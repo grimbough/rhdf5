@@ -9,13 +9,13 @@
   needed to treat HDF5 datasets as if they were R arrays.
 }
 \usage{
-min.hdf5.dataset(x, na.rm=FALSE)
-max.hdf5.dataset(x, na.rm=FALSE)
-range.hdf5.dataset(x, na.rm=FALSE)
+min.hdf5.dataset(..., na.rm=FALSE)
+max.hdf5.dataset(..., na.rm=FALSE)
+range.hdf5.dataset(..., na.rm=FALSE)
 length.hdf5.dataset(x)
 }
 \arguments{
-  \item{x}{An object of class \code{hdf5.dataset}. }
+  \item{...}{An object of class \code{hdf5.dataset}. }
   \item{na.rm}{A logical variable indicating whether NA's (missing
     values) should be removed when computing the summary statistic. }
 }

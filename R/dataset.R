@@ -21,12 +21,50 @@ hdf5.dataset <- function(group, name, data=NULL, dims=NULL, type=NULL,
 dim.hdf5 <- function(x) .Call("HDF_dims", x, PACKAGE="rhdf5")
 length.hdf5.dataset <- function(x) .Call("HDF_dataset_length", x,
                                          PACKAGE="rhdf5")
-min.hdf5.dataset <- function(x, na.rm=FALSE)
-	.External("HDF_dataset_min", x, na.rm, PACKAGE="rhdf5")
-max.hdf5.dataset <- function(x, na.rm=FALSE)
-	.External("HDF_dataset_max", x, na.rm, PACKAGE="rhdf5")
-range.hdf5.dataset <- function(x, na.rm=FALSE)
-	.External("HDF_dataset_range", x, na.rm, PACKAGE="rhdf5")
+min.hdf5.dataset <- function(..., na.rm=FALSE) {
+     args <- list(...)
+    x <- args[[1]]
+
+    if (missing(na.rm)) {
+        if (na.rm %in% names(args))
+            na.rm <- args$na.rm
+        else
+            if (length(args) >= 2)
+                na.rm <- args[[2]]
+    }
+
+     .External("HDF_dataset_min", x, na.rm, PACKAGE="rhdf5")
+ }
+
+max.hdf5.dataset <- function(..., na.rm=FALSE) {
+    args <- list(...)
+    x <- args[[1]]
+
+    if (missing(na.rm)) {
+        if (na.rm %in% names(args))
+            na.rm <- args$na.rm
+        else
+            if (length(args) >= 2)
+                na.rm <- args[[2]]
+    }
+
+    .External("HDF_dataset_max", x, na.rm, PACKAGE="rhdf5")
+}
+
+range.hdf5.dataset <- function(..., na.rm=FALSE) {
+    args <- list(...)
+    x <- args[[1]]
+
+    if (missing(na.rm)) {
+        if (na.rm %in% names(args))
+            na.rm <- args$na.rm
+        else
+            if (length(args) >= 2)
+                na.rm <- args[[2]]
+    }
+
+    .External("HDF_dataset_range", x, na.rm, PACKAGE="rhdf5")
+}
 
 is.finite.default <- function(x, ...) .Primitive("is.finite")(x)
 is.finite <- function(x, ...) UseMethod("is.finite")
