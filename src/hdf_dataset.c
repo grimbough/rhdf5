@@ -1067,3 +1067,4 @@ SEXP HDF_dataset_range(SEXP args)
     H5Sclose(s);
     return ans;
 }
+

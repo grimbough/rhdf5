@@ -75,6 +75,10 @@ int HDF_has_subgroup(SEXP group, SEXP name)
     return ret;
 }
 
+/*
+  positive if there is a subgroup/element with the name, zero
+  otherwise 
+*/
 int HDF_hassubgroup(hid_t group, char *name)
 {
     int ret;
@@ -160,7 +164,7 @@ SEXP HDF_group_get_info(SEXP group, SEXP name)
 	error("not a file or group");
 	return R_NilValue;
     }
-    if(!HDF_has_subgroup(group,name))
+    if(!HDF_has_subgroup(group, name))
 	return R_NilValue;
     
     if (H5Gget_objinfo(HID(group),STR(name),1,&info) < 0)
@@ -173,23 +177,23 @@ SEXP HDF_group_get_info(SEXP group, SEXP name)
     REAL(temp)[0] = (double)info.nlink;
     SET_VECTOR_ELT(ans,0,temp);
     
-    PROTECT(temp = allocVector(REALSXP,1));
+    PROTECT(temp = allocVector(STRSXP,1));
     switch(info.type)
     {
     case H5G_GROUP:
-	REAL(temp)[0] = 1;
+	SET_STRING_ELT(temp, 0, mkChar("group"));
 	break;
     case H5G_DATASET:
-	REAL(temp)[0] = 2;
+	SET_STRING_ELT(temp, 0, mkChar("dataset"));
 	break;
     case H5G_LINK:
-	REAL(temp)[0] = 3;
+	SET_STRING_ELT(temp, 0, mkChar("link"));
 	break;
     case H5G_TYPE:
-	REAL(temp)[0] = 4;
+	SET_STRING_ELT(temp, 0, mkChar("type"));
 	break;
     default:
-	REAL(temp)[0] = 0;
+	SET_STRING_ELT(temp, 0, mkChar("default"));
     }
     SET_VECTOR_ELT(ans,1,temp);
     
@@ -245,6 +249,12 @@ SEXP HDF_group_mkgroup(SEXP group, SEXP name)
     
     if(!isFILE(group) && !isGROUP(group)) 
 	error("not a file or group");
+
+    if( !isString(name) )
+      error("name must be a string");
+
+    if( length(name) != 1 )
+      error("name must have length 1");
     
     /* Open the group if it already exists */
     if(HDF_has_subgroup(group, name)) {
@@ -281,11 +291,18 @@ hid_t HDF_groupmkgroup(hid_t group, char *name)
 
 
 
-SEXP HDF_group_delete(SEXP group,SEXP name)
+SEXP HDF_group_delete(SEXP group, SEXP name)
 {
     if(!isFILE(group) && !isGROUP(group)) 
-	error("not a file or group");
+	error("first argument is not a file or group");
     
+    if( !isString(name) || length(name) > 1)
+      error("invalid name");
+
+    if( !HDF_has_subgroup(group, name) )
+      error("the group has no element named %s", STR(name));
+
+
     if(H5Gunlink(HID(group),STR(name)) < 0)
 	warning("unable to delete \"%s\"",STR(name));
     return R_NilValue;

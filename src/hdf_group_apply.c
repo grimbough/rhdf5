@@ -64,42 +64,49 @@ int HDF_group_apply_iterator(hid_t group_id,const char* member_name,void* userda
   return 0;
 }
 
-SEXP HDF_group_apply(SEXP group,SEXP FUN,SEXP region,SEXP args)
+SEXP HDF_group_apply(SEXP group, SEXP FUN, SEXP region, SEXP args)
 {
-  int i,n;
+  int i, n;
   struct apply_state state;
   SEXP tmp,subscripts,myargs;
-
+  
   if(!isFunction(FUN))
     error("FUN must be a function");
   
+  if(!isGROUP(group) && !isFILE(group) )
+    error("group must be either an HDF5 group or an HDF5 file");
+  
   /* Construct a function */
-  myargs = R_NilValue;
-  n = length(args);
-  for(i=0;i<n;i++) myargs = LCONS(VECTOR_ELT(args,i),myargs);
+  PROTECT(myargs = R_NilValue);
+
+  /* looks like a PROTECT nightmare here */
+  for(i=0; i<length(args); i++) 
+    myargs = LCONS(VECTOR_ELT(args,i),myargs);
+
   if(region != R_NilValue) {
-    n = length(region);
     subscripts = R_NilValue;
-    for(i=0;i<n;i++) {
-      if(VECTOR_ELT(region,i) == R_NilValue)
-	subscripts = LCONS(R_MissingArg,subscripts);
+    for(i=0; i<length(region); i++) {
+      if(VECTOR_ELT(region, i) == R_NilValue)
+	subscripts = LCONS(R_MissingArg, subscripts);
       else
-	subscripts = LCONS(VECTOR_ELT(region,i),subscripts);
+	subscripts = LCONS(VECTOR_ELT(region, i), subscripts);
     }
-    PROTECT(tmp = LCONS(R_BracketSymbol,LCONS(R_NilValue,subscripts)));
-    PROTECT(state.funcall = LCONS(FUN,LCONS(tmp,myargs)));
+    PROTECT(tmp = LCONS(R_BracketSymbol, LCONS(R_NilValue, subscripts)));
+    PROTECT(state.funcall = LCONS(FUN, LCONS(tmp,myargs)));
     state.dataset = CDR(tmp);
-  } else {
+  } 
+  else {
     PROTECT(state.funcall = LCONS(FUN,LCONS(R_NilValue,myargs)));
     state.dataset = CDR(state.funcall);
   }
 
   /* Call the iterator */
-  n = HDF_count(HID(group),MASKED_DATASET);
-  PROTECT(state.results = allocVector(VECSXP,n));
+  n = HDF_count(HID(group), MASKED_DATASET);
+  PROTECT(state.results = allocVector(VECSXP, n));
   state.index = 0;
-  H5Giterate(HID(group),".",NULL,HDF_group_apply_iterator,(void*)&state);
-  UNPROTECT(2);
-  if(region != R_NilValue) UNPROTECT(1);
+  H5Giterate(HID(group), ".", NULL,HDF_group_apply_iterator, (void*)&state);
+  UNPROTECT(3);
+  if(region != R_NilValue) 
+    UNPROTECT(1);
   return state.results;
 }

@@ -4,17 +4,15 @@
 
 hdf5.dataset <- function(group, name, data=NULL, dims=NULL, type=NULL,
                          create=hdf5.default.properties) {
-  #Check for various wierdness
   if(is.null(data) && is.null(dims))
     stop("you must specify either data to store or dimensions for the dataset")
-  if(!is.null(data) && !is.null(dims))
-    stop("you cannot specify dimensions for the dataset AND data! its not right!")
-  if(!is.null(data)) {
-    s <- .Call("HDF_dataset_store", group, name)
-  } else {
+  if(!is.null(data) && !is.null(dims)) 
+    stop("you must specify one of dims or data")
+  if(!is.null(data)) 
+    s <- .Call("HDF_dataset_store", group, data, name)
+   else 
     s <- .Call("HDF_dataset_create_simple", group, name, dims, create,
                          type)
-  }
   invisible(s)
 }
 
@@ -29,11 +27,11 @@ max.hdf5.dataset <- function(x, na.rm=FALSE)
 range.hdf5.dataset <- function(x, na.rm=FALSE)
 	.External("HDF_dataset_range", x, na.rm)
 
-is.finite.default <- function(x) .Primitive("is.finite")(x)
+is.finite.default <- function(x, ...) .Primitive("is.finite")(x)
 is.finite <- function(x, ...) UseMethod("is.finite")
 is.finite.hdf5.dataset <- function(x, ...) .Call("HDF_dataset_finite", x)
 
-is.matrix.default <- function(x) .Primitive("is.matrix")(x)
+is.matrix.default <- function(x, ...) .Primitive("is.matrix")(x)
 is.matrix <- function(x, ...) UseMethod("is.matrix")
 is.matrix.hdf5.dataset <- function(x, ...) {
    if(length(dim(x)) == 2 && is.integer(dim(x)) )

@@ -2,7 +2,6 @@
 \alias{[.hdf5.dataset}
 \alias{[<-.hdf5.dataset}
 \alias{$.hdf5.file}
-\alias{$.hdf5.group}
 \title{ Extract Parts of an HDF5 object. }
 \description{
   These are subset operators for HDF5 objects. The name provides
@@ -45,10 +44,10 @@
 
 \examples{
  \dontrun{ mad <- hdf5.open("microarray.h5")
-  hdf5.group(mad,"chip")
-  hdf5.group(mad$chip,"group")
-  hdf5.group.rm(mad$chip,"group")
-  x1 <- hdf5.dataset(mad$chip, "AA", dim=c(5, 5))
+  hdf5.group(mad,"chip1")
+  hdf5.group(mad$chip1,"group")
+  hdf5.group.rm(mad$chip1,"group")
+  x1 <- hdf5.dataset(mad$chip1, "AA", dim=c(5, 5))
   x1[,1, drop=FALSE]
 }
 }
