@@ -18,6 +18,7 @@ length.hdf5.dataset(x)
   \item{...}{An object of class \code{hdf5.dataset}. }
   \item{na.rm}{A logical variable indicating whether NA's (missing
     values) should be removed when computing the summary statistic. }
+  \item{x}{An object of class \code{hdf5.dataset}. }
 }
 \details{
   Not much to say. It might be nice to be able to handle multiple
