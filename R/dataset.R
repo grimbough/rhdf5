@@ -2,16 +2,18 @@
 # HDF5 Dataset Functions
 #
 
-hdf5.dataset <- function(group,name,data=NULL,dims=NULL,type=NULL,create=hdf5.default.properties) {
+hdf5.dataset <- function(group, name, data=NULL, dims=NULL, type=NULL,
+                         create=hdf5.default.properties) {
   #Check for various wierdness
   if(is.null(data) && is.null(dims))
-    error("you must specify either data to store or dimensions for the dataset")
+    stop("you must specify either data to store or dimensions for the dataset")
   if(!is.null(data) && !is.null(dims))
-    error("you cannot specify dimensions for the dataset AND data! its not right!")
+    stop("you cannot specify dimensions for the dataset AND data! its not right!")
   if(!is.null(data)) {
-    s <- .Call("HDF_dataset_store",group,name)
+    s <- .Call("HDF_dataset_store", group, name)
   } else {
-    s <- .Call("HDF_dataset_create_simple",group,name,dims,create,type)
+    s <- .Call("HDF_dataset_create_simple", group, name, dims, create,
+                         type)
   }
   invisible(s)
 }

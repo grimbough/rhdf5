@@ -30,18 +30,14 @@ names.hdf5.group <- function(x, ...)
 "[.hdf5.group" <- function(x,...) "[[.hdf5.group"(x,names(x)[..1])
 
 #Why doesn't this work?
-as.container <- function(x) UseMethod("as.container")
-as.container.hdf5.group <- function(group) {
+as.container <- function(x, ...) UseMethod("as.container")
+as.container.hdf5.group <- function(x, ...) {
   #There should be some consistency checking here
-  class(group) <- c("container",class(group))
+  class(x) <- c("container",class(x))
   group
 }
+
 hdf5.apply <- function(X, REGION, FUN=function(x) x,...) {
   FUN <- match.fun(FUN)
-  .Call("HDF_group_apply",X,FUN,REGION,list(...))
+  .Call("HDF_group_apply", X, FUN, REGION, list(...))
 }
-
-
-
-
-

@@ -59,7 +59,7 @@ interpretation.
 \examples{
   mad <- hdf5.open("microarray.h5")
   hdf5.attributes(mad)
-  hdf5.group.create(mad,"chip")
+  hdf5.group(mad,"chip")
   hdf5.attr(mad$chip, "foo") <- 33
   hdf5.attributes(mad$chip)
   hdf5.attr(mad$chip, "foo")

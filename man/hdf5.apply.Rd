@@ -7,14 +7,15 @@
   the function specified by "fun."
 }
 \usage{
-hdf5.apply(group,REGION,FUN,...)
+hdf5.apply(X, REGION, FUN,...)
 }
 \arguments{
-  \item{group}{a group reference}
+  \item{X}{a group reference}
   \item{REGION}{a subset specification or set to NULL to pass the
     dataset itself}
   \item{FUN}{The function to call on each returned value. By default it
     is function(x) x}
+  \item{...}{Additional arguments, currently unused}
 }
 \examples{
 mad <- hdf5.open("test.h5")

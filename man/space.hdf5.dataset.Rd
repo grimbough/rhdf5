@@ -28,7 +28,7 @@ space.hdf5.dataset(set, ...)
 
 \examples{
      x1 <- hdf5.open("aaa")
-     x2 <- hdf5.dataset.create(x1, "hi", 10, 10)
+     x2 <- hdf5.dataset(x1, "hi", dims=c(10, 10))
      v  <- space(x2)
      v
 }

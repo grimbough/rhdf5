@@ -13,7 +13,7 @@ hdf5.get.default.plist()
 }
 \arguments{
   \item{type}{Is one of \code{file.create}, \code{file.access},
-  \code{dataset.create},  \code{dataset.xfer}, \code{mount}}
+  \code{dataset},  \code{dataset.xfer}, \code{mount}}
   \item{\dots}{ Additional parameters depending upon the value of the
     first argument. }
 }
