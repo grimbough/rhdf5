@@ -64,7 +64,7 @@ void H5finalize(SEXP x)
 	break;
     case H5I_GENPROP_LST: /* I got these from the source */
 #if 0
-    /* gcc gives warnings for these: not part of H5I_type_t enum */
+    /* these are not part of H5I_type_t enum in HDF5 1.6.1 */
     case H5I_TEMPLATE_0:
     case H5I_TEMPLATE_1:
     case H5I_TEMPLATE_2:
@@ -73,6 +73,8 @@ void H5finalize(SEXP x)
     case H5I_TEMPLATE_5:
     case H5I_TEMPLATE_6:
     case H5I_TEMPLATE_7:
+#else
+    default:
 #endif
     H5Pclose(hidx);
 	break;
@@ -81,7 +83,7 @@ void H5finalize(SEXP x)
     case H5I_DATATYPE:
     case H5I_FILE_CLOSING:
 #if 0
-    /* gcc gives warnings for this: not part of H5I_type_t enum */
+    /* not part of H5I_type_t enum in HDF5 1.6.1 */
     case H5I_TEMPLATE_MAX:
 #endif
     case H5I_TEMPBUF:
