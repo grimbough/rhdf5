@@ -5,7 +5,7 @@
 % \VignetteIndexEntry{HowTo  HowTo}
 %\VignetteDepends{}
 %\VignetteKeywords{Expression Analysis}
-%\VignettePackage{Biobase}
+%\VignettePackage{rhdf5}
 \documentclass[12pt]{article}
 
 \usepackage{times}
