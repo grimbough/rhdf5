@@ -145,7 +145,7 @@ hid_t Rtype2HDFtype(SEXPTYPE);
 
 /* functions imported from R */
 SEXP Rf_DropDims(SEXP);
-SEXP Rf_mat2insdsub(SEXP, SEXP);
+SEXP Rf_mat2indsub(SEXP, SEXP);
 
 #endif
 

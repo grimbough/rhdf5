@@ -11,7 +11,6 @@
 SEXP HDF_file_open(SEXP filename,SEXP access) 
 {
 	hid_t	file;
-	struct	stat buf;
 
 	file = HDF_fileopen(STR(filename), HID(access));
 
@@ -40,7 +39,7 @@ hid_t HDF_fileopen(char *filename, hid_t createplist)
 
 SEXP HDF_file_create(SEXP filename, SEXP mode, SEXP create, SEXP access)
 {
-	unsigned int flags;
+	unsigned int flags=H5F_ACC_EXCL;
 	hid_t	file;
 	struct stat buf;
 

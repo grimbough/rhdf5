@@ -21,7 +21,7 @@ static SEXP HDF_ArraySubassign(SEXP, SEXP, SEXP);
 */
 static SEXP HDF_typefix(SEXP x, SEXP y)
 {
-    SEXP rval;
+    SEXP rval=R_NilValue;
     SEXPTYPE Rtype;
     int which;
     hid_t ds, t;
@@ -130,15 +130,13 @@ SEXP HDF_subassign(SEXP x, SEXP subargs, SEXP value)
 
 static SEXP HDF_VectorSubassign(SEXP x, SEXP s, SEXP y)
 {
-    SEXP dim, indx, out;
+    SEXP indx, out;
     SEXPTYPE Rtype;
-    int nx, stretch, i, j, rank, val, dimx, n;
-    int ny, iy, which;
+    int nx, ny, stretch, i, j, rank, val, n;
     double z;
     hid_t ds, status, htype, t, memspace;
     hsize_t *dims, *cnt, *tmp, sdim[1];
-    hssize_t *off, *t2;
-    void *buf;
+    hssize_t *off;
 
     ds = H5Dget_space(HID(x));
     if( ds<0 || H5Iget_type(ds) != H5I_DATASPACE )
@@ -235,6 +233,7 @@ static SEXP HDF_VectorSubassign(SEXP x, SEXP s, SEXP y)
 	error("hdf:sub assignment not done; bug");
     }
     UNPROTECT(2);
+    return(out);
 }
 
 /* here I think we might just want to translate to vector subscripts
@@ -244,15 +243,12 @@ static SEXP HDF_ArraySubassign(SEXP x, SEXP s, SEXP y)
 {
     SEXP dim, out;
     SEXPTYPE Rtype;
-    int nx, stretch, i, j, rank, val, dimx, n;
-    int ii, ij, jj, ny, iy, which;
+    int ny, i, j, rank, n;
     double z;
     hid_t ds, status, htype, t, memspace;
     hsize_t *dims, *cnt, *tmp;
-    hssize_t *off, *t2;
-    void *buf;
+    hssize_t *off;
     int **subs, *bound, *indx, *offset;
-    double ry;
 
  
     ds = H5Dget_space(HID(x));
@@ -380,6 +376,7 @@ static SEXP HDF_ArraySubassign(SEXP x, SEXP s, SEXP y)
 	;
     }
     UNPROTECT(2);
+    return(out);
 }
 
 
