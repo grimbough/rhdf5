@@ -2,14 +2,14 @@ dnl configure.in for hdf5, patterned on configure.in for RPgSQL
 dnl Process this file with autoconf to produce a configure script.
 AC_INIT
 AC_PREREQ(2.52)
-AC_REVISION($Revision: 1.2 $)
+AC_REVISION($Revision: 1.3 $)
 AC_CONFIG_SRCDIR(src/hdf5.c)
 
 AC_DEFUN([CHECK_HDF5],
 [AC_MSG_CHECKING(for hdf5)
 AC_ARG_WITH(hdf5,
 [ --with-hdf5=DIR root directory of hdf5 installation [defaults to
-	/usr/local or /usr if not found in /usr/local]],
+	/usr/local or /usr if not found in /usr/local and finally /sw]],
 [if test x"$withval" != no ; then
 	AC_MSG_RESULT(yes)
 	HDF5_HOME="$withval"
@@ -21,6 +21,10 @@ fi],[
 	if test ! -f "${HDF5_HOME}/include/hdf5.h"
 	then
 		HDF5_HOME="/usr"
+		if test ! -f "${HDF5_HOME}/include/hdf5.h"
+		then
+			HDF5_HOME="/sw"
+		fi
 	fi
 ])
 
