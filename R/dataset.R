@@ -29,11 +29,11 @@ max.hdf5.dataset <- function(x, na.rm=FALSE)
 range.hdf5.dataset <- function(x, na.rm=FALSE)
 	.External("HDF_dataset_range", x, na.rm)
 
-is.finite.default <- .Primitive("is.finite")
+is.finite.default <- function(x) .Primitive("is.finite")(x)
 is.finite <- function(x, ...) UseMethod("is.finite")
 is.finite.hdf5.dataset <- function(x, ...) .Call("HDF_dataset_finite", x)
 
-is.matrix.default <- .Primitive("is.matrix")
+is.matrix.default <- function(x) .Primitive("is.matrix")(x)
 is.matrix <- function(x, ...) UseMethod("is.matrix")
 is.matrix.hdf5.dataset <- function(x, ...) {
    if(length(dim(x)) == 2 && is.integer(dim(x)) )
