@@ -1,61 +1,57 @@
 dnl configure.in for hdf5, patterned on configure.in for RPgSQL
 dnl Process this file with autoconf to produce a configure script.
-AC_INIT(src/hdf5.c)
+AC_INIT
+AC_PREREQ(2.52)
+AC_REVISION($Revision: 1.2 $)
+AC_CONFIG_SRCDIR(src/hdf5.c)
 
-dnl See if user specified library directory
-if test $HDF5_LIB_DIR
-then
-	PKG_LIBS="${PKG_LIBS} -L${HDF5_LIB_DIR} -lhdf5"
+AC_DEFUN([CHECK_HDF5],
+[AC_MSG_CHECKING(for hdf5)
+AC_ARG_WITH(hdf5,
+[ --with-hdf5=DIR root directory of hdf5 installation [defaults to
+	/usr/local or /usr if not found in /usr/local]],
+[if test x"$withval" != no ; then
+	AC_MSG_RESULT(yes)
+	HDF5_HOME="$withval"
 else
-	AC_ARG_WITH(hdf5-libraries,
-		    --with-hdf5-libraries    sets path to hdf5  library,
-		    PKG_LIBS="${PKG_LIBS} -L${withval} -lhdf5",
-		    NO_USER_PKG_LIB_ARGS=1)
-fi
+	AC_MSG_RESULT(no)
+fi],[
+	AC_MSG_RESULT(yes)
+	HDF5_HOME="/usr/local"
+	if test ! -f "${HDF5_HOME}/include/hdf5.h"
+	then
+		HDF5_HOME="/usr"
+	fi
+])
 
-dnl If not, look for it
-if test $NO_USER_PKG_LIB_ARGS
+if test -n "${HDF5_HOME}"
 then
-	AC_CHECK_LIB(hdf5, H5A_open,
-                     PKG_LIBS="${PKG_LIBS} -lhdf5",
-                     NO_LIBHDF5=1)
-fi
+	HDF5_OLD_LDFLAGS=$LDFLAGS
+	HDF5_OLD_CPPFLAGS=$CPPFLAGS
+	LDFLAGS="$LDFLAGS -L${HDF5_HOME}/lib"
+	CPPFLAGS="$CPPFLAGS -I${HDF5_HOME}/include"
+	AC_LANG_SAVE
+	AC_LANG_C
+	AC_CHECK_LIB(hdf5,H5Fopen,[hdf5_cv_libhdf5=yes],[hdf5_cv_libhdf5=no])
+	AC_CHECK_HEADER(hdf5.h,[hdf5_cv_hdf5_h=yes],[hdf5_cv_hdf5_h=no])
+	AC_LANG_RESTORE
+	if test "$hdf5_cv_libhdf5" = "yes" -a "$hdf5_cv_hdf5_h" = "yes"
+	then
+		AC_MSG_CHECKING(hdf5 in ${HDF5_HOME})
+		PKG_LIBS="${PKG_LIBS} -L${HDF5_HOME}/lib -lhdf5"
+		PKG_CPPFLAGS="${PKG_CPPFLAGS} -L${HDF5_HOME}/include"
+		AC_MSG_RESULT(ok)
+	else
+		AC_MSG_CHECKING(hdf5 in ${HDF5_HOME})
+		LDFLAGS="${HDF5_OLD_LDFLAGS}"
+		CPPFLAGS="${HDF5_OLD_CPPFLAGS}"
+		AC_MSG_RESULT(failed)
+		AC_MSG_ERROR(please specify a valid hdf5 installation with --with-hdf5=DIR)
+	fi
+fi])
 
-if test $NO_LIBHDF5
-then
-	echo
-	echo I could not find your HDF5 libraries\!
-	echo Use --with-hdf5-libraries=PATH\; if running R\'s INSTALL\, 
-	echo use --configure-args=\'--with-hdf5-libraries=PATH\'\; or
-	echo set HDF5_LIB_DIR in your environment to the library path\,
-	echo and rerun the configure/install\.
-	echo
-	exit 1;
-fi
 
-dnl Check for user args
-if test $HDF5_INCLUDE_DIR
-then
-	PKG_CPPFLAGS=-I${HDF5_INCLUDE_DIR}
-else
-	AC_ARG_WITH(hdf5-includes,
-                    --with-hdf5-includes     sets path to hdf5 header,
-                    PKG_CPPFLAGS=-I${withval},
-		    HDF5_INCLUDE_DIR_NOT_FOUND=1)
-fi
-
-if test $HDF5_INCLUDE_DIR_NOT_FOUND
-then
-	echo
-	echo I could not find your HDF5 headers\!
-	echo Use --with-hdf5-includes=PATH\; if running R\'s INSTALL\, 
-	echo use --configure-args=\'--with-hdf5-includes=PATH\'\; or
-	echo set HDF5_INCLUDE_DIR in your environment to the library path\,
-	echo and rerun the configure/install\.
-	echo
-	exit 1;
-fi
-
+CHECK_HDF5
 AC_SUBST(PKG_CPPFLAGS)
 AC_SUBST(PKG_LIBS)
 AC_OUTPUT(src/Makevars)
