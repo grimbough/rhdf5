@@ -7,7 +7,6 @@ as.matrix.hdf5.dataset
                         Coerce an HDF5 dataset to be an R matrix. 
 dim.hdf5                Obtain the dimensions of an HDF5 object. 
 hdf5.apply              HDF5 Group Apply
-hdf5.apply              HDF5 Group Apply
 hdf5.attributes         Attributes on HDF5 Objects. 
 hdf5.datasets           HDF5 Datasets
 hdf5.files              HDF5 File Interface
