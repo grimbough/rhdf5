@@ -36,6 +36,9 @@ int HDF_masked_count(hid_t group_id,const char* member_name,void* data)
   case H5G_DATASET:if(state->mask & MASKED_DATASET) state->count++;break;
   case H5G_LINK:if(state->mask & MASKED_LINK) state->count++;break;
   case H5G_TYPE:if(state->mask & MASKED_TYPE) state->count++;break;
+  default:
+  /* maybe we should do something here - SDR */
+  break;
   }
   return 0;
 }

@@ -35,6 +35,9 @@ int HDF_print_iterator(hid_t group_id, const char* member_name,
 		when.tm_mday, when.tm_mon+1, when.tm_year+1900,
 		when.tm_hour, when.tm_min); 
 	break;
+    default:
+    /* maybe we should do something here - SDR */
+    break;
     }
     value[0] = '\0';
     H5Gget_comment(group_id,member_name,1024,value);
