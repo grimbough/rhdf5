@@ -10,7 +10,7 @@
    \item{"char"}{H5T_NATIVE_CHAR}
    \item{"uchar"}{H5T_NATIVE_UCHAR}
    \item{"short"}{H5T_NATIVE_SHORT}
-   \item{"ushort", H5T_NATIVE_USHORT}
+   \item{"ushort"}{H5T_NATIVE_USHORT}
   \item{"int"}{H5T_NATIVE_INT}
   \item{"uint"}{H5T_NATIVE_UINT}
   \item{"long"}{H5T_NATIVE_LONG}
@@ -19,3 +19,5 @@
   \item{"double"}{H5T_NATIVE_DOUBLE}
 }
 }
+\keyword{attribute}
+

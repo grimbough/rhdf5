@@ -471,7 +471,7 @@ SEXP HDF_dataset_select_points(SEXP d, SEXP x, SEXP y)
   coord = R_alloc(length(x)*2,sizeof(hssize_t));
   sdim[0] = length(x);
   
-  space    = H5Dget_space(HID(x));
+  space    = H5Dget_space(HID(d));
   memspace = H5Screate_simple(1, sdim, NULL);
   /* Select the points */
   for(i=0;i<length(x);i++) {
