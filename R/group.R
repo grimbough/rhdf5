@@ -35,7 +35,7 @@ as.container.hdf5.group <- function(group) {
   class(group) <- c("container",class(group))
   group
 }
-hdf5.apply <- function(X,REGION,FUN,...) {
+hdf5.apply <- function(X,REGION,FUN=function(x) x,...) {
   FUN <- match.fun(FUN)
   .Call("HDF_group_apply",X,FUN,REGION,list(...))
 }
