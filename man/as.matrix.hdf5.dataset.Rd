@@ -27,7 +27,7 @@ as.matrix.hdf5.dataset(x)
 
 \examples{
     mad <- hdf5.open("microarray.h5")
-    x1 <- hdf5.dataset.create(mad, "asmat", 31, 12)
+    x1 <- hdf5.dataset(mad, "asmat", dim=c(31, 12))
     set.seed(777)
     x1[] <- rexp(372,4)
     y <- as.matrix(x1)

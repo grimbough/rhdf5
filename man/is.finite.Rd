@@ -36,7 +36,7 @@ is.finite.hdf5.dataset(x, ...)
 
 \examples{
     mad <- hdf5.open("microarray.h5")
-    x1 <- hdf5.dataset.create(mad, "finiteex", 15, 15)
+    x1 <- hdf5.dataset(mad, "finiteex", dim=c(15, 15))
     set.seed(098)
     x1[] <- rnorm(225)
     x1[3,4:8] <- Inf

@@ -33,9 +33,9 @@ names.hdf5.group(x, \dots)
 
 \examples{
   mad <- hdf5.open("microarray.h5")
-  hdf5.group.create(mad,"chip")
+  hdf5.group(mad,"chip")
   names(mad)
-  hdf5.group.create(mad$chip, "bar")
+  hdf5.group(mad$chip, "bar")
   names(mad$chip)
 }
 \keyword{ attribute }
