@@ -25,8 +25,8 @@ dim.hdf5(x)
 \seealso{\code{\link{dim}}, \code{\link[hdf5]{hdf5}} }
 
 \examples{
-   mad <- hdf5.open("microarray.h5")
+\dontrun{   mad <- hdf5.open("microarray.h5")
    hdf5.dataset(mad, "xxx", dim=c(100, 110))
    dim(mad$xxx)
-}
+}}
 \keyword{manip }

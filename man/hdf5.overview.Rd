@@ -7,7 +7,7 @@
   R/S paradigm for working with data objects. 
 }
 \examples{
-  # Load the HDF5 library 
+\dontrun{  # Load the HDF5 library 
   library(hdf5)
   # Attach open or create an HDF5 file to the variable "mad."
   mad <- hdf5.open("microarray.h5")
@@ -21,7 +21,7 @@
 
  # Draw an image of our chip. About 17megs if you try it! 
   image(raw[1:534,1:534])        
-}
+}}
 \seealso{ \code{\link[hdf5]{hdf5.group}},
   \code{\link[hdf5]{hdf5.dataset}}}
 

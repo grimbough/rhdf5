@@ -44,13 +44,13 @@
 \seealso{\code{\link[hdf5]{hdf5.dataset}}}
 
 \examples{
-  mad <- hdf5.open("microarray.h5")
+ \dontrun{ mad <- hdf5.open("microarray.h5")
   hdf5.group(mad,"chip")
   hdf5.group(mad$chip,"group")
   hdf5.group.rm(mad$chip,"group")
   x1 <- hdf5.dataset(mad$chip, "AA", dim=c(5, 5))
   x1[,1, drop=FALSE]
-
+}
 }
 \keyword{ array }
 \keyword{list}

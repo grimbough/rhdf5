@@ -35,12 +35,12 @@ is.finite.hdf5.dataset(x, ...)
 \seealso{\code{\link[hdf5]{as.double.hdf5.dataset}} }
 
 \examples{
-    mad <- hdf5.open("microarray.h5")
+ \dontrun{   mad <- hdf5.open("microarray.h5")
     x1 <- hdf5.dataset(mad, "finiteex", dim=c(15, 15))
     set.seed(098)
     x1[] <- rnorm(225)
     x1[3,4:8] <- Inf
     is.finite(x1)
-
+}
 }
 \keyword{programming }
