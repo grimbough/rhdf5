@@ -14,6 +14,7 @@ names.hdf5.file <- function(x, ...)      names.hdf5.group(x)
 print.hdf5.file <- function(x, ...)      print.hdf5.group(x)
 "$.hdf5.file"   <- function(file, name) "$.hdf5.group"(file, name)
 "[[.hdf5.file"  <- function(file, name) "[[.hdf5.group"(file,name)
-
+"[.hdf5.file" <- function(x, i, j, drop)
+    stop("[ is not implemented for hdf5.file")
 
 

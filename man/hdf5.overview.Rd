@@ -8,7 +8,7 @@
 }
 \examples{
 \dontrun{  # Load the HDF5 library 
-  library(hdf5)
+  library(rhdf5)
   # Attach open or create an HDF5 file to the variable "mad."
   mad <- hdf5.open("microarray.h5")
   # Create a new group inside the file

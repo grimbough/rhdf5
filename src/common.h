@@ -26,7 +26,7 @@ extern SEXP HDF_workgroup;
 #define EPTR(SE) VECTOR_ELT((SE),0)
 #define HID(SE)	(hid_t)R_ExternalPtrAddr(EPTR((SE)))
 #define HREF(H)	R_MakeExternalPtr((H),HDF_hid_tag,R_NilValue)
-#define IS_HID(SE) (TYPEOF(EPTR((SE))) == EXTPTRSXP && R_ExternalPtrTag(EPTR((SE))) == HDF_hid_tag)
+#define IS_HID(SE) (TYPEOF(SE) == VECSXP && TYPEOF(EPTR((SE))) == EXTPTRSXP && R_ExternalPtrTag(EPTR((SE))) == HDF_hid_tag)
 
 #define isPLIST(SE) (IS_HID((SE)) && (HID(SE) == H5P_DEFAULT || H5Pget_class(HID((SE))) != H5P_NO_CLASS))
 #define isDPLIST(SE) (IS_HID((SE)) && R_ExternalPtrAddr((SE)) == NULL)

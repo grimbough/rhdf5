@@ -25,4 +25,6 @@ hdf5.get.default.plist <- function() .Call("HDF_plist_default_plist")
     assign(".hdf5.Rwork", .hdf5.Rwork, env=where)
     assign(".hdf5.Rwork.Current", .hdf5.Rwork.Current, env=where)
     assign(".hdf5.space.dims.symbol" , .hdf5.space.dims.symbol, env=where)
+    rm(.hdf5.Rwork, .hdf5.Rwork.Current,
+         .hdf5.space.dims.symbol, envir=.GlobalEnv)
 }
