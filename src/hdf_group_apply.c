@@ -80,7 +80,12 @@ SEXP HDF_group_apply(SEXP group,SEXP FUN,SEXP region,SEXP args)
   if(region != R_NilValue) {
     n = length(region);
     subscripts = R_NilValue;
-    for(i=0;i<n;i++) subscripts = LCONS(VECTOR_ELT(region,i),subscripts);
+    for(i=0;i<n;i++) {
+      if(VECTOR_ELT(region,i) == R_NilValue)
+	subscripts = LCONS(R_MissingArg,subscripts);
+      else
+	subscripts = LCONS(VECTOR_ELT(region,i),subscripts);
+    }
     PROTECT(tmp = LCONS(R_BracketSymbol,LCONS(R_NilValue,subscripts)));
     PROTECT(state.funcall = LCONS(FUN,LCONS(tmp,myargs)));
     state.dataset = CDR(tmp);

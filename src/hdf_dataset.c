@@ -577,6 +577,42 @@ SEXP HDF_VectorSubset(SEXP x, SEXP s)
     return(ans);
 }
 
+SEXP HDF_dataset_select_points(SEXP d,SEXP x,SEXP y)
+{
+  SEXP ans;
+  int  i;
+
+  hssize_t *coord;
+  hsize_t  sdim[1];
+  hid_t    space,memspace;
+
+  if(!isDATASET(d))
+    error("argument is not an HDF5 dataset");
+
+  if(length(x) != length(y)) 
+    error("x and y vectors must have the same length");
+  
+  /* Allocate the coordinate space */
+  coord = R_alloc(length(x)*2,sizeof(hssize_t));
+  sdim[0] = length(x);
+  
+  space    = H5Dget_space(HID(x));
+  memspace = H5Screate_simple(1,sdim,NULL);
+  /* Select the points */
+  for(i=0;i<length(x);i++) {
+    coord[i]           = (int)REAL(x)[i];
+    coord[length(x)+i] = (int)REAL(y)[i];
+  }
+  
+  H5Sselect_elements(space,H5S_SELECT_SET,length(x),(const hssize_t **)coord);
+  PROTECT(ans = allocVector(REALSXP,length(x)));
+  H5Dread(HID(d),H5T_NATIVE_DOUBLE,memspace,space,H5P_DEFAULT,REAL(ans));
+  UNPROTECT(1);
+  H5Sclose(memspace);
+  H5Sclose(space);
+  return(ans);
+}
+
 /* 
   copies the R data in mat into the HDF5 format indicated by "in"
 */
