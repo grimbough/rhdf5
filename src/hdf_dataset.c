@@ -2,6 +2,7 @@
 
 hid_t hdf_datatype_resolve(SEXP); /* in hdf_datatype.c */
 int   HDF_has_subgroup(SEXP group,SEXP name); /* in hdf_group.c */
+/* extern SEXP mat2indsub(SEXP dims,SEXP s); /* in subscript.c */ 
 
 SEXP HDF_dataset_print(SEXP dataset)
 {
@@ -349,7 +350,6 @@ SEXP HDF_dataset_select(SEXP x, SEXP args, SEXP drop)
     for(i=0; i<length(args); i++)
 	if( isMissingArg(VECTOR_ELT(args, i)) )
 	    SET_VECTOR_ELT(args, i, R_MissingArg);
-    
     if( length(args) == 1 ) 
 	PROTECT( ans = HDF_VectorSubset(x, args));
     else
@@ -493,7 +493,7 @@ SEXP HDF_ArraySubset(SEXP x, SEXP subargs)
 
 SEXP HDF_VectorSubset(SEXP x, SEXP s)
 {
-    SEXP indx, ans, out;
+    SEXP indx, ans, out,dimlist;
     SEXPTYPE Rtype;
     int nx, stretch, i, j, rank, lindx, val, dimx;
     hid_t ds, status, htype, t, memspace;
@@ -505,7 +505,6 @@ SEXP HDF_VectorSubset(SEXP x, SEXP s)
 	return HDF_duplicate(x);
 
     PROTECT(s);
-
 
     ds = H5Dget_space(HID(x));
     if( ds<0 || H5Iget_type(ds) != H5I_DATASPACE )
@@ -537,9 +536,21 @@ SEXP HDF_VectorSubset(SEXP x, SEXP s)
 	nx *= (int) dims[i];
 
     stretch=1; /* can stretch the subscript vector */
-    PROTECT(indx= vectorSubscript(nx, VECTOR_ELT(s, 0),
-					    &stretch, NULL, R_NilValue));
-
+    /* Ack! We should check to see if our single element is a 
+       matrix---people will expect that to work and right now
+       it returns values of extreme bogosity as it expects the
+       values to already be unwound. 
+    */
+    if(isMatrix(VECTOR_ELT(s,0))) {
+      PROTECT(dimlist = allocVector(INTSXP, rank));
+      for(i=0;i<rank;i++) 
+	INTEGER(dimlist)[i] = (int) dims[i];
+      PROTECT(indx = Rf_mat2indsub(dimlist,VECTOR_ELT(s,0)));
+      UNPROTECT(1);
+    } else
+      PROTECT(indx= vectorSubscript(nx, VECTOR_ELT(s, 0),
+				    &stretch, NULL, R_NilValue));
+    
     lindx = length(indx);
 
     /* set up the return value */

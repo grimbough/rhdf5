@@ -27,6 +27,7 @@ names.hdf5.group <- function(x, ...)
   return(NULL)
 }
 "$.hdf5.group" <- function(group,name) "[[.hdf5.group"(group,name)
+"[.hdf5.group" <- function(x,...) "[[.hdf5.group"(x,names(x)[..1])
 
 #Why doesn't this work?
 as.container <- function(x) UseMethod("as.container")
