@@ -1,5 +1,5 @@
 .First.lib <- function(lib, pkg, where) {
-  library.dynam("hdf5",pkg,lib)
+  library.dynam("rhdf5",pkg,lib)
   .Call("HDF_init")
   if (missing(where)) {
       where <- match(paste("package:", pkg, sep = ""),

@@ -1,12 +1,10 @@
 #include "common.h"
-
 /**
  * We need to do a lot of work to apply properly 
  */
 struct apply_state {
   int   index;
-  hid_t space;
-  SEXP  region;
+  SEXP  dataset;
   SEXP  funcall;
   SEXP  results;
 };
@@ -50,62 +48,53 @@ int HDF_count(hid_t group,int mask)
   return state.count;
 }
 
-int HDF_group_apply_iterator(hid_t group_id,const char* member_name,void* data)
+int HDF_group_apply_iterator(hid_t group_id,const char* member_name,void* userdata)
 {
   H5G_stat_t buf;
   hid_t      dataset;
-  SEXP       ds;
-  struct     apply_state *apply = (struct apply_state *)data;
-  
+  struct     apply_state *apply = (struct apply_state *)userdata;
   
   H5Gget_objinfo(group_id,member_name,0,&buf);
   if(buf.type == H5G_DATASET) {
     dataset = H5Dopen(group_id,member_name);
-    PROTECT(ds = H5Dsexp(dataset));
-    /* This must be the first dataset, so build the space from the region entry */
-    if(!apply->space) {
-      /* If there isn't a region then send the dataset to our function */
-      if(apply->region == R_NilValue) {
-	SETCAR(CDR(apply->funcall),ds);
-      } else {
-      }
-    } else {
-    }
+    SETCAR(apply->dataset,H5Dsexp(dataset));
     SET_VECTOR_ELT(apply->results,apply->index,eval(apply->funcall,R_GlobalEnv));
     apply->index++;
-    UNPROTECT(1);
   }
   return 0;
 }
 
-SEXP HDF_group_apply(SEXP group,SEXP closure,SEXP region,SEXP args)
+SEXP HDF_group_apply(SEXP group,SEXP FUN,SEXP region,SEXP args)
 {
   int i,n;
   struct apply_state state;
+  SEXP tmp,subscripts,myargs;
 
-  if(!isFunction(closure))
+  if(!isFunction(FUN))
     error("FUN must be a function");
-
-  /* Do we need to construct a region? */
-  if(isSPACE(region)) {
-    state.space = HID(region);
-    state.region= R_NilValue;
+  
+  /* Construct a function */
+  myargs = R_NilValue;
+  n = length(args);
+  for(i=0;i<n;i++) myargs = LCONS(VECTOR_ELT(args,i),myargs);
+  if(region != R_NilValue) {
+    n = length(region);
+    subscripts = R_NilValue;
+    for(i=0;i<n;i++) subscripts = LCONS(VECTOR_ELT(region,i),subscripts);
+    PROTECT(tmp = LCONS(R_BracketSymbol,LCONS(R_NilValue,subscripts)));
+    PROTECT(state.funcall = LCONS(FUN,LCONS(tmp,myargs)));
+    state.dataset = CDR(tmp);
   } else {
-    state.space = NULL;
-    state.region= region;
+    PROTECT(state.funcall = LCONS(FUN,LCONS(R_NilValue,myargs)));
+    state.dataset = CDR(state.funcall);
   }
 
-  /* Build the function call */
-  n = length(args);
-  state.funcall = R_NilValue;
-  for(i=0;i<n;i++) 
-    PROTECT(state.funcall = LCONS(VECTOR_ELT(args,n-i),state.funcall));
-  UNPROTECT(n);
-  PROTECT(state.funcall = LCONS(closure,LCONS(R_NilValue,state.funcall)));
-  n = HDF_count(HID(group),MASKED_GROUP);
+  /* Call the iterator */
+  n = HDF_count(HID(group),MASKED_DATASET);
   PROTECT(state.results = allocVector(VECSXP,n));
   state.index = 0;
   H5Giterate(HID(group),".",NULL,HDF_group_apply_iterator,(void*)&state);
   UNPROTECT(2);
+  if(region != R_NilValue) UNPROTECT(1);
   return state.results;
 }
