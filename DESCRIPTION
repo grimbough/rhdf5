@@ -1,0 +1,8 @@
+Package: Rhdf5
+Version: 0.1-0
+Title:	 An HDF5 interface for R
+Author:	 Byron Ellis, R. Gentleman
+Depends: R (>= 1.4.0), HDF5 (>= 5-1.40)
+Description: Provides supports for large matrix manipulation using the HDF5 storage library.
+Maintainer: R. Gentleman <rgentlem@hsph.harvard.edu>
+License: LGPL
