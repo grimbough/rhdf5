@@ -7,5 +7,4 @@ SystemRequirements: HDF5 (1.4.x)
 Description: Provides supports for large matrix manipulation using the HDF5 storage library.
 Maintainer: R. Gentleman <rgentlem@hsph.harvard.edu>
 License: LGPL
-ReleaseLevel: devel
 
