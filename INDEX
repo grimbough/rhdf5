@@ -1,5 +1,28 @@
-hdf5.attach              Attach an HDF5 File to an R variable
-hdf5.datasets            HDF5 Datasets
-hdf5.files               HDF5 File Interface
-hdf5.groups              HDF5 Groups
-hdf5                     HDF5 Interface Library for R
+Extract.hdf5            Extract Parts of an HDF5 object. 
+as.double.hdf5.dataset
+                        Coercion functions for HDF5 datasets. 
+as.hdf5.dataset         Create an HDF5 dataset from an R array or
+                        vector. 
+as.matrix.hdf5.dataset
+                        Coerce an HDF5 dataset to be an R matrix. 
+dim.hdf5                Obtain the dimensions of an HDF5 object. 
+hdf5.apply              HDF5 Group Apply
+hdf5.apply              HDF5 Group Apply
+hdf5.attributes         Attributes on HDF5 Objects. 
+hdf5.datasets           HDF5 Datasets
+hdf5.files              HDF5 File Interface
+hdf5.groups             HDF5 Groups
+hdf5.overview           HDF5 Interface Library for R
+hdf5.plist.create       Create an HDF5 property list. 
+hdf5.readcel            Read and Affymetrix CEL file into an HDF5 file
+hdf5.select.hyperslab   Select a hyperslab from an HDF5 dataspace. 
+is.finite               Test to see if elements are finite. 
+is.matrix               A generic is.matrix with some methods. 
+min.hdf5.dataset        Compute various useful quantities on HDF5
+                        datasets. 
+names.hdf5.file         Obtain the names for datasets and or groups. 
+print.hdf5.dataspace    Printing of the various HDF5 objects 
+space.hdf5.dataset      Obtain a dataspace congruent with the supplied
+                        HDF5 dataset. 
+swapmemory              Functions to handle adding R memory to HDF5
+                        objects. 
