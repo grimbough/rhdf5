@@ -1,4 +1,5 @@
 \name{hdf5.apply}
+\alias{hdf5.apply}
 \title{HDF5 Group Apply}
 \description{
   Allows the user to iterate over a set of datasets within a group,
@@ -10,7 +11,7 @@ hdf5.apply(group,REGION,FUN,...)
 }
 \arguments{
   \item{group}{a group reference}
-  \item{region}{a subset specification or set to NULL to pass the
+  \item{REGION}{a subset specification or set to NULL to pass the
     dataset itself}
   \item{FUN}{The function to call on each returned value. By default it
     is function(x) x}
