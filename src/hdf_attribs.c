@@ -116,9 +116,10 @@ SEXP HDF_attr_set(SEXP in, SEXP name, SEXP value)
       H5Awrite(attr, H5T_NATIVE_DOUBLE, REAL(value));
       break;
   default:
-      H5Aclose(attr);
+      /* H5Aclose(attr); */ /* not needed - SDR */
       H5Sclose(aid);
       error("unsupported attribute type");
+      attr = aid; /* -Wall */
   }
   H5Aclose(attr);  H5Sclose(aid);
 
@@ -207,6 +208,7 @@ static SEXP getattrbyindex(hid_t data, int i)
     default:
 	H5Aclose(attr);  H5Tclose(atype);
 	error("unknown type of attribute");
+    ans = R_NilValue; /* -Wall */
     }
 
     H5Aclose(attr);  H5Tclose(atype);
