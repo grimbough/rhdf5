@@ -33,7 +33,7 @@ groupgetinfo(group, name)
   \code{groupgetinfo} returns an object of class \code{hdf5.info} that
   contains the three values listed above.
 }
-\references{H5Gget_objinfo}
+\references{\samp{H5Gget_objinfo}}
 \author{R. Gentleman and B. Ellis}
 
 \seealso{\code{\link{hdf5.group}}}
