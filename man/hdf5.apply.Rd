@@ -20,4 +20,4 @@ mad <- hdf5.open("test.h5")
 unlist(hdf5.apply(mad[["test"]],list(1,),mean))
 }
 \seealso{\code{\link[hdf5]{hdf5.groups}}}
-\keyword{lapply}
+\keyword{manip}
