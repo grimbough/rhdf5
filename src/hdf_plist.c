@@ -34,6 +34,23 @@ SEXP HDF_plist_print(SEXP plist)
     return R_NilValue;
 }
 
+SEXP HDF_plist_set_cache(SEXP plist,SEXP bytes)
+{
+  int mdc_nelts,rdcc_nelts;
+  size_t rdcc_nbytes;
+  double rdcc_w0;
+
+  if(!isPLIST(plist)) {
+    error("not a Property List");
+    return R_NilValue;
+  }
+  H5Pget_cache(HID(plist),&mdc_nelts,&rdcc_nelts,&rdcc_nbytes,&rdcc_w0);
+  rdcc_nelts = (int)((rdcc_nelts*REAL(bytes)[0])/((double)rdcc_nbytes));
+  rdcc_nbytes = (size_t)(REAL(bytes)[0]);
+  H5Pset_cache(HID(plist),mdc_nelts,rdcc_nelts,rdcc_nbytes,rdcc_w0);
+  return R_NilValue;
+}
+
 SEXP HDF_plist_set_sizes(SEXP plist,SEXP sizes)
 {
     size_t sizeof_addr;
