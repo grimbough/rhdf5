@@ -6,7 +6,7 @@
 
 #include "R_ext/Rdynload.h"
 
-#define CALL(NAME,ARGS) {#NAME,(DL_FUNC)&##NAME,ARGS},
+#define CALL(NAME,ARGS) {#NAME,(DL_FUNC)& NAME,ARGS},
 
 /* Automate using sed or something. */
 #if _MSC_VER >= 1000
