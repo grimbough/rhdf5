@@ -28,9 +28,10 @@ as.hdf5.dataset(file, value, name)
 \seealso{\code{\link{hdf5.dataset}} }
 
 \examples{
+\dontrun{
    mad <- hdf5.open("microarray.h5")
    x <- matrix(rnorm(100), nc=2)
    j <- as.hdf5.dataset(mad, x)
-}
+}}
 \keyword{manip }
 
