@@ -8,12 +8,11 @@ hdf5.dataset <- function(group,name,data=NULL,dims=NULL,type=NULL,create=hdf5.de
     error("you must specify either data to store or dimensions for the dataset")
   if(!is.null(data) && !is.null(dims))
     error("you cannot specify dimensions for the dataset AND data! its not right!")
-  d <- dims
-  if(is.null(d)) d <- dim(data)
-  s <- .Call("HDF_dataset_create_simple",group,name,d,create,type)
-  #store the matrix into this dataset
-  if(!is.null(data))
-    s[1:d[1],1:d[2]] <- data
+  if(!is.null(data)) {
+    s <- .Call("HDF_dataset_store",group,name)
+  } else {
+    s <- .Call("HDF_dataset_create_simple",group,name,dims,create,type)
+  }
   invisible(s)
 }
 
@@ -50,6 +49,7 @@ as.hdf5.dataset <- function(file, value, name) {
     invisible(.Call("HDF_dataset_store", file, value, name))
 }
 
+get.points <- function(d,x,y) .Call("HDF_dataset_select_points",d,x,y)
 
 "[.hdf5.dataset" <- function(x, ..., drop = TRUE) {
     mf <- match.call()
