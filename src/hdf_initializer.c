@@ -76,6 +76,13 @@ void H5finalize(SEXP x)
     case H5I_ATTR:
     case H5I_BADID:
     case H5I_DATATYPE:
+    case H5I_FILE_CLOSING:
+    case H5I_TEMPLATE_MAX:
+    case H5I_TEMPBUF:
+    case H5I_REFERENCE:
+    case H5I_VFL:
+    case H5I_GENPROP_CLS:
+    case H5I_NGROUPS:
 	error("bad datatype for external pointer");
     }
 
@@ -86,7 +93,7 @@ void H5finalize(SEXP x)
 /* we always add a hdf class to the object */
 SEXP H5sexp(hid_t hid, const char* classname, void (*finalizer)(SEXP))
 {
-    SEXP ans, final, tmp;
+    SEXP ans, final;
 
     PROTECT(ans = allocVector(VECSXP,1));
     PROTECT(final = R_MakeExternalPtr((void*)hid, HDF_hid_tag, R_NilValue));

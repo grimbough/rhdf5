@@ -1,5 +1,6 @@
 #include "common.h"
 
+
 /* 
   given an hdf5 data set, see if it has dims set, if so,
   copy these to a dim attribute and attach that to rdata,
@@ -46,8 +47,7 @@ int HDF_hdfdims2Rdims(hid_t hdfdata, SEXP rdata, int check)
 int HDF_rdims2hdf5dims(hid_t hdfdata, SEXP rdata, int check)
 {
     hid_t d, s;
-    int i, rank, count=1;
-    SEXP Rdims;
+    int rank;
     hsize_t *dims;
 
     d = hdfdata;
@@ -111,7 +111,7 @@ void setMatrixDims(SEXP obj, int ndims, hsize_t* dims)
 void *HDF_convertoR(SEXP obj, R_CConvertInfo *inf, R_toCConverter *el)
 {
     hid_t d, s;
-    int i, n;
+    int n=0;
     herr_t status;
     SEXP ans;
 
@@ -165,7 +165,6 @@ void *HDF_convertoR(SEXP obj, R_CConvertInfo *inf, R_toCConverter *el)
 
 SEXP HDF_duplicate(SEXP x) 
 {
-    SEXP dup;
     hid_t s;
 
     if( !isSPACE(x) && !isDATASET(x) )

@@ -2,7 +2,6 @@
 
 hid_t hdf_datatype_resolve(SEXP); /* in hdf_datatype.c */
 int   HDF_has_subgroup(SEXP group,SEXP name); /* in hdf_group.c */
-/* extern SEXP mat2indsub(SEXP dims,SEXP s); /* in subscript.c */ 
 
 SEXP HDF_dataset_print(SEXP dataset)
 {
@@ -495,11 +494,10 @@ SEXP HDF_VectorSubset(SEXP x, SEXP s)
 {
     SEXP indx, ans, out,dimlist;
     SEXPTYPE Rtype;
-    int nx, stretch, i, j, rank, lindx, val, dimx;
+    int nx, stretch, i, j, rank, lindx, val;
     hid_t ds, status, htype, t, memspace;
     hsize_t *dims, *cnt, *tmp, sdim[1];
-    hssize_t *off, *t2;
-    void *buf;
+    hssize_t *off;
 
     if( s == R_MissingArg )
 	return HDF_duplicate(x);
@@ -588,14 +586,14 @@ SEXP HDF_VectorSubset(SEXP x, SEXP s)
     return(ans);
 }
 
-SEXP HDF_dataset_select_points(SEXP d,SEXP x,SEXP y)
+SEXP HDF_dataset_select_points(SEXP d, SEXP x, SEXP y)
 {
   SEXP ans;
   int  i;
 
   hssize_t *coord;
   hsize_t  sdim[1];
-  hid_t    space,memspace;
+  hid_t    space, memspace;
 
   if(!isDATASET(d))
     error("argument is not an HDF5 dataset");
@@ -608,7 +606,7 @@ SEXP HDF_dataset_select_points(SEXP d,SEXP x,SEXP y)
   sdim[0] = length(x);
   
   space    = H5Dget_space(HID(x));
-  memspace = H5Screate_simple(1,sdim,NULL);
+  memspace = H5Screate_simple(1, sdim, NULL);
   /* Select the points */
   for(i=0;i<length(x);i++) {
     coord[i]           = (int)REAL(x)[i];
@@ -630,8 +628,8 @@ SEXP HDF_dataset_select_points(SEXP d,SEXP x,SEXP y)
 SEXP HDF_dataset_store(SEXP in, SEXP mat, SEXP name)
 {
     SEXP dimVal;
-    hssize_t *datadim, matdim[1];
-    hid_t    dataspace, memspace, dset, dtype;
+    hssize_t *datadim;
+    hid_t    memspace, dset, dtype;
     int ndims, i;
 
     if( !isFILE(in) && !isGROUP(in) ) {
@@ -1054,6 +1052,8 @@ SEXP HDF_dataset_min(SEXP args)
     if(n<0)
 	error("unable to obtain the number of points");
 
+    ans = R_NilValue; /* keep Wall happy */
+
     switch(HDF_getRtype(HID(dataset))) {
     case INTSXP:
     case LGLSXP:
@@ -1109,6 +1109,8 @@ SEXP HDF_dataset_max(SEXP args)
     n = H5Sget_simple_extent_npoints(s);
     if(n<0)
 	error("unable to obtain the number of points");
+
+    ans = R_NilValue; /* keep Wall happy */
 
     switch(HDF_getRtype(HID(dataset))) {
     case INTSXP:

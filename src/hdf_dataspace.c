@@ -23,7 +23,7 @@ SEXP HDF_space_store(SEXP in, SEXP space, SEXP vec)
     hsize_t	dims[1], cnt[1];
     hssize_t	off[1];
     herr_t      val;
-    SEXP v, w, temp;
+    SEXP v, w;
     int lv, i;
     
     dims[0] = H5Sget_select_npoints(HID(space));
@@ -82,10 +82,8 @@ SEXP HDF_space_load(SEXP in, SEXP space, SEXP drop)
     SEXP  ans, dimlist, spaced;
     SEXPTYPE Rtype;
     int i;
-    hid_t memspace, d, t, htype, xfer_plist, select;
+    hid_t memspace, d, t, htype, select;
     hssize_t dims[1], off[1], cnt[1];
-    size_t size;
-    void *foo;
 
     dims[0] = H5Sget_select_npoints(HID(space));
     off[0]  = 0;
@@ -157,7 +155,7 @@ SEXP HDF_select_hyperslab(SEXP space, SEXP selop, SEXP Rstart, SEXP
 			  Rstride, SEXP Rcount, SEXP Rblock)
 {
     hid_t s;
-    H5S_seloper_t op;
+    H5S_seloper_t op=H5S_SELECT_SET;
     hssize_t *start;
     hsize_t *stride, *count, *block, *dims;
     int ndims, i;
