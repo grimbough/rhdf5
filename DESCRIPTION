@@ -1,4 +1,4 @@
-Package: Rhdf5
+Package: rhdf5
 Version: 0.1-0
 Title:	 An HDF5 interface for R
 Author:	 Byron Ellis, R. Gentleman
