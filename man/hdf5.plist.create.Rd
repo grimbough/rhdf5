@@ -1,6 +1,8 @@
 \name{hdf5.plist.create}
 \alias{hdf5.plist.create}
 \alias{hdf5.get.default.plist}
+\alias{hdf5.plist.set.cache}
+\alias{hdf5.default.properties}
 \title{ Create an HDF5 property list. }
 \description{
   The HDF5 library provides a general means of interacting with files
@@ -10,12 +12,15 @@
 \usage{
 hdf5.plist.create(type, ...)
 hdf5.get.default.plist()
+hdf5.plist.set.cache(plist, bytes)
 }
 \arguments{
   \item{type}{Is one of \code{file.create}, \code{file.access},
   \code{dataset},  \code{dataset.xfer}, \code{mount}}
   \item{\dots}{ Additional parameters depending upon the value of the
     first argument. }
+  \item{plist}{An instance of the \code{hdf5.proplist} class.}
+  \item{bytes}{The size of the cache in bytes.}
 }
 \details{
   Arguments are passed through the HDF5 library routines for each of

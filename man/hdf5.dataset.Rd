@@ -1,5 +1,6 @@
 \name{hdf5.dataset}
 \alias{hdf5.dataset}
+\alias{get.points}
 \title{HDF5 Dataset}
 \description{
   In the HDF5 hierarchy there are files, groups and datasets. Files
@@ -9,6 +10,7 @@
 \usage{
 hdf5.dataset(group, name, data=NULL, dims=NULL, type=NULL,
                          create=hdf5.default.properties)
+get.points(d, x, y)
 }
 \arguments{
   \item{group}{An instance of \code{\link{hdf5.file}} or
@@ -19,6 +21,9 @@ hdf5.dataset(group, name, data=NULL, dims=NULL, type=NULL,
   \item{type}{The type of dataset to create. See
     \code{link{hdf5.datatypes}} for details. }
   \item{create}{An HDF5 property list. }
+  \item{d}{An instance of \code{hdf5.dataset}.}
+  \item{x}{The x-positions of the points to select.}
+  \item{y}{The y-positions of the points to select.}
 }
 
 \details{
@@ -29,6 +34,8 @@ arguments must not be specified. The \code{type} and \code{create}
 arguments are ignored.
 If \code{dims} is specified then \code{data} must not be.
 The default \code{type} is \texttt{double}.
+
+\code{get.points} returns the points specified.
 }
 
 \value{

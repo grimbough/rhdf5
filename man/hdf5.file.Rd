@@ -3,6 +3,7 @@
 \alias{hdf5.open}
 \alias{hdf5.create}
 \alias{[[.hdf5.file}
+\alias{[.hdf5.file}
 \title{HDF5 File Interface}
 \description{
   Files are pretty simple things in HDF5 and inherit most of their
@@ -14,6 +15,7 @@
 access=hdf5.default.properties)   
   hdf5.open(filename,access=hdf5.default.properties)
   x[[i]]
+  x[i]
 }
 \arguments{
   \item{filename}{A filename.}
@@ -30,6 +32,10 @@ access=hdf5.default.properties)
   file. It signals an error if the file already exists.
   \code{hdf5.open} opens an existing file or creates a file with the
   specified name.
+
+  The function \code{[.hdf5.file} throws an error. It is not clear how
+  to implement such a function.
+  
 }
 \seealso{\code{\link[hdf5]{hdf5.groups}},
   \code{\link[hdf5]{hdf5.create.group}},
