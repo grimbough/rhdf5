@@ -1,0 +1,5 @@
+hdf5.attach              Attach an HDF5 File to an R variable
+hdf5.datasets            HDF5 Datasets
+hdf5.files               HDF5 File Interface
+hdf5.groups              HDF5 Groups
+hdf5                     HDF5 Interface Library for R
