@@ -13,24 +13,7 @@ SEXP HDF_plist_print(SEXP plist)
 	return R_NilValue;
     }
     Rprintf("Property List Class: ");
-    switch(H5Pget_class(HID(plist)))
-    {
-    case H5P_FILE_CREATE:
-	printf("File Create\n");
-	break;
-    case H5P_FILE_ACCESS:
-	printf("File Access\n");
-	break;
-    case H5P_DATASET_CREATE:
-	printf("Dataset Create\n");
-	break;
-    case H5P_DATASET_XFER:
-	printf("Dataset Transfer\n");
-	break;
-    case H5P_MOUNT:
-	printf("Mount\n");
-	break;
-    }
+    printf("%s\n", H5Pget_class_name(HID(plist)));
     return R_NilValue;
 }
 
