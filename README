@@ -1,0 +1,11 @@
+Installation Instructions
+
+1) make sure that the file, configure, is executable
+2) make sure that HDF5 is installed on your computer
+3) you can set the locations using the environment variables:
+   HDF5_LIB_DIR
+   HDF5_INCLUDE_DIR
+4) run R INSTALL rhdf5
+
+ And that should be all you need to do.
+ Please report any problems.
