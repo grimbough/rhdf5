@@ -213,117 +213,6 @@ SEXP HDF_dataset_create_simple(SEXP group, SEXP name, SEXP dim, SEXP
     return H5Dsexp(data);
 }
 
-/* Decide whether or not this vector is contiguous */
-int is_contig_i(SEXP vec)
-{
-    int i,l;
-
-    l = length(vec);
-    for(i=1;i<l;i++)
-	if(INTEGER(vec)[i-1]+1 != INTEGER(vec)[i]) return 0;
-    return 1;
-}
-
-int is_contig_r(SEXP vec)
-{
-    int i,l;
-
-    l = length(vec);
-    for(i=1;i<l;i++)
-	if(REAL(vec)[i-1]+1 != REAL(vec)[i]) return 0;
-    return 1;
-}
-
-/* Do all the dirty work */
-/* FIXME: I think we can now only get INTSXP subscripts here and the
-   other code can disappear, RG */
-/* do_subslab is called recursively, count times.
-   Each time we grab another part of the object */
-
-#define SELECT (d == 0) ? H5S_SELECT_SET : H5S_SELECT_OR
-
-void do_subslab(hid_t space, hssize_t* off, hsize_t* cnt, int ldim, int
-		count, hsize_t* dims, SEXP vec)
-{
-    int	      i;
-    hsize_t   d;
-    SEXP      arg;
-    herr_t    success;
-
-    ldim++;
-    arg = VECTOR_ELT(vec, ldim); 
-
-    d	= H5Sget_select_npoints(space);
-    switch(TYPEOF(arg)) {
-    case SYMSXP:
-	off[ldim] = 0;
-	cnt[ldim]= dims[ldim];
-	if(ldim == count-1)
-	    success = H5Sselect_hyperslab(space,SELECT,off,NULL,cnt,NULL);
-	else
-	    do_subslab(space, off, cnt, ldim, count, dims, vec);
-	break;
-    case INTSXP:
-	if(length(arg) > 1) {
-	    if(is_contig_i(arg)) {
-		off[ldim] = (hssize_t)INTEGER(arg)[0]-1;
-		cnt[ldim] = (hsize_t)( INTEGER(arg)[length(arg)-1] - (INTEGER(arg)[0]-1) );
-		if(ldim == count-1)
-		    success = H5Sselect_hyperslab(space, SELECT, off,
-						  NULL, cnt, NULL);
-		else 		    
-		    do_subslab(space, off, cnt, ldim, count, dims, vec);
-	    } else {
-		for(i=0;i<length(arg);i++) {
-		    off[ldim] = (hssize_t)INTEGER(arg)[i]-1;
-		    cnt[ldim] = 1;
-		    if(ldim == count-1)
-			success = H5Sselect_hyperslab(space, SELECT,
-						      off, NULL, cnt, NULL);
-		    else
-			do_subslab(space, off, cnt, ldim, count, dims, vec);
-		} /* for */
-	    } /* if */
-	} else {
-	    off[ldim] = (hssize_t)INTEGER(arg)[0]-1;
-	    cnt[ldim] = 1;
-	    if(ldim == count-1)
-		H5Sselect_hyperslab(space,SELECT,off,NULL,cnt,NULL);
-	    else
-		do_subslab(space,off,cnt,ldim,count,dims, vec);
-	} /* if */
-	break;
-    case REALSXP:
-	/* moved this here to overcome a compiler bug in Suse 6.4 */
-	off[ldim] = (hssize_t)REAL(arg)[0]-1;
-	if(length(arg) > 1) {
-	    if(is_contig_r(arg)) {
-		cnt[ldim] = (hsize_t)( REAL(arg)[length(arg)-1] - (REAL(arg)[0]-1) );
-		if(ldim == count)
-		    H5Sselect_hyperslab(space,SELECT,off,NULL,cnt,NULL);
-		else
-		    do_subslab(space,off,cnt,ldim,count,dims, vec);
-	    } else {
-		for(i=0;i<length(arg);i++) {
-		    off[ldim] = (hssize_t)REAL(arg)[i]-1;
-		    cnt[ldim] = 1;
-		    if(ldim == count-1)
-			H5Sselect_hyperslab(space,SELECT,off,NULL,cnt,NULL);
-		    else
-			do_subslab(space,off,cnt,ldim,count,dims, vec);
-		} /* for */
-	    } /* if */
-    } else {
-	cnt[ldim] = 1;
-	if(ldim == count-1)
-	    H5Sselect_hyperslab(space,SELECT,off,NULL,cnt,NULL);
-	else
-	    do_subslab(space,off,cnt,ldim,count,dims, vec);
-    } /* if */
-	break;
-    }
-}
-
 /* the args are:
      HDF_dataset_select_space
      x - the dataset
@@ -352,7 +241,7 @@ SEXP HDF_dataset_select(SEXP x, SEXP args, SEXP drop)
     if( length(args) == 1 ) 
 	PROTECT( ans = HDF_VectorSubset(x, args));
     else
-	PROTECT( ans = HDF_ArraySubset(x, args));
+      PROTECT( ans = HDF_ArraySubset(x, args));
 
     if( !isMissingArg(drop) ) {
 	i = asLogical(drop);
@@ -492,98 +381,75 @@ SEXP HDF_ArraySubset(SEXP x, SEXP subargs)
 
 SEXP HDF_VectorSubset(SEXP x, SEXP s)
 {
-    SEXP indx, ans, out,dimlist;
-    SEXPTYPE Rtype;
-    int nx, stretch, i, j, rank, lindx, val;
-    hid_t ds, status, htype, t, memspace;
-    hsize_t *dims, *cnt, *tmp, sdim[1];
-    hssize_t *off;
+  int       rank,i,j,status,nx,stretch,len,val;
+  hid_t     ds,t,htype,memspace;
+  hsize_t   *dims,*tmp,sdims[1];
+  hssize_t  *coords;
+  SEXPTYPE  Rtype;
+  SEXP      indices,dimlist,ans;
 
-    if( s == R_MissingArg )
-	return HDF_duplicate(x);
+  if(s == R_MissingArg)
+    return HDF_duplicate(x);
 
-    PROTECT(s);
+  PROTECT(s);
+  ds = H5Dget_space(HID(x));
+  if(ds < 0 || H5Iget_type(ds) != H5I_DATASPACE)
+    error("could not get the dataspace");
+  t = H5Dget_type(HID(x));
+  
+  rank = H5Sget_simple_extent_ndims(ds);
+  if(rank < 0) {
+    H5Sclose(ds);
+    error("invalid dimensions");
+  }
+  dims = (hsize_t*)R_alloc(rank,sizeof(hsize_t));
+  tmp  = (hsize_t*)R_alloc(rank+1,sizeof(hsize_t));
+  status = H5Sget_simple_extent_dims(ds,dims,NULL);
+  if(status < 0) {
+    H5Sclose(ds);
+    error("unable to obtain dims");
+  }
+  
 
-    ds = H5Dget_space(HID(x));
-    if( ds<0 || H5Iget_type(ds) != H5I_DATASPACE )
-	error("failed to obtain dataspace");
-    
-    t =  H5Dget_type(HID(x));
+  nx = 1;
+  for(i=0;i<rank;i++) nx *= (int)dims[i];
+  stretch=1;
+  if(isMatrix(VECTOR_ELT(s,0))) {
+    PROTECT(dimlist = allocVector(INTSXP,rank));
+    for(i=0;i<rank;i++)
+      INTEGER(dimlist)[i] = (int)dims[i];
+    PROTECT(indices = Rf_mat2indsub(dimlist,VECTOR_ELT(s,0)));
+    UNPROTECT(1);
+  } else {
+    PROTECT(indices = vectorSubscript(nx,VECTOR_ELT(s,0),&stretch,NULL,R_NilValue));
+  }
+  len = length(indices);
+  Rtype = HDFclass2Rtype(H5Tget_class(t)); 
 
-    rank = H5Sget_simple_extent_ndims(ds);
-    if( rank < 0 )
-	error("failed to get dims of dataspace");
-
-    off = (hssize_t*) R_alloc(rank, sizeof(hssize_t));
-    cnt = (hsize_t*) R_alloc(rank, sizeof(hsize_t));
-    dims = (hsize_t*) R_alloc(rank, sizeof(hsize_t));
-    tmp = (hsize_t*) R_alloc(rank+1, sizeof(hsize_t));
-
-    status = H5Sget_simple_extent_dims(ds, dims, NULL);
-    if( status < 0 ) {
-	H5Sclose(ds);
-	error("unable to obtain dims");
+  PROTECT(ans = allocVector(Rtype, len)); 
+  htype = Rtype2HDFtype(Rtype); 
+  tmp[0] = 1;
+  for(i =0;i<rank;i++) tmp[i+1] = tmp[i]*dims[i];
+  
+  /* Select some elements */
+  coords = (hssize_t*)R_alloc(rank*len,sizeof(hssize_t));
+  for(i=0;i<len;i++) {
+    val = INTEGER(indices)[i]-1;
+    for(j=rank-1;j>=0;j--) {
+      coords[(i*rank)+j] = val/tmp[j];
+      val = val % tmp[j];
     }
-    status = H5Sselect_none(ds);
-    if( status < 0 ) {
-	H5Sclose(ds);
-	error("select none failed");
-    }
-    nx = 1;
-    for(i=0; i<rank; i++)
-	nx *= (int) dims[i];
-
-    stretch=1; /* can stretch the subscript vector */
-    /* Ack! We should check to see if our single element is a 
-       matrix---people will expect that to work and right now
-       it returns values of extreme bogosity as it expects the
-       values to already be unwound. 
-    */
-    if(isMatrix(VECTOR_ELT(s,0))) {
-      PROTECT(dimlist = allocVector(INTSXP, rank));
-      for(i=0;i<rank;i++) 
-	INTEGER(dimlist)[i] = (int) dims[i];
-      PROTECT(indx = Rf_mat2indsub(dimlist,VECTOR_ELT(s,0)));
-      UNPROTECT(1);
-    } else
-      PROTECT(indx= vectorSubscript(nx, VECTOR_ELT(s, 0),
-				    &stretch, NULL, R_NilValue));
-    
-    lindx = length(indx);
-
-    /* set up the return value */
-    Rtype = HDFclass2Rtype(H5Tget_class(t));
-
-    PROTECT(out = allocVector(Rtype, 1));
-    PROTECT(ans = allocVector(Rtype, lindx));
-
-    htype = Rtype2HDFtype(Rtype);
-
-    tmp[0] = 1;
-    for(i = 0; i<rank; i++) {
-	cnt[i] = 1;
-	tmp[i+1] = tmp[i]*dims[i];
-    }
-
-    sdim[0]=1;
-    memspace = H5Screate_simple(1, sdim, NULL);
-
-    /* here we presume C-style indexing;
-       this will need to be fixed for other
-       types of indexing */
-    for( i=0; i<lindx; i++ ) {
-	val = INTEGER(indx)[i]-1;
-	for(j = rank-1; j>=0; j--) {
-	    off[j] = val/tmp[j];
-	    val = val%tmp[j];
-	}
-	H5Sselect_hyperslab(ds, H5S_SELECT_SET, off, NULL, cnt, NULL);
-	H5Dread(HID(x), htype, memspace, ds, H5P_DEFAULT, REAL(out));
-	REAL(ans)[i] = REAL(out)[0];
-    }
-
-    UNPROTECT(4);
-    return(ans);
+  }
+  /* Select Elements into our nifty dataspace */
+  H5Sselect_elements(ds,H5S_SELECT_SET,len,(const hssize_t **)coords);
+  sdims[0] = len;
+  memspace = H5Screate_simple(1,sdims,NULL);
+  /* Q: Why do we go through all the type selection when we HAVE to have a double here? */
+  H5Dread(HID(x),htype,memspace,ds,H5P_DEFAULT,REAL(ans));
+  H5Sclose(memspace);
+  H5Sclose(ds);
+  UNPROTECT(3);
+  return(ans);
 }
 
 SEXP HDF_dataset_select_points(SEXP d, SEXP x, SEXP y)
