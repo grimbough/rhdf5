@@ -176,7 +176,7 @@ static SEXP HDF_VectorSubassign(SEXP x, SEXP s, SEXP y)
 	nx *= (int) dims[i];
 
     PROTECT(indx= vectorSubscript(nx, VECTOR_ELT(s, 0),
-					    &stretch, NULL, R_NilValue));
+					    &stretch, NULL, (STRING_ELT), R_NilValue));
 
     n = length(indx);
 
@@ -306,7 +306,7 @@ static SEXP HDF_ArraySubassign(SEXP x, SEXP s, SEXP y)
 
     for (i = 0; i < rank; i++) 
 	SET_VECTOR_ELT(s, i, arraySubscript(i, VECTOR_ELT(s, i), dim,
-					    NULL, R_NilValue)); 
+					    NULL, (STRING_ELT), R_NilValue)); 
     n = 1;
     tmp[0] = 1;
     for (i = 0; i < rank; i++) {
