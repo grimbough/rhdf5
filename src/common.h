@@ -138,6 +138,15 @@ hid_t HDF_copydataset(hid_t, hid_t, hid_t, hid_t);
 
 int HDF_getRtype(hid_t);
 int HDF_setRtype(hid_t, int);
+
+SEXPTYPE HDFclass2Rtype(hid_t);
+hid_t Rtype2HDFtype(SEXPTYPE);
+
+
+/* functions imported from R */
+SEXP Rf_DropDims(SEXP);
+SEXP Rf_mat2insdsub(SEXP, SEXP);
+
 #endif
 
 

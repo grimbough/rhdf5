@@ -20,9 +20,7 @@ static void datecp(char *from, char *to)
 
 SEXP HDF_init(void) 
 {
-    SEXP temp, sym;
     hid_t file, group;
-    struct tm when;
     time_t t1;
     char *buf, date[20];
     

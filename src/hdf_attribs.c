@@ -147,14 +147,15 @@ SEXP HDF_attr_get(SEXP in, SEXP name)
 	attr = H5Aopen_idx(HID(in), i);
 	if( attrmatchname(attr, STR(name)) ) {
 	    found = 1;
+	    H5Aclose(attr);
 	    break;
 	}
+	H5Aclose(attr);
     }
-    H5Aclose(attr); 
-    
+
     if( !found )
 	return R_NilValue;
-    
+
     return getattrbyindex(HID(in), i);
 }
 
@@ -304,7 +305,7 @@ int HDF_getRtype(hid_t data)
 {
     int count, i, ans, found=0;
     int npt;
-    hid_t attr, atype, aid, aspace;
+    hid_t attr, atype, aspace;
 
     if( H5Iget_type(data) != H5I_DATASET )
 	error("argument is not a dataset");
@@ -312,12 +313,13 @@ int HDF_getRtype(hid_t data)
     count = H5Aget_num_attrs(data);
     for(i=0; i<count; i++) {
 	attr = H5Aopen_idx(data, i);
-      if( attrmatchname(attr, "*Rtype*") ) {
-	  found = 1;
-	  break;
-      }
-      H5Aclose(attr); 
+	if( attrmatchname(attr, "*Rtype*") ) {
+	    found = 1;
+	    break;
+         }
+         H5Aclose(attr); 
     }
+    
     if( !found )
 	return -1;
 

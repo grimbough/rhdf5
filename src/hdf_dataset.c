@@ -71,7 +71,7 @@ SEXP HDF_dataset_print(SEXP dataset)
 SEXP HDF_dataset_getspace(SEXP in)
 {
 
-    hid_t    s, status;
+    hid_t    s;
 
     if(!isDATASET(in) )
 	error("the argument must be an HDF5 dataset");
