@@ -32,10 +32,10 @@ names.hdf5.group(x, \dots)
 \seealso{\code{\link{names}}, \code{\link[hdf5]{hdf5.file}} }
 
 \examples{
-  mad <- hdf5.open("microarray.h5")
+\dontrun{  mad <- hdf5.open("microarray.h5")
   hdf5.group(mad,"chip")
   names(mad)
   hdf5.group(mad$chip, "bar")
   names(mad$chip)
-}
+}}
 \keyword{ attribute }

@@ -18,13 +18,13 @@ hdf5.attr(set, name) <- value
   \item{value}{The value to associate with the attribute.}
 }
 \details{
-  Even though the HDF5 attributes look a lot like \R attributes I do not
+  Even though the HDF5 attributes look a lot like R attributes I do not
   believe that these functions should become generic. It would make
   little sense (and a lot of work) to try and syncronize HDF5 attributes
-  and \R attributes.
+  and R attributes.
 
   The HDF5 attributes do have the advantage that they are stored with
-  the HDF5 datasets and groups and hence have persistence across \R
+  the HDF5 datasets and groups and hence have persistence across R
   sessions. 
 }
 \value{
@@ -57,7 +57,7 @@ interpretation.
 \seealso{\code{\link[hdf5]{hdf5.dataset}}, \code{\link{attr}} }
 
 \examples{
-  mad <- hdf5.open("microarray.h5")
+ \dontrun{ mad <- hdf5.open("microarray.h5")
   hdf5.attributes(mad)
   hdf5.group(mad,"chip")
   hdf5.attr(mad$chip, "foo") <- 33
@@ -65,5 +65,5 @@ interpretation.
   hdf5.attr(mad$chip, "foo")
   hdf5.attr(mad$chip, "bar") <- "aa"
   hdf5.attributes(mad$chip)
-}
+}}
 \keyword{attribute }

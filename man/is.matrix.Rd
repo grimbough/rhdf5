@@ -28,8 +28,8 @@ is.matrix.hdf5.dataset(x, ...)
 \seealso{\code{\link[hdf5]{is.finite.hdf5.dataset}} }
 
 \examples{
-    mad <- hdf5.open("microarray.h5")
+ \dontrun{   mad <- hdf5.open("microarray.h5")
     x1 <- hdf5.dataset(mad, "finiteex", dim=c(15, 15))
     is.matrix(x1)
-}
+}}
 \keyword{ programming }

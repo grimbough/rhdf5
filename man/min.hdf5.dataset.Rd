@@ -32,7 +32,7 @@ length.hdf5.dataset(x)
 \seealso{\code{\link{hdf5.dataset}} }
 
 \examples{
-  set.seed(321)   
+ \dontrun{ set.seed(321)   
   xx <- hdf5.dataset(mad, "aab", dim=c(10, 10))
   xx[]<-rnorm(100)
   xx ##10x10 matrix of reals
@@ -42,6 +42,6 @@ length.hdf5.dataset(x)
   xx[5,5] <- NA
   min(xx) ##[1] NA
   min(xx,na.rm=TRUE)  ##[1] -1.932862
-}
+}}
 
 \keyword{ math }
