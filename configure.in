@@ -2,7 +2,7 @@ dnl configure.in for hdf5, patterned on configure.in for RPgSQL
 dnl Process this file with autoconf to produce a configure script.
 AC_INIT
 AC_PREREQ(2.52)
-AC_REVISION($Revision: 1.4 $)
+AC_REVISION($Revision: 1.5 $)
 AC_CONFIG_SRCDIR(src/hdf5.c)
 
 AC_DEFUN([CHECK_HDF5],
@@ -53,7 +53,7 @@ then
 		AC_MSG_ERROR(please specify a valid hdf5 installation with --with-hdf5=DIR)
 	fi
 
-AC_MSG_CHECKING(for hdf5 version 1.4)
+AC_MSG_CHECKING(for hdf5 version >= 1.4)
 LIBS="$LIBS -lhdf5"
 AC_CACHE_VAL(ac_cv_working_hdf5_version,
 [AC_TRY_RUN(
@@ -64,14 +64,14 @@ int main(void) {
 
         H5get_libversion(&maj, &min, &rel);
 
-        if ((maj == 1)&&(min==4))
+        if ((maj == 1)&&(min>=4))
            exit(0);
         else
            exit(1);
 }], ac_cv_working_hdf5_version=yes, ac_cv_working_hdf5_version=no, ac_cv_working_hdf5_version=cross)])
 AC_MSG_RESULT([$ac_cv_working_hdf5_version])
 if test x$ac_cv_working_hdf5_version != "xyes"; then
-	AC_MSG_ERROR(HDF5 installation must be version 1.4.x)
+	AC_MSG_ERROR(HDF5 installation must be version 1.4.x or greater)
 fi
 fi])
 
