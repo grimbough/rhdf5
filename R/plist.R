@@ -11,6 +11,9 @@ hdf5.plist.create <- function(type,...) {
   return(hdf5.default.properties)
 }
 
+hdf5.plist.set.cache <- function(plist,bytes)
+  .Call("HDF_plist_set_cache",plist,bytes)
+
 print.hdf5.proplist <- function(x, ...)
   .Call("HDF_plist_print", x)
 
