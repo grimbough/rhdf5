@@ -3,18 +3,18 @@
 #
 
 hdf5.group <- function(group, name)
-  invisible(.Call("HDF_group_mkgroup", group,name))
+  invisible(.Call("HDF_group_mkgroup", group,name, PACKAGE="rhdf5"))
 hdf5.group.rm <- function(group, name) {
-  .Call("HDF_group_delete",group, name)
+  .Call("HDF_group_delete",group, name, PACKAGE="rhdf5")
   invisible(group)
 }
 print.hdf5.group <- function(x, ...) {
-  .Call("HDF_group_print", x)
+  .Call("HDF_group_print", x, PACKAGE="rhdf5")
   invisible(x)
 }
 
 names.hdf5.group <- function(x, ...)
-  .Call("HDF_group_members", x)
+  .Call("HDF_group_members", x, PACKAGE="rhdf5")
 
 print.hdf5.info <- function(x, ...) {
   cat("Type: ", x$type, "\n")
@@ -23,7 +23,7 @@ print.hdf5.info <- function(x, ...) {
   invisible(x)
 }
 groupgetinfo <- function(group, name)
-  .Call("HDF_group_get_info", group, name)
+  .Call("HDF_group_get_info", group, name, PACKAGE="rhdf5")
 
 "[[.hdf5.group" <- function(group, name) {
     if(length(name) != 1)
@@ -38,13 +38,13 @@ groupgetinfo <- function(group, name)
             stop(paste(name, "is not one of the named objects"))
     }
 
-   info <- .Call("HDF_group_get_info", group, name)
+   info <- .Call("HDF_group_get_info", group, name, PACKAGE="rhdf5")
    if( is.null(info)) return(NULL)
    if(info$type == "group") {
-       return(.Call("HDF_group_get_group", group, name))
+       return(.Call("HDF_group_get_group", group, name, PACKAGE="rhdf5"))
    }
    if(info$type == "dataset") {
-       return(.Call("HDF_group_get_dataset", group, name))
+       return(.Call("HDF_group_get_dataset", group, name, PACKAGE="rhdf5"))
    }
    return(NULL)
 }
@@ -65,5 +65,5 @@ groupgetinfo <- function(group, name)
 
 hdf5.apply <- function(X, REGION, FUN=function(x) x,...) {
   FUN <- match.fun(FUN)
-  .Call("HDF_group_apply", X, FUN, REGION, list(...))
+  .Call("HDF_group_apply", X, FUN, REGION, list(...), PACKAGE="rhdf5")
 }

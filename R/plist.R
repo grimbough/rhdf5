@@ -3,19 +3,21 @@
 #
 hdf5.plist.create <- function(type,...) {
   switch(type,
-         file.create=return(.Call("HDF_plist_file_create",..1,..2)),
-         file.access=return(.Call("HDF_plist_file_access")),
-         dataset.create=return(.Call("HDF_plist_dataset_create")),
-         dataset.xfer=return(.Call("HDF_plist_dataset_xfer")),
-         mount=return(.Call("HDF_plist_mount")))
+         file.create=return(.Call("HDF_plist_file_create",..1,..2,
+                            PACKAGE="rhdf5")),
+         file.access=return(.Call("HDF_plist_file_access", PACKAGE="rhdf5")),
+         dataset.create=return(.Call("HDF_plist_dataset_create",
+                               PACKAGE="rhdf5")),
+         dataset.xfer=return(.Call("HDF_plist_dataset_xfer", PACKAGE="rhdf5")),
+         mount=return(.Call("HDF_plist_mount", PACKAGE="rhdf5")))
   return(hdf5.default.properties)
 }
 
 hdf5.plist.set.cache <- function(plist,bytes)
-  .Call("HDF_plist_set_cache",plist,bytes)
+  .Call("HDF_plist_set_cache",plist,bytes, PACKAGE="rhdf5")
 
 print.hdf5.proplist <- function(x, ...)
-  .Call("HDF_plist_print", x)
+  .Call("HDF_plist_print", x, PACKAGE="rhdf5")
 
 hdf5.get.default.plist <- function() .Call("HDF_plist_default_plist")
 
