@@ -304,7 +304,7 @@ SEXP HDF_ArraySubset(SEXP x, SEXP subargs)
 	if( isMissingArg(s) )
 	    s = R_MissingArg;
 	SET_VECTOR_ELT(sublist, i, arraySubscript(i, s, dimlist,
-						  NULL, R_NilValue));
+						  NULL, (STRING_ELT), R_NilValue));
 	bound[i] = length(VECTOR_ELT(sublist, i));
 	nreq *= bound[i];
 	INTEGER(dimlist)[i] = bound[i];
@@ -421,7 +421,8 @@ SEXP HDF_VectorSubset(SEXP x, SEXP s)
     PROTECT(indices = Rf_mat2indsub(dimlist,VECTOR_ELT(s,0)));
     UNPROTECT(1);
   } else {
-    PROTECT(indices = vectorSubscript(nx,VECTOR_ELT(s,0),&stretch,NULL,R_NilValue));
+    PROTECT(indices = vectorSubscript(nx,VECTOR_ELT(s,0),&stretch,NULL,
+                                      (STRING_ELT),R_NilValue));
   }
   len = length(indices);
   Rtype = HDFclass2Rtype(H5Tget_class(t)); 
@@ -468,7 +469,7 @@ SEXP HDF_dataset_select_points(SEXP d, SEXP x, SEXP y)
     error("x and y vectors must have the same length");
   
   /* Allocate the coordinate space */
-  coord = R_alloc(length(x)*2,sizeof(hssize_t));
+  coord = (hssize_t*) R_alloc(length(x)*2,sizeof(hssize_t));
   sdim[0] = length(x);
   
   space    = H5Dget_space(HID(d));
@@ -1063,6 +1064,7 @@ SEXP HDF_dataset_range(SEXP args)
 	break;
     default:
 	error("wrong type for min");
+    ans = R_NilValue; /* -Wall */
     }
     H5Sclose(s);
     return ans;
