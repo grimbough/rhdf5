@@ -1,10 +1,11 @@
 Package: rhdf5
-Version: 1.4.1
-Title:	 An HDF5 interface for R
-Author:	 Byron Ellis, R. Gentleman
+Version: 1.5.0
+Title: An HDF5 interface for R
+Author: Byron Ellis, R. Gentleman
 Depends: R (>= 1.9.0)
 SystemRequirements: HDF5 (1.4.x)
-Description: Provides supports for large matrix manipulation using the HDF5 storage library.
+Description: Provides supports for large matrix manipulation using the
+        HDF5 storage library.
 Maintainer: R. Gentleman <rgentlem@hsph.harvard.edu>
 License: LGPL
 
