@@ -86,7 +86,12 @@ void H5finalize(SEXP x)
     /* not part of H5I_type_t enum in HDF5 1.6.1 */
     case H5I_TEMPLATE_MAX:
 #endif
+#if H5_VERS_MAJOR < 1 || \
+      (H5_VERS_MAJOR == 1 && ( H5_VERS_MINOR < 6 || \
+	 (H5_VERS_MINOR == 6 && H5_VERS_RELEASE < 4)))
+    /* HDF5 H5public.h 1.6.3 (and earlier?), not 1.6.4 (and later?) */
     case H5I_TEMPBUF:
+#endif
     case H5I_REFERENCE:
     case H5I_VFL:
     case H5I_GENPROP_CLS:
