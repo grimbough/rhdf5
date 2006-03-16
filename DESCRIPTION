@@ -6,6 +6,6 @@ Depends: R (>= 1.9.0)
 SystemRequirements: HDF5 (1.4.x)
 Description: Provides supports for large matrix manipulation using the
         HDF5 storage library.
-Maintainer: R. Gentleman <rgentlem@fhcrc.org>
+Maintainer: Biocore Team <biocpkgs@lists.fhcrc.org>
 License: LGPL
 
