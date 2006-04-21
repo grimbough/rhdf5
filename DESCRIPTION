@@ -8,4 +8,5 @@ Description: Provides supports for large matrix manipulation using the
         HDF5 storage library.
 Maintainer: Biocore Team <biocpkgs@lists.fhcrc.org>
 License: LGPL
+biocViews: Infrastructure
 
