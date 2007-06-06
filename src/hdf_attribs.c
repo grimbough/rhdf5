@@ -9,7 +9,7 @@ struct attrib_data {
   SEXP  data;
 };
 
-static int attrmatchname(hid_t attr, char *name)
+static int attrmatchname(hid_t attr, const char *name)
 {
     char buf[MAXATTRLEN];
     
