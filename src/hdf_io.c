@@ -5,7 +5,8 @@
 SEXP HDF_readCEL(SEXP group, SEXP name, SEXP create)
 {
     FILE *f;
-    char *filename, buf[600];
+    const char *filename;
+    char buf[600];
     int cols, rows, i, j, xp, yp, lines, ns;
     double mn, std, npix, *mnmat, *sdmat, *npmat;
 

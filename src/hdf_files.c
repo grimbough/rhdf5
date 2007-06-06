@@ -22,7 +22,7 @@ SEXP HDF_file_open(SEXP filename, SEXP access)
 	return H5Fsexp(file);
 }
 
-hid_t HDF_fileopen(char *filename, hid_t createplist)
+hid_t HDF_fileopen(const char *filename, hid_t createplist)
 {
     hid_t file;
     struct stat buf;

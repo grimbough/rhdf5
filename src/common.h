@@ -129,7 +129,7 @@ R_FUNC(HDF_VectorSubset)(SEXP, SEXP);
 R_FUNC(HDF_ArraySubset)(SEXP, SEXP);
 
 /* other functions */
-hid_t HDF_fileopen(char*, hid_t);
+hid_t HDF_fileopen(const char*, hid_t);
 hid_t HDF_groupmkgroup(hid_t, char*);
 herr_t double2int (hid_t, hid_t, H5T_cdata_t*, size_t, size_t, size_t,
 		   void*, void*, hid_t);
