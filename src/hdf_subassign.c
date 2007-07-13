@@ -216,7 +216,7 @@ static SEXP HDF_VectorSubassign(SEXP x, SEXP s, SEXP y)
 	    if (val == NA_INTEGER) continue;
 	    val = val - 1;
 	    z = REAL(y)[i % ny];
-	    if (z == NA_REAL)
+	    if (ISNA(z))
 		REAL(out)[0] = NA_REAL;
 	    else
 		REAL(out)[0] = z;
@@ -353,7 +353,7 @@ static SEXP HDF_ArraySubassign(SEXP x, SEXP s, SEXP y)
 	    
 	case REALSXP:
 	    z = REAL(y)[i % ny];
-	    if (z == NA_REAL)
+	    if (ISNA(z))
 		REAL(out)[0] = NA_REAL;
 	    else
 		REAL(out)[0] = z;
