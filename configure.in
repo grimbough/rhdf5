@@ -2,7 +2,7 @@ dnl configure.in for hdf5, patterned on configure.in for RPgSQL
 dnl Process this file with autoconf to produce a configure script.
 AC_INIT
 AC_PREREQ(2.52)
-AC_REVISION($Revision: 1.5 $)
+AC_REVISION($Revision: 6989 $)
 AC_CONFIG_SRCDIR(src/hdf5.c)
 
 AC_DEFUN([CHECK_HDF5],
