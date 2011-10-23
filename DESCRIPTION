@@ -1,12 +1,12 @@
 Package: rhdf5
-Version: 1.7.1
+Version: 1.7.2
 Title: An HDF5 interface for R
 Author: Byron Ellis, R. Gentleman
 Depends: R (>= 2.6.0)
 SystemRequirements: HDF5 (1.4.x)
 Description: Provides supports for large matrix manipulation using the
         HDF5 storage library.
-Maintainer: Biocore Team c/o BioC user list <bioconductor@stat.math.ethz.ch>
+Maintainer: Bioconductor Package Maintainer <maintainer@bioconductor.org>
 License: LGPL
 biocViews: Infrastructure
 
