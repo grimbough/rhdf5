@@ -1,0 +1,68 @@
+
+- H5S_select_index:
+  check: index exeeds matrix dimensions
+- What happens to NA's in string arrays?
+- indexing with list of indices, instead of hyperslabs
+- read/write logical
+- write lists
+- write data.frame
+- write compound datatype
+- read nested compound datatypes to data.frame
+- read/write bitfield
+- read/write array data type
+- read/write variable length strings
+- read/write S3/S4 classes
+- read/write attributes
+- convert any HDF5 integer to int32 on R-side: throw warning
+- Same for long double: throw warning
+- remove internal1 and internal2 from H5Dcreate
+-function addGroupHandle(hid_t ID, const char *name, hid_t loc_id) in
+  file HandleList.cp uses malloc. Find replacement for malloc
+
+- h5save, h5write: ask if h5loc is valid before writing
+- test h5read for different sel_types
+- show(H5space): show selected hyperslab
+
+- h5createFile: parameter overwrite
+
+Discussion:
+- Which functions to export: All C-interface functions, or only a small number of selected ones?
+- H5file & H5group: show directory
+- h5write: when vector passed to h5write, it looses its names attribute
+- h5read and h5write call low-level functions with the help of try. Implement proper error messaging and move try's around .Call.
+
+####################################################
+Solved
++ h5ls change argument simple=TRUE to all=FALSE
+
++ use class H5File / H5Group in the files
+  -- H5D.R [done]
+  -- H5S.R [done]
+  -- h5dump.R [done]
+  -- h5ls.R [done]
+  -- h5read.R [done]
+  -- h5save.R [done] 
+  -- h5write.R [done]
+- H5file & H5group: show: check if file is still open.
+  show filename and directory
+- How to represent constants:
+  - Create an object .onLoad
+  - and use text input whenever a constant is required e.g. "H5P_DEFAULT"
+- fid, gid as classes
+- H5file & H5group: show: check if file is still open.
+  show filename and directory
+- H5Dget_space: Read type of dataspace. Now it is set to H5S_SIMPLE per default
+- addDatasetHandle: Read datatype and data space when opening a dataset (dtype_id = -1 and dspace_id = -1)
+- compression
+- h5write: create dataset and hdf5-file if not yet available
+- hwriteHyperslab, even a vector needs a dim attribute, change this
+- h5read: return dim symbol (check if this works!)
+- writing string data: There is lots of printf's in the c-code. Remove them.
+- h5ls: dimensions appear in wrong order (reverse dimensions before printing)
+- hdf5 library source in package
+- read compound
+- h5read.INTEGER: How to make this generic?
+  - use do.call
+  - h5ls provides a fingerprint of each dataset. Can we register a function for a specific fingerprint?
+  - or Class of resulting object has to be given to h5read, whenever we need a specific h5read-function
+  - or attach specific R-attributes to hdf5 objects: NAMESPACE = packagename, class = myRclass

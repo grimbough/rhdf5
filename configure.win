@@ -1,0 +1,5 @@
+
+echo "configure"
+echo "libwin${R_ARCH}"
+cp src/libwin${R_ARCH}/* src
+

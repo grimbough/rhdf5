@@ -1,0 +1,13 @@
+Package: rhdf5
+Type: Package
+Title: HDF5 interface to R
+Version: 1.99.10
+Date: 2011-12-01
+Author: Bernd Fischer, Gregoire Pau
+Maintainer: Bernd Fischer <bernd.fischer@embl.de>
+Description: HDF5 interface to R
+License: Artistic-2.0
+LazyLoad: true
+Depends: methods
+SystemRequirements: GNU make
+biocViews: Infrastructure

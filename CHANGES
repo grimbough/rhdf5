@@ -1,0 +1,42 @@
+1.99.10
+- improved parameter checking and warning messages h5create functions
+- check for existence of objects before creating a group, dataset, or attribute
+- h5create functions now return TRUE or FALSE depending on success
+- The default value for datasets is set to 0 (set_fill_value) when creating datasets
+- A small timing experiment for chunking and compression is added to the vignette
+
+1.99.9
+- corrected typos in the vignette
+- removed the part on installing libhdf5 from the vignette, since it is installed automatically now
+- added examples to man pages
+- NAMESPACE exports H5Sselect_index
+- set return value of get_info functions to visible
+- removed a bug in h5read(.., index=list(NULL,1))
+
+1.99.8
+- Faster detection of memory space dimensions for hyperslab reading
+
+1.99.7
+- warn if object has an attribute of type list (e.g. dimnames). list
+  attributes can not be written to hdf5-files.
+
+0.2.5
+- added list reading and writing with h5read and h5write
+- implementation of h5write as generic S3 function
+- added reading and writing of attributes
+- added argument index in h5write / h5read to allow for R-style subsetting
+
+0.2.4
+- bug removed: reading data with h5dump did not call h5read
+ 
+0.2.3
+- bug removed: writing strings truncated one character
+- bug removed: warning about not coercing multi-dimensional
+  data to data.frame now only appears when reading a
+  compound data type 
+
+0.2.2
+- reading support for COMPOUND data types
+
+0.2.1
+- removed warnings in compilation of libhdf5

@@ -1,0 +1,5 @@
+#!/bin/sh
+
+rm -f src/libhdf5ForBioC.a
+rm -rf src/hdf5
+rm -rf inst/doc/*.h5
