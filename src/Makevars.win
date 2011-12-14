@@ -1,0 +1,7 @@
+PKG_CFLAGS = -IincludeWin -DWINDOWS
+PKG_CXXFLAGS = -IincludeWin -DWINDOWS
+ifeq "$(WIN)" "64"
+PKG_LIBS = -lhdf5dll-64 -lszip-64 -lzlib1-64 -lm -L.
+else
+PKG_LIBS = -lhdf5dll -lszip -lzlib1 -lm -L.
+endif
