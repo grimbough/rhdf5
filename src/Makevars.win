@@ -1,4 +1,0 @@
-PKG_CPPFLAGS += -IC:/hdf/5-142p1-win/include -D_HDF5USEDLL_
-PKG_LIBS     += -LC:/hdf/5-142p1-win/libdll/release -lhdf5dll
-
-
