@@ -10,7 +10,6 @@ Lists the content of an HDF5 file.
 h5ls   (file,
         recursive = TRUE,
 	all = FALSE, 
-        objecttype = h5default("H5O_TYPE"),
 	datasetinfo = TRUE,
 	index_type = h5default("H5_INDEX"),
 	order = h5default("H5_ITER"))
@@ -18,7 +17,6 @@ h5dump (file,
         recursive = TRUE,
 	load = TRUE,
 	all = FALSE, 
-        objecttype = h5default("H5O_TYPE"),
         index_type = h5default("H5_INDEX"),
         order = h5default("H5_ITER"), ...)
 }
