@@ -79,7 +79,6 @@ void getMemSpaceDim( hid_t file_space_id, hsize_t *size) {
   hsize_t sizebuf[2*rank*sel_hyper_nblocks];
   H5Sget_select_hyper_blocklist(file_space_id, 0, sel_hyper_nblocks, sizebuf );
 
-  printf("rank = %ld; sel_hyper_nblocks = %ld\n",rank,sel_hyper_nblocks);
   int isnew;
   for (int i=0; i < rank; i++) {
     size[i] = 0;
@@ -431,7 +430,7 @@ SEXP _H5Dwrite( SEXP _dataset_id, SEXP _buf, SEXP _file_space_id, SEXP _mem_spac
       if (TYPEOF(_buf) == STRSXP) {
 	mem_type_id = H5Dget_type(dataset_id);
 	size_t stsize = H5Tget_size( mem_type_id );
-	char * strbuf = (char *)malloc(LENGTH(_buf)*stsize);
+	char * strbuf = (char *)R_alloc(LENGTH(_buf),stsize);
 	int z=0;
 	int j;
 	for (int i=0; i < LENGTH(_buf); i++) {

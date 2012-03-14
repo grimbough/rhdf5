@@ -22,6 +22,7 @@ public :
   inline void addHandle( enum HandleType type, hid_t ID, const char *name, const char *group, 
 			 enum HandleType parentType, hid_t parentID, int parentFileID,
 			 hid_t dtypeID = -1, hid_t spaceID = -1 ) {
+    /*
     H5Handle h;
     h.isvalid = 1;
     h.type = type;
@@ -38,9 +39,11 @@ public :
       handleList_[type].erase(it);
     }
     handleList_[type].insert(pair<int, H5Handle>(ID, h ));
+    */
   };
 
   inline int removeHandle( enum HandleType type, hid_t fid ) {
+    /*
     std::map<int,H5Handle>::iterator it = handleList_[type].find( fid );
     if (it == handleList_[type].end()) {
 	// printf("Not a valid file.\n");
@@ -48,6 +51,7 @@ public :
     } else {
       handleList_[type].erase(it);
     }
+    */
     return(1);
   };
 
@@ -55,19 +59,19 @@ public :
     // printf("type = %d\n",type);
     // printf("size = %d\n",handleList_.size());
     H5Handle h;
-    std::map<int,H5Handle>::iterator it = handleList_[type].find( fid );
-    if (it == handleList_[type].end()) {
+    //    std::map<int,H5Handle>::iterator it = handleList_[type].find( fid );
+    //    if (it == handleList_[type].end()) {
       // printf("ID not found!\n");
       h.isvalid = 0;
-      // 	return(h);
-    } else {
+      //} else {
       // printf("ID found!\n");
-      h = it->second;
-    }
+      //  h = it->second;
+      //}
     return(h);
   };
 
   inline void ls() {
+    /*
     std::map<int,H5Handle>::iterator it;
     int i=0;
     for (int type=0; type < handleList_.size(); type++) {
@@ -77,8 +81,10 @@ public :
 	       it->second.name, it->second.group, it->second.parentType, it->second.parentID);
       }
     }
+    */
   };
 
+  /*
   inline static HandleList& Instance() {
     static HandleList instance;
     if (instance.handleList_.size() < instance.ntype) {
@@ -86,12 +92,15 @@ public :
     }
     return instance;
   }
+  */
 
 private : 
   inline explicit HandleList() : ntype(5) {}
   inline ~HandleList() {}
+  /*
   inline explicit HandleList(HandleList const&) {}
   inline HandleList& operator=(HandleList const&) { return *this; }
+  */
 };
 
 #endif // ifndef HandleList_HPP

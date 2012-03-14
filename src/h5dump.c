@@ -42,12 +42,12 @@ typedef struct {
 herr_t opAddToLinfoTree( hid_t g_id, const char *name, const H5L_info_t *info, void *op_data) {
   opLinfoTree *data = op_data;
 
-  opLinfoTreeElement *newElement = malloc(sizeof(struct opLinfoTreeElement) );
+  opLinfoTreeElement *newElement = (opLinfoTreeElement *)R_alloc(1,sizeof(struct opLinfoTreeElement) );
   newElement->idx = data->n;
   /* printf("sizeof = %ld cset=%ld group=>%s< name=>%s<\n", strlen(name), info->cset, data->group, name); */
-  newElement->name = malloc((strlen(name)+1)*sizeof(char));
+  newElement->name = (char *)R_alloc((strlen(name)+1),sizeof(char));
   strcpy(newElement->name, name);
-  newElement->group = malloc((strlen(data->group)+1)*sizeof(char));
+  newElement->group = (char *)R_alloc((strlen(data->group)+1),sizeof(char));
   strcpy(newElement->group, data->group);
   newElement->info = (*info);
 
@@ -76,7 +76,7 @@ herr_t opAddToLinfoTree( hid_t g_id, const char *name, const H5L_info_t *info, v
     switch(space_type) {
     case H5S_SCALAR: newElement->dim = "( 0 )"; break;
     case H5S_SIMPLE: {
-      char* tmp = malloc(100*newElement->rank*sizeof(char));
+      char* tmp = (char *)R_alloc(100*newElement->rank,sizeof(char));
       sprintf(tmp, "( %lu", size[newElement->rank-1]);
       for(int i = newElement->rank-2; i >= 0 ; i--) {
       	sprintf(tmp, "%s, %lu", tmp, size[i]);
@@ -91,7 +91,7 @@ herr_t opAddToLinfoTree( hid_t g_id, const char *name, const H5L_info_t *info, v
 	}
 	sprintf(tmp, "%s )", tmp);
       }
-      newElement->dim = malloc((strlen(tmp)+1)*sizeof(char));
+      newElement->dim = (char *)R_alloc((strlen(tmp)+1),sizeof(char));
       strcpy(newElement->dim, tmp);
       free(tmp);
     } break;
@@ -142,7 +142,7 @@ herr_t opAddToLinfoTree( hid_t g_id, const char *name, const H5L_info_t *info, v
     if ((data->maxdepth < 0) | (data->depth < data->maxdepth)) {
       hsize_t idx=0;
       char* group = data->group;
-      data->group = malloc((strlen(name)+strlen(group)+2)*sizeof(char));
+      data->group = (char *)R_alloc((strlen(name)+strlen(group)+2),sizeof(char));
       strcpy(data->group, group);
       if (data->depth > 1) {
 	strcat(data->group, "/");
@@ -264,7 +264,7 @@ SEXP _h5dump( SEXP _loc_id, SEXP _depth, SEXP _objecttype, SEXP _datasetinfo, SE
   data.n = 0;
   data.maxdepth = INTEGER(_depth)[0];
   data.depth = 1;
-  data.group = malloc(2*sizeof(char));
+  data.group = (char *)R_alloc(2,sizeof(char));
   strcpy(data.group, "/");
   data.objecttype = INTEGER(_objecttype)[0];
   data.showdatasetinfo = INTEGER(_datasetinfo)[0];

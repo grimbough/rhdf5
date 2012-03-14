@@ -7,6 +7,7 @@
 #include "H5D.h"
 #include "H5F.h"
 #include "H5G.h"
+#include "H5I.h"
 #include "H5L.h"
 #include "H5O.h"
 #include "H5S.h"
@@ -52,8 +53,12 @@ static R_CallMethodDef libraryRCalls[] = {
   {"_H5Gget_info_by_idx", (DL_FUNC) &_H5Gget_info_by_idx, 5},
   /* {"_H5Lget_info", (DL_FUNC) &_H5Lget_info, 2}, */
   /* {"_H5Ldump", (DL_FUNC) &_H5Ldump, 1}, */
-  {"_H5Oget_info", (DL_FUNC) &_H5Oget_info, 1},
-  {"_H5Oget_info_by_name", (DL_FUNC) &_H5Oget_info_by_name, 2},
+  {"_H5Iget_type", (DL_FUNC) &_H5Iget_type, 1},
+  {"_H5Oopen", (DL_FUNC) &_H5Oopen, 2},
+  {"_H5Oclose", (DL_FUNC) &_H5Oclose, 1},
+  {"_H5Oget_num_attrs", (DL_FUNC) &_H5Oget_num_attrs, 1},
+  //  {"_H5Oget_info", (DL_FUNC) &_H5Oget_info, 1},
+  //  {"_H5Oget_info_by_name", (DL_FUNC) &_H5Oget_info_by_name, 2},
   {"_H5Lexists", (DL_FUNC) &_H5Lexists, 2},
   {"_H5Lget_info", (DL_FUNC) &_H5Lget_info, 2},
   {"_H5Screate", (DL_FUNC) &_H5Screate, 1},
@@ -66,7 +71,7 @@ static R_CallMethodDef libraryRCalls[] = {
   {"_H5Sselect_index", (DL_FUNC) &_H5Sselect_index, 3},
   {"_H5Tcopy", (DL_FUNC) &_H5Tcopy, 1},
   {"_H5Tset_size", (DL_FUNC) &_H5Tset_size, 2},
-  {"_h5ls", (DL_FUNC) &_h5ls, 6},
+  {"_h5ls", (DL_FUNC) &_h5ls, 5},
   {"_h5dump", (DL_FUNC) &_h5dump, 6},
   {"_listHandles", (DL_FUNC) &_listHandles, 0},
   {"_handleInfo", (DL_FUNC) &_handleInfo, 2},

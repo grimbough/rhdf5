@@ -413,7 +413,7 @@ SEXP _H5Awrite( SEXP _attr_id, SEXP _buf) {
       if (TYPEOF(_buf) == STRSXP) {
 	mem_type_id = H5Aget_type(attr_id);
 	size_t stsize = H5Tget_size( mem_type_id );
-	char * strbuf = (char *)malloc(LENGTH(_buf)*stsize);
+	char * strbuf = (char *)R_alloc(LENGTH(_buf),stsize);
 	int z=0;
 	int j;
 	for (int i=0; i < LENGTH(_buf); i++) {
