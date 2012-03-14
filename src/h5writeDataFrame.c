@@ -76,7 +76,7 @@ SEXP _h5writeDataFrame(SEXP _obj, SEXP _loc_id, SEXP _name, SEXP _level) {
 	  H5Tset_size(tid2, strsize[i]);
 	  H5Tinsert (tidn, nn, 0, tid2);
 	  
-	  char * strbuf = (char *)malloc(n*strsize[i]);
+	  char * strbuf = (char *)R_alloc(n,strsize[i]);
 	  int z=0;
 	  int j;
 	  for (int k=0; k < LENGTH(VECTOR_ELT(_obj,i)); k++) {

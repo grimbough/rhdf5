@@ -1,7 +1,20 @@
-PKG_CFLAGS = -IincludeWin -DWINDOWS
-PKG_CXXFLAGS = -IincludeWin -DWINDOWS
-ifeq "$(WIN)" "64"
-PKG_LIBS = -lhdf5ForBioC-7 -lzlib1-64 -lm -L.
-else
-PKG_LIBS = -lhdf5ForBioC-7 -lzlib1 -lm -L.
-endif
+# ZLIB_CFLAGS+=$(shell echo 'zlibbioc::pkgconfig("PKG_CFLAGS")'| "${R_HOME}/bin/R" --vanilla --slave)
+
+PKG_CFLAGS += -IincludeWin -DWINDOWS
+PKG_CXXFLAGS += -IincludeWin -DWINDOWS
+# ifeq "$(WIN)" "64"
+PKG_LIBS += -lhdf5dll -lzlib1 -lszip -lm -L.
+
+# with zlibbioc
+# PKG_LIBS += -llibsz-2 -lm -L.
+# PKG_LIBS += $(shell echo 'zlibbioc::pkgconfig("PKG_LIBS_shared")' | "${R_HOME}/bin/R" --vanilla --slave)
+# PKG_LIBS += -llibhdf5ForBioC-7
+
+# else
+# PKG_LIBS = -lzlib1bioc libsz.a libhdf5ForBioC.a -lm -L. 
+# endif
+# %.o: %.c
+# 	$(CC) $(ZLIB_CFLAGS) $(ALL_CPPFLAGS) $(ALL_CFLAGS) -c $< -o $@
+
+# %.o: %.cpp
+# 	$(CXX) $(ZLIB_CFLAGS) $(ALL_CPPFLAGS) $(ALL_CXXFLAGS) -c $< -o $@

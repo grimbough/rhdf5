@@ -6,11 +6,12 @@ extern "C" {
 
 void
 addFileHandle(hid_t ID, const char *name) {
-  HandleList::Instance().addHandle(file, ID, name, "/", file, -1, ID);
+  //  HandleList::Instance().addHandle(file, ID, name, "/", file, -1, ID);
 }
 
 void
 addGroupHandle(hid_t ID, const char *name, hid_t loc_id) {
+  /*
   H5Handle h;
   h = handleInfo(file, loc_id);
   char *groupname;
@@ -27,10 +28,12 @@ addGroupHandle(hid_t ID, const char *name, hid_t loc_id) {
     strcat(groupname, name);
     HandleList::Instance().addHandle(group, ID, name, groupname, group, h.ID, h.parentFileID);
   }
+  */
 }
 
 void
 addSpaceHandle(hid_t hid, H5S_class_t type) {
+  /*
   char *group;
   switch(type) {
   case H5S_SCALAR : { group = new char[11]; strcpy(group, "H5S_SCALAR"); } break;
@@ -40,10 +43,12 @@ addSpaceHandle(hid_t hid, H5S_class_t type) {
   default : { group = new char[8]; strcpy(group, "unknown"); } break;
   }
   HandleList::Instance().addHandle(space, hid, "", group, space, -1, -1);
+  */
 }
 
 void
 addDatasetHandle(hid_t hid, hid_t loc_id, const char *name, hid_t dtype_id, hid_t space_id) {
+  /*
   if (space_id <= 0) {
     space_id = H5Dget_space( hid );
     if (space_id > 0) {
@@ -62,10 +67,12 @@ addDatasetHandle(hid_t hid, hid_t loc_id, const char *name, hid_t dtype_id, hid_
     h = handleInfo(group, loc_id);
     HandleList::Instance().addHandle(dataset, hid, name, "", group, h.ID, h.parentFileID, dtype_id, space_id);
   }
+  */
 }
 
 void
 addAttributeHandle(hid_t hid, hid_t obj_id, const char *name, hid_t dtype_id, hid_t space_id) {
+  /*
   if (space_id <= 0) {
     space_id = H5Aget_space( hid );
     if (space_id > 0) {
@@ -89,31 +96,38 @@ addAttributeHandle(hid_t hid, hid_t obj_id, const char *name, hid_t dtype_id, hi
       HandleList::Instance().addHandle(attribute, hid, name, "", dataset, h.ID, h.parentFileID, dtype_id, space_id);
     }
   }
+  */
 }
 
 int
 removeHandle( enum HandleType type, hid_t fid ) {
+  /*
   if (type == dataset) {
     H5Handle h5h = handleInfo(type, fid);
     HandleList::Instance().removeHandle(space, h5h.spaceID);
   }
   HandleList::Instance().removeHandle(type, fid);
+  */
 }
 
 void 
 listHandles( ) {
+  /*
   HandleList::Instance().ls();
+  */
 }
 
 SEXP _listHandles() {
-
+  /*
   listHandles();
-
+  */
   return R_NilValue;
 }
 
 H5Handle handleInfo(enum HandleType type, hid_t ID) {
-  H5Handle h = HandleList::Instance().info(type, ID);
+  H5Handle h;
+  h.isvalid = 0;
+  // = HandleList::Instance().info(type, ID);
   return(h);
 }
 
@@ -124,10 +138,11 @@ SEXP _handleInfo (SEXP _type, SEXP _ID) {
 
   // printf("typeEnum = %d\n",type);
 
-  H5Handle h = HandleList::Instance().info(type, ID);
+  //  H5Handle h = HandleList::Instance().info(type, ID);
   SEXP Rval;
-  if (h.isvalid==0) {
+  // if (h.isvalid==0) {
     Rval = R_NilValue; 
+    /*
   } else {
     Rval = PROTECT(allocVector(VECSXP, 9));
 
@@ -156,6 +171,7 @@ SEXP _handleInfo (SEXP _type, SEXP _ID) {
     SET_NAMES(Rval, names);
     UNPROTECT(2);
   }
+    */
     // if (h.isvalid != 0) {
     //   printf("name = %s\n",h.name);
     // } else {
