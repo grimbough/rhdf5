@@ -20,11 +20,15 @@ h5write.default <- function(obj, file, name, write.attributes = TRUE, ...) {
   }
   res <- h5writeDataset(obj, h5loc, name, ...)
   if (write.attributes) {
-    type = H5Oget_info_by_name(h5loc, name)$type
-    if (type == "H5O_TYPE_GROUP") {
+    # type = H5Oget_info_by_name(h5loc, name)$type
+    oid = H5Oopen(h5loc, name)
+    type = H5Iget_type(oid)
+    H5Oclose(oid)
+
+    if (type == "H5I_GROUP") {
       h5obj = H5Gopen(h5loc, name)
     } else {
-      if (type == "H5O_TYPE_DATASET") {
+      if (type == "H5I_DATASET") {
         h5obj = H5Dopen(h5loc, name)
       } else {
         stop("Cannot open object of this type")
@@ -174,7 +178,8 @@ h5writeDataset.array <- function(obj, h5loc, name, index = NULL, start=NULL, str
   try( { H5Sclose(h5spaceMem) } )
   try( { H5Sclose(h5spaceFile) } )
   try( { H5Dclose(h5dataset) } )
-  invisible(res)
+#  invisible(res)
+  invisible(NULL)
 }
 
 
