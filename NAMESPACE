@@ -39,11 +39,17 @@ export(H5Gget_info_by_idx)
 export(H5Gget_info_by_name)
 export(H5Gopen)
 
+export(H5Iget_type)
+
 export(H5Lexists)
 export(H5Lget_info)
 
-export(H5Oget_info)
-export(H5Oget_info_by_name)
+export(H5Oopen)
+export(H5Oclose)
+export(H5Oget_num_attrs)
+export(H5Oget_num_attrs_by_name)
+# export(H5Oget_info)
+# export(H5Oget_info_by_name)
 
 export(H5Sclose)
 export(H5Scopy)

@@ -1,6 +1,6 @@
-src/libwin/i386/hdf5dll.dll
-src/libwin/i386/szip.dll
 src/libwin/i386/zlib1.dll
-src/libwin/x64/hdf5dll-64.dll
-src/libwin/x64/szip-64.dll
-src/libwin/x64/zlib1-64.dll
+src/libwin/i386/szip.dll
+src/libwin/i386/hdf5dll.dll
+src/libwin/x64/zlib1.dll
+src/libwin/x64/szip.dll
+src/libwin/x64/hdf5dll.dll
