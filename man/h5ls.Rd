@@ -25,7 +25,6 @@ h5dump (file,
   \item{file}{The filename (character) of the file in which the dataset will be located. For advanced programmers it is possible to provide an object of class \code{\link{H5file}} or \code{\link{H5group}}. See \code{\link{H5Fcreate}}, \code{\link{H5Fopen}}, \code{\link{H5Gcreate}}, \code{\link{H5Gopen}} to create an object of this kind.}
   \item{recursive}{If TRUE, the content of the whole group hierarchy is listed. If FALSE, Only the content of the main group is shown. If a positive integer is provided this indicates the maximum level of the hierarchy that is shown.}
   \item{all}{If TRUE, a longer list of information on each entry is provided.}
-  \item{objecttype}{Only elements of a specific type are listed. See \code{h5const("H5O_TYPE")} for possible object types.}
   \item{datasetinfo}{If FALSE, datatype and dimensionality information is not provided. This can speed up the content listing for large files.}
   \item{index_type}{See \code{h5const("H5_INDEX")} for possible arguments.}
   \item{order}{See \code{h5const("H5_ITER")} for possible arguments.}

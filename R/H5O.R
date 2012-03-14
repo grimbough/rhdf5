@@ -26,14 +26,14 @@ H5Oopen <- function( h5loc, name ) {
   invisible(h5object)
 }
 
-H5Oclose <- function( h5object ) {
-  stopifnot( is( h5object, "H5group" ) )
-  invisible(.Call("_H5Oclose", h5object@ID, PACKAGE='rhdf5'))
+H5Oclose <- function( h5obj ) {
+  stopifnot( is( h5obj, "H5group" ) )
+  invisible(.Call("_H5Oclose", h5obj@ID, PACKAGE='rhdf5'))
 }
 
 H5Oget_num_attrs <- function( h5obj ) {
   stopifnot( is( h5obj, "H5file" ) | is( h5obj, "H5group" ) | is( h5obj, "H5dataset" ) )
-  n <- .Call("_H5Oget_num_attrs", h5loc@ID, name, PACKAGE='rhdf5')
+  n <- .Call("_H5Oget_num_attrs", h5obj@ID, PACKAGE='rhdf5')
   n
 }
 
