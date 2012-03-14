@@ -1,6 +1,2 @@
 #!/bin/sh
 
-rm -f src/szip*
-rm -f src/hdf5dll*
-rm -f src/zlib*
-rm -rf inst/doc/*.h5

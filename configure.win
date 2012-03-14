@@ -1,5 +1,10 @@
 
 echo "configure"
+echo "R_ARCH=${R_ARCH}"
+echo "WIN=$(WIN)"
+echo "CC=${CC}"
 echo "libwin${R_ARCH}"
-cp src/libwin${R_ARCH}/* src
+
+cp src/includeWin${R_ARCH}/* src/includeWin/
+cp src/libwin${R_ARCH}/*.dll src
 
