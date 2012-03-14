@@ -72,7 +72,7 @@ static R_CallMethodDef libraryRCalls[] = {
   {"_H5Tcopy", (DL_FUNC) &_H5Tcopy, 1},
   {"_H5Tset_size", (DL_FUNC) &_H5Tset_size, 2},
   {"_h5ls", (DL_FUNC) &_h5ls, 5},
-  {"_h5dump", (DL_FUNC) &_h5dump, 6},
+  {"_h5dump", (DL_FUNC) &_h5dump, 4},
   {"_listHandles", (DL_FUNC) &_listHandles, 0},
   {"_handleInfo", (DL_FUNC) &_handleInfo, 2},
   {"_getDatatypeName", (DL_FUNC) &_getDatatypeName, 1},

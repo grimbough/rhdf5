@@ -15,6 +15,6 @@
 /* functions */
 /*################################*/
 
-SEXP _h5dump( SEXP _loc_id, SEXP _depth, SEXP _objecttype, SEXP _datasetinfo, SEXP _index_type, SEXP _order );
+SEXP _h5dump( SEXP _loc_id, SEXP _depth, SEXP _index_type, SEXP _order );
 
 #endif
