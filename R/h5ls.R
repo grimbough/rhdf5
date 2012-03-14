@@ -2,18 +2,18 @@
 h5lsConvertToDataframe <- function(L, all=FALSE) {
   if (is.data.frame(L)) {
     L$ltype <- h5const2Factor("H5L_TYPE", L$ltype)
-    L$otype <- h5const2Factor("H5O_TYPE", L$otype)
-    L$atime <- .POSIXct(L$atime)
-    L$atime[L$atime == 0] <- NA
-    L$mtime <- .POSIXct(L$mtime)
-    L$mtime[L$mtime == 0] <- NA
-    L$ctime <- .POSIXct(L$ctime)
-    L$ctime[L$ctime == 0] <- NA
-    L$btime <- .POSIXct(L$btime)
-    L$btime[L$btime == 0] <- NA
+    L$otype <- h5const2Factor("H5I_TYPE", L$otype)
+#    L$atime <- .POSIXct(L$atime)
+#    L$atime[L$atime == 0] <- NA
+#    L$mtime <- .POSIXct(L$mtime)
+#    L$mtime[L$mtime == 0] <- NA
+#    L$ctime <- .POSIXct(L$ctime)
+#    L$ctime[L$ctime == 0] <- NA
+#    L$btime <- .POSIXct(L$btime)
+#    L$btime[L$btime == 0] <- NA
     ## L <- as.data.frame(L, stringsAsFactors=FALSE)
     if (!all) {
-      L <- L[,c("group", "name", "otype", "dclass", "ctime","dim")]
+      L <- L[,c("group", "name", "otype", "dclass","dim")]
     }
   } else {
     for (i in seq_len(length(L))) {
@@ -23,7 +23,7 @@ h5lsConvertToDataframe <- function(L, all=FALSE) {
   L
 }
 
-h5ls <- function( file, recursive = TRUE, all=FALSE, objecttype = h5default("H5O_TYPE"), datasetinfo=TRUE, index_type = h5default("H5_INDEX"), order = h5default("H5_ITER")) {
+h5ls <- function( file, recursive = TRUE, all=FALSE, datasetinfo=TRUE, index_type = h5default("H5_INDEX"), order = h5default("H5_ITER")) {
   if (is( file, "H5file" ) | is( file, "H5group" )) {
     h5loc = file
   } else {
@@ -40,7 +40,6 @@ h5ls <- function( file, recursive = TRUE, all=FALSE, objecttype = h5default("H5O
   }
 
   if (length(datasetinfo)!=1 || !is.logical(datasetinfo)) stop("'datasetinfo' must be a logical of length 1")
-  objecttype <- h5checkConstants( "H5O_TYPE", objecttype )
   index_type <- h5checkConstants( "H5_INDEX", index_type )
   order <- h5checkConstants( "H5_ITER", order )
   if (is.logical(recursive)) {
@@ -60,7 +59,7 @@ h5ls <- function( file, recursive = TRUE, all=FALSE, objecttype = h5default("H5O
     }
   }
   di <- ifelse(datasetinfo, 1L, 0L)
-  L <- .Call("_h5ls", h5loc@ID, depth, objecttype, di, index_type, order, PACKAGE='rhdf5')
+  L <- .Call("_h5ls", h5loc@ID, depth, di, index_type, order, PACKAGE='rhdf5')
   L <- h5lsConvertToDataframe(L, all=all)
   if (!is( file, "H5file" ) & !is( file, "H5group" )) {
     H5Fclose(h5loc)

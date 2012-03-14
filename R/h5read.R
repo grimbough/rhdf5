@@ -20,13 +20,15 @@ h5read <- function(file, name, index=NULL, start=NULL, stride=NULL, block=NULL, 
     }
     stop("Object ",name," does not exist.")
   } else {
-    info = H5Oget_info_by_name(h5loc, name)
-    if (info$type == "H5O_TYPE_GROUP") {
+oid = H5Oopen(h5loc, name)
+type = H5Iget_type(oid)
+H5Oclose(oid)
+    if (type == "H5I_GROUP") {
       gid <- H5Gopen(h5loc, name)
       obj = h5dump(gid, start=start, stride=stride, block=block, count=count, compoundAsDataFrame = compoundAsDataFrame, callGeneric = callGeneric)
       H5Gclose(gid)
     } else {
-      if (info$type == "H5O_TYPE_DATASET") {
+      if (type == "H5I_DATASET") {
         try( { h5dataset <- H5Dopen(h5loc, name) } )
         try( { h5spaceFile <- H5Dget_space( h5dataset ) } )
         h5spaceMem = NULL
@@ -73,20 +75,20 @@ h5read <- function(file, name, index=NULL, start=NULL, stride=NULL, block=NULL, 
           }
         }
       } else {
-        message("Reading of datatype not supported.")
+        message("Reading of object type not supported.")
         obj <- NULL
       } ## DATASET
     } ## GROUP
-    if (read.attributes & (info$num_attrs > 0) & !is.null(obj)) {
-      for (i in 1:info$num_attrs) {
-        A = H5Aopen_by_idx(h5loc, n = i-1, objname = name)
-        attrname <- H5Aget_name(A)
-        if (attrname != "dim") {
-          attr(obj, attrname) = H5Aread(A)
-        }
-        H5Aclose(A)
-      }
-    }
+#    if (read.attributes & (info$num_attrs > 0) & !is.null(obj)) {
+#      for (i in 1:info$num_attrs) {
+#        A = H5Aopen_by_idx(h5loc, n = i-1, objname = name)
+#        attrname <- H5Aget_name(A)
+#        if (attrname != "dim") {
+#          attr(obj, attrname) = H5Aread(A)
+#        }
+#        H5Aclose(A)
+#      }
+#    }
   }  # !H5Lexists
   if (!is( file, "H5file" ) & !is( file, "H5group" )) {
     try( { H5Fclose(h5loc) } )
