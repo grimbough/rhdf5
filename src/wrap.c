@@ -36,6 +36,7 @@ static R_CallMethodDef libraryRCalls[] = {
   {"_H5Dcreate", (DL_FUNC) &_H5Dcreate, 6},
   {"_H5Dopen", (DL_FUNC) &_H5Dopen, 2},
   {"_H5Dclose", (DL_FUNC) &_H5Dclose, 1},
+  {"_H5Dget_type", (DL_FUNC) &_H5Dget_type, 1},
   {"_H5Dget_space", (DL_FUNC) &_H5Dget_space, 1},
   {"_H5Dread", (DL_FUNC) &_H5Dread, 5},
   {"_H5Dwrite", (DL_FUNC) &_H5Dwrite, 4},
@@ -53,7 +54,9 @@ static R_CallMethodDef libraryRCalls[] = {
   {"_H5Gget_info_by_idx", (DL_FUNC) &_H5Gget_info_by_idx, 5},
   /* {"_H5Lget_info", (DL_FUNC) &_H5Lget_info, 2}, */
   /* {"_H5Ldump", (DL_FUNC) &_H5Ldump, 1}, */
+  {"_H5Iget_name", (DL_FUNC) &_H5Iget_name, 1},
   {"_H5Iget_type", (DL_FUNC) &_H5Iget_type, 1},
+  {"_H5Iis_valid", (DL_FUNC) &_H5Iis_valid, 1},
   {"_H5Oopen", (DL_FUNC) &_H5Oopen, 2},
   {"_H5Oclose", (DL_FUNC) &_H5Oclose, 1},
   {"_H5Oget_num_attrs", (DL_FUNC) &_H5Oget_num_attrs, 1},
@@ -73,8 +76,10 @@ static R_CallMethodDef libraryRCalls[] = {
   {"_H5Tset_size", (DL_FUNC) &_H5Tset_size, 2},
   {"_h5ls", (DL_FUNC) &_h5ls, 5},
   {"_h5dump", (DL_FUNC) &_h5dump, 4},
-  {"_listHandles", (DL_FUNC) &_listHandles, 0},
-  {"_handleInfo", (DL_FUNC) &_handleInfo, 2},
+  {"_h5listIdentifier", (DL_FUNC) &_h5listIdentifier, 0},
+  {"_h5validObjects", (DL_FUNC) &_h5validObjects, 0},
+  /* {"_listHandles", (DL_FUNC) &_listHandles, 0}, */
+  {"_handleInfo", (DL_FUNC) &_handleInfo, 1},
   {"_getDatatypeName", (DL_FUNC) &_getDatatypeName, 1},
   {"_getDatatypeClass", (DL_FUNC) &_getDatatypeClass, 1},
   {"_h5writeDataFrame", (DL_FUNC) &_h5writeDataFrame, 4},

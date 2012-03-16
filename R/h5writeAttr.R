@@ -1,8 +1,6 @@
 
 h5writeAttribute <- function(attr, h5obj, name, ...) {
-  if (!(is( h5obj, "H5file" ) | is( h5obj, "H5group" ) | is( h5obj, "H5dataset" ))) {
-    stop("h5obj not of class H5file, H5group, or H5dataset.")
-  }
+  h5checktype(h5obj, "object")
   res <- UseMethod("h5writeAttribute")
   invisible(res)
 }

@@ -10,12 +10,12 @@
 
 
 /*     H5Iget_file_id */
-/*     H5Iget_name */
+SEXP _H5Iget_name( SEXP _obj_id );
 SEXP _H5Iget_type( SEXP _obj_id );
 /*     H5Iobject_verify */
 /*     H5Iremove_verify */
 /*     H5Isearch */
-/*     H5Iis_valid  */
+SEXP _H5Iis_valid( SEXP _obj_id );
 
 /*     H5Iget_ref */
 /*     H5Iinc_ref */

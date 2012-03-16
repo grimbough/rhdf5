@@ -6,9 +6,7 @@ SEXP _H5Gcreate( SEXP _loc_id, SEXP _name ) {
   hid_t loc_id = INTEGER(_loc_id)[0];
   const char *name = CHAR(STRING_ELT(_name, 0));
   hid_t hid = H5Gcreate( loc_id, name, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT );
-  if (hid > 0) {
-    addGroupHandle(hid, name, loc_id);
-  }
+  addHandle(hid);
 
   SEXP Rval;
   PROTECT(Rval = allocVector(INTSXP, 1));
@@ -22,9 +20,7 @@ SEXP _H5Gcreate( SEXP _loc_id, SEXP _name ) {
 SEXP _H5Gcreate_anon( SEXP _loc_id ) {
   hid_t loc_id = INTEGER(_loc_id)[0];
   hid_t hid = H5Gcreate_anon( loc_id, H5P_DEFAULT, H5P_DEFAULT );
-  if (hid > 0) {
-    addGroupHandle(hid, "anonym", loc_id);
-  }
+  addHandle(hid);
 
   SEXP Rval;
   PROTECT(Rval = allocVector(INTSXP, 1));
@@ -39,9 +35,7 @@ SEXP _H5Gopen( SEXP _loc_id, SEXP _name ) {
   hid_t loc_id = INTEGER(_loc_id)[0];
   const char *name = CHAR(STRING_ELT(_name, 0));
   hid_t hid = H5Gopen( loc_id, name, H5P_DEFAULT );
-  if (hid > 0) {
-    addGroupHandle(hid, name, loc_id);
-  }
+  addHandle(hid);
 
   SEXP Rval;
   PROTECT(Rval = allocVector(INTSXP, 1));
@@ -55,7 +49,7 @@ SEXP _H5Gclose( SEXP _group_id ) {
   hid_t group_id =  INTEGER(_group_id)[0];
   herr_t herr = H5Gclose( group_id );
   if (herr == 0) {
-    removeHandle(group, group_id);
+    removeHandle(group_id);
   }
 
   SEXP Rval;

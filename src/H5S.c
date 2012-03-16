@@ -4,9 +4,7 @@
 SEXP _H5Screate( SEXP _type ) {
   H5S_class_t type = INTEGER(_type)[0];
   hid_t hid = H5Screate( type );
-  if (hid > 0) {
-    addSpaceHandle(hid, type);
-  }
+  addHandle(hid);
 
   SEXP Rval;
   PROTECT(Rval = allocVector(INTSXP, 1));
@@ -19,9 +17,7 @@ SEXP _H5Screate( SEXP _type ) {
 SEXP _H5Scopy( SEXP _space_id ) {
   hid_t space_id =  INTEGER(_space_id)[0];
   hid_t hid = H5Scopy( space_id );
-  if (hid > 0) {
-    addSpaceHandle(hid, H5S_SIMPLE);
-  }
+  addHandle(hid);
 
   SEXP Rval;
   PROTECT(Rval = allocVector(INTSXP, 1));
@@ -35,7 +31,7 @@ SEXP _H5Sclose( SEXP _space_id ) {
   hid_t space_id =  INTEGER(_space_id)[0];
   herr_t herr = H5Sclose( space_id );
   if (herr == 0) {
-    removeHandle(space, space_id);
+    removeHandle(space_id);
   }
 
   SEXP Rval;
@@ -55,9 +51,7 @@ SEXP _H5Screate_simple( SEXP _dims, SEXP _maxdims ) {
   }
   if (length(_maxdims) == 0) {
     hid = H5Screate_simple( rank, dims, NULL);
-    if (hid > 0) {
-      addSpaceHandle(hid, H5S_SIMPLE);
-    }
+    addHandle(hid);
   } else {
     if (length(_maxdims) != length(_dims)) {
       printf("dims and maxdims must have the same length.\n");
@@ -68,9 +62,7 @@ SEXP _H5Screate_simple( SEXP _dims, SEXP _maxdims ) {
 	maxdims[i] = INTEGER(_maxdims)[i];
       }
       hid = H5Screate_simple( rank, dims, maxdims);
-      if (hid > 0) {
-	addSpaceHandle(hid, H5S_SIMPLE);
-      }
+      addHandle(hid);
     }
   }
 

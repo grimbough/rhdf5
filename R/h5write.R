@@ -4,32 +4,21 @@ h5write <- function(obj, file, name, ...) {
   invisible(res)
 }
 
-h5write.default <- function(obj, file, name, write.attributes = TRUE, ...) {
-  if (is( file, "H5file" ) | is( file, "H5group" )) {
-    h5loc = file
-  } else {
-    if (is.character(file)) {
-      if (file.exists(file)) {
-        try( { h5loc <- H5Fopen(file) } )
-      } else {
-        stop("Can not open file '",file,"'.")
-      }
-    } else {
-      stop("File has to be either a valid file or an object of class H5file or H5group.")
-    }
-  }
-  res <- h5writeDataset(obj, h5loc, name, ...)
+h5write.default <- function(obj, file, name, createnewfile=TRUE, write.attributes = FALSE, ...) {
+  loc = h5checktypeOrOpenLoc(file)
+  
+  res <- h5writeDataset(obj, loc$H5Identifier, name, ...)
   if (write.attributes) {
-    # type = H5Oget_info_by_name(h5loc, name)$type
-    oid = H5Oopen(h5loc, name)
+    # type = H5Oget_info_by_name(loc$H5Identifier, name)$type
+    oid = H5Oopen(loc$H5Identifier, name)
     type = H5Iget_type(oid)
     H5Oclose(oid)
 
     if (type == "H5I_GROUP") {
-      h5obj = H5Gopen(h5loc, name)
+      h5obj = H5Gopen(loc$H5Identifier, name)
     } else {
       if (type == "H5I_DATASET") {
-        h5obj = H5Dopen(h5loc, name)
+        h5obj = H5Dopen(loc$H5Identifier, name)
       } else {
         stop("Cannot open object of this type")
       }
@@ -46,16 +35,13 @@ h5write.default <- function(obj, file, name, write.attributes = TRUE, ...) {
       }
     }
   }
-  if (!is( file, "H5file" ) & !is( file, "H5group" )) {
-    try( { H5Fclose(h5loc) } )
-  }
+  h5closeitLoc(loc)
+
   invisible(res)
 }
 
 h5writeDataset <- function(obj, h5loc, name, ...) {
-  if (!(is( h5loc, "H5file" ) | is( h5loc, "H5group" ))) {
-    stop("h5loc not of class H5file or H5group.")
-  }
+  h5checktype(h5loc, "loc")
   res <- UseMethod("h5writeDataset")
   invisible(res)
 }

@@ -14,11 +14,11 @@
 #}
 
 H5Oopen <- function( h5loc, name ) {
-  stopifnot( is( h5loc, "H5file" ) | is( h5loc, "H5group" ) )
+  h5checktype(h5loc, "loc")
   if (length(name)!=1 || !is.character(name)) stop("'name' must be a character string of length 1")
   oid <- .Call("_H5Oopen", h5loc@ID, name, PACKAGE='rhdf5')
   if (oid > 0) {
-    h5object = new("H5group", ID = oid)
+    h5object = new("H5IdComponent", ID = oid)
   } else {
     message("HDF5: unable to open object")
     h5object = FALSE
@@ -27,18 +27,18 @@ H5Oopen <- function( h5loc, name ) {
 }
 
 H5Oclose <- function( h5obj ) {
-  stopifnot( is( h5obj, "H5group" ) )
+  h5checktype(h5obj, "object")
   invisible(.Call("_H5Oclose", h5obj@ID, PACKAGE='rhdf5'))
 }
 
 H5Oget_num_attrs <- function( h5obj ) {
-  stopifnot( is( h5obj, "H5file" ) | is( h5obj, "H5group" ) | is( h5obj, "H5dataset" ) )
+  h5checktype(h5obj, "object")
   n <- .Call("_H5Oget_num_attrs", h5obj@ID, PACKAGE='rhdf5')
   n
 }
 
 H5Oget_num_attrs_by_name <- function( h5loc, name ) {
-  stopifnot( is( h5loc, "H5file" ) | is( h5loc, "H5group" ) )
+  h5checktype(h5loc, "loc")
   if (length(name)!=1 || !is.character(name)) stop("'name' must be a character string of length 1")
   h5obj = H5Oopen( h5loc, name )
   n <- .Call("_H5Oget_num_attrs", h5obj@ID, PACKAGE='rhdf5')

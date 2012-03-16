@@ -30,10 +30,8 @@ SEXP _H5Dcreate( SEXP _loc_id, SEXP _name, SEXP _dtype_id, SEXP _space_id, SEXP 
 
   hid_t hid = H5Dcreate( loc_id, name, dtype_id, space_id, 
 			 H5P_DEFAULT, plist, H5P_DEFAULT );
-  if (hid > 0) {
-    addDatasetHandle(hid, loc_id, name, dtype_id, space_id);
-  }
-
+  addHandle(hid);
+ 
   SEXP Rval;
   PROTECT(Rval = allocVector(INTSXP, 1));
   INTEGER(Rval)[0] = hid;
@@ -47,9 +45,7 @@ SEXP _H5Dopen( SEXP _loc_id, SEXP _name ) {
   hid_t loc_id = INTEGER(_loc_id)[0];
   const char *name = CHAR(STRING_ELT(_name, 0));
   hid_t hid = H5Dopen( loc_id, name, H5P_DEFAULT );
-  if (hid > 0) {
-    addDatasetHandle( hid, loc_id, name, -1, -1 );
-  }
+  addHandle(hid);
 
   SEXP Rval;
   PROTECT(Rval = allocVector(INTSXP, 1));
@@ -63,7 +59,7 @@ SEXP _H5Dclose( SEXP _dataset_id ) {
   hid_t dataset_id = INTEGER(_dataset_id)[0];
   herr_t herr = H5Dclose( dataset_id );
   if (herr == 0) {
-    removeHandle(dataset, dataset_id);
+    removeHandle(dataset_id);
   }
 
   SEXP Rval;
@@ -463,12 +459,16 @@ SEXP _H5Dwrite( SEXP _dataset_id, SEXP _buf, SEXP _file_space_id, SEXP _mem_spac
 SEXP _H5Dget_space(SEXP _dataset_id ) {
   hid_t dataset_id = INTEGER(_dataset_id)[0];
   hid_t sid = H5Dget_space( dataset_id );
-  if (sid > 0) {
-    H5S_class_t space_type = H5Sget_simple_extent_type(sid);
-    addSpaceHandle(sid, space_type);
-  }
+  addHandle(sid);
   SEXP Rval = ScalarInteger( sid );
   return Rval;
 }
 
+/* hid_t H5Dget_type(hid_t dataset_id) */
+SEXP _H5Dget_type( SEXP _dataset_id ) {
+  hid_t dataset_id = INTEGER(_dataset_id)[0];
+  hid_t hid = H5Dget_type( dataset_id );
+  SEXP Rval = ScalarInteger(hid);
+  return Rval;
+}
 

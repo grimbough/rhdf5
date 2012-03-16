@@ -30,11 +30,11 @@ H5Awrite        (h5attribute, buf)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{h5obj}{An object of class \code{\link{H5file}}, class \code{\link{H5group}}, or class \code{\link{H5dataset}}. See \code{\link{H5Fcreate}}, \code{\link{H5Fopen}}, \code{\link{H5Gcreate}}, \code{\link{H5Gopen}}, \code{\link{H5Dcreate}}, \code{\link{H5Dopen}} to create an object of this kind.}
+  \item{h5obj}{An object of class \code{\link{H5IdComponent}} representing a H5 object identifier (file, group, or dataset). See \code{\link{H5Fcreate}}, \code{\link{H5Fopen}}, \code{\link{H5Gcreate}}, \code{\link{H5Gopen}}, \code{\link{H5Dcreate}}, or \code{\link{H5Dopen}} to create an object of this kind.}
   \item{name}{The name of the attribute (character).}
   \item{dtype_id}{A character name of a datatype. See \code{h5const("H5T")} for possible datatypes. Can also be an integer representing an HDF5 datatype. Only simple datatypes are allowed for atttributes.}
-  \item{h5space}{An object of class \code{\link{H5space}}. See \code{\link{H5Dget_space}}, \code{\link{H5Screate_simple}}, \code{\link{H5Screate}} to create an object of this kind.}
-  \item{h5attribute}{An object of class \code{\link{H5attribute}} as created by \code{H5Acreate} or \code{H5Aopen}}
+  \item{h5space}{An object of class \code{\link{H5IdComponent}} representing a H5 dataspace. See \code{\link{H5Dget_space}}, \code{\link{H5Screate_simple}}, \code{\link{H5Screate}} to create an object of this kind.}
+  \item{h5attribute}{An object of class \code{\link{H5IdComponent}} represnting a H5 attribute as created by \code{H5Acreate} or \code{H5Aopen}}
   \item{n}{Opens attribute number n in the given order and index. The first attribute is opened with n=0.}
   \item{objname}{The name of the object the attribute belongs to.}
   \item{index_type}{See \code{h5const("H5_INDEX")} for possible arguments.}
@@ -45,9 +45,9 @@ H5Awrite        (h5attribute, buf)
 Interface to the HDF5 C-library libhdf5. See \url{http://www.hdfgroup.org/HDF5/doc/RM/RM_H5A.html} for further details.
 }
 \value{
-\code{H5Acreate}, \code{H5Aopen}, \code{H5Aopen_by_name}, \code{H5Aopen_by_idx}  return an object of class \code{\link{H5attribute}}.
+\code{H5Acreate}, \code{H5Aopen}, \code{H5Aopen_by_name}, \code{H5Aopen_by_idx}  return an object of class \code{\link{H5IdComponent}} representing a H5 attribute identifier.
 
-\code{H5Aget_space} returns an object of class \code{\link{H5space}}.
+\code{H5Aget_space} returns an object of class \code{\link{H5IdComponent}} representing a H5 dataspace identifier.
 
 \code{H5Aread} returns an array with the read data.
 
