@@ -9,7 +9,7 @@ h5save(..., file, name = NULL, createnewfile = TRUE)
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{\dots}{The objects to be saved.}
-  \item{file}{The filename (character) of the file in which the dataset will be located. For advanced programmers it is possible to provide an object of class \code{\link{H5file}} or \code{\link{H5group}}. See \code{\link{H5Fcreate}}, \code{\link{H5Fopen}}, \code{\link{H5Gcreate}}, \code{\link{H5Gopen}} to create an object of this kind.}
+  \item{file}{The filename (character) of the file in which the dataset will be located. For advanced programmers it is possible to provide an object of class \code{\link{H5IdComponent}} representing a H5 location identifier (file or group). See \code{\link{H5Fcreate}}, \code{\link{H5Fopen}}, \code{\link{H5Gcreate}}, \code{\link{H5Gopen}} to create an object of this kind.}
   \item{name}{A character vector of names for the datasets. The length of the name vector should match the number of objects.}
   \item{createnewfile}{If TRUE, a new file will be created if necessary.}
 }

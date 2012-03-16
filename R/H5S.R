@@ -3,7 +3,7 @@ H5Screate <- function( type = h5default("H5S") ) {
   type <- h5checkConstants( "H5S", type )
   sid <- .Call("_H5Screate", type, PACKAGE='rhdf5')
   if (sid > 0) {
-    h5space = new("H5space", ID = sid)
+    h5space = new("H5IdComponent", ID = sid)
   } else {
     message("HDF5: unable to create data space")
     h5space = FALSE
@@ -12,15 +12,15 @@ H5Screate <- function( type = h5default("H5S") ) {
 }
 
 H5Sclose <- function( h5space ) {
-  stopifnot( is( h5space, "H5space" ) )
+  h5checktype(h5space, "dataspace")
   invisible(.Call("_H5Sclose", h5space@ID, PACKAGE='rhdf5'))
 }
 
 H5Scopy <- function( h5space ) {
-  stopifnot( is( h5space, "H5space" ) )
+  h5checktype(h5space, "dataspace")
   sid <- .Call("_H5Scopy", h5space@ID, PACKAGE='rhdf5')
   if (sid > 0) {
-    h5spacenew = new("H5space", ID = sid)
+    h5spacenew = new("H5IdComponent", ID = sid)
   } else {
     message("HDF5: unable to copy data space")
     h5spacenew = FALSE
@@ -31,7 +31,7 @@ H5Scopy <- function( h5space ) {
 H5Screate_simple <- function( dims, maxdims = dims) {
   sid <- .Call("_H5Screate_simple", as.integer(dims), as.integer(maxdims), PACKAGE='rhdf5')
   if (sid > 0) {
-    h5space = new("H5space", ID = sid)
+    h5space = new("H5IdComponent", ID = sid)
   } else {
     message("HDF5: unable to create simple data space")
     h5space = FALSE
@@ -40,12 +40,12 @@ H5Screate_simple <- function( dims, maxdims = dims) {
 }
 
 H5Sis_simple<- function( h5space ) {
-  stopifnot( is( h5space, "H5space" ) )
+  h5checktype(h5space, "dataspace")
   as.logical(.Call("_H5Sis_simple", h5space@ID, PACKAGE='rhdf5'))
 }
 
 H5Sget_simple_extent_dims <- function( h5space ) {
-  stopifnot( is( h5space, "H5space" ) )
+  h5checktype(h5space, "dataspace")
   res <- .Call("_H5Sget_simple_extent_dims", h5space@ID, PACKAGE='rhdf5')
   if (length(res) > 2) {
     res$size <- rev(res$size)
@@ -55,7 +55,7 @@ H5Sget_simple_extent_dims <- function( h5space ) {
 }
 
 H5Sselect_hyperslab <- function( h5space, op = h5default("H5S_SELECT"), start=NULL, stride=NULL, count=NULL, block=NULL ) {
-  stopifnot( is( h5space, "H5space" ) )
+  h5checktype(h5space, "dataspace")
   op <- h5checkConstants( "H5S_SELECT", op )
 
   dims <- H5Sget_simple_extent_dims( h5space )
@@ -105,7 +105,7 @@ H5Sselect_hyperslab <- function( h5space, op = h5default("H5S_SELECT"), start=NU
 }
 
 H5Sselect_index <- function( h5space, index ) {
-  stopifnot( is( h5space, "H5space" ) )
+  h5checktype(h5space, "dataspace")
   dim <- H5Sget_simple_extent_dims(h5space)$size
   if (!is.list(index)) {
     index = list(index)

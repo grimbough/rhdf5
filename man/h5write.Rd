@@ -29,7 +29,9 @@ h5read                      (file, name, index=NULL,
                              compoundAsDataFrame = TRUE, callGeneric = TRUE,
 			     read.attributes = TRUE, ...)
 h5write                     (obj, file, name, ...)
-h5write.default             (obj, file, name, write.attributes = TRUE, ...)
+h5write.default             (obj, file, name, 
+                             createnewfile = TRUE,
+                             write.attributes = FALSE, ...)
 h5writeDataset              (obj, h5loc, name, ...)
 h5writeDataset.data.frame   (obj, h5loc, name, level=7, DataFrameAsCompound = TRUE)
 h5writeDataset.list         (obj, h5loc, name, level=7)
@@ -53,9 +55,9 @@ h5writeAttribute.array      (attr, h5obj, name, size)
 \arguments{
   \item{obj}{The R object to be written.}
   \item{attr}{The R object to be written as an HDF5 attribute.}
-  \item{file}{The filename (character) of the file in which the dataset will be located. For advanced programmers it is possible to provide an object of class \code{\link{H5file}} or \code{\link{H5group}}. See \code{\link{H5Fcreate}}, \code{\link{H5Fopen}}, \code{\link{H5Gcreate}}, \code{\link{H5Gopen}} to create an object of this kind.}
-  \item{h5loc}{An object of class \code{\link{H5file}} or class \code{\link{H5group}}. See \code{\link{H5Fcreate}}, \code{\link{H5Fopen}}, \code{\link{H5Gcreate}}, \code{\link{H5Gopen}} to create an object of this kind.}
-  \item{h5obj}{An object of class \code{\link{H5file}}, class \code{\link{H5group}}, or  class \code{\link{H5dataset}}. See \code{\link{H5Fcreate}}, \code{\link{H5Fopen}}, \code{\link{H5Gcreate}}, \code{\link{H5Gopen}}, \code{\link{H5Dcreate}}, or \code{\link{H5Dopen}} to create an object of this kind.}
+  \item{file}{The filename (character) of the file in which the dataset will be located. For advanced programmers it is possible to provide an object of class \code{\link{H5IdComponent}} representing a H5 location identifier (file or group). See \code{\link{H5Fcreate}}, \code{\link{H5Fopen}}, \code{\link{H5Gcreate}}, \code{\link{H5Gopen}} to create an object of this kind.}
+  \item{h5loc}{An object of class \code{\link{H5IdComponent}} representing a H5 location identifier (file or group). See \code{\link{H5Fcreate}}, \code{\link{H5Fopen}}, \code{\link{H5Gcreate}}, \code{\link{H5Gopen}} to create an object of this kind.}
+  \item{h5obj}{An object of class \code{\link{H5IdComponent}} representing a H5 object identifier (file, group, or dataset). See \code{\link{H5Fcreate}}, \code{\link{H5Fopen}}, \code{\link{H5Gcreate}}, \code{\link{H5Gopen}}, \code{\link{H5Dcreate}}, or \code{\link{H5Dopen}} to create an object of this kind.}
   \item{name}{The name of the dataset in the HDF5 file. The name of the attribute for hwriteAttribute.}
   \item{index}{List of indices for subsetting. The length of the list has to agree with the dimensional extension of the HDF5 array. Each list element is an integer vector of indices. A list element equal to NULL choses all indices in this dimension. Counting is R-style 1-based.}
   \item{start}{The start coordinate of a hyperslab (similar to subsetting in R). Counting is R-style 1-based. This argument is ignored, if index is not NULL.}
@@ -67,6 +69,7 @@ h5writeAttribute.array      (attr, h5obj, name, size)
   \item{DataFrameAsCompound}{If true, a data.frame will be saved as a compound data type. Otherwise it is saved like a list. The adantage of saving a data.frame as a compound data type is that it can be read as a table from python or with a struct-type from C. The disadvantage is that the data has to be rearranged on disk and thus can slow down I/O. If fast reading is required, DataFrameAsCompound=FALSE is recommended.}
   \item{callGeneric}{If TRUE a generic function h5read.classname will be called if it exists depending on the dataset's class attribute within the HDF5 file. This function can be used to convert the standard output of h5read depending on the class attribute. Note that h5read is not a S3 generic function. Dispatching is done based on the HDF5 attribute after the standard h5read function.}
   \item{size}{The length of string data type. Variable lengt strings are not yet supported.}
+  \item{createnewfile}{If TRUE, a new file will be created if necessary.}
   \item{read.attributes}{(logical) If TRUE, the HDF5 attributes are read and attached to the respective R object.}
   \item{write.attributes}{(logical) If TRUE, all R-attributes attached to the object \code{obj} are written to the HDF5 file.}
   \item{\dots}{Further arguments passed to \code{\link{H5Dread}}.}

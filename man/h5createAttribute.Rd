@@ -10,8 +10,8 @@ h5createAttribute (obj, attr, dims, maxdims = dims, file,
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{obj}{The name (character) of the object the attribute will be attatched to. For advanced programmers it is possible to provide an object of class \code{\link{H5file}}, \code{\link{H5group}}, or \code{\link{H5dataset}}. See \code{\link{H5Fcreate}}, \code{\link{H5Fopen}}, \code{\link{H5Gcreate}}, \code{\link{H5Gopen}}, \code{\link{H5Dcreate}}, \code{\link{H5Dopen}} to create an object of this kind.}
-  \item{file}{The filename (character) of the file in which the dataset will be located. For advanced programmers it is possible to provide an object of class \code{\link{H5file}} or \code{\link{H5group}}. See \code{\link{H5Fcreate}}, \code{\link{H5Fopen}}, \code{\link{H5Gcreate}}, \code{\link{H5Gopen}} to create an object of this kind.}
+  \item{obj}{The name (character) of the object the attribute will be attatched to. For advanced programmers it is possible to provide an object of class \code{\link{H5IdComponent}} representing a H5 object identifier (file, group, dataset). See \code{\link{H5Fcreate}}, \code{\link{H5Fopen}}, \code{\link{H5Gcreate}}, \code{\link{H5Gopen}}, \code{\link{H5Dcreate}}, \code{\link{H5Dopen}} to create an object of this kind.}
+  \item{file}{The filename (character) of the file in which the dataset will be located. For advanced programmers it is possible to provide an object of class \code{\link{H5IdComponent}} representig an H5 location identifier. See \code{\link{H5Fcreate}}, \code{\link{H5Fopen}}, \code{\link{H5Gcreate}}, \code{\link{H5Gopen}} to create an object of this kind. The \code{file} argument is not required, if the argument \code{obj} is of type \code{H5IdComponent}.}
   \item{attr}{Name of the attribute to be created.}
   \item{dims}{The dimension of the attribute.}
   \item{maxdims}{The maximum extension of the attribute.}

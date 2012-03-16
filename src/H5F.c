@@ -6,9 +6,8 @@ SEXP _H5Fcreate( SEXP _name, SEXP _flags ) {
   const char *name = CHAR(STRING_ELT(_name, 0));
   unsigned flags = INTEGER(_flags)[0];
   hid_t hid = H5Fcreate( name, flags, H5P_DEFAULT, H5P_DEFAULT );
-  if (hid > 0) {
-    addFileHandle(hid, name);
-  }
+  addHandle(hid);
+
   SEXP Rval;
   PROTECT(Rval = allocVector(INTSXP, 1));
   INTEGER(Rval)[0] = hid;
@@ -22,9 +21,7 @@ SEXP _H5Fopen( SEXP _name, SEXP _flags ) {
   const char *name = CHAR(STRING_ELT(_name, 0));
   unsigned flags = INTEGER(_flags)[0];
   hid_t hid = H5Fopen( name, flags, H5P_DEFAULT );
-  if (hid > 0) {
-    addFileHandle(hid, name);
-  }
+  addHandle(hid);
 
   SEXP Rval;
   PROTECT(Rval = allocVector(INTSXP, 1));
@@ -37,10 +34,7 @@ SEXP _H5Fopen( SEXP _name, SEXP _flags ) {
 SEXP _H5Freopen( SEXP _file_id ) {
   hid_t file_id =  INTEGER(_file_id)[0];
   hid_t hid = H5Freopen( file_id );
-  if (hid > 0) {
-    H5Handle h = handleInfo(file, file_id);
-    addFileHandle(hid, h.name);
-  }
+  addHandle(file_id);
 
   SEXP Rval;
   PROTECT(Rval = allocVector(INTSXP, 1));
@@ -54,7 +48,7 @@ SEXP _H5Fclose( SEXP _file_id ) {
   hid_t file_id =  INTEGER(_file_id)[0];
   herr_t herr = H5Fclose( file_id );
   if (herr == 0) {
-    removeHandle(file, file_id);
+    removeHandle(file_id);
   }
 
   SEXP Rval;

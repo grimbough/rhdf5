@@ -24,20 +24,7 @@ h5lsConvertToDataframe <- function(L, all=FALSE) {
 }
 
 h5ls <- function( file, recursive = TRUE, all=FALSE, datasetinfo=TRUE, index_type = h5default("H5_INDEX"), order = h5default("H5_ITER")) {
-  if (is( file, "H5file" ) | is( file, "H5group" )) {
-    h5loc = file
-  } else {
-    if (is.character(file)) {
-      if (file.exists(file)) {
-        h5loc <- H5Fopen(file)
-      } else {
-        message("Can not open file '",file,"'.")
-        return(NULL)
-      }
-    } else {
-      stop("file has to be either a valid file or an object of class H5file or H5group.")
-    }
-  }
+  loc = h5checktypeOrOpenLoc(file)
 
   if (length(datasetinfo)!=1 || !is.logical(datasetinfo)) stop("'datasetinfo' must be a logical of length 1")
   index_type <- h5checkConstants( "H5_INDEX", index_type )
@@ -59,11 +46,9 @@ h5ls <- function( file, recursive = TRUE, all=FALSE, datasetinfo=TRUE, index_typ
     }
   }
   di <- ifelse(datasetinfo, 1L, 0L)
-  L <- .Call("_h5ls", h5loc@ID, depth, di, index_type, order, PACKAGE='rhdf5')
+  L <- .Call("_h5ls", loc$H5Identifier@ID, depth, di, index_type, order, PACKAGE='rhdf5')
   L <- h5lsConvertToDataframe(L, all=all)
-  if (!is( file, "H5file" ) & !is( file, "H5group" )) {
-    H5Fclose(h5loc)
-  }
+  h5closeitLoc(loc)
   L
 }
 

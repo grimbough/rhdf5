@@ -21,15 +21,15 @@ H5Oget_num_attrs_by_name(h5loc, name)
 % H5Oget_info_by_name (h5loc, name)
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{h5obj}{An object of class \code{\link{H5file}}, class \code{\link{H5group}} or class \code{\link{H5dataset}}. See \code{\link{H5Fcreate}}, \code{\link{H5Fopen}}, \code{\link{H5Gcreate}}, \code{\link{H5Gopen}}, \code{\link{H5Dcreate}}, \code{\link{H5Dopen}} to create an object of this kind.}
-  \item{h5loc}{An object of class \code{\link{H5file}} or class \code{\link{H5group}}. See \code{\link{H5Fcreate}}, \code{\link{H5Fopen}}, \code{\link{H5Gcreate}}, \code{\link{H5Gopen}} to create an object of this kind.}
+  \item{h5obj}{An object of class \code{\link{H5IdComponent}} representing a H5 object identifier (file, group, or dataset). See \code{\link{H5Fcreate}}, \code{\link{H5Fopen}}, \code{\link{H5Gcreate}}, \code{\link{H5Gopen}}, \code{\link{H5Dcreate}}, or \code{\link{H5Dopen}} to create an object of this kind.}
+  \item{h5loc}{An object of class \code{\link{H5IdComponent}} representing a H5 location identifier (file or group). See \code{\link{H5Fcreate}}, \code{\link{H5Fopen}}, \code{\link{H5Gcreate}}, \code{\link{H5Gopen}} to create an object of this kind.}
   \item{name}{The name of the link to be checked.}
 }
 \details{
 Interface to the HDF5 C-library libhdf5. See \url{http://www.hdfgroup.org/HDF5/doc/RM/RM_H5O.html} for further details.
 }
 \value{
-\code{H5Oopen} opens an object (a file, a group, or a dataset). \code{H5Oclose} closed the object again. \code{H5Oget_num_attrs} and \code{H5Oget_num_attrs_by_name} return the number of attributes of an object.
+\code{H5Oopen} opens an object (a file, group, or dataset) and returns an object of class \code{\link{H5IdComponent}}. \code{H5Oclose} closed the object again. \code{H5Oget_num_attrs} and \code{H5Oget_num_attrs_by_name} return the number of attributes of an object.
 }
 \references{\url{http://www.hdfgroup.org/HDF5}}
 \author{Bernd Fischer}

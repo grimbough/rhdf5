@@ -1,35 +1,21 @@
 
 h5read <- function(file, name, index=NULL, start=NULL, stride=NULL, block=NULL, count=NULL, compoundAsDataFrame = TRUE, callGeneric = TRUE, read.attributes=TRUE, ... ) {
-  if (is( file, "H5file" ) | is( file, "H5group" )) {
-    h5loc = file
-  } else {
-    if (is.character(file)) {
-      if (file.exists(file)) {
-        try( { h5loc <- H5Fopen(file) } )
-      } else {
-        stop("Can not open file '",file,"'.")
-      }
-    } else {
-      stop("file has to be either a valid file or an object of class H5file or H5group.")
-    }
-  }
+  loc = h5checktypeOrOpenLoc(file)
 
-  if (!H5Lexists(h5loc, name)) {
-    if (!is( file, "H5file" ) & !is( file, "H5group" )) {
-      try( { H5Fclose(h5loc) } )
-    }
-    stop("Object ",name," does not exist.")
+  if (!H5Lexists(loc$H5Identifier, name)) {
+    h5closeitLoc(loc)
+    stop("Object ",name," does not exist in this HDF5 file.")
   } else {
-oid = H5Oopen(h5loc, name)
-type = H5Iget_type(oid)
-H5Oclose(oid)
+    oid = H5Oopen(loc$H5Identifier, name)
+    type = H5Iget_type(oid)
+    H5Oclose(oid)
     if (type == "H5I_GROUP") {
-      gid <- H5Gopen(h5loc, name)
+      gid <- H5Gopen(loc$H5Identifier, name)
       obj = h5dump(gid, start=start, stride=stride, block=block, count=count, compoundAsDataFrame = compoundAsDataFrame, callGeneric = callGeneric)
       H5Gclose(gid)
     } else {
       if (type == "H5I_DATASET") {
-        try( { h5dataset <- H5Dopen(h5loc, name) } )
+        try( { h5dataset <- H5Dopen(loc$H5Identifier, name) } )
         try( { h5spaceFile <- H5Dget_space( h5dataset ) } )
         h5spaceMem = NULL
         if (!is.null(index)) {
@@ -81,7 +67,7 @@ H5Oclose(oid)
     } ## GROUP
 #    if (read.attributes & (info$num_attrs > 0) & !is.null(obj)) {
 #      for (i in 1:info$num_attrs) {
-#        A = H5Aopen_by_idx(h5loc, n = i-1, objname = name)
+#        A = H5Aopen_by_idx(loc$H5Identifier, n = i-1, objname = name)
 #        attrname <- H5Aget_name(A)
 #        if (attrname != "dim") {
 #          attr(obj, attrname) = H5Aread(A)
@@ -90,9 +76,7 @@ H5Oclose(oid)
 #      }
 #    }
   }  # !H5Lexists
-  if (!is( file, "H5file" ) & !is( file, "H5group" )) {
-    try( { H5Fclose(h5loc) } )
-  }
+  h5closeitLoc(loc)
 
   obj
 }

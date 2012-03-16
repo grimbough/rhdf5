@@ -13,9 +13,7 @@ SEXP _H5Acreate( SEXP _obj_id, SEXP _attr_name, SEXP _type_id, SEXP _space_id ) 
 
   hid_t hid = H5Acreate( obj_id, attr_name, type_id, space_id, 
 			 H5P_DEFAULT, H5P_DEFAULT );
-  if (hid > 0) {
-    addAttributeHandle(hid, obj_id, attr_name, type_id, space_id);
-  }
+  addHandle(hid);
 
   SEXP Rval;
   PROTECT(Rval = allocVector(INTSXP, 1));
@@ -29,9 +27,7 @@ SEXP _H5Aopen( SEXP _obj_id, SEXP _attr_name ) {
   hid_t obj_id = INTEGER(_obj_id)[0];
   const char *attr_name = CHAR(STRING_ELT(_attr_name, 0));
   hid_t hid = H5Aopen( obj_id, attr_name, H5P_DEFAULT );
-  if (hid > 0) {
-    addAttributeHandle( hid, obj_id, attr_name, -1, -1 );
-  }
+  addHandle( hid );
 
   SEXP Rval;
   PROTECT(Rval = allocVector(INTSXP, 1));
@@ -46,9 +42,7 @@ SEXP _H5Aopen_by_name( SEXP _obj_id, SEXP _obj_name, SEXP _attr_name ) {
   const char *obj_name = CHAR(STRING_ELT(_obj_name, 0));
   const char *attr_name = CHAR(STRING_ELT(_attr_name, 0));
   hid_t hid = H5Aopen_by_name( obj_id, obj_name, attr_name, H5P_DEFAULT, H5P_DEFAULT );
-  if (hid > 0) {
-    addAttributeHandle( hid, obj_id, attr_name, -1, -1 );
-  }
+  addHandle( hid );
 
   SEXP Rval;
   PROTECT(Rval = allocVector(INTSXP, 1));
@@ -65,13 +59,7 @@ SEXP _H5Aopen_by_idx( SEXP _obj_id, SEXP _obj_name, SEXP _idx_type, SEXP _order,
   H5_iter_order_t order = INTEGER(_order)[0];
   hsize_t n = INTEGER(_n)[0];
   hid_t hid = H5Aopen_by_idx( obj_id, obj_name, idx_type, order, n, H5P_DEFAULT, H5P_DEFAULT );
-  if (hid > 0) {
-    char buf[3];
-    ssize_t s = H5Aget_name(hid, 3, buf );
-    char attr_name[s+1];
-    H5Aget_name(hid, s+1, attr_name );
-    addAttributeHandle( hid, obj_id, attr_name, -1, -1 );
-  }
+  addHandle( hid );
 
   SEXP Rval;
   PROTECT(Rval = allocVector(INTSXP, 1));
@@ -94,7 +82,7 @@ SEXP _H5Aclose( SEXP _attr_id ) {
   hid_t attr_id = INTEGER(_attr_id)[0];
   herr_t herr = H5Aclose( attr_id );
   if (herr == 0) {
-    removeHandle(attribute, attr_id);
+    removeHandle(attr_id);
   }
 
   SEXP Rval;
@@ -458,10 +446,7 @@ SEXP _H5Aget_name(SEXP _attr_id ) {
 SEXP _H5Aget_space(SEXP _attr_id ) {
   hid_t attr_id = INTEGER(_attr_id)[0];
   hid_t sid = H5Aget_space( attr_id );
-  if (sid > 0) {
-    H5S_class_t space_type = H5Sget_simple_extent_type(sid);
-    addSpaceHandle(sid, space_type);
-  }
+  addHandle(sid);
   SEXP Rval = ScalarInteger( sid );
   return Rval;
 }

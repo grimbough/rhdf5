@@ -1,6 +1,6 @@
 
 H5Lexists <- function( h5loc, name ) {
-  stopifnot( is( h5loc, "H5file" ) | is( h5loc, "H5group" ) )
+  h5checktype(h5loc, "loc")
   if (length(name)!=1 || !is.character(name)) stop("'name' must be a character string of length 1")
 
   name = strsplit(name,split="/")[[1]]
@@ -16,7 +16,7 @@ H5Lexists <- function( h5loc, name ) {
 }
 
 H5Lget_info <- function( h5loc, name ) {
-  stopifnot( is( h5loc, "H5file" ) | is( h5loc, "H5group" ) )
+  h5checktype(h5loc, "loc")
   if (length(name)!=1 || !is.character(name)) stop("'name' must be a character string of length 1")
 
   res <- .Call("_H5Lget_info", h5loc@ID, name, PACKAGE='rhdf5')

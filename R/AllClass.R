@@ -1,21 +1,53 @@
 
-setClass("H5file",
+setClass("H5IdComponent",
          representation(ID = "integer")
 )
 
-setClass("H5group",
-         representation(ID = "integer")
-)
+## setClass("H5attribute",
+##          contains = "H5IdComponent"
+## )
 
-setClass("H5space",
-         representation(ID = "integer")
-)
+## setClass("H5DataSpace",
+##          contains = "H5IdComponent"
+## )
 
-setClass("H5dataset",
-         representation(ID = "integer")
-)
+## setClass("H5DataSet",
+##          contains = "H5IdComponent"
+## )
 
-setClass("H5attribute",
-         representation(ID = "integer")
-)
+## setClass("H5DataType",
+##          contains = "H5IdComponent"
+## )
+
+## setClass("H5DataType",
+##          contains = "H5IdComponent"
+## )
+
+## setClass("H5file",
+##          contains = "H5IdComponent"
+## )
+
+## setClass("H5PropList",
+##          contains = "H5IdComponent"
+## )
+
+## setClass("H5group",
+##          contains = "H5IdComponent"
+## )
+
+## setClass("H5space",
+##          contains = "H5IdComponent"
+## )
+
+## setClass("H5dataset",
+##          contains = "H5IdComponent"
+## )
+
+
+
+
+
+## setClass("H5Object",
+##          contains = "H5IdComponent"
+## )
 
