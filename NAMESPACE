@@ -1,5 +1,7 @@
 useDynLib(rhdf5)
 
+import(zlibbioc)
+
 exportClasses(H5IdComponent)
 ## exportClasses(H5file)
 ## exportClasses(H5group)
