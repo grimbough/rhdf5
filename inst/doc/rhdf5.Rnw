@@ -72,7 +72,7 @@ h5ls("myhdf5file.h5")
 \subsection{Writing and reading objects}
 \label{sec_writeMatrix}
 
-Objects can be written to the HDF5 file. Attributes attached to an object are written as well, if \code{write.attributes=FALSE} is not given as argument to \code{h5write}.
+Objects can be written to the HDF5 file. Attributes attached to an object are written as well, if \code{write.attributes=TRUE} is given as argument to \code{h5write}. Note that not all R-attributes can be written as HDF5 attributes.
 
 <<writeMatrix>>=
 A = matrix(1:10,nr=5,nc=2)
