@@ -1,7 +1,7 @@
 Package: rhdf5
 Type: Package
 Title: HDF5 interface to R
-Version: 2.0.0
+Version: 2.1.0
 Date: 2012-03-28
 Author: Bernd Fischer, Gregoire Pau
 Maintainer: Bernd Fischer <bernd.fischer@embl.de>
