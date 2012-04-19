@@ -3,22 +3,15 @@ ZLIB_CFLAGS+=$(shell echo 'zlibbioc::pkgconfig("PKG_CFLAGS")'|"${R_HOME}/bin/R" 
 PKG_CFLAGS += $(ZLIB_CFLAGS) -IincludeWin$(arch) -DWINDOWS
 PKG_CXXFLAGS += $(ZLIB_CFLAGS) -IincludeWin$(arch) -DWINDOWS
 
-# PKG_LIBS += -llibhdf5ForBioC-7 -lzlib1bioc -llibsz-2 -lm -L.
-
 PKG_LIBS += -llibhdf5ForBioC-7 
 PKG_LIBS+=$(shell echo 'zlibbioc::pkgconfig("PKG_LIBS_shared")' |"${R_HOME}/bin/R" --vanilla --slave)
 PKG_LIBS += -llibsz-2 -lm -L.
 
-# with zlibbioc
-# PKG_LIBS += -llibsz-2 -lm -L.
-# PKG_LIBS += $(shell echo 'zlibbioc::pkgconfig("PKG_LIBS_shared")' | "${R_HOME}/bin/R" --vanilla --slave)
-# PKG_LIBS += -llibhdf5ForBioC-7
+.PHONY: all libhdf5ForBioC
 
-# else
-# PKG_LIBS = -lzlib1bioc libsz.a libhdf5ForBioC.a -lm -L. 
-# endif
-# %.o: %.c
-# 	$(CC) $(ZLIB_CFLAGS) $(ALL_CPPFLAGS) $(ALL_CFLAGS) -c $< -o $@
+all: libhdf5ForBioC $(SHLIB)
+$(SHLIB): libhdf5ForBioC
+libhdf5ForBioC:
+	cp includeWin${R_ARCH}/* includeWin/
+	cp libwin${R_ARCH}/*.dll .
 
-# %.o: %.cpp
-# 	$(CXX) $(ZLIB_CFLAGS) $(ALL_CPPFLAGS) $(ALL_CXXFLAGS) -c $< -o $@
