@@ -1,3 +1,15 @@
 PKG_CFLAGS = -Ihdf5/src
 PKG_CXXFLAGS = -Ihdf5/src
 PKG_LIBS = libhdf5ForBioC.a -lz -lm -L.
+
+.PHONY: all libhdf5ForBioC.a
+
+all: libhdf5ForBioC.a $(SHLIB)
+$(SHLIB): libhdf5ForBioC.a
+libhdf5ForBioC.a:
+	gunzip -dc hdf5small.tgz | tar xf -;
+	cd hdf5 && \
+	   ./configure CC="${CC}" CPP="${CPP}" CXX="${CXX}" CXXCPP="${CXXCPP}" F77="${F77}" --build="${R_ARCH#*/}" --with-pic 
+	cd hdf5/src && \
+	   $(MAKE)
+	cp hdf5/src/.libs/libhdf5ForBioC.a .
