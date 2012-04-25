@@ -2,4 +2,4 @@ src/libwin/i386/libsz-2.dll
 src/libwin/i386/libhdf5ForBioC-7.dll
 src/libwin/x64/libsz-2.dll
 src/libwin/x64/libhdf5ForBioC-7.dll
-src/hdf5small.tgz
+src/hdf5source/hdf5small.tgz
