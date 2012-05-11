@@ -266,7 +266,9 @@ SEXP H5Dread_helper_ARRAY(hid_t dataset_id, hid_t file_space_id, hid_t mem_space
   SEXP Rval;
 
   hid_t superclass =  H5Tget_class(H5Tget_super( dtype_id ));
-  if ((superclass == H5T_INTEGER) | (superclass == H5T_FLOAT)) {
+  printf("%d  --  %d\n", cpdNField, compoundAsDataFrame);
+  if (((superclass == H5T_INTEGER) | (superclass == H5T_FLOAT)) & (!((cpdNField > 0) & (compoundAsDataFrame > 0)))) {
+    printf("Read ARRAY\n");
     int ndims = H5Tget_array_ndims (dtype_id);
     hsize_t na = 1;
     hsize_t adims[ndims];
@@ -322,13 +324,17 @@ SEXP H5Dread_helper_ARRAY(hid_t dataset_id, hid_t file_space_id, hid_t mem_space
       setAttrib(Rval, R_DimSymbol, Rdima);
       UNPROTECT(2);
     }
-  } else {  
+  } else {
     double na = R_NaReal;
     Rval = PROTECT(allocVector(REALSXP, n));
     for (int i=0; i<n; i++) { REAL(Rval)[i] = na; }
     setAttrib(Rval, R_DimSymbol, Rdim);
     UNPROTECT(1);
-    printf("Warning: h5read for type ARRAY [%s] not implemented. Values replaced by NA's\n", getDatatypeClass(H5Tget_super( dtype_id )));
+    if ((cpdNField > 0) & (compoundAsDataFrame > 0)) {
+      printf("Warning: h5read cannot coerce COMPOUND dataset with element of type ARRAY to data.frame. Values replaced by NA's. Try h5read with argument compoundAsDataFrame=FALSE to read element of type ARRAY\n");
+    } else {
+      printf("Warning: h5read for type ARRAY [%s] not implemented. Values replaced by NA's\n", getDatatypeClass(H5Tget_super( dtype_id )));
+    }
   }
 
   return(Rval);
