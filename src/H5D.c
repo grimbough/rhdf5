@@ -197,6 +197,143 @@ SEXP H5Dread_helper_STRING(hid_t dataset_id, hid_t file_space_id, hid_t mem_spac
   return(Rval);
 }
 
+SEXP H5Dread_helper_ENUM(hid_t dataset_id, hid_t file_space_id, hid_t mem_space_id, hsize_t n, SEXP Rdim, SEXP _buf, 
+			 hid_t dtype_id, hid_t cpdType, int cpdNField, char ** cpdField, int compoundAsDataFrame ) {
+  hid_t mem_type_id = -1;
+
+  SEXP Rval;
+
+  hid_t superclass =  H5Tget_class(H5Tget_super( dtype_id ));
+  if (superclass == H5T_INTEGER) {
+    hid_t enumtype = H5Tenum_create(H5T_NATIVE_INT);
+    int nmembers = H5Tget_nmembers( dtype_id );
+    SEXP levels = PROTECT(allocVector(STRSXP, nmembers));
+    for (int i=0; i<nmembers; i++) {
+      char * st = H5Tget_member_name( dtype_id, i );
+      SET_STRING_ELT(levels, i, mkChar(st));
+      herr_t status = H5Tenum_insert (enumtype, st, &i);
+    }
+    UNPROTECT(1);
+
+    if (cpdType < 0) {
+      mem_type_id = enumtype;
+    } else {
+      mem_type_id = H5Tcreate(H5T_COMPOUND, H5Tget_size(enumtype));
+      herr_t status = H5Tinsert(mem_type_id, cpdField[0], 0, enumtype);
+      for (int i=1; i<cpdNField; i++) {
+	hid_t mem_type_id2 = H5Tcreate(H5T_COMPOUND, H5Tget_size(enumtype));
+	herr_t status = H5Tinsert(mem_type_id2, cpdField[i], 0, mem_type_id);
+	mem_type_id = mem_type_id2;
+      }
+    }
+    
+    void * buf;
+    if (length(_buf) == 0) {
+      Rval = PROTECT(allocVector(INTSXP, n));
+      buf = INTEGER(Rval);
+    } else {
+      buf = INTEGER(_buf);
+      Rval = _buf;
+    }
+
+    herr_t herr = H5Dread(dataset_id, mem_type_id, mem_space_id, file_space_id, H5P_DEFAULT, buf );
+    if (length(_buf) == 0) {
+      for (int i=0; i < n; i++) {
+	((int *)buf)[i] += 1;
+      }
+      setAttrib(Rval, R_DimSymbol, Rdim);
+      setAttrib(Rval, mkString("levels"), levels);
+      setAttrib(Rval, R_ClassSymbol, mkString("factor"));
+      UNPROTECT(1);
+    }
+  } else {
+    double na = R_NaReal;
+    Rval = PROTECT(allocVector(REALSXP, n));
+    for (int i=0; i<n; i++) { REAL(Rval)[i] = na; }
+    setAttrib(Rval, R_DimSymbol, Rdim);
+    UNPROTECT(1);
+    printf("Warning: h5read for type ENUM [%s] not yet implemented. Values replaced by NA's\n", getDatatypeClass(H5Tget_super( dtype_id )));
+  }
+
+  return(Rval);
+
+}
+
+SEXP H5Dread_helper_ARRAY(hid_t dataset_id, hid_t file_space_id, hid_t mem_space_id, hsize_t n, SEXP Rdim, SEXP _buf, 
+			  hid_t dtype_id, hid_t cpdType, int cpdNField, char ** cpdField, int compoundAsDataFrame ) {
+  hid_t mem_type_id = -1;
+
+  SEXP Rval;
+
+  hid_t superclass =  H5Tget_class(H5Tget_super( dtype_id ));
+  if ((superclass == H5T_INTEGER) | (superclass == H5T_FLOAT)) {
+    int ndims = H5Tget_array_ndims (dtype_id);
+    hsize_t na = 1;
+    hsize_t adims[ndims];
+    H5Tget_array_dims( dtype_id, adims );
+    for (int i=0; i < ndims; i++) {
+      na = na * adims[i];
+    }
+    hid_t arraytype;
+    if (superclass == H5T_INTEGER) {
+      arraytype = H5Tarray_create (H5T_NATIVE_INT, ndims, adims);
+    } else if (superclass == H5T_FLOAT) {
+      arraytype = H5Tarray_create (H5T_NATIVE_DOUBLE, ndims, adims);
+    }
+    if (cpdType < 0) {
+      mem_type_id =  arraytype;
+    } else {
+      mem_type_id = H5Tcreate(H5T_COMPOUND, H5Tget_size(arraytype));
+      herr_t status = H5Tinsert(mem_type_id, cpdField[0], 0, arraytype);
+      for (int i=1; i<cpdNField; i++) {
+    	hid_t mem_type_id2 = H5Tcreate(H5T_COMPOUND, H5Tget_size(arraytype));
+    	herr_t status = H5Tinsert(mem_type_id2, cpdField[i], 0, mem_type_id);
+    	mem_type_id = mem_type_id2;
+      }
+    }
+    void * buf;
+    if (length(_buf) == 0) {
+      if (superclass == H5T_INTEGER) {
+	Rval = PROTECT(allocVector(INTSXP, n*na));
+	buf = INTEGER(Rval);
+      } else if (superclass == H5T_FLOAT) {
+	Rval = PROTECT(allocVector(REALSXP, n*na));
+	buf = REAL(Rval);
+      }
+    } else {
+      if (superclass == H5T_INTEGER) {
+	buf = INTEGER(_buf);
+      } else if (superclass == H5T_FLOAT) {
+	buf = REAL(_buf);
+      }
+      Rval = _buf;
+    }
+
+    herr_t herr = H5Dread(dataset_id, mem_type_id, mem_space_id, file_space_id, H5P_DEFAULT, buf );
+    if (length(_buf) == 0) {
+      SEXP Rdima = PROTECT(allocVector(INTSXP, LENGTH(Rdim)+ndims));
+      int i=0,j=0;
+      for (j=ndims-1; j>=0; j--,i++) {
+        INTEGER(Rdima)[i] = adims[j];
+      }
+      for (j=0; j<LENGTH(Rdim); j++,i++) {
+        INTEGER(Rdima)[i] = INTEGER(Rdim)[j];
+      }
+      setAttrib(Rval, R_DimSymbol, Rdima);
+      UNPROTECT(2);
+    }
+  } else {  
+    double na = R_NaReal;
+    Rval = PROTECT(allocVector(REALSXP, n));
+    for (int i=0; i<n; i++) { REAL(Rval)[i] = na; }
+    setAttrib(Rval, R_DimSymbol, Rdim);
+    UNPROTECT(1);
+    printf("Warning: h5read for type ARRAY [%s] not implemented. Values replaced by NA's\n", getDatatypeClass(H5Tget_super( dtype_id )));
+  }
+
+  return(Rval);
+
+}
 
 SEXP H5Dread_helper_COMPOUND(hid_t dataset_id, hid_t file_space_id, hid_t mem_space_id, hsize_t n, SEXP Rdim, SEXP _buf, 
 			    hid_t dtype_id, hid_t cpdType, int cpdNField, char ** cpdField, int compoundAsDataFrame ) {
@@ -290,13 +427,19 @@ SEXP H5Dread_helper(hid_t dataset_id, hid_t file_space_id, hid_t mem_space_id, h
     Rval = H5Dread_helper_COMPOUND(dataset_id, file_space_id, mem_space_id, n, Rdim, _buf, 
 				   dtype_id, cpdType, cpdNField, cpdField, compoundAsDataFrame );
   } break;
+  case H5T_ENUM: {
+    Rval = H5Dread_helper_ENUM(dataset_id, file_space_id, mem_space_id, n, Rdim, _buf,
+  			       dtype_id, cpdType, cpdNField, cpdField, compoundAsDataFrame );
+  } break;
+  case H5T_ARRAY: {
+    Rval = H5Dread_helper_ARRAY(dataset_id, file_space_id, mem_space_id, n, Rdim, _buf,
+  			        dtype_id, cpdType, cpdNField, cpdField, compoundAsDataFrame );
+  } break;
   case H5T_TIME:
   case H5T_BITFIELD:
   case H5T_OPAQUE:
   case H5T_REFERENCE:
-  case H5T_ENUM:
   case H5T_VLEN:
-  case H5T_ARRAY:
   default: {
     double na = R_NaReal;
     Rval = PROTECT(allocVector(REALSXP, n));

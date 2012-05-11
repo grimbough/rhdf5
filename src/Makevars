@@ -2,7 +2,7 @@ PKG_CFLAGS = -Ihdf5/src
 PKG_CXXFLAGS = -Ihdf5/src
 PKG_LIBS = libhdf5ForBioC.a -lz -lm -L.
 
-.PHONY: all libhdf5ForBioC.a
+.PHONY: all
 
 all: libhdf5ForBioC.a $(SHLIB)
 $(SHLIB): libhdf5ForBioC.a

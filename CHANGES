@@ -1,3 +1,9 @@
+2.1.3
+- support for reading ENUM and ARRAY
+
+2.1.2 
+- bug fix for multiarchitecture binary build on MacOS and Linux
+
 1.99.10
 - improved parameter checking and warning messages h5create functions
 - check for existence of objects before creating a group, dataset, or attribute
