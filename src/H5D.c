@@ -266,9 +266,7 @@ SEXP H5Dread_helper_ARRAY(hid_t dataset_id, hid_t file_space_id, hid_t mem_space
   SEXP Rval;
 
   hid_t superclass =  H5Tget_class(H5Tget_super( dtype_id ));
-  printf("%d  --  %d\n", cpdNField, compoundAsDataFrame);
   if (((superclass == H5T_INTEGER) | (superclass == H5T_FLOAT)) & (!((cpdNField > 0) & (compoundAsDataFrame > 0)))) {
-    printf("Read ARRAY\n");
     int ndims = H5Tget_array_ndims (dtype_id);
     hsize_t na = 1;
     hsize_t adims[ndims];
