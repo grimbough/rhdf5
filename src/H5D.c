@@ -187,9 +187,17 @@ SEXP H5Dread_helper_STRING(hid_t dataset_id, hid_t file_space_id, hid_t mem_spac
     }
     char bufSTR[n][size];
     herr_t herr = H5Dread(dataset_id, mem_type_id, mem_space_id, file_space_id, H5P_DEFAULT, bufSTR );
+    char bufSTR2[n][size+1];
+    for (int i=0; i<n; i++) {
+      for (int j=0; j<size; j++) {
+    	bufSTR2[i][j] = bufSTR[i][j];
+      }
+      bufSTR2[i][size] = '\0';
+    }
+   
     Rval = PROTECT(allocVector(STRSXP, n));
     for (int i=0; i<n; i++) {
-      SET_STRING_ELT(Rval, i, mkChar(bufSTR[i]));
+      SET_STRING_ELT(Rval, i, mkChar(bufSTR2[i]));
     }
     setAttrib(Rval, R_DimSymbol, Rdim);
     UNPROTECT(1);
@@ -357,7 +365,7 @@ SEXP H5Dread_helper_COMPOUND(hid_t dataset_id, hid_t file_space_id, hid_t mem_sp
       SET_STRING_ELT(names, i, mkChar(H5Tget_member_name(dtype_id,i)));
       char* name[1];
       name[0] = H5Tget_member_name(dtype_id,i);
-      SEXP col; 
+      SEXP col;
       if (compoundAsDataFrame && (H5Tget_member_class(dtype_id,i) == H5T_COMPOUND)) {
 	printf("Warning: Cannot read hierarchical compound data types as data.frame. Use 'compoundAsDataFrame=FALSE' instead. Values replaced by NA's.\n");
 	double na = R_NaReal;
