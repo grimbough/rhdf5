@@ -1,6 +1,6 @@
 
 h5read <- function(file, name, index=NULL, start=NULL, stride=NULL, block=NULL, count=NULL, compoundAsDataFrame = TRUE, callGeneric = TRUE, read.attributes=TRUE, ... ) {
-  loc = h5checktypeOrOpenLoc(file)
+  loc = h5checktypeOrOpenLoc(file, readonly=TRUE)
 
   if (!H5Lexists(loc$H5Identifier, name)) {
     h5closeitLoc(loc)
