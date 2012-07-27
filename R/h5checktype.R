@@ -80,11 +80,15 @@ h5checktypeOrNULL <- function(h5id, type, fctname = deparse(match.call()[1])) {
   invisible(NULL)
 }
 
-h5checktypeOrOpenLoc <- function(file, fctname = deparse(match.call()[1]), createnewfile=FALSE) {
+h5checktypeOrOpenLoc <- function(file, fctname = deparse(match.call()[1]), createnewfile=FALSE, readonly=FALSE) {
   res = list()
   if (is.character(file)) {
     if (file.exists(file)) {
-      h5loc <- H5Fopen(file)
+      h5loc <- if (readonly) {
+          H5Fopen(file,"H5F_ACC_RDONLY")
+        } else {
+          H5Fopen(file)
+        }
       if (!is(h5loc, "H5IdComponent")) {
         stop("Error in ",fctname,". File '",file,"' is not a valid HDF5 file.")
       } else {

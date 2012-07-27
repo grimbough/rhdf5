@@ -1,3 +1,6 @@
+2.1.6
+- open files readonly in h5ls and h5read
+
 2.1.5
 - reading strings without terminating '\0'
 
