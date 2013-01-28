@@ -353,7 +353,7 @@ SEXP H5Dread_helper_COMPOUND(hid_t dataset_id, hid_t file_space_id, hid_t mem_sp
 
   if ((LENGTH(Rdim) > 1) && compoundAsDataFrame) {
     compoundAsDataFrame = 0;
-    printf("Warning: Cannot coerce multi-dimensional data to data.frame. Data returned it as list.\n");
+    printf("Warning: Cannot coerce multi-dimensional data to data.frame. Data returned as a list.\n");
   }
 
   SEXP Rval;

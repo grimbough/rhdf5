@@ -1,3 +1,7 @@
+2.3.1
+- moved precompiled chunksize.pdf to rhdf5/inst/demoChunkSize
+  (avoids display of chunksize.pdf as a vignette on the bioconductor website)
+
 2.1.6
 - open files readonly in h5ls and h5read
 

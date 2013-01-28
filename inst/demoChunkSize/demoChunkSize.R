@@ -9,11 +9,12 @@ Data2 = 1:10000000L
 chunksize = 10L^(0:6)
 level = c(0,3,6,9)
 
-WT = matrix(-1,nr=7,nc=4)
-RT = matrix(-1,nr=7,nc=4)
-S = matrix(-1,nr=7,nc=4)
+nchunks = length(chunksize)
+WT = matrix(-1,nr=nchunks,nc=4)
+RT = matrix(-1,nr=nchunks,nc=4)
+S = matrix(-1,nr=nchunks,nc=4)
 
-for (i in 1:7) {
+for (i in 1:nchunks) {
   for (j in 1:4) {
     h5createFile("test.h5")
     h5createDataset("test.h5","A",dims=Dim, storage.mode = "integer", chunk = chunksize[i], level = level[j])
@@ -46,28 +47,27 @@ pdf(file="chunksize.pdf")
 par(mfrow=c(3,1))
 ylim = range(c(WT))
 col = rainbow(4)
-plot(-10000,xlim=c(1,7),ylim=ylim,xlab="chunksize",ylab="time (sec)",main="writing time",xaxt="n")
-axis(1,1:7,chunksize)
+plot(NA,xlim=c(1,nchunks),ylim=ylim,xlab="chunksize",ylab="time (sec)",main="writing time",xaxt="n")
+axis(1,1:nchunks,chunksize)
+chunk.x <- t(replicate(4, jitter(1:nchunks, factor=0.5)))
 for (i in 1:4) {
-  lines(WT[,i],col=col[i], pch=20,lwd=3,type="b")
+  lines(chunk.x[i,],WT[,i],col=col[i], pch=20,lwd=3,type="b")
 }
-legend("topright",sprintf("level = ",c(0,3,6,9)),fill=col,inset=0.01)
+legend("topright",sprintf("level = %d",c(0,3,6,9)),fill=col,inset=0.01)
 
 ylim = range(c(RT))
-col = rainbow(4)
-plot(-10000,xlim=c(1,7),ylim=ylim,xlab="chunksize",ylab="sec",main="reading time",xaxt="n")
-axis(1,1:7,chunksize)
+plot(NA,xlim=c(1,nchunks),ylim=ylim,xlab="chunksize",ylab="time (sec)",main="reading time",xaxt="n")
+axis(1,1:nchunks,chunksize)
 for (i in 1:4) {
-  lines(RT[,i],col=col[i], pch=20,lwd=3,type="b")
+  lines(chunk.x[i,],RT[,i],col=col[i], pch=20,lwd=3,type="b")
 }
 legend("topright",sprintf("level = %d",c(0,3,6,9)),fill=col,inset=0.01)
 
 ylim = range(c(log10(S)))
-col = rainbow(4)
-plot(-10000,xlim=c(1,7),ylim=ylim,xlab="chunksize",ylab="byte [log10]",main="file size",xaxt="n")
-axis(1,1:7,chunksize)
+plot(NA,xlim=c(1,nchunks),ylim=ylim,xlab="chunksize",ylab="byte [log10]",main="file size",xaxt="n")
+axis(1,1:nchunks,chunksize)
 for (i in 1:4) {
-  lines(log10(S[,i]),col=col[i], pch=20,lwd=3,type="b")
+  lines(chunk.x[i,], log10(S[,i]),col=col[i], pch=20,lwd=3,type="b")
 }
 legend("topright",sprintf("level = %d",c(0,3,6,9)),fill=col,inset=0.01)
 dev.off()

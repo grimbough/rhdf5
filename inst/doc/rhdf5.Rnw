@@ -101,7 +101,7 @@ The rhdf5 package provides two ways of subsetting. One can specify the submatrix
 \paragraph{Influence of chunk size and compression level} The chosen chunk size and compression level have a strong impact on the reading and writing time as well as on the resulting file size. In an example an integer vector of size 10e7is written to an hdf5 file. The file is written in subvectors of size 10'000. The definition of the chunk size influences the reading as well as the writing time. In the chunk size is much smaller or much larger than actually used, the runtime performance decreases dramatically. Furthermore the file size is larger for smaller chunk sizes, because of an overhead. The compression can be much more efficient when the chunk size is very large. The following figure illustrates the runtime and file size behaviour as a function of the chunk size for a small toy dataset. 
 
 \begin{center}
-  \includegraphics[width=0.75\textwidth]{chunksize.pdf}
+  \includegraphics[width=0.75\textwidth]{../demoChunkSize/chunksize.pdf}
 \end{center}
 
 After the creation of the dataset, the data can be written sequentially to the hdf5 file. Subsetting in R-style needs the specification of the argument index to h5read and h5write.
