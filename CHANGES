@@ -1,3 +1,6 @@
+2.3.2
+- support for reading 64-bit integers added
+
 2.3.1
 - moved precompiled chunksize.pdf to rhdf5/inst/demoChunkSize
   (avoids display of chunksize.pdf as a vignette on the bioconductor website)

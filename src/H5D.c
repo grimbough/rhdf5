@@ -94,33 +94,83 @@ void getMemSpaceDim( hid_t file_space_id, hsize_t *size) {
 }
 
 SEXP H5Dread_helper_INTEGER(hid_t dataset_id, hid_t file_space_id, hid_t mem_space_id, hsize_t n, SEXP Rdim, SEXP _buf, 
-			    hid_t dtype_id, hid_t cpdType, int cpdNField, char ** cpdField, int compoundAsDataFrame ) {
+			    hid_t dtype_id, hid_t cpdType, int cpdNField, char ** cpdField, int compoundAsDataFrame,
+                            int bit64conversion ) {
   hid_t mem_type_id = -1;
 
   SEXP Rval;
-  if (cpdType < 0) {
-    mem_type_id = H5T_NATIVE_INT;
-  } else {
-    mem_type_id = H5Tcreate(H5T_COMPOUND, H5Tget_size(H5T_NATIVE_INT));
-    herr_t status = H5Tinsert(mem_type_id, cpdField[0], 0, H5T_NATIVE_INT);
-    for (int i=1; i<cpdNField; i++) {
-      hid_t mem_type_id2 = H5Tcreate(H5T_COMPOUND, H5Tget_size(H5T_NATIVE_INT));
-      herr_t status = H5Tinsert(mem_type_id2, cpdField[i], 0, mem_type_id);
-      mem_type_id = mem_type_id2;
+  int b = H5Tget_size(dtype_id);
+  if ((b > 4) & (bit64conversion == 0)) {
+    bit64conversion = 1;
+    warning("There is a potential data loss by converting a 64-bit integer from an HDF5 to a 32-bit integer in R. Choose bit64conversion='bit64' or bit64conversion='double' to avoid data loss and see the vignette 'rhdf5' for more details about 64-bit integers.");
+  }
+  if ((b <= 4) | (bit64conversion == 1)) {
+    if (cpdType < 0) {
+      mem_type_id = H5T_NATIVE_INT;
+    } else {
+      mem_type_id = H5Tcreate(H5T_COMPOUND, H5Tget_size(H5T_NATIVE_INT));
+      herr_t status = H5Tinsert(mem_type_id, cpdField[0], 0, H5T_NATIVE_INT);
+      for (int i=1; i<cpdNField; i++) {
+	hid_t mem_type_id2 = H5Tcreate(H5T_COMPOUND, H5Tget_size(H5T_NATIVE_INT));
+	herr_t status = H5Tinsert(mem_type_id2, cpdField[i], 0, mem_type_id);
+	mem_type_id = mem_type_id2;
+      }
     }
-  }
-  void * buf;
-  if (length(_buf) == 0) {
-    Rval = PROTECT(allocVector(INTSXP, n));
-    buf = INTEGER(Rval);
-  } else {
-    buf = INTEGER(_buf);
-    Rval = _buf;
-  }
-  herr_t herr = H5Dread(dataset_id, mem_type_id, mem_space_id, file_space_id, H5P_DEFAULT, buf );
-  if (length(_buf) == 0) {
-    setAttrib(Rval, R_DimSymbol, Rdim);
-    UNPROTECT(1);
+    void * buf;
+    if (length(_buf) == 0) {
+      Rval = PROTECT(allocVector(INTSXP, n));
+      buf = INTEGER(Rval);
+    } else {
+      buf = INTEGER(_buf);
+      Rval = _buf;
+    }
+    herr_t herr = H5Dread(dataset_id, mem_type_id, mem_space_id, file_space_id, H5P_DEFAULT, buf );
+    if (length(_buf) == 0) {
+      setAttrib(Rval, R_DimSymbol, Rdim);
+      UNPROTECT(1);
+    }
+  } else {  // coerce 64-bit integers to 'double' or to 'integer64' from the bit64 package
+    if (cpdType < 0) {
+      mem_type_id = H5T_NATIVE_INT64;
+    } else {
+      mem_type_id = H5Tcreate(H5T_COMPOUND, H5Tget_size(H5T_NATIVE_INT64));
+      herr_t status = H5Tinsert(mem_type_id, cpdField[0], 0, H5T_NATIVE_INT64);
+      for (int i=1; i<cpdNField; i++) {
+	hid_t mem_type_id2 = H5Tcreate(H5T_COMPOUND, H5Tget_size(H5T_NATIVE_INT64));
+	herr_t status = H5Tinsert(mem_type_id2, cpdField[i], 0, mem_type_id);
+	mem_type_id = mem_type_id2;
+      }
+    }
+    
+    long intbuf[n];
+    herr_t herr = H5Dread(dataset_id, mem_type_id, mem_space_id, file_space_id, H5P_DEFAULT, intbuf );
+
+    void * buf;
+    if (length(_buf) == 0) {
+      Rval = PROTECT(allocVector(REALSXP, n));
+      buf = (long long *) REAL(Rval);
+    } else {
+      buf = REAL(_buf);
+      Rval = _buf;
+    }
+    if (bit64conversion == 2) {
+      long long i;
+      for (i=0; i<n; i++){
+	((double *)buf)[i] = intbuf[i];
+      }
+    } else {
+      long long i;
+      for (i=0; i<n; i++){
+	((long long *)buf)[i] = (long long) intbuf[i];
+      }
+      SEXP la = PROTECT(mkString("integer64"));
+      setAttrib(Rval, R_ClassSymbol, la);
+      UNPROTECT(1);
+    }
+    if (length(_buf) == 0) {
+      setAttrib(Rval, R_DimSymbol, Rdim);
+      UNPROTECT(1);
+    }
   }
 
   return(Rval);
@@ -348,7 +398,8 @@ SEXP H5Dread_helper_ARRAY(hid_t dataset_id, hid_t file_space_id, hid_t mem_space
 }
 
 SEXP H5Dread_helper_COMPOUND(hid_t dataset_id, hid_t file_space_id, hid_t mem_space_id, hsize_t n, SEXP Rdim, SEXP _buf, 
-			    hid_t dtype_id, hid_t cpdType, int cpdNField, char ** cpdField, int compoundAsDataFrame ) {
+			     hid_t dtype_id, hid_t cpdType, int cpdNField, char ** cpdField, int compoundAsDataFrame,
+			     int bit64conversion ) {
   hid_t mem_type_id = -1;
 
   if ((LENGTH(Rdim) > 1) && compoundAsDataFrame) {
@@ -375,7 +426,8 @@ SEXP H5Dread_helper_COMPOUND(hid_t dataset_id, hid_t file_space_id, hid_t mem_sp
 	UNPROTECT(1);
       } else {
 	col = H5Dread_helper(dataset_id, file_space_id, mem_space_id, n, Rdim, _buf,
-			     H5Tget_member_type(dtype_id,i), 1, name, compoundAsDataFrame);
+			     H5Tget_member_type(dtype_id,i), 1, name, compoundAsDataFrame,
+			     bit64conversion);
       }
       SET_VECTOR_ELT(Rval, i, col);
     }
@@ -400,7 +452,8 @@ SEXP H5Dread_helper_COMPOUND(hid_t dataset_id, hid_t file_space_id, hid_t mem_sp
 	name[j+1] = cpdField[j];
       }
       SEXP col = H5Dread_helper(dataset_id, file_space_id, mem_space_id, n, Rdim, _buf,
-				H5Tget_member_type(dtype_id,i), cpdNField+1, name, compoundAsDataFrame);
+				H5Tget_member_type(dtype_id,i), cpdNField+1, name, compoundAsDataFrame,
+				bit64conversion);
       
       SET_VECTOR_ELT(Rval, i, col);
     }
@@ -411,7 +464,8 @@ SEXP H5Dread_helper_COMPOUND(hid_t dataset_id, hid_t file_space_id, hid_t mem_sp
 }
 
 SEXP H5Dread_helper(hid_t dataset_id, hid_t file_space_id, hid_t mem_space_id, hsize_t n, SEXP Rdim, SEXP _buf, 
-		    hid_t cpdType, int cpdNField, char ** cpdField, int compoundAsDataFrame ) {
+		    hid_t cpdType, int cpdNField, char ** cpdField, int compoundAsDataFrame,
+                    int bit64conversion  ) {
 
   hid_t dtype_id;
   if (cpdType >= 0) {
@@ -425,7 +479,8 @@ SEXP H5Dread_helper(hid_t dataset_id, hid_t file_space_id, hid_t mem_space_id, h
   switch(dtypeclass_id) {
   case H5T_INTEGER: {
     Rval = H5Dread_helper_INTEGER(dataset_id, file_space_id, mem_space_id, n, Rdim, _buf, 
-				  dtype_id, cpdType, cpdNField, cpdField, compoundAsDataFrame );
+				  dtype_id, cpdType, cpdNField, cpdField, compoundAsDataFrame,
+                                  bit64conversion  );
   } break;
   case H5T_FLOAT: {
     Rval = H5Dread_helper_FLOAT(dataset_id, file_space_id, mem_space_id, n, Rdim, _buf, 
@@ -437,7 +492,8 @@ SEXP H5Dread_helper(hid_t dataset_id, hid_t file_space_id, hid_t mem_space_id, h
   } break;
   case H5T_COMPOUND: {
     Rval = H5Dread_helper_COMPOUND(dataset_id, file_space_id, mem_space_id, n, Rdim, _buf, 
-				   dtype_id, cpdType, cpdNField, cpdField, compoundAsDataFrame );
+				   dtype_id, cpdType, cpdNField, cpdField, compoundAsDataFrame,
+				   bit64conversion );
   } break;
   case H5T_ENUM: {
     Rval = H5Dread_helper_ENUM(dataset_id, file_space_id, mem_space_id, n, Rdim, _buf,
@@ -467,9 +523,11 @@ SEXP H5Dread_helper(hid_t dataset_id, hid_t file_space_id, hid_t mem_space_id, h
 
 /* herr_t H5Dread(hid_t dataset_id, hid_t mem_type_id, hid_t mem_space_id, hid_t file_space_id, hid_t xfer_plist_id, void * buf ) */
 /* TODO: accept mem_type_id as parameter */
-SEXP _H5Dread( SEXP _dataset_id, SEXP _file_space_id, SEXP _mem_space_id, SEXP _buf, SEXP _compoundAsDataFrame ) {
+SEXP _H5Dread( SEXP _dataset_id, SEXP _file_space_id, SEXP _mem_space_id, SEXP _buf, SEXP _compoundAsDataFrame,
+               SEXP _bit64conversion  ) {
 
   int compoundAsDataFrame = LOGICAL(_compoundAsDataFrame)[0];
+  int bit64conversion = INTEGER(_bit64conversion)[0];
 
   /***********************************************************************/
   /* dataset_id                                                          */
@@ -536,7 +594,7 @@ SEXP _H5Dread( SEXP _dataset_id, SEXP _file_space_id, SEXP _mem_space_id, SEXP _
   /* read file space data type                                           */
   /***********************************************************************/
 
-  SEXP Rval = H5Dread_helper(dataset_id, file_space_id, mem_space_id, n, Rdim, _buf, -1, -1, NULL, compoundAsDataFrame);
+  SEXP Rval = H5Dread_helper(dataset_id, file_space_id, mem_space_id, n, Rdim, _buf, -1, -1, NULL, compoundAsDataFrame, bit64conversion);
 
   // close mem space
   if (length(_mem_space_id) == 0) {

@@ -189,6 +189,58 @@ system("h5dump myhdf5file.h5")
 @ 
 Please note, that arrays appear as transposed matrices when opening it with a C-program (h5dump or HDFView). This is due to the fact the fastest changing dimension on C is the last one, but on \R~ it is the first one (as in Fortran).
 
+\section{64-bit integers}
+Internally, R does not support 64-bit integers. All integers in R are
+32-bit integers. When reading 64-bit integers from a HDF5-file, you
+may run into troubles. rhdf5 is able to deal with 64-bit integers, but
+you still should pay attention when dealing with 64-bit integers. 
+
+As an example, we create an HDF5 file that contains 64-bit integers.
+
+<<bit64integer1>>=
+x = h5createFile("newfile3.h5")
+
+D = array(1L:30L,dim=c(3,5,2))
+d = h5createDataset(file="newfile3.h5", dataset="D64", dims=c(10,5,2),H5type="H5T_NATIVE_INT64")
+h5write(D,file="newfile3.h5",name="D64")
+@
+
+There are three different ways of reading 64-bit integers in
+R. \code{H5Dread} and \code{h5read} have the argument
+\code{bit64conversion} the specify the conversion method.
+
+By setting {\bf bit64conversion='int'}, a coercing to 32-bit integers is enforced, with the risc of data loss, but with the insurance that numbers are represented as integers.
+
+<<bit64integer2>>=
+D64a = h5read(file="newfile3.h5",name="D64",bit64conversion="int")
+D64a
+storage.mode(D64a)
+@
+
+{\bf bit64conversion='double'} coerces the 64-bit integers to floating
+point numbers. doubles can represent integers with up to 54-bits, but
+they are not represented as integer values anymore. For larger numbers there is again a data loss.
+
+<<bit64integer3>>=
+D64b = h5read(file="newfile3.h5",name="D64",bit64conversion="double")
+D64b
+storage.mode(D64b)
+@
+
+{\bf bit64conversion='bit64'} is recommended way of coercing. It
+represents the 64-bit integers as objects of class 'integer64' as
+defined in the package 'bit64'. Make sure that you have installed
+'bit64'. The datatype 'integer64' is not part of base R, but defined
+in an external package. This can produce unexpected behaviour when
+working with the data. When choosing this option the library bit64
+will be loaded.
+
+<<bit64integer4>>=
+D64c = h5read(file="newfile3.h5",name="D64",bit64conversion="bit64")
+D64c
+class(D64c)
+@
+
 \section{Low level HDF5 functions}
 \subsection{Creating an HDF5 file and a group hierarchy}
 

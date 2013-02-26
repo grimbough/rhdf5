@@ -38,7 +38,7 @@ static R_CallMethodDef libraryRCalls[] = {
   {"_H5Dclose", (DL_FUNC) &_H5Dclose, 1},
   {"_H5Dget_type", (DL_FUNC) &_H5Dget_type, 1},
   {"_H5Dget_space", (DL_FUNC) &_H5Dget_space, 1},
-  {"_H5Dread", (DL_FUNC) &_H5Dread, 5},
+  {"_H5Dread", (DL_FUNC) &_H5Dread, 6},
   {"_H5Dwrite", (DL_FUNC) &_H5Dwrite, 4},
   {"_H5Fcreate", (DL_FUNC) &_H5Fcreate, 2},
   {"_H5Fopen", (DL_FUNC) &_H5Fopen, 2},
