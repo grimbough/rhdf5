@@ -201,7 +201,7 @@ As an example, we create an HDF5 file that contains 64-bit integers.
 x = h5createFile("newfile3.h5")
 
 D = array(1L:30L,dim=c(3,5,2))
-d = h5createDataset(file="newfile3.h5", dataset="D64", dims=c(10,5,2),H5type="H5T_NATIVE_INT64")
+d = h5createDataset(file="newfile3.h5", dataset="D64", dims=c(3,5,2),H5type="H5T_NATIVE_INT64")
 h5write(D,file="newfile3.h5",name="D64")
 @
 
