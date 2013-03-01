@@ -131,18 +131,20 @@ SEXP H5Dread_helper_INTEGER(hid_t dataset_id, hid_t file_space_id, hid_t mem_spa
     }
   } else {  // coerce 64-bit integers to 'double' or to 'integer64' from the bit64 package
     if (cpdType < 0) {
-      mem_type_id = H5T_NATIVE_INT64;
+      mem_type_id = H5T_NATIVE_LLONG;
     } else {
-      mem_type_id = H5Tcreate(H5T_COMPOUND, H5Tget_size(H5T_NATIVE_INT64));
-      herr_t status = H5Tinsert(mem_type_id, cpdField[0], 0, H5T_NATIVE_INT64);
+      mem_type_id = H5Tcreate(H5T_COMPOUND, H5Tget_size(H5T_NATIVE_LLONG));
+      herr_t status = H5Tinsert(mem_type_id, cpdField[0], 0, H5T_NATIVE_LLONG);
       for (int i=1; i<cpdNField; i++) {
-	hid_t mem_type_id2 = H5Tcreate(H5T_COMPOUND, H5Tget_size(H5T_NATIVE_INT64));
+	hid_t mem_type_id2 = H5Tcreate(H5T_COMPOUND, H5Tget_size(H5T_NATIVE_LLONG));
 	herr_t status = H5Tinsert(mem_type_id2, cpdField[i], 0, mem_type_id);
 	mem_type_id = mem_type_id2;
       }
     }
     
-    long intbuf[n];
+    printf("long is %d byte\n",sizeof(long));
+    printf("long long is %d byte\n",sizeof(long));
+    long long intbuf[n];
     herr_t herr = H5Dread(dataset_id, mem_type_id, mem_space_id, file_space_id, H5P_DEFAULT, intbuf );
 
     void * buf;

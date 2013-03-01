@@ -190,10 +190,10 @@ system("h5dump myhdf5file.h5")
 Please note, that arrays appear as transposed matrices when opening it with a C-program (h5dump or HDFView). This is due to the fact the fastest changing dimension on C is the last one, but on \R~ it is the first one (as in Fortran).
 
 \section{64-bit integers}
-Internally, R does not support 64-bit integers. All integers in R are
+R does not support a native datatype for 64-bit integers. All integers in R are
 32-bit integers. When reading 64-bit integers from a HDF5-file, you
 may run into troubles. rhdf5 is able to deal with 64-bit integers, but
-you still should pay attention when dealing with 64-bit integers. 
+you still should pay attention.
 
 As an example, we create an HDF5 file that contains 64-bit integers.
 
@@ -209,7 +209,9 @@ There are three different ways of reading 64-bit integers in
 R. \code{H5Dread} and \code{h5read} have the argument
 \code{bit64conversion} the specify the conversion method.
 
-By setting {\bf bit64conversion='int'}, a coercing to 32-bit integers is enforced, with the risc of data loss, but with the insurance that numbers are represented as integers.
+By setting {\bf bit64conversion='int'}, a coercing to 32-bit integers
+is enforced, with the risc of data loss, but with the insurance that
+numbers are represented as native integers.
 
 <<bit64integer2>>=
 D64a = h5read(file="newfile3.h5",name="D64",bit64conversion="int")
@@ -219,7 +221,7 @@ storage.mode(D64a)
 
 {\bf bit64conversion='double'} coerces the 64-bit integers to floating
 point numbers. doubles can represent integers with up to 54-bits, but
-they are not represented as integer values anymore. For larger numbers there is again a data loss.
+they are not represented as integer values anymore. For larger numbers there is still a data loss.
 
 <<bit64integer3>>=
 D64b = h5read(file="newfile3.h5",name="D64",bit64conversion="double")
