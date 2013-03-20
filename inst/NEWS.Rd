@@ -5,6 +5,8 @@
   \subsection{NEW FEATURES}{
     \itemize{
       \item support for reading 64-bit integers added
+      \item support for reading variable length strings added
+      \item support for reading scalar objects added
     }
   }
   \subsection{USER VISIBLE CHANGES}{

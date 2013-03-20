@@ -1,5 +1,7 @@
 2.3.5
 - NEWS.Rd added
+- support for reading of variable length strings (Thanks to a patch by Patrick Perry)
+- support for reading of scalar objects (Thanks to a patch by Patrick Perry)
 
 2.3.4
 - support for reading 64-bit integers added
