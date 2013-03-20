@@ -1,4 +1,7 @@
-2.3.2
+2.3.5
+- NEWS.Rd added
+
+2.3.4
 - support for reading 64-bit integers added
 
 2.3.1
