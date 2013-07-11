@@ -1,5 +1,5 @@
 
-h5read <- function(file, name, index=NULL, start=NULL, stride=NULL, block=NULL, count=NULL, compoundAsDataFrame = TRUE, callGeneric = TRUE, read.attributes=TRUE, ... ) {
+h5read <- function(file, name, index=NULL, start=NULL, stride=NULL, block=NULL, count=NULL, compoundAsDataFrame = TRUE, callGeneric = TRUE, read.attributes=FALSE, ... ) {
   loc = h5checktypeOrOpenLoc(file, readonly=TRUE)
 
   if (!H5Lexists(loc$H5Identifier, name)) {
@@ -8,6 +8,8 @@ h5read <- function(file, name, index=NULL, start=NULL, stride=NULL, block=NULL, 
   } else {
     oid = H5Oopen(loc$H5Identifier, name)
     type = H5Iget_type(oid)
+    num_attrs = H5Oget_num_attrs(oid)
+    if (is.na(num_attrs)) { num_attrs = 0 }
     H5Oclose(oid)
     if (type == "H5I_GROUP") {
       gid <- H5Gopen(loc$H5Identifier, name)
@@ -65,16 +67,16 @@ h5read <- function(file, name, index=NULL, start=NULL, stride=NULL, block=NULL, 
         obj <- NULL
       } ## DATASET
     } ## GROUP
-#    if (read.attributes & (info$num_attrs > 0) & !is.null(obj)) {
-#      for (i in 1:info$num_attrs) {
-#        A = H5Aopen_by_idx(loc$H5Identifier, n = i-1, objname = name)
-#        attrname <- H5Aget_name(A)
-#        if (attrname != "dim") {
-#          attr(obj, attrname) = H5Aread(A)
-#        }
-#        H5Aclose(A)
-#      }
-#    }
+    if (read.attributes & (num_attrs > 0) & !is.null(obj)) {
+      for (i in seq_len(num_attrs)) {
+        A = H5Aopen_by_idx(loc$H5Identifier, n = i-1, objname = name)
+        attrname <- H5Aget_name(A)
+        if (attrname != "dim") {
+          attr(obj, attrname) = H5Aread(A)
+        }
+        H5Aclose(A)
+      }
+    }
   }  # !H5Lexists
   h5closeitLoc(loc)
 

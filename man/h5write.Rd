@@ -27,7 +27,7 @@ Reads and writes objects in HDF5 files. This function can be used to read and wr
 h5read                      (file, name, index=NULL,
                              start=NULL, stride=NULL, block=NULL, count=NULL,
                              compoundAsDataFrame = TRUE, callGeneric = TRUE,
-			     read.attributes = TRUE, ...)
+			     read.attributes = FALSE, ...)
 h5write                     (obj, file, name, ...)
 h5write.default             (obj, file, name, 
                              createnewfile = TRUE,
