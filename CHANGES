@@ -1,3 +1,9 @@
+2.5.2
+- Use BiocStyles for package vignette
+
+2.5.1
+- reactivated code for reading attributes
+
 2.3.5
 - NEWS.Rd added
 - support for reading of variable length strings (Thanks to a patch by Patrick Perry)
