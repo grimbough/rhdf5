@@ -1,6 +1,19 @@
 \name{NEWS}
 \title{News for Package 'rhdf5'}
 
+\section{Changes in version 2.6.0}{
+  \subsection{NEW FEATURES}{
+    \itemize{
+      \item support for reading attributes added
+    }
+  }
+  \subsection{USER VISIBLE CHANGES}{
+    \itemize{
+      \item Use BiocStyles for package vignette
+    }
+  }
+}
+
 \section{Changes in version 2.4.0}{
   \subsection{NEW FEATURES}{
     \itemize{
