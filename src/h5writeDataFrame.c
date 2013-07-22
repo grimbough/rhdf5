@@ -5,7 +5,7 @@
 SEXP _h5writeDataFrame(SEXP _obj, SEXP _loc_id, SEXP _name, SEXP _level) {
   hid_t loc_id = INTEGER(_loc_id)[0];
   const char *name = CHAR(STRING_ELT(_name, 0));
-  int level = INTEGER(_level)[0];
+  unsigned int level = INTEGER(_level)[0];
 
   size_t size = 0;
   size_t strsize[LENGTH(_obj)];
@@ -53,7 +53,18 @@ SEXP _h5writeDataFrame(SEXP _obj, SEXP _loc_id, SEXP _name, SEXP _level) {
   }
   hsize_t n = LENGTH(VECTOR_ELT(_obj,0));
   hid_t space = H5Screate_simple (1, &n, &n);
-  hid_t dset = H5Dcreate (loc_id, name,tid, space, H5P_DEFAULT, H5P_DEFAULT,H5P_DEFAULT);
+
+  hid_t plist = H5P_DEFAULT;
+  if (level > 0) {
+    plist = H5Pcreate(H5P_DATASET_CREATE);
+    H5Pset_fill_time( plist, H5D_FILL_TIME_ALLOC );
+    int rank = 1L;
+    hsize_t cdim[rank];
+    cdim[0] = n;
+    H5Pset_chunk(plist, rank, cdim);
+    H5Pset_deflate( plist, level );
+  }
+  hid_t dset = H5Dcreate (loc_id, name,tid, space, H5P_DEFAULT, plist, H5P_DEFAULT);
 
   offset = 0;
   for (int i=0; i< LENGTH(_obj); i++) {
