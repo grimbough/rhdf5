@@ -4,7 +4,8 @@
 \section{Changes in version 2.6.0}{
   \subsection{NEW FEATURES}{
     \itemize{
-      \item support for reading attributes added
+      \item support for reading attributes added (use read.attributes=TRUE)
+      \item enabeled compression for data.frame in h5write
     }
   }
   \subsection{USER VISIBLE CHANGES}{
