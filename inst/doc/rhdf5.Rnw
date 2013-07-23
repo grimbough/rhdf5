@@ -291,10 +291,10 @@ storage.mode(D64b)
 
 {\bf \Robject{bit64conversion='bit64'}} is recommended way of coercing. It
 represents the 64-bit integers as objects of class \Rclass{integer64} as
-defined in the package \Rpkg{bit64}. Make sure that you have installed
-\Rpkg{bit64}. \warning{The datatype \Rclass{integer64} is not part of base \R{}, but defined
+defined in the package \CRANpkg{bit64}. Make sure that you have installed
+\CRANpkg{bit64}. \warning{The datatype \Rclass{integer64} is not part of base \R{}, but defined
 in an external package. This can produce unexpected behaviour when
-working with the data.} When choosing this option the package \Rpkg{bit64}
+working with the data.} When choosing this option the package \CRANpkg{bit64}
 will be loaded.
 
 <<bit64integer4>>=

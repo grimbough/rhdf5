@@ -1,3 +1,6 @@
+2.5.4
+- BiocStyles changed \Rpkg to \CRANpkg
+
 2.5.3
 - enabeled compression for data.frame in h5write
 
