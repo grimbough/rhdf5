@@ -56,6 +56,7 @@ h5createDataset <- function(file, dataset, dims, maxdims = dims, storage.mode = 
               tid <- switch(storage.mode[1],
                             double = h5constants$H5T["H5T_NATIVE_DOUBLE"],
                             integer = h5constants$H5T["H5T_NATIVE_INT32"],
+                            logical = h5constants$H5T["H5T_NATIVE_INT32"],
                             character = {
                               tid <- H5Tcopy("H5T_C_S1")
                               if (!is.numeric(size)) {
@@ -76,6 +77,10 @@ h5createDataset <- function(file, dataset, dims, maxdims = dims, storage.mode = 
           } else {
             did <- H5Dcreate(loc$H5Identifier, dataset, tid, sid, chunk, level)
             if (is(did, "H5IdComponent")) {
+              if (storage.mode[1] == "logical") {
+                x = "logical"
+                h5writeAttribute(attr = x, h5obj = did, name="storage.mode")
+              }
               H5Dclose(did)
               res <- TRUE
             }
@@ -87,7 +92,7 @@ h5createDataset <- function(file, dataset, dims, maxdims = dims, storage.mode = 
       }
     }
   }
-  
+
   h5closeitLoc(loc)
   res
 }

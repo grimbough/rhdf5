@@ -142,9 +142,9 @@ SEXP H5Dread_helper_INTEGER(hid_t dataset_id, hid_t file_space_id, hid_t mem_spa
 	mem_type_id = mem_type_id2;
       }
     }
-    
-    printf("long is %d byte\n",sizeof(long));
-    printf("long long is %d byte\n",sizeof(long));
+
+    /* printf("long is %d byte\n",sizeof(long)); */
+    /* printf("long long is %d byte\n",sizeof(long)); */
     long long intbuf[n];
     herr_t herr = H5Dread(dataset_id, mem_type_id, mem_space_id, file_space_id, H5P_DEFAULT, intbuf );
 
@@ -644,26 +644,31 @@ SEXP _H5Dwrite( SEXP _dataset_id, SEXP _buf, SEXP _file_space_id, SEXP _mem_spac
       mem_type_id = H5T_NATIVE_DOUBLE;
       buf = REAL(_buf);
     } else {
-      if (TYPEOF(_buf) == STRSXP) {
-	mem_type_id = H5Dget_type(dataset_id);
-	size_t stsize = H5Tget_size( mem_type_id );
-	char * strbuf = (char *)R_alloc(LENGTH(_buf),stsize);
-	int z=0;
-	int j;
-	for (int i=0; i < LENGTH(_buf); i++) {
-	  for (j=0; (j < LENGTH(STRING_ELT(_buf,i))) & (j < (stsize-1)); j++) {
-	    strbuf[z++] = CHAR(STRING_ELT(_buf,i))[j];
-	  }
-	  for (; j < stsize; j++) {
-	    strbuf[z++] = '\0';
-	  }
-	}
-	buf = strbuf;
+      if (TYPEOF(_buf) == LGLSXP) {
+	mem_type_id = H5T_NATIVE_INT;
+	buf = INTEGER(_buf);
       } else {
-	mem_type_id = -1;
-	printf("Writing of this type of data not supported.\n");
-	SEXP Rval = R_NilValue;
-	return Rval;
+	if (TYPEOF(_buf) == STRSXP) {
+	  mem_type_id = H5Dget_type(dataset_id);
+	  size_t stsize = H5Tget_size( mem_type_id );
+	  char * strbuf = (char *)R_alloc(LENGTH(_buf),stsize);
+	  int z=0;
+	  int j;
+	  for (int i=0; i < LENGTH(_buf); i++) {
+	    for (j=0; (j < LENGTH(STRING_ELT(_buf,i))) & (j < (stsize-1)); j++) {
+	      strbuf[z++] = CHAR(STRING_ELT(_buf,i))[j];
+	    }
+	    for (; j < stsize; j++) {
+	      strbuf[z++] = '\0';
+	    }
+	  }
+	  buf = strbuf;
+	} else {
+	  mem_type_id = -1;
+	  printf("Writing of this type of data not supported.\n");
+	  SEXP Rval = R_NilValue;
+	  return Rval;
+	}
       }
     }
   }
