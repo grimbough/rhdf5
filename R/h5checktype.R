@@ -14,55 +14,55 @@ h5checktype <- function(h5id, type, fctname = deparse(match.call()[1]), allow.ch
   switch(type,
          file = {
            if (truetype != "H5I_FILE") {
-             stop("Error in ", fctname, ". H5Identifier not a file identifier.", call. = FALSE)
+             stop("Error in ", fctname, ". The provided H5Identifier is not a file identifier.", call. = FALSE)
            }
            0
          },
          group = {
            if (truetype != c("H5I_GROUP")) {
-             stop("Error in ", fctname, ". H5Identifier not a group identifier.", call. = FALSE)
+             stop("Error in ", fctname, ". The provided H5Identifier is not a group identifier.", call. = FALSE)
            }
            0
          },
          loc = {
            if (!(truetype %in% c("H5I_FILE","H5I_GROUP"))) {
-             stop("Error in ", fctname, ". H5Identifier not a location identifier.", call. = FALSE)
+             stop("Error in ", fctname, ". The provided H5Identifier is not a location identifier.", call. = FALSE)
            }
            0
          },
          dataset = {
            if (truetype != "H5I_DATASET") {
-             stop("Error in ", fctname, ". H5Identifier not a dataset identifier.", call. = FALSE)
+             stop("Error in ", fctname, ". The provided H5Identifier is not a dataset identifier.", call. = FALSE)
            }
            0
          },
          object = {
            if (!(truetype %in% c("H5I_FILE","H5I_GROUP","H5I_DATASET"))) {
-             stop("Error in ", fctname, ". H5Identifier not an object identifier.", call. = FALSE)
+             stop("Error in ", fctname, ". The provided H5Identifier is not an object identifier.", call. = FALSE)
            }
            0
          },
          dataspace = {
            if (truetype != "H5I_DATASPACE") {
-             stop("Error in ", fctname, ". H5Identifier not a dataspace identifier.", call. = FALSE)
+             stop("Error in ", fctname, ". The provided H5Identifier is not a dataspace identifier.", call. = FALSE)
            }
            0
          },
          attribute = {
            if (truetype != "H5I_ATTR") {
-             stop("Error in ", fctname, ". H5Identifier not an attribute identifier.", call. = FALSE)
+             stop("Error in ", fctname, ". The provided H5Identifier is not an attribute identifier.", call. = FALSE)
            }
            0
          },
          type = {
            if (truetype != "H5I_DATATYPE") {
-             stop("Error in ", fctname, ". H5Identifier not a type identifier.", call. = FALSE)
+             stop("Error in ", fctname, ". The provided H5Identifier is not a type identifier.", call. = FALSE)
            }
            0
          },
          object = {
            if (!(truetype %in% c("H5I_FILE","H5I_GROUP","H5I_DATASET","H5I_DATATYPE","H5I_DATASPACE","H5I_ATTR"))) {
-             stop("Error in ", fctname, ". H5Identifier not an object identifier.", call. = FALSE)
+             stop("Error in ", fctname, ". The provided H5Identifier is not an object identifier.", call. = FALSE)
            }
            0
          },
@@ -105,7 +105,7 @@ h5checktypeOrOpenLoc <- function(file, fctname = deparse(match.call()[1]), creat
           res$closeit = FALSE
         }
       } else {
-        stop("Error in ",fctname,". Cannot open file. File '",file,"' does not exists.")
+        stop("Error in ",fctname,". Cannot open file. File '",file,"' does not exist.")
       }
     }
   } else {
@@ -134,7 +134,7 @@ h5checktypeOrOpenObj <- function(obj, file, fctname = deparse(match.call()[1])) 
   res = list()
   if (is.character(obj)) {
     if (missing(file)) {
-      stop("Error in ",fctname,". If the object is specified by name, you have to specify the file.")
+      stop("Error in ",fctname,". If the object is specified by name, then you have to specify the file.")
     }
     loc = h5checktypeOrOpenLoc(file, fctname=fctname)
 
