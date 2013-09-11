@@ -1,3 +1,9 @@
+2.5.7
+- bug fix for clang 3.2
+
+2.5.6
+- fixed a grammatical typo in an error message
+
 2.5.5
 - Added suppport for logical
 

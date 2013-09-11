@@ -171,7 +171,7 @@ SEXP _h5validObjects( ) {
 
 int
 removeHandle( hid_t id ) {
-  HandleList::Instance().removeHandle( id );
+  return (HandleList::Instance().removeHandle( id ) );
 }
 
 // int
