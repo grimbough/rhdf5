@@ -141,7 +141,7 @@ behaviour as a function of the chunk size for a small toy dataset.
 
 
 \begin{center}
-  \includegraphics[width=0.75\textwidth]{../demoChunkSize/chunksize.pdf}
+  \includegraphics[width=0.75\textwidth]{../inst/demoChunkSize/chunksize.pdf}
 \end{center}
 
 After the creation of the dataset, the data can be written
