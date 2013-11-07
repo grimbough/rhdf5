@@ -1,6 +1,18 @@
 \name{NEWS}
 \title{News for Package 'rhdf5'}
 
+\section{Changes in version 2.8.0}{
+  \subsection{NEW FEATURES}{
+    \itemize{
+    }
+  }
+  \subsection{USER VISIBLE CHANGES}{
+    \itemize{
+      \item bug fix in i/o with chunksize or blocksize parameters
+    }
+  }
+}
+
 \section{Changes in version 2.6.0}{
   \subsection{NEW FEATURES}{
     \itemize{

@@ -28,8 +28,13 @@ H5Scopy <- function( h5space ) {
   invisible(h5spacenew)
 }
 
-H5Screate_simple <- function( dims, maxdims = dims) {
-  sid <- .Call("_H5Screate_simple", as.integer(dims), as.integer(maxdims), PACKAGE='rhdf5')
+H5Screate_simple <- function( dims, maxdims ) {
+  if (missing(maxdims)) {
+    maxdims = dims
+  }
+  dims <- as.integer(rev(dims))
+  maxdims <- as.integer(rev(maxdims))
+  sid <- .Call("_H5Screate_simple", dims, maxdims, PACKAGE='rhdf5')
   if (sid > 0) {
     h5space = new("H5IdComponent", ID = sid)
   } else {

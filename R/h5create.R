@@ -47,7 +47,7 @@ h5createDataset <- function(file, dataset, dims, maxdims = dims, storage.mode = 
       message("Can not create dataset. Object with name '",dataset,"' already exists.")
     } else {
       if (is.numeric(dims) & is.numeric(maxdims)) {
-        sid <- H5Screate_simple(rev(dims), rev(maxdims))
+        sid <- H5Screate_simple(dims, maxdims)
         if (!is(sid, "H5IdComponent")) {
           message("Can not create dataset. 'dims' or 'maxdims' argument invalid.")
         } else {
@@ -149,7 +149,7 @@ h5createAttribute <- function(obj, attr, dims, maxdims = dims, file, storage.mod
   ## }
 
   if (is.numeric(dims) & is.numeric(maxdims)) {
-    sid <- H5Screate_simple(rev(dims), rev(maxdims))
+    sid <- H5Screate_simple(dims, maxdims)
     if (!is(sid, "H5IdComponent")) {
       message("Can not create attribute. 'dims' or 'maxdims' argument invalid.")
     } else {

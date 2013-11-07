@@ -1,3 +1,13 @@
+
+2.7.3
+- bug fix in i/o with chunksize or blocksize parameters
+
+2.7.2
+- Fixes a bug caused by moving the vignette from inst/doc to vignettes
+
+2.7.1
+- rename inst/doc to vignettes and bump version
+
 2.5.7
 - bug fix for clang 3.2
 
