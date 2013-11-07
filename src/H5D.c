@@ -567,7 +567,7 @@ SEXP _H5Dread( SEXP _dataset_id, SEXP _file_space_id, SEXP _mem_space_id, SEXP _
     H5Sget_simple_extent_dims(file_space_id, size, maxsize);
     hsize_t dims[rank];
     for (int i=0; i<rank; i++) {
-      dims[i] = size[rank-i-1];
+      dims[i] = size[i];
     }
     mem_space_id = H5Screate_simple( rank, dims, dims);
   } else {
@@ -590,7 +590,7 @@ SEXP _H5Dread( SEXP _dataset_id, SEXP _file_space_id, SEXP _mem_space_id, SEXP _
   if (rank > 0) {
     Rdim = PROTECT(allocVector(INTSXP, rank));
     for (int i=0; i<rank; i++) {
-      INTEGER(Rdim)[i] = size[i];
+      INTEGER(Rdim)[rank-i-1] = size[i];
     }
   } else {
     Rdim = NULL_USER_OBJECT;

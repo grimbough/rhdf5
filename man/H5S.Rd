@@ -15,7 +15,7 @@ These functions create and manipulate the dataspace in which to store the elemen
 }
 \usage{
 H5Screate                 (type = h5default("H5S"))
-H5Screate_simple          (dims, maxdims = dims)
+H5Screate_simple          (dims, maxdims )
 H5Scopy                   (h5space)
 H5Sclose                  (h5space)
 H5Sis_simple              (h5space)
@@ -28,7 +28,7 @@ H5Sselect_index           (h5space, index)
 \arguments{
   \item{type}{See \code{h5const("H5S")} for possible types.}
   \item{dims}{Dimension of the dataspace. This argument is similar to the dim attribute of an array. When viewing the HDF5 dataset with an C-program (e.g. HDFView), the dimensions appear in inverted order, because the fastest changing dimension in R is the first one, and in C its the last one.}
-  \item{maxdims}{Maximum extension of the dimension of the dataset in the file.}
+  \item{maxdims}{Maximum extension of the dimension of the dataset in the file. If not provided, it is set to dims.}
   \item{h5space}{An object of class \code{\link{H5IdComponent}} representing a H5 dataspace identifier. See \code{\link{H5Dget_space}}, \code{\link{H5Screate_simple}}, \code{\link{H5Screate}} to create an object of this kind.}
   \item{index}{A list of integer indices. The length of the list corresponds to the number of dimensions of the HDF5 array.}
   \item{op}{See h5const("H5S_SELECT") for possible arguments.}
