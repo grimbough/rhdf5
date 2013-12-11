@@ -55,13 +55,13 @@ h5writeDataset.data.frame <- function(obj, h5loc, name, level=7, DataFrameAsComp
     .Call("_h5writeDataFrame", obj, h5loc@ID, name, level, PACKAGE='rhdf5')
     res <- 0
   } else {
-    a <- attr(df,"names")
+    a <- attr(obj,"names")
     if (is.null(a)) {
-      attr(df,"names") = sprintf("col%d",seq_len(ncol(df)))
+      attr(obj,"names") = sprintf("col%d",seq_len(ncol(obj)))
     } else {
       if (any(duplicated(a))) {
-        a[duplicated(a)] = sprintf("col%d",seq_len(ncol(df)))[duplicated(a)]
-        attr(df,"names") = a
+        a[duplicated(a)] = sprintf("col%d",seq_len(ncol(obj)))[duplicated(a)]
+        attr(obj,"names") = a
       }
     }
     res <- h5writeDataset.list(obj=obj, h5loc=h5loc, name=name, level=level)

@@ -1,3 +1,5 @@
+2.7.4
+- bug fix in returning int value in C++-function removeHandle
 
 2.7.3
 - bug fix in i/o with chunksize or blocksize parameters
