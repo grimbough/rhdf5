@@ -2,13 +2,10 @@
 \title{News for Package 'rhdf5'}
 
 \section{Changes in version 2.8.0}{
-  \subsection{NEW FEATURES}{
-    \itemize{
-    }
-  }
   \subsection{USER VISIBLE CHANGES}{
     \itemize{
       \item bug fix in i/o with chunksize or blocksize parameters
+      \item bug fix of compiling errors due to missing int return value
     }
   }
 }
