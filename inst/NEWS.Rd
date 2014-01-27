@@ -2,10 +2,11 @@
 \title{News for Package 'rhdf5'}
 
 \section{Changes in version 2.8.0}{
-  \subsection{USER VISIBLE CHANGES}{
+  \subsection{BUG FIXES}{
     \itemize{
-      \item bug fix in i/o with chunksize or blocksize parameters
-      \item bug fix of compiling errors due to missing int return value
+      \item C-stack overflow when reading large fixed-length strings.
+      \item error in i/o with chunksize or blocksize parameters
+      \item compiling errors due to missing int return value
     }
   }
 }

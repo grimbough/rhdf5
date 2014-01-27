@@ -240,19 +240,25 @@ SEXP H5Dread_helper_STRING(hid_t dataset_id, hid_t file_space_id, hid_t mem_spac
       free(bufSTR[i]);
     }
   } else {
-    char bufSTR[n][size];
+    void* bufSTR = malloc(sizeof(char) * n * size * 100000000);
+    if (bufSTR == 0) {
+      error("Not enough memory to read data! Try to read a subset of data by specifying the index or count parameter.");
+    }
     herr_t herr = H5Dread(dataset_id, mem_type_id, mem_space_id, file_space_id, H5P_DEFAULT, bufSTR );
-    char bufSTR2[n][size+1];
+    char* bufSTR2 = malloc(sizeof(char)*(size+1));
+    if (bufSTR2 == 0) {
+      error("Not enough memory to read data! Try to read a subset of data by specifying the index or count parameter.");
+    }
+    bufSTR2[size] = '\0';
+    char* bufSTR3 = ((char* )bufSTR);
     for (int i=0; i<n; i++) {
       for (int j=0; j<size; j++) {
-	bufSTR2[i][j] = bufSTR[i][j];
+	bufSTR2[j] = bufSTR3[i*sizeof(char)*size+j];
       }
-      bufSTR2[i][size] = '\0';
+      SET_STRING_ELT(Rval, i, mkChar(bufSTR2));
     }
-
-    for (int i=0; i<n; i++) {
-      SET_STRING_ELT(Rval, i, mkChar(bufSTR2[i]));
-    }
+    free(bufSTR);
+    free(bufSTR2);
   }
   setAttrib(Rval, R_DimSymbol, Rdim);
   UNPROTECT(1);
