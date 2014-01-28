@@ -3,6 +3,7 @@
 #include <R_ext/Rdynload.h>
 #include <R_ext/Error.h>
 #include "H5constants.h"
+#include "H5.h"
 #include "H5A.h"
 #include "H5D.h"
 #include "H5F.h"
@@ -19,7 +20,16 @@
 #include "h5writeDataFrame.h"
 #include "printdatatype.h"
 
+SEXP _H5open(void);
+SEXP _H5close(void);
+SEXP _H5garbage_collect(void);
+SEXP _H5get_libversion(void);
+
 static R_CallMethodDef libraryRCalls[] = {
+  {"_H5open", (DL_FUNC) &_H5open, 0},
+  {"_H5close", (DL_FUNC) &_H5close, 0},
+  {"_H5garbage_collect", (DL_FUNC) &_H5garbage_collect, 0},
+  {"_H5get_libversion", (DL_FUNC) &_H5get_libversion, 0},
   {"_H5constants", (DL_FUNC) &_H5constants, 0},
   {"_H5Acreate", (DL_FUNC) &_H5Acreate, 4},
   {"_H5Aopen", (DL_FUNC) &_H5Aopen, 2},
