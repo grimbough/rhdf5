@@ -4,7 +4,6 @@
 \alias{hdf5}
 \alias{HDF5}
 \alias{h5r}
-\alias{H5}
 
 \docType{package}
 
@@ -42,8 +41,15 @@ There are a number of high level R functions that provide a convinient way of ac
     \item \code{\link{h5const}}, \code{\link{h5default}}, \code{\link{h5constType}}
   }
 
+  HDF5 version number
+  \itemize{
+    \item \code{\link{h5version}}
+  }
+
+
   Low level interface to HDF5 C-library (for expert users only!):
   \itemize{
+    \item general HDF5 functions (\code{\link{H5open}} / \code{\link{H5close}} / \code{\link{H5garbage_collect}} / \code{\link{H5get_libversion}})
     \item HDF5 File Interface (\code{\link{H5Fcreate}}, \code{\link{H5Fopen}} / \code{\link{H5Fclose}} / \code{\link{H5Fflush}})
     \item HDF5 Group Interface (\code{\link{H5Gcreate}}, \code{\link{H5Gcreate_anon}}, \code{\link{H5Gopen}} / \code{\link{H5Gclose}} / \code{\link{H5Gget_info}}, \code{\link{H5Gget_info_by_idx}}, \code{\link{H5Gget_info_by_name}})
     \item HDF5 Link Interface (\code{\link{H5Lexists}}, \code{\link{H5Lget_info}})

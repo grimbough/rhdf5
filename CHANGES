@@ -1,3 +1,7 @@
+2.7.6
+- New function h5version implemented.
+- New low level general library functions H5open, H5close, H5garbage_collect, and H5get_libversion implemented.
+
 2.7.5.
 - bug fix of C-stack overflow when reading large fixed-length strings. Now allocating memory with malloc.
 
