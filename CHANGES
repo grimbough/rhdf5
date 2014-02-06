@@ -1,3 +1,6 @@
+2.7.7
+- remove debug code
+
 2.7.6
 - New function h5version implemented.
 - New low level general library functions H5open, H5close, H5garbage_collect, and H5get_libversion implemented.

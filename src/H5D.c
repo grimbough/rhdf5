@@ -240,7 +240,7 @@ SEXP H5Dread_helper_STRING(hid_t dataset_id, hid_t file_space_id, hid_t mem_spac
       free(bufSTR[i]);
     }
   } else {
-    void* bufSTR = malloc(sizeof(char) * n * size * 100000000);
+    void* bufSTR = malloc(sizeof(char) * n * size);
     if (bufSTR == 0) {
       error("Not enough memory to read data! Try to read a subset of data by specifying the index or count parameter.");
     }
