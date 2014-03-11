@@ -54,7 +54,9 @@ SEXP _H5Dread( SEXP _dataset_id, SEXP _file_space_id, SEXP _mem_space_id, SEXP _
                SEXP _bit64conversion );
 SEXP _H5Dwrite( SEXP _dataset_id, SEXP _buf, SEXP _file_space_id, SEXP _mem_space_id );
 /* H5Diterate */
-/* H5Dset_extent */
+
+SEXP _H5Dset_extent( SEXP _dataset_id, SEXP _size );
+
 /* H5Dfill */
 
 #endif

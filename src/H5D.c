@@ -704,3 +704,24 @@ SEXP _H5Dget_type( SEXP _dataset_id ) {
   return Rval;
 }
 
+/* herr_t H5Dset_extent( hid_t dset_id, const hsize_t size[] ) */
+SEXP _H5Dset_extent( SEXP _dataset_id, SEXP _size ) {
+  hid_t dataset_id = INTEGER(_dataset_id)[0];
+  int rank = length(_size);
+  herr_t herr = 3;
+  if (rank > 0) {
+    hsize_t size[rank];
+    for (int i=0; i < rank; i++) {
+      size[i] = INTEGER(_size)[i];
+    }
+    herr = H5Dset_extent( dataset_id, size );
+  } else {
+    error("size parameter in H5Dset_extend has to be a vector of length > 0.");
+  }
+  SEXP Rval;
+  PROTECT(Rval = allocVector(INTSXP, 1));
+  INTEGER(Rval)[0] = herr;
+  UNPROTECT(1);
+  return Rval;
+}
+
