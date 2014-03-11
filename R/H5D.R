@@ -1,5 +1,5 @@
 
-H5Dcreate <- function( h5loc, name, dtype_id, h5space, internal1=NULL, internal2 =6 ) {
+H5Dcreate <- function( h5loc, name, dtype_id, h5space, internal1=NULL, internal2=6 ) {
   h5checktype(h5loc, "loc")
   if (length(name)!=1 || !is.character(name)) stop("'name' must be a character string of length 1")
   if (!is.integer(dtype_id)) {
@@ -93,3 +93,8 @@ H5Dwrite <- function( h5dataset, buf, h5spaceMem=NULL, h5spaceFile=NULL ) {
   invisible(.Call("_H5Dwrite", h5dataset@ID, buf, sidFile, sidMem, PACKAGE='rhdf5'))
 }
 
+H5Dset_extent <- function( h5dataset, size) {
+  h5checktype(h5dataset, "dataset")
+  size <- as.integer(rev(size))
+  invisible(.Call("_H5Dset_extent", h5dataset@ID, size, PACKAGE='rhdf5'))
+}

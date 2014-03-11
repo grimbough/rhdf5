@@ -5,7 +5,12 @@
   \subsection{NEW FEATURES}{
     \itemize{
       \item New function h5version implemented.
-      \item New low level general library functions H5open, H5close, H5garbage_collect, and H5get_libversion implemented.
+      \item New low level general library functions H5open, H5close, H5garbage_collect, H5get_libversion, and H5Dset_extent implemented.
+    }
+  }
+  \subsection{USER VISIBLE CHANGES}{
+    \itemize{
+      \item h5createDataset automatically uses chunking and compression
     }
   }
   \subsection{BUG FIXES}{

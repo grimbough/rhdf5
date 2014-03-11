@@ -38,7 +38,7 @@ h5createGroup <- function(file, group) {
   res
 }
 
-h5createDataset <- function(file, dataset, dims, maxdims = dims, storage.mode = "double", H5type = NULL, size=NULL, chunk=NULL, level=6) {
+h5createDataset <- function(file, dataset, dims, maxdims = dims, storage.mode = "double", H5type = NULL, size=NULL, chunk=dims, level=6) {
   loc = h5checktypeOrOpenLoc(file)
 
   res <- FALSE
@@ -47,6 +47,18 @@ h5createDataset <- function(file, dataset, dims, maxdims = dims, storage.mode = 
       message("Can not create dataset. Object with name '",dataset,"' already exists.")
     } else {
       if (is.numeric(dims) & is.numeric(maxdims)) {
+        if (length(maxdims) != length(dims)) {
+          stop('"maxdims" has to have the same rank as "dims".')
+        }
+        if (any(maxdims != dims) & is.null(chunk)) {
+          stop('If "maxdims" is different from "dims", chunking is required.')
+        }
+        if (any(maxdims < dims)) {
+          stop('All elements of "maxdims" have to be equal or larger than "dims".')
+        }
+        if (any(dims < 0)) {
+          stop('All elements of "dims" must be non-negative.')
+        }
         sid <- H5Screate_simple(dims, maxdims)
         if (!is(sid, "H5IdComponent")) {
           message("Can not create dataset. 'dims' or 'maxdims' argument invalid.")
@@ -75,6 +87,9 @@ h5createDataset <- function(file, dataset, dims, maxdims = dims, storage.mode = 
           if (!is.numeric(tid)) {
             message("Can not create dataset. H5type unknown. Check h5const('H5T') for valid types.")
           } else {
+            if ((level > 0) & (is.null(chunk))) {
+              warning("Compression (level > 0) requires chunking. Set chunk size to activate compression.")
+            }
             did <- H5Dcreate(loc$H5Identifier, dataset, tid, sid, chunk, level)
             if (is(did, "H5IdComponent")) {
               if (storage.mode[1] == "logical") {
