@@ -7,6 +7,7 @@
 \alias{H5Dget_space}
 \alias{H5Dread}
 \alias{H5Dwrite}
+\alias{H5Dset_extent}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{HDF5 Dataset Interface}
 \description{
@@ -20,6 +21,7 @@ H5Dget_space (h5dataset)
 H5Dget_type  (h5dataset)
 H5Dread      (h5dataset, h5spaceFile = NULL, h5spaceMem = NULL, buf = NULL, compoundAsDataFrame = TRUE, bit64conversion)
 H5Dwrite     (h5dataset, buf, h5spaceMem = NULL, h5spaceFile = NULL)
+H5Dset_extent(h5dataset, size)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -32,6 +34,7 @@ H5Dwrite     (h5dataset, buf, h5spaceMem = NULL, h5spaceFile = NULL)
   \item{buf}{Reading and writing buffer containing the data to written/read. When using the buffer for reading, the buffer size has to fit the size of the memory space \code{h5spaceMem}. No extra memory will be allocated for the data. A pointer to the same data is returned.}
   \item{compoundAsDataFrame}{If true, a compound datatype will be coerced to a data.frame. This is not possible, if the dataset is multi-dimensional. Otherwise the compound datatype will be returned as a list. Nested compound data types will be returned as a nested list.}
   \item{bit64conversion}{Defines, how 64-bit integers are converted. Internally, R does not support 64-bit integers. All integers in R are 32-bit integers. By setting bit64conversion='int', a coercing to 32-bit integers is enforced, with the risc of data loss, but with the insurance that numbers are represented as integers. bit64conversion='double' coerces the 64-bit integers to floating point numbers. doubles can represent integers with up to 54-bits, but they are not represented as integer values anymore. For larger numbers there is again a data loss. bit64conversion='bit64' is recommended way of coercing. It represents the 64-bit integers as objects of class 'integer64' as defined in the package 'bit64'. Make sure that you have installed 'bit64'. The datatype 'integer64' is not part of base R, but defined in an external package. This can produce unexpected behaviour when working with the data.}
+  \item{size}{An integer vector with the new dimension of the dataset. Calling this function is only valid for chunked datasets.}
   \item{internal1,internal2}{For internal usage only. Will be removed in later versions.}
 }
 \details{
