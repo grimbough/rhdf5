@@ -10,7 +10,8 @@
   }
   \subsection{USER VISIBLE CHANGES}{
     \itemize{
-      \item h5createDataset automatically uses chunking and compression
+      \item h5createDataset automatically uses chunking and compression.
+      \item Added a warning if chunk size is equal to dimensions for large compressed datasets.
     }
   }
   \subsection{BUG FIXES}{

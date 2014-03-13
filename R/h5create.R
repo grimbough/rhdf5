@@ -38,7 +38,7 @@ h5createGroup <- function(file, group) {
   res
 }
 
-h5createDataset <- function(file, dataset, dims, maxdims = dims, storage.mode = "double", H5type = NULL, size=NULL, chunk=dims, level=6) {
+h5createDataset <- function(file, dataset, dims, maxdims = dims, storage.mode = "double", H5type = NULL, size=NULL, chunk=dims, level=6, showWarnings = TRUE) {
   loc = h5checktypeOrOpenLoc(file)
 
   res <- FALSE
@@ -58,6 +58,11 @@ h5createDataset <- function(file, dataset, dims, maxdims = dims, storage.mode = 
         }
         if (any(dims < 0)) {
           stop('All elements of "dims" must be non-negative.')
+        }
+        if ((level > 0) & (length(chunk) > 0)) {
+          if (showWarnings & (prod(dims) > 1000000L) & (all(dims == chunk))) {
+            warning("You created a large dataset with compression and chunking. The chunk size is equal to the dataset dimensions. If you want to read subsets of the dataset, you should test smaller chunk sizes to improve read times. Turn off this warning with showWarnings=FALSE.")
+          }
         }
         sid <- H5Screate_simple(dims, maxdims)
         if (!is(sid, "H5IdComponent")) {
