@@ -8,7 +8,7 @@
 h5createDataset (file, dataset, 
 		dims, maxdims = dims, 
 		storage.mode = "double", H5type = NULL, 
-		size = NULL, chunk = NULL, level = 6,
+		size = NULL, chunk = dims, level = 6,
                 showWarnings=TRUE)
 }
 %- maybe also 'usage' for other objects documented here.
