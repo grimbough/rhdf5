@@ -1,5 +1,19 @@
 #include "H5L.h"
 
+/* herr_t H5Lcreate_external( const char *target_file_name, const char *target_obj_name, hid_t link_loc_id, const char *link_name, hid_t lcpl_id, hid_t lapl_id ) */
+SEXP _H5Lcreate_external( SEXP _target_file_name, SEXP _target_obj_name, SEXP _link_loc_id, SEXP _link_name) {
+  const char *target_file_name = CHAR(STRING_ELT(_target_file_name, 0));
+  const char *target_obj_name = CHAR(STRING_ELT(_target_obj_name, 0));
+  hid_t link_loc_id = INTEGER(_link_loc_id)[0];
+  const char *link_name = CHAR(STRING_ELT(_link_name, 0));
+  herr_t herr = H5Lcreate_external( target_file_name, target_obj_name, link_loc_id, link_name, H5P_DEFAULT, H5P_DEFAULT );
+  SEXP Rval;
+  PROTECT(Rval = allocVector(INTSXP, 1));
+  INTEGER(Rval)[0] = herr;
+  UNPROTECT(1);
+  return Rval;
+}
+
 /* htri_t H5Lexists( hid_t loc_id, const char *name, hid_t lapl_id ); */
 SEXP _H5Lexists( SEXP _loc_id, SEXP _name ) {
   hid_t loc_id = INTEGER(_loc_id)[0];

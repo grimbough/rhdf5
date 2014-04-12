@@ -73,6 +73,7 @@ static R_CallMethodDef libraryRCalls[] = {
   {"_H5Oget_num_attrs", (DL_FUNC) &_H5Oget_num_attrs, 1},
   //  {"_H5Oget_info", (DL_FUNC) &_H5Oget_info, 1},
   //  {"_H5Oget_info_by_name", (DL_FUNC) &_H5Oget_info_by_name, 2},
+  {"_H5Lcreate_external", (DL_FUNC) &_H5Lcreate_external, 4},
   {"_H5Lexists", (DL_FUNC) &_H5Lexists, 2},
   {"_H5Lget_info", (DL_FUNC) &_H5Lget_info, 2},
   {"_H5Screate", (DL_FUNC) &_H5Screate, 1},

@@ -8,11 +8,16 @@
 The Link interface, H5L, functions create and manipulate links in an HDF5 group. This interface includes functions that enable the creation and use of user-defined link classes.
 }
 \usage{
-H5Lexists   (h5loc, name)
-H5Lget_info (h5loc, name)
+H5Lcreate_external (target_file_name, target_obj_name, link_loc, link_name)
+H5Lexists          (h5loc, name)
+H5Lget_info        (h5loc, name)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
+  \item{target_file_name}{the relative or absoulte target file name containing the target object.}
+  \item{target_obj_name}{the absolute path and name of the target object within the target file.}
+  \item{link_loc}{An object of class \code{\link{H5IdComponent}} representing a H5 location identifier (file or group) where the new link is placed.}
+  \item{link_name}{The name of the new link.}
   \item{h5loc}{An object of class \code{\link{H5IdComponent}} representing a H5 location identifier (file or group). See \code{\link{H5Fcreate}}, \code{\link{H5Fopen}}, \code{\link{H5Gcreate}}, \code{\link{H5Gopen}} to create an object of this kind.}
   \item{name}{The name of the link to be checked.}
 }
