@@ -1,6 +1,15 @@
 \name{NEWS}
 \title{News for Package 'rhdf5'}
 
+\section{Changes in version 2.10.0}{
+  \subsection{NEW FEATURES}{
+    \itemize{
+      \item New function h5version implemented.
+      \item New low level general library functions H5Lcreate_external implemented.
+    }
+  }
+}
+
 \section{Changes in version 2.8.0}{
   \subsection{NEW FEATURES}{
     \itemize{
