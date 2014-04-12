@@ -53,6 +53,7 @@ export(H5Iget_name)
 export(H5Iget_type)
 export(H5Iis_valid)
 
+export(H5Lcreate_external)
 export(H5Lexists)
 export(H5Lget_info)
 

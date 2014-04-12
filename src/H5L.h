@@ -11,6 +11,7 @@
 /* H5Lcreate_hard */
 /* H5Lcreate_soft */
 /* H5Lcreate_external */
+SEXP _H5Lcreate_external( SEXP _target_file_name, SEXP _target_obj_name, SEXP _link_loc_id, SEXP _link_name);
 SEXP _H5Lexists( SEXP _loc_id, SEXP _name );
 /* H5Lmove */
 /* H5Lcopy */
