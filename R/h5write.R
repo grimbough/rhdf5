@@ -116,7 +116,11 @@ h5writeDataset.array <- function(obj, h5loc, name, index = NULL, start=NULL, str
     if (is.null(size)) {
       size = NULL
       if (storage.mode(obj) == "character") {
-        size = max(nchar(obj))+1
+        if (length(obj) > 0) {
+          size = max(nchar(obj))+1
+        } else {
+          size = 1
+        }
       }
       try( { h5createDataset(h5loc, name, dim(obj), storage.mode = storage.mode(obj), size = size, chunk=dim(obj), level=level) } )
     }
