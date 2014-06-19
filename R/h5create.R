@@ -64,6 +64,9 @@ h5createDataset <- function(file, dataset, dims, maxdims = dims, storage.mode = 
             warning("You created a large dataset with compression and chunking. The chunk size is equal to the dataset dimensions. If you want to read subsets of the dataset, you should test smaller chunk sizes to improve read times. Turn off this warning with showWarnings=FALSE.")
           }
         }
+        if (length(chunk) > 0) {
+          chunk[which(chunk == 0)] = 1
+        }
         sid <- H5Screate_simple(dims, maxdims)
         if (!is(sid, "H5IdComponent")) {
           message("Can not create dataset. 'dims' or 'maxdims' argument invalid.")

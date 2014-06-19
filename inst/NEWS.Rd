@@ -8,7 +8,13 @@
       \item New low level general library functions H5Lcreate_external implemented.
     }
   }
+  \subsection{BUG FIXES}{
+    \itemize{
+      \item Error in h5write for 0-length objects, as a consequence of automatic determining chunk size
+    }
+  }
 }
+bug fix for 
 
 \section{Changes in version 2.8.0}{
   \subsection{NEW FEATURES}{

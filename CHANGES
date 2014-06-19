@@ -1,3 +1,10 @@
+2.9.2
+- man pages corrected for H5Lcreate_external
+- bug fix: Error in h5write for 0-length objects, as a consequence of automatic determining chunk size
+
+2.9.1
+- low-level function H5Lcreate_external added
+
 2.7.10
 - Removed codoc mismatches in man pages
 

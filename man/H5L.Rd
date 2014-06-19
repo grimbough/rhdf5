@@ -2,6 +2,7 @@
 \alias{H5L}
 \alias{H5Lexists}
 \alias{H5Lget_info}
+\alias{H5Lcreate_external}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{HDF5 Link Interface}
 \description{
