@@ -1,3 +1,6 @@
+2.9.3
+- corrected formatting of NEWS.Rd
+
 2.9.2
 - man pages corrected for H5Lcreate_external
 - bug fix: Error in h5write for 0-length objects, as a consequence of automatic determining chunk size

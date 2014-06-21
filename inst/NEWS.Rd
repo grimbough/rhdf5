@@ -14,7 +14,6 @@
     }
   }
 }
-bug fix for 
 
 \section{Changes in version 2.8.0}{
   \subsection{NEW FEATURES}{
