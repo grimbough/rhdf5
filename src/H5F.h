@@ -13,18 +13,18 @@ SEXP _H5Fopen( SEXP _name, SEXP _flags );
 SEXP _H5Freopen( SEXP _file_id );
 SEXP _H5Fclose( SEXP _file_id );
 SEXP _H5Fflush( SEXP _object_id, SEXP _scope );
-/* _H5Fis_hdf5 */
+SEXP _H5Fis_hdf5( SEXP _name );
 /* _H5Fmount */
 /* _H5Funmount */
 
 /* _H5Fget_vfd_handle */
-/* _H5Fget_filesize */
+SEXP _H5Fget_filesize( SEXP _file_id );
 /* _H5Fget_create_plist */
 /* _H5Fget_access_plist */
 /* _H5Fget_info */
 /* _H5Fget_intent */
-/* _H5Fget_name */
-/* _H5Fget_obj_count */
+SEXP _H5Fget_name( SEXP _obj_id );
+/* SEXP _H5Fget_obj_count( SEXP _file_id, unsigned int types ); */
       	
 /* _H5Fget_obj_ids */
 /* _H5Fget_freespace */
