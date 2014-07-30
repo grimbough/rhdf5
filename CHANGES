@@ -1,3 +1,7 @@
+2.9.5
+- A warning is shown in high level function (h5read, h5write and others), if an open HDF5 handle already exists for the specified filename
+- Added man pages for H5Fis_hdf5, H5Fget_filesize, and H5Fget_name
+
 2.9.4
 - Added low level functions H5Fis_hdf5, H5Fget_filesize, and H5Fget_name
 
