@@ -5,7 +5,12 @@
   \subsection{NEW FEATURES}{
     \itemize{
       \item New function h5version implemented.
-      \item New low level general library functions H5Lcreate_external implemented.
+      \item New low level general library functions H5Lcreate_external, H5Fis_hdf5, H5Fget_filesize, and H5Fget_name implemented.
+    }
+  }
+  \subsection{USER VISIBLE CHANGES}{
+    \itemize{
+      \item A warning is shown in high level function (h5read, h5write and others), if an open HDF5 handle already exists for the specified filename.
     }
   }
   \subsection{BUG FIXES}{
