@@ -56,7 +56,7 @@ There are a number of high level R functions that provide a convinient way of ac
     \item HDF5 Object Interface (\code{\link{H5Oopen}}, \code{\link{H5Oclose}}, \code{\link{H5Oget_num_attrs}}, \code{\link{H5Oget_num_attrs_by_name}})
     \item HDF5 Identifier Interface (\code{\link{H5Iget_type}}, \code{\link{H5Iget_name}}, \code{\link{H5Iis_valid}})
     \item HDF5 Dataset Interface (\code{\link{H5Dcreate}}, \code{\link{H5Dopen}} / \code{\link{H5Dclose}} / \code{\link{H5Dget_space}} / \code{\link{H5Dread}}, \code{\link{H5Dwrite}})
-    \item HDF5 Attrbiute Interface (\code{\link{H5Acreate}}, \code{\link{H5Aopen}}, \code{\link{H5Aopen_by_idx}}, \code{\link{H5Aopen_by_name}} / \code{\link{H5Aclose}}, \code{\link{H5Adelete}} / \code{\link{H5Aexists}} / \code{\link{H5Aget_name}}, \code{\link{H5Aget_space}}, \code{\link{H5Aget_type}} / \code{\link{H5Aread}}, \code{\link{H5Awrite}})
+    \item HDF5 Attribute Interface (\code{\link{H5Acreate}}, \code{\link{H5Aopen}}, \code{\link{H5Aopen_by_idx}}, \code{\link{H5Aopen_by_name}} / \code{\link{H5Aclose}}, \code{\link{H5Adelete}} / \code{\link{H5Aexists}} / \code{\link{H5Aget_name}}, \code{\link{H5Aget_space}}, \code{\link{H5Aget_type}} / \code{\link{H5Aread}}, \code{\link{H5Awrite}})
     \item HDF5 Dataspace Interface (\code{\link{H5Screate}}, \code{\link{H5Screate_simple}}, \code{\link{H5Scopy}} / \code{\link{H5Sclose}} / \code{\link{H5Sis_simple}}, \code{\link{H5Sget_simple_extent_dims}} / \code{\link{H5Sselect_hyperslab}})
     \item HDF5 Datatype Interface (\code{\link{H5Tcopy}}, \code{\link{H5Tset_size}})
   }
