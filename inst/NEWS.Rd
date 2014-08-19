@@ -4,6 +4,7 @@
 \section{Changes in version 2.10.0}{
   \subsection{NEW FEATURES}{
     \itemize{
+      \item New function h5readAttributes implemented that reads all HDF5 attributes of one object.
       \item New function h5version implemented.
       \item New low level general library functions H5Lcreate_external, H5Fis_hdf5, H5Fget_filesize, and H5Fget_name implemented.
     }

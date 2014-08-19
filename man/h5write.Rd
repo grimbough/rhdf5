@@ -1,5 +1,6 @@
 \name{h5write}
 \alias{h5read}
+\alias{h5readAttributes}
 \alias{h5write}
 \alias{h5write.default}
 \alias{h5writeDataset}
@@ -28,6 +29,7 @@ h5read                      (file, name, index=NULL,
                              start=NULL, stride=NULL, block=NULL, count=NULL,
                              compoundAsDataFrame = TRUE, callGeneric = TRUE,
 			     read.attributes = FALSE, ...)
+h5readAttributes            (file, name)
 h5write                     (obj, file, name, ...)
 h5write.default             (obj, file, name, 
                              createnewfile = TRUE,
@@ -81,6 +83,8 @@ When viewing the HDF5 datasets with any C-program (e.g. HDFView), the order of d
 }
 \value{
 \code{h5read} returns an array with the data read. 
+
+\code{h5readAttributes} returns a list of all HDF5 attributes of object \code{name}.
 
 \code{h5write} returns 0 if successful.
 }
