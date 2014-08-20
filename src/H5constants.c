@@ -23,8 +23,8 @@ void addVector( int pos, SEXP Rval, SEXP groupnames, const char *groupname, int 
 
 SEXP _H5constants( ) {
   SEXP Rval;
-  PROTECT(Rval = allocVector(VECSXP, 12));
-  SEXP groupnames = PROTECT(allocVector(STRSXP, 12));
+  PROTECT(Rval = allocVector(VECSXP, 13));
+  SEXP groupnames = PROTECT(allocVector(STRSXP, 13));
   int i=0;
 
   int const_H5F_ACC[2]       = {  H5F_ACC_TRUNC,   H5F_ACC_EXCL };
@@ -144,9 +144,23 @@ SEXP _H5constants( ) {
   const char *name_H5T_CLASS[] = { "H5T_INTEGER", "H5T_FLOAT", "H5T_TIME", "H5T_STRING", "H5T_BITFIELD", "H5T_OPAQUE", "H5T_COMPOUND", "H5T_REFERENCE", "H5T_ENUM", "H5T_VLEN", "H5T_ARRAY"};
   addVector(i++, Rval, groupnames, "H5T_CLASS", 11, const_H5T_CLASS, name_H5T_CLASS);
 
-  int const_H5I_TYPE[7]       = { H5I_FILE, H5I_GROUP, H5I_DATATYPE, H5I_DATASPACE, H5I_DATASET, H5I_ATTR, H5I_BADID };
-  const char *name_H5I_TYPE[] = { "H5I_FILE", "H5I_GROUP", "H5I_DATATYPE", "H5I_DATASPACE", "H5I_DATASET", "H5I_ATTR", "H5I_BADID" };
-  addVector(i++, Rval, groupnames, "H5I_TYPE", 7, const_H5I_TYPE, name_H5I_TYPE);
+  int const_H5I_TYPE[15]       = { H5I_FILE, H5I_GROUP, H5I_DATATYPE, H5I_DATASPACE, H5I_DATASET, H5I_ATTR, 
+				   H5I_BADID, H5I_UNINIT,
+				   H5I_REFERENCE, H5I_VFL, H5I_GENPROP_CLS, H5I_GENPROP_LST, 
+				   H5I_ERROR_CLASS, H5I_ERROR_MSG, H5I_ERROR_STACK };
+  const char *name_H5I_TYPE[]  = { "H5I_FILE", "H5I_GROUP", "H5I_DATATYPE", "H5I_DATASPACE", "H5I_DATASET", "H5I_ATTR",
+				   "H5I_BADID", "H5I_UNINIT",
+				   "H5I_REFERENCE", "H5I_VFL", "H5I_GENPROP_CLS", "H5I_GENPROP_LST", 
+				   "H5I_ERROR_CLASS", "H5I_ERROR_MSG", "H5I_ERROR_STACK" };
+  addVector(i++, Rval, groupnames, "H5I_TYPE", 15, const_H5I_TYPE, name_H5I_TYPE);
+
+  int const_H5P[16]      = {  H5P_OBJECT_CREATE, H5P_FILE_CREATE, H5P_FILE_ACCESS, H5P_DATASET_CREATE, H5P_DATASET_ACCESS, H5P_DATASET_XFER,
+			      H5P_FILE_MOUNT, H5P_GROUP_CREATE, H5P_GROUP_ACCESS, H5P_DATATYPE_CREATE, H5P_DATATYPE_ACCESS, H5P_STRING_CREATE,
+			      H5P_ATTRIBUTE_CREATE, H5P_OBJECT_COPY, H5P_LINK_CREATE, H5P_LINK_ACCESS };
+  const char *name_H5P[] = {  "H5P_OBJECT_CREATE", "H5P_FILE_CREATE", "H5P_FILE_ACCESS", "H5P_DATASET_CREATE", "H5P_DATASET_ACCESS", "H5P_DATASET_XFER",
+			      "H5P_FILE_MOUNT", "H5P_GROUP_CREATE", "H5P_GROUP_ACCESS", "H5P_DATATYPE_CREATE", "H5P_DATATYPE_ACCESS", "H5P_STRING_CREATE",
+			      "H5P_ATTRIBUTE_CREATE", "H5P_OBJECT_COPY", "H5P_LINK_CREATE", "H5P_LINK_ACCESS" };
+  addVector(i++, Rval, groupnames, "H5P", 16, const_H5P, name_H5P);
 
   /*################################*/
   /* return constants */

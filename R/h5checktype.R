@@ -66,6 +66,18 @@ h5checktype <- function(h5id, type, fctname = deparse(match.call()[1]), allow.ch
            }
            0
          },
+         plist = {
+           if (truetype != "H5I_GENPROP_LST") {
+             stop("Error in ", fctname, ". The provided H5Identifier is not a property list.", call. = FALSE)
+           }
+           0
+         },
+         plistclass = {
+           if (truetype != "H5I_GENPROP_CLS") {
+             stop("Error in ", fctname, ". The provided H5Identifier is not a property list class.", call. = FALSE)
+           }
+           0
+         },
          {
            stop("argument for type unknown")
          }

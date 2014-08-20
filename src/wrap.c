@@ -13,6 +13,7 @@
 #include "H5O.h"
 #include "H5S.h"
 #include "H5T.h"
+#include "H5P.h"
 #include "h5ls.h"
 #include "HandleList.h"
 #include "h5dump.h"
@@ -89,6 +90,11 @@ static R_CallMethodDef libraryRCalls[] = {
   {"_H5Sselect_index", (DL_FUNC) &_H5Sselect_index, 3},
   {"_H5Tcopy", (DL_FUNC) &_H5Tcopy, 1},
   {"_H5Tset_size", (DL_FUNC) &_H5Tset_size, 2},
+  {"_H5Pcreate", (DL_FUNC) &_H5Pcreate, 1},
+  {"_H5Pget_class", (DL_FUNC) &_H5Pget_class, 1},
+  {"_H5Pcopy", (DL_FUNC) &_H5Pcopy, 1},
+  {"_H5Pclose", (DL_FUNC) &_H5Pclose, 1},
+  {"_H5Pclose_class", (DL_FUNC) &_H5Pclose_class, 1},
   {"_h5ls", (DL_FUNC) &_h5ls, 5},
   {"_h5dump", (DL_FUNC) &_h5dump, 4},
   {"_h5listIdentifier", (DL_FUNC) &_h5listIdentifier, 0},

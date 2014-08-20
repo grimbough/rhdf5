@@ -1,3 +1,7 @@
+2.9.7
+- Added support for the HDF5 property list H5P
+- Added low level functions H5Pcreate, H5Pcopy, H5Pget_class, H5Pclose, H5Pclose_class
+
 2.9.6
 - Added a function h5readAttributes that reads all HDF5 attributes of one object
 

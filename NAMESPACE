@@ -79,6 +79,12 @@ export(H5Sselect_hyperslab)
 export(H5Tcopy)
 export(H5Tset_size)
 
+export(H5Pcreate)
+export(H5Pget_class)
+export(H5Pcopy)
+export(H5Pclose)
+export(H5Pclose_class)
+
 ## export(H5loadConstants)
 
 ## export(getDatatypeClass)
