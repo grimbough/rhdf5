@@ -197,3 +197,34 @@ h5closeitObj <- function(obj, fctname = deparse(match.call()[1])) {
   invisible(res)
 }
 
+h5checktypeAndPLC <- function(h5id, plc, allowNULL = FALSE, fctname = deparse(match.call()[1])) {
+  if (is.null(h5id)) {
+    if (!allowNULL) {
+      stop("Error in ", fctname, ". Property list is null", call. = FALSE)
+    } else {
+      h5id = new("H5IdComponent", ID = integer(0))
+    }
+  } else {
+    if (!is( h5id, "H5IdComponent" ) ) {
+      stop("Error in ", fctname, ". Argument not of class H5IdComponent.", call. = FALSE)
+    }
+    isvalid = H5Iis_valid(h5id)
+    if (!isvalid) {
+      stop("Error in ", fctname, ". H5Identifier not valid.", call. = FALSE)
+    }
+    truetype = H5Iget_type(h5id)
+    if (truetype != "H5I_GENPROP_LST") {
+      stop("Error in ", fctname, ". The provided H5Identifier is not a property list.", call. = FALSE)
+    }
+    h5plc = H5Pget_class(h5id)
+    if (!(plc %in% names(rhdf5:::h5constants[["H5P"]]))) {
+      stop("plist class '",plc,"' unknown")
+    }
+    if (!.Call("_H5Pequal", h5plc@ID, rhdf5:::h5constants[["H5P"]][plc], PACKAGE='rhdf5')) {
+      stop("property list is not of class '",plc,"'")
+    }
+    H5Pclose_class(h5plc)
+  }
+  return(invisible(h5id))
+}
+

@@ -23,8 +23,8 @@ void addVector( int pos, SEXP Rval, SEXP groupnames, const char *groupname, int 
 
 SEXP _H5constants( ) {
   SEXP Rval;
-  PROTECT(Rval = allocVector(VECSXP, 13));
-  SEXP groupnames = PROTECT(allocVector(STRSXP, 13));
+  PROTECT(Rval = allocVector(VECSXP, 16));
+  SEXP groupnames = PROTECT(allocVector(STRSXP, 16));
   int i=0;
 
   int const_H5F_ACC[2]       = {  H5F_ACC_TRUNC,   H5F_ACC_EXCL };
@@ -161,6 +161,18 @@ SEXP _H5constants( ) {
 			      "H5P_FILE_MOUNT", "H5P_GROUP_CREATE", "H5P_GROUP_ACCESS", "H5P_DATATYPE_CREATE", "H5P_DATATYPE_ACCESS", "H5P_STRING_CREATE",
 			      "H5P_ATTRIBUTE_CREATE", "H5P_OBJECT_COPY", "H5P_LINK_CREATE", "H5P_LINK_ACCESS" };
   addVector(i++, Rval, groupnames, "H5P", 16, const_H5P, name_H5P);
+
+  int const_H5D[3]      = { H5D_COMPACT, H5D_CONTIGUOUS, H5D_CHUNKED };
+  const char *name_H5D[] = { "H5D_COMPACT", "H5D_CONTIGUOUS", "H5D_CHUNKED" };
+  addVector(i++, Rval, groupnames, "H5D", 3, const_H5D, name_H5D);
+
+  int const_H5D_FILL_TIME[3]      = { H5D_FILL_TIME_IFSET, H5D_FILL_TIME_ALLOC, H5D_FILL_TIME_NEVER };
+  const char *name_H5D_FILL_TIME[] = { "H5D_FILL_TIME_IFSET", "H5D_FILL_TIME_ALLOC", "H5D_FILL_TIME_NEVER" };
+  addVector(i++, Rval, groupnames, "H5D_FILL_TIME", 3, const_H5D_FILL_TIME, name_H5D_FILL_TIME);
+
+  int const_H5D_ALLOC_TIME[4]      = { H5D_ALLOC_TIME_DEFAULT, H5D_ALLOC_TIME_EARLY, H5D_ALLOC_TIME_INCR, H5D_ALLOC_TIME_LATE };
+  const char *name_H5D_ALLOC_TIME[] = { "H5D_ALLOC_TIME_DEFAULT", "H5D_ALLOC_TIME_EARLY", "H5D_ALLOC_TIME_INCR", "H5D_ALLOC_TIME_LATE" };
+  addVector(i++, Rval, groupnames, "H5D_ALLOC_TIME", 4, const_H5D_ALLOC_TIME, name_H5D_ALLOC_TIME);
 
   /*################################*/
   /* return constants */

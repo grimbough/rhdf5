@@ -1,3 +1,7 @@
+2.9.8
+- Added property list arguments to H5Dcreate
+- Added low level functions H5Pset_layout, H5Pset_chunk, H5Pset_deflate, H5Pset_fill_value, H5Pset_fill_time, H5Pset_alloc_time, H5Pequal
+
 2.9.7
 - Added support for the HDF5 property list H5P
 - Added low level functions H5Pcreate, H5Pcopy, H5Pget_class, H5Pclose, H5Pclose_class
