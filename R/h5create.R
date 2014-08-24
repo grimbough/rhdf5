@@ -59,13 +59,22 @@ h5createDataset <- function(file, dataset, dims, maxdims = dims, storage.mode = 
         if (any(dims < 0)) {
           stop('All elements of "dims" must be non-negative.')
         }
+        if ((level > 0) & (is.null(chunk))) {
+          warning("Compression (level > 0) requires chunking. Set chunk size to activate compression.")
+        }
+        if (length(chunk) > 0) {
+          chunk[which(chunk == 0)] = 1
+        }
         if ((level > 0) & (length(chunk) > 0)) {
           if (showWarnings & (prod(dims) > 1000000L) & (all(dims == chunk))) {
             warning("You created a large dataset with compression and chunking. The chunk size is equal to the dataset dimensions. If you want to read subsets of the dataset, you should test smaller chunk sizes to improve read times. Turn off this warning with showWarnings=FALSE.")
           }
-        }
-        if (length(chunk) > 0) {
-          chunk[which(chunk == 0)] = 1
+          dcpl = H5Pcreate("H5P_DATASET_CREATE")
+          H5Pset_fill_time( dcpl, "H5D_FILL_TIME_ALLOC" )
+          H5Pset_chunk( dcpl, chunk)
+          if (level > 0) { H5Pset_deflate( dcpl, level ) }
+        } else {
+          dcpl = NULL
         }
         sid <- H5Screate_simple(dims, maxdims)
         if (!is(sid, "H5IdComponent")) {
@@ -95,10 +104,7 @@ h5createDataset <- function(file, dataset, dims, maxdims = dims, storage.mode = 
           if (!is.numeric(tid)) {
             message("Can not create dataset. H5type unknown. Check h5const('H5T') for valid types.")
           } else {
-            if ((level > 0) & (is.null(chunk))) {
-              warning("Compression (level > 0) requires chunking. Set chunk size to activate compression.")
-            }
-            did <- H5Dcreate(loc$H5Identifier, dataset, tid, sid, chunk, level)
+            did <- H5Dcreate(loc$H5Identifier, dataset, tid, sid, dcpl = dcpl)
             if (is(did, "H5IdComponent")) {
               if (storage.mode[1] == "logical") {
                 x = "logical"
@@ -110,6 +116,7 @@ h5createDataset <- function(file, dataset, dims, maxdims = dims, storage.mode = 
           }
           H5Sclose(sid)
         }
+        if (!is.null(dcpl)) { H5Pclose(dcpl) }
       } else {
         message("Can not create dataset. 'dims' and 'maxdims' have to be numeric.")
       }

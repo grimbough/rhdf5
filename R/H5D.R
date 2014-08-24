@@ -1,16 +1,15 @@
 
-H5Dcreate <- function( h5loc, name, dtype_id, h5space, internal1=NULL, internal2=6 ) {
+H5Dcreate <- function( h5loc, name, dtype_id, h5space, lcpl=NULL, dcpl=NULL, dapl=NULL ) {
   h5checktype(h5loc, "loc")
   if (length(name)!=1 || !is.character(name)) stop("'name' must be a character string of length 1")
   if (!is.integer(dtype_id)) {
     dtype_id<- h5checkConstants( "H5T", dtype_id)
   }
   h5checktype(h5space, "dataspace")
-  chunk = internal1
-  level = internal2
-  if (!is.null(chunk)) { chunk = rev(as.integer(chunk)) }
-  if (!is.null(level)) { level = as.integer(level) }
-  did <- .Call("_H5Dcreate", h5loc@ID, name, dtype_id, h5space@ID, chunk, level, PACKAGE='rhdf5')
+  lcpl = h5checktypeAndPLC(lcpl, "H5P_LINK_CREATE", allowNULL = TRUE)
+  dcpl = h5checktypeAndPLC(dcpl, "H5P_DATASET_CREATE", allowNULL = TRUE)
+  dapl = h5checktypeAndPLC(dapl, "H5P_DATASET_ACCESS", allowNULL = TRUE)
+  did <- .Call("_H5Dcreate", h5loc@ID, name, dtype_id, h5space@ID, lcpl@ID, dcpl@ID, dapl@ID, PACKAGE='rhdf5')
   if (did > 0) {
     h5dataset = new("H5IdComponent", ID = did)
   } else {
