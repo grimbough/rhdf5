@@ -1,5 +1,11 @@
+2.9.9
+- Added support for link create and dataset access property lists.
+- Added property list arguments to H5Dopen
+- Added low level functions H5Pset_char_encoding, H5Pset_create_intermediate_group, H5Pset_chunk_cache.
+
 2.9.8
 - Added property list arguments to H5Dcreate
+- Added support for dataset create property lists.
 - Added low level functions H5Pset_layout, H5Pset_chunk, H5Pset_deflate, H5Pset_fill_value, H5Pset_fill_time, H5Pset_alloc_time, H5Pequal
 
 2.9.7

@@ -111,9 +111,9 @@ SEXP _H5Pclose( SEXP _plist );
 // Link Creation Properties
 ////////////////////////////////////////////////////
 
-/* SEXP _H5Pset_char_encoding( SEXP _plist_id, SEXP _encoding ); */
+SEXP _H5Pset_char_encoding( SEXP _plist_id, SEXP _encoding );
 /* SEXP _H5Pget_char_encoding( SEXP _plist_id, SEXP _encoding ); */
-/* SEXP _H5Pset_create_intermediate_group( SEXP _lcpl_id, SEXP _crt_intermed_group ); */
+SEXP _H5Pset_create_intermediate_group( SEXP _lcpl_id, SEXP _crt_intermed_group );
 /* SEXP _H5Pget_create_intermediate_group( SEXP _lcpl_id, SEXP _crt_intermed_group ); */
 
 ////////////////////////////////////////////////////
@@ -169,7 +169,7 @@ SEXP _H5Pset_alloc_time( SEXP _plist_id, SEXP _alloc_time );
 // Dataset Access Properties
 ////////////////////////////////////////////////////
 
-/* SEXP _H5Pset_chunk_cache( SEXP _dapl_id, SEXP _rdcc_nslots, SEXP _rdcc_nbytes, SEXP _rdcc_w0 ); */
+SEXP _H5Pset_chunk_cache( SEXP _dapl_id, SEXP _rdcc_nslots, SEXP _rdcc_nbytes, SEXP _rdcc_w0 );
 /* SEXP _H5Pget_chunk_cache( SEXP _dapl_id, SEXP _rdcc_nslots, SEXP _rdcc_nbytes, SEXP _rdcc_w0 ); */
 
 ////////////////////////////////////////////////////

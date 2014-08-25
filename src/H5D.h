@@ -19,7 +19,7 @@
 
 SEXP _H5Dcreate( SEXP _loc_id, SEXP _name, SEXP _dtype_id, SEXP _space_id, SEXP _lcpl_id, SEXP _dcpl_id, SEXP _dapl_id );
 /* H5Dcreate_anon */
-SEXP _H5Dopen( SEXP _loc_id, SEXP _name );
+SEXP _H5Dopen( SEXP _loc_id, SEXP _name, SEXP _dapl_id );
 SEXP _H5Dclose( SEXP _dataset_id );
 
 SEXP _H5Dget_space(SEXP _dataset_id );

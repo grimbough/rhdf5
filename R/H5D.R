@@ -19,10 +19,11 @@ H5Dcreate <- function( h5loc, name, dtype_id, h5space, lcpl=NULL, dcpl=NULL, dap
   invisible(h5dataset)
 }
 
-H5Dopen <- function( h5loc, name ) {
+H5Dopen <- function( h5loc, name, dapl = NULL ) {
   h5checktype(h5loc, "loc")
   if (length(name)!=1 || !is.character(name)) stop("'filename' must be a character string of length 1")
-  did <- .Call("_H5Dopen", h5loc@ID, name, PACKAGE='rhdf5')
+  dapl = h5checktypeAndPLC(dapl, "H5P_DATASET_ACCESS", allowNULL = TRUE)
+  did <- .Call("_H5Dopen", h5loc@ID, name, dapl@ID, PACKAGE='rhdf5')
   if (did > 0) {
     h5dataset = new("H5IdComponent", ID = did)
   } else {
