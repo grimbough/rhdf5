@@ -23,8 +23,8 @@ void addVector( int pos, SEXP Rval, SEXP groupnames, const char *groupname, int 
 
 SEXP _H5constants( ) {
   SEXP Rval;
-  PROTECT(Rval = allocVector(VECSXP, 16));
-  SEXP groupnames = PROTECT(allocVector(STRSXP, 16));
+  PROTECT(Rval = allocVector(VECSXP, 17));
+  SEXP groupnames = PROTECT(allocVector(STRSXP, 17));
   int i=0;
 
   int const_H5F_ACC[2]       = {  H5F_ACC_TRUNC,   H5F_ACC_EXCL };
@@ -143,6 +143,10 @@ SEXP _H5constants( ) {
   int const_H5T_CLASS[11]      = {  H5T_INTEGER,   H5T_FLOAT,   H5T_TIME,   H5T_STRING,   H5T_BITFIELD,   H5T_OPAQUE,   H5T_COMPOUND,   H5T_REFERENCE,   H5T_ENUM,   H5T_VLEN,   H5T_ARRAY };
   const char *name_H5T_CLASS[] = { "H5T_INTEGER", "H5T_FLOAT", "H5T_TIME", "H5T_STRING", "H5T_BITFIELD", "H5T_OPAQUE", "H5T_COMPOUND", "H5T_REFERENCE", "H5T_ENUM", "H5T_VLEN", "H5T_ARRAY"};
   addVector(i++, Rval, groupnames, "H5T_CLASS", 11, const_H5T_CLASS, name_H5T_CLASS);
+
+  int const_H5T_CSET[2]      = { H5T_CSET_ASCII, H5T_CSET_UTF8 };
+  const char *name_H5T_CSET[] = { "H5T_CSET_ASCII", "H5T_CSET_UTF8" };
+  addVector(i++, Rval, groupnames, "H5T_CSET", 2, const_H5T_CSET, name_H5T_CSET);
 
   int const_H5I_TYPE[15]       = { H5I_FILE, H5I_GROUP, H5I_DATATYPE, H5I_DATASPACE, H5I_DATASET, H5I_ATTR, 
 				   H5I_BADID, H5I_UNINIT,

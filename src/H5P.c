@@ -788,14 +788,14 @@ SEXP _H5Pclose( SEXP _plist ) {
 ////////////////////////////////////////////////////
 
 
-/* /\* herr_t H5Pset_char_encoding(hid_t plist_id, H5T_cset_t encoding) *\/ */
-/* SEXP _H5Pset_char_encoding( SEXP _plist_id, SEXP _encoding ) { */
-/*   hid_t plist_id = INTEGER(_plist_id)[0]; */
-/*   TODO: H5T_cset_t encoding = _encoding */
-/*   herr_t herr = H5Pset_char_encoding(hid_tplist_id, H5T_cset_tencoding); */
-/*   SEXP Rval = ScalarInteger(herr); */
-/*   return Rval; */
-/* } */
+/* herr_t H5Pset_char_encoding(hid_t plist_id, H5T_cset_t encoding) */
+SEXP _H5Pset_char_encoding( SEXP _plist_id, SEXP _encoding ) {
+  hid_t plist_id = INTEGER(_plist_id)[0];
+  H5T_cset_t encoding = INTEGER(_encoding)[0];
+  herr_t herr = H5Pset_char_encoding(plist_id, encoding);
+  SEXP Rval = ScalarInteger(herr);
+  return Rval;
+}
 
 /* /\* herr_t H5Pget_char_encoding(hid_t plist_id, H5T_cset_t encoding) *\/ */
 /* SEXP _H5Pget_char_encoding( SEXP _plist_id, SEXP _encoding ) { */
@@ -806,14 +806,14 @@ SEXP _H5Pclose( SEXP _plist ) {
 /*   return Rval; */
 /* } */
 
-/* /\* herr_t H5Pset_create_intermediate_group(hid_t lcpl_id, unsigned crt_intermed_group) *\/ */
-/* SEXP _H5Pset_create_intermediate_group( SEXP _lcpl_id, SEXP _crt_intermed_group ) { */
-/*   hid_t lcpl_id = INTEGER(_lcpl_id)[0]; */
-/*   unsigned crt_intermed_group = INTEGER(_crt_intermed_group)[0]; */
-/*   herr_t herr = H5Pset_create_intermediate_group(hid_tlcpl_id, unsignedcrt_intermed_group); */
-/*   SEXP Rval = ScalarInteger(herr); */
-/*   return Rval; */
-/* } */
+/* herr_t H5Pset_create_intermediate_group(hid_t lcpl_id, unsigned crt_intermed_group) */
+SEXP _H5Pset_create_intermediate_group( SEXP _lcpl_id, SEXP _crt_intermed_group ) {
+  hid_t lcpl_id = INTEGER(_lcpl_id)[0];
+  unsigned crt_intermed_group = (unsigned int)INTEGER(_crt_intermed_group)[0];
+  herr_t herr = H5Pset_create_intermediate_group(lcpl_id, crt_intermed_group);
+  SEXP Rval = ScalarInteger(herr);
+  return Rval;
+}
 
 /* /\* herr_t H5Pget_create_intermediate_group(hid_t lcpl_id, unsigned * crt_intermed_group) *\/ */
 /* SEXP _H5Pget_create_intermediate_group( SEXP _lcpl_id, SEXP _crt_intermed_group ) { */
@@ -971,7 +971,7 @@ SEXP _H5Pset_chunk( SEXP _plist, SEXP _dim ) {
 /* herr_t H5Pset_deflate(hid_t plist_id, uint level) */
 SEXP _H5Pset_deflate( SEXP _plist_id, SEXP _level ) {
   hid_t plist_id = INTEGER(_plist_id)[0];
-  uint level = (unsigned int)INTEGER(_level)[0];
+  unsigned int level = (unsigned int)INTEGER(_level)[0];
   herr_t herr = H5Pset_deflate(plist_id, level);
   SEXP Rval = ScalarInteger(herr);
   return Rval;
@@ -1240,16 +1240,16 @@ SEXP _H5Pset_alloc_time( SEXP _plist_id, SEXP _alloc_time ) {
 // Dataset Access Properties
 ////////////////////////////////////////////////////
 
-/* /\* herr_t H5Pset_chunk_cache(hid_t dapl_id, size_t rdcc_nslots, size_t rdcc_nbytes, double rdcc_w0) *\/ */
-/* SEXP _H5Pset_chunk_cache( SEXP _dapl_id, SEXP _rdcc_nslots, SEXP _rdcc_nbytes, SEXP _rdcc_w0 ) { */
-/*   hid_t dapl_id = INTEGER(_dapl_id)[0]; */
-/*   size_t rdcc_nslots = INTEGER(_rdcc_nslots)[0]; */
-/*   size_t rdcc_nbytes = INTEGER(_rdcc_nbytes)[0]; */
-/*   double rdcc_w0 = REAL(_rdcc_w0)[0]; */
-/*   herr_t herr = H5Pset_chunk_cache(hid_tdapl_id, size_trdcc_nslots, size_trdcc_nbytes, doublerdcc_w0); */
-/*   SEXP Rval = ScalarInteger(herr); */
-/*   return Rval; */
-/* } */
+/* herr_t H5Pset_chunk_cache(hid_t dapl_id, size_t rdcc_nslots, size_t rdcc_nbytes, double rdcc_w0) */
+SEXP _H5Pset_chunk_cache( SEXP _dapl_id, SEXP _rdcc_nslots, SEXP _rdcc_nbytes, SEXP _rdcc_w0 ) {
+  hid_t dapl_id = INTEGER(_dapl_id)[0];
+  size_t rdcc_nslots = INTEGER(_rdcc_nslots)[0];
+  size_t rdcc_nbytes = INTEGER(_rdcc_nbytes)[0];
+  double rdcc_w0 = REAL(_rdcc_w0)[0];
+  herr_t herr = H5Pset_chunk_cache(dapl_id, rdcc_nslots, rdcc_nbytes, rdcc_w0);
+  SEXP Rval = ScalarInteger(herr);
+  return Rval;
+}
 
 /* /\* herr_t H5Pget_chunk_cache(hid_t dapl_id, size_t * rdcc_nslots, size_t * rdcc_nbytes, double * rdcc_w0) *\/ */
 /* SEXP _H5Pget_chunk_cache( SEXP _dapl_id, SEXP _rdcc_nslots, SEXP _rdcc_nbytes, SEXP _rdcc_w0 ) { */

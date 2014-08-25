@@ -3,7 +3,6 @@
 #include <time.h>
 
 /* hid_t H5Dcreate( hid_t loc_id, const char *name, hid_t dtype_id, hid_t space_id, hid_t lcpl_id, hid_t dcpl_id, hid_t dapl_id ) */
-/* TODO more parameters: hid_t lcpl_id, hid_t dcpl_id, hid_t dapl_id */
 SEXP _H5Dcreate( SEXP _loc_id, SEXP _name, SEXP _dtype_id, SEXP _space_id, SEXP _lcpl_id, SEXP _dcpl_id, SEXP _dapl_id ) {
   hid_t loc_id = INTEGER(_loc_id)[0];
   const char *name = CHAR(STRING_ELT(_name, 0));
@@ -17,25 +16,6 @@ SEXP _H5Dcreate( SEXP _loc_id, SEXP _name, SEXP _dtype_id, SEXP _space_id, SEXP 
   if (length(_dcpl_id) > 0) { dcpl_id = INTEGER(_dcpl_id)[0]; }
   if (length(_dapl_id) > 0) { dapl_id = INTEGER(_dapl_id)[0]; }
 
-  /* hid_t plist = H5P_DEFAULT; */
-  /* int rank = length(_cdim); */
-  /* if (rank > 0) { */
-  /*   hsize_t cdim[rank]; */
-  /*   for (int i=0; i < rank; i++) { */
-  /*     cdim[i] = INTEGER(_cdim)[i]; */
-  /*   } */
-  /*   unsigned int level = 6; */
-  /*   if (length(_level) > 0) { */
-  /*     level = (unsigned int)INTEGER(_level)[0]; */
-  /*   } */
-  /*   plist = H5Pcreate(H5P_DATASET_CREATE); */
-  /*   H5Pset_fill_time( plist, H5D_FILL_TIME_ALLOC ); */
-  /*   H5Pset_chunk(plist, rank, cdim); */
-  /*   if (level > 0) { */
-  /*     H5Pset_deflate( plist, level ); */
-  /*   } */
-  /* } */
-
   hid_t hid = H5Dcreate( loc_id, name, dtype_id, space_id, 
 			 lcpl_id, dcpl_id, dapl_id );
 
@@ -45,11 +25,12 @@ SEXP _H5Dcreate( SEXP _loc_id, SEXP _name, SEXP _dtype_id, SEXP _space_id, SEXP 
 }
 
 /* hid_t H5Dopen( hid_t loc_id, const char *name, hid_t dapl_id ) */
-/* TODO more parameters: hid_t dapl_id */
-SEXP _H5Dopen( SEXP _loc_id, SEXP _name ) {
+SEXP _H5Dopen( SEXP _loc_id, SEXP _name, SEXP _dapl_id ) {
   hid_t loc_id = INTEGER(_loc_id)[0];
   const char *name = CHAR(STRING_ELT(_name, 0));
-  hid_t hid = H5Dopen( loc_id, name, H5P_DEFAULT );
+  hid_t dapl_id = H5P_DEFAULT;
+  if (length(_dapl_id) > 0) { dapl_id = INTEGER(_dapl_id)[0]; }
+  hid_t hid = H5Dopen( loc_id, name, dapl_id );
   addHandle(hid);
 
   SEXP Rval;

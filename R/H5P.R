@@ -696,13 +696,12 @@ H5Pclose <- function( h5plist ) {
 ## Link Creation Properties
 ####################################################
 
-## H5Pset_char_encoding <- function( plist_id, encoding ) {
-##   h5checktype(h5plist, "plist")
-##   TODO: encoding = as.TYPE(encoding)
-##   res <- .Call("_H5Pset_char_encoding", plist_id, encoding, PACKAGE='rhdf5')
-##   SEXP Rval = R_NilValue;
-##   invisible(res)
-## }
+H5Pset_char_encoding <- function( h5plist, encoding = h5default("H5T_CSET")) {
+  h5checktypeAndPLC(h5plist, "H5P_LINK_CREATE")
+  encoding <- h5checkConstants( "H5T_CSET", encoding )
+  res <- .Call("_H5Pset_char_encoding", h5plist@ID, encoding, PACKAGE='rhdf5')
+  invisible(res)
+}
 
 ## H5Pget_char_encoding <- function( plist_id, encoding ) {
 ##   h5checktype(h5plist, "plist")
@@ -712,13 +711,12 @@ H5Pclose <- function( h5plist ) {
 ##   invisible(res)
 ## }
 
-## H5Pset_create_intermediate_group <- function( lcpl_id, crt_intermed_group ) {
-##   TODO: lcpl_id = as.TYPE(lcpl_id)
-##   crt_intermed_group = as.integer(crt_intermed_group)
-##   res <- .Call("_H5Pset_create_intermediate_group", lcpl_id, crt_intermed_group, PACKAGE='rhdf5')
-##   SEXP Rval = R_NilValue;
-##   invisible(res)
-## }
+H5Pset_create_intermediate_group <- function( h5plist, crt_intermed_group ) {
+  h5checktypeAndPLC(h5plist, "H5P_LINK_CREATE")
+  crt_intermed_group = as.integer(crt_intermed_group)
+  res <- .Call("_H5Pset_create_intermediate_group", h5plist@ID, crt_intermed_group, PACKAGE='rhdf5')
+  invisible(res)
+}
 
 ## H5Pget_create_intermediate_group <- function( lcpl_id, crt_intermed_group ) {
 ##   TODO: lcpl_id = as.TYPE(lcpl_id)
@@ -1093,15 +1091,14 @@ H5Pset_alloc_time <- function( h5plist, alloc_time = h5default("H5D_ALLOC_TIME")
 ## Dataset Access Properties
 ####################################################
 
-## H5Pset_chunk_cache <- function( dapl_id, rdcc_nslots, rdcc_nbytes, rdcc_w0 ) {
-##   TODO: dapl_id = as.TYPE(dapl_id)
-##   rdcc_nslots = as.integer(rdcc_nslots)
-##   rdcc_nbytes = as.integer(rdcc_nbytes)
-##   rdcc_w0 = as.double(rdcc_w0)
-##   res <- .Call("_H5Pset_chunk_cache", dapl_id, rdcc_nslots, rdcc_nbytes, rdcc_w0, PACKAGE='rhdf5')
-##   SEXP Rval = R_NilValue;
-##   invisible(res)
-## }
+H5Pset_chunk_cache <- function( h5plist, rdcc_nslots, rdcc_nbytes, rdcc_w0 ) {
+  h5checktypeAndPLC(h5plist, "H5P_DATASET_ACCESS")
+  rdcc_nslots = as.integer(rdcc_nslots)
+  rdcc_nbytes = as.integer(rdcc_nbytes)
+  rdcc_w0 = as.double(rdcc_w0)
+  res <- .Call("_H5Pset_chunk_cache", h5plist@ID, rdcc_nslots, rdcc_nbytes, rdcc_w0, PACKAGE='rhdf5')
+  invisible(res)
+}
 
 ## H5Pget_chunk_cache <- function( dapl_id, rdcc_nslots, rdcc_nbytes, rdcc_w0 ) {
 ##   TODO: dapl_id = as.TYPE(dapl_id)
