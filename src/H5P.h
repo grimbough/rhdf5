@@ -112,9 +112,9 @@ SEXP _H5Pclose( SEXP _plist );
 ////////////////////////////////////////////////////
 
 SEXP _H5Pset_char_encoding( SEXP _plist_id, SEXP _encoding );
-/* SEXP _H5Pget_char_encoding( SEXP _plist_id, SEXP _encoding ); */
+SEXP _H5Pget_char_encoding( SEXP _plist_id );
 SEXP _H5Pset_create_intermediate_group( SEXP _lcpl_id, SEXP _crt_intermed_group );
-/* SEXP _H5Pget_create_intermediate_group( SEXP _lcpl_id, SEXP _crt_intermed_group ); */
+SEXP _H5Pget_create_intermediate_group( SEXP _lcpl_id );
 
 ////////////////////////////////////////////////////
 // Link Access Properties
@@ -136,17 +136,17 @@ SEXP _H5Pset_create_intermediate_group( SEXP _lcpl_id, SEXP _crt_intermed_group 
 ////////////////////////////////////////////////////
 
 SEXP _H5Pset_layout( SEXP _plist, SEXP _layout );
-/* SEXP _H5Pget_layout( SEXP _plist ); */
+SEXP _H5Pget_layout( SEXP _plist );
 SEXP _H5Pset_chunk( SEXP _plist, SEXP _dim );
-/* SEXP _H5Pget_chunk( SEXP _plist, SEXP _max_ndims, SEXP _dims ); */
+SEXP _H5Pget_chunk( SEXP _plist );
 SEXP _H5Pset_deflate( SEXP _plist_id, SEXP _level );
 SEXP _H5Pset_fill_value( SEXP _plist_id, SEXP _type_id, SEXP _value );
-/* SEXP _H5Pget_fill_value( SEXP _plist_id, SEXP _type_id, SEXP _value );
-/* SEXP _H5Pfill_value_defined( SEXP _plist_id, SEXP _status ); */
+/* SEXP _H5Pget_fill_value( SEXP _plist_id, SEXP _type_id, SEXP _value ); */
+SEXP _H5Pfill_value_defined( SEXP _plist_id );
 SEXP _H5Pset_fill_time( SEXP _plist_id, SEXP _fill_time );
-/* SEXP _H5Pget_fill_time( SEXP _plist_id, SEXP _fill_time ); */
+SEXP _H5Pget_fill_time( SEXP _plist_id );
 SEXP _H5Pset_alloc_time( SEXP _plist_id, SEXP _alloc_time );
-/* SEXP _H5Pget_alloc_time( SEXP _plist_id, SEXP _alloc_time ); */
+SEXP _H5Pget_alloc_time( SEXP _plist_id );
 /* SEXP _H5Pset_filter( SEXP _plist_id, SEXP _filter_id, SEXP _flags, SEXP _cd_nelmts, SEXP _cd_values[] ); */
 /* SEXP _H5Pall_filters_avail( SEXP _plist_id ); */
 /* SEXP _H5Pget_nfilters( SEXP _plist ); */
