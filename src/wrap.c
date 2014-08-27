@@ -169,9 +169,9 @@ static R_CallMethodDef libraryRCalls[] = {
   /* {"_H5Pset_link_phase_change", (DL_FUNC) &_H5Pset_link_phase_change, 3}, */
   /* {"_H5Pget_link_phase_change", (DL_FUNC) &_H5Pget_link_phase_change, 3}, */
   {"_H5Pset_char_encoding", (DL_FUNC) &_H5Pset_char_encoding, 2},
-  /* {"_H5Pget_char_encoding", (DL_FUNC) &_H5Pget_char_encoding, 2}, */
+  {"_H5Pget_char_encoding", (DL_FUNC) &_H5Pget_char_encoding, 1},
   {"_H5Pset_create_intermediate_group", (DL_FUNC) &_H5Pset_create_intermediate_group, 2},
-  /* {"_H5Pget_create_intermediate_group", (DL_FUNC) &_H5Pget_create_intermediate_group, 2}, */
+  {"_H5Pget_create_intermediate_group", (DL_FUNC) &_H5Pget_create_intermediate_group, 1},
   /* {"_H5Pset_nlinks", (DL_FUNC) &_H5Pset_nlinks, 2}, */
   /* {"_H5Pget_nlinks", (DL_FUNC) &_H5Pget_nlinks, 2}, */
   /* {"_H5Pset_elink_cb", (DL_FUNC) &_H5Pset_elink_cb, 3}, */
@@ -183,17 +183,17 @@ static R_CallMethodDef libraryRCalls[] = {
   /* {"_H5Pset_elink_acc_flags", (DL_FUNC) &_H5Pset_elink_acc_flags, 2}, */
   /* {"_H5Pget_elink_acc_flags", (DL_FUNC) &_H5Pget_elink_acc_flags, 2}, */
   {"_H5Pset_layout", (DL_FUNC) &_H5Pset_layout, 2},
-  /* {"_H5Pget_layout", (DL_FUNC) &_H5Pget_layout, 1}, */
+  {"_H5Pget_layout", (DL_FUNC) &_H5Pget_layout, 1},
   {"_H5Pset_chunk", (DL_FUNC) &_H5Pset_chunk, 2},
-  /* {"_H5Pget_chunk", (DL_FUNC) &_H5Pget_chunk, 3}, */
+  {"_H5Pget_chunk", (DL_FUNC) &_H5Pget_chunk, 1},
   {"_H5Pset_deflate", (DL_FUNC) &_H5Pset_deflate, 2},
   {"_H5Pset_fill_value", (DL_FUNC) &_H5Pset_fill_value, 3},
   /* {"_H5Pget_fill_value", (DL_FUNC) &_H5Pget_fill_value, 3}, */
-  /* {"_H5Pfill_value_defined", (DL_FUNC) &_H5Pfill_value_defined, 2}, */
+  {"_H5Pfill_value_defined", (DL_FUNC) &_H5Pfill_value_defined, 1},
   {"_H5Pset_fill_time", (DL_FUNC) &_H5Pset_fill_time, 2},
-  /* {"_H5Pget_fill_time", (DL_FUNC) &_H5Pget_fill_time, 2}, */
+  {"_H5Pget_fill_time", (DL_FUNC) &_H5Pget_fill_time, 1},
   {"_H5Pset_alloc_time", (DL_FUNC) &_H5Pset_alloc_time, 2},
-  /* {"_H5Pget_alloc_time", (DL_FUNC) &_H5Pget_alloc_time, 2}, */
+  {"_H5Pget_alloc_time", (DL_FUNC) &_H5Pget_alloc_time, 1},
   /* {"_H5Pset_filter", (DL_FUNC) &_H5Pset_filter, 5}, */
   /* {"_H5Pall_filters_avail", (DL_FUNC) &_H5Pall_filters_avail, 1}, */
   /* {"_H5Pget_nfilters", (DL_FUNC) &_H5Pget_nfilters, 1}, */

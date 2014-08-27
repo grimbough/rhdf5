@@ -1,3 +1,6 @@
+2.9.10
+- Added low level functions H5Pget_char_encoding, H5Pget_create_intermediate_group, H5Pget_layout, H5Pget_chunk, H5Pfill_value_defined, H5Pget_fill_time, H5Pget_alloc_time.
+
 2.9.9
 - Added support for link create and dataset access property lists.
 - Added property list arguments to H5Dopen
