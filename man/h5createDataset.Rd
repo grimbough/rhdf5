@@ -9,6 +9,7 @@ h5createDataset (file, dataset,
 		dims, maxdims = dims, 
 		storage.mode = "double", H5type = NULL, 
 		size = NULL, chunk = dims, level = 6,
+		fillValue,
                 showWarnings=TRUE)
 }
 %- maybe also 'usage' for other objects documented here.
@@ -22,6 +23,7 @@ h5createDataset (file, dataset,
   \item{size}{For \code{storage.mode='character'} the maximum string length has to be specified. HDF5 then stores the string as fixed length character vectors. Together with compression, this should be efficient.}
   \item{chunk}{The chunk size used to store the dataset. It is an integer vector of the same length as \code{dims}. This argument is usually set together with a compression property (argument \code{level}). }
   \item{level}{The compression level used. An integer value between 0 (no compression) and 9 (highest and slowest compression).}
+  \item{fillValue}{Standard value for filling the dataset. The storage.mode of value has to be convertable to the dataset type by HDF5.}
   \item{showWarnings}{If TRUE (default), a warning is given if the chunk size is equal to the dataset dimension for large compressed datasets.}
 }
 \details{
