@@ -9,8 +9,8 @@
       \item New function h5readAttributes implemented that reads all HDF5 attributes of one object.
       \item New function h5version implemented.
       \item fillValue parameter added to h5createDataset.
-      \item New low level general library functions H5Lcreate_external, H5Fis_hdf5, H5Fget_filesize, and H5Fget_name implemented.
-      \item New low level general library functions H5Pcreate, H5Pcopy, H5Pget_class, H5Pclose, H5Pclose_class, H5Pset_char_encoding, H5Pset_create_intermediate_group, H5Pset_chunk_cache, H5Pset_layout, H5Pset_chunk, H5Pget_chunk, H5Pset_deflate, H5Pset_fill_value, H5Pset_fill_time, H5Pset_alloc_time, H5Pequal implemented.
+      \item New low level general library functions H5Lcreate_external, H5Fis_hdf5, H5Fget_filesize, H5Fget_name, H5Pcreate, H5Pcopy, H5Pget_class, H5Pclose, H5Pclose_class, H5Pset_char_encoding, H5Pset_create_intermediate_group, H5Pset_chunk_cache, H5Pset_layout, H5Pset_chunk, H5Pget_chunk, H5Pset_deflate, H5Pset_fill_value, H5Pset_fill_time, H5Pset_alloc_time, H5Pequal implemented.
+      \item Support for parallel Make (make -j)
     }
   }
   \subsection{USER VISIBLE CHANGES}{
