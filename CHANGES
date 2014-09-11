@@ -1,3 +1,6 @@
+2.9.12
+- Changed Makevars for compatibility with parallel make
+
 2.9.11
 - Added a parameter fillValue to h5createDataset.
 
