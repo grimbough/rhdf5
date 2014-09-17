@@ -1,3 +1,6 @@
+2.9.13
+- Added dependence of .o files to configure in src/Makevars.
+
 2.9.12
 - Changed Makevars for compatibility with parallel make
 

@@ -24,8 +24,6 @@ wrap.o: sourcecode
 HandleList.o: sourcecode
 
 libhdf5ForBioC.a: sourcecode
-	cd hdf5 && \
-	   ./configure CC="${CC}" CPP="${CPP}" CXX="${CXX}" CXXCPP="${CXXCPP}" F77="${F77}" --build="${R_ARCH#*/}" --with-pic 
 	cd hdf5/src && \
 	   $(MAKE)
 	cp hdf5/src/.libs/libhdf5ForBioC.a .
@@ -34,3 +32,5 @@ sourcecode:
 	cd hdf5source && \
 	   gunzip -dc hdf5small.tgz | tar xf -;
 	mv hdf5source/hdf5 .
+	cd hdf5 && \
+	   ./configure CC="${CC}" CPP="${CPP}" CXX="${CXX}" CXXCPP="${CXXCPP}" F77="${F77}" --build="${R_ARCH#*/}" --with-pic 
