@@ -92,7 +92,7 @@ h5createDataset <- function(file, dataset, dims, maxdims = dims, storage.mode = 
                             character = {
                               tid <- H5Tcopy("H5T_C_S1")
                               if (!is.numeric(size)) {
-                                stop("parameter '",size,"' has to be defined for storage.mode character.")
+                                stop("parameter 'size' has to be defined for storage.mode character.")
                               }
                               H5Tset_size(tid, size)
                               tid
@@ -194,7 +194,7 @@ h5createAttribute <- function(obj, attr, dims, maxdims = dims, file, storage.mod
                         character = {
                           tid <- H5Tcopy("H5T_C_S1")
                           if (!is.numeric(size)) {
-                            stop("parameter '",size,"' has to be defined for storage.mode character.")
+                            stop("parameter 'size' has to be defined for storage.mode character.")
                           }
                           H5Tset_size(tid, size)
                           tid
