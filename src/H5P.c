@@ -1003,7 +1003,7 @@ SEXP _H5Pset_fill_value( SEXP _plist_id, SEXP _type_id, SEXP _value ) {
     if (type_id == H5T_NATIVE_INT32) {
       value = INTEGER(_value);
     } else {
-      value = CHAR(STRING_ELT(_value, 0));
+      value = (void *)CHAR(STRING_ELT(_value, 0));
     }
   }
   herr_t herr = H5Pset_fill_value(plist_id, type_id, value);

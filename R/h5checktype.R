@@ -60,12 +60,6 @@ h5checktype <- function(h5id, type, fctname = deparse(match.call()[1]), allow.ch
            }
            0
          },
-         object = {
-           if (!(truetype %in% c("H5I_FILE","H5I_GROUP","H5I_DATASET","H5I_DATATYPE","H5I_DATASPACE","H5I_ATTR"))) {
-             stop("Error in ", fctname, ". The provided H5Identifier is not an object identifier.", call. = FALSE)
-           }
-           0
-         },
          plist = {
            if (truetype != "H5I_GENPROP_LST") {
              stop("Error in ", fctname, ". The provided H5Identifier is not a property list.", call. = FALSE)
@@ -94,9 +88,16 @@ h5checktypeOrNULL <- function(h5id, type, fctname = deparse(match.call()[1])) {
 
 h5FileIsOpen <- function(filename) {
   L = rhdf5:::h5validObjects()
-  isopen = any(sapply(L, function(x) {
-    H5Fget_name(x) == filename
-  } ))
+  isobject = sapply(L, function(x) {
+      H5Iget_type(x) %in% c("H5I_FILE","H5I_GROUP","H5I_DATASET")
+  } )
+  if (length(isobject) > 0) {
+    isopen = any(sapply(L[which(isobject)], function(x) {
+      H5Fget_name(x) == filename
+    } ))
+  } else {
+    isopen = FALSE
+  }
   isopen
 }
 

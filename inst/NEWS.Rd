@@ -21,6 +21,9 @@
   \subsection{BUG FIXES}{
     \itemize{
       \item Error in h5write for 0-length objects, as a consequence of automatic determining chunk size
+      \item missing size parameter message in h5createDataset now correctly display
+      \item checking for open file identifiers in h5read and h5ls now only searches for file names in open files, groups and datasets.
+      \item assignment has now correct pointer target type (void *) in H5Pset_fill_value
     }
   }
 }
