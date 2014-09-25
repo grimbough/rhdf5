@@ -4,33 +4,32 @@ PKG_LIBS = libhdf5ForBioC.a -lz -lm -L.
 
 all: $(SHLIB)
 $(SHLIB): libhdf5ForBioC.a
-H5.o: sourcecode
-H5A.o: sourcecode
-H5D.o: sourcecode
-H5F.o: sourcecode
-H5G.o: sourcecode
-H5I.o: sourcecode
-H5L.o: sourcecode
-H5O.o: sourcecode
-H5P.o: sourcecode
-H5S.o: sourcecode
-H5T.o: sourcecode
-H5constants.o: sourcecode
-h5dump.o: sourcecode
-h5ls.o: sourcecode
-h5writeDataFrame.o: sourcecode
-printdatatype.o: sourcecode
-wrap.o: sourcecode
-HandleList.o: sourcecode
+H5.o: libhdf5ForBioC.a
+H5A.o: libhdf5ForBioC.a
+H5D.o: libhdf5ForBioC.a
+H5F.o: libhdf5ForBioC.a
+H5G.o: libhdf5ForBioC.a
+H5I.o: libhdf5ForBioC.a
+H5L.o: libhdf5ForBioC.a
+H5O.o: libhdf5ForBioC.a
+H5P.o: libhdf5ForBioC.a
+H5S.o: libhdf5ForBioC.a
+H5T.o: libhdf5ForBioC.a
+H5constants.o: libhdf5ForBioC.a
+h5dump.o: libhdf5ForBioC.a
+h5ls.o: libhdf5ForBioC.a
+h5writeDataFrame.o: libhdf5ForBioC.a
+printdatatype.o: libhdf5ForBioC.a
+wrap.o: libhdf5ForBioC.a
+HandleList.o: libhdf5ForBioC.a
 
-libhdf5ForBioC.a: sourcecode
-	cd hdf5/src && \
-	   $(MAKE)
-	cp hdf5/src/.libs/libhdf5ForBioC.a .
-
-sourcecode: 
+libhdf5ForBioC.a: 
 	cd hdf5source && \
 	   gunzip -dc hdf5small.tgz | tar xf -;
+	rm -rf hdf5
 	mv hdf5source/hdf5 .
 	cd hdf5 && \
 	   ./configure CC="${CC}" CPP="${CPP}" CXX="${CXX}" CXXCPP="${CXXCPP}" F77="${F77}" --build="${R_ARCH#*/}" --with-pic 
+	cd hdf5/src && \
+	   $(MAKE)
+	cp hdf5/src/.libs/libhdf5ForBioC.a .

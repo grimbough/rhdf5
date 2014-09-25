@@ -1,3 +1,6 @@
+2.9.15
+- Avoid re-compilation of hdf5 library while installing from source code
+
 2.9.14
 - bug fix: missing size parameter message in h5createDataset now correctly display
 - bug fix: checking for open file identifiers in h5read and h5ls now only searches for file names in open files, groups and datasets.
