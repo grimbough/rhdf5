@@ -1,6 +1,14 @@
 \name{NEWS}
 \title{News for Package 'rhdf5'}
 
+\section{Changes in version 2.12.0}{
+  \subsection{NEW FEATURES}{
+    \itemize{
+      \item Filenames are expanded with normalizePaths.
+    }
+  }
+}
+
 \section{Changes in version 2.10.0}{
   \subsection{NEW FEATURES}{
     \itemize{
