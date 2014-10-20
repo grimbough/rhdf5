@@ -1,3 +1,6 @@
+2.11.1
+- expand file names with normalizePaths
+
 2.9.15
 - Avoid re-compilation of hdf5 library while installing from source code
 
