@@ -1,7 +1,7 @@
 
 H5Lcreate_external <- function( target_file_name, target_obj_name, link_loc, link_name) {
   if (length(target_file_name)!=1 || !is.character(target_file_name)) stop("'target_file_name' must be a character string of length 1")
-  target_file_name = normalizePath(target_file_name)
+  target_file_name = normalizePath(target_file_name,mustWork = FALSE)
   if (length(target_obj_name)!=1 || !is.character(target_obj_name)) stop("'target_obj_name' must be a character string of length 1")
   h5checktype( link_loc, "loc")
   if (length(link_name)!=1 || !is.character(link_name)) stop("'link_name' must be a character string of length 1")

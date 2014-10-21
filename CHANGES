@@ -1,5 +1,8 @@
+2.11.2
+- set mustWork=FALSE in normalizePath to avoid warning for non-existing files
+
 2.11.1
-- expand file names with normalizePaths
+- expand file names with normalizePath
 
 2.9.15
 - Avoid re-compilation of hdf5 library while installing from source code
