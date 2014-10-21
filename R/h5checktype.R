@@ -87,7 +87,7 @@ h5checktypeOrNULL <- function(h5id, type, fctname = deparse(match.call()[1])) {
 }
 
 h5FileIsOpen <- function(filename) {
-  filename = normalizePath(filename)
+  filename = normalizePath(filename,mustWork = FALSE)
   L = rhdf5:::h5validObjects()
   isobject = sapply(L, function(x) {
       H5Iget_type(x) %in% c("H5I_FILE","H5I_GROUP","H5I_DATASET")
@@ -105,7 +105,7 @@ h5FileIsOpen <- function(filename) {
 h5checktypeOrOpenLoc <- function(file, fctname = deparse(match.call()[1]), createnewfile=FALSE, readonly=FALSE) {
   res = list()
   if (is.character(file)) {
-    file = normalizePath(file)
+    file = normalizePath(file,mustWork = FALSE)
     if (file.exists(file)) {
       if (h5FileIsOpen(file)) {
         warning("An open HDF5 file handle exists. If the file has changed on disk meanwhile, the function may not work properly. Run 'H5close()' to close all open HDF5 object handles.")
