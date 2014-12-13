@@ -5,6 +5,7 @@
   \subsection{NEW FEATURES}{
     \itemize{
       \item Filenames are expanded with normalizePaths.
+      \item New function H5Sset_extent_simple implemented.
     }
   }
 }
