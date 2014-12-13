@@ -1,3 +1,9 @@
+2.11.4
+- New function h5set_extent
+
+2.11.3
+- New function H5Sset_extent_simple
+
 2.11.2
 - set mustWork=FALSE in normalizePath to avoid warning for non-existing files
 
