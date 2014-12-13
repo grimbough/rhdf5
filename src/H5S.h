@@ -24,7 +24,7 @@ SEXP _H5Sget_simple_extent_dims( SEXP _space_id );
 /* H5Sget_simple_extent_type */
 /* H5Sextent_copy */
 /* H5Sextent_equal */
-/* H5Sset_extent_simple */
+SEXP _H5Sset_extent_simple( SEXP _space_id, SEXP _current_size, SEXP _maximum_size );
 /* H5Sset_extent_none */
 /* H5Sget_select_type */
 /* H5Sget_select_npoints */

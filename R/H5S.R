@@ -59,6 +59,18 @@ H5Sget_simple_extent_dims <- function( h5space ) {
   res
 }
 
+H5Sset_extent_simple <- function( h5space, dims, maxdims) {
+  h5checktype(h5space, "dataspace")
+  if (missing(maxdims)) {
+    maxdims = dims
+  }
+  dims <- as.integer(rev(dims))
+  maxdims <- as.integer(rev(maxdims))
+
+  res <- .Call("_H5Sset_extent_simple", h5space@ID, dims, maxdims, PACKAGE='rhdf5')
+  invisible(res)
+}
+
 H5Sselect_hyperslab <- function( h5space, op = h5default("H5S_SELECT"), start=NULL, stride=NULL, count=NULL, block=NULL ) {
   h5checktype(h5space, "dataspace")
   op <- h5checkConstants( "H5S_SELECT", op )

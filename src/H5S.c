@@ -126,6 +126,34 @@ SEXP _H5Sget_simple_extent_dims( SEXP _space_id ) {
   return(Rval);
 }
 
+/* herr_t H5Sset_extent_simple( hid_t space_id, int rank, const hsize_t *current_size, const hsize_t *maximum_size ) */
+SEXP _H5Sset_extent_simple( SEXP _space_id, SEXP _current_size, SEXP _maximum_size ) {
+  hid_t space_id =  INTEGER(_space_id)[0];  
+  hid_t herr;
+  int rank = length(_current_size);
+  hsize_t current_size[rank];
+  for (int i=0; i<rank; i++) {
+    current_size[i] = INTEGER(_current_size)[i];
+  }
+  if (length(_maximum_size) == 0) {
+    herr = H5Sset_extent_simple( space_id, rank, current_size, NULL);
+  } else {
+    if (length(_maximum_size) != length(_current_size)) {
+      printf("dims and maxdims must have the same length.\n");
+      herr = -1;
+    } else {
+      hsize_t maximum_size[rank];
+      for (int i=0; i<rank; i++) {
+	maximum_size[i] = INTEGER(_maximum_size)[i];
+      }
+      herr = H5Sset_extent_simple( space_id, rank, current_size, maximum_size);
+    }
+  }
+
+  SEXP Rval = ScalarInteger(herr);
+  return Rval;
+}
+
 /* herr_t H5Sselect_hyperslab(hid_t space_id, H5S_seloper_t op, const hsize_t *start, const hsize_t *stride, const hsize_t *count, const hsize_t *block ) */
 SEXP _H5Sselect_hyperslab( SEXP _space_id, SEXP _op, SEXP _start, SEXP _stride, SEXP _count, SEXP _block ) {
   hid_t space_id =  INTEGER(_space_id)[0];  
