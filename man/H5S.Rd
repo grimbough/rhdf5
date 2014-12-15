@@ -8,6 +8,7 @@
 \alias{H5Sget_simple_extent_dims}
 \alias{H5Sselect_hyperslab}
 \alias{H5Sselect_index}
+\alias{H5Sset_extent_simple}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{HDF5 Dataspace Interface}
 \description{
