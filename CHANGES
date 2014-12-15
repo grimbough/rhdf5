@@ -1,3 +1,9 @@
+2.11.6
+- Added man pages for H5Sset_extent_simple and h5set_extent
+
+2.11.5
+- Added missing file R/h5modifier.R
+
 2.11.4
 - New function h5set_extent
 
