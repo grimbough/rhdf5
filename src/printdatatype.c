@@ -23,6 +23,7 @@ getDatatypeName(hid_t type) {
   /* htri_t TRUE = H5Tequal( H5T_STD_I8LE, H5T_STD_I8LE ); */
 
   if (H5Tcommitted(type) > 0) {
+    name = "uncommitted datatype";
 /*         H5O_info_t  oinfo; */
 /*         obj_t  *obj;    /\* Found object *\/ */
 
@@ -355,7 +356,7 @@ getDatatypeName(hid_t type) {
 
 /*                 indentation(indent); */
 /*                 printf("%s", dump_header_format->structblockend); */
-                break;
+      break;
 
     case H5T_REFERENCE:
       name = "HST_REFERENCE";

@@ -9,6 +9,11 @@
       \item New low level function H5Sset_extent_simple implemented.
     }
   }
+  \subsection{BUG FIXES}{
+    \itemize{
+      \item Segmentation fault while writing data type names for uncommitted data types.
+    }
+  }
 }
 
 \section{Changes in version 2.10.0}{
