@@ -130,7 +130,11 @@ SEXP H5Dread_helper_INTEGER(hid_t dataset_id, hid_t file_space_id, hid_t mem_spa
 
     /* printf("long is %d byte\n",sizeof(long)); */
     /* printf("long long is %d byte\n",sizeof(long)); */
-    long long intbuf[n];
+    long long* intbuf = malloc(sizeof(long long) * n);
+    if (intbuf == 0) {
+      error("Not enough memory to read data! Try to read a subset of data by specifying the index or count parameter.");
+    }
+
     herr_t herr = H5Dread(dataset_id, mem_type_id, mem_space_id, file_space_id, H5P_DEFAULT, intbuf );
 
     void * buf;
@@ -155,6 +159,8 @@ SEXP H5Dread_helper_INTEGER(hid_t dataset_id, hid_t file_space_id, hid_t mem_spa
       setAttrib(Rval, R_ClassSymbol, la);
       UNPROTECT(1);
     }
+
+    free(intbuf);
     if (length(_buf) == 0) {
       setAttrib(Rval, R_DimSymbol, Rdim);
       UNPROTECT(1);
