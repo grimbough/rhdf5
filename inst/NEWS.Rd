@@ -1,6 +1,18 @@
 \name{NEWS}
 \title{News for Package 'rhdf5'}
 
+\section{Changes in version 2.14.0}{
+  \subsection{NEW FEATURES}{
+    \itemize{
+    }
+  }
+  \subsection{BUG FIXES}{
+    \itemize{
+      \item Memory allocation on heap instead of stack for reading large datasets (Thanks to a patch from Jimmy Jia).
+    }
+  }
+}
+
 \section{Changes in version 2.12.0}{
   \subsection{NEW FEATURES}{
     \itemize{
