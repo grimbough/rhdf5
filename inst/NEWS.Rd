@@ -4,7 +4,7 @@
 \section{Changes in version 2.14.0}{
   \subsection{NEW FEATURES}{
     \itemize{
-    }
+	\item improved handling of error messages: HDF5 error messages are simplified and forwarded to R. }
   }
   \subsection{BUG FIXES}{
     \itemize{

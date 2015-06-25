@@ -1,3 +1,6 @@
+2.13.2
+- improved handling of error messages: HDF5 error messages are simplified and forwarded to R
+
 2.13.1
 - memory allocation on heap instead of steck (Thanks to a patch from Jimmy Jia)
 

@@ -310,3 +310,5 @@ export(h5listIdentifier)
 export(h5validObjects)
 export(h5version)
 export(h5set_extent)
+
+export(h5errorHandling)

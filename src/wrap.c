@@ -6,6 +6,7 @@
 #include "H5.h"
 #include "H5A.h"
 #include "H5D.h"
+#include "H5E.h"
 #include "H5F.h"
 #include "H5G.h"
 #include "H5I.h"
@@ -283,6 +284,7 @@ static R_CallMethodDef libraryRCalls[] = {
   {"_getDatatypeName", (DL_FUNC) &_getDatatypeName, 1},
   {"_getDatatypeClass", (DL_FUNC) &_getDatatypeClass, 1},
   {"_h5writeDataFrame", (DL_FUNC) &_h5writeDataFrame, 4},
+  {"_h5errorHandling", (DL_FUNC) &_h5errorHandling, 1},
   {NULL, NULL, 0}
 };
 
