@@ -10,6 +10,7 @@ BiocStyle::latex()
 
 \RequirePackage{amsfonts,amsmath,amstext,amssymb,amscd}
 \usepackage{graphicx}
+\usepackage{xcolor,colortbl}
 %\usepackage{verbatim}
 %\usepackage{hyperref}
 %\usepackage{color}
@@ -302,6 +303,133 @@ D64c = h5read(file="newfile3.h5",name="D64",bit64conversion="bit64")
 D64c
 class(D64c)
 @
+
+\subsection{Large integer data types}
+
+The following table gives an overview of the limits of the different integer representations in R and in HDF5.
+
+\definecolor{Gray1}{gray}{0.85}
+\definecolor{Gray2}{gray}{0.8}
+\definecolor{Gray3}{gray}{0.75}
+\definecolor{LightBlue}{rgb}{0.88,0.88,1}
+
+\newcommand{\N}{-}
+\newcommand{\Y}{\cellcolor{Gray2}+}
+
+\begin{tabular}{|l|r||c|c|c||c|c|c|c|}
+\hline
+\rowcolor{LightBlue}
+\multicolumn{2}{|c||}{value} &
+\multicolumn{3}{c||}{R-datatype} &
+\multicolumn{4}{c|}{HDF5 datatype}\\
+\rowcolor{LightBlue}
+\multicolumn{2}{|c||}{} &
+integer & double & integer64 &
+I32 & U32 & I64 & U64 \\
+\hline
+\hline
+$\phantom{-}2^{64}$ & 18446744073709551616 &
+\phantom{\vdots} - \phantom{\vdots}& - & - &
+- & - & - & - \\
+\hline
+$\phantom{-}2^{64}-1$ & 18446744073709551615 &
+\phantom{\vdots} - \phantom{\vdots}& - & - &
+- & - & - & \Y \\\hline
+$\phantom{-}$\vdots & \vdots &
+\vdots & \vdots & \vdots &
+\vdots & \vdots & \vdots & \cellcolor{Gray2}\vdots \\
+\hline
+$\phantom{-}2^{63}$ & 9223372036854775808 &
+\phantom{\vdots} - \phantom{\vdots} & - & - &
+- & - & - & \Y \\\hline
+$\phantom{-}2^{63}-1$ & 9223372036854775807  &
+\phantom{\vdots} - \phantom{\vdots} & - & \Y &
+- & - & \Y & \Y \\\hline
+$\phantom{-}$\vdots & \vdots &
+\vdots & \vdots & \cellcolor{Gray2}\vdots &
+\vdots & \vdots & \cellcolor{Gray2}\vdots & \cellcolor{Gray2}\vdots \\
+\hline
+$\phantom{-}2^{53}$ & 9007199254740992 &
+\phantom{\vdots} - \phantom{\vdots} & - & \Y &
+- & - & \Y & \Y \\\hline
+$\phantom{-}2^{53}-1$ & 9007199254740991 &
+\phantom{\vdots} - \phantom{\vdots} & \Y & \Y &
+- & - & \Y & \Y \\\hline
+$\phantom{-}$\vdots & \vdots &
+\vdots & \cellcolor{Gray2}\vdots & \cellcolor{Gray2}\vdots &
+\vdots & \vdots & \cellcolor{Gray2}\vdots & \cellcolor{Gray2}\vdots \\
+\hline
+$\phantom{-}2^{32}$ & 4294967296 &
+\phantom{\vdots} - \phantom{\vdots} & \Y & \Y &
+- & - & \Y & \Y \\\hline
+$\phantom{-}2^{32}-1$ & 4294967295 &
+\phantom{\vdots} - \phantom{\vdots} & \Y & \Y &
+- & \Y & \Y & \Y \\\hline
+$\phantom{-}$\vdots & \vdots &
+\vdots & \cellcolor{Gray2}\vdots & \cellcolor{Gray2}\vdots &
+\vdots & \cellcolor{Gray2}\vdots & \cellcolor{Gray2}\vdots & \cellcolor{Gray2}\vdots \\
+\hline
+$\phantom{-}2^{31}$ & 2147483648 &
+\phantom{\vdots} - \phantom{\vdots} & \Y & \Y &
+- & \Y & \Y & \Y \\\hline
+$\phantom{-}2^{31}-1$ & 2147483647 &
+\phantom{\vdots}\Y\phantom{\vdots} & \Y & \Y &
+\Y & \Y & \Y & \Y \\\hline
+$\phantom{-}$\vdots & \vdots &
+\cellcolor{Gray2}\vdots & \cellcolor{Gray2}\vdots & \cellcolor{Gray2}\vdots &
+\cellcolor{Gray2}\vdots & \cellcolor{Gray2}\vdots & \cellcolor{Gray2}\vdots & \cellcolor{Gray2}\vdots \\
+\hline
+$\phantom{-}2^0$ & 1 &
+\phantom{\vdots}\Y\phantom{\vdots} & \Y & \Y &
+\Y & \Y & \Y & \Y \\\hline
+$\phantom{-}0$ & 0 &
+\phantom{\vdots}\Y\phantom{\vdots} & \Y & \Y &
+\Y & \Y & \Y & \Y \\\hline
+$-2^0$ & -1 &
+\phantom{\vdots}\Y\phantom{\vdots} & \Y & \Y &
+\Y & - & \Y & - \\\hline
+$\phantom{-}$\vdots & \vdots &
+\cellcolor{Gray2}\vdots & \cellcolor{Gray2}\vdots & \cellcolor{Gray2}\vdots &
+\cellcolor{Gray2}\vdots & \vdots & \cellcolor{Gray2}\vdots & \vdots \\
+\hline
+$-2^{31}+1$ & -2147483647 &
+\phantom{\vdots}\Y\phantom{\vdots} & \Y & \Y &
+\Y & - & \Y & - \\\hline
+$-2^{31}$ & -2147483648 &
+\cellcolor{Gray2}\phantom{\vdots}NA\phantom{\vdots} & \Y & \Y &
+\Y & - & \Y & - \\\hline
+$-2^{31}-1$ & -2147483649 &
+\phantom{\vdots} - \phantom{\vdots} & \Y & \Y &
+- & - & \Y & - \\\hline
+$\phantom{-}$\vdots & \vdots &
+\vdots & \cellcolor{Gray2}\vdots & \cellcolor{Gray2}\vdots &
+\vdots & \vdots & \cellcolor{Gray2}\vdots & \vdots \\
+\hline
+$-2^{53}+1$ & -9007199254740991 &
+\phantom{\vdots} - \phantom{\vdots} & \Y & \Y &
+- & - & \Y & - \\\hline
+$-2^{53}$ & -9007199254740992 &
+\phantom{\vdots} - \phantom{\vdots} & - & \Y &
+- & - & \Y & - \\\hline
+$\phantom{-}$\vdots & \vdots &
+\vdots & \vdots & \cellcolor{Gray2}\vdots &
+\vdots & \vdots & \cellcolor{Gray2}\vdots & \vdots \\
+\hline
+$-2^{63}+1$ & -9223372036854775807 &
+\phantom{\vdots} - \phantom{\vdots} & - & \Y &
+- & - & \Y & - \\\hline
+$-2^{63}$ & -9223372036854775808 &
+\phantom{\vdots} - \phantom{\vdots} & - & \cellcolor{Gray2}NA &
+- & - & \Y & - \\\hline
+$-2^{63}-1$ & -9223372036854775809 &
+\phantom{\vdots} - \phantom{\vdots} & - & - &
+- & - & - & - \\\hline
+\end{tabular}
+
+From the table it becomes obvious that some integer values in HDF5
+files cannot be displayed in R. Note that this can happen for both
+64-bit integer as well as for unsigned 32-bit integer. When generating
+an HDF5 file, it is recommended to use signed 32-bit integers.
 
 \section{Low level HDF5 functions}
 \subsection{Creating an HDF5 file and a group hierarchy}

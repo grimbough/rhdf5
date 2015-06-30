@@ -4,11 +4,15 @@
 \section{Changes in version 2.14.0}{
   \subsection{NEW FEATURES}{
     \itemize{
-	\item improved handling of error messages: HDF5 error messages are simplified and forwarded to R. }
+	\item improved handling of error messages: HDF5 error messages are simplified and forwarded to R.
+	\item When reading integer valued data, especially 64-integers and unsigned 32-bit integers, overflow values are now replaced by NA's and a warning is thrown in this case.
+	\item When coercing HDF5-integers to R-double, a warning is displayed when integer precision is lost.
+	}
   }
   \subsection{BUG FIXES}{
     \itemize{
       \item Memory allocation on heap instead of stack for reading large datasets (Thanks to a patch from Jimmy Jia).
+      \item Some bugs have been fixed for reading large 64-bit integers and unsigned 32-bit integers.
     }
   }
 }
