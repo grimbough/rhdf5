@@ -79,6 +79,108 @@ void getMemSpaceDim( hid_t file_space_id, hsize_t *size) {
   }
 }
 
+SEXP _create_Integer_test_file() {
+  /* long long x[17]; */
+  /* unsigned long long y[11]; */
+
+  /* y[0] = ULONG_MAX; */
+  /* y[1] = LLONG_MAX; */
+  /* y[1] = y[1] + 1; */
+  /* y[2] = LLONG_MAX; */
+  /* y[3] = 0x0020000000000000UL; */
+  /* y[4] = 0x001fffffffffffffUL; */
+  /* y[5] = UINT_MAX; */
+  /* y[5] = y[5] + 1; */
+  /* y[6] = UINT_MAX; */
+  /* y[7] = INT_MAX; */
+  /* y[7] = y[7] + 1; */
+  /* y[8] = INT_MAX; */
+  /* y[9] = 1; */
+  /* y[10] = 0; */
+
+  /* printf("\n"); */
+  /* for (int i=0; i<11; i++) { */
+  /*   printf("y[%d] = %llu\n",i, y[i]); */
+  /* } */
+  /* printf("\n"); */
+
+  /* x[0] = LLONG_MAX; */
+  /* x[1] = 0x0020000000000000L; */
+  /* x[2] = 0x001fffffffffffffL; */
+  /* x[3] = UINT_MAX; */
+  /* x[3] = x[3] + 1; */
+  /* x[4] = UINT_MAX; */
+  /* x[5] = INT_MAX; */
+  /* x[5] = x[5] + 1; */
+  /* x[6] = INT_MAX; */
+  /* x[7] = 1; */
+  /* x[8] = 0; */
+  /* x[9] = -1; */
+  /* x[10] = INT_MIN+1; */
+  /* x[11] = INT_MIN; */
+  /* x[12] = INT_MIN; */
+  /* x[12] = x[12]-1; */
+  /* x[13] = 0xffe0000000000001L; */
+  /* x[14] = 0xffe0000000000000L; */
+  /* x[15] = LLONG_MIN+1; */
+  /* x[16] = LLONG_MIN; */
+
+  /* for (int i=0; i<17; i++) { */
+  /*   printf("x[%d] = %ld\n",i, x[i]); */
+  /* } */
+  /* printf("\n"); */
+
+  /* hid_t fid = H5Fcreate("integer_test.h5",H5F_ACC_TRUNC,H5P_DEFAULT,H5P_DEFAULT); */
+  /* int rank = 1; */
+  /* hsize_t current_dims[1]; */
+  /* current_dims[0] = 17; */
+  /* hid_t sid = H5Screate_simple( rank, &current_dims, &current_dims ); */
+  /* hid_t did; */
+  /* herr_t herr; */
+
+  /* did = H5Dcreate( fid, "I8", H5T_STD_I8LE, sid, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT ); */
+  /* herr = H5Dwrite( did, H5T_NATIVE_LLONG, sid, sid,H5P_DEFAULT, &x ); */
+  /* H5Dclose(did); */
+
+  /* did = H5Dcreate( fid, "I16", H5T_STD_I16LE, sid, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT ); */
+  /* herr = H5Dwrite( did, H5T_NATIVE_LLONG, sid, sid,H5P_DEFAULT, &x ); */
+  /* H5Dclose(did); */
+
+  /* did = H5Dcreate( fid, "I32", H5T_STD_I32LE, sid, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT ); */
+  /* herr = H5Dwrite( did, H5T_NATIVE_LLONG, sid, sid,H5P_DEFAULT, &x ); */
+  /* H5Dclose(did); */
+
+  /* did = H5Dcreate( fid, "I64", H5T_STD_I64LE, sid, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT ); */
+  /* herr = H5Dwrite( did, H5T_NATIVE_LLONG, sid, sid,H5P_DEFAULT, &x ); */
+  /* H5Dclose(did); */
+
+  /* H5Sclose(sid); */
+  /* current_dims[0] = 11; */
+  /* sid = H5Screate_simple( rank, &current_dims, &current_dims ); */
+
+  /* did = H5Dcreate( fid, "U8", H5T_STD_U8LE, sid, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT ); */
+  /* herr = H5Dwrite( did, H5T_NATIVE_ULLONG, sid, sid,H5P_DEFAULT, &y ); */
+  /* H5Dclose(did); */
+
+  /* did = H5Dcreate( fid, "U16", H5T_STD_U16LE, sid, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT ); */
+  /* herr = H5Dwrite( did, H5T_NATIVE_ULLONG, sid, sid,H5P_DEFAULT, &y ); */
+  /* H5Dclose(did); */
+
+  /* did = H5Dcreate( fid, "U32", H5T_STD_U32LE, sid, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT ); */
+  /* herr = H5Dwrite( did, H5T_NATIVE_ULLONG, sid, sid,H5P_DEFAULT, &y ); */
+  /* H5Dclose(did); */
+
+  /* did = H5Dcreate( fid, "U64", H5T_STD_U64LE, sid, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT ); */
+  /* herr = H5Dwrite( did, H5T_NATIVE_ULLONG, sid, sid,H5P_DEFAULT, &y ); */
+  /* H5Dclose(did); */
+
+  /* H5Sclose(sid); */
+  /* H5Fclose(fid); */
+
+  SEXP Rval = R_NilValue;
+  return Rval;
+}
+
 SEXP H5Dread_helper_INTEGER(hid_t dataset_id, hid_t file_space_id, hid_t mem_space_id, hsize_t n, SEXP Rdim, SEXP _buf, 
 			    hid_t dtype_id, hid_t cpdType, int cpdNField, char ** cpdField, int compoundAsDataFrame,
                             int bit64conversion ) {
@@ -86,18 +188,20 @@ SEXP H5Dread_helper_INTEGER(hid_t dataset_id, hid_t file_space_id, hid_t mem_spa
 
   SEXP Rval;
   int b = H5Tget_size(dtype_id);
-  if ((b > 4) & (bit64conversion == 0)) {
-    bit64conversion = 1;
-    warning("There is a potential data loss by converting a 64-bit integer from an HDF5 to a 32-bit integer in R. Choose bit64conversion='bit64' or bit64conversion='double' to avoid data loss and see the vignette 'rhdf5' for more details about 64-bit integers.");
-  }
-  if ((b <= 4) | (bit64conversion == 1)) {
+  H5T_sign_t sgn = H5Tget_sign(dtype_id);
+
+  int warn_NA = 0;
+  int warn = 0;
+  int warn_double = 0;
+
+  if (((b < 4) | ((b == 4) & (sgn == H5T_SGN_2))) & (bit64conversion == 0)) {   // Read directly to R-integer without loss of data
     if (cpdType < 0) {
-      mem_type_id = H5T_NATIVE_INT;
+      mem_type_id = H5T_NATIVE_INT32;
     } else {
-      mem_type_id = H5Tcreate(H5T_COMPOUND, H5Tget_size(H5T_NATIVE_INT));
-      herr_t status = H5Tinsert(mem_type_id, cpdField[0], 0, H5T_NATIVE_INT);
+      mem_type_id = H5Tcreate(H5T_COMPOUND, H5Tget_size(H5T_NATIVE_INT32));
+      herr_t status = H5Tinsert(mem_type_id, cpdField[0], 0, H5T_NATIVE_INT32);
       for (int i=1; i<cpdNField; i++) {
-	hid_t mem_type_id2 = H5Tcreate(H5T_COMPOUND, H5Tget_size(H5T_NATIVE_INT));
+	hid_t mem_type_id2 = H5Tcreate(H5T_COMPOUND, H5Tget_size(H5T_NATIVE_INT32));
 	herr_t status = H5Tinsert(mem_type_id2, cpdField[i], 0, mem_type_id);
 	mem_type_id = mem_type_id2;
       }
@@ -111,59 +215,192 @@ SEXP H5Dread_helper_INTEGER(hid_t dataset_id, hid_t file_space_id, hid_t mem_spa
       Rval = _buf;
     }
     herr_t herr = H5Dread(dataset_id, mem_type_id, mem_space_id, file_space_id, H5P_DEFAULT, buf );
+    for (long long i=0; i<n; i++) {
+      if (((int *)buf)[i] == INT_MIN) {
+	warn_NA = 1;
+      }
+    }
     if (length(_buf) == 0) {
       setAttrib(Rval, R_DimSymbol, Rdim);
       UNPROTECT(1);
     }
-  } else {  // coerce 64-bit integers to 'double' or to 'integer64' from the bit64 package
+  } else {  // Convert data to R-integer and replace overflow values with NA_integer
+    hid_t dtypeNative;
+    void* intbuf;
+    if ((b < 4) | ((b == 4) & (sgn == H5T_SGN_2))) {
+      dtypeNative = H5T_NATIVE_INT;
+      intbuf = malloc(sizeof(int) * n);
+    } else if ((b == 4) & (sgn == H5T_SGN_NONE)) {
+      dtypeNative = H5T_NATIVE_UINT;
+      intbuf = malloc(sizeof(unsigned int) * n);
+    } else if ((b == 8) & (sgn == H5T_SGN_2)) {
+      dtypeNative = H5T_NATIVE_INT64;
+      intbuf = malloc(sizeof(long long) * n);
+    } else if ((b == 8) & (sgn == H5T_SGN_NONE)) {
+      dtypeNative = H5T_NATIVE_UINT64;
+      intbuf = malloc(sizeof(unsigned long long) * n);
+    }
+    if (intbuf == 0) {
+      error("Not enough memory to read data! Try to read a subset of data by specifying the index or count parameter.");
+    }
     if (cpdType < 0) {
-      mem_type_id = H5T_NATIVE_LLONG;
+      mem_type_id = dtypeNative;
     } else {
-      mem_type_id = H5Tcreate(H5T_COMPOUND, H5Tget_size(H5T_NATIVE_LLONG));
-      herr_t status = H5Tinsert(mem_type_id, cpdField[0], 0, H5T_NATIVE_LLONG);
+      mem_type_id = H5Tcreate(H5T_COMPOUND, H5Tget_size(dtypeNative));
+      herr_t status = H5Tinsert(mem_type_id, cpdField[0], 0, dtypeNative);
       for (int i=1; i<cpdNField; i++) {
-	hid_t mem_type_id2 = H5Tcreate(H5T_COMPOUND, H5Tget_size(H5T_NATIVE_LLONG));
+	hid_t mem_type_id2 = H5Tcreate(H5T_COMPOUND, H5Tget_size(dtypeNative));
 	herr_t status = H5Tinsert(mem_type_id2, cpdField[i], 0, mem_type_id);
 	mem_type_id = mem_type_id2;
       }
     }
 
-    /* printf("long is %d byte\n",sizeof(long)); */
-    /* printf("long long is %d byte\n",sizeof(long)); */
-    long long* intbuf = malloc(sizeof(long long) * n);
-    if (intbuf == 0) {
-      error("Not enough memory to read data! Try to read a subset of data by specifying the index or count parameter.");
-    }
-
     herr_t herr = H5Dread(dataset_id, mem_type_id, mem_space_id, file_space_id, H5P_DEFAULT, intbuf );
 
-    void * buf;
-    if (length(_buf) == 0) {
-      Rval = PROTECT(allocVector(REALSXP, n));
-      buf = (long long *) REAL(Rval);
-    } else {
-      buf = REAL(_buf);
-      Rval = _buf;
-    }
-    if (bit64conversion == 2) {
+    if (bit64conversion == 0) {
+      void * buf;
+      if (length(_buf) == 0) {
+	Rval = PROTECT(allocVector(INTSXP, n));
+	buf = (int *) INTEGER(Rval);
+      } else {
+	buf = INTEGER(_buf);
+	Rval = _buf;
+      }
       long long i;
-      for (i=0; i<n; i++){
-	((double *)buf)[i] = intbuf[i];
+      if ((b == 4) & (sgn == H5T_SGN_NONE)) {
+	for (i=0; i<n; i++) {
+	  ((int *)buf)[i] = ((unsigned int *)intbuf)[i];
+	}
+	for (i=0; i<n; i++) {
+	  if (((unsigned int *)intbuf)[i] > INT_MAX) {
+	    ((int *)buf)[i] = INT_MIN;
+	    warn = 1;
+	  }
+	}
+      } else if ((b == 8) & (sgn == H5T_SGN_2)) {
+	for (i=0; i<n; i++) {
+	  ((int *)buf)[i] = ((long long *)intbuf)[i];
+	}
+	for (i=0; i<n; i++) {
+	  if (((long long *)intbuf)[i] > INT_MAX) {
+	    ((int *)buf)[i] = INT_MIN;
+	    warn = 1;
+	  }
+	  if (((long long *)intbuf)[i] < INT_MIN) {
+	    ((int *)buf)[i] = INT_MIN;
+	    warn = 1;
+	  }
+	  if (((long long *)intbuf)[i] == INT_MIN) {
+	    warn_NA = 1;
+	  }
+	}
+      } else if ((b == 8) & (sgn == H5T_SGN_NONE)) {
+	for (i=0; i<n; i++) {
+	  ((int *)buf)[i] = ((unsigned long long *)intbuf)[i];
+	}
+	for (i=0; i<n; i++) {
+	  if (((unsigned long long *)intbuf)[i] > INT_MAX) {
+	    ((int *)buf)[i] = INT_MIN;
+	    warn = 1;
+	  }
+	}
       }
     } else {
-      long long i;
-      for (i=0; i<n; i++){
-	((long long *)buf)[i] = (long long) intbuf[i];
+      void * buf;
+      if (length(_buf) == 0) {
+	Rval = PROTECT(allocVector(REALSXP, n));
+	buf = (long long *) REAL(Rval);
+      } else {
+	buf = REAL(_buf);
+	Rval = _buf;
       }
-      SEXP la = PROTECT(mkString("integer64"));
-      setAttrib(Rval, R_ClassSymbol, la);
-      UNPROTECT(1);
+      if (bit64conversion == 2) {
+	long long i;
+	if ((b < 4) | ((b == 4) & (sgn == H5T_SGN_2))) {
+	  for (i=0; i<n; i++){
+	    ((double *)buf)[i] = ((int *)intbuf)[i];
+	  }
+	} else if ((b == 4) & (sgn == H5T_SGN_NONE)) {
+	  for (i=0; i<n; i++){
+	    ((double *)buf)[i] = ((unsigned int *)intbuf)[i];
+	  }
+	} else if ((b == 8) & (sgn == H5T_SGN_2)) {
+	  for (i=0; i<n; i++){
+	    ((double *)buf)[i] = ((long long *)intbuf)[i];
+	  }
+	  for (i=0; i<n; i++) {
+	    if (((long long *)intbuf)[i] > 0x001fffffffffffffL) {
+	      warn_double = 1;
+	    }
+	    if (((long long *)intbuf)[i] < 0xffe0000000000001L) {
+	      warn_double = 1;
+	    }
+	  }
+	} else if ((b == 8) & (sgn == H5T_SGN_NONE)) {
+	  for (i=0; i<n; i++){
+	    ((double *)buf)[i] = ((unsigned long long *)intbuf)[i];
+	  }
+	  for (i=0; i<n; i++) {
+	    if (((unsigned long long *)intbuf)[i] > 0x001fffffffffffffUL) {
+	      warn_double = 1;
+	    }
+	  }
+	}
+      } else {
+	long long i;
+	if ((b < 4) | ((b == 4) & (sgn == H5T_SGN_2))) {
+	  for (i=0; i<n; i++){
+	    ((long long *)buf)[i] = ((int *)intbuf)[i];
+	  }
+	} else if ((b == 4) & (sgn == H5T_SGN_NONE)) {
+	  for (i=0; i<n; i++){
+	    ((long long *)buf)[i] = ((unsigned int *)intbuf)[i];
+	  }
+	} else if ((b == 8) & (sgn == H5T_SGN_2)) {
+	  for (i=0; i<n; i++){
+	    ((long long *)buf)[i] = ((long long *)intbuf)[i];
+	  }
+	  for (i=0; i<n; i++) {
+	    if (((long long *)intbuf)[i] == LLONG_MIN) {
+	      warn_NA = 1;
+	    }
+	  }
+	} else if ((b == 8) & (sgn == H5T_SGN_NONE)) {
+	  for (i=0; i<n; i++){
+	    ((long long *)buf)[i] = ((unsigned long long *)intbuf)[i];
+	  }
+	  for (i=0; i<n; i++) {
+	    if (((unsigned long long *)intbuf)[i] > LLONG_MAX) {
+	      ((long long *)buf)[i] = LLONG_MIN;
+	      warn = 1;
+	    }
+	  }
+	}
+	SEXP la = PROTECT(mkString("integer64"));
+	setAttrib(Rval, R_ClassSymbol, la);
+	UNPROTECT(1);
+      }
     }
-
     free(intbuf);
     if (length(_buf) == 0) {
       setAttrib(Rval, R_DimSymbol, Rdim);
       UNPROTECT(1);
+    }
+  }
+
+  if ((warn > 0) | (warn_NA > 0) | (warn_double > 0)) {
+    if (warn > 0) {
+      warning("NAs produced by integer overflow while converting 64-bit integer or unsigned 32-bit integer from HDF5 to a 32-bit integer in R. Choose bit64conversion='bit64' or bit64conversion='double' to avoid data loss and see the vignette 'rhdf5' for more details about 64-bit integers.");
+    } else {
+      if (warn_double > 0) {
+	warning("integer precision lost while converting 64-bit integer or unsigned 32-bit integer from HDF5 to double in R. Choose bit64conversion='bit64' to avoid data loss and see the vignette 'rhdf5' for more details about 64-bit integers.");
+      } else {
+	if (bit64conversion == 2) {
+	  warning("integer value -2^31 replaced by NA. See the section 'Large integer data types' in the 'rhdf5' vignette for more details.");
+	} else {
+	  warning("integer value -2^63 replaced NA. See the section 'Large integer data types' in the 'rhdf5' vignette for more details.");
+	}
+      }
     }
   }
 
