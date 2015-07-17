@@ -33,6 +33,7 @@ export(H5Dget_space)
 export(H5Dopen)
 export(H5Dread)
 export(H5Dwrite)
+export(H5Dget_storage_size)
 export(H5Dset_extent)
 
 export(H5Fclose)

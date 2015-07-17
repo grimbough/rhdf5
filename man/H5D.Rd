@@ -14,14 +14,15 @@
 These functions create and manipulate dataset objects, and set and retrieve their constant or persistent properties.
 }
 \usage{
-H5Dcreate    (h5loc, name, dtype_id, h5space, lcpl=NULL, dcpl=NULL, dapl=NULL)
-H5Dopen      (h5loc, name, dapl=NULL)
-H5Dclose     (h5dataset)
-H5Dget_space (h5dataset)
-H5Dget_type  (h5dataset)
-H5Dread      (h5dataset, h5spaceFile = NULL, h5spaceMem = NULL, buf = NULL, compoundAsDataFrame = TRUE, bit64conversion)
-H5Dwrite     (h5dataset, buf, h5spaceMem = NULL, h5spaceFile = NULL)
-H5Dset_extent(h5dataset, size)
+H5Dcreate           (h5loc, name, dtype_id, h5space, lcpl=NULL, dcpl=NULL, dapl=NULL)
+H5Dopen             (h5loc, name, dapl=NULL)
+H5Dclose            (h5dataset)
+H5Dget_space        (h5dataset)
+H5Dget_type         (h5dataset)
+H5Dget_storage_size (h5dataset)
+H5Dread             (h5dataset, h5spaceFile = NULL, h5spaceMem = NULL, buf = NULL, compoundAsDataFrame = TRUE, bit64conversion)
+H5Dwrite            (h5dataset, buf, h5spaceMem = NULL, h5spaceFile = NULL)
+H5Dset_extent       (h5dataset, size)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{

@@ -55,6 +55,21 @@ SEXP _H5Dclose( SEXP _dataset_id ) {
   return Rval;
 }
 
+/* hsize_t H5Dget_storage_size( hid_t dataset_id ) */
+SEXP _H5Dget_storage_size( SEXP _dataset_id ) {
+  hid_t dataset_id = INTEGER(_dataset_id)[0];
+  hsize_t size = H5Dget_storage_size( dataset_id );
+
+  SEXP Rval;
+  if (size <= INT_MAX) {
+    Rval = ScalarInteger(size);
+  } else {
+    double dsize = size;
+    Rval = ScalarReal(dsize);
+  }
+  return Rval;
+}
+
 void getMemSpaceDim( hid_t file_space_id, hsize_t *size) {
   hssize_t sel_hyper_nblocks = H5Sget_select_hyper_nblocks( file_space_id );
   int rank = H5Sget_simple_extent_ndims( file_space_id );
