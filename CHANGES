@@ -1,3 +1,6 @@
+2.13.5
+- function H5Dget_storage_size added
+
 2.13.3
 - Bug fixes in reading integer valued data, especially 64-integers and unsigned 32-bit integers. Overflow values are now replaced by NA's and a warning is thrown in this case. When coercing HDF5-integers to R-double, a warning is displayed when integer precision is lost.
 

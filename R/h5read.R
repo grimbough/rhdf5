@@ -13,7 +13,7 @@ h5read <- function(file, name, index=NULL, start=NULL, stride=NULL, block=NULL, 
     H5Oclose(oid)
     if (type == "H5I_GROUP") {
       gid <- H5Gopen(loc$H5Identifier, name)
-      obj = h5dump(gid, start=start, stride=stride, block=block, count=count, compoundAsDataFrame = compoundAsDataFrame, callGeneric = callGeneric)
+      obj = h5dump(gid, start=start, stride=stride, block=block, count=count, compoundAsDataFrame = compoundAsDataFrame, callGeneric = callGeneric, ...)
       H5Gclose(gid)
     } else {
       if (type == "H5I_DATASET") {

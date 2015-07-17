@@ -56,6 +56,11 @@ H5Dget_space <- function( h5dataset ) {
   invisible(h5space)
 }
 
+H5Dget_storage_size <- function( h5dataset ) {
+  h5checktype(h5dataset, "dataset")
+  .Call("_get_storage_size", h5dataset@ID, PACKAGE='rhdf5')
+}
+
 H5Dread <- function( h5dataset, h5spaceFile=NULL, h5spaceMem=NULL, buf = NULL, compoundAsDataFrame = TRUE,
                      bit64conversion ) {
   h5checktype(h5dataset, "dataset")

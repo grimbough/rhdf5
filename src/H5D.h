@@ -28,7 +28,8 @@ SEXP _H5Dget_type( SEXP _dataset_id );
 /* H5Dget_create_plist */
 /* H5Dget_access_plist */
 /* H5Dget_offset */
-/* H5Dget_storage_size */
+
+SEXP _H5Dget_storage_size( SEXP _dataset_id );
 
 /* H5Dvlen_get_buf_size */
 /* H5Dvlen_reclaim */
