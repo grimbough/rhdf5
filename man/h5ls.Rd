@@ -16,7 +16,7 @@ h5ls   (file,
 h5dump (file,
         recursive = TRUE,
 	load = TRUE,
-	all = FALSE, 
+	all = FALSE,
         index_type = h5default("H5_INDEX"),
         order = h5default("H5_ITER"), ...)
 }
