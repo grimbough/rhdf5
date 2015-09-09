@@ -14,6 +14,7 @@
     \itemize{
       \item Memory allocation on heap instead of stack for reading large datasets (Thanks to a patch from Jimmy Jia).
       \item Some bugs have been fixed for reading large 64-bit integers and unsigned 32-bit integers.
+      \item A bug was fixed for reading HDF5 files containing soft links.
     }
   }
 }

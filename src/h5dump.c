@@ -54,6 +54,31 @@ herr_t opAddToLinfoTree( hid_t g_id, const char *name, const H5L_info_t *info, v
   strcpy(newElement->group, data->group);
   newElement->info = (*info);
 
+  if ((info->type == H5L_TYPE_SOFT) | (info->type == H5L_TYPE_ERROR)) {
+    newElement->type = INT_MIN;
+    newElement->num_attrs = 0;
+    newElement->datatype = "";
+    newElement->class = "";
+    newElement->rank = 0;
+    newElement->spacetype = "";
+    newElement->dim = "";
+    newElement->maxdim = "";
+    newElement->child = NULL;
+    newElement->next = NULL;
+
+    data->n = data->n + 1;
+    if (data->first == NULL) {
+      data->first = newElement;
+    } else {
+      if (data->insertAsChild) {
+	data->last->child = newElement;
+	data->insertAsChild = 0;
+      } else {
+	data->last->next = newElement;
+      }
+    }
+    data->last = newElement;
+  } else {
   hid_t oid = H5Oopen( g_id, name, H5P_DEFAULT );
   // herr_t herr = H5Oget_info( oid, &(newElement->object_info) );
   newElement->type = H5Iget_type(oid);
@@ -173,7 +198,7 @@ herr_t opAddToLinfoTree( hid_t g_id, const char *name, const H5L_info_t *info, v
     }
   }
   H5Oclose(oid);
-
+  }
   return(herr);
 }
 

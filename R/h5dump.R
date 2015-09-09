@@ -1,15 +1,21 @@
 
-h5loadData <- function(h5loc, L, ...) {
+h5loadData <- function(h5loc, L, all=FALSE, ...) {
   h5checktype(h5loc,"loc")
   if (length(L) > 0) {
     for (i in seq_len(length(L))) {
       if (is.data.frame(L[[i]])) {
-        if (L[[i]]$otype == h5constants[["H5I_TYPE"]]["H5I_DATASET"]) {
-          L[i] = list(h5read( h5loc, L[[i]]$name, ...))
+        if (L[[i]]$ltype %in% h5constants[["H5L_TYPE"]][c("H5L_TYPE_HARD","H5L_TYPE_EXTERNAL")]) {
+          if (L[[i]]$otype == h5constants[["H5I_TYPE"]]["H5I_DATASET"]) {
+            L[i] = list(h5read( h5loc, L[[i]]$name, ...))
+          } else {
+            L[i] = h5lsConvertToDataframe(L[i], all=all)
+          }
+        } else {
+          L[i] = h5lsConvertToDataframe(L[i], all=all)
         }
       } else {
         group = H5Gopen(h5loc, names(L)[i])
-        L[i] = list(h5loadData(group, L[[i]], ...))
+        L[i] = list(h5loadData(group, L[[i]], all=all, ...))
         H5Gclose(group)
       }
     }
@@ -41,7 +47,7 @@ h5dump <- function( file, recursive = TRUE, load=TRUE, all=FALSE, index_type = h
   di <- as.integer(2)
   L <- .Call("_h5dump", loc$H5Identifier@ID, depth, index_type, order, PACKAGE='rhdf5')
   if (load) {
-    L <- h5loadData( loc$H5Identifier, L, ...)
+    L <- h5loadData( loc$H5Identifier, L, all=all, ...)
   } else {
     L <- h5lsConvertToDataframe(L, all=all)
   }
