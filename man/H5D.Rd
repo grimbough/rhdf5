@@ -4,6 +4,7 @@
 \alias{H5Dopen}
 \alias{H5Dclose}
 \alias{H5Dget_type}
+\alias{H5Dget_storage_size}
 \alias{H5Dget_space}
 \alias{H5Dread}
 \alias{H5Dwrite}
