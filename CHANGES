@@ -1,3 +1,6 @@
+2.13.7
+- The man page for H5Dget_storage_size was corrected.
+
 2.13.6
 - A bug was fixed for reading HDF5 files containing soft links.
 
