@@ -1089,13 +1089,9 @@ H5Pset_chunk_cache <- function( h5plist, rdcc_nslots, rdcc_nbytes, rdcc_w0 ) {
   invisible(res)
 }
 
-## H5Pget_chunk_cache <- function( dapl_id, rdcc_nslots, rdcc_nbytes, rdcc_w0 ) {
-##   TODO: dapl_id = as.TYPE(dapl_id)
-##   TODO: rdcc_nslots = as.TYPE(rdcc_nslots)
-##   TODO: rdcc_nbytes = as.TYPE(rdcc_nbytes)
-##   TODO: rdcc_w0 = as.TYPE(rdcc_w0)
-##   res <- .Call("_H5Pget_chunk_cache", dapl_id, rdcc_nslots, rdcc_nbytes, rdcc_w0, PACKAGE='rhdf5')
-##   SEXP Rval = R_NilValue;
+## H5Pget_chunk_cache <- function( h5plist ) {  # OUT: , rdcc_nslots, rdcc_nbytes, rdcc_w0
+##   h5checktypeAndPLC(h5plist, "H5P_DATASET_ACCESS")
+##   res <- .Call("_H5Pget_chunk_cache", h5plist@ID, PACKAGE='rhdf5')
 ##   invisible(res)
 ## }
 

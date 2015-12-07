@@ -44,6 +44,18 @@ H5Dget_type <- function( h5dataset ) {
   invisible(tid)
 }
 
+H5Dget_create_plist <- function( h5dataset ) {
+  h5checktype(h5dataset, "dataset")
+  pid <- .Call("_H5Dget_create_plist", h5dataset@ID, PACKAGE='rhdf5')
+  if (pid > 0) {
+    h5plist = new("H5IdComponent", ID = pid)
+  } else {
+    message("HDF5: unable to create property list")
+    h5plist = FALSE
+  }
+  invisible(h5plist)
+}
+
 H5Dget_space <- function( h5dataset ) {
   h5checktype(h5dataset, "dataset")
   sid <- .Call("_H5Dget_space", h5dataset@ID, PACKAGE='rhdf5')

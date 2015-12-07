@@ -170,7 +170,7 @@ SEXP _H5Pget_alloc_time( SEXP _plist_id );
 ////////////////////////////////////////////////////
 
 SEXP _H5Pset_chunk_cache( SEXP _dapl_id, SEXP _rdcc_nslots, SEXP _rdcc_nbytes, SEXP _rdcc_w0 );
-/* SEXP _H5Pget_chunk_cache( SEXP _dapl_id, SEXP _rdcc_nslots, SEXP _rdcc_nbytes, SEXP _rdcc_w0 ); */
+/* SEXP _H5Pget_chunk_cache( SEXP _dapl_id );  // , SEXP _rdcc_nslots, SEXP _rdcc_nbytes, SEXP _rdcc_w0  */
 
 ////////////////////////////////////////////////////
 // Dataset Transfer Properties

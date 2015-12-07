@@ -25,7 +25,7 @@ SEXP _H5Dclose( SEXP _dataset_id );
 SEXP _H5Dget_space(SEXP _dataset_id );
 /* H5Dget_space_status */
 SEXP _H5Dget_type( SEXP _dataset_id );
-/* H5Dget_create_plist */
+SEXP _H5Dget_create_plist( SEXP _dataset_id );
 /* H5Dget_access_plist */
 /* H5Dget_offset */
 

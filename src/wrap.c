@@ -49,6 +49,7 @@ static R_CallMethodDef libraryRCalls[] = {
   {"_H5Dopen", (DL_FUNC) &_H5Dopen, 3},
   {"_H5Dclose", (DL_FUNC) &_H5Dclose, 1},
   {"_H5Dget_type", (DL_FUNC) &_H5Dget_type, 1},
+  {"_H5Dget_create_plist", (DL_FUNC) &_H5Dget_create_plist, 1},
   {"_H5Dget_space", (DL_FUNC) &_H5Dget_space, 1},
   {"_H5Dget_storage_size", (DL_FUNC) &_H5Dget_space, 1},
   {"_create_Integer_test_file", (DL_FUNC) &_create_Integer_test_file, 0},
@@ -216,7 +217,7 @@ static R_CallMethodDef libraryRCalls[] = {
   /* {"_H5Pget_external_count", (DL_FUNC) &_H5Pget_external_count, 1}, */
   /* {"_H5Pget_external", (DL_FUNC) &_H5Pget_external, 6}, */
   {"_H5Pset_chunk_cache", (DL_FUNC) &_H5Pset_chunk_cache, 4},
-  /* {"_H5Pget_chunk_cache", (DL_FUNC) &_H5Pget_chunk_cache, 4}, */
+  /* {"_H5Pget_chunk_cache", (DL_FUNC) &_H5Pget_chunk_cache, 1}, */
   /* {"_H5Pset_buffer", (DL_FUNC) &_H5Pset_buffer, 4}, */
   /* {"_H5Pget_buffer", (DL_FUNC) &_H5Pget_buffer, 3}, */
   /* {"_H5Pset_preserve", (DL_FUNC) &_H5Pset_preserve, 2}, */
