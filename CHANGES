@@ -1,3 +1,6 @@
+2.15.1
+- Added low level function H5Dget_create_plist
+
 2.13.7
 - The man page for H5Dget_storage_size was corrected.
 

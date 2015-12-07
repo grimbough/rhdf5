@@ -947,6 +947,14 @@ SEXP _H5Dget_type( SEXP _dataset_id ) {
   return Rval;
 }
 
+/* hid_t H5Dget_create_plist(hid_t dataset_id ) */
+SEXP _H5Dget_create_plist( SEXP _dataset_id ) {
+  hid_t dataset_id = INTEGER(_dataset_id)[0];
+  hid_t hid = H5Dget_create_plist( dataset_id );
+  SEXP Rval = ScalarInteger(hid);
+  return Rval;
+}
+
 /* herr_t H5Dset_extent( hid_t dset_id, const hsize_t size[] ) */
 SEXP _H5Dset_extent( SEXP _dataset_id, SEXP _size ) {
   hid_t dataset_id = INTEGER(_dataset_id)[0];

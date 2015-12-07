@@ -1,6 +1,14 @@
 \name{NEWS}
 \title{News for Package 'rhdf5'}
 
+\section{Changes in version 2.16.0}{
+  \subsection{NEW FEATURES}{
+    \itemize{
+	\item New low level general library function H5Dget_create_plist implemented.
+	}
+  }
+}
+
 \section{Changes in version 2.14.0}{
   \subsection{NEW FEATURES}{
     \itemize{

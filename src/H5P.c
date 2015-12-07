@@ -1293,12 +1293,11 @@ SEXP _H5Pset_chunk_cache( SEXP _dapl_id, SEXP _rdcc_nslots, SEXP _rdcc_nbytes, S
 }
 
 /* /\* herr_t H5Pget_chunk_cache(hid_t dapl_id, size_t * rdcc_nslots, size_t * rdcc_nbytes, double * rdcc_w0) *\/ */
-/* SEXP _H5Pget_chunk_cache( SEXP _dapl_id, SEXP _rdcc_nslots, SEXP _rdcc_nbytes, SEXP _rdcc_w0 ) { */
+/* SEXP _H5Pget_chunk_cache( SEXP _dapl_id ) { */
 /*   hid_t dapl_id = INTEGER(_dapl_id)[0]; */
-/*   TODO: size_t * rdcc_nslots = _rdcc_nslots */
-/*   TODO: size_t * rdcc_nbytes = _rdcc_nbytes */
-/*   TODO: double * rdcc_w0 = _rdcc_w0 */
-/*   herr_t herr = H5Pget_chunk_cache(hid_tdapl_id, size_t *rdcc_nslots, size_t *rdcc_nbytes, double *rdcc_w0); */
+/*   size_t nslots, nbytes; */
+/*   double w0; */
+/*   herr_t herr = H5Pget_chunk_cache(dapl_id, &nslots, &nbytes, &w0); */
 /*   SEXP Rval = ScalarInteger(herr); */
 /*   return Rval; */
 /* } */
