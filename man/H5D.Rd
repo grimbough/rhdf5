@@ -4,6 +4,7 @@
 \alias{H5Dopen}
 \alias{H5Dclose}
 \alias{H5Dget_type}
+\alias{H5Dget_create_plist}
 \alias{H5Dget_storage_size}
 \alias{H5Dget_space}
 \alias{H5Dread}
@@ -20,6 +21,7 @@ H5Dopen             (h5loc, name, dapl=NULL)
 H5Dclose            (h5dataset)
 H5Dget_space        (h5dataset)
 H5Dget_type         (h5dataset)
+H5Dget_create_plist (h5dataset)
 H5Dget_storage_size (h5dataset)
 H5Dread             (h5dataset, h5spaceFile = NULL, h5spaceMem = NULL, buf = NULL, compoundAsDataFrame = TRUE, bit64conversion)
 H5Dwrite            (h5dataset, buf, h5spaceMem = NULL, h5spaceFile = NULL)
