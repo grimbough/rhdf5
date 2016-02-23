@@ -1,3 +1,6 @@
+2.15.3
+- Removed #include <R.H> from external "C" code. To be compatible with newest C-compilers and current R-devel
+
 2.15.2
 - added man page for H5Dget_create_plist
 

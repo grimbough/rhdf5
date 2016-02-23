@@ -5,6 +5,7 @@
   \subsection{NEW FEATURES}{
     \itemize{
 	\item New low level general library function H5Dget_create_plist implemented.
+	\item Removed #include <R.H> from external C code. To be compatible with newest C-compilers and current R-devel
 	}
   }
 }
