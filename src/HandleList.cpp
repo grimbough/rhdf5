@@ -2,7 +2,7 @@
 #include "HandleList.hpp"
 
 extern "C" {
-#include "HandleListCPP.h"
+#include "HandleListcpp.h"
 
 void
 addHandleCPP( hid_t id ) {
