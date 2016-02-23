@@ -5,6 +5,7 @@
 #include <Rdefines.h>
 #include <R_ext/Rdynload.h>
 #include <R_ext/Error.h>
+#include <stdlib.h>
 #include "myhdf5.h"
 
 void addHandle(hid_t ID);
