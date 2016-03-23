@@ -116,6 +116,61 @@ the object \Robject{obj}, the data in the file is overwritten. If the
 dataset already exists and either the datatype or the dimensions are
 different, \Rfunction{h5write} fails.
 
+\subsection{Writing and reading objects with file, group and dataset handles}
+\label{sec_writeMatrixHandle}
+
+File, group and dataset handles are a simpler way to read (and partially to write) HDF5 files. 
+A file is opened by \Robject{H5Fopen}. 
+
+<<accessorH5Fopen>>=
+h5f = H5Fopen("myhdf5file.h5")
+h5f
+@
+
+The \Robject{\$} and \Robject{\&} operators can be used to access the next group level. While the \Robject{\$} operator reads the object from disk, the \Robject{\&} operator returns a group or dataset handle.
+
+<<accessorDF>>=
+h5f$df
+h5f&'df'
+@
+
+Both of the following code lines return the matrix \Robject{C}. \warning{However, while first version reads the whole tree \Robject{/foo} in memory and then subsets to \Robject{/foobaa/C}, the second version only reads the matrix \Robject{C}. The first "\$" in "h5f\$foo\$foobaa\$C" reads the dataset, the other "\$" are accessors of a list. Remind that this can have severe consequences for large datasets and datastructures.}
+
+<<accessorC1>>=
+h5f$foo$foobaa$C
+h5f$"/foo/foobaa/C"
+@
+
+One can as well return a dataset handle for a matrix and then read the matrix in chunks for out-of-memory computations. \warning{Please read the next section on subsetting, chunking and compression for more details}.
+
+<<accessorB1>>=
+h5d = h5f&"/foo/B"
+h5d[]
+h5d[3,,]
+@
+
+The same works as well for writing to datasets. \warning{Remind that it is only guarenteed that the data is written on disk after a call to \Robject{H5Fflush} or after closing of the file.}
+<<accessorB2>>=
+h5d[3,,] = 1:4
+H5Fflush(h5f)
+@
+
+Remind again that in the following code the first version does not change the data on disk, but the second does.
+<<accessorB3,eval=FALSE>>=
+h5f$foo$B = 101:120
+h5f$"/foo/B" = 101:120
+@
+
+It is important to close all dataset, group, and file handles when not used anymore
+<<accessorClose1>>=
+H5Dclose(h5d)
+H5Fclose(h5f)
+@
+or close all open HDF5 handles in the environment by
+<<accessorClose2>>=
+H5close()
+@
+
 \subsection{Writing and reading with subsetting, chunking and compression}
 The \Biocpkg{rhdf5} package provides two ways of subsetting. One can
 specify the submatrix with the \R{}-style index lists or with the HDF5

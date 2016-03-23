@@ -4,6 +4,7 @@
 \section{Changes in version 2.16.0}{
   \subsection{NEW FEATURES}{
     \itemize{
+	\item New access of HDF5 files by file, group and dataset handles. HDF5 groups and datasets can be read and written by the $-operator (e.g. h5f$A) and the [-operator can be used for partial reading and writing of datasets (e.g. h5d[3,,]).
 	\item New low level general library function H5Dget_create_plist implemented.
 	\item Removed #include <R.H> from external C code. To be compatible with newest C-compilers and current R-devel
 	}
