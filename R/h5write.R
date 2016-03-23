@@ -1,4 +1,72 @@
 
+
+h5writeDatasetHelper <- function (obj, h5dataset, index = NULL, start = NULL, stride = NULL, 
+                                  block = NULL, count = NULL)
+{
+  if (is.null(dim(obj))) {
+    dim(obj) = length(obj)
+  }
+  try({
+    h5spaceFile <- H5Dget_space(h5dataset)
+  })
+  if (!is.null(index)) {
+    s = H5Sget_simple_extent_dims(h5spaceFile)$size
+    if (length(index) != length(s)) {
+      stop("length of index has to be equal to dimensional extension of HDF5 dataset.")
+    }
+    for (i in seq_len(length(index))) {
+      if (is.null(index[[i]])) {
+        index[[i]] = seq_len(s[i])
+      }
+    }
+    try({
+      H5Sselect_index(h5spaceFile, index)
+    })
+    d = sapply(index, length)
+    d[d == 0] = dim(obj)[d == 0]
+    dim(obj) = d
+    I = list()
+    for (i in seq_len(length(index))) {
+      m <- match(index[[i]], unique(sort(index[[i]])))
+      I[[i]] = order(m)
+      I[[i]] = I[[i]][!duplicated(m[I[[i]]], fromLast = TRUE)]
+    }
+    obj <- do.call("[", c(list(obj), I))
+  }
+  else {
+    if (any(c(!is.null(start), !is.null(stride), !is.null(block), 
+              !is.null(count)))) {
+      if (is.null(block) & is.null(count)) {
+        block = rep(1, length(dim(obj)))
+        count = dim(obj)
+      }
+      try({
+        H5Sselect_hyperslab(h5spaceFile, start = start, 
+                            stride = stride, count = count, block = block)
+      })
+    }
+  }
+  DimMem <- dim(obj)
+  if (is.null(DimMem)) {
+    DimMem = length(obj)
+  }
+  try({
+    h5spaceMem <- H5Screate_simple(DimMem, NULL)
+  })
+  try({
+    res <- H5Dwrite(h5dataset, obj, h5spaceMem = h5spaceMem, 
+                    h5spaceFile = h5spaceFile)
+  })
+  try({
+    H5Sclose(h5spaceMem)
+  })
+  try({
+    H5Sclose(h5spaceFile)
+  })
+  invisible(NULL)
+}
+
+
 h5write <- function(obj, file, name, ...) {
   res <- UseMethod("h5write")
   invisible(res)
@@ -126,47 +194,8 @@ h5writeDataset.array <- function(obj, h5loc, name, index = NULL, start=NULL, str
     }
   }
   try ( { h5dataset <- H5Dopen(h5loc, name) } )
-
-  try( { h5spaceFile <- H5Dget_space( h5dataset ) } )
-  if (!is.null(index)) {
-    s = H5Sget_simple_extent_dims(h5spaceFile)$size
-    if (length(index) != length(s)) {
-      stop("length of index has to be equal to dimensional extension of HDF5 dataset.")
-    }
-    for (i in seq_len(length(index))) {
-      if (is.null(index[[i]])) {
-        index[[i]] = seq_len(s[i])
-      }
-    }
-    try ( { H5Sselect_index ( h5spaceFile, index) } )
-    d = sapply(index,length)
-    d[d == 0] = dim(obj)[d == 0]
-    dim(obj) = d
-    I = list()
-    for (i in seq_len(length(index))) {
-      m <- match(index[[i]],unique(sort(index[[i]])))
-      I[[i]] = order(m)
-      I[[i]] = I[[i]][!duplicated(m[I[[i]]],fromLast=TRUE)]
-    }
-    obj <- do.call('[',c(list(obj),I))
-  } else {
-    if (any(c(!is.null(start), !is.null(stride), !is.null(block), !is.null(count)))) {
-      if (is.null(block) & is.null(count)) {
-        block = rep(1,length(dim(obj)))
-        count = dim(obj)
-      }
-      try ( { H5Sselect_hyperslab ( h5spaceFile, start=start, stride = stride, count=count, block  = block) } )
-    }
-  }
-
-  DimMem <- dim(obj)
-  if (is.null(DimMem)) { DimMem = length(obj) }
-  try( { h5spaceMem <- H5Screate_simple(DimMem,NULL) } )
-
-  try( { res <- H5Dwrite(h5dataset, obj, h5spaceMem = h5spaceMem, h5spaceFile = h5spaceFile) } )
-
-  try( { H5Sclose(h5spaceMem) } )
-  try( { H5Sclose(h5spaceFile) } )
+  h5writeDatasetHelper(obj=obj, h5dataset=h5dataset, index = index, start = start, stride = stride, 
+                       block = block, count = count)
   try( { H5Dclose(h5dataset) } )
 #  invisible(res)
   invisible(NULL)

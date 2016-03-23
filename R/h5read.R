@@ -1,3 +1,61 @@
+h5readDataset <- function (h5dataset, index = NULL, start = NULL, stride = NULL, 
+                           block = NULL, count = NULL, compoundAsDataFrame = TRUE, ...) {
+  try({
+    h5spaceFile <- H5Dget_space(h5dataset)
+  })
+  h5spaceMem = NULL
+  if (!is.null(index)) {
+    s <- H5Sget_simple_extent_dims(h5spaceFile)$size
+    if (length(index) != length(s)) {
+      stop("length of index has to be equal to dimensional extension of HDF5 dataset.")
+    }
+    for (i in seq_len(length(index))) {
+      if (is.null(index[[i]])) {
+        index[[i]] = seq_len(s[i])
+      }
+    }
+    size = 0
+    try({
+      size = H5Sselect_index(h5spaceFile, index)
+    })
+    h5spaceMem = H5Screate_simple(size)
+  }
+  else {
+    if (any(c(!is.null(start), !is.null(stride), 
+              !is.null(count), !is.null(block)))) {
+      size = 0
+      try({
+        size = H5Sselect_hyperslab(h5spaceFile, 
+                                   start = start, stride = stride, count = count, 
+                                   block = block)
+      })
+      h5spaceMem = H5Screate_simple(size)
+    }
+  }
+  obj <- NULL
+  try({
+    obj <- H5Dread(h5dataset = h5dataset, h5spaceFile = h5spaceFile, 
+                   h5spaceMem = h5spaceMem, compoundAsDataFrame = compoundAsDataFrame, 
+                   ...)
+  })
+  if (!is.null(h5spaceMem)) {
+    try({
+      H5Sclose(h5spaceMem)
+    })
+  }
+  if (!is.null(index)) {
+    I = list()
+    for (i in seq_len(length(index))) {
+      tmp = unique(sort(index[[i]]))
+      I[[i]] = match(index[[i]], tmp)
+    }
+    obj <- do.call("[", c(list(obj), I, drop = FALSE))
+  }
+  try({
+    H5Sclose(h5spaceFile)
+  })
+  obj
+}
 
 h5read <- function(file, name, index=NULL, start=NULL, stride=NULL, block=NULL, count=NULL, compoundAsDataFrame = TRUE, callGeneric = TRUE, read.attributes=FALSE, ... ) {
   loc = h5checktypeOrOpenLoc(file, readonly=TRUE)
@@ -18,42 +76,8 @@ h5read <- function(file, name, index=NULL, start=NULL, stride=NULL, block=NULL, 
     } else {
       if (type == "H5I_DATASET") {
         try( { h5dataset <- H5Dopen(loc$H5Identifier, name) } )
-        try( { h5spaceFile <- H5Dget_space( h5dataset ) } )
-        h5spaceMem = NULL
-        if (!is.null(index)) {
-          s <- H5Sget_simple_extent_dims(h5spaceFile)$size
-          if (length(index) != length(s)) {
-            stop("length of index has to be equal to dimensional extension of HDF5 dataset.")
-          }
-          for (i in seq_len(length(index))) {
-            if (is.null(index[[i]])) {
-              index[[i]] = seq_len(s[i])
-            }
-          }
-          size = 0
-          try ( { size = H5Sselect_index ( h5spaceFile, index) } )
-          h5spaceMem = H5Screate_simple(size)
-        } else {
-          if (any(c(!is.null(start), !is.null(stride), !is.null(count), !is.null(block)))) {
-            size = 0
-            try( { size = H5Sselect_hyperslab ( h5spaceFile, start=start, stride = stride, count=count, block  = block) } )
-            h5spaceMem = H5Screate_simple(size)
-          }
-        }
-        obj <- NULL
-        try( { obj <- H5Dread( h5dataset = h5dataset, h5spaceFile = h5spaceFile, h5spaceMem = h5spaceMem, compoundAsDataFrame=compoundAsDataFrame, ...) } )
-        if (!is.null(h5spaceMem)) {
-          try( { H5Sclose(h5spaceMem) } )
-        }
-        if (!is.null(index)) {
-          I = list()
-          for (i in seq_len(length(index))) {
-            tmp = unique(sort(index[[i]]))
-            I[[i]] = match(index[[i]], tmp)
-          }
-          obj <- do.call('[', c(list(obj),I,drop=FALSE))
-        }
-        try( { H5Sclose(h5spaceFile) } )
+        obj <- h5readDataset(h5dataset, index = index, start = start, stride = stride, 
+                      block = block, count = count, compoundAsDataFrame = compoundAsDataFrame, ...)
         try( { H5Dclose(h5dataset) } )
         
         cl <- attr(obj,"class")
