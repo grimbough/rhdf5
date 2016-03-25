@@ -1,3 +1,6 @@
+2.15.6
+- added man pages for methods
+
 2.15.5
 - New operators for data access implemented ($, & and [, $<-, and [<- operators are now available)
 
