@@ -120,34 +120,6 @@ setMethod(`[`, signature = c("H5IdComponent", "ANY", "ANY", "ANY"),
             res
           } )
 
-setMethod(`[<-`, signature = c("H5IdComponent","ANY","ANY","ANY"),
-          function(x, i, j, ..., value) {
-            h5id = x
-            index = as.list(sys.call())
-            index = index[-c(1,2,length(index))]
-            for (i in seq_along(index)) {
-              if (index[[i]] == '') {
-                index[i] = list(c())
-              }
-            }
-            if (length(index) == 1) {
-              if (is.null(index[[1]])) {
-                index = NULL
-              }
-            }
-            isvalid = H5Iis_valid(h5id)
-            if (!isvalid) {
-              stop("Bad HDF5 ID. Dataset closed?", call. = FALSE)
-            }
-            truetype = H5Iget_type(h5id)
-            if (truetype == "H5I_DATASET") {
-              res = h5writeDatasetHelper(obj=value, h5dataset = h5id, index=index)
-            } else {
-              stop("The provided H5Identifier is not a dataset identifier and can not be subsetted.", 
-                   call. = FALSE)
-            }
-            h5id
-          } )
 
 setMethod(`[<-`, signature = c("H5IdComponent", "ANY","ANY","ANY"),
           function(x, i, j, ..., value) {
