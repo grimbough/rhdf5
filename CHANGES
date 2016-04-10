@@ -1,3 +1,6 @@
+2.15.7
+- moved 'format' from h5ls to the show-method.
+
 2.15.6
 - added man pages for methods
 
