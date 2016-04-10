@@ -49,7 +49,6 @@ h5ls <- function( file, recursive = TRUE, all=FALSE, datasetinfo=TRUE, index_typ
   L <- .Call("_h5ls", loc$H5Identifier@ID, depth, di, index_type, order, PACKAGE='rhdf5')
   L <- h5lsConvertToDataframe(L, all=all)
   h5closeitLoc(loc)
-  L = format(L, justify = "left")
   L
 }
 

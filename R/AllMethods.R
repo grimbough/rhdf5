@@ -43,6 +43,7 @@ setMethod("show",signature="H5IdComponent", function(object) {
   if (res$type %in% c("FILE","GROUP")) {
     cat("\n")
     x = h5ls(object, recursive=FALSE)
+    x = format(x, justify = "left")
     x = x[,-1]
     print(x)
   }
