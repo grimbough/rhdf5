@@ -1,3 +1,6 @@
+2.17.2
+- printf-calls replaced by call to warning. Warning messages from the package C code can now be suppressed by the R-function suppressWarnings().
+
 2.15.7
 - moved 'format' from h5ls to the show-method.
 

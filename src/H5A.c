@@ -332,7 +332,9 @@ SEXP H5Aread_helper(hid_t attr_id, hsize_t n, SEXP Rdim, SEXP _buf ) {
     for (int i=0; i<n; i++) { REAL(Rval)[i] = na; }
     setAttrib(Rval, R_DimSymbol, Rdim);
     UNPROTECT(1);
-    printf("Warning: Reading attribute data of type '%s' not yet implemented. Values replaced by NA's\n", getDatatypeClass(dtype_id));
+    char str[256];
+    sprintf(str, "Reading attribute data of type '%s' not yet implemented. Values replaced by NA's.", getDatatypeClass(dtype_id));
+    warning(str);
   } break;
   }
 
@@ -426,7 +428,7 @@ SEXP _H5Awrite( SEXP _attr_id, SEXP _buf) {
 	buf = strbuf;
       } else {
 	mem_type_id = -1;
-	printf("Writing of this type of attribute data not supported.\n");
+	warning("Writing of this type of attribute data not supported.");
 	SEXP Rval = R_NilValue;
 	return Rval;
       }
