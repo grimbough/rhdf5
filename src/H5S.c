@@ -54,7 +54,7 @@ SEXP _H5Screate_simple( SEXP _dims, SEXP _maxdims ) {
     addHandle(hid);
   } else {
     if (length(_maxdims) != length(_dims)) {
-      printf("dims and maxdims must have the same length.\n");
+      warning("dims and maxdims must have the same length.\n");
       hid = -1;
     } else {
       hsize_t maxdims[rank];
@@ -139,7 +139,7 @@ SEXP _H5Sset_extent_simple( SEXP _space_id, SEXP _current_size, SEXP _maximum_si
     herr = H5Sset_extent_simple( space_id, rank, current_size, NULL);
   } else {
     if (length(_maximum_size) != length(_current_size)) {
-      printf("dims and maxdims must have the same length.\n");
+      warning("dims and maxdims must have the same length.\n");
       herr = -1;
     } else {
       hsize_t maximum_size[rank];

@@ -563,7 +563,9 @@ SEXP H5Dread_helper_ENUM(hid_t dataset_id, hid_t file_space_id, hid_t mem_space_
     for (int i=0; i<n; i++) { REAL(Rval)[i] = na; }
     setAttrib(Rval, R_DimSymbol, Rdim);
     UNPROTECT(1);
-    printf("Warning: h5read for type ENUM [%s] not yet implemented. Values replaced by NA's\n", getDatatypeClass(H5Tget_super( dtype_id )));
+    char str[256];
+    sprintf(str, "h5read for type ENUM [%s] not yet implemented. Values replaced by NA's.", getDatatypeClass(H5Tget_super( dtype_id )));
+    warning(str);
   }
 
   return(Rval);
@@ -640,9 +642,11 @@ SEXP H5Dread_helper_ARRAY(hid_t dataset_id, hid_t file_space_id, hid_t mem_space
     setAttrib(Rval, R_DimSymbol, Rdim);
     UNPROTECT(1);
     if ((cpdNField > 0) & (compoundAsDataFrame > 0)) {
-      printf("Warning: h5read cannot coerce COMPOUND dataset with element of type ARRAY to data.frame. Values replaced by NA's. Try h5read with argument compoundAsDataFrame=FALSE to read element of type ARRAY\n");
+      warning("h5read cannot coerce COMPOUND dataset with element of type ARRAY to data.frame. Values replaced by NA's. Try h5read with argument compoundAsDataFrame=FALSE to read element of type ARRAY.");
     } else {
-      printf("Warning: h5read for type ARRAY [%s] not implemented. Values replaced by NA's\n", getDatatypeClass(H5Tget_super( dtype_id )));
+      char str[256];
+      sprintf(str, "h5read for type ARRAY [%s] not yet implemented. Values replaced by NA's.", getDatatypeClass(H5Tget_super( dtype_id )));
+      warning(str);
     }
   }
 
@@ -657,7 +661,7 @@ SEXP H5Dread_helper_COMPOUND(hid_t dataset_id, hid_t file_space_id, hid_t mem_sp
 
   if ((LENGTH(Rdim) > 1) && compoundAsDataFrame) {
     compoundAsDataFrame = 0;
-    printf("Warning: Cannot coerce multi-dimensional data to data.frame. Data returned as a list.\n");
+    warning("Cannot coerce multi-dimensional data to data.frame. Data returned as a list.");
   }
 
   SEXP Rval;
@@ -671,7 +675,7 @@ SEXP H5Dread_helper_COMPOUND(hid_t dataset_id, hid_t file_space_id, hid_t mem_sp
       name[0] = H5Tget_member_name(dtype_id,i);
       SEXP col;
       if (compoundAsDataFrame && (H5Tget_member_class(dtype_id,i) == H5T_COMPOUND)) {
-	printf("Warning: Cannot read hierarchical compound data types as data.frame. Use 'compoundAsDataFrame=FALSE' instead. Values replaced by NA's.\n");
+	warning("Cannot read hierarchical compound data types as data.frame. Use 'compoundAsDataFrame=FALSE' instead. Values replaced by NA's.");
 	double na = R_NaReal;
 	col = PROTECT(allocVector(REALSXP, n));
 	for (int i=0; i<n; i++) { REAL(col)[i] = na; }
@@ -767,7 +771,9 @@ SEXP H5Dread_helper(hid_t dataset_id, hid_t file_space_id, hid_t mem_space_id, h
     for (int i=0; i<n; i++) { REAL(Rval)[i] = na; }
     setAttrib(Rval, R_DimSymbol, Rdim);
     UNPROTECT(1);
-    printf("Warning: h5read for type '%s' not yet implemented. Values replaced by NA's\n", getDatatypeClass(dtype_id)); 
+    char str[256];
+    sprintf(str, "h5read for type '%s' not yet implemented. Values replaced by NA's.", getDatatypeClass(dtype_id));
+    warning(str);
   } break;
   }
 
@@ -778,7 +784,6 @@ SEXP H5Dread_helper(hid_t dataset_id, hid_t file_space_id, hid_t mem_space_id, h
 /* TODO: accept mem_type_id as parameter */
 SEXP _H5Dread( SEXP _dataset_id, SEXP _file_space_id, SEXP _mem_space_id, SEXP _buf, SEXP _compoundAsDataFrame,
                SEXP _bit64conversion  ) {
-
   int compoundAsDataFrame = LOGICAL(_compoundAsDataFrame)[0];
   int bit64conversion = INTEGER(_bit64conversion)[0];
 
@@ -806,7 +811,7 @@ SEXP _H5Dread( SEXP _dataset_id, SEXP _file_space_id, SEXP _mem_space_id, SEXP _
   if (length(_mem_space_id) == 0) {
     H5S_sel_type sel_type = H5Sget_select_type(file_space_id);
     if (sel_type != H5S_SEL_ALL) {
-      printf("file dataspace is set up for selective reading (e.g. hyperslabs). You have to provide a memory space for selective reading.\n");
+      warning("file dataspace is set up for selective reading (e.g. hyperslabs). You have to provide a memory space for selective reading.");
       SEXP Rval = R_NilValue;
       return Rval;
     }
@@ -914,7 +919,7 @@ SEXP _H5Dwrite( SEXP _dataset_id, SEXP _buf, SEXP _file_space_id, SEXP _mem_spac
 	  buf = strbuf;
 	} else {
 	  mem_type_id = -1;
-	  printf("Writing of this type of data not supported.\n");
+	  warning("Writing of this type of data not supported.");
 	  SEXP Rval = R_NilValue;
 	  return Rval;
 	}

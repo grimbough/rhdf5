@@ -1,6 +1,14 @@
 \name{NEWS}
 \title{News for Package 'rhdf5'}
 
+\section{Changes in version 2.18.0}{
+  \subsection{USER VISIBLE CHANGES}{
+    \itemize{
+	\item Warning messages from the package C code can now be suppressed by the R-function suppressWarnings().
+	}
+  }
+}
+
 \section{Changes in version 2.16.0}{
   \subsection{NEW FEATURES}{
     \itemize{
