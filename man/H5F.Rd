@@ -13,7 +13,7 @@
 These functions are designed to provide file-level access to HDF5 files. 
 }
 \usage{
-H5Fcreate      (name, flags = h5default("H5F_ACC"))
+H5Fcreate      (name, flags = h5default("H5F_ACC"), fcpl = NULL, fapl = NULL)
 H5Fopen        (name, flags = h5default("H5F_ACC_RD"))
 H5Fclose       (h5file)
 H5Fflush       (h5file, scope = h5default("H5F_SCOPE"))
@@ -25,6 +25,8 @@ H5Fget_name    (h5obj)
 \arguments{
   \item{name}{The filename of the HDF5 file.}
   \item{flags}{See \code{h5const("H5F_ACC")} for possible arguments.}
+  \item{fcpl}{An object of class \code{\link{H5IdComponent}} representing a H5 file creation property list. See \code{\link{H5Pcreate}}, \code{\link{H5Pcopy}} to create an object of this kind.}
+  \item{fapl}{An object of class \code{\link{H5IdComponent}} representing a H5 file access property list. See \code{\link{H5Pcreate}}, \code{\link{H5Pcopy}} to create an object of this kind.}
   \item{h5file}{An object of class \code{\link{H5IdComponent}} representing a H5 file identifier as created by \code{H5Fcreate} or \code{H5Fopen}.}
   \item{scope}{See \code{h5const("H5F_ACC_RD")} for possible arguments.}
   \item{showWarnings}{If TRUE (default), a warning is given if an open HDF5 handle exists for this file.}

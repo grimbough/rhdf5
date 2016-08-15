@@ -56,7 +56,7 @@ static R_CallMethodDef libraryRCalls[] = {
   {"_H5Dread", (DL_FUNC) &_H5Dread, 6},
   {"_H5Dwrite", (DL_FUNC) &_H5Dwrite, 4},
   {"_H5Dset_extent", (DL_FUNC) &_H5Dset_extent, 2},
-  {"_H5Fcreate", (DL_FUNC) &_H5Fcreate, 2},
+  {"_H5Fcreate", (DL_FUNC) &_H5Fcreate, 4},
   {"_H5Fopen", (DL_FUNC) &_H5Fopen, 2},
   {"_H5Freopen", (DL_FUNC) &_H5Freopen, 1},
   {"_H5Fclose", (DL_FUNC) &_H5Fclose, 1},
@@ -163,8 +163,8 @@ static R_CallMethodDef libraryRCalls[] = {
   /* {"_H5Pget_gc_references", (DL_FUNC) &_H5Pget_gc_references, 2}, */
   /* {"_H5Pset_small_data_block_size", (DL_FUNC) &_H5Pset_small_data_block_size, 2}, */
   /* {"_H5Pget_small_data_block_size", (DL_FUNC) &_H5Pget_small_data_block_size, 2}, */
-  /* {"_H5Pset_libver_bounds", (DL_FUNC) &_H5Pset_libver_bounds, 3}, */
-  /* {"_H5Pget_libver_bounds", (DL_FUNC) &_H5Pget_libver_bounds, 3}, */
+  {"_H5Pset_libver_bounds", (DL_FUNC) &_H5Pset_libver_bounds, 3},
+  {"_H5Pget_libver_bounds", (DL_FUNC) &_H5Pget_libver_bounds, 1},
   /* {"_H5Pset_local_heap_size_hint", (DL_FUNC) &_H5Pset_local_heap_size_hint, 2}, */
   /* {"_H5Pget_local_heap_size_hint", (DL_FUNC) &_H5Pget_local_heap_size_hint, 2}, */
   /* {"_H5Pset_link_creation_order", (DL_FUNC) &_H5Pset_link_creation_order, 2}, */

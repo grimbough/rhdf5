@@ -2,8 +2,12 @@
 \title{News for Package 'rhdf5'}
 
 \section{Changes in version 2.18.0}{
+  \subsection{NEW FEATURES}{
+        \item The low-level functions H5Pset_libver_bounds and H5Pget_libver_bounds is implemented. Creating files that can only be read by library versions 1.8 or later allows the usage of large attributes and improves performance.
+  }
   \subsection{USER VISIBLE CHANGES}{
     \itemize{
+        \item Per default all HDF5 files will be created with version 1.8 as lower bound. That means the created files can only be read with HDF5 library versions >= 1.8. This changes allows the usage of large attributes and leads to performance improvements. If one wants to create a file that is readable with the earliest version of HDF5, one has to call H5Fcreate with fapl=h5default("H5P").
 	\item Warning messages from the package C code can now be suppressed by the R-function suppressWarnings().
 	}
   }
