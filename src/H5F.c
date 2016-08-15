@@ -2,10 +2,16 @@
 
 /* hid_t H5Fcreate( const char *name, unsigned flags, hid_t fcpl_id, hid_t fapl_id ) */
 /* TODO more parameters: hid_t fcpl_id, hid_t fapl_id */
-SEXP _H5Fcreate( SEXP _name, SEXP _flags ) {
+SEXP _H5Fcreate( SEXP _name, SEXP _flags, SEXP _fcpl_id, SEXP _fapl_id ) {
   const char *name = CHAR(STRING_ELT(_name, 0));
   unsigned flags = INTEGER(_flags)[0];
-  hid_t hid = H5Fcreate( name, flags, H5P_DEFAULT, H5P_DEFAULT );
+
+  hid_t fcpl_id = H5P_DEFAULT;
+  hid_t fapl_id = H5P_DEFAULT;
+  if (length(_fcpl_id) > 0) { fcpl_id = INTEGER(_fcpl_id)[0]; }
+  if (length(_fapl_id) > 0) { fapl_id = INTEGER(_fapl_id)[0]; }
+
+  hid_t hid = H5Fcreate( name, flags, fcpl_id, fapl_id );
   addHandle(hid);
 
   SEXP Rval;

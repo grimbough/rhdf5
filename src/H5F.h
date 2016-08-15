@@ -8,7 +8,7 @@
 #include "myhdf5.h"
 #include "HandleList.h"
 
-SEXP _H5Fcreate( SEXP _name, SEXP _flags );
+SEXP _H5Fcreate( SEXP _name, SEXP _flags, SEXP _fcpl_id, SEXP _fapl_id );
 SEXP _H5Fopen( SEXP _name, SEXP _flags );
 SEXP _H5Freopen( SEXP _file_id );
 SEXP _H5Fclose( SEXP _file_id );

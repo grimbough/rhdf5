@@ -602,23 +602,21 @@ H5Pclose <- function( h5plist ) {
 ##   invisible(res)
 ## }
 
-## H5Pset_libver_bounds <- function( fapl_id, libver_low, libver_high ) {
-##   # TODO: check type fapl
-##   TODO: libver_low = as.TYPE(libver_low)
-##   TODO: libver_high = as.TYPE(libver_high)
-##   res <- .Call("_H5Pset_libver_bounds", fapl_id, libver_low, libver_high, PACKAGE='rhdf5')
-##   SEXP Rval = R_NilValue;
-##   invisible(res)
-## }
+H5Pset_libver_bounds <- function( h5plist, libver_low = "H5F_LIBVER_18", libver_high = "H5F_LIBVER_LATEST") {
+  h5checktype(h5plist, "plist")
+  libver_low <- h5checkConstants( "H5F_LIBVER", libver_low )
+  libver_high <- h5checkConstants( "H5F_LIBVER", libver_high )
+  res <- .Call("_H5Pset_libver_bounds", h5plist@ID, libver_low, libver_high, PACKAGE='rhdf5')
+  invisible(res)
+}
 
-## H5Pget_libver_bounds <- function( fapl_id, libver_low, libver_high ) {
-##   # TODO: check type fapl
-##   TODO: libver_low = as.TYPE(libver_low)
-##   TODO: libver_high = as.TYPE(libver_high)
-##   res <- .Call("_H5Pget_libver_bounds", fapl_id, libver_low, libver_high, PACKAGE='rhdf5')
-##   SEXP Rval = R_NilValue;
-##   invisible(res)
-## }
+H5Pget_libver_bounds <- function( h5plist ) {
+  h5checktype(h5plist, "plist")
+  res <- .Call("_H5Pget_libver_bounds", h5plist@ID, PACKAGE='rhdf5')
+  res <- rhdf5:::h5const2Factor("H5F_LIBVER", res)
+  names(res) = c("libver_low","libver_high")
+  res
+}
 
 ####################################################
 ## Group Creation Properties

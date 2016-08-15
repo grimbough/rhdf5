@@ -23,8 +23,8 @@ void addVector( int pos, SEXP Rval, SEXP groupnames, const char *groupname, int 
 
 SEXP _H5constants( ) {
   SEXP Rval;
-  PROTECT(Rval = allocVector(VECSXP, 17));
-  SEXP groupnames = PROTECT(allocVector(STRSXP, 17));
+  PROTECT(Rval = allocVector(VECSXP, 18));
+  SEXP groupnames = PROTECT(allocVector(STRSXP, 18));
   int i=0;
 
   int const_H5F_ACC[2]       = {  H5F_ACC_TRUNC,   H5F_ACC_EXCL };
@@ -38,6 +38,10 @@ SEXP _H5constants( ) {
   int const_H5F_SCOPE[2]       = {  H5F_SCOPE_GLOBAL,   H5F_SCOPE_LOCAL };
   const char *name_H5F_SCOPE[] = { "H5F_SCOPE_GLOBAL", "H5F_SCOPE_LOCAL"};
   addVector(i++, Rval, groupnames, "H5F_SCOPE", 2, const_H5F_SCOPE, name_H5F_SCOPE);
+
+  int const_H5F_LIBVER[3]       = {  H5F_LIBVER_18,   H5F_LIBVER_EARLIEST,   H5F_LIBVER_LATEST };
+  const char *name_H5F_LIBVER[] = { "H5F_LIBVER_18", "H5F_LIBVER_EARLIEST", "H5F_LIBVER_LATEST"};
+  addVector(i++, Rval, groupnames, "H5F_LIBVER", 3, const_H5F_LIBVER, name_H5F_LIBVER);
 
   int const_H5_INDEX[2]       = {  H5_INDEX_NAME,   H5_INDEX_CRT_ORDER };
   const char *name_H5_INDEX[] = { "H5_INDEX_NAME", "H5_INDEX_CRT_ORDER"};

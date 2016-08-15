@@ -1,9 +1,15 @@
 
-H5Fcreate <- function( name, flags = h5default("H5F_ACC") ) {
+H5Fcreate <- function( name, flags = h5default("H5F_ACC"), fcpl = NULL, fapl = NULL) {
   if (length(name)!=1 || !is.character(name)) stop("'name' must be a character string of length 1")
   name = normalizePath(name,mustWork = FALSE)
   flags <- h5checkConstants( "H5F_ACC", flags )
-  fid <- .Call("_H5Fcreate", name, flags, PACKAGE='rhdf5')
+  fcpl = h5checktypeAndPLC(fcpl, "H5P_FILE_CREATE", allowNULL = TRUE)
+  if (is.null(fapl)) {
+      fapl = H5Pcreate("H5P_FILE_ACCESS")
+      H5Pset_libver_bounds(fapl)
+  }
+  fapl = h5checktypeAndPLC(fapl, "H5P_FILE_ACCESS", allowNULL = TRUE)
+  fid <- .Call("_H5Fcreate", name, flags, fcpl@ID, fapl@ID, PACKAGE='rhdf5')
   if (fid > 0) {
     h5file = new("H5IdComponent", ID = fid)
   } else {

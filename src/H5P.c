@@ -683,24 +683,32 @@ SEXP _H5Pclose( SEXP _plist ) {
 /* } */
 
 /* /\* herr_t H5Pset_libver_bounds(hid_t fapl_id, H5F_libver_t libver_low, H5F_libver_t libver_high) *\/ */
-/* SEXP _H5Pset_libver_bounds( SEXP _fapl_id, SEXP _libver_low, SEXP _libver_high ) { */
-/*   hid_t fapl_id = INTEGER(_fapl_id)[0]; */
-/*   TODO: H5F_libver_t libver_low = _libver_low */
-/*   TODO: H5F_libver_t libver_high = _libver_high */
-/*   herr_t herr = H5Pset_libver_bounds(hid_tfapl_id, H5F_libver_tlibver_low, H5F_libver_tlibver_high); */
-/*   SEXP Rval = ScalarInteger(herr); */
-/*   return Rval; */
-/* } */
+SEXP _H5Pset_libver_bounds( SEXP _fapl_id, SEXP _libver_low, SEXP _libver_high ) {
+  hid_t fapl_id = INTEGER(_fapl_id)[0];
+  H5F_libver_t libver_low = INTEGER(_libver_low)[0];
+  H5F_libver_t libver_high = INTEGER(_libver_high)[0];
+  /* herr_t herr = H5Pset_libver_bounds(fapl_id, libver_low, libver_high); */
+  herr_t herr = H5Pset_libver_bounds(fapl_id, H5F_LIBVER_18, H5F_LIBVER_LATEST);
+  SEXP Rval = ScalarInteger(herr);
+  return Rval;
+}
 
 /* /\* herr_t H5Pget_libver_bounds(hid_t fapl_id, H5F_libver_t * libver_low, H5F_libver_t * libver_high) *\/ */
-/* SEXP _H5Pget_libver_bounds( SEXP _fapl_id, SEXP _libver_low, SEXP _libver_high ) { */
-/*   hid_t fapl_id = INTEGER(_fapl_id)[0]; */
-/*   TODO: H5F_libver_t * libver_low = _libver_low */
-/*   TODO: H5F_libver_t * libver_high = _libver_high */
-/*   herr_t herr = H5Pget_libver_bounds(hid_tfapl_id, H5F_libver_t *libver_low, H5F_libver_t *libver_high); */
-/*   SEXP Rval = ScalarInteger(herr); */
-/*   return Rval; */
-/* } */
+SEXP _H5Pget_libver_bounds( SEXP _fapl_id ) {
+  hid_t fapl_id = INTEGER(_fapl_id)[0];
+  H5F_libver_t libver_low;
+  H5F_libver_t libver_high;
+  herr_t herr = H5Pget_libver_bounds(fapl_id, &libver_low, &libver_high);
+  if (herr != 0) {
+    error("Error while calling H5Pget_libver_bounds");
+  }
+  SEXP Rval;
+  PROTECT(Rval = allocVector(INTSXP, 2));
+  INTEGER(Rval)[0] = libver_low;
+  INTEGER(Rval)[1] = libver_high;
+  UNPROTECT(1);
+  return Rval;
+}
 
 
 ////////////////////////////////////////////////////
