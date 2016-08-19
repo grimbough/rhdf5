@@ -63,6 +63,8 @@ static R_CallMethodDef libraryRCalls[] = {
   {"_H5Fflush", (DL_FUNC) &_H5Fflush, 2},
   {"_H5Fis_hdf5", (DL_FUNC) &_H5Fis_hdf5, 1},
   {"_H5Fget_filesize", (DL_FUNC) &_H5Fget_filesize, 1},
+  {"_H5Fget_create_plist", (DL_FUNC) &_H5Fget_create_plist, 1},
+  {"_H5Fget_access_plist", (DL_FUNC) &_H5Fget_access_plist, 1},
   {"_H5Fget_name", (DL_FUNC) &_H5Fget_name, 1},
   {"_H5Gcreate", (DL_FUNC) &_H5Gcreate, 2},
   {"_H5Gcreate_anon", (DL_FUNC) &_H5Gcreate_anon, 1},

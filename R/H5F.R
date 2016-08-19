@@ -6,7 +6,8 @@ H5Fcreate <- function( name, flags = h5default("H5F_ACC"), fcpl = NULL, fapl = N
   fcpl = h5checktypeAndPLC(fcpl, "H5P_FILE_CREATE", allowNULL = TRUE)
   if (is.null(fapl)) {
       fapl = H5Pcreate("H5P_FILE_ACCESS")
-      H5Pset_libver_bounds(fapl)
+      H5Pset_libver_bounds(fapl, libver_low = "H5F_LIBVER_18",libver_high = "H5F_LIBVER_LATEST")
+      print("Set libver lower bound to 18")
   }
   fapl = h5checktypeAndPLC(fapl, "H5P_FILE_ACCESS", allowNULL = TRUE)
   fid <- .Call("_H5Fcreate", name, flags, fcpl@ID, fapl@ID, PACKAGE='rhdf5')
@@ -73,6 +74,31 @@ H5Fis_hdf5 <- function( name, showWarnings=TRUE ) {
 H5Fget_filesize <- function( h5file ) {
   h5checktype(h5file, "file")
   .Call("_H5Fget_filesize", h5file@ID, PACKAGE='rhdf5')
+}
+
+H5Fget_create_plist <- function( h5file ) {
+  h5checktype(h5file, "file")
+  pid <- .Call("_H5Fget_create_plist", h5file@ID, PACKAGE='rhdf5')
+  if (pid > 0) {
+    h5plist = new("H5IdComponent", ID = pid)
+  } else {
+    message("HDF5: unable to create property list")
+    h5plist = FALSE
+  }
+  invisible(h5plist)
+}
+
+
+H5Fget_access_plist <- function( h5file ) {
+  h5checktype(h5file, "file")
+  pid <- .Call("_H5Fget_access_plist", h5file@ID, PACKAGE='rhdf5')
+  if (pid > 0) {
+    h5plist = new("H5IdComponent", ID = pid)
+  } else {
+    message("HDF5: unable to create property list")
+    h5plist = FALSE
+  }
+  invisible(h5plist)
 }
 
 H5Fget_name <- function( h5obj ) {

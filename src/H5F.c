@@ -127,3 +127,20 @@ SEXP _H5Fget_name( SEXP _obj_id ) {
 }
 
 /* ssize_t H5Fget_obj_count( hid_t file_id, unsigned int types ) */
+
+/* hid_t H5Fget_create_plist(hid_t file_id ) { */
+SEXP _H5Fget_create_plist( SEXP _file_id ) {
+  hid_t file_id =  INTEGER(_file_id)[0];
+  hid_t plist_id = H5Fget_create_plist( file_id );
+  SEXP Rval = ScalarInteger(plist_id);
+  return Rval;
+}
+
+/* hid_t H5Fget_access_plist(hid_t file_id ) { */
+SEXP _H5Fget_access_plist( SEXP _file_id ) {
+  hid_t file_id =  INTEGER(_file_id)[0];
+  hid_t plist_id = H5Fget_access_plist( file_id );
+  SEXP Rval = ScalarInteger(plist_id);
+  return Rval;
+}
+
