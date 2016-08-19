@@ -46,6 +46,8 @@ export(H5Fopen)
 export(H5Fis_hdf5)
 export(H5Fget_filesize)
 export(H5Fget_name)
+export(H5Fget_create_plist)
+export(H5Fget_access_plist)
 
 export(H5Gclose)
 export(H5Gcreate)

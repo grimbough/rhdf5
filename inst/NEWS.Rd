@@ -3,7 +3,9 @@
 
 \section{Changes in version 2.18.0}{
   \subsection{NEW FEATURES}{
-        \item The low-level functions H5Pset_libver_bounds and H5Pget_libver_bounds is implemented. Creating files that can only be read by library versions 1.8 or later allows the usage of large attributes and improves performance.
+    \itemize{
+	\item The low-level functions H5Pset_libver_bounds and H5Pget_libver_bounds is implemented. Creating files that can only be read by library versions 1.8 or later allows the usage of large attributes and improves performance.
+	}
   }
   \subsection{USER VISIBLE CHANGES}{
     \itemize{

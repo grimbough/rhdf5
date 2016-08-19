@@ -1,3 +1,6 @@
+2.17.4
+- Documented functions
+
 2.17.3
 - The low-level function H5Pset_libver_bounds is implemented. Per default all HDF5 files will be created with version 1.8 as lower bound. That means the created files can only be read with HDF5 library versions >= 1.8. This changes allows the usage of large attributes and leads to performance improvements.
 

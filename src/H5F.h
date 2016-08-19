@@ -19,8 +19,8 @@ SEXP _H5Fis_hdf5( SEXP _name );
 
 /* _H5Fget_vfd_handle */
 SEXP _H5Fget_filesize( SEXP _file_id );
-/* _H5Fget_create_plist */
-/* _H5Fget_access_plist */
+SEXP _H5Fget_create_plist( SEXP _file_id );
+SEXP _H5Fget_access_plist( SEXP _file_id );
 /* _H5Fget_info */
 /* _H5Fget_intent */
 SEXP _H5Fget_name( SEXP _obj_id );
