@@ -7,19 +7,23 @@
 \alias{H5Fis_hdf5}
 \alias{H5Fget_filesize}
 \alias{H5Fget_name}
+\alias{H5Fget_create_plist}
+\alias{H5Fget_access_plist}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{HDF5 File Interface}
 \description{
 These functions are designed to provide file-level access to HDF5 files. 
 }
 \usage{
-H5Fcreate      (name, flags = h5default("H5F_ACC"), fcpl = NULL, fapl = NULL)
-H5Fopen        (name, flags = h5default("H5F_ACC_RD"))
-H5Fclose       (h5file)
-H5Fflush       (h5file, scope = h5default("H5F_SCOPE"))
-H5Fis_hdf5     (name, showWarnings = TRUE)
-H5Fget_filesize(h5file)
-H5Fget_name    (h5obj)
+H5Fcreate           (name, flags = h5default("H5F_ACC"), fcpl = NULL, fapl = NULL)
+H5Fopen             (name, flags = h5default("H5F_ACC_RD"))
+H5Fclose            (h5file)
+H5Fflush            (h5file, scope = h5default("H5F_SCOPE"))
+H5Fis_hdf5          (name, showWarnings = TRUE)
+H5Fget_filesize     (h5file)
+H5Fget_name         (h5obj)
+H5Fget_create_plist (h5file)
+H5Fget_access_plist (h5file)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
