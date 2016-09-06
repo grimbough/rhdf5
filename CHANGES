@@ -1,3 +1,6 @@
+2.17.6
+- Removed message on lower bound on libversion at file creation
+
 2.17.5
 - Added documentation
 

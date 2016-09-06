@@ -7,7 +7,6 @@ H5Fcreate <- function( name, flags = h5default("H5F_ACC"), fcpl = NULL, fapl = N
   if (is.null(fapl)) {
       fapl = H5Pcreate("H5P_FILE_ACCESS")
       H5Pset_libver_bounds(fapl, libver_low = "H5F_LIBVER_18",libver_high = "H5F_LIBVER_LATEST")
-      print("Set libver lower bound to 18")
   }
   fapl = h5checktypeAndPLC(fapl, "H5P_FILE_ACCESS", allowNULL = TRUE)
   fid <- .Call("_H5Fcreate", name, flags, fcpl@ID, fapl@ID, PACKAGE='rhdf5')
