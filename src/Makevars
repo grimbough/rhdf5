@@ -2,26 +2,11 @@ PKG_CFLAGS = -Ihdf5/src
 PKG_CXXFLAGS = -Ihdf5/src
 PKG_LIBS = libhdf5ForBioC.a -lz -lm -L.
 
+objects := $(patsubst %.c%,%.o,$(wildcard *.c*)) 
+
 all: $(SHLIB)
 $(SHLIB): libhdf5ForBioC.a
-H5.o: libhdf5ForBioC.a
-H5A.o: libhdf5ForBioC.a
-H5D.o: libhdf5ForBioC.a
-H5F.o: libhdf5ForBioC.a
-H5G.o: libhdf5ForBioC.a
-H5I.o: libhdf5ForBioC.a
-H5L.o: libhdf5ForBioC.a
-H5O.o: libhdf5ForBioC.a
-H5P.o: libhdf5ForBioC.a
-H5S.o: libhdf5ForBioC.a
-H5T.o: libhdf5ForBioC.a
-H5constants.o: libhdf5ForBioC.a
-h5dump.o: libhdf5ForBioC.a
-h5ls.o: libhdf5ForBioC.a
-h5writeDataFrame.o: libhdf5ForBioC.a
-printdatatype.o: libhdf5ForBioC.a
-wrap.o: libhdf5ForBioC.a
-HandleList.o: libhdf5ForBioC.a
+$(objects): libhdf5ForBioC.a
 
 libhdf5ForBioC.a: 
 	cd hdf5source && \
