@@ -7,26 +7,11 @@ PKG_LIBS += -llibhdf5ForBioC-7
 PKG_LIBS+=$(shell echo 'zlibbioc::pkgconfig("PKG_LIBS_shared")' |"${R_HOME}/bin/R" --vanilla --slave)
 PKG_LIBS += -llibsz-2 -lm -L.
 
+objects := $(patsubst %.c%,%.o,$(wildcard *.c*)) 
+
 all: $(SHLIB)
 $(SHLIB): libhdf5ForBioC
-H5.o: libhdf5ForBioC
-H5A.o: libhdf5ForBioC
-H5D.o: libhdf5ForBioC
-H5F.o: libhdf5ForBioC
-H5G.o: libhdf5ForBioC
-H5I.o: libhdf5ForBioC
-H5L.o: libhdf5ForBioC
-H5O.o: libhdf5ForBioC
-H5P.o: libhdf5ForBioC
-H5S.o: libhdf5ForBioC
-H5T.o: libhdf5ForBioC
-H5constants.o: libhdf5ForBioC
-h5dump.o: libhdf5ForBioC
-h5ls.o: libhdf5ForBioC
-h5writeDataFrame.o: libhdf5ForBioC
-printdatatype.o: libhdf5ForBioC
-wrap.o: libhdf5ForBioC
-HandleList.o: libhdf5ForBioC
+$(objects): libhdf5ForBioC
 
 
 libhdf5ForBioC:
