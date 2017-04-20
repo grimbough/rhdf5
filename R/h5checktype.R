@@ -88,7 +88,7 @@ h5checktypeOrNULL <- function(h5id, type, fctname = deparse(match.call()[1])) {
 
 h5FileIsOpen <- function(filename) {
   filename = normalizePath(filename,mustWork = FALSE)
-  L = rhdf5:::h5validObjects()
+  L = h5validObjects()
   isobject = sapply(L, function(x) {
       H5Iget_type(x) %in% c("H5I_FILE","H5I_GROUP","H5I_DATASET")
   } )
@@ -219,10 +219,10 @@ h5checktypeAndPLC <- function(h5id, plc, allowNULL = FALSE, fctname = deparse(ma
       stop("Error in ", fctname, ". The provided H5Identifier is not a property list.", call. = FALSE)
     }
     h5plc = H5Pget_class(h5id)
-    if (!(plc %in% names(rhdf5:::h5constants[["H5P"]]))) {
+    if (!(plc %in% names(h5constants[["H5P"]]))) {
       stop("plist class '",plc,"' unknown")
     }
-    if (!.Call("_H5Pequal", h5plc@ID, rhdf5:::h5constants[["H5P"]][plc], PACKAGE='rhdf5')) {
+    if (!.Call("_H5Pequal", h5plc@ID, h5constants[["H5P"]][plc], PACKAGE='rhdf5')) {
       stop("property list is not of class '",plc,"'")
     }
     H5Pclose_class(h5plc)

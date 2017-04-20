@@ -702,7 +702,7 @@ SEXP _H5Pget_libver_bounds( SEXP _fapl_id ) {
   if (herr != 0) {
     error("Error while calling H5Pget_libver_bounds");
   }
-  printf("low: %d high: %d\n", libver_low, libver_high);
+  Rprintf("low: %d high: %d\n", libver_low, libver_high);
   SEXP Rval;
   PROTECT(Rval = allocVector(INTSXP, 2));
   INTEGER(Rval)[0] = libver_low;
