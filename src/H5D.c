@@ -347,7 +347,7 @@ SEXP H5Dread_helper_INTEGER(hid_t dataset_id, hid_t file_space_id, hid_t mem_spa
 	    if (((long long *)intbuf)[i] > 0x001fffffffffffffL) {
 	      warn_double = 1;
 	    }
-	    if (((long long *)intbuf)[i] < 0xffe0000000000001L) {
+	    if (((long long *)intbuf)[i] < (long long) 0xffe0000000000000L) {
 	      warn_double = 1;
 	    }
 	  }
