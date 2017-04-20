@@ -1,6 +1,27 @@
 \name{NEWS}
 \title{News for Package 'rhdf5'}
 
+\section{Changes in version 2.20.0}{
+  \subsection{NEW FEATURES}{
+    \itemize{
+      \item Indexing into spaces with more than .Machine$integer.max
+      elements is supported using numeric (rather than integer)
+      indexing; this provides exact indexing into spaces with about 51
+      bits of precision.
+      \item Zero-length indexing is now supported (returning zero-length
+      slabs).
+    }
+  }
+
+  \subsection{BUG FIXES}{
+    \itemize{
+      \item Using \code{bit64conversion = "double"} would always warn
+      about loss of precision, but now only warns when precision is
+      actually lost.
+    }
+  }
+}
+
 \section{Changes in version 2.18.0}{
   \subsection{NEW FEATURES}{
     \itemize{

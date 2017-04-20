@@ -613,7 +613,7 @@ H5Pset_libver_bounds <- function( h5plist, libver_low = "H5F_LIBVER_18", libver_
 H5Pget_libver_bounds <- function( h5plist ) {
   h5checktype(h5plist, "plist")
   res <- .Call("_H5Pget_libver_bounds", h5plist@ID, PACKAGE='rhdf5')
-  res <- rhdf5:::h5const2Factor("H5F_LIBVER", res)
+  res <- h5const2Factor("H5F_LIBVER", res)
   names(res) = c("libver_low","libver_high")
   res
 }

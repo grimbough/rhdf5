@@ -11,9 +11,6 @@ h5set_extent(file, dataset, dims)
   \item{dataset}{The name of the dataset in the HDF5 file, or an object of class \code{\link{H5IdComponent}} representing a H5 dataset identifier. See \code{\link{H5Dcreate}}, or \code{\link{H5Dopen}} to create an object of this kind.}
   \item{dims}{The dimensions of the array as they will appear in the file. Note, the dimensions will appear in inverted order when viewing the file with a C-programm (e.g. HDFView), because the fastest changing dimension in R is the first one, whereas the fastest changing dimension in C is the last one.}
 }
-\details{
-%%  ~~ If necessary, more details than the description above ~~
-}
 \value{Returns 0 if the dimension of the dataset was changed successfully and a negative value otherwise.}
 \references{\url{http://www.hdfgroup.org/HDF5}}
 \author{Bernd Fischer}
