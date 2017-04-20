@@ -86,8 +86,8 @@ H5Dread <- function( h5dataset, h5spaceFile=NULL, h5spaceMem=NULL, buf = NULL, c
     bit64conv = switch(bit64conversion, int = 1L,double = 2L,bit64 = 3L,default=0L)
   }
   if (bit64conv == 3L) {
-    if (!require(bit64,quietly=TRUE)) {
-      stop("You have to install the package 'bit64' before you can use the option bit64conversion='bit64'")
+    if (!requireNamespace("bit64",quietly=TRUE)) {
+      stop("install package 'bit64' before using bit64conversion='bit64'")
     }
   }
   res <- .Call("_H5Dread", h5dataset@ID, sidFile, sidMem, buf, compoundAsDataFrame, bit64conv, PACKAGE='rhdf5')
