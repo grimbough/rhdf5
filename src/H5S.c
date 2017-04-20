@@ -47,7 +47,7 @@ SEXP _H5Screate_simple( SEXP _dims, SEXP _maxdims ) {
   int rank = length(_dims);
   hsize_t dims[rank];
   for (int i=0; i<rank; i++) {
-    dims[i] = INTEGER(_dims)[i];
+    dims[i] = REAL(_dims)[i];
   }
   if (length(_maxdims) == 0) {
     hid = H5Screate_simple( rank, dims, NULL);
@@ -59,7 +59,7 @@ SEXP _H5Screate_simple( SEXP _dims, SEXP _maxdims ) {
     } else {
       hsize_t maxdims[rank];
       for (int i=0; i<rank; i++) {
-	maxdims[i] = INTEGER(_maxdims)[i];
+	maxdims[i] = REAL(_maxdims)[i];
       }
       hid = H5Screate_simple( rank, dims, maxdims);
       addHandle(hid);
@@ -99,17 +99,17 @@ SEXP _H5Sget_simple_extent_dims( SEXP _space_id ) {
   SEXP Rsize;
   SEXP Rmaxsize;
   if (rank < 0) {
-    Rsize = PROTECT(allocVector(INTSXP, 0));
-    Rmaxsize = PROTECT(allocVector(INTSXP, 0));
+    Rsize = PROTECT(allocVector(REALSXP, 0));
+    Rmaxsize = PROTECT(allocVector(REALSXP, 0));
     SET_VECTOR_ELT(Rval,1,Rsize);
     SET_VECTOR_ELT(Rval,2,Rmaxsize);
     UNPROTECT(2);
   } else {
-    Rsize = PROTECT(allocVector(INTSXP, rank));
-    Rmaxsize = PROTECT(allocVector(INTSXP, rank));
+    Rsize = PROTECT(allocVector(REALSXP, rank));
+    Rmaxsize = PROTECT(allocVector(REALSXP, rank));
     for (int i=0; i < rank; i++) {
-      INTEGER(Rsize)[i] = size[i];
-      INTEGER(Rmaxsize)[i] = maxsize[i];
+      REAL(Rsize)[i] = size[i];
+      REAL(Rmaxsize)[i] = maxsize[i];
     }
     SET_VECTOR_ELT(Rval,1,Rsize);
     SET_VECTOR_ELT(Rval,2,Rmaxsize);
@@ -133,7 +133,7 @@ SEXP _H5Sset_extent_simple( SEXP _space_id, SEXP _current_size, SEXP _maximum_si
   int rank = length(_current_size);
   hsize_t current_size[rank];
   for (int i=0; i<rank; i++) {
-    current_size[i] = INTEGER(_current_size)[i];
+    current_size[i] = REAL(_current_size)[i];
   }
   if (length(_maximum_size) == 0) {
     herr = H5Sset_extent_simple( space_id, rank, current_size, NULL);
@@ -144,7 +144,7 @@ SEXP _H5Sset_extent_simple( SEXP _space_id, SEXP _current_size, SEXP _maximum_si
     } else {
       hsize_t maximum_size[rank];
       for (int i=0; i<rank; i++) {
-	maximum_size[i] = INTEGER(_maximum_size)[i];
+	maximum_size[i] = REAL(_maximum_size)[i];
       }
       herr = H5Sset_extent_simple( space_id, rank, current_size, maximum_size);
     }
@@ -164,16 +164,16 @@ SEXP _H5Sselect_hyperslab( SEXP _space_id, SEXP _op, SEXP _start, SEXP _stride, 
   hsize_t block[LENGTH(_block)];
   int i;
   for (i=0; i < LENGTH(_start); i++) {
-    start[i] = INTEGER(_start)[i];
+    start[i] = REAL(_start)[i];
   }
   for (i=0; i < LENGTH(_stride); i++) {
-    stride[i] = INTEGER(_stride)[i];
+    stride[i] = REAL(_stride)[i];
   }
   for (i=0; i < LENGTH(_count); i++) {
-    count[i] = INTEGER(_count)[i];
+    count[i] = REAL(_count)[i];
   }
   for (i=0; i < LENGTH(_block); i++) {
-    block[i] = INTEGER(_block)[i];
+    block[i] = REAL(_block)[i];
   }
 
   herr_t herr = H5Sselect_hyperslab( space_id, op, start, stride, count, block );
@@ -209,8 +209,8 @@ SEXP _H5Sselect_index( SEXP _space_id, SEXP _start, SEXP _count) {
   int k = l-1;
   while(cont > 0) {
     for (int i=0; i<l; i++) {
-      start[i] = INTEGER(VECTOR_ELT(_start,i))[index[i]];
-      count[i] = INTEGER(VECTOR_ELT(_count,i))[index[i]];
+      start[i] = REAL(VECTOR_ELT(_start,i))[index[i]];
+      count[i] = REAL(VECTOR_ELT(_count,i))[index[i]];
     }
     herr = H5Sselect_hyperslab(space_id, H5S_SELECT_OR, start, stride, count, block);
     if (herr < 0) {

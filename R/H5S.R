@@ -32,8 +32,8 @@ H5Screate_simple <- function( dims, maxdims ) {
   if (missing(maxdims)) {
     maxdims = dims
   }
-  dims <- as.integer(rev(dims))
-  maxdims <- as.integer(rev(maxdims))
+  dims <- as.numeric(rev(dims))
+  maxdims <- as.numeric(rev(maxdims))
   sid <- .Call("_H5Screate_simple", dims, maxdims, PACKAGE='rhdf5')
   if (sid > 0) {
     h5space = new("H5IdComponent", ID = sid)
@@ -64,8 +64,8 @@ H5Sset_extent_simple <- function( h5space, dims, maxdims) {
   if (missing(maxdims)) {
     maxdims = dims
   }
-  dims <- as.integer(rev(dims))
-  maxdims <- as.integer(rev(maxdims))
+  dims <- as.numeric(rev(dims))
+  maxdims <- as.numeric(rev(maxdims))
 
   res <- .Call("_H5Sset_extent_simple", h5space@ID, dims, maxdims, PACKAGE='rhdf5')
   invisible(res)
@@ -78,14 +78,14 @@ H5Sselect_hyperslab <- function( h5space, op = h5default("H5S_SELECT"), start=NU
   dims <- H5Sget_simple_extent_dims( h5space )
   R <- dims$rank
   if (length(start) == 0) {
-    start <- rep(1L, R)
+    start <- rep(1, R)
   } else {
     if (length(start) != R) {
       stop(sprintf("start must either be NULL or have length %d (rank of dataspace)",R))
     }
   }
   if (length(stride) == 0) {
-    stride <- rep(1L, R)
+    stride <- rep(1, R)
   } else {
     if (length(stride) != R) {
       stop(sprintf("stride must either be NULL or have length %d (rank of dataspace)",R))
@@ -99,24 +99,22 @@ H5Sselect_hyperslab <- function( h5space, op = h5default("H5S_SELECT"), start=NU
     }
   }
   if (length(block) == 0) {
-    block <- rep(1L, R)
+    block <- rep(1, R)
   } else {
     if (length(block) != R) {
       stop(sprintf("block must either be NULL or have length %d (rank of dataspace)",R))
     }
   }
 
-  size <- as.integer(count) * as.integer(block)
+  count <- as.numeric(count)
+  block <- as.numeric(block)
+  size <- count * block
   start <- start - 1
   start <- rev(start)
-  stride <- rev(stride)
+  stride <- as.numeric(rev(stride))
   count <- rev(count)
   block <- rev(block)
 
-  start = as.integer(start)
-  stride = as.integer(stride)
-  count = as.integer(count)
-  block = as.integer(block)
   .Call("_H5Sselect_hyperslab", h5space@ID, op, start, stride, count, block, PACKAGE='rhdf5')
   invisible(size)
 }
@@ -137,10 +135,9 @@ H5Sselect_index <- function( h5space, index ) {
   for (i in seq_len(length(index))) {
     if (is.null(index[[i]])) {
       ## index[[i]] <- seq_len(dim[i]) - 1L
-      start[[i]] <- 0L
-      count[[i]] <- as.integer(dim[i])
+      start[[i]] <- 0
+      count[[i]] <- dim[i]
     } else {
-      index[[i]] <- as.integer(index[[i]])
       if (any(index[[i]] > dim[i])) {
         stop("index exceeds HDF5-array dimension.")
       }
@@ -152,8 +149,9 @@ H5Sselect_index <- function( h5space, index ) {
         test <- ind[seq_len(length(ind)-1)+1]-1 != ind[seq_len(length(ind)-1)]
         I <- c(1, which(test) + 1)
       } else I <- 1
+      start[[i]] <- ind[I] - 1
       I <- c(I,length(ind)+1)
-      count[[i]] <- as.integer(I[seq_len(length(I)-1)+1] - I[seq_len(length(I)-1)])
+      count[[i]] <- I[seq_len(length(I)-1)+1] - I[seq_len(length(I)-1)]
     }
   }
   size = sapply(count, sum)
