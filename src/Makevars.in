@@ -1,0 +1,25 @@
+HDF5_INCLUDE=@HDF5_INCLUDE@
+HDF5_LIB=@HDF5_LIB@
+
+PKG_CFLAGS = -I${HDF5_INCLUDE}
+PKG_CXXFLAGS = -I${HDF5_INCLUDE}
+PKG_LIBS = ${HDF5_LIB} -lz -lm -L.
+
+objects := $(patsubst %.c%,%.o,$(wildcard *.c*))
+
+#expose headers in installed package include folder
+USER_INCLUDE = $(R_PACKAGE_DIR)/include
+USER_LIB_DIR = ${R_PACKAGE_DIR}/lib${R_ARCH}
+USER_LIB = ${USER_LIB_DIR}/libhdf5.a
+
+all:  $(SHLIB) $(USER_LIB)
+
+#copy hdf5 library headers to package include
+$(USER_LIB): 
+	mkdir -p "${USER_INCLUDE}"
+	cp ${HDF5_INCLUDE}/*.h ${USER_INCLUDE}
+	mkdir -p "${USER_LIB_DIR}"
+	cp ${HDF5_LIB} ${USER_LIB}
+	
+	
+	
