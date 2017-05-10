@@ -3,3 +3,5 @@
 rm -f src/libhdf5ForBioC.a
 rm -rf src/hdf5
 rm -rf vignettes/*.h5
+rm -f src/Makevars
+rm -rf src/*.o
