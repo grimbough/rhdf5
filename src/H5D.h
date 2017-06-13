@@ -54,7 +54,7 @@ SEXP H5Dread_helper(hid_t dataset_id, hid_t file_space_id, hid_t mem_space_id, h
 		    hid_t cpdType, int cpdNField, char ** cpdField, int compoundAsDataFrame,
                     int bit64conversion );
 SEXP _H5Dread( SEXP _dataset_id, SEXP _file_space_id, SEXP _mem_space_id, SEXP _buf, SEXP _compoundAsDataFrame,
-               SEXP _bit64conversion );
+               SEXP _bit64conversion, SEXP _drop );
 SEXP _H5Dwrite( SEXP _dataset_id, SEXP _buf, SEXP _file_space_id, SEXP _mem_space_id );
 /* H5Diterate */
 
