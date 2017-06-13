@@ -12,6 +12,9 @@ h5readDataset <- function (h5dataset, index = NULL, start = NULL, stride = NULL,
     for (i in seq_len(length(index))) {
       if (is.null(index[[i]])) {
         index[[i]] = seq_len(s[i])
+      ## if we passed an object to the index, we need to get its values    
+      } else if (is.name(index[[i]])) {
+        index[[i]] <- eval(index[[i]])  
       }
     }
     size = 0
