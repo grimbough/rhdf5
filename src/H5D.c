@@ -783,8 +783,9 @@ SEXP H5Dread_helper(hid_t dataset_id, hid_t file_space_id, hid_t mem_space_id, h
 /* herr_t H5Dread(hid_t dataset_id, hid_t mem_type_id, hid_t mem_space_id, hid_t file_space_id, hid_t xfer_plist_id, void * buf ) */
 /* TODO: accept mem_type_id as parameter */
 SEXP _H5Dread( SEXP _dataset_id, SEXP _file_space_id, SEXP _mem_space_id, SEXP _buf, SEXP _compoundAsDataFrame,
-               SEXP _bit64conversion  ) {
+               SEXP _bit64conversion, SEXP _drop  ) {
   int compoundAsDataFrame = LOGICAL(_compoundAsDataFrame)[0];
+  int drop = LOGICAL(_drop)[0];
   int bit64conversion = INTEGER(_bit64conversion)[0];
 
   /***********************************************************************/
@@ -841,7 +842,7 @@ SEXP _H5Dread( SEXP _dataset_id, SEXP _file_space_id, SEXP _mem_space_id, SEXP _
     n = n * size[i];
   }
   SEXP Rdim;
-  if (rank > 0) {
+  if (!drop && rank > 0) {
     Rdim = PROTECT(allocVector(INTSXP, rank));
     for (int i=0; i<rank; i++) {
       INTEGER(Rdim)[rank-i-1] = size[i];
@@ -860,7 +861,7 @@ SEXP _H5Dread( SEXP _dataset_id, SEXP _file_space_id, SEXP _mem_space_id, SEXP _
   if (length(_mem_space_id) == 0) {
     H5Sclose(mem_space_id);
   }
-  if (rank > 0) {
+  if (!drop && rank > 0) {
     UNPROTECT(1);
   }
 
