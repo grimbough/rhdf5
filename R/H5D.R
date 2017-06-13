@@ -74,7 +74,7 @@ H5Dget_storage_size <- function( h5dataset ) {
 }
 
 H5Dread <- function( h5dataset, h5spaceFile=NULL, h5spaceMem=NULL, buf = NULL, compoundAsDataFrame = TRUE,
-                     bit64conversion ) {
+                     bit64conversion, drop = FALSE ) {
   h5checktype(h5dataset, "dataset")
   h5checktypeOrNULL(h5spaceFile, "dataspace")
   h5checktypeOrNULL(h5spaceMem, "dataspace")
@@ -90,7 +90,7 @@ H5Dread <- function( h5dataset, h5spaceFile=NULL, h5spaceMem=NULL, buf = NULL, c
       stop("install package 'bit64' before using bit64conversion='bit64'")
     }
   }
-  res <- .Call("_H5Dread", h5dataset@ID, sidFile, sidMem, buf, compoundAsDataFrame, bit64conv, PACKAGE='rhdf5')
+  res <- .Call("_H5Dread", h5dataset@ID, sidFile, sidMem, buf, compoundAsDataFrame, bit64conv, drop, PACKAGE='rhdf5')
   if (H5Aexists(h5obj=h5dataset, name="storage.mode")) {
     att = H5Aopen(h5obj=h5dataset, name="storage.mode")
     if (H5Aread(h5attribute=att) == "logical") {

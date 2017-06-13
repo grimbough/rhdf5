@@ -28,7 +28,7 @@ Reads and writes objects in HDF5 files. This function can be used to read and wr
 h5read                      (file, name, index=NULL,
                              start=NULL, stride=NULL, block=NULL, count=NULL,
                              compoundAsDataFrame = TRUE, callGeneric = TRUE,
-			     read.attributes = FALSE, ...)
+			     read.attributes = FALSE, drop = FALSE, ...)
 h5readAttributes            (file, name)
 h5write                     (obj, file, name, ...)
 h5write.default             (obj, file, name, 
@@ -73,6 +73,7 @@ h5writeAttribute.array      (attr, h5obj, name, size)
   \item{size}{The length of string data type. Variable lengt strings are not yet supported.}
   \item{createnewfile}{If TRUE, a new file will be created if necessary.}
   \item{read.attributes}{(logical) If TRUE, the HDF5 attributes are read and attached to the respective R object.}
+  \item{drop}{(logical) If TRUE, the HDF5 object is read as a vector with NULL dim attributes.}
   \item{write.attributes}{(logical) If TRUE, all R-attributes attached to the object \code{obj} are written to the HDF5 file.}
   \item{\dots}{Further arguments passed to \code{\link{H5Dread}}.}
 }
