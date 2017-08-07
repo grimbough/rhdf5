@@ -5,7 +5,9 @@ H5Fcreate <- function( name, flags = h5default("H5F_ACC"), fcpl = NULL, fapl = N
   flags <- h5checkConstants( "H5F_ACC", flags )
   fcpl = h5checktypeAndPLC(fcpl, "H5P_FILE_CREATE", allowNULL = TRUE)
   if (is.null(fapl)) {
+      ## create a new propery list, and make sure it is closed
       fapl = H5Pcreate("H5P_FILE_ACCESS")
+      on.exit(H5Pclose(fapl))
       H5Pset_libver_bounds(fapl, libver_low = "H5F_LIBVER_18",libver_high = "H5F_LIBVER_LATEST")
   }
   fapl = h5checktypeAndPLC(fapl, "H5P_FILE_ACCESS", allowNULL = TRUE)
