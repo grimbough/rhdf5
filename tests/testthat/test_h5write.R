@@ -17,7 +17,7 @@ test_that("Writing works", {
     expect_true( h5createFile(h5File) )
     expect_true( file.exists(h5File) )
     h5write(obj = A, file = h5File, name = "A")
-    expect_equal( H5read(file = h5File, name = "A"), A )
+    expect_equal( h5read(file = h5File, name = "A"), A )
 })
 
 
