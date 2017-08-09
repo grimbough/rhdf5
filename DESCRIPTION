@@ -9,6 +9,6 @@ License: Artistic-2.0
 LazyLoad: true
 Imports: zlibbioc
 Depends: methods
-Suggests: bit64,BiocStyle
+Suggests: bit64, BiocStyle, testthat
 SystemRequirements: GNU make
 biocViews: Infrastructure, DataImport
