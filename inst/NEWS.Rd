@@ -1,6 +1,16 @@
 \name{NEWS}
 \title{News for Package 'rhdf5'}
 
+\section{Changes in version 2.22.0}{
+  \subsection{BUG FIXES}{
+    \itemize{
+      \item The `name' argument to \code{h5save} now works, and lets you choose
+      an new name for the dataset in the file, rather than only using the 
+      name of the object in the R session.
+    }
+  }
+}
+
 \section{Changes in version 2.20.0}{
   \subsection{NEW FEATURES}{
     \itemize{
