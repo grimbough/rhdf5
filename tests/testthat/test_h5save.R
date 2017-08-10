@@ -29,6 +29,11 @@ test_that("Changing dataset names", {
                  dsetNames )
 })
 
+test_that("Error on wrong number of names", {
+    expect_error( h5save(A, B, file = h5File, name = "A") )
+    expect_error( h5save(A, B, file = h5File, name = c("A", "B", "C")) )
+})
+
 test_that("Fail if file doesn't exist", {
     if(file.exists(h5File))
        file.remove(h5File)
