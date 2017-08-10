@@ -17,7 +17,9 @@ H5Pget_class         (h5plist)
 H5Pclose             (h5plist)
 H5Pclose_class       (h5plistclass)
 H5Pequal             (h5plistclass1, h5plistclass2)
-H5Pset_libver_bounds (h5plist, libver_low = "H5F_LIBVER_18", libver_high = "H5F_LIBVER_LATEST")
+H5Pset_libver_bounds (h5plist, 
+                      libver_low = "H5F_LIBVER_18", 
+                      libver_high = "H5F_LIBVER_LATEST")
 H5Pget_libver_bounds (h5plist)
 }
 \arguments{
