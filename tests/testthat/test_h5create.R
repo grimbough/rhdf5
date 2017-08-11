@@ -36,8 +36,9 @@ test_that("Fail if toplevel group missing", {
     H5close()
 })
 
-
+############################################################
 context("h5createDataset")
+############################################################
 
 if(file.exists(h5File))
     file.remove(h5File)
@@ -56,21 +57,37 @@ test_that("Create single dataset", {
     
 })
 
-test_that("Create second integer dataset", {
-    expect_true( h5createDataset(file = h5File, dataset = "B", dims = c(4,5), storage.mode = "integer") )
-    expect_true( "B" %in% names(h5dump(file = h5File)) )
-    B <- h5read(file = h5File, name = "B")
+test_that("Create more datasets with different data types", {
+    expect_true( h5createDataset(file = h5File, dataset = "int", dims = c(4,5), storage.mode = "integer") )
+    expect_true( h5createDataset(file = h5File, dataset = "bool", dims = c(4,5), storage.mode = "logical") )
+    expect_true( h5createDataset(file = h5File, dataset = "char", dims = c(4,5), storage.mode = "character", size = 255) )
     
-    expect_is(B, "matrix")
-    expect_true(nrow(B) == 4)
-    expect_true(ncol(B) == 5)
-    expect_is(B[1,1], "integer")
+    contents <- h5dump(file = h5File)
     
+    expect_true( all(c("int", "bool", "char") %in% names(contents)) )
+
+    expect_is(contents$int, "matrix")
+    expect_true(nrow(contents$int) == 4)
+    expect_true(ncol(contents$int) == 5)
+    
+    expect_is(contents$int[1,1], "integer")
+    expect_is(contents$bool[1,1], "logical")
+    expect_is(contents$char[1,1], "character")
 })
+
+test_that("Invalid storage mode arguments", {
+    expect_error( h5createDataset(file = h5File, dataset = "foo", dims = c(1,1), storage.mode = "foo") )
+    expect_error( h5createDataset(file = h5File, dataset = "foo", dims = c(1,1), storage.mode = 10) ) 
+    expect_error( h5createDataset(file = h5File, dataset = "foo", dims = c(1,1), storage.mode = 1L) )
+    expect_error( h5createDataset(file = h5File, dataset = "foo", dims = c(1,1), storage.mode = FALSE) )
+    ## character without size argument
+    expect_error( h5createDataset(file = h5File, dataset = "foo", dims = c(1,1), storage.mode = "character", size = NULL) )
+})
+
 
 test_that("Datasets with different compression levels", {
     
-    dataMatrix <- matrix(runif(n = 1e6), nrow = 100000, ncol = 10)
+    dataMatrix <- matrix(runif(n = 1e5), nrow = 10000, ncol = 10)
     
     h5File_0 <- tempfile(pattern = "level0_", fileext = ".h5")
     if(file.exists(h5File_0)) 
@@ -88,3 +105,40 @@ test_that("Datasets with different compression levels", {
     ## expect compressed file to be at least a small as uncompressed
     expect_lte( file.size(h5File_9), file.size(h5File_0) )
 })
+
+############################################################
+context("h5createAttribute")
+############################################################
+
+h5File <- tempfile(pattern = "ex_createAttr", fileext = ".h5")
+if(file.exists(h5File))
+    file.remove(h5File)
+## create a new file with a single dataset
+h5createFile(h5File)
+h5write(1:1, h5File, "foo")
+
+test_that("Add attribute using file name", {
+    expect_true( h5createAttribute(obj = "foo", file = h5File, attr = "foo_attr", dims = c(1,1)) )
+    expect_match( names(h5readAttributes(file = h5File, name = "foo")), "foo_attr" )
+})
+
+test_that("Fail is attribute already exists", {
+    expect_false( h5createAttribute(obj = "foo", file = h5File, attr = "foo_attr", dims = c(1,1)) )
+    expect_message( h5createAttribute(obj = "foo", file = h5File, attr = "foo_attr", dims = c(1,1)),
+                    "Can not create attribute")
+})
+
+test_that("Fail if dims or maxdims not numeric", {
+    expect_error( h5createAttribute(obj = "foo", file = h5File, attr = "foo_attr2", dims = "A" ) )
+    expect_error( h5createAttribute(obj = "foo", file = h5File, attr = "foo_attr2", dims = c(1,1), maxdims = "A" ) )
+})
+
+test_that("Invalid storage mode arguments", {
+    expect_error( h5createAttribute(file = h5File, obj = "foo", dims = c(1,1), attr = "bad_attr", storage.mode = "foo") )
+    expect_error( h5createAttribute(file = h5File, obj = "foo", dims = c(1,1), attr = "bad_attr", storage.mode = 10) ) 
+    expect_error( h5createAttribute(file = h5File, obj = "foo", dims = c(1,1), attr = "bad_attr", storage.mode = 1L) )
+    expect_error( h5createAttribute(file = h5File, obj = "foo", dims = c(1,1), attr = "bad_attr", storage.mode = FALSE) )
+    ## character without size argument
+    expect_error( h5createAttribute(file = h5File, obj = "foo", dims = c(1,1), attr = "bad_attr", storage.mode = "character", size = NULL) )
+})
+

@@ -1,7 +1,6 @@
 library(rhdf5)
 
-context("h5save function")
-## h5save doesn't close files, so we have to use H5close() after every call!
+context("h5write")
 
 A = 1:7;  
 ## output file name
