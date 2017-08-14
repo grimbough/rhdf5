@@ -1,58 +1,58 @@
 
 h5loadData <- function(h5loc, L, all=FALSE, ...) {
-  h5checktype(h5loc,"loc")
-  if (length(L) > 0) {
-    for (i in seq_len(length(L))) {
-      if (is.data.frame(L[[i]])) {
-        if (L[[i]]$ltype %in% h5constants[["H5L_TYPE"]][c("H5L_TYPE_HARD","H5L_TYPE_EXTERNAL")]) {
-          if (L[[i]]$otype == h5constants[["H5I_TYPE"]]["H5I_DATASET"]) {
-            L[i] = list(h5read( h5loc, L[[i]]$name, ...))
-          } else {
-            L[i] = h5lsConvertToDataframe(L[i], all=all)
-          }
-        } else {
-          L[i] = h5lsConvertToDataframe(L[i], all=all)
+    h5checktype(h5loc,"loc")
+    if (length(L) > 0) {
+        for (i in seq_len(length(L))) {
+            if (is.data.frame(L[[i]])) {
+                if (L[[i]]$ltype %in% h5constants[["H5L_TYPE"]][c("H5L_TYPE_HARD","H5L_TYPE_EXTERNAL")]) {
+                    if (L[[i]]$otype == h5constants[["H5I_TYPE"]]["H5I_DATASET"]) {
+                        L[i] = list(h5read( h5loc, L[[i]]$name, ...))
+                    } else {
+                        L[i] = h5lsConvertToDataframe(L[i], all=all)
+                    }
+                } else {
+                    L[i] = h5lsConvertToDataframe(L[i], all=all)
+                }
+            } else {
+                group = H5Gopen(h5loc, names(L)[i])
+                L[i] = list(h5loadData(group, L[[i]], all=all, ...))
+                H5Gclose(group)
+            }
         }
-      } else {
-        group = H5Gopen(h5loc, names(L)[i])
-        L[i] = list(h5loadData(group, L[[i]], all=all, ...))
-        H5Gclose(group)
-      }
     }
-  }
-  L
+    L
 }
 
 h5dump <- function( file, recursive = TRUE, load=TRUE, all=FALSE, index_type = h5default("H5_INDEX"), order = h5default("H5_ITER"), ...) {
-  loc = h5checktypeOrOpenLoc(file)
-
-  index_type <- h5checkConstants( "H5_INDEX", index_type )
-  order <- h5checkConstants( "H5_ITER", order )
-  if (is.logical(recursive)) {
-    if (recursive) {
-      depth = -1L
+    loc = h5checktypeOrOpenLoc(file)
+    on.exit( h5closeitLoc(loc) )
+    
+    index_type <- h5checkConstants( "H5_INDEX", index_type )
+    order <- h5checkConstants( "H5_ITER", order )
+    if (is.logical(recursive)) {
+        if (recursive) {
+            depth = -1L
+        } else {
+            depth = 1L
+        }
     } else {
-      depth = 1L
+        if (is.numeric(recursive)) {
+            depth = as.integer(recursive)
+            if (recursive == 0) {
+                stop("value 0 for 'recursive' is undefined, either a positive integer or negative (maximum recursion)")
+            }
+        } else {
+            stop("'recursive' must be an integer of length 1 or a logical")
+        }
     }
-  } else {
-    if (is.numeric(recursive)) {
-      depth = as.integer(recursive)
-      if (recursive == 0) {
-        stop("value 0 for 'recursive' is undefined, either a positive integer or negative (maximum recursion)")
-      }
+    di <- as.integer(2)
+    L <- .Call("_h5dump", loc$H5Identifier@ID, depth, index_type, order, PACKAGE='rhdf5')
+    if (load) {
+        L <- h5loadData( loc$H5Identifier, L, all=all, ...)
     } else {
-      stop("'recursive' must be an integer of length 1 or a logical")
+        L <- h5lsConvertToDataframe(L, all=all)
     }
-  }
-  di <- as.integer(2)
-  L <- .Call("_h5dump", loc$H5Identifier@ID, depth, index_type, order, PACKAGE='rhdf5')
-  if (load) {
-    L <- h5loadData( loc$H5Identifier, L, all=all, ...)
-  } else {
-    L <- h5lsConvertToDataframe(L, all=all)
-  }
-  h5closeitLoc(loc)
-
-  L
+    
+    L
 }
 

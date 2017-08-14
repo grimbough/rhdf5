@@ -21,6 +21,7 @@ h5createFile <- function(file) {
 
 h5createGroup <- function(file, group) {
     loc = h5checktypeOrOpenLoc(file)
+    on.exit(h5closeitLoc(loc))
     
     res <- FALSE
     if (is.character(group)) {
@@ -35,7 +36,6 @@ h5createGroup <- function(file, group) {
         }
     }
     
-    h5closeitLoc(loc)
     res
 }
 
@@ -73,7 +73,7 @@ h5createDataset <- function(file, dataset, dims, maxdims = dims, storage.mode = 
                     if (showWarnings & (prod(dims) > 1000000L) & (all(dims == chunk))) {
                         warning("You created a large dataset with compression and chunking. The chunk size is equal to the dataset dimensions. If you want to read subsets of the dataset, you should test smaller chunk sizes to improve read times. Turn off this warning with showWarnings=FALSE.")
                     }
-                    if (is.null(dcpl)) { dcpl = H5Pcreate("H5P_DATASET_CREATE") }
+                    if (is.null(dcpl)) { dcpl = H5Pcreate("H5P_DATASET_CREATE"); }
                     H5Pset_fill_time( dcpl, "H5D_FILL_TIME_ALLOC" )
                     H5Pset_chunk( dcpl, chunk)
                     if (level > 0) { H5Pset_deflate( dcpl, level ) }
@@ -86,6 +86,7 @@ h5createDataset <- function(file, dataset, dims, maxdims = dims, storage.mode = 
                 if (!is(sid, "H5IdComponent")) {
                     message("Can not create dataset. 'dims' or 'maxdims' argument invalid.")
                 } else {
+                    on.exit(H5Sclose(sid), add = TRUE)
                     if (is.null(H5type)) {
                         if (is.character(storage.mode)) {
                             tid <- switch(storage.mode[1],
@@ -120,7 +121,7 @@ h5createDataset <- function(file, dataset, dims, maxdims = dims, storage.mode = 
                             res <- TRUE
                         }
                     }
-                    H5Sclose(sid)
+                    #H5Sclose(sid)
                 }
                 if (!is.null(dcpl)) { H5Pclose(dcpl) }
             } else {
@@ -144,6 +145,7 @@ h5createAttribute <- function(obj, attr, dims, maxdims = dims, file, storage.mod
         if (!is(sid, "H5IdComponent")) {
             message("Can not create attribute. 'dims' or 'maxdims' argument invalid.")
         } else {
+            on.exit(H5Sclose(sid), add = TRUE)
             if (is.null(H5type)) {
                 if (is.character(storage.mode)) {
                     tid <- switch(storage.mode[1],
@@ -177,7 +179,6 @@ h5createAttribute <- function(obj, attr, dims, maxdims = dims, file, storage.mod
                     }
                 }
             }
-            H5Sclose(sid)
         }
     } else {
         stop("Can not create attribute. 'dims' and 'maxdims' have to be numeric.")

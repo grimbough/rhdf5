@@ -7,6 +7,8 @@
       \item The `name' argument to \code{h5save} now works, and lets you choose
       an new name for the dataset in the file, rather than only using the 
       name of the object in the R session.
+      \item Made efforts to ensure files are close, even if a function throws
+      an error, so repeated calls to H5close() are no longer needed.
     }
   }
 }
