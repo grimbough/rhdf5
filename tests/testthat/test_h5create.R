@@ -40,6 +40,7 @@ test_that("Fail if toplevel group missing", {
 context("h5createDataset")
 ############################################################
 
+h5File <- tempfile(pattern = "ex_createDS", fileext = ".h5")
 if(file.exists(h5File))
     file.remove(h5File)
 ## create empty file
@@ -141,4 +142,9 @@ test_that("Invalid storage mode arguments", {
     ## character without size argument
     expect_error( h5createAttribute(file = h5File, obj = "foo", dims = c(1,1), attr = "bad_attr", storage.mode = "character", size = NULL) )
 })
+
+test_that("No open HDF5 objects are left", {
+    expect_equal( length(h5validObjects()), 0 )
+})
+
 
