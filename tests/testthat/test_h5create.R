@@ -1,6 +1,8 @@
 library(rhdf5)
 
+############################################################
 context("h5createFile")
+############################################################
 
 ## output file name
 h5File <- tempfile(pattern = "ex_save", fileext = ".h5")
@@ -17,7 +19,9 @@ test_that("Don't overwrite existing file", {
                    regexp = "already exists.\n$")
 })
 
+############################################################
 context("h5createGroup")
+############################################################
 
 if(!file.exists(h5File))
     h5createFile(file = h5File)

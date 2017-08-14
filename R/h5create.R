@@ -73,13 +73,21 @@ h5createDataset <- function(file, dataset, dims, maxdims = dims, storage.mode = 
                     if (showWarnings & (prod(dims) > 1000000L) & (all(dims == chunk))) {
                         warning("You created a large dataset with compression and chunking. The chunk size is equal to the dataset dimensions. If you want to read subsets of the dataset, you should test smaller chunk sizes to improve read times. Turn off this warning with showWarnings=FALSE.")
                     }
-                    if (is.null(dcpl)) { dcpl = H5Pcreate("H5P_DATASET_CREATE"); }
+                    if (is.null(dcpl)) { 
+                        dcpl = H5Pcreate("H5P_DATASET_CREATE"); 
+                        on.exit(H5Pclose(dcpl), add = TRUE) 
+                    }
                     H5Pset_fill_time( dcpl, "H5D_FILL_TIME_ALLOC" )
                     H5Pset_chunk( dcpl, chunk)
-                    if (level > 0) { H5Pset_deflate( dcpl, level ) }
+                    if (level > 0) { 
+                        H5Pset_deflate( dcpl, level ) 
+                    }
                 }
                 if(!missing(fillValue)) {
-                    if (is.null(dcpl)) { dcpl = H5Pcreate("H5P_DATASET_CREATE") }
+                    if (is.null(dcpl)) { 
+                        dcpl = H5Pcreate("H5P_DATASET_CREATE")
+                        on.exit(H5Pclose(dcpl), add = TRUE) 
+                    }
                     H5Pset_fill_value(dcpl, fillValue)
                 }
                 sid <- H5Screate_simple(dims, maxdims)
@@ -123,7 +131,7 @@ h5createDataset <- function(file, dataset, dims, maxdims = dims, storage.mode = 
                     }
                     #H5Sclose(sid)
                 }
-                if (!is.null(dcpl)) { H5Pclose(dcpl) }
+                #if (!is.null(dcpl)) { H5Pclose(dcpl) }
             } else {
                 message("Can not create dataset. 'dims' and 'maxdims' have to be numeric.")
             }
