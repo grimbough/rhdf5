@@ -74,6 +74,7 @@ h5write <- function(obj, file, name, ...) {
 
 h5write.default <- function(obj, file, name, createnewfile=TRUE, write.attributes = FALSE, ...) {
   loc = h5checktypeOrOpenLoc(file)
+  on.exit(h5closeitLoc(loc))
   
   res <- h5writeDataset(obj, loc$H5Identifier, name, ...)
   if (write.attributes) {
@@ -84,9 +85,11 @@ h5write.default <- function(obj, file, name, createnewfile=TRUE, write.attribute
 
     if (type == "H5I_GROUP") {
       h5obj = H5Gopen(loc$H5Identifier, name)
+      on.exit(H5Gclose(h5obj), add = TRUE)
     } else {
       if (type == "H5I_DATASET") {
         h5obj = H5Dopen(loc$H5Identifier, name)
+        on.exit(H5Dclose(h5obj), add = TRUE)
       } else {
         stop("Cannot open object of this type")
       }
@@ -95,15 +98,14 @@ h5write.default <- function(obj, file, name, createnewfile=TRUE, write.attribute
     for (i in seq_len(length(Attr))) {
       h5writeAttribute(Attr[[i]], h5obj, name = names(Attr)[i])
     }
-    if (type == "H5O_TYPE_GROUP") {
-      H5Gclose(h5obj)
-    } else {
-      if (type == "H5O_TYPE_DATASET") {
-        H5Dclose(h5obj)
-      }
-    }
+    #if (type == "H5O_TYPE_GROUP") {
+    #  H5Gclose(h5obj)
+    #} else {
+    #  if (type == "H5O_TYPE_DATASET") {
+    #    H5Dclose(h5obj)
+    #  }
+    #}
   }
-  h5closeitLoc(loc)
 
   invisible(res)
 }

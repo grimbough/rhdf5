@@ -17,10 +17,29 @@ test_that("Error if file doesn't exist", {
 test_that("Writing works", {
     expect_true( h5createFile(h5File) )
     expect_true( file.exists(h5File) )
+    ## writing to a file name
     h5write(obj = A, file = h5File, name = "A")
     expect_equal( as.integer(h5read(file = h5File, name = "A")), A )
+    
+    fid <- H5Fopen(name = h5File)
+    ## writing to a group
+    gid <- H5Gcreate(h5loc = fid, name = "test_group")
+    expect_silent( h5write(matrix(1:20, ncol = 10), file = gid, name = "foo") )
+    H5Gclose(gid)
+    
+    H5Fclose(fid)
 })
 
+
+test_that("Attributes are written too", {
+    B <- runif(n = 10)
+    attr(B, "scale") <- "centimeters" 
+    h5write(obj = B, file = h5File, name = "B", write.attributes = TRUE)
+    ## note that attributes aren't retrieved here
+    expect_equivalent( as.numeric(h5read(file = h5File, name = "B")), B )
+    #expect_equal( h5read(file = h5File, name = "B", read.attributes = TRUE), B )
+    expect_true( "scale" %in% names(h5readAttributes(file = h5File, name = "B")) )
+})
 
 test_that("No open HDF5 objects are left", {
     expect_equal( length(h5validObjects()), 0 )
