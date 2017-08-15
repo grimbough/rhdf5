@@ -12,7 +12,7 @@ if(file.exists(h5File))
 ## populate an example file
 D <- 1:20
 h5createFile(h5File)
-h5createDataset(file = h5File, dataset = "foo", dims = c(1,length(D)), maxdims = c(2,length(D)))
+h5createDataset(file = h5File, dataset = "foo", dims = c(1,length(D)), maxdims = c(4,length(D)))
 h5write(obj = D, file = h5File, name = "foo")
 
 test_that("Dimensions as expected", {

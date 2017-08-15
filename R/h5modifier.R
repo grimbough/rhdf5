@@ -19,6 +19,7 @@ h5set_extent <- function(file, dataset, dims) {
         }
     } else {
         h5checktype(dataset, "dataset")
+        ## TODO: only valid for chunked datasets, so we should check for them
         res = H5Dset_extent(dataset, dims)
     }
     
