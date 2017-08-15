@@ -61,11 +61,12 @@ h5readDataset <- function (h5dataset, index = NULL, start = NULL, stride = NULL,
 }
 
 h5read <- function(file, name, index=NULL, start=NULL, stride=NULL, block=NULL, count=NULL, compoundAsDataFrame = TRUE, callGeneric = TRUE, read.attributes=FALSE, drop = FALSE, ... ) {
+    
   loc = h5checktypeOrOpenLoc(file, readonly=TRUE)
+  on.exit( h5closeitLoc(loc) )
 
   if (!H5Lexists(loc$H5Identifier, name)) {
-    h5closeitLoc(loc)
-    stop("Object ",name," does not exist in this HDF5 file.")
+    stop("Object '", name, "' does not exist in this HDF5 file.")
   } else {
     oid = H5Oopen(loc$H5Identifier, name)
     type = H5Iget_type(oid)
@@ -105,7 +106,5 @@ h5read <- function(file, name, index=NULL, start=NULL, stride=NULL, block=NULL, 
       }
     }
   }  # !H5Lexists
-  h5closeitLoc(loc)
-
   obj
 }
