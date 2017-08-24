@@ -1,6 +1,6 @@
 
 h5set_extent <- function(file, dataset, dims) {
-    
+
     loc = h5checktypeOrOpenLoc(file)
     on.exit( h5closeitLoc(loc) )
     

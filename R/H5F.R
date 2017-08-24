@@ -1,5 +1,6 @@
 
 H5Fcreate <- function( name, flags = h5default("H5F_ACC"), fcpl = NULL, fapl = NULL) {
+
     if (length(name)!=1 || !is.character(name)) 
         stop("'name' must be a character string of length 1")
     name = normalizePath(name, mustWork = FALSE)
@@ -60,6 +61,7 @@ H5Fflush <- function( h5file, scope = h5default("H5F_SCOPE") ) {
 }
 
 H5Fis_hdf5 <- function( name, showWarnings=TRUE ) {
+
     if (length(name)!=1 || !is.character(name)) 
         stop("'name' must be a character string of length 1")
     name = normalizePath(name,mustWork = FALSE)

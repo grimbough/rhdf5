@@ -1,5 +1,6 @@
 
 h5createFile <- function(file) {
+
     res <- FALSE
     if (is.character(file)) {
         file = normalizePath(file,mustWork = FALSE)

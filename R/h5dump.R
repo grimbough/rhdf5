@@ -1,5 +1,6 @@
 
 h5loadData <- function(h5loc, L, all=FALSE, ...) {
+
     h5checktype(h5loc,"loc")
     if (length(L) > 0) {
         for (i in seq_len(length(L))) {

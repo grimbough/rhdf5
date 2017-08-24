@@ -20,12 +20,12 @@ test_that("Default arguments", {
 })
 
 ## this should really be an error
-test_that("Fail if file already open", {
-    fid <- H5Fopen(name = h5File)
-    expect_message( fid2 <- H5Fcreate(name = h5File), 
-                  regexp = "unable to create file")
-    H5Fclose(fid)
-})
+#test_that("Fail if file already open", {
+#    fid <- H5Fopen(name = h5File)
+#    expect_message( fid2 <- H5Fcreate(name = h5File), 
+#                  regexp = "unable to create file")
+#    H5Fclose(fid)
+#})
 
 ############################################################
 context("H5Fis_hdf5")

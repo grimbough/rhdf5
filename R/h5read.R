@@ -106,5 +106,6 @@ h5read <- function(file, name, index=NULL, start=NULL, stride=NULL, block=NULL, 
       }
     }
   }  # !H5Lexists
+
   obj
 }
