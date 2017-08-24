@@ -10,6 +10,7 @@ bioc_use_devel: true
 warnings_are_errors: false
 
 r: bioc-devel
+r_check_args: "--no-vignettes --force-multiarch"
 
 r_github_packages:
   - jimhester/covr
