@@ -3,10 +3,7 @@ sudo: false
 cache: packages
 
 before_install:
-  - tlmgr install bera
-  - tlmgr install nowidow
-  - tlmgr install parnotes
-  - tlmgr install marginfix
+  - tlmgr install texlive-fonts-extra
 
 r:
   - devel
@@ -16,8 +13,8 @@ bioc_use_devel: true
 warnings_are_errors: false
 
 r: bioc-devel
-r_build_args: "--no-build-vignettes"
-r_check_args: "--no-vignettes --force-multiarch"
+r_build_args: --no-build-vignettes
+r_check_args: --no-vignettes --force-multiarch
 
 r_github_packages:
   - jimhester/covr
