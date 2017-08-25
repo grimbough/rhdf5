@@ -3,7 +3,7 @@ sudo: false
 cache: packages
 
 before_install:
-  - tlmgr install texlive-fonts-extra
+  - tlmgr install bera nowidow
 
 r:
   - devel
