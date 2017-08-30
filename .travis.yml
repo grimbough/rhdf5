@@ -16,7 +16,7 @@ bioc_packages: BiocCheck
 r_github_packages:
   - jimhester/covr
   
-script:
+after_script:
   - R CMD BiocCheck *tar.gz  
 
 after_success:
