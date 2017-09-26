@@ -129,13 +129,15 @@ h5checktypeOrOpenLoc <- function(file, fctname = deparse(match.call()[1]), creat
           stop("Error in ",fctname,". Cannot create file.")
         } else {
           res$H5Identifier = h5loc
-          res$closeit = FALSE
+          #res$closeit = FALSE
+          res$closeit = TRUE
         }
       } else {
         stop("Error in ",fctname,". Cannot open file. File '",file,"' does not exist.")
       }
     }
   } else {
+    ## We have passed an H5IdComponent, so it should not be closed after  
     h5checktype(file, "loc", fctname = fctname, allow.character = TRUE)
     res$H5Identifier = file
     res$closeit = FALSE

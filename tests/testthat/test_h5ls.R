@@ -53,6 +53,12 @@ test_that("Changing traversal order", {
                       c("baa", "foo", "A", "B") )
 })
 
+test_that('Passing H5Identifier does not close it', {
+    fid <- H5Fopen(h5File)
+    expect_is( h5ls(file = fid), class = 'data.frame')
+    expect_silent( H5Fclose(fid) )
+})
+
 test_that("No open HDF5 objects are left", {
     expect_equal( length(h5validObjects()), 0 )
 })

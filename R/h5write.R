@@ -73,7 +73,7 @@ h5write <- function(obj, file, name, ...) {
 }
 
 h5write.default <- function(obj, file, name, createnewfile=TRUE, write.attributes = FALSE, ...) {
-  loc = h5checktypeOrOpenLoc(file)
+  loc = h5checktypeOrOpenLoc(file, createnewfile = createnewfile)
   on.exit(h5closeitLoc(loc))
   
   res <- h5writeDataset(obj, loc$H5Identifier, name, ...)
