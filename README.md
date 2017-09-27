@@ -8,7 +8,7 @@ for the exchange of large and/or complex datasets between R and other software p
 
 | Travis        | BioC           | Test Coverage |
 | ------------- |-------------| -----|
-| [![Build Status](https://travis-ci.org/grimbough/rhdf5.svg?branch=master)](https://travis-ci.org/grimbough/rhdf5) | [![BioC Status](https://bioconductor.org/shields/build/devel/bioc/biomaRt.svg)](http://bioconductor.org/checkResults/devel/bioc-LATEST/rhdf5/) | [![Codecov](http://img.shields.io/codecov/c/github/grimbough/rhdf5.svg)](https://codecov.io/gh/grimbough/rhdf5) |
+| [![Build Status](https://travis-ci.org/grimbough/rhdf5.svg?branch=master)](https://travis-ci.org/grimbough/rhdf5) | [![BioC Status](https://bioconductor.org/shields/build/devel/bioc/rhdf5.svg)](http://bioconductor.org/checkResults/devel/bioc-LATEST/rhdf5/) | [![Codecov](http://img.shields.io/codecov/c/github/grimbough/rhdf5.svg)](https://codecov.io/gh/grimbough/rhdf5) |
 
 ## Contact
 
