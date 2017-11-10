@@ -74,7 +74,7 @@ H5Dget_storage_size <- function( h5dataset ) {
 }
 
 H5Dread <- function( h5dataset, h5spaceFile=NULL, h5spaceMem=NULL, buf = NULL, compoundAsDataFrame = TRUE,
-                     bit64conversion, drop = FALSE ) {
+                     bit64conversion, drop = FALSE, native = FALSE ) {
   h5checktype(h5dataset, "dataset")
   h5checktypeOrNULL(h5spaceFile, "dataspace")
   h5checktypeOrNULL(h5spaceMem, "dataspace")
@@ -90,7 +90,7 @@ H5Dread <- function( h5dataset, h5spaceFile=NULL, h5spaceMem=NULL, buf = NULL, c
       stop("install package 'bit64' before using bit64conversion='bit64'")
     }
   }
-  res <- .Call("_H5Dread", h5dataset@ID, sidFile, sidMem, buf, compoundAsDataFrame, bit64conv, drop, PACKAGE='rhdf5')
+  res <- .Call("_H5Dread", h5dataset@ID, sidFile, sidMem, buf, compoundAsDataFrame, bit64conv, drop, native, PACKAGE='rhdf5')
   if (H5Aexists(h5obj=h5dataset, name="storage.mode")) {
     att = H5Aopen(h5obj=h5dataset, name="storage.mode")
     if (H5Aread(h5attribute=att) == "logical") {
@@ -101,13 +101,13 @@ H5Dread <- function( h5dataset, h5spaceFile=NULL, h5spaceMem=NULL, buf = NULL, c
   res
 }
 
-H5Dwrite <- function( h5dataset, buf, h5spaceMem=NULL, h5spaceFile=NULL ) {
+H5Dwrite <- function( h5dataset, buf, h5spaceMem=NULL, h5spaceFile=NULL, native=FALSE) {
   h5checktype(h5dataset, "dataset")
   h5checktypeOrNULL(h5spaceFile, "dataspace")
   h5checktypeOrNULL(h5spaceMem, "dataspace")
   if (is.null(h5spaceMem)) { sidMem <- NULL } else { sidMem <- h5spaceMem@ID }
   if (is.null(h5spaceFile)) { sidFile <- NULL } else { sidFile <- h5spaceFile@ID }
-  invisible(.Call("_H5Dwrite", h5dataset@ID, buf, sidFile, sidMem, PACKAGE='rhdf5'))
+  invisible(.Call("_H5Dwrite", h5dataset@ID, buf, sidFile, sidMem, native, PACKAGE='rhdf5'))
 }
 
 H5Dset_extent <- function( h5dataset, size) {

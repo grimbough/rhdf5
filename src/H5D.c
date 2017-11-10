@@ -783,7 +783,7 @@ SEXP H5Dread_helper(hid_t dataset_id, hid_t file_space_id, hid_t mem_space_id, h
 /* herr_t H5Dread(hid_t dataset_id, hid_t mem_type_id, hid_t mem_space_id, hid_t file_space_id, hid_t xfer_plist_id, void * buf ) */
 /* TODO: accept mem_type_id as parameter */
 SEXP _H5Dread( SEXP _dataset_id, SEXP _file_space_id, SEXP _mem_space_id, SEXP _buf, SEXP _compoundAsDataFrame,
-               SEXP _bit64conversion, SEXP _drop  ) {
+               SEXP _bit64conversion, SEXP _drop, SEXP _native) {
   int compoundAsDataFrame = LOGICAL(_compoundAsDataFrame)[0];
   int drop = LOGICAL(_drop)[0];
   int bit64conversion = INTEGER(_bit64conversion)[0];
@@ -874,10 +874,11 @@ SEXP _H5Dread( SEXP _dataset_id, SEXP _file_space_id, SEXP _mem_space_id, SEXP _
 
 /* herr_t H5Dwrite(hid_t dataset_id, hid_t mem_type_id, hid_t mem_space_id, hid_t file_space_id, hid_t xfer_plist_id, const void * buf ) */
 /* TODO more parameters: hid_t xfer_plist_id */
-SEXP _H5Dwrite( SEXP _dataset_id, SEXP _buf, SEXP _file_space_id, SEXP _mem_space_id ) {
+SEXP _H5Dwrite( SEXP _dataset_id, SEXP _buf, SEXP _file_space_id, SEXP _mem_space_id, SEXP _native) {
   hid_t dataset_id = INTEGER(_dataset_id)[0];
   hid_t mem_type_id;
   hid_t mem_space_id;
+  int native = LOGICAL(_native)[0];
   if (length(_mem_space_id) == 0) {
     mem_space_id = H5S_ALL;
   } else {
