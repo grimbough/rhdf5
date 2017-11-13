@@ -16,3 +16,8 @@ Package Homepage: http://bioconductor.org/packages/devel/bioc/html/rhdf5.html
 Bug Reports: https://support.bioconductor.org/p/new/post/?tag_val=rhdf5.
 
 
+## Funding 
+
+Funding for continued development and maintenance of this package is provided by the German Network for Bioinformatics Infrastructure
+
+<a href="http://www.denbi.de"><img src="https://tess.elixir-europe.org/system/content_providers/images/000/000/063/original/deNBI_Logo_rgb.jpg" width="400" align="left"></a>
