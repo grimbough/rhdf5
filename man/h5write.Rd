@@ -28,7 +28,7 @@ Reads and writes objects in HDF5 files. This function can be used to read and wr
 h5read                      (file, name, index=NULL,
                              start=NULL, stride=NULL, block=NULL, count=NULL,
                              compoundAsDataFrame = TRUE, callGeneric = TRUE,
-			     read.attributes = FALSE, drop = FALSE, ...)
+			     read.attributes = FALSE, drop = FALSE, native = FALSE, ...)
 h5readAttributes            (file, name)
 h5write                     (obj, file, name, ...)
 h5write.default             (obj, file, name, 
@@ -44,7 +44,7 @@ h5writeDataset.logical      (...)
 h5writeDataset.character    (...)
 h5writeDataset.array        (obj, h5loc, name, index = NULL,
                              start=NULL, stride=NULL, block=NULL, count=NULL,
-                             size=NULL, level=7)
+                             size=NULL, level=7, native=FALSE)
 h5writeAttribute            (attr, h5obj, name, ...)
 h5writeAttribute.matrix     (...)
 h5writeAttribute.integer    (...)
@@ -75,6 +75,7 @@ h5writeAttribute.array      (attr, h5obj, name, size)
   \item{read.attributes}{(logical) If TRUE, the HDF5 attributes are read and attached to the respective R object.}
   \item{drop}{(logical) If TRUE, the HDF5 object is read as a vector with NULL dim attributes.}
   \item{write.attributes}{(logical) If TRUE, all R-attributes attached to the object \code{obj} are written to the HDF5 file.}
+  \item{native}{(logical) If TRUE, the \code{array} being written or read is transposed so that it will be stored in the R orientation in the HDF5 file. A file written with \code{native = TRUE} should also be read with \code{native = TRUE}}.
   \item{\dots}{Further arguments passed to \code{\link{H5Dread}}.}
 }
 \details{
