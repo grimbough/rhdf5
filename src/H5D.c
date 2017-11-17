@@ -897,12 +897,6 @@ SEXP _H5Dwrite( SEXP _dataset_id, SEXP _buf, SEXP _file_space_id, SEXP _mem_spac
     file_space_id = INTEGER(_file_space_id)[0];
   }
 
-  const int ndims = H5Sget_simple_extent_ndims(mem_space_id);
-  hsize_t * dims = (hsize_t *)R_alloc((size_t)ndims, sizeof(hsize_t));
-  herr_t test = H5Sget_simple_extent_dims(mem_space_id, dims, NULL);
-
-  const unsigned int BLOCKSIZE = 10;
-
   const void * buf;
   if (TYPEOF(_buf) == INTSXP) {
     mem_type_id = H5T_NATIVE_INT;

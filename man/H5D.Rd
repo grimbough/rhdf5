@@ -25,7 +25,7 @@ H5Dget_create_plist (h5dataset)
 H5Dget_storage_size (h5dataset)
 H5Dread             (h5dataset, h5spaceFile = NULL, h5spaceMem = NULL,
                      buf = NULL, compoundAsDataFrame = TRUE,
-                     bit64conversion, drop = FALSE)
+                     bit64conversion, drop = FALSE, native)
 H5Dwrite            (h5dataset, buf, h5spaceMem = NULL, h5spaceFile = NULL)
 H5Dset_extent       (h5dataset, size)
 }

@@ -55,7 +55,7 @@ h5writeDatasetHelper <- function (obj, h5dataset, index = NULL, start = NULL, st
   })
   try({
     res <- H5Dwrite(h5dataset, obj, h5spaceMem = h5spaceMem, 
-                    h5spaceFile = h5spaceFile, native = native)
+                    h5spaceFile = h5spaceFile)
   })
   try({
     H5Sclose(h5spaceMem)
