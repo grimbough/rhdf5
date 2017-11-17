@@ -1,7 +1,7 @@
 
 
 h5writeDatasetHelper <- function (obj, h5dataset, index = NULL, start = NULL, stride = NULL, 
-                                  block = NULL, count = NULL, native=FALSE)
+                                  block = NULL, count = NULL)
 {
   if (is.null(dim(obj))) {
     dim(obj) = length(obj)
@@ -192,13 +192,14 @@ h5writeDataset.array <- function(obj, h5loc, name, index = NULL, start=NULL, str
           size = 1
         }
       }
-      if (native) { dim(obj) <- rev(dim(obj)) }
-      try( { h5createDataset(h5loc, name, dim(obj), storage.mode = storage.mode(obj), size = size, chunk=dim(obj), level=level) } )
+      temp_dim <- dim(obj)
+      if (native) { temp_dim <- rev(dim(obj)) }
+      try( { h5createDataset(h5loc, name, temp_dim, storage.mode = storage.mode(obj), size = size, chunk=temp_dim, level=level) } )
     }
   }
   try ( { h5dataset <- H5Dopen(h5loc, name) } )
   h5writeDatasetHelper(obj=obj, h5dataset=h5dataset, index = index, start = start, stride = stride, 
-                       block = block, count = count, native = native)
+                       block = block, count = count)
   try( { H5Dclose(h5dataset) } )
 #  invisible(res)
   invisible(NULL)

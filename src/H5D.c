@@ -786,6 +786,7 @@ SEXP _H5Dread( SEXP _dataset_id, SEXP _file_space_id, SEXP _mem_space_id, SEXP _
                SEXP _bit64conversion, SEXP _drop, SEXP _native) {
   int compoundAsDataFrame = LOGICAL(_compoundAsDataFrame)[0];
   int drop = LOGICAL(_drop)[0];
+  int native = LOGICAL(_native)[0];
   int bit64conversion = INTEGER(_bit64conversion)[0];
 
   /***********************************************************************/
@@ -821,8 +822,14 @@ SEXP _H5Dread( SEXP _dataset_id, SEXP _file_space_id, SEXP _mem_space_id, SEXP _
     hsize_t maxsize[rank];
     H5Sget_simple_extent_dims(file_space_id, size, maxsize);
     hsize_t dims[rank];
-    for (int i=0; i<rank; i++) {
-      dims[i] = size[i];
+    if(native == 0) {
+      for (int i=0; i<rank; i++) {
+        dims[i] = size[i];
+      }
+    } else {
+      for (int i=0; i<rank; i++) {
+        dims[i] = size[rank-1-i];
+      }
     }
     mem_space_id = H5Screate_simple( rank, dims, dims);
   } else {
@@ -874,11 +881,10 @@ SEXP _H5Dread( SEXP _dataset_id, SEXP _file_space_id, SEXP _mem_space_id, SEXP _
 
 /* herr_t H5Dwrite(hid_t dataset_id, hid_t mem_type_id, hid_t mem_space_id, hid_t file_space_id, hid_t xfer_plist_id, const void * buf ) */
 /* TODO more parameters: hid_t xfer_plist_id */
-SEXP _H5Dwrite( SEXP _dataset_id, SEXP _buf, SEXP _file_space_id, SEXP _mem_space_id, SEXP _native) {
+SEXP _H5Dwrite( SEXP _dataset_id, SEXP _buf, SEXP _file_space_id, SEXP _mem_space_id) {
   hid_t dataset_id = INTEGER(_dataset_id)[0];
   hid_t mem_type_id;
   hid_t mem_space_id;
-  int native = LOGICAL(_native)[0];
   if (length(_mem_space_id) == 0) {
     mem_space_id = H5S_ALL;
   } else {
@@ -890,6 +896,12 @@ SEXP _H5Dwrite( SEXP _dataset_id, SEXP _buf, SEXP _file_space_id, SEXP _mem_spac
   } else {
     file_space_id = INTEGER(_file_space_id)[0];
   }
+
+  const int ndims = H5Sget_simple_extent_ndims(mem_space_id);
+  hsize_t * dims = (hsize_t *)R_alloc((size_t)ndims, sizeof(hsize_t));
+  herr_t test = H5Sget_simple_extent_dims(mem_space_id, dims, NULL);
+
+  const unsigned int BLOCKSIZE = 10;
 
   const void * buf;
   if (TYPEOF(_buf) == INTSXP) {
