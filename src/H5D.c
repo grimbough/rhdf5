@@ -881,8 +881,9 @@ SEXP _H5Dread( SEXP _dataset_id, SEXP _file_space_id, SEXP _mem_space_id, SEXP _
 
 /* herr_t H5Dwrite(hid_t dataset_id, hid_t mem_type_id, hid_t mem_space_id, hid_t file_space_id, hid_t xfer_plist_id, const void * buf ) */
 /* TODO more parameters: hid_t xfer_plist_id */
-SEXP _H5Dwrite( SEXP _dataset_id, SEXP _buf, SEXP _file_space_id, SEXP _mem_space_id) {
+SEXP _H5Dwrite( SEXP _dataset_id, SEXP _buf, SEXP _file_space_id, SEXP _mem_space_id, SEXP _native) {
   hid_t dataset_id = INTEGER(_dataset_id)[0];
+  int native = LOGICAL(_native)[0];
   hid_t mem_type_id;
   hid_t mem_space_id;
   if (length(_mem_space_id) == 0) {
@@ -897,7 +898,13 @@ SEXP _H5Dwrite( SEXP _dataset_id, SEXP _buf, SEXP _file_space_id, SEXP _mem_spac
     file_space_id = INTEGER(_file_space_id)[0];
   }
 
+  ndims = H5Sget_simple_extent_ndims(mem_space_id);
+  hsize_t * dims = (hsize_t *)R_alloc((size_t)ndims, sizeof(hsize_t));
+  H5Sget_simple_extent_dims(mem_space_id, dims, NULL); 
+
   const void * buf;
+  const void * block;
+
   if (TYPEOF(_buf) == INTSXP) {
     mem_type_id = H5T_NATIVE_INT;
     buf = INTEGER(_buf);
