@@ -52,7 +52,15 @@ h5readDataset <- function (h5dataset, index = NULL, start = NULL, stride = NULL,
       tmp = unique(sort(index[[i]]))
       I[[i]] = match(index[[i]], tmp)
     }
-    obj <- do.call("[", c(list(obj), I, drop = FALSE))
+    #####################
+    ## This can take a long time for large datasets
+    ## can we find rules for skipping it? 
+    #obj <- do.call("[", c(list(obj), I, drop = FALSE))
+    obj.dim <- lapply(dim(obj), FUN = seq_len)
+    if(!identical(I, obj.dim)) {
+        obj <- do.call("[", c(list(obj), I, drop = FALSE))
+    } 
+    ####################
   }
   try({
     H5Sclose(h5spaceFile)
