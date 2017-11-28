@@ -17,6 +17,7 @@ test_that("Dataspace creation & closure", {
     expect_is(sid , "H5IdComponent")
     expect_silent(H5Sclose(sid))
     
+    expect_null( h5errorHandling(type = "suppress") )  
     expect_message( sid <- H5Screate(type = "FOO") )
     expect_false(sid)
 })

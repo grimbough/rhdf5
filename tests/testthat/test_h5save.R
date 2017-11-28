@@ -41,6 +41,10 @@ test_that("Fail if file doesn't exist", {
     H5close()
 })
 
+test_that("Suppress Internal error messages", {
+    h5errorHandling(type = "suppress")
+})
+
 test_that("Adding to existing file", {
     h5save(A, file = h5File)
     H5close()
@@ -55,11 +59,12 @@ test_that("Try to overwrite existing data set with same name", {
     if(file.exists(h5File))
         file.remove(h5File)
     
-    h5save(A, file = h5File)
+    expect_null(h5save(A, file = h5File))
     H5close()
     
     ## this will throw an HDF5 error, but I don't know how to catch it yet
-    h5save(B, file = h5File, name = "A")
+    h5errorHandling(type = "suppress")
+    expect_null(h5save(B, file = h5File, name = "A"))
     H5close()
     
     expect_false( identical(h5read(file = h5File, name = "A"), B) )
