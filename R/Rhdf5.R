@@ -24,8 +24,9 @@ getDatatypeClass <- function(type) {
 }
 
 h5version <- function() {
-  cat("This is Bioconductor rhdf5",as.character(packageVersion("rhdf5")),
-      "linking to C-library HDF5",
-      paste(H5get_libversion(),collapse="."),"\n")
+  message("This is Bioconductor rhdf5 ",
+          as.character(packageVersion("rhdf5")),
+          " linking to C-library HDF5 ",
+          paste(H5get_libversion(), collapse="."))
   invisible(NULL)
 }
