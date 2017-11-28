@@ -136,7 +136,7 @@ H5Sselect_index <- function( h5space, index ) {
     if (is.null(index[[i]])) {
       ## index[[i]] <- seq_len(dim[i]) - 1L
       start[[i]] <- 0
-      count[[i]] <- dim[i]
+      count[[i]] <- as.numeric(dim[i])
     } else {
       if (any(index[[i]] > dim[i])) {
         stop("index exceeds HDF5-array dimension.")
