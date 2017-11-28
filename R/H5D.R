@@ -101,7 +101,7 @@ H5Dread <- function( h5dataset, h5spaceFile=NULL, h5spaceMem=NULL, buf = NULL, c
   res
 }
 
-H5Dwrite <- function( h5dataset, buf, h5spaceMem=NULL, h5spaceFile=NULL, native=FALSE) {
+H5Dwrite <- function( h5dataset, buf, h5spaceMem=NULL, h5spaceFile=NULL, native=FALSE ) {
   h5checktype(h5dataset, "dataset")
   h5checktypeOrNULL(h5spaceFile, "dataspace")
   h5checktypeOrNULL(h5spaceMem, "dataspace")
@@ -110,8 +110,9 @@ H5Dwrite <- function( h5dataset, buf, h5spaceMem=NULL, h5spaceFile=NULL, native=
   invisible(.Call("_H5Dwrite", h5dataset@ID, buf, sidFile, sidMem, native, PACKAGE='rhdf5'))
 }
 
-H5Dset_extent <- function( h5dataset, size) {
+H5Dset_extent <- function( h5dataset, size, native = FALSE ) {
   h5checktype(h5dataset, "dataset")
-  size <- as.integer(rev(size))
+  size <- as.integer(size)
+  if (!native) size <- rev(size)
   invisible(.Call("_H5Dset_extent", h5dataset@ID, size, PACKAGE='rhdf5'))
 }

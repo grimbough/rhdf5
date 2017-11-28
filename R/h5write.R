@@ -193,7 +193,7 @@ h5writeDataset.array <- function(obj, h5loc, name, index = NULL, start=NULL, str
         }
       }
       temp_dim <- dim(obj)
-      if (native) { temp_dim <- rev(dim(obj)) }
+      if (native) temp_dim <- rev(temp_dim)
       try( { h5createDataset(h5loc, name, temp_dim, storage.mode = storage.mode(obj), size = size, chunk=temp_dim, level=level) } )
     }
   }

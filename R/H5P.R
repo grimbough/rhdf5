@@ -825,9 +825,9 @@ H5Pget_layout <- function( h5plist ) {
   res
 }
 
-H5Pset_chunk <- function( h5plist, dim ) {
+H5Pset_chunk <- function( h5plist, dim, native = FALSE ) {
   h5checktypeAndPLC(h5plist, "H5P_DATASET_CREATE")
-  if (!is.null(dim)) { dim = rev(as.integer(dim)) }
+  if (!is.null(dim) && !native) { dim = rev(as.integer(dim)) }
   res <- .Call("_H5Pset_chunk", h5plist@ID, dim, PACKAGE='rhdf5')
   invisible(res)
 }

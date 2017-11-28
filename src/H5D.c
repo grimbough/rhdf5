@@ -898,26 +898,25 @@ SEXP _H5Dwrite( SEXP _dataset_id, SEXP _buf, SEXP _file_space_id, SEXP _mem_spac
     file_space_id = INTEGER(_file_space_id)[0];
   }
 
-  ndims = H5Sget_simple_extent_ndims(mem_space_id);
-  hsize_t * dims = (hsize_t *)R_alloc((size_t)ndims, sizeof(hsize_t));
+  int ndims = H5Sget_simple_extent_ndims(mem_space_id);
+  hsize_t dims[ndims];
   H5Sget_simple_extent_dims(mem_space_id, dims, NULL); 
 
   const void * buf;
-  const void * block;
+  const void * buffer;
 
-  if (TYPEOF(_buf) == INTSXP) {
-    mem_type_id = H5T_NATIVE_INT;
-    buf = INTEGER(_buf);
-  } else {
-    if (TYPEOF(_buf) == REALSXP) {
+  switch(TYPE(_buf)) {
+    case INTSXP :
+      mem_type_id = H5T_NATIVE_INT;
+      buf = INTEGER(_buf);
+      buffer = INTEGER(_buf);
+    case REALSXP :
       mem_type_id = H5T_NATIVE_DOUBLE;
       buf = REAL(_buf);
-    } else {
-      if (TYPEOF(_buf) == LGLSXP) {
-	mem_type_id = H5T_NATIVE_INT;
-	buf = INTEGER(_buf);
-      } else {
-	if (TYPEOF(_buf) == STRSXP) {
+    case LGLSXP :
+	  mem_type_id = H5T_NATIVE_INT;
+      buf = INTEGER(_buf);
+    case STRSXP :
 	  mem_type_id = H5Dget_type(dataset_id);
 	  size_t stsize = H5Tget_size( mem_type_id );
 	  char * strbuf = (char *)R_alloc(LENGTH(_buf),stsize);
@@ -932,15 +931,61 @@ SEXP _H5Dwrite( SEXP _dataset_id, SEXP _buf, SEXP _file_space_id, SEXP _mem_spac
 	    }
 	  }
 	  buf = strbuf;
-	} else {
+    default :
 	  mem_type_id = -1;
 	  warning("Writing of this type of data not supported.");
 	  SEXP Rval = R_NilValue;
 	  return Rval;
-	}
+  }
+
+/*
+  int isa[ndims]; //dims before perm
+  int iip[ndims];
+  int stride[ndims];
+  int isr[ndims];
+
+  int len = 1;
+
+  for (int i = 0; i < ndims; i++) {
+    len = len * dims[i];
+  }
+
+  for (int i = 0; i < ndims; i++) {
+    isa[i] = ndims-1-i;
+  }
+
+  iip[0] = 1;
+  for (int i = 0; i < ndims; i++) {
+    iip[i] = iip[i-1] * isa[i-1];
+  }
+
+  for (int i = 0; i < ndims; i++) {
+    stride[i] = iip[dims[i]];
+  }
+
+  for (int i = 0; i < ndims; i++) {
+    isr[i] = isa[dims[i]];
+  }
+
+  for (int i = 0; i < ndims; iip[i++] = 0);
+
+  int li, lj, itmp;
+
+  for (li = 0, lj = 0; li < len; li++) {
+    //buffer[li] = buf[lj];
+    for (itmp = 0; itmp < ndims; itmp++) {
+      if (iip[itmp] == isr[itmp] - 1) iip[itmp] = 0;
+      else {
+        iip[itmp]++;
+        break;
       }
     }
+    for (lj = 0, itmp = 0; itmp < ndims; itmp++) {
+      lj += iip[itmp] * stride[itmp];
+    }
   }
+
+*/
   herr_t herr = 3;
   herr = H5Dwrite(dataset_id, mem_type_id, mem_space_id, file_space_id, H5P_DEFAULT, buf );
   SEXP Rval;

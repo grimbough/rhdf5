@@ -49,29 +49,32 @@ H5Sis_simple<- function( h5space ) {
   as.logical(.Call("_H5Sis_simple", h5space@ID, PACKAGE='rhdf5'))
 }
 
-H5Sget_simple_extent_dims <- function( h5space ) {
+H5Sget_simple_extent_dims <- function( h5space, native = FALSE ) {
   h5checktype(h5space, "dataspace")
   res <- .Call("_H5Sget_simple_extent_dims", h5space@ID, PACKAGE='rhdf5')
-  if (length(res) > 2) {
+  if (length(res) > 2 && native) {
     res$size <- rev(res$size)
     res$maxsize <- rev(res$maxsize)
   }
   res
 }
 
-H5Sset_extent_simple <- function( h5space, dims, maxdims) {
+H5Sset_extent_simple <- function( h5space, dims, maxdims, native = FALSE ) {
   h5checktype(h5space, "dataspace")
   if (missing(maxdims)) {
     maxdims = dims
   }
-  dims <- as.numeric(rev(dims))
-  maxdims <- as.numeric(rev(maxdims))
-
+  dims <- as.numeric(dims)
+  maxdims <- as.numeric(maxdims)
+  if (!native){
+    dims <- rev(dims)
+    maxdims <- rev(maxdims)
+  }
   res <- .Call("_H5Sset_extent_simple", h5space@ID, dims, maxdims, PACKAGE='rhdf5')
   invisible(res)
 }
 
-H5Sselect_hyperslab <- function( h5space, op = h5default("H5S_SELECT"), start=NULL, stride=NULL, count=NULL, block=NULL ) {
+H5Sselect_hyperslab <- function( h5space, op = h5default("H5S_SELECT"), start=NULL, stride=NULL, count=NULL, block=NULL, native = FALSE ) {
   h5checktype(h5space, "dataspace")
   op <- h5checkConstants( "H5S_SELECT", op )
 
@@ -108,18 +111,21 @@ H5Sselect_hyperslab <- function( h5space, op = h5default("H5S_SELECT"), start=NU
 
   count <- as.numeric(count)
   block <- as.numeric(block)
+  stride <- as.numeric(stride)
   size <- count * block
   start <- start - 1
-  start <- rev(start)
-  stride <- as.numeric(rev(stride))
-  count <- rev(count)
-  block <- rev(block)
+  if (!native) {
+    start <- rev(start)
+    stride <- rev(stride)
+    count <- rev(count)
+    block <- rev(block)
+  }
 
   .Call("_H5Sselect_hyperslab", h5space@ID, op, start, stride, count, block, PACKAGE='rhdf5')
   invisible(size)
 }
 
-H5Sselect_index <- function( h5space, index ) {
+H5Sselect_index <- function( h5space, index, native = FALSE ) {
   h5checktype(h5space, "dataspace")
   dim <- H5Sget_simple_extent_dims(h5space)$size
   if (!is.list(index)) {
@@ -155,8 +161,10 @@ H5Sselect_index <- function( h5space, index ) {
     }
   }
   size = sapply(count, sum)
-  start = rev(start)
-  count = rev(count)
+  if (!native) {
+    start = rev(start)
+    count = rev(count)
+  }
 
   .Call("_H5Sselect_index", h5space@ID, start, count, PACKAGE='rhdf5')
   invisible(size)

@@ -23,7 +23,7 @@ h5lsConvertToDataframe <- function(L, all=FALSE) {
   L
 }
 
-h5ls <- function( file, recursive = TRUE, all=FALSE, datasetinfo=TRUE, index_type = h5default("H5_INDEX"), order = h5default("H5_ITER")) {
+h5ls <- function( file, recursive = TRUE, all=FALSE, datasetinfo=TRUE, index_type = h5default("H5_INDEX"), order = h5default("H5_ITER"), native = FALSE ) {
     
   loc = h5checktypeOrOpenLoc(file, readonly=TRUE)
 
@@ -49,6 +49,11 @@ h5ls <- function( file, recursive = TRUE, all=FALSE, datasetinfo=TRUE, index_typ
   di <- ifelse(datasetinfo, 1L, 0L)
   L <- .Call("_h5ls", loc$H5Identifier@ID, depth, di, index_type, order, PACKAGE='rhdf5')
   L <- h5lsConvertToDataframe(L, all=all)
+  if (native) {
+    dims <- L[,'dim']
+    dims <- lapply(dims, function(x) paste(rev(x), collapse=" x "))
+    L[,'dim'] <- dims
+  }
   h5closeitLoc(loc)
   L
 }
