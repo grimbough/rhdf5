@@ -36,7 +36,8 @@ test_that("Create group heirachy", {
 
 test_that("Fail if toplevel group missing", {
     ## this is really an error, but doesn't get thrown as one
-    expect_error( h5createGroup(file = h5File, group = "baa/foo") )
+    h5errorHandling(type = "suppress")
+    expect_false( h5createGroup(file = h5File, group = "baa/foo") )
     H5close()
 })
 

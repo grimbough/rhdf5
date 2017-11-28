@@ -19,7 +19,7 @@ test_that("Property list creation & closure", {
     expect_silent( pid1 <- H5Pcreate() )
     
     expect_silent( pid2 <- H5Pcopy(pid1) )
-    expect_is(pid , "H5IdComponent")
+    expect_is(pid2 , "H5IdComponent")
     
     expect_silent(H5Pclose(pid1))
     expect_silent(H5Pclose(pid2))
