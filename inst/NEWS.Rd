@@ -5,7 +5,9 @@
   \subsection{BUG FIXES}{
     \itemize{
       \item Datasets can now be subset using `[` and a range of values 
-      e.g. did[,1:5]
+      e.g. did[,1:5].
+      \item Writing a data.frame that contains factors and setting 
+      DataFrameAsCompound=FALSE now works.
     }
   }
 }
