@@ -60,10 +60,35 @@ test_that("Writing to file handle", {
     expect_silent(h5writeDataset(obj = integer(1), h5loc = fid, name = "integer"))
     expect_silent(h5writeDataset(obj = numeric(1), h5loc = fid, name = "numeric"))
     expect_silent(h5writeDataset(obj = "foobaa", h5loc = fid, name = "character"))
+    expect_silent(h5writeDataset(obj = logical(1), h5loc = fid, name = "logical"))
     expect_silent(h5writeDataset(obj = list(a = 1:4, b = letters[10:15]), h5loc = fid, name = "list"))
-    expect_silent(h5writeDataset(obj = data.frame("col_A" = 1:10, "col_B" = letters[1:10]), h5loc = fid, name = "data.frame"))
+    expect_silent(h5writeDataset(obj = data.frame("col_A" = 1:10, "col_B" = letters[1:10]), 
+                                 h5loc = fid, name = "data.frame"))
+    expect_silent(h5writeDataset(obj = data.frame("col_A" = 1:10, "col_B" = letters[1:10]), 
+                                 h5loc = fid, name = "data.frame2", DataFrameAsCompound = FALSE))
     H5Fclose(fid)
 })
+
+############################################################
+context("Writing a datset subset")
+############################################################
+
+## output file name
+h5File <- tempfile(pattern = "ex_writeDataset_", fileext = ".h5")
+if(file.exists(h5File))
+    file.remove(h5File)
+
+test_that("Overwriting a subset", {
+    fid <- H5Fcreate(name = h5File)
+    expect_silent(h5writeDataset(obj = matrix(1:40, ncol = 4), h5loc = fid, name = "matrix"))
+    expect_silent(h5writeDataset(obj = rep(0, 20), h5loc = fid, name = "matrix", index = list(NULL, 2:3)))
+    H5Fclose(fid)
+    
+    expect_is( mat <- h5read(h5File, name = "matrix"), "matrix" )
+    expect_true( all(mat[,2] == 0) )
+    
+})
+
 
 ## remove this later
 H5close()
