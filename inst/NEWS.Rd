@@ -8,6 +8,7 @@
       e.g. did[,1:5]
     }
   }
+}
 
 \section{Changes in version 2.20.0}{
   \subsection{NEW FEATURES}{
