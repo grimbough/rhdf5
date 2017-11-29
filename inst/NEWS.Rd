@@ -1,6 +1,14 @@
 \name{NEWS}
 \title{News for Package 'rhdf5'}
 
+\section{Changes in version 2.24.0}{
+  \subsection{BUG FIXES}{
+    \itemize{
+      \item Datasets can now be subset using `[` and a range of values 
+      e.g. did[,1:5]
+    }
+  }
+
 \section{Changes in version 2.20.0}{
   \subsection{NEW FEATURES}{
     \itemize{
