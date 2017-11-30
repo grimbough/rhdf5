@@ -8,6 +8,8 @@
       e.g. did[,1:5].
       \item Writing a data.frame that contains factors and setting 
       DataFrameAsCompound=FALSE now works.
+      \item Many functions that would leave open file handles after exiting
+      under error conditions have been fixed.
     }
   }
 }
