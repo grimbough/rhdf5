@@ -51,7 +51,8 @@ test_that("Changing recursion depth", {
                       h5ls(h5File, recursive = TRUE) )
     
     expect_error( h5dump(h5File, recursive = 0) )
-    expect_error( h5ls(h5File, recursive = "FOO") )
+    expect_error( h5dump(h5File, recursive = "FOO") )
+    expect_warning( (h5dump(h5File, recursive = 1:3)) )
 })
 
 test_that("Changing traversal order", {
