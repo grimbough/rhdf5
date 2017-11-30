@@ -19,7 +19,7 @@ test_that("Writing attributes", {
     expect_silent(sid <- H5Screate_simple(c(1,1)) )
     expect_silent( tid <- H5Tcopy("H5T_C_S1") )
     
-    H5Tset_size(tid, 10L)
+    expect_silent( H5Tset_size(tid, 10L) )
     expect_silent( aid <- H5Acreate(did, "volume", tid, sid) )
     expect_silent( H5Awrite(aid, "liter") )
     expect_silent( H5Aclose(aid) )
@@ -66,7 +66,7 @@ test_that("Opening attributes", {
 
     expect_silent( H5Fclose(fid) )
     
-    ## doens't cope well when a missing attribute is named
+    ## doesn't cope well when a missing attribute is named
     ## H5Aopen_by_name(fid, objname = "A", name = "foobaa")
     
 })
