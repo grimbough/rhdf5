@@ -572,7 +572,7 @@ SEXP H5Dread_helper_ENUM(hid_t dataset_id, hid_t file_space_id, hid_t mem_space_
 
 }
 
-SEXP H5Dread_helper_ARRAY(hid_t dataset_id, hid_t file_space_id, hid_t mem_space_id, hsize_t n, SEXP Rdim, SEXP _buf, 
+SELENGTH(_buf)H5Dread_helper_ARRAY(hid_t dataset_id, hid_t file_space_id, hid_t mem_space_id, hsize_t n, SEXP Rdim, SEXP _buf, 
 			  hid_t dtype_id, hid_t cpdType, int cpdNField, char ** cpdField, int compoundAsDataFrame ) {
   hid_t mem_type_id = -1;
 
@@ -879,6 +879,9 @@ SEXP _H5Dread( SEXP _dataset_id, SEXP _file_space_id, SEXP _mem_space_id, SEXP _
   return Rval;
 }
 
+#define CLICKJ 0
+  
+
 /* herr_t H5Dwrite(hid_t dataset_id, hid_t mem_type_id, hid_t mem_space_id, hid_t file_space_id, hid_t xfer_plist_id, const void * buf ) */
 /* TODO more parameters: hid_t xfer_plist_id */
 SEXP _H5Dwrite( SEXP _dataset_id, SEXP _buf, SEXP _file_space_id, SEXP _mem_space_id, SEXP _native) {
@@ -902,20 +905,93 @@ SEXP _H5Dwrite( SEXP _dataset_id, SEXP _buf, SEXP _file_space_id, SEXP _mem_spac
   hsize_t dims[ndims];
   H5Sget_simple_extent_dims(mem_space_id, dims, NULL); 
 
-  const void * buf;
-  const void * buffer;
+  int iip[ndims];
+  int stride[ndims];
 
-  switch(TYPE(_buf)) {
+  iip[0] = 1;
+  for (int i = 1; i < ndims; i++) {
+    iip[i] = iip[i-1] * dims[ndims-i];
+  }
+
+  for (int i = 0; i < ndims; i++) {
+    stride[i] = iip[ndims-i-1];
+  }
+
+  for (int i = 0; i < ndims; iip[i++] = 0);
+
+  int li, lj, itmp;
+  const void * buf;
+
+  switch(TYPEOF(_buf)) {
     case INTSXP :
       mem_type_id = H5T_NATIVE_INT;
-      buf = INTEGER(_buf);
-      buffer = INTEGER(_buf);
+      if (native) {
+        int * buffer = (int *) R_alloc((size_t) LENGTH(_buf), sizeof(int));
+        for (li = 0, lj = 0; li < LENGTH(_buf); li++) {
+          buffer[li] = INTEGER(_buf)[lj];
+          for (itmp = 0; itmp < ndims; itmp++) {
+            if (iip[itmp] == dims[itmp] - 1) iip[itmp] = 0;
+            else {
+              iip[itmp]++;
+              break;
+            }
+          }
+          for (lj = 0, itmp = 0; itmp < ndims; itmp++) {
+            lj += iip[itmp] * stride[itmp];
+          }
+        }
+        buf = buffer;
+      }
+      else {
+        buf = INTEGER(_buf);
+      }
+      break;
     case REALSXP :
       mem_type_id = H5T_NATIVE_DOUBLE;
-      buf = REAL(_buf);
+      if (native) {
+        double * buffer = (double *) R_alloc((size_t) LENGTH(_buf), sizeof(double));
+        for (li = 0, lj = 0; li < LENGTH(_buf); li++) {
+          buffer[li] = REAL(_buf)[lj];
+          for (itmp = 0; itmp < ndims; itmp++) {
+            if (iip[itmp] == dims[itmp] - 1) iip[itmp] = 0;
+            else {
+              iip[itmp]++;
+              break;
+            }
+          }
+          for (lj = 0, itmp = 0; itmp < ndims; itmp++) {
+            lj += iip[itmp] * stride[itmp];
+          }
+        }
+        buf = buffer;
+      }
+      else {
+        buf = REAL(_buf);
+      }
+      break;
     case LGLSXP :
 	  mem_type_id = H5T_NATIVE_INT;
-      buf = INTEGER(_buf);
+      if (native) {
+        int * buffer = (int *) R_alloc((size_t) LENGTH(_buf), sizeof(int));
+        for (li = 0, lj = 0; li < LENGTH(_buf); li++) {
+          buffer[li] = INTEGER(_buf)[lj];
+          for (itmp = 0; itmp < ndims; itmp++) {
+            if (iip[itmp] == dims[itmp] - 1) iip[itmp] = 0;
+            else {
+              iip[itmp]++;
+              break;
+            }
+          }
+          for (lj = 0, itmp = 0; itmp < ndims; itmp++) {
+            lj += iip[itmp] * stride[itmp];
+          }
+        }
+        buf = buffer;
+      }
+      else {
+        buf = INTEGER(_buf);
+      }
+      break;
     case STRSXP :
 	  mem_type_id = H5Dget_type(dataset_id);
 	  size_t stsize = H5Tget_size( mem_type_id );
@@ -931,61 +1007,13 @@ SEXP _H5Dwrite( SEXP _dataset_id, SEXP _buf, SEXP _file_space_id, SEXP _mem_spac
 	    }
 	  }
 	  buf = strbuf;
+      break;
     default :
 	  mem_type_id = -1;
-	  warning("Writing of this type of data not supported.");
-	  SEXP Rval = R_NilValue;
-	  return Rval;
+	  Rf_error("Writing '%s' not supported.", Rf_type2char(_buf));
+      break;
   }
 
-/*
-  int isa[ndims]; //dims before perm
-  int iip[ndims];
-  int stride[ndims];
-  int isr[ndims];
-
-  int len = 1;
-
-  for (int i = 0; i < ndims; i++) {
-    len = len * dims[i];
-  }
-
-  for (int i = 0; i < ndims; i++) {
-    isa[i] = ndims-1-i;
-  }
-
-  iip[0] = 1;
-  for (int i = 0; i < ndims; i++) {
-    iip[i] = iip[i-1] * isa[i-1];
-  }
-
-  for (int i = 0; i < ndims; i++) {
-    stride[i] = iip[dims[i]];
-  }
-
-  for (int i = 0; i < ndims; i++) {
-    isr[i] = isa[dims[i]];
-  }
-
-  for (int i = 0; i < ndims; iip[i++] = 0);
-
-  int li, lj, itmp;
-
-  for (li = 0, lj = 0; li < len; li++) {
-    //buffer[li] = buf[lj];
-    for (itmp = 0; itmp < ndims; itmp++) {
-      if (iip[itmp] == isr[itmp] - 1) iip[itmp] = 0;
-      else {
-        iip[itmp]++;
-        break;
-      }
-    }
-    for (lj = 0, itmp = 0; itmp < ndims; itmp++) {
-      lj += iip[itmp] * stride[itmp];
-    }
-  }
-
-*/
   herr_t herr = 3;
   herr = H5Dwrite(dataset_id, mem_type_id, mem_space_id, file_space_id, H5P_DEFAULT, buf );
   SEXP Rval;
