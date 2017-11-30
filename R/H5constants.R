@@ -34,13 +34,15 @@ h5checkConstants <- function(group, constant) {
   if (is.null(res)) {
     stop("unknown 'group' of H5 constants")
   }
-  if (is.null(res)) {
-    if (constant %in% h5constants[[group]]) {
-      res <- constant
-    } else {
-      stop("Constant ", constant, " unknown. Has to be one of '", paste(names(h5constants[[group]]), collapse="', '"), "'")
-    }
-  }
+  ## I don't think we can ever run this code
+  ## MLS 30-11-2017
+  #if (is.null(res)) {
+  #  if (constant %in% h5constants[[group]]) {
+  #    res <- constant
+  #  } else {
+  #    stop("Constant ", constant, " unknown. Has to be one of '", paste(names(h5constants[[group]]), collapse="', '"), "'")
+  #  }
+  #}
   if (length(constant) > 1) {
     warning("H5 constant identifier has more than one value. Only the first value will be used.")
   }

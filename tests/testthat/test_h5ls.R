@@ -1,14 +1,14 @@
 library(rhdf5)
 
 ############################################################
-context("h5dump")
+context("h5ls")
 ############################################################
 
 A = 1:7;  
 B = 1:18; 
 D = seq(0,1,by=0.1)
 ## output file name
-h5File <- tempfile(pattern = "ex_ls", fileext = ".h5")
+h5File <- tempfile(pattern = "ex_h5ls_", fileext = ".h5")
 if(file.exists(h5File))
     file.remove(h5File)
 
@@ -38,12 +38,21 @@ test_that("Expanded information", {
     
 })
 
-test_that("No recursion", {
+test_that("Changing recursion depth", {
     
-    ls_output <- h5ls( file = h5File, recursive = FALSE )
+    expect_silent (ls_output <- h5ls(file = h5File, recursive = FALSE) )
     expect_equal( dim(ls_output), c(2, 5) )
     expect_identical( ls_output$name, c("baa", "foo") )
     
+    expect_identical( h5ls(h5File, recursive = 1),
+                      ls_output )
+    expect_identical( h5ls(h5File, recursive = -1),
+                      h5ls(h5File) )
+    
+    expect_error( h5ls(h5File, recursive = 0) )
+    expect_warning( h5ls(h5File, recursive = 1:3), 
+                    regexp = "'recursive' must be of length 1")
+    expect_error( h5ls(h5File, recursive = "TRUE") )
 })
 
 test_that("Changing traversal order", {
@@ -58,6 +67,10 @@ test_that('Passing H5Identifier does not close it', {
     expect_is( h5ls(file = fid), class = 'data.frame')
     expect_silent( H5Fclose(fid) )
 })
+
+############################################################
+context("h5ls cleanup")
+##########################################################
 
 test_that("No open HDF5 objects are left", {
     expect_equal( length(h5validObjects()), 0 )
