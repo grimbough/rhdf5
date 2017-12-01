@@ -35,4 +35,14 @@ test_that("We can list created objects", {
     expect_length( h5validObjects(), 0 )
 })
 
+test_that("Find location of libray", {
+    
+    expect_output( rhdf5:::LdFlags(), regexp = "libhdf5" )
+    
+    path <- capture.output( rhdf5:::LdFlags() )
+    if( Sys.info()[['sysname']] != "Windows" ) {
+        libfile <- gsub(pattern = "^-l", replacement = "", x = path)
+        expect_true( file.exists(libfile) )
+    }
+})
 
