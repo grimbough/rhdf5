@@ -64,11 +64,41 @@ test_that("Subsetting datasets", {
     expect_silent( col15 <- did[,1:5] )
     expect_is( col15, "matrix" )
     expect_equal( dim(col15), c(10,5) )
+    expect_silent( H5Dclose(did) )
     
+    expect_error( did[], 
+                  regexp = "Bad HDF5 ID")
     expect_error( fid[,3], 
                   regexp = "The provided H5Identifier is not a dataset identifier" )
     
+    expect_silent( H5Fclose(fid) )
+})
+
+test_that("Subsetting assignment", {
+    
+    expect_silent(fid <- H5Fopen(name = h5File))
+    expect_silent(did <- H5Dopen(h5loc = fid, name = "A"))
+    
+    ## assign new values
+    expect_silent( did[10,] <- did[10,] + 1000 )
+    expect_silent( did[,1] <- 1001:1010 )
+    expect_silent( did[1:3,5:7] <- rep(0,9) )
+    ## in native R the 0 would be repeated to fill the space
+    # expect_silent( did[1:3,5:7] <- 0 )
+
+    ## close dataset and check the values are permanent
     expect_silent( H5Dclose(did) )
+    expect_silent( did <- H5Dopen(h5loc = fid, name = "A") )
+    expect_equal( did[,1], 1001:1010)
+    expect_equal( did[10,], seq(10,200,10) + 1000 )
+    expect_equal( did[1:3,5:7], matrix(0, ncol = 3, nrow = 3) )
+    expect_silent( H5Dclose(did) )
+    
+    expect_error( did[,1] <- 10:1, 
+                  regexp = "Bad HDF5 ID")
+    expect_error( fid[,3] <- 10, 
+                  regexp = "The provided H5Identifier is not a dataset identifier" )
+
     expect_silent( H5Fclose(fid) )
 })
 

@@ -10,6 +10,7 @@
       DataFrameAsCompound=FALSE now works.
       \item Many functions that would leave open file handles after exiting
       under error conditions have been fixed.
+      \item Minor performance improvements in h5read().
     }
   }
 }

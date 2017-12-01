@@ -8,7 +8,9 @@ h5writeDatasetHelper <- function (obj, h5dataset, index = NULL, start = NULL, st
   }
   try({
     h5spaceFile <- H5Dget_space(h5dataset)
+    on.exit(H5Sclose(h5spaceFile))
   })
+
   if (!is.null(index)) {
     s = H5Sget_simple_extent_dims(h5spaceFile)$size
     if (length(index) != length(s)) {
@@ -17,6 +19,8 @@ h5writeDatasetHelper <- function (obj, h5dataset, index = NULL, start = NULL, st
     for (i in seq_len(length(index))) {
       if (is.null(index[[i]])) {
         index[[i]] = seq_len(s[i])
+      } else if( is.call(index[[i]] )) {
+          index[[i]] <- eval(index[[i]])
       }
     }
     try({
@@ -52,17 +56,18 @@ h5writeDatasetHelper <- function (obj, h5dataset, index = NULL, start = NULL, st
   }
   try({
     h5spaceMem <- H5Screate_simple(DimMem, NULL)
+    on.exit(H5Sclose(h5spaceMem), add = TRUE, after = FALSE)
   })
   try({
     res <- H5Dwrite(h5dataset, obj, h5spaceMem = h5spaceMem, 
                     h5spaceFile = h5spaceFile)
   })
-  try({
-    H5Sclose(h5spaceMem)
-  })
-  try({
-    H5Sclose(h5spaceFile)
-  })
+  #try({
+  #  H5Sclose(h5spaceMem)
+  #})
+  #try({
+  #  H5Sclose(h5spaceFile)
+  #})
   invisible(NULL)
 }
 
