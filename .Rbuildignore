@@ -3,3 +3,4 @@
 .travis.yml
 _config.yml
 BinaryFiles
+.covrignore

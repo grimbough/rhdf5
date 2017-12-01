@@ -67,4 +67,9 @@ test_that("Dataset creation properties", {
     expect_silent( H5Pset_fill_value( pid, TRUE ) )
     expect_error( H5Pset_fill_value( pid, sum ))
     
+    expect_silent(H5Pclose(pid))
+})
+
+test_that("No open HDF5 objects are left", {
+    expect_equal( length(h5validObjects()), 0 )
 })
