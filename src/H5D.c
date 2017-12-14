@@ -879,8 +879,16 @@ SEXP _H5Dread( SEXP _dataset_id, SEXP _file_space_id, SEXP _mem_space_id, SEXP _
   return Rval;
 }
 
-#define CLICKJ 0
-  
+#define CLICKJ                                          \
+    for (itmp = 0; itmp < ndims; itmp++) {              \
+        if (iip[itmp] == dims[itmp] - 1) iip[itmp] = 0; \
+        else {                                          \
+            iip[itmp]++;                                \
+            break;                                      \
+        }                                               \
+    }                                                   \
+    for (lj = 0, itmp = 0; itmp < ndims; itmp++)        \
+        lj += iip[itmp] * stride[itmp];
 
 /* herr_t H5Dwrite(hid_t dataset_id, hid_t mem_type_id, hid_t mem_space_id, hid_t file_space_id, hid_t xfer_plist_id, const void * buf ) */
 /* TODO more parameters: hid_t xfer_plist_id */
@@ -922,97 +930,78 @@ SEXP _H5Dwrite( SEXP _dataset_id, SEXP _buf, SEXP _file_space_id, SEXP _mem_spac
   int li, lj, itmp;
   const void * buf;
 
+  SEXP buffer;
+  if (native)
+      buffer = PROTECT(allocVector(TYPEOF(_buf), XLENGTH(_buf)));
+
   switch(TYPEOF(_buf)) {
     case INTSXP :
       mem_type_id = H5T_NATIVE_INT;
       if (native) {
-        int * buffer = (int *) R_alloc((size_t) LENGTH(_buf), sizeof(int));
         for (li = 0, lj = 0; li < LENGTH(_buf); li++) {
-          buffer[li] = INTEGER(_buf)[lj];
-          for (itmp = 0; itmp < ndims; itmp++) {
-            if (iip[itmp] == dims[itmp] - 1) iip[itmp] = 0;
-            else {
-              iip[itmp]++;
-              break;
-            }
-          }
-          for (lj = 0, itmp = 0; itmp < ndims; itmp++) {
-            lj += iip[itmp] * stride[itmp];
-          }
+          INTEGER(buffer)[li] = INTEGER(_buf)[lj];
+          CLICKJ
         }
-        buf = buffer;
+        _buf = buffer;
       }
-      else {
-        buf = INTEGER(_buf);
-      }
+      buf = INTEGER(_buf);
       break;
     case REALSXP :
       mem_type_id = H5T_NATIVE_DOUBLE;
       if (native) {
-        double * buffer = (double *) R_alloc((size_t) LENGTH(_buf), sizeof(double));
         for (li = 0, lj = 0; li < LENGTH(_buf); li++) {
-          buffer[li] = REAL(_buf)[lj];
-          for (itmp = 0; itmp < ndims; itmp++) {
-            if (iip[itmp] == dims[itmp] - 1) iip[itmp] = 0;
-            else {
-              iip[itmp]++;
-              break;
-            }
-          }
-          for (lj = 0, itmp = 0; itmp < ndims; itmp++) {
-            lj += iip[itmp] * stride[itmp];
-          }
+          REAL(buffer)[li] = REAL(_buf)[lj];
+          CLICKJ
         }
-        buf = buffer;
+        _buf = buffer;
       }
-      else {
-        buf = REAL(_buf);
-      }
+      buf = REAL(_buf);
       break;
     case LGLSXP :
-	  mem_type_id = H5T_NATIVE_INT;
+      mem_type_id = H5T_NATIVE_INT;
       if (native) {
-        int * buffer = (int *) R_alloc((size_t) LENGTH(_buf), sizeof(int));
         for (li = 0, lj = 0; li < LENGTH(_buf); li++) {
-          buffer[li] = INTEGER(_buf)[lj];
-          for (itmp = 0; itmp < ndims; itmp++) {
-            if (iip[itmp] == dims[itmp] - 1) iip[itmp] = 0;
-            else {
-              iip[itmp]++;
-              break;
-            }
-          }
-          for (lj = 0, itmp = 0; itmp < ndims; itmp++) {
-            lj += iip[itmp] * stride[itmp];
-          }
+          LOGICAL(buffer)[li] = LOGICAL(_buf)[lj];
+          CLICKJ
         }
-        buf = buffer;
+        _buf = buffer;
       }
-      else {
-        buf = INTEGER(_buf);
-      }
+      buf = LOGICAL(_buf);
       break;
     case STRSXP :
-	  mem_type_id = H5Dget_type(dataset_id);
-	  size_t stsize = H5Tget_size( mem_type_id );
-	  char * strbuf = (char *)R_alloc(LENGTH(_buf),stsize);
-	  int z=0;
-	  int j;
-	  for (int i=0; i < LENGTH(_buf); i++) {
-	    for (j=0; (j < LENGTH(STRING_ELT(_buf,i))) & (j < (stsize-1)); j++) {
-	      strbuf[z++] = CHAR(STRING_ELT(_buf,i))[j];
-	    }
-	    for (; j < stsize; j++) {
-	      strbuf[z++] = '\0';
-	    }
-	  }
-	  buf = strbuf;
+      mem_type_id = H5Dget_type(dataset_id);
+      /* native? */
+      if (native) {
+        for (li = 0, lj = 0; li < LENGTH(_buf); li++) {
+          SET_STRING_ELT(buffer, li, STRING_ELT(_buf, lj));
+          CLICKJ
+        }
+        _buf = buffer;
+      }
+
+      /* prepare for hdf5 */
+      size_t stsize = H5Tget_size( mem_type_id );
+      char * strbuf = (char *)R_alloc(LENGTH(_buf),stsize);
+      int z=0;
+      int j;
+      for (int i=0; i < LENGTH(_buf); i++) {
+          for (j=0; (j < LENGTH(STRING_ELT(_buf,i))) & (j < (stsize-1)); j++) {
+              strbuf[z++] = CHAR(STRING_ELT(_buf,i))[j];
+          }
+          for (; j < stsize; j++) {
+              strbuf[z++] = '\0';
+          }
+      }
+      buf = strbuf;
       break;
     default :
-	  mem_type_id = -1;
-	  Rf_error("Writing '%s' not supported.", Rf_type2char(_buf));
+      mem_type_id = -1;
+      Rf_error("Writing '%s' not supported.", Rf_type2char(TYPEOF(_buf)));
       break;
   }
+
+  if (native)
+      UNPROTECT(1);
 
   herr_t herr = 3;
   herr = H5Dwrite(dataset_id, mem_type_id, mem_space_id, file_space_id, H5P_DEFAULT, buf );
