@@ -96,3 +96,17 @@ test_that("h5read/write supports native", {
     do_array(sample(c(TRUE, FALSE), 12), c(2, 3, 4))
     do_array(LETTERS[1:12], c(2, 3, 4))
 })
+
+## test_that("misc. fixes work", {
+##     h5 <- tempfile(fileext = ".h5")
+##     h5createFile(file = h5)
+##     h5createGroup(file = h5, group = "test")
+
+##     m <- matrix(1:12, 3, 4)
+##     h5write(m, file = h5, name = "test/complex")
+##     m <- matrix(as.complex(1:12), 3, 4)
+##     expect_error(
+##         h5write(m, file = h5, name = "test/complex")
+##         "Writing 'complex' not supported"
+##     )
+## })
