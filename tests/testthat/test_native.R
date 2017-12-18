@@ -22,6 +22,7 @@ test_that("H5ls supports native", {
     h5file <- tempfile(fileext = ".h5")
     h5createFile(file = h5file)
     h5createGroup(file = h5file, group = "test")
+    m0 <- matrix(1:12, 3, 4)
 
     h5write(m0, file = h5file, name = "test/native", native=TRUE)
     h5write(m0, file = h5file, name = "test/nonnative", native=FALSE)
@@ -54,47 +55,47 @@ test_that("h5read/write supports native", {
     h5createGroup(file = h5, group = "test")
 
     ## matrix
-    do_matrix <- function(values, nrow, ncol) {
+    do_matrix <- function(values, nrow, ncol, val) {
         m0 <- matrix(values, nrow, ncol)
 
-        h5write(m0, file = h5, name = "test/nonnative", native=FALSE)
-        m1 <- h5read(file = h5, name = "test/nonnative", native = TRUE)
-        expect_identical(m0, t(m1))
-        m2 <- h5read(file = h5, name = "test/nonnative", native = FALSE)
-        expect_identical(m0, m2)
+        h5write(m0, file = h5, name = paste0("test/nonnative", val), native=FALSE)
+        m1 <- h5read(file = h5, name = paste0("test/nonnative", val), native = TRUE)
+        expect_equivalent(m0, t(m1))
+        m2 <- h5read(file = h5, name = paste0("test/nonnative", val), native = FALSE)
+        expect_equivalent(m0, m2)
 
-        h5write(m0, file = h5, name = "test/native", native=TRUE)
-        m1 <- h5read(file = h5, name = "test/native", native = FALSE)
-        expect_identical(m0, t(m1))
-        m2 <- h5read(file = h5, name = "test/native", native = TRUE)
-        expect_identical(m0, m2)
+        h5write(m0, file = h5, name = paste0("test/native", val), native=TRUE)
+        m1 <- h5read(file = h5, name = paste0("test/native", val), native = FALSE)
+        expect_equivalent(m0, t(m1))
+        m2 <- h5read(file = h5, name = paste0("test/native", val), native = TRUE)
+        expect_equivalent(m0, m2)
     }
-    do_matrix(1:12, 3, 4)
-    do_matrix(as.numeric(1:12), 3, 4)
-    do_matrix(sample(c(TRUE, FALSE), 12), 3, 4)
-    do_matrix(LETTERS[1:12], 3, 4)
+    do_matrix(1:12, 3, 4, "A")
+    do_matrix(as.numeric(1:12), 3, 4, "B")
+    do_matrix(sample(c(TRUE, FALSE), 12, replace=TRUE), 3, 4, "C")
+    do_matrix(LETTERS[1:12], 3, 4, "D")
 
     ## 3D-array
-    do_array <- function(values, dim) {
+    do_array <- function(values, dim, val) {
         m0 <- array(values, dim)
 
-        h5write(m0, file = h5, name = "test/nonnative-array", native=FALSE)
-        m1 <- h5read(file = h5, name = "test/nonnative-array", native = TRUE)
-        expect_identical(m0, t(m1))
-        m2 <- h5read(file = h5, name = "test/nonnative-array", native = FALSE)
-        expect_identical(m0, m2)
+        h5write(m0, file = h5, name = paste0("test/nonnative-array", val), native=FALSE)
+        m1 <- h5read(file = h5, name = paste0("test/nonnative-array", val), native = TRUE)
+        expect_equivalent(m0, aperm(m1))
+        m2 <- h5read(file = h5, name = paste0("test/nonnative-array", val), native = FALSE)
+        expect_equivalent(m0, m2)
 
-        h5write(m0, file = h5, name = "test/native-array", native=TRUE)
-        m1 <- h5read(file = h5, name = "test/native-array", native = FALSE)
-        expect_identical(m0, t(m1))
-        m2 <- h5read(file = h5, name = "test/native-array", native = TRUE)
-        expect_identical(m0, m2)
+        h5write(m0, file = h5, name = paste0("test/native-array", val), native=TRUE)
+        m1 <- h5read(file = h5, name = paste0("test/native-array", val), native = FALSE)
+        expect_equivalent(m0, aperm(m1))
+        m2 <- h5read(file = h5, name = paste0("test/native-array", val), native = TRUE)
+        expect_equivalent(m0, m2)
     }
     
-    do_array(1:12, c(2, 3, 4))
-    do_array(as.numeric(1:12), c(2, 3, 4))
-    do_array(sample(c(TRUE, FALSE), 12), c(2, 3, 4))
-    do_array(LETTERS[1:12], c(2, 3, 4))
+    do_array(1:12, c(2, 3, 4), "A")
+    do_array(as.numeric(1:12), c(2, 3, 4), "B")
+    do_array(sample(c(TRUE, FALSE), 12, replace=TRUE), c(2, 3, 4), "C")
+    do_array(LETTERS[1:12], c(2, 3, 4), "D")
 })
 
 ## test_that("misc. fixes work", {
