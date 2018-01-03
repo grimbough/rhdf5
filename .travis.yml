@@ -8,8 +8,6 @@ before_install:
 warnings_are_errors: false
 
 r: bioc-devel
-r_build_args: --no-build-vignettes
-r_check_args: --no-vignettes --force-multiarch
 
 bioc_packages: BiocCheck
 
