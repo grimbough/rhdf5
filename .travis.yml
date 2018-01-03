@@ -3,11 +3,16 @@ sudo: false
 cache: packages
 
 before_install:
-  - tlmgr install bera
+  - tlmgr install bera nowidow
 
-warnings_are_errors: false
+r:
+  - devel
+bioc_required: true
+bioc_use_devel: true
 
 r: bioc-devel
+
+warnings_are_errors: false
 
 bioc_packages: BiocCheck
 
