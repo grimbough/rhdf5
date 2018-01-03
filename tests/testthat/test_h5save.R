@@ -11,7 +11,7 @@ h5File <- tempfile(pattern = "ex_save", fileext = ".h5")
 
 test_that("Default arguments", {
     h5save(A, B, D, file = h5File)
-    H5close()
+    h5closeAll()
 })
 
 test_that("File exists", {
@@ -23,7 +23,7 @@ test_that("File exists", {
 test_that("Changing dataset names", {
     dsetNames <- c("dset1", "dset2", "dset3")
     h5save(A, B, D, file = h5File, name = dsetNames)
-    H5close()
+    h5closeAll()
     expect_true( file.exists(h5File) )
     expect_equal( names(h5dump(h5File)),
                  dsetNames )
@@ -38,7 +38,7 @@ test_that("Fail if file doesn't exist", {
     if(file.exists(h5File))
        file.remove(h5File)
     expect_error(h5save(A, B, D, file = h5File, createnewfile = FALSE))
-    H5close()
+    h5closeAll()
 })
 
 test_that("Suppress Internal error messages", {
@@ -47,11 +47,11 @@ test_that("Suppress Internal error messages", {
 
 test_that("Adding to existing file", {
     h5save(A, file = h5File)
-    H5close()
+    h5closeAll()
     expect_equal( names(h5dump(h5File)), "A" )
     
     h5save(B, D, file = h5File)
-    H5close()
+    h5closeAll()
     expect_equal( names(h5dump(h5File)), c("A", "B", "D") )
 })
 
@@ -60,12 +60,12 @@ test_that("Try to overwrite existing data set with same name", {
         file.remove(h5File)
     
     expect_null(h5save(A, file = h5File))
-    H5close()
+    h5closeAll()
     
     ## this will throw an HDF5 error, but I don't know how to catch it yet
     h5errorHandling(type = "suppress")
     expect_null(h5save(B, file = h5File, name = "A"))
-    H5close()
+    h5closeAll()
     
     expect_false( identical(h5read(file = h5File, name = "A"), B) )
 })

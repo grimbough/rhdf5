@@ -168,7 +168,7 @@ H5Fclose(h5f)
 @
 or close all open HDF5 handles in the environment by
 <<accessorClose2>>=
-H5close()
+h5closeAll()
 @
 
 \subsection{Writing and reading with subsetting, chunking and compression}

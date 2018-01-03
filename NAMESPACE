@@ -318,3 +318,5 @@ export(h5version)
 export(h5set_extent)
 
 export(h5errorHandling)
+
+export(h5closeAll)

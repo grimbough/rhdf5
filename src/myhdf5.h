@@ -4,7 +4,7 @@
 #ifdef WINDOWS
 #include "includeWin/hdf5.h"
 #else
-#include "hdf5/src/hdf5.h"
+#include "hdf5.h"
 #endif
 
 #endif
