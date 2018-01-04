@@ -1,6 +1,5 @@
 useDynLib(rhdf5)
 
-import(zlibbioc)
 import(Rhdf5lib)
 import(methods)
 importFrom(utils, packageVersion)

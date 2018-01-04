@@ -1,95 +1,73 @@
-%\VignetteIndexEntry{rhdf5}
-%\VignetteKeywords{HDF5}
-%\VignettePackage{rhdf5}
+---
+title: "rhdf5 - HDF5 interface for R"
+author:
+- name: Bernd Fischer
+  affiliation: DKFZ
+- name: Mike L. Smith
+  affiliation: de.NBI & EMBL Heidelberg
+package: rhdf5
+output:
+  BiocStyle::html_document
+vignette: |
+  %\VignetteIndexEntry{rhdf5}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
 
-\documentclass[10pt,a4paper]{article}
+```{r cleanup, echo=FALSE, include=FALSE}
+if(file.exists('myhdf5file.h5'))
+    file.remove('myhdf5file.h5')
+if(file.exists('newfile.h5'))
+    file.remove('newfile.h5')
+if(file.exists('newfile2.h5'))
+    file.remove('newfile2.h5')
+if(file.exists('newfile3.h5'))
+    file.remove('newfile3.h5')
+```
 
-<<style, echo=FALSE, results=tex>>=
-BiocStyle::latex()
-@
-
-\RequirePackage{amsfonts,amsmath,amstext,amssymb,amscd}
-\usepackage{graphicx}
-\usepackage{xcolor,colortbl}
-%\usepackage{verbatim}
-%\usepackage{hyperref}
-%\usepackage{color}
-%\definecolor{darkblue}{rgb}{0.2,0.0,0.4}
-
-%\topmargin -1.5cm
-%\oddsidemargin -0cm   % read Lamport p.163
-%\evensidemargin -0cm  % same as oddsidemargin but for left-hand pages
-%\textwidth 17cm
-%\textheight 24.5cm
-%\parindent0em
-
-%\newcommand{\lib}[1]{{\mbox{\normalfont\textsf{#1}}}}
-%\newcommand{\file}[1]{{\mbox{\normalfont\textsf{'#1'}}}}
-%\newcommand{\R}{{\mbox{\normalfont\textsf{R}}}}
-%\newcommand{\Rfunction}[1]{{\mbox{\normalfont\texttt{#1}}}}
-%\newcommand{\Robject}[1]{{\mbox{\normalfont\texttt{#1}}}}
-%\newcommand{\Rpackage}[1]{{\mbox{\normalfont\textsf{#1}}}}
-%\newcommand{\Rclass}[1]{{\mbox{\normalfont\textit{#1}}}}
-%\newcommand{\code}[1]{{\mbox{\normalfont\texttt{#1}}}}
-
-%\newcommand{\email}[1]{\mbox{\href{mailto:#1}{\textcolor{darkblue}{\normalfont{#1}}}}}
-%\newcommand{\web}[2]{\mbox{\href{#2}{\textcolor{darkblue}{\normalfont{#1}}}}}
-
-\SweaveOpts{keep.source=TRUE,eps=FALSE}
-
-\begin{document}
-
-\title{rhdf5 - HDF5 interface for R}
-
-\author{Bernd Fischer}
-
-\maketitle
-
-\tableofcontents
-
-\section{Introduction}
+#Introduction
 The package is an R interface for HDF5. On the one hand it implements
-\R{}~interfaces to many of the low level functions from the C
+**R** interfaces to many of the low level functions from the C
 interface. On the other hand it provides high level convenience
-functions on \R{}~ level to make a usage of HDF5 files more easy.
+functions on **R** level to make a usage of HDF5 files more easy.
 
-\section{Installation of the HDF5 package}
-To install the package \Biocpkg{rhdf5}, you need a current version
-(>2.15.0) of \R{}~(www.r-project.org). After installing \R{}~you can
-run the following commands from the \R{}~command shell to install the
-bioconductor package \Biocpkg{rhdf5}. 
+#Installation of the HDF5 package
+To install the `r Biocpkg("rhdf5")` package, you need a current version
+(>2.15.0) of **R** (www.r-project.org). After installing **R** you can
+run the following commands from the **R** command shell to install the
+bioconductor package `r Biocpkg("rhdf5")`. 
 
-<<installation,eval=FALSE>>=
+```{r installation,eval=FALSE}
 source("http://bioconductor.org/biocLite.R")
 biocLite("rhdf5")
-@
+```
 
-\section{High level \R~-HDF5 functions}
-\subsection{Creating an HDF5 file and group hierarchy}
+\section{High level \R-HDF5 functions}
+##Creating an HDF5 file and group hierarchy
 An empty HDF5 file is created by
-<<createHDF5file>>=
+```{r createHDF5file}
 library(rhdf5)
 h5createFile("myhdf5file.h5")
-@
+```
 
 The HDF5 file can contain a group hierarchy. We create a number of
 groups and list the file content afterwards.
-<<create groups>>=
+```{r create groups}
 h5createGroup("myhdf5file.h5","foo")
 h5createGroup("myhdf5file.h5","baa")
 h5createGroup("myhdf5file.h5","foo/foobaa")
 h5ls("myhdf5file.h5")
-@
+```
 
-\subsection{Writing and reading objects}
+##Writing and reading objects
 \label{sec_writeMatrix}
 
 Objects can be written to the HDF5 file. Attributes attached to an
 object are written as well, if \Robject{write.attributes=TRUE} is
-given as argument to \Robject{h5write}. Note that not all
-\R{}-attributes can be written as HDF5 attributes.
+given as argument to `h5write`. Note that not all
+**R**-attributes can be written as HDF5 attributes.
 
-<<writeMatrix>>=
+```{r writeMatrix}
 A = matrix(1:10,nr=5,nc=2)
 h5write(A, "myhdf5file.h5","foo/A")
 B = array(seq(0.1,2.0,by=0.1),dim=c(5,2,2))
@@ -106,74 +84,74 @@ D = h5read("myhdf5file.h5","foo/A")
 E = h5read("myhdf5file.h5","foo/B")
 F = h5read("myhdf5file.h5","foo/foobaa/C")
 G = h5read("myhdf5file.h5","df")
-@ 
+``` 
 
-If a dataset with the given \Robject{name} does not yet exist, a
-dataset is created in the HDF5 file and the object \Robject{obj} is
-written to the HDF5 file. If a dataset with the given \Robject{name}
+If a dataset with the given `name` does not yet exist, a
+dataset is created in the HDF5 file and the object `obj` is
+written to the HDF5 file. If a dataset with the given `name`
 already exists and the datatype and the dimensions are the same as for
-the object \Robject{obj}, the data in the file is overwritten. If the
+the object `obj`, the data in the file is overwritten. If the
 dataset already exists and either the datatype or the dimensions are
-different, \Rfunction{h5write} fails.
+different, `h5write()` fails.
 
 \subsection{Writing and reading objects with file, group and dataset handles}
 \label{sec_writeMatrixHandle}
 
 File, group and dataset handles are a simpler way to read (and partially to write) HDF5 files. 
-A file is opened by \Robject{H5Fopen}. 
+A file is opened by `H5Fopen`. 
 
-<<accessorH5Fopen>>=
+```{r accessorH5Fopen}
 h5f = H5Fopen("myhdf5file.h5")
 h5f
-@
+```
 
 The \Robject{\$} and \Robject{\&} operators can be used to access the next group level. While the \Robject{\$} operator reads the object from disk, the \Robject{\&} operator returns a group or dataset handle.
 
-<<accessorDF>>=
+```{r accessorDF}
 h5f$df
 h5f&'df'
-@
+```
 
-Both of the following code lines return the matrix \Robject{C}. \warning{However, while first version reads the whole tree \Robject{/foo} in memory and then subsets to \Robject{/foobaa/C}, the second version only reads the matrix \Robject{C}. The first "\$" in "h5f\$foo\$foobaa\$C" reads the dataset, the other "\$" are accessors of a list. Remind that this can have severe consequences for large datasets and datastructures.}
+Both of the following code lines return the matrix `C`. \warning{However, while first version reads the whole tree \Robject{/foo} in memory and then subsets to \Robject{/foobaa/C}, the second version only reads the matrix `C`. The first "\$" in "h5f\$foo\$foobaa\$C" reads the dataset, the other "\$" are accessors of a list. Remind that this can have severe consequences for large datasets and datastructures.}
 
-<<accessorC1>>=
+```{r accessorC1}
 h5f$foo$foobaa$C
 h5f$"/foo/foobaa/C"
-@
+```
 
 One can as well return a dataset handle for a matrix and then read the matrix in chunks for out-of-memory computations. \warning{Please read the next section on subsetting, chunking and compression for more details}.
 
-<<accessorB1>>=
+```{r accessorB1}
 h5d = h5f&"/foo/B"
 h5d[]
 h5d[3,,]
-@
+```
 
-The same works as well for writing to datasets. \warning{Remind that it is only guarenteed that the data is written on disk after a call to \Robject{H5Fflush} or after closing of the file.}
-<<accessorB2>>=
+The same works as well for writing to datasets. \warning{Remind that it is only guarenteed that the data is written on disk after a call to `H5Fflush` or after closing of the file.}
+```{r accessorB2}
 h5d[3,,] = 1:4
 H5Fflush(h5f)
-@
+```
 
 Remind again that in the following code the first version does not change the data on disk, but the second does.
-<<accessorB3,eval=FALSE>>=
+```{r accessorB3,eval=FALSE}
 h5f$foo$B = 101:120
 h5f$"/foo/B" = 101:120
-@
+```
 
 It is important to close all dataset, group, and file handles when not used anymore
-<<accessorClose1>>=
+```{r accessorClose1}
 H5Dclose(h5d)
 H5Fclose(h5f)
-@
+```
 or close all open HDF5 handles in the environment by
-<<accessorClose2>>=
+```{r accessorClose2}
 h5closeAll()
-@
+```
 
 \subsection{Writing and reading with subsetting, chunking and compression}
-The \Biocpkg{rhdf5} package provides two ways of subsetting. One can
-specify the submatrix with the \R{}-style index lists or with the HDF5
+The `r Biocpkg("rhdf5")` package provides two ways of subsetting. One can
+specify the submatrix with the **R**-style index lists or with the HDF5
 style hyperslabs. Note, that the two next examples below show two
 alternative ways for reading and writing the exact same
 submatrices. Before writing subsetting or hyperslabbing, the dataset
@@ -196,15 +174,13 @@ large. The following figure illustrates the runtime and file size
 behaviour as a function of the chunk size for a small toy dataset. 
 
 
-\begin{center}
-  \includegraphics[width=0.75\textwidth]{../inst/demoChunkSize/chunksize.pdf}
-\end{center}
+![](../inst/demoChunkSize/chunksize-1.png)
 
 After the creation of the dataset, the data can be written
-sequentially to the HDF5 file. Subsetting in \R{}-style needs the
-specification of the argument index to \Rfunction{h5read} and 
-\Rfunction{h5write}.
-<<writeMatrixSubsetting>>=
+sequentially to the HDF5 file. Subsetting in **R**-style needs the
+specification of the argument index to `h5read()` and 
+`h5write()`.
+```{r writeMatrixSubsetting}
 h5createDataset("myhdf5file.h5", "foo/S", c(5,8), 
                 storage.mode = "integer", chunk=c(5,1), level=7)
 h5write(matrix(1:5,nr=5,nc=1), file="myhdf5file.h5", 
@@ -225,13 +201,13 @@ h5read("myhdf5file.h5", "foo/S")
 h5read("myhdf5file.h5", "foo/S", index=list(2:3,2:3))
 h5read("myhdf5file.h5", "foo/S", index=list(2:3,c(2,4)))
 h5read("myhdf5file.h5", "foo/S", index=list(2:3,c(1,2,4,5)))
-@ 
+``` 
 
 The HDF5 hyperslabs are defined by some of the arguments
-\Robject{start}, \Robject{stride}, \Robject{count}, and
-\Robject{block}. These arguments are not effective, if the argument
-\Robject{index} is specified.
-<<writeMatrixHyperslab>>=
+`start`, `stride`, `count`, and
+`block`. These arguments are not effective, if the argument
+`index` is specified.
+```{r writeMatrixHyperslab}
 h5createDataset("myhdf5file.h5", "foo/H", c(5,8), storage.mode = "integer",
                 chunk=c(5,1), level=7)
 h5write(matrix(1:5,nr=5,nc=1), file="myhdf5file.h5", name="foo/H", 
@@ -255,111 +231,113 @@ h5read("myhdf5file.h5", "foo/H",
        start=c(2,2), stride=c(1,2),count=c(2,2))
 h5read("myhdf5file.h5", "foo/H", 
        start=c(2,1), stride=c(1,3),count=c(2,2), block=c(1,2))
-@ 
+``` 
 
 \subsection{Saving multiple objects to an HDF5 file (h5save)}
 
 A number of objects can be written to the top level group of an HDF5
-file with the function \Rfunction{h5save} (as analogonanalogous to the
-\R{}~function \Rfunction{save}).
-<<h5save>>=
+file with the function `h5save()` (as analogous to the base
+**R** function `save()`).
+```{r h5save}
 A = 1:7;  B = 1:18; D = seq(0,1,by=0.1)
 h5save(A, B, D, file="newfile2.h5")
 h5dump("newfile2.h5")
-@
+```
 
-\subsection{List the content of an HDF5 file}
+##List the content of an HDF5 file
 
-The function \Rfunction{h5ls} provides some ways of viewing the content of an HDF5 file.
+The function `h5ls()` provides some ways of viewing the content of an HDF5 file.
 
-<<h5ls>>=
+```{r h5ls}
 h5ls("myhdf5file.h5")
 h5ls("myhdf5file.h5", all=TRUE)
 h5ls("myhdf5file.h5", recursive=2)
-@ 
+``` 
 
-\subsection{Dump the content of an HDF5 file}
-The function \Rfunction{h5dump} is similar to the function \Rfunction{h5ls}. If
-used with the argument \Robject{load=FALSE}, it produces the same result
-as \Rfunction{h5ls}, but with the group structure resolved as a hierarchy
-of lists. If the default argument \Robject{load=TRUE} is used all
+##Dump the content of an HDF5 file
+The function `h5dump()` is similar to the function `h5ls()`. If
+used with the argument `load=FALSE`, it produces the same result
+as `h5ls()`, but with the group structure resolved as a hierarchy
+of lists. If the default argument `load=TRUE` is used all
 datasets from the HDF5 file are read.
 
-<<h5dump>>=
+```{r h5dump}
 h5dump("myhdf5file.h5",load=FALSE)
 D <- h5dump("myhdf5file.h5")
-@ 
+``` 
 
-\subsection{Reading HDF5 files with external software}
+##Reading HDF5 files with external software
 The content of the HDF5 file can be checked with the command line tool
-\software{h5dump} (available on linux-like systems with the HDF5 tools
-package installed) or with the graphical user interface \software{HDFView}
+**h5dump** (available on linux-like systems with the HDF5 tools
+package installed) or with the graphical user interface **HDFView**
 (http://www.hdfgroup.org/hdf-java-html/hdfview/) available for all
 major platforms. 
-<<h5dump, eval=FALSE>>=
+```{r h5dump2, eval=FALSE}
 system("h5dump myhdf5file.h5")
-@ 
+``` 
 \warning{Please note, that arrays appear as transposed matrices when opening it
 with a C-program (\software{h5dump} or \software{HDFView}). This is due to the fact the
 fastest changing dimension on C is the last one, but on \R~ it is the
 first one (as in Fortran).}
 
 \section{64-bit integers}
-\R{} does not support a native datatype for 64-bit integers. All integers in \R{} are
+**R** does not support a native datatype for 64-bit integers. All integers in **R** are
 32-bit integers. When reading 64-bit integers from a HDF5-file, you
-may run into troubles. \Biocpkg{rhdf5} is able to deal with 64-bit integers, but
+may run into troubles. `r Biocpkg("rhdf5")` is able to deal with 64-bit integers, but
 you still should pay attention.
 
 As an example, we create an HDF5 file that contains 64-bit integers.
 
-<<bit64integer1>>=
+```{r bit64integer1}
 x = h5createFile("newfile3.h5")
 
 D = array(1L:30L,dim=c(3,5,2))
 d = h5createDataset(file="newfile3.h5", dataset="D64", dims=c(3,5,2),H5type="H5T_NATIVE_INT64")
 h5write(D,file="newfile3.h5",name="D64")
-@
+```
 
 There are three different ways of reading 64-bit integers in
-\R{}. \Rfunction{H5Dread} and \Rfunction{h5read} have the argument
-\Robject{bit64conversion} the specify the conversion method.
+**R**. `H5Dread()` and `h5read()` have the argument
+`bit64conversion` the specify the conversion method.
 
-By setting {\bf \Robject{bit64conversion='int'}}, a coercing to 32-bit
+By setting {\bf `bit64conversion='int'`}, a coercing to 32-bit
 integers is enforced, with the risc of data loss, but with the
 insurance that numbers are represented as native integers.
 
-<<bit64integer2>>=
+```{r bit64integer2}
 D64a = h5read(file="newfile3.h5",name="D64",bit64conversion="int")
 D64a
 storage.mode(D64a)
-@
+```
 
-{\bf \Robject{bit64conversion='double'}} coerces the 64-bit integers to floating
+`bit64conversion='double'` coerces the 64-bit integers to floating
 point numbers. doubles can represent integers with up to 54-bits, but
 they are not represented as integer values anymore. For larger numbers
 there is still a data loss.
 
-<<bit64integer3>>=
+```{r bit64integer3}
 D64b = h5read(file="newfile3.h5",name="D64",bit64conversion="double")
 D64b
 storage.mode(D64b)
-@
+```
 
-{\bf \Robject{bit64conversion='bit64'}} is recommended way of coercing. It
-represents the 64-bit integers as objects of class \Rclass{integer64} as
-defined in the package \CRANpkg{bit64}. Make sure that you have installed
-\CRANpkg{bit64}. \warning{The datatype \Rclass{integer64} is not part of base \R{}, but defined
+`bit64conversion='bit64'` is recommended way of coercing. It
+represents the 64-bit integers as objects of class *integer64* as
+defined in the package `r CRANpkg("bit64")`. Make sure that you have installed
+`r CRANpkg("bit64")`. 
+*The datatype *integer64* is not part of base **R**, but defined
 in an external package. This can produce unexpected behaviour when
-working with the data.} When choosing this option the package \CRANpkg{bit64}
+working with the data.* When choosing this option the package `r CRANpkg("bit64")`
 will be loaded.
 
-<<bit64integer4>>=
+```{r bit64integer4}
 D64c = h5read(file="newfile3.h5",name="D64",bit64conversion="bit64")
 D64c
 class(D64c)
-@
+```
 
-\subsection{Large integer data types}
+<!--
+##Large integer data types
 
 The following table gives an overview of the limits of the different integer representations in R and in HDF5.
 
@@ -481,34 +459,36 @@ $-2^{63}-1$ & -9223372036854775809 &
 - & - & - & - \\\hline
 \end{tabular}
 
+
 From the table it becomes obvious that some integer values in HDF5
 files cannot be displayed in R. Note that this can happen for both
 64-bit integer as well as for unsigned 32-bit integer. When generating
 an HDF5 file, it is recommended to use signed 32-bit integers.
+-->
 
-\section{Low level HDF5 functions}
-\subsection{Creating an HDF5 file and a group hierarchy}
+#Low level HDF5 functions
+##Creating an HDF5 file and a group hierarchy
 
 Create a file.
-<<createfile,quiet=FALSE>>=
+```{r createfile,quiet=FALSE}
 library(rhdf5)
 h5file = H5Fcreate("newfile.h5")
 h5file
-@ 
+``` 
 
 and a group hierarchy
-<<createfile,quiet=FALSE>>=
+```{r create_groups, quiet=FALSE}
 h5group1 <- H5Gcreate(h5file, "foo")
 h5group2 <- H5Gcreate(h5file, "baa")
 h5group3 <- H5Gcreate(h5group1, "foobaa")
 h5group3
-@ 
+``` 
 
-\subsection{Writing data to an HDF5 file}
+##Writing data to an HDF5 file
 
 Create 4 different simple and scalar data spaces. The data space sets the dimensions for the datasets.
 
-<<createdataspace,quiet=FALSE>>=
+```{r createdataspace, quiet=FALSE}
 d = c(5,7)
 h5space1 = H5Screate_simple(d,d)
 h5space2 = H5Screate_simple(d,NULL)
@@ -516,28 +496,28 @@ h5space3 = H5Scopy(h5space1)
 h5space4 = H5Screate("H5S_SCALAR")
 h5space1
 H5Sis_simple(h5space1)
-@ 
+``` 
 
 Create two datasets, one with integer and one with floating point numbers. 
 
-<<create dataset>>=
+```{r create_dataset}
 h5dataset1 = H5Dcreate( h5file, "dataset1", "H5T_IEEE_F32LE", h5space1 )
 h5dataset2 = H5Dcreate( h5group2, "dataset2", "H5T_STD_I32LE", h5space1 )
 h5dataset1
-@ 
+``` 
 
 Now lets write data to the datasets.
-<<writedata>>=
+```{r writedata}
 A = seq(0.1,3.5,length.out=5*7)
 H5Dwrite(h5dataset1, A)
 B = 1:35
 H5Dwrite(h5dataset2, B)
-@ 
+``` 
 
 To release resources and to ensure that the data is written on disk,
 we have to close datasets, dataspaces, and the file. There are
 different functions to close datasets, dataspaces, groups, and files.
-<<closefile>>=
+```{r closefile}
 H5Dclose(h5dataset1)
 H5Dclose(h5dataset2)
 
@@ -551,20 +531,20 @@ H5Gclose(h5group2)
 H5Gclose(h5group3)
 
 H5Fclose(h5file)
-@
+```
 
-
+<!--
 % We can now check how it looks like on disk.
-% <<h5dump>>=
+% ```{r h5dump}
 % system("h5dump newfile2.h5")
-% @ 
+% ``` 
 % Please note, that arrays appear as transposed matrices when opening it with a C-program (h5dump). This is due to the fact the fastest changing dimension on C is the last one, but on \R~ it is the first one (as in Fortran).
+-->
 
-
-\section{Session Info}
-<<sessioninfo, results=tex, print=TRUE>>=
-toLatex(sessionInfo())
-@
+#Session Info
+```{r sessioninfo}
+sessionInfo()
+```
 
 \end{document}
 
