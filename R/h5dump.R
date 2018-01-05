@@ -36,17 +36,16 @@ h5dump <- function( file, recursive = TRUE, load=TRUE, all=FALSE, index_type = h
         } else {
             depth = 1L
         }
-    } else {
-        if (is.numeric(recursive)) {
-            depth = as.integer(recursive)
-            if (recursive == 0) {
-                stop("value 0 for 'recursive' is undefined, either a positive integer or negative (maximum recursion)")
-            }
-        } else {
-            stop("'recursive' must be an integer of length 1 or a logical")
+    } else if (is.numeric(recursive) | is.integer(recursive) ) {
+        depth = as.integer(recursive)
+        if( length(recursive) > 1 ) {
+            warning("'recursive' must be of length 1.  Only using first value.")
+        } else if (recursive == 0) {
+            stop("value 0 for 'recursive' is undefined, either a positive number specify the depth to descend or negative for maximum recursion")
         }
+    } else {
+        stop("'recursive' must be an integer of length 1 or a logical")
     }
-    di <- as.integer(2)
     L <- .Call("_h5dump", loc$H5Identifier@ID, depth, index_type, order, PACKAGE='rhdf5')
     if (load) {
         L <- h5loadData( loc$H5Identifier, L, all=all, ...)

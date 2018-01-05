@@ -1,6 +1,20 @@
 \name{NEWS}
 \title{News for Package 'rhdf5'}
 
+\section{Changes in version 2.24.0}{
+  \subsection{BUG FIXES}{
+    \itemize{
+      \item Datasets can now be subset using `[` and a range of values 
+      e.g. did[,1:5].
+      \item Writing a data.frame that contains factors and setting 
+      DataFrameAsCompound=FALSE now works.
+      \item Many functions that would leave open file handles after exiting
+      under error conditions have been fixed.
+      \item Minor performance improvements in h5read().
+    }
+  }
+}
+
 \section{Changes in version 2.20.0}{
   \subsection{NEW FEATURES}{
     \itemize{

@@ -1,6 +1,6 @@
 useDynLib(rhdf5)
 
-import(zlibbioc)
+import(Rhdf5lib)
 import(methods)
 importFrom(utils, packageVersion)
 
@@ -318,3 +318,5 @@ export(h5version)
 export(h5set_extent)
 
 export(h5errorHandling)
+
+export(h5closeAll)

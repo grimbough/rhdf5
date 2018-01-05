@@ -39,10 +39,20 @@ test_that("Check reading only dataset headers", {
     
 })
 
-test_that("No recursion", {
+test_that("Changing recursion depth", {
     
+    expect_is( h5dump( file = h5File, recursive = FALSE ), "list" ) %>%
+        expect_length(n = 2)
     expect_null( h5dump( file = h5File, recursive = FALSE )$foo )
     
+    expect_identical( h5ls(h5File, recursive = 1),
+                      h5ls(h5File, recursive = FALSE) )
+    expect_identical( h5ls(h5File, recursive = -1),
+                      h5ls(h5File, recursive = TRUE) )
+    
+    expect_error( h5dump(h5File, recursive = 0) )
+    expect_error( h5dump(h5File, recursive = "FOO") )
+    expect_warning( (h5dump(h5File, recursive = 1:3)) )
 })
 
 test_that("Changing traversal order", {

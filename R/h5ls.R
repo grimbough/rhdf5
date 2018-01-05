@@ -25,25 +25,27 @@ h5lsConvertToDataframe <- function(L, all=FALSE) {
 
 h5ls <- function( file, recursive = TRUE, all=FALSE, datasetinfo=TRUE, index_type = h5default("H5_INDEX"), order = h5default("H5_ITER"), native = FALSE ) {
     
-  loc = h5checktypeOrOpenLoc(file, readonly=TRUE)
-
-  if (length(datasetinfo)!=1 || !is.logical(datasetinfo)) stop("'datasetinfo' must be a logical of length 1")
-  index_type <- h5checkConstants( "H5_INDEX", index_type )
-  order <- h5checkConstants( "H5_ITER", order )
-  if (is.logical(recursive)) {
-    if (recursive) {
-      depth = -1L
+    loc = h5checktypeOrOpenLoc(file, readonly=TRUE)
+    on.exit(h5closeitLoc(loc))
+    
+    if (length(datasetinfo)!=1 || !is.logical(datasetinfo)) stop("'datasetinfo' must be a logical of length 1")
+    index_type <- h5checkConstants( "H5_INDEX", index_type )
+    order <- h5checkConstants( "H5_ITER", order )
+    if (is.logical(recursive)) {
+        if (recursive) {
+            depth = -1L
+        } else {
+            depth = 1L
+        }
+    } else if ( is.numeric(recursive) | is.integer(recursive) ) {
+        depth = as.integer(recursive)
+        if( length(recursive) > 1 ) {
+            warning("'recursive' must be of length 1.  Only using first value.")
+        } else if (recursive == 0) {
+            stop("value 0 for 'recursive' is undefined, either a positive integer or negative (maximum recursion)")
+        } 
     } else {
-      depth = 1L
-    }
-  } else {
-    if (is.numeric(recursive)) {
-      depth = as.integer(recursive)
-      if (recursive == 0) {
-        stop("value 0 for 'recursive' is undefined, either a positive integer or negative (maximum recursion)")
-      }
-    } else {
-      stop("'recursive' must be an integer of length 1 or a logical")
+        stop("'recursive' must be number or a logical")
     }
   }
   di <- ifelse(datasetinfo, 1L, 0L)
