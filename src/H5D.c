@@ -4,20 +4,30 @@
 
 
 #define STRIDEJ                                           \
-    int ndims = H5Sget_simple_extent_ndims(file_space_id);\
-    hsize_t dims[ndims];                                  \
-    H5Sget_simple_extent_dims(file_space_id, dims, NULL); \
-    int iip[ndims];                                       \
-    int stride[ndims];                                    \
+  int ndims, li, lj, itmp;                                \
+  hsize_t* dims;                                          \
+  int* iip;                                               \
+  int* stride;                                            \
+                                                          \
+  if (native) {                                           \
+    ndims = H5Sget_simple_extent_ndims(mem_space_id);     \
+    dims = (hsize_t *)R_alloc(ndims, sizeof(hsize_t));    \
+    H5Sget_simple_extent_dims(mem_space_id, dims, NULL);  \
+                                                          \
+    iip = (int *)R_alloc(ndims, sizeof(int));             \
+    stride = (int *)R_alloc(ndims, sizeof(int));          \
+                                                          \
     iip[0] = 1;                                           \
     for (int i = 1; i < ndims; i++) {                     \
       iip[i] = iip[i-1] * dims[ndims-i];                  \
     }                                                     \
+                                                          \
     for (int i = 0; i < ndims; i++) {                     \
       stride[i] = iip[ndims-i-1];                         \
     }                                                     \
+                                                          \
     for (int i = 0; i < ndims; iip[i++] = 0);             \
-    int li, lj, itmp;                                     \
+  }                     
 
 #define CLICKJ                                            \
     for (itmp = 0; itmp < ndims; itmp++) {                \
@@ -919,13 +929,13 @@ SEXP _H5Dread( SEXP _dataset_id, SEXP _file_space_id, SEXP _mem_space_id, SEXP _
     hsize_t maxsize[rank];
     H5Sget_simple_extent_dims(file_space_id, size, maxsize);
     hsize_t dims[rank];
-    if(native == 0) {
+    if(native) {
       for (int i=0; i<rank; i++) {
-        dims[i] = size[i];
+        dims[i] = size[rank-1-i];
       }
     } else {
       for (int i=0; i<rank; i++) {
-        dims[i] = size[rank-1-i];
+        dims[i] = size[i];
       }
     }
     mem_space_id = H5Screate_simple( rank, dims, dims);
@@ -995,25 +1005,31 @@ SEXP _H5Dwrite( SEXP _dataset_id, SEXP _buf, SEXP _file_space_id, SEXP _mem_spac
     file_space_id = INTEGER(_file_space_id)[0];
   }
 
-  int ndims = H5Sget_simple_extent_ndims(mem_space_id);
-  hsize_t dims[ndims];
-  H5Sget_simple_extent_dims(mem_space_id, dims, NULL); 
+  int ndims, li, lj, itmp;
+  hsize_t* dims;
+  int* iip;
+  int* stride;
 
-  int iip[ndims];
-  int stride[ndims];
+  if (native) {
+    ndims = H5Sget_simple_extent_ndims(mem_space_id);
+    dims = (hsize_t *)R_alloc(ndims, sizeof(hsize_t));
+    H5Sget_simple_extent_dims(mem_space_id, dims, NULL); 
 
-  iip[0] = 1;
-  for (int i = 1; i < ndims; i++) {
-    iip[i] = iip[i-1] * dims[ndims-i];
+    iip = (int *)R_alloc(ndims, sizeof(int));
+    stride = (int *)R_alloc(ndims, sizeof(int));
+
+    iip[0] = 1;
+    for (int i = 1; i < ndims; i++) {
+      iip[i] = iip[i-1] * dims[ndims-i];
+    }
+
+    for (int i = 0; i < ndims; i++) {
+      stride[i] = iip[ndims-i-1];
+    }
+
+    for (int i = 0; i < ndims; iip[i++] = 0);
   }
 
-  for (int i = 0; i < ndims; i++) {
-    stride[i] = iip[ndims-i-1];
-  }
-
-  for (int i = 0; i < ndims; iip[i++] = 0);
-
-  int li, lj, itmp;
   const void * buf;
 
   SEXP buffer;
@@ -1026,7 +1042,15 @@ SEXP _H5Dwrite( SEXP _dataset_id, SEXP _buf, SEXP _file_space_id, SEXP _mem_spac
       if (native) {
         for (li = 0, lj = 0; li < LENGTH(_buf); li++) {
           INTEGER(buffer)[li] = INTEGER(_buf)[lj];
-          CLICKJ
+    for (itmp = 0; itmp < ndims; itmp++) {                
+        if (iip[itmp] == dims[itmp] - 1) iip[itmp] = 0;   
+        else {                                            
+            iip[itmp]++;                                  
+            break;                                        
+        }                                                 
+    }                                                     
+    for (lj = 0, itmp = 0; itmp < ndims; itmp++)          
+        lj += iip[itmp] * stride[itmp];
         }
         _buf = buffer;
       }
