@@ -33,3 +33,23 @@ H5Lget_info <- function( h5loc, name ) {
   res$type <- h5const2Factor("H5L_TYPE", res$type)
   res
 }
+
+H5Ldelete <- function( h5loc, name ) {
+    
+    h5checktype(h5loc, "loc")
+    if ( length(name) != 1 || !is.character(name) ) {
+        stop("'name' must be a character string of length 1")
+    }
+    
+    if(!H5Lexists(h5loc, name)) {
+        stop("Specified link doesn't exist.")
+    }
+    
+    res <- .Call("_H5Ldelete", h5loc@ID, name, PACKAGE='rhdf5')
+    
+    if(res < 0) {
+        stop('Link deletion failed')
+    } else {
+        return( invisible(res) )
+    }
+}

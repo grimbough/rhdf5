@@ -16,6 +16,7 @@ SEXP _H5Lexists( SEXP _loc_id, SEXP _name );
 /* H5Lmove */
 /* H5Lcopy */
 /* H5Ldelete */
+SEXP _H5Ldelete( SEXP _loc_id, SEXP _name );
 
 SEXP _H5Lget_info( SEXP _loc_id, SEXP _name );
 /* H5Lget_val */
