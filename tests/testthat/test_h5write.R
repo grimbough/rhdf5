@@ -91,7 +91,7 @@ test_that("Overwriting a subset", {
 
 
 ## remove this later
-H5close()
+#H5close()
 
 test_that("No open HDF5 objects are left", {
     expect_equal( length(h5validObjects()), 0 )

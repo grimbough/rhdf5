@@ -3,13 +3,16 @@ sudo: false
 cache: packages
 
 before_install:
-  - tlmgr install bera
+  - tlmgr install bera nowidow parnotes marginfix
 
-warnings_are_errors: false
+r:
+  - devel
+bioc_required: true
+bioc_use_devel: true
 
 r: bioc-devel
-r_build_args: --no-build-vignettes
-r_check_args: --no-vignettes --force-multiarch
+
+warnings_are_errors: false
 
 bioc_packages: BiocCheck
 
