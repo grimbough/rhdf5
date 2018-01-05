@@ -41,7 +41,9 @@ test_that("Deletion is selective", {
     
     expect_true( "data.frame" %in% h5ls(h5File)$name )
     expect_silent( h5delete(file = h5File, name = "data.frame") )  
+    ## 'data.frame' has been removed
     expect_false( "data.frame" %in% h5ls(h5File)$name )
+    ## 'list' is still present
     expect_true( "list" %in% h5ls(h5File)$name )
 })
 
