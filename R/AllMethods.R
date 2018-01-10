@@ -92,6 +92,7 @@ setMethod(`&`, signature = c("H5IdComponent"),
 
 setMethod(`[`, signature = c("H5IdComponent", "ANY", "ANY", "ANY"),
           function(x, i, j, ..., drop = TRUE) {
+            browser()
             h5id = x
             index = as.list(sys.call())[-c(1,2)]
             for (i in seq_along(index)) {
@@ -110,7 +111,7 @@ setMethod(`[`, signature = c("H5IdComponent", "ANY", "ANY", "ANY"),
             }
             truetype = H5Iget_type(h5id)
             if (truetype == "H5I_DATASET") {
-              res = h5readDataset(h5dataset = h5id, index = index)
+              res = h5readDataset(h5dataset = h5id, index = index, native = h5id@native)
               if (drop) {
                 res = drop(res)
               }

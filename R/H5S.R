@@ -28,12 +28,16 @@ H5Scopy <- function( h5space ) {
   invisible(h5spacenew)
 }
 
-H5Screate_simple <- function( dims, maxdims ) {
+H5Screate_simple <- function( dims, maxdims, native = FALSE ) {
   if (missing(maxdims)) {
     maxdims = dims
   }
-  dims <- as.numeric(rev(dims))
-  maxdims <- as.numeric(rev(maxdims))
+  dims <- as.numeric(dims)
+  maxdims <- as.numeric(maxdims)
+  if (!native) {
+    dims <- rev(dims)
+    maxdims <- rev(maxdims)
+  }
   sid <- .Call("_H5Screate_simple", dims, maxdims, PACKAGE='rhdf5')
   if (sid > 0) {
     h5space = new("H5IdComponent", ID = sid)
@@ -52,7 +56,7 @@ H5Sis_simple<- function( h5space ) {
 H5Sget_simple_extent_dims <- function( h5space, native = FALSE ) {
   h5checktype(h5space, "dataspace")
   res <- .Call("_H5Sget_simple_extent_dims", h5space@ID, PACKAGE='rhdf5')
-  if (length(res) > 2 && native) {
+  if (length(res) > 2 && !native) {
     res$size <- rev(res$size)
     res$maxsize <- rev(res$maxsize)
   }

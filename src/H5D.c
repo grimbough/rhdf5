@@ -10,9 +10,9 @@
   int* stride;                                            \
                                                           \
   if (native) {                                           \
-    ndims = H5Sget_simple_extent_ndims(mem_space_id);     \
+    ndims = H5Sget_simple_extent_ndims(dim_space_id);     \
     dims = (hsize_t *)R_alloc(ndims, sizeof(hsize_t));    \
-    H5Sget_simple_extent_dims(mem_space_id, dims, NULL);  \
+    H5Sget_simple_extent_dims(dim_space_id, dims, NULL);  \
                                                           \
     iip = (int *)R_alloc(ndims, sizeof(int));             \
     stride = (int *)R_alloc(ndims, sizeof(int));          \
@@ -247,24 +247,8 @@ SEXP H5Dread_helper_INTEGER(hid_t dataset_id, hid_t file_space_id, hid_t mem_spa
   int warn_NA = 0;
   int warn = 0;
   int warn_double = 0;
-/*
-  if (native) {
-    int ndims = H5Sget_simple_extent_ndims(file_space_id);
-    hsize_t dims[ndims];
-    H5Sget_simple_extent_dims(file_space_id, dims, NULL);
-    int iip[ndims];
-    int stride[ndims];
-    iip[0] = 1;                                           
-    for (int i = 1; i < ndims; i++) {
-      iip[i] = iip[i-1] * dims[ndims-i];                  
-    }
-    for (int i = 0; i < ndims; i++) {                     
-      stride[i] = iip[ndims-i-1];
-    }                                                     
-    for (int i = 0; i < ndims; iip[i++] = 0);
-    int li, lj, itmp;
-  }                                                       
-*/
+
+  hid_t dim_space_id = file_space_id;
   STRIDEJ
 
   if (((b < 4) | ((b == 4) & (sgn == H5T_SGN_2))) & (bit64conversion == 0)) {   // Read directly to R-integer without loss of data
@@ -516,6 +500,7 @@ SEXP H5Dread_helper_FLOAT(hid_t dataset_id, hid_t file_space_id, hid_t mem_space
     buf = REAL(_buf);
     Rval = _buf;
   }
+  hid_t dim_space_id = file_space_id;
   STRIDEJ
 
   herr_t herr = H5Dread(dataset_id, mem_type_id, mem_space_id, file_space_id, H5P_DEFAULT, buf );
@@ -555,6 +540,7 @@ SEXP H5Dread_helper_STRING(hid_t dataset_id, hid_t file_space_id, hid_t mem_spac
     }
   }
 
+  hid_t dim_space_id = file_space_id;
   STRIDEJ
 
   Rval = PROTECT(allocVector(STRSXP, n));
@@ -997,7 +983,7 @@ SEXP _H5Dwrite( SEXP _dataset_id, SEXP _buf, SEXP _file_space_id, SEXP _mem_spac
     mem_space_id = H5S_ALL;
   } else {
     mem_space_id = INTEGER(_mem_space_id)[0];
-  }
+  } // dataset_id equal?
   hid_t file_space_id;
   if (length(_file_space_id) == 0) {
     file_space_id = H5S_ALL;
@@ -1005,30 +991,11 @@ SEXP _H5Dwrite( SEXP _dataset_id, SEXP _buf, SEXP _file_space_id, SEXP _mem_spac
     file_space_id = INTEGER(_file_space_id)[0];
   }
 
-  int ndims, li, lj, itmp;
-  hsize_t* dims;
-  int* iip;
-  int* stride;
-
-  if (native) {
-    ndims = H5Sget_simple_extent_ndims(mem_space_id);
-    dims = (hsize_t *)R_alloc(ndims, sizeof(hsize_t));
-    H5Sget_simple_extent_dims(mem_space_id, dims, NULL); 
-
-    iip = (int *)R_alloc(ndims, sizeof(int));
-    stride = (int *)R_alloc(ndims, sizeof(int));
-
-    iip[0] = 1;
-    for (int i = 1; i < ndims; i++) {
-      iip[i] = iip[i-1] * dims[ndims-i];
-    }
-
-    for (int i = 0; i < ndims; i++) {
-      stride[i] = iip[ndims-i-1];
-    }
-
-    for (int i = 0; i < ndims; iip[i++] = 0);
+  hsize_t dim_space_id = mem_space_id;
+  if (mem_space_id == H5S_ALL) {
+    dim_space_id = dataset_id;
   }
+  STRIDEJ;
 
   const void * buf;
 

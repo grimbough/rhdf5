@@ -21,7 +21,7 @@ h5readDataset <- function (h5dataset, index = NULL, start = NULL, stride = NULL,
     try({
       size = H5Sselect_index(h5spaceFile, index)
     })
-    h5spaceMem = H5Screate_simple(size)
+    h5spaceMem = H5Screate_simple(size, native = native)
   }
   else {
     if (any(c(!is.null(start), !is.null(stride), 
@@ -32,7 +32,7 @@ h5readDataset <- function (h5dataset, index = NULL, start = NULL, stride = NULL,
                                    start = start, stride = stride, count = count, 
                                    block = block)
       })
-      h5spaceMem = H5Screate_simple(size)
+      h5spaceMem = H5Screate_simple(size, native = native)
     }
   }
   obj <- NULL
