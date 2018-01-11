@@ -85,7 +85,7 @@ H5Fget_create_plist <- function( h5file ) {
   h5checktype(h5file, "file")
   pid <- .Call("_H5Fget_create_plist", h5file@ID, PACKAGE='rhdf5')
   if (pid > 0) {
-    h5plist = new("H5IdComponent", ID = pid)
+    h5plist = new("H5IdComponent", ID = pid, native = .native(h5file))
   } else {
     message("HDF5: unable to create property list")
     h5plist = FALSE
@@ -98,7 +98,7 @@ H5Fget_access_plist <- function( h5file ) {
   h5checktype(h5file, "file")
   pid <- .Call("_H5Fget_access_plist", h5file@ID, PACKAGE='rhdf5')
   if (pid > 0) {
-    h5plist = new("H5IdComponent", ID = pid)
+    h5plist = new("H5IdComponent", ID = pid, native = .native(h5file))
   } else {
     message("HDF5: unable to create property list")
     h5plist = FALSE

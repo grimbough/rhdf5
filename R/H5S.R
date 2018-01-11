@@ -1,9 +1,9 @@
 
-H5Screate <- function( type = h5default("H5S") ) {
+H5Screate <- function( type = h5default("H5S"), native = FALSE ) {
   type <- h5checkConstants( "H5S", type )
   sid <- .Call("_H5Screate", type, PACKAGE='rhdf5')
   if (sid > 0) {
-    h5space = new("H5IdComponent", ID = sid)
+    h5space = new("H5IdComponent", ID = sid, native = native)
   } else {
     message("HDF5: unable to create data space")
     h5space = FALSE
@@ -20,7 +20,7 @@ H5Scopy <- function( h5space ) {
   h5checktype(h5space, "dataspace")
   sid <- .Call("_H5Scopy", h5space@ID, PACKAGE='rhdf5')
   if (sid > 0) {
-    h5spacenew = new("H5IdComponent", ID = sid)
+    h5spacenew = new("H5IdComponent", ID = sid, native = .native(h5space))
   } else {
     message("HDF5: unable to copy data space")
     h5spacenew = FALSE
@@ -40,7 +40,7 @@ H5Screate_simple <- function( dims, maxdims, native = FALSE ) {
   }
   sid <- .Call("_H5Screate_simple", dims, maxdims, PACKAGE='rhdf5')
   if (sid > 0) {
-    h5space = new("H5IdComponent", ID = sid)
+    h5space = new("H5IdComponent", ID = sid, native = native)
   } else {
     message("HDF5: unable to create simple data space")
     h5space = FALSE
@@ -53,24 +53,24 @@ H5Sis_simple<- function( h5space ) {
   as.logical(.Call("_H5Sis_simple", h5space@ID, PACKAGE='rhdf5'))
 }
 
-H5Sget_simple_extent_dims <- function( h5space, native = FALSE ) {
+H5Sget_simple_extent_dims <- function( h5space ) {
   h5checktype(h5space, "dataspace")
   res <- .Call("_H5Sget_simple_extent_dims", h5space@ID, PACKAGE='rhdf5')
-  if (length(res) > 2 && !native) {
+  if (length(res) > 2 && !.native(h5space)) {
     res$size <- rev(res$size)
     res$maxsize <- rev(res$maxsize)
   }
   res
 }
 
-H5Sset_extent_simple <- function( h5space, dims, maxdims, native = FALSE ) {
+H5Sset_extent_simple <- function( h5space, dims, maxdims ) {
   h5checktype(h5space, "dataspace")
   if (missing(maxdims)) {
     maxdims = dims
   }
   dims <- as.numeric(dims)
   maxdims <- as.numeric(maxdims)
-  if (!native){
+  if (!.native(h5space)){
     dims <- rev(dims)
     maxdims <- rev(maxdims)
   }
@@ -78,7 +78,7 @@ H5Sset_extent_simple <- function( h5space, dims, maxdims, native = FALSE ) {
   invisible(res)
 }
 
-H5Sselect_hyperslab <- function( h5space, op = h5default("H5S_SELECT"), start=NULL, stride=NULL, count=NULL, block=NULL, native = FALSE ) {
+H5Sselect_hyperslab <- function( h5space, op = h5default("H5S_SELECT"), start=NULL, stride=NULL, count=NULL, block=NULL ) {
   h5checktype(h5space, "dataspace")
   op <- h5checkConstants( "H5S_SELECT", op )
 
@@ -118,7 +118,7 @@ H5Sselect_hyperslab <- function( h5space, op = h5default("H5S_SELECT"), start=NU
   stride <- as.numeric(stride)
   size <- count * block
   start <- start - 1
-  if (!native) {
+  if (!.native(h5space)) {
     start <- rev(start)
     stride <- rev(stride)
     count <- rev(count)
@@ -129,7 +129,7 @@ H5Sselect_hyperslab <- function( h5space, op = h5default("H5S_SELECT"), start=NU
   invisible(size)
 }
 
-H5Sselect_index <- function( h5space, index, native = FALSE ) {
+H5Sselect_index <- function( h5space, index ) {
   h5checktype(h5space, "dataspace")
   dim <- H5Sget_simple_extent_dims(h5space)$size
   if (!is.list(index)) {
@@ -165,7 +165,7 @@ H5Sselect_index <- function( h5space, index, native = FALSE ) {
     }
   }
   size = sapply(count, sum)
-  if (!native) {
+  if (!.native(h5space)) {
     start = rev(start)
     count = rev(count)
   }

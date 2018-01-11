@@ -10,7 +10,7 @@ h5validObjects <- function() {
   ids <- .Call("_h5validObjects", PACKAGE='rhdf5')
   res <- list()
   for (i in seq_len(length(ids))) {
-    res[[i]] <- new("H5IdComponent", ID = ids[i])
+    res[[i]] <- new("H5IdComponent", ID = ids[i], native = FALSE) # FIXME: native
   }
   res
 }

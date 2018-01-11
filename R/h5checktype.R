@@ -206,7 +206,7 @@ h5checktypeAndPLC <- function(h5id, plc, allowNULL = FALSE, fctname = deparse(ma
     if (!allowNULL) {
       stop("Error in ", fctname, ". Property list is null", call. = FALSE)
     } else {
-      h5id = new("H5IdComponent", ID = integer(0))
+      h5id = new("H5IdComponent", ID = integer(0), native = logical(0))
     }
   } else {
     if (!is( h5id, "H5IdComponent" ) ) {

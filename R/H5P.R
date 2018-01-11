@@ -3,11 +3,11 @@
 ## General Property List Operations
 ####################################################
 
-H5Pcreate <- function( type = h5default("H5P") ) {
+H5Pcreate <- function( type = h5default("H5P"), native = FALSE ) {
   type <- h5checkConstants( "H5P", type )
   pid <- .Call("_H5Pcreate", type, PACKAGE='rhdf5')
   if (pid > 0) {
-    h5plist = new("H5IdComponent", ID = pid)
+    h5plist = new("H5IdComponent", ID = pid, native = native)
   } else {
     message("HDF5: unable to create property list")
     h5plist = FALSE
@@ -19,7 +19,7 @@ H5Pget_class <- function( h5plist ) {
   h5checktype(h5plist, "plist")
   pclid <- .Call("_H5Pget_class", h5plist@ID, PACKAGE='rhdf5')
   if (pclid > 0) {
-    h5plistclass = new("H5IdComponent", ID = pclid)
+    h5plistclass = new("H5IdComponent", ID = pclid, native = .native(h5plist))
   } else {
     message("HDF5: unable to get property list class")
     h5plistclass = FALSE
@@ -31,7 +31,7 @@ H5Pcopy <- function( h5plist ) {
   h5checktype(h5plist, "plist")
   pid <- .Call("_H5Pcopy", h5plist@ID, PACKAGE='rhdf5')
   if (pid > 0) {
-    h5plistnew = new("H5IdComponent", ID = pid)
+    h5plistnew = new("H5IdComponent", ID = pid, native = .native(h5plist))
   } else {
     message("HDF5: unable to copy property list")
     h5plistnew = FALSE
@@ -825,9 +825,9 @@ H5Pget_layout <- function( h5plist ) {
   res
 }
 
-H5Pset_chunk <- function( h5plist, dim, native = FALSE ) {
+H5Pset_chunk <- function( h5plist, dim ) {
   h5checktypeAndPLC(h5plist, "H5P_DATASET_CREATE")
-  if (!is.null(dim) && !native) { dim = rev(as.integer(dim)) }
+  if (!is.null(dim) && !.native(h5plist)) { dim = rev(as.integer(dim)) }
   res <- .Call("_H5Pset_chunk", h5plist@ID, dim, PACKAGE='rhdf5')
   invisible(res)
 }
