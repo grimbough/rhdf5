@@ -27,7 +27,7 @@
     }                                                     \
                                                           \
     for (int i = 0; i < ndims; iip[i++] = 0);             \
-  }                     
+  }
 
 #define CLICKJ                                            \
     for (itmp = 0; itmp < ndims; itmp++) {                \
@@ -575,18 +575,6 @@ SEXP H5Dread_helper_STRING(hid_t dataset_id, hid_t file_space_id, hid_t mem_spac
     bufSTR2[size] = '\0';
     char* bufSTR3 = ((char* )bufSTR);
 
-    if (native) {      
-      char* swapBuf =  malloc(sizeof(char) * n * size);
-      for (li = 0, lj = 0; li < n; li++) {
-        for (int j=0; j<size; j++) {
-          swapBuf[li*size+j] = bufSTR3[lj*sizeof(char)*size+j];
-        }
-        CLICKJ;
-      }
-      bufSTR3 = swapBuf;
-      free(swapBuf);
-    }
-
     for (int i=0; i<n; i++) {
       for (int j=0; j<size; j++) {
         bufSTR2[j] = bufSTR3[i*sizeof(char)*size+j];
@@ -595,6 +583,16 @@ SEXP H5Dread_helper_STRING(hid_t dataset_id, hid_t file_space_id, hid_t mem_spac
     }
     free(bufSTR);
     free(bufSTR2);
+  }
+
+  SEXP buffer = PROTECT(allocVector(TYPEOF(Rval), LENGTH(Rval)));
+  if (native) {
+    for (li = 0, lj = 0; li < LENGTH(Rval); li++) {
+      SEXP elt = STRING_ELT(Rval, lj);
+      SET_STRING_ELT(buffer, li, elt);
+      CLICKJ
+    }
+    Rval = buffer;
   }
   setAttrib(Rval, R_DimSymbol, Rdim);
   UNPROTECT(1);
