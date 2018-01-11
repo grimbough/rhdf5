@@ -92,7 +92,6 @@ setMethod(`&`, signature = c("H5IdComponent"),
 
 setMethod(`[`, signature = c("H5IdComponent", "ANY", "ANY", "ANY"),
           function(x, i, j, ..., drop = TRUE) {
-            browser()
             h5id = x
             index = as.list(sys.call())[-c(1,2)]
             for (i in seq_along(index)) {
