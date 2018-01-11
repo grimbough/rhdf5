@@ -18,7 +18,7 @@ H5Oopen <- function( h5loc, name ) {
   if (length(name)!=1 || !is.character(name)) stop("'name' must be a character string of length 1")
   oid <- .Call("_H5Oopen", h5loc@ID, name, PACKAGE='rhdf5')
   if (oid > 0) {
-    h5object = new("H5IdComponent", ID = oid, native = .native(h5loc))
+    h5object = new("H5IdComponent", ID = oid, native = h5loc@native)
   } else {
     message("HDF5: unable to open object")
     h5object = FALSE
