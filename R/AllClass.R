@@ -1,8 +1,9 @@
 
 setClass("H5IdComponent",
-         representation(ID = "integer", native = "logical"),
-         prototype=list(native = FALSE)
+         representation(ID = "integer", native = "logical")
 )
+
+.native <- function(x) x@native
 
 ## setClass("H5attribute",
 ##          contains = "H5IdComponent"
