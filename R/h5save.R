@@ -1,5 +1,5 @@
 
-h5save <- function(..., file, name = NULL, createnewfile=TRUE) {
+h5save <- function(..., file, name = NULL, createnewfile=TRUE, native = FALSE) {
   N <- length(list(...))
 
   # get object names
@@ -10,7 +10,7 @@ h5save <- function(..., file, name = NULL, createnewfile=TRUE) {
     stop("length of 'name' argument  must fit the number of objects to save.")
   }
 
-  loc = h5checktypeOrOpenLoc(file, createnewfile=createnewfile)
+  loc = h5checktypeOrOpenLoc(file, createnewfile=createnewfile, native = native)
 
   for (i in 1:N) {
     h5write(list(...)[[i]], file = loc$H5Identifier, name = name[i])

@@ -1,7 +1,6 @@
 
 setClass("H5IdComponent",
-         representation(ID = "integer", native = "logical"),
-         prototype=list(native = FALSE)
+         representation(ID = "integer", native = "logical")
 )
 
 ## setClass("H5attribute",

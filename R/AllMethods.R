@@ -110,7 +110,7 @@ setMethod(`[`, signature = c("H5IdComponent", "ANY", "ANY", "ANY"),
             }
             truetype = H5Iget_type(h5id)
             if (truetype == "H5I_DATASET") {
-              res = h5readDataset(h5dataset = h5id, index = index, native = h5id@native)
+              res = h5readDataset(h5dataset = h5id, index = index)
               if (drop) {
                 res = drop(res)
               }

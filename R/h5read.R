@@ -1,5 +1,5 @@
 h5readDataset <- function (h5dataset, index = NULL, start = NULL, stride = NULL, 
-                           block = NULL, count = NULL, compoundAsDataFrame = TRUE, drop = FALSE, native = FALSE, ...) {
+                           block = NULL, count = NULL, compoundAsDataFrame = TRUE, drop = FALSE, ...) {
   try({
     h5spaceFile <- H5Dget_space(h5dataset)
   })
@@ -21,7 +21,7 @@ h5readDataset <- function (h5dataset, index = NULL, start = NULL, stride = NULL,
     try({
       size = H5Sselect_index(h5spaceFile, index)
     })
-    h5spaceMem = H5Screate_simple(size, native = native)
+    h5spaceMem = H5Screate_simple(size, native = h5dataset@native)
   }
   else {
     if (any(c(!is.null(start), !is.null(stride), 
@@ -32,14 +32,14 @@ h5readDataset <- function (h5dataset, index = NULL, start = NULL, stride = NULL,
                                    start = start, stride = stride, count = count, 
                                    block = block)
       })
-      h5spaceMem = H5Screate_simple(size, native = native)
+      h5spaceMem = H5Screate_simple(size, native = h5dataset@native)
     }
   }
   obj <- NULL
   try({
     obj <- H5Dread(h5dataset = h5dataset, h5spaceFile = h5spaceFile, 
                    h5spaceMem = h5spaceMem,
-                   compoundAsDataFrame = compoundAsDataFrame, drop = drop, native = native, ...)
+                   compoundAsDataFrame = compoundAsDataFrame, drop = drop, ...)
   })
   if (!is.null(h5spaceMem)) {
     try({
@@ -68,9 +68,9 @@ h5readDataset <- function (h5dataset, index = NULL, start = NULL, stride = NULL,
   obj
 }
 
-h5read <- function(file, name, index=NULL, start=NULL, stride=NULL, block=NULL, count=NULL, compoundAsDataFrame = TRUE, callGeneric = TRUE, read.attributes=FALSE, drop = FALSE, native = FALSE, ... ) {
+h5read <- function(file, name, index=NULL, start=NULL, stride=NULL, block=NULL, count=NULL, compoundAsDataFrame = TRUE, callGeneric = TRUE, read.attributes=FALSE, drop = FALSE, ..., native = FALSE) {
     
-  loc = h5checktypeOrOpenLoc(file, readonly=TRUE)
+  loc = h5checktypeOrOpenLoc(file, readonly=TRUE, native = native)
   on.exit( h5closeitLoc(loc) )
 
   if (!H5Lexists(loc$H5Identifier, name)) {
@@ -89,7 +89,7 @@ h5read <- function(file, name, index=NULL, start=NULL, stride=NULL, block=NULL, 
       if (type == "H5I_DATASET") {
         try( { h5dataset <- H5Dopen(loc$H5Identifier, name) } )
         obj <- h5readDataset(h5dataset, index = index, start = start, stride = stride, 
-                      block = block, count = count, compoundAsDataFrame = compoundAsDataFrame, drop = drop, native = native, ...)
+                      block = block, count = count, compoundAsDataFrame = compoundAsDataFrame, drop = drop, ...)
         try( { H5Dclose(h5dataset) } )
         
         cl <- attr(obj,"class")

@@ -12,13 +12,13 @@ h5ls   (file,
 	all = FALSE, 
 	datasetinfo = TRUE,
 	index_type = h5default("H5_INDEX"),
-	order = h5default("H5_ITER"))
+	order = h5default("H5_ITER"), native = FALSE)
 h5dump (file,
         recursive = TRUE,
 	load = TRUE,
 	all = FALSE,
         index_type = h5default("H5_INDEX"),
-        order = h5default("H5_ITER"), ...)
+        order = h5default("H5_ITER"), ..., native = FALSE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -29,6 +29,7 @@ h5dump (file,
   \item{index_type}{See \code{h5const("H5_INDEX")} for possible arguments.}
   \item{order}{See \code{h5const("H5_ITER")} for possible arguments.}
   \item{load}{If TRUE the datasets are read in, not only the header information. Note, that this can cause memory problems for very large files. In this case choose \code{load=FALSE} and load the datasets successively.}
+  \item{native}{An object of class \code{logical}. If TRUE, array-like objects are treated as stored in HDF5 row-major rather than R column-major orientation. Using \code{native = TRUE} increases HDF5 file portability between programming languages. A file written with \code{native = TRUE} should also be read with \code{native = TRUE}}.
   \item{\dots}{Arguments passed to \code{\link{h5read}}}
 }
 \details{

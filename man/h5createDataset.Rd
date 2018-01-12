@@ -10,7 +10,7 @@ h5createDataset (file, dataset,
 		storage.mode = "double", H5type = NULL, 
 		size = NULL, chunk = dims, level = 6,
 		fillValue,
-                showWarnings=TRUE)
+                showWarnings = TRUE, native = FALSE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -25,6 +25,7 @@ h5createDataset (file, dataset,
   \item{level}{The compression level used. An integer value between 0 (no compression) and 9 (highest and slowest compression).}
   \item{fillValue}{Standard value for filling the dataset. The storage.mode of value has to be convertable to the dataset type by HDF5.}
   \item{showWarnings}{If TRUE (default), a warning is given if the chunk size is equal to the dataset dimension for large compressed datasets.}
+  \item{native}{An object of class \code{logical}. If TRUE, array-like objects are treated as stored in HDF5 row-major rather than R column-major orientation. Using \code{native = TRUE} increases HDF5 file portability between programming languages. A file written with \code{native = TRUE} should also be read with \code{native = TRUE}}.
 }
 \details{
 Creates a new dataset. in an existing HDF5 file. The function will fail, if the file doesn't exist or if there exists already another dataset with the same name within the specified file.

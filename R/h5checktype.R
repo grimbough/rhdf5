@@ -102,7 +102,7 @@ h5FileIsOpen <- function(filename) {
   isopen
 }
 
-h5checktypeOrOpenLoc <- function(file, fctname = deparse(match.call()[1]), createnewfile=FALSE, readonly=FALSE) {
+h5checktypeOrOpenLoc <- function(file, fctname = deparse(match.call()[1]), createnewfile=FALSE, readonly=FALSE, native) {
   res = list()
   if (is.character(file)) {
     file = normalizePath(file,mustWork = FALSE)
@@ -112,9 +112,9 @@ h5checktypeOrOpenLoc <- function(file, fctname = deparse(match.call()[1]), creat
       }
       
       h5loc <- if (readonly) {
-          H5Fopen(file,"H5F_ACC_RDONLY")
+          H5Fopen(file,"H5F_ACC_RDONLY", native=native)
         } else {
-          H5Fopen(file)
+          H5Fopen(file, native = native)
         }
       if (!is(h5loc, "H5IdComponent")) {
         stop("Error in ",fctname,". File '",file,"' is not a valid HDF5 file.")
@@ -159,13 +159,13 @@ h5closeitLoc <- function(file, fctname = deparse(match.call()[1])) {
   invisible(res)
 }
 
-h5checktypeOrOpenObj <- function(obj, file, fctname = deparse(match.call()[1])) {
+h5checktypeOrOpenObj <- function(obj, file, fctname = deparse(match.call()[1]), native) {
   res = list()
   if (is.character(obj)) {
     if (missing(file)) {
       stop("Error in ",fctname,". If the object is specified by name, then you have to specify the file.")
     }
-    loc = h5checktypeOrOpenLoc(file, fctname=fctname)
+    loc = h5checktypeOrOpenLoc(file, fctname=fctname, native = native)
 
     if (!H5Lexists(loc$H5Identifier, obj)) {
       stop("Error in ",fctname,". Object '",obj,"' not found in file.")
@@ -206,7 +206,7 @@ h5checktypeAndPLC <- function(h5id, plc, allowNULL = FALSE, fctname = deparse(ma
     if (!allowNULL) {
       stop("Error in ", fctname, ". Property list is null", call. = FALSE)
     } else {
-      h5id = new("H5IdComponent", ID = integer(0))
+      h5id = new("H5IdComponent", ID = integer(0), native = logical(0))
     }
   } else {
     if (!is( h5id, "H5IdComponent" ) ) {

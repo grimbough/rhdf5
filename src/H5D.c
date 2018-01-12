@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <time.h>
 
-
 #define STRIDEJ                                           \
   int ndims, li, lj, itmp;                                \
   hsize_t* dims;                                          \
@@ -27,7 +26,7 @@
     }                                                     \
                                                           \
     for (int i = 0; i < ndims; iip[i++] = 0);             \
-  }                     
+  }
 
 #define CLICKJ                                            \
     for (itmp = 0; itmp < ndims; itmp++) {                \
@@ -247,9 +246,7 @@ SEXP H5Dread_helper_INTEGER(hid_t dataset_id, hid_t file_space_id, hid_t mem_spa
   int warn_NA = 0;
   int warn = 0;
   int warn_double = 0;
-
   hid_t dim_space_id = file_space_id;
-  STRIDEJ
 
   if (((b < 4) | ((b == 4) & (sgn == H5T_SGN_2))) & (bit64conversion == 0)) {   // Read directly to R-integer without loss of data
     if (cpdType < 0) {
@@ -272,25 +269,24 @@ SEXP H5Dread_helper_INTEGER(hid_t dataset_id, hid_t file_space_id, hid_t mem_spa
       Rval = _buf;
     }
     herr_t herr = H5Dread(dataset_id, mem_type_id, mem_space_id, file_space_id, H5P_DEFAULT, buf );
-    
-    SEXP buffer = PROTECT(allocVector(TYPEOF(Rval), LENGTH(Rval)));
 
     if (native) {
+      SEXP buffer = PROTECT(allocVector(TYPEOF(Rval), LENGTH(Rval)));
+      STRIDEJ;
       for (li = 0, lj = 0; li < LENGTH(Rval); li++) {
         INTEGER(buffer)[li] = INTEGER(Rval)[lj];
         CLICKJ;
       }
       Rval = buffer;
     }
+
     for (long long i=0; i<n; i++) {
       if (((int *)buf)[i] == INT_MIN) {
 	warn_NA = 1;
       }
     }
-        
     if (length(_buf) == 0) {
       setAttrib(Rval, R_DimSymbol, Rdim);
-      UNPROTECT(2);
     }
   } else {  // Convert data to R-integer and replace overflow values with NA_integer
     hid_t dtypeNative;
@@ -459,7 +455,6 @@ SEXP H5Dread_helper_INTEGER(hid_t dataset_id, hid_t file_space_id, hid_t mem_spa
     free(intbuf);
     if (length(_buf) == 0) {
       setAttrib(Rval, R_DimSymbol, Rdim);
-      UNPROTECT(1);
     }
   }
 
@@ -479,6 +474,7 @@ SEXP H5Dread_helper_INTEGER(hid_t dataset_id, hid_t file_space_id, hid_t mem_spa
     }
   }
 
+  UNPROTECT( (length(_buf) == 0) + native );
   return(Rval);
 }
 
@@ -508,13 +504,11 @@ SEXP H5Dread_helper_FLOAT(hid_t dataset_id, hid_t file_space_id, hid_t mem_space
     Rval = _buf;
   }
   hid_t dim_space_id = file_space_id;
-  STRIDEJ
-
   herr_t herr = H5Dread(dataset_id, mem_type_id, mem_space_id, file_space_id, H5P_DEFAULT, buf );
 
-  SEXP buffer = PROTECT(allocVector(TYPEOF(Rval), LENGTH(Rval)));
-
   if (native) {
+    SEXP buffer = PROTECT(allocVector(TYPEOF(Rval), LENGTH(Rval)));
+    STRIDEJ;
     for (li = 0, lj = 0; li < LENGTH(Rval); li++) {
       REAL(buffer)[li] = REAL(Rval)[lj];
       CLICKJ;
@@ -524,8 +518,9 @@ SEXP H5Dread_helper_FLOAT(hid_t dataset_id, hid_t file_space_id, hid_t mem_space
 
   if (length(_buf) == 0) {
     setAttrib(Rval, R_DimSymbol, Rdim);
-    UNPROTECT(2);
   }
+
+  UNPROTECT( (length(_buf) == 0) + native );
   return(Rval);
 }
 
@@ -546,27 +541,15 @@ SEXP H5Dread_helper_STRING(hid_t dataset_id, hid_t file_space_id, hid_t mem_spac
       mem_type_id = mem_type_id2;
     }
   }
-
   hid_t dim_space_id = file_space_id;
-  STRIDEJ
-
   Rval = PROTECT(allocVector(STRSXP, n));
 
   if (H5Tis_variable_str(dtype_id)) {
     char *bufSTR[n];
     herr_t herr = H5Dread(dataset_id, mem_type_id, mem_space_id, file_space_id, H5P_DEFAULT, bufSTR );
-    if (native) {
-      for (li = 0, lj = 0; li < n; li++) {
-        SET_STRING_ELT(Rval, li, mkChar(bufSTR[lj]));
-        free(bufSTR[lj]);
-        CLICKJ
-      }
-    }
-    else {
-      for (int i=0; i<n; i++) {
-          SET_STRING_ELT(Rval, i, mkChar(bufSTR[i]));
-          free(bufSTR[i]);
-      }
+    for (int i=0; i<n; i++) {
+      SET_STRING_ELT(Rval, i, mkChar(bufSTR[i]));
+      free(bufSTR[i]);
     }
   } else {
     void* bufSTR = malloc(sizeof(char) * n * size);
@@ -578,22 +561,8 @@ SEXP H5Dread_helper_STRING(hid_t dataset_id, hid_t file_space_id, hid_t mem_spac
     if (bufSTR2 == 0) {
       error("Not enough memory to read data! Try to read a subset of data by specifying the index or count parameter.");
     }
-    
     bufSTR2[size] = '\0';
     char* bufSTR3 = ((char* )bufSTR);
-
-    if (native) {      
-      char* swapBuf =  malloc(sizeof(char) * n * size);
-      for (li = 0, lj = 0; li < n; li++) {
-        for (int j=0; j<size; j++) {
-          swapBuf[li*size+j] = bufSTR3[lj*sizeof(char)*size+j];
-        }
-        CLICKJ;
-      }
-      bufSTR3 = swapBuf;
-      free(swapBuf);
-    }
-
     for (int i=0; i<n; i++) {
       for (int j=0; j<size; j++) {
         bufSTR2[j] = bufSTR3[i*sizeof(char)*size+j];
@@ -603,8 +572,19 @@ SEXP H5Dread_helper_STRING(hid_t dataset_id, hid_t file_space_id, hid_t mem_spac
     free(bufSTR);
     free(bufSTR2);
   }
+
+  if (native) {
+    SEXP buffer = PROTECT(allocVector(TYPEOF(Rval), LENGTH(Rval)));
+    STRIDEJ;
+    for (li = 0, lj = 0; li < LENGTH(Rval); li++) {
+      SEXP elt = STRING_ELT(Rval, lj);
+      SET_STRING_ELT(buffer, li, elt);
+      CLICKJ;
+    }
+    Rval = buffer;
+  }
   setAttrib(Rval, R_DimSymbol, Rdim);
-  UNPROTECT(1);
+  UNPROTECT( 1 + native );
   return(Rval);
 }
 
@@ -864,11 +844,11 @@ SEXP H5Dread_helper(hid_t dataset_id, hid_t file_space_id, hid_t mem_space_id, h
   } break;
   case H5T_ENUM: {
     Rval = H5Dread_helper_ENUM(dataset_id, file_space_id, mem_space_id, n, Rdim, _buf,
-  			       dtype_id, cpdType, cpdNField, cpdField, compoundAsDataFrame, native );
+			       dtype_id, cpdType, cpdNField, cpdField, compoundAsDataFrame, native );
   } break;
   case H5T_ARRAY: {
     Rval = H5Dread_helper_ARRAY(dataset_id, file_space_id, mem_space_id, n, Rdim, _buf,
-  			        dtype_id, cpdType, cpdNField, cpdField, compoundAsDataFrame, native );
+				dtype_id, cpdType, cpdNField, cpdField, compoundAsDataFrame, native );
   } break;
   case H5T_TIME:
   case H5T_BITFIELD:
@@ -893,7 +873,7 @@ SEXP H5Dread_helper(hid_t dataset_id, hid_t file_space_id, hid_t mem_space_id, h
 /* herr_t H5Dread(hid_t dataset_id, hid_t mem_type_id, hid_t mem_space_id, hid_t file_space_id, hid_t xfer_plist_id, void * buf ) */
 /* TODO: accept mem_type_id as parameter */
 SEXP _H5Dread( SEXP _dataset_id, SEXP _file_space_id, SEXP _mem_space_id, SEXP _buf, SEXP _compoundAsDataFrame,
-               SEXP _bit64conversion, SEXP _drop, SEXP _native) {
+               SEXP _bit64conversion, SEXP _drop, SEXP _native ) {
   int compoundAsDataFrame = LOGICAL(_compoundAsDataFrame)[0];
   int drop = LOGICAL(_drop)[0];
   int native = LOGICAL(_native)[0];
@@ -1000,7 +980,7 @@ SEXP _H5Dwrite( SEXP _dataset_id, SEXP _buf, SEXP _file_space_id, SEXP _mem_spac
     mem_space_id = H5S_ALL;
   } else {
     mem_space_id = INTEGER(_mem_space_id)[0];
-  } // dataset_id equal?
+  }
   hid_t file_space_id;
   if (length(_file_space_id) == 0) {
     file_space_id = H5S_ALL;
@@ -1008,14 +988,13 @@ SEXP _H5Dwrite( SEXP _dataset_id, SEXP _buf, SEXP _file_space_id, SEXP _mem_spac
     file_space_id = INTEGER(_file_space_id)[0];
   }
 
+  const void * buf;
+
   hsize_t dim_space_id = mem_space_id;
   if (mem_space_id == H5S_ALL) {
     dim_space_id = dataset_id;
   }
   STRIDEJ;
-
-  const void * buf;
-
   SEXP buffer;
   if (native)
       buffer = PROTECT(allocVector(TYPEOF(_buf), XLENGTH(_buf)));
@@ -1026,15 +1005,7 @@ SEXP _H5Dwrite( SEXP _dataset_id, SEXP _buf, SEXP _file_space_id, SEXP _mem_spac
       if (native) {
         for (li = 0, lj = 0; li < LENGTH(_buf); li++) {
           INTEGER(buffer)[li] = INTEGER(_buf)[lj];
-    for (itmp = 0; itmp < ndims; itmp++) {                
-        if (iip[itmp] == dims[itmp] - 1) iip[itmp] = 0;   
-        else {                                            
-            iip[itmp]++;                                  
-            break;                                        
-        }                                                 
-    }                                                     
-    for (lj = 0, itmp = 0; itmp < ndims; itmp++)          
-        lj += iip[itmp] * stride[itmp];
+          CLICKJ;
         }
         _buf = buffer;
       }
@@ -1045,7 +1016,7 @@ SEXP _H5Dwrite( SEXP _dataset_id, SEXP _buf, SEXP _file_space_id, SEXP _mem_spac
       if (native) {
         for (li = 0, lj = 0; li < LENGTH(_buf); li++) {
           REAL(buffer)[li] = REAL(_buf)[lj];
-          CLICKJ
+          CLICKJ;
         }
         _buf = buffer;
       }
@@ -1056,7 +1027,7 @@ SEXP _H5Dwrite( SEXP _dataset_id, SEXP _buf, SEXP _file_space_id, SEXP _mem_spac
       if (native) {
         for (li = 0, lj = 0; li < LENGTH(_buf); li++) {
           LOGICAL(buffer)[li] = LOGICAL(_buf)[lj];
-          CLICKJ
+          CLICKJ;
         }
         _buf = buffer;
       }
@@ -1090,19 +1061,17 @@ SEXP _H5Dwrite( SEXP _dataset_id, SEXP _buf, SEXP _file_space_id, SEXP _mem_spac
       break;
     default :
       mem_type_id = -1;
+      UNPROTECT(native);
       Rf_error("Writing '%s' not supported.", Rf_type2char(TYPEOF(_buf)));
       break;
   }
-
-  if (native)
-      UNPROTECT(1);
 
   herr_t herr = 3;
   herr = H5Dwrite(dataset_id, mem_type_id, mem_space_id, file_space_id, H5P_DEFAULT, buf );
   SEXP Rval;
   PROTECT(Rval = allocVector(INTSXP, 1));
   INTEGER(Rval)[0] = herr;
-  UNPROTECT(1);
+  UNPROTECT( 1 + native );
   return Rval;
 }
 
