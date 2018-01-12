@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <time.h>
 
-
 #define STRIDEJ                                           \
   int ndims, li, lj, itmp;                                \
   hsize_t* dims;                                          \
@@ -247,7 +246,6 @@ SEXP H5Dread_helper_INTEGER(hid_t dataset_id, hid_t file_space_id, hid_t mem_spa
   int warn_NA = 0;
   int warn = 0;
   int warn_double = 0;
-
   hid_t dim_space_id = file_space_id;
 
   if (((b < 4) | ((b == 4) & (sgn == H5T_SGN_2))) & (bit64conversion == 0)) {   // Read directly to R-integer without loss of data
@@ -271,7 +269,6 @@ SEXP H5Dread_helper_INTEGER(hid_t dataset_id, hid_t file_space_id, hid_t mem_spa
       Rval = _buf;
     }
     herr_t herr = H5Dread(dataset_id, mem_type_id, mem_space_id, file_space_id, H5P_DEFAULT, buf );
-    
 
     if (native) {
       SEXP buffer = PROTECT(allocVector(TYPEOF(Rval), LENGTH(Rval)));
@@ -282,12 +279,12 @@ SEXP H5Dread_helper_INTEGER(hid_t dataset_id, hid_t file_space_id, hid_t mem_spa
       }
       Rval = buffer;
     }
+
     for (long long i=0; i<n; i++) {
       if (((int *)buf)[i] == INT_MIN) {
 	warn_NA = 1;
       }
     }
-        
     if (length(_buf) == 0) {
       setAttrib(Rval, R_DimSymbol, Rdim);
     }
@@ -500,7 +497,6 @@ SEXP H5Dread_helper_FLOAT(hid_t dataset_id, hid_t file_space_id, hid_t mem_space
     Rval = _buf;
   }
   hid_t dim_space_id = file_space_id;
-
   herr_t herr = H5Dread(dataset_id, mem_type_id, mem_space_id, file_space_id, H5P_DEFAULT, buf );
 
   if (native) {
@@ -538,9 +534,7 @@ SEXP H5Dread_helper_STRING(hid_t dataset_id, hid_t file_space_id, hid_t mem_spac
       mem_type_id = mem_type_id2;
     }
   }
-
   hid_t dim_space_id = file_space_id;
-
   Rval = PROTECT(allocVector(STRSXP, n));
 
   if (H5Tis_variable_str(dtype_id)) {
@@ -560,10 +554,8 @@ SEXP H5Dread_helper_STRING(hid_t dataset_id, hid_t file_space_id, hid_t mem_spac
     if (bufSTR2 == 0) {
       error("Not enough memory to read data! Try to read a subset of data by specifying the index or count parameter.");
     }
-    
     bufSTR2[size] = '\0';
     char* bufSTR3 = ((char* )bufSTR);
-
     for (int i=0; i<n; i++) {
       for (int j=0; j<size; j++) {
         bufSTR2[j] = bufSTR3[i*sizeof(char)*size+j];
@@ -835,11 +827,11 @@ SEXP H5Dread_helper(hid_t dataset_id, hid_t file_space_id, hid_t mem_space_id, h
   } break;
   case H5T_ENUM: {
     Rval = H5Dread_helper_ENUM(dataset_id, file_space_id, mem_space_id, n, Rdim, _buf,
-  			       dtype_id, cpdType, cpdNField, cpdField, compoundAsDataFrame, native );
+			       dtype_id, cpdType, cpdNField, cpdField, compoundAsDataFrame, native );
   } break;
   case H5T_ARRAY: {
     Rval = H5Dread_helper_ARRAY(dataset_id, file_space_id, mem_space_id, n, Rdim, _buf,
-  			        dtype_id, cpdType, cpdNField, cpdField, compoundAsDataFrame, native );
+				dtype_id, cpdType, cpdNField, cpdField, compoundAsDataFrame, native );
   } break;
   case H5T_TIME:
   case H5T_BITFIELD:
@@ -864,7 +856,7 @@ SEXP H5Dread_helper(hid_t dataset_id, hid_t file_space_id, hid_t mem_space_id, h
 /* herr_t H5Dread(hid_t dataset_id, hid_t mem_type_id, hid_t mem_space_id, hid_t file_space_id, hid_t xfer_plist_id, void * buf ) */
 /* TODO: accept mem_type_id as parameter */
 SEXP _H5Dread( SEXP _dataset_id, SEXP _file_space_id, SEXP _mem_space_id, SEXP _buf, SEXP _compoundAsDataFrame,
-               SEXP _bit64conversion, SEXP _drop, SEXP _native) {
+               SEXP _bit64conversion, SEXP _drop, SEXP _native ) {
   int compoundAsDataFrame = LOGICAL(_compoundAsDataFrame)[0];
   int drop = LOGICAL(_drop)[0];
   int native = LOGICAL(_native)[0];
@@ -971,7 +963,7 @@ SEXP _H5Dwrite( SEXP _dataset_id, SEXP _buf, SEXP _file_space_id, SEXP _mem_spac
     mem_space_id = H5S_ALL;
   } else {
     mem_space_id = INTEGER(_mem_space_id)[0];
-  } // dataset_id equal?
+  }
   hid_t file_space_id;
   if (length(_file_space_id) == 0) {
     file_space_id = H5S_ALL;
@@ -979,13 +971,12 @@ SEXP _H5Dwrite( SEXP _dataset_id, SEXP _buf, SEXP _file_space_id, SEXP _mem_spac
     file_space_id = INTEGER(_file_space_id)[0];
   }
 
+  const void * buf;
+
   hsize_t dim_space_id = mem_space_id;
   if (mem_space_id == H5S_ALL) {
     dim_space_id = dataset_id;
   }
-
-  const void * buf;
-
   STRIDEJ;
   SEXP buffer;
   if (native)

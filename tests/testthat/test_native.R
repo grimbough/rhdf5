@@ -116,7 +116,7 @@ test_that("h5read/write supports native", {
                      native = TRUE)
         expect_equivalent(m0, m2)
     }
-    
+
     do_array(1:12, c(2, 3, 4), "A")
     do_array(as.numeric(1:12), c(2, 3, 4), "B")
     do_array(sample(c(TRUE, FALSE), 12, replace=TRUE), c(2, 3, 4), "C")

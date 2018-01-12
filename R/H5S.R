@@ -63,7 +63,7 @@ H5Sget_simple_extent_dims <- function( h5space ) {
   res
 }
 
-H5Sset_extent_simple <- function( h5space, dims, maxdims ) {
+H5Sset_extent_simple <- function( h5space, dims, maxdims) {
   h5checktype(h5space, "dataspace")
   if (missing(maxdims)) {
     maxdims = dims

@@ -68,7 +68,7 @@ h5readDataset <- function (h5dataset, index = NULL, start = NULL, stride = NULL,
   obj
 }
 
-h5read <- function(file, name, index=NULL, start=NULL, stride=NULL, block=NULL, count=NULL, compoundAsDataFrame = TRUE, callGeneric = TRUE, read.attributes=FALSE, drop = FALSE, native = FALSE, ... ) {
+h5read <- function(file, name, index=NULL, start=NULL, stride=NULL, block=NULL, count=NULL, compoundAsDataFrame = TRUE, callGeneric = TRUE, read.attributes=FALSE, drop = FALSE, ..., native = FALSE) {
     
   loc = h5checktypeOrOpenLoc(file, readonly=TRUE, native = native)
   on.exit( h5closeitLoc(loc) )

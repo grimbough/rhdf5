@@ -30,7 +30,7 @@ h5read                      (file, name, index=NULL,
                              count=NULL, compoundAsDataFrame = TRUE,
                              callGeneric = TRUE,
                              read.attributes = FALSE, drop = FALSE,
-                             native = FALSE, ...)
+                             ..., native = FALSE)
 h5readAttributes            (file, name, native = FALSE)
 h5write                     (obj, file, name, ...)
 h5write.default             (obj, file, name, 

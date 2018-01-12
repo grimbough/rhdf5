@@ -203,9 +203,9 @@ h5writeDataset.array <- function(obj, h5loc, name, index = NULL, start=NULL, str
           size = 1
         }
       }
-      temp_dim <- dim(obj)
-      if (h5loc@native) temp_dim <- rev(temp_dim)
-      try( { h5createDataset(h5loc, name, temp_dim, storage.mode = storage.mode(obj), size = size, chunk=temp_dim, level=level) } )
+      dim <- dim(obj)
+      if (h5loc@native) dim <- rev(dim)
+      try( { h5createDataset(h5loc, name, dim, storage.mode = storage.mode(obj), size = size, chunk=dim, level=level) } )
     }
   }
   try ( { h5dataset <- H5Dopen(h5loc, name) } )
