@@ -249,7 +249,6 @@ SEXP H5Dread_helper_INTEGER(hid_t dataset_id, hid_t file_space_id, hid_t mem_spa
   int warn_double = 0;
 
   hid_t dim_space_id = file_space_id;
-  STRIDEJ
 
   if (((b < 4) | ((b == 4) & (sgn == H5T_SGN_2))) & (bit64conversion == 0)) {   // Read directly to R-integer without loss of data
     if (cpdType < 0) {
@@ -273,9 +272,10 @@ SEXP H5Dread_helper_INTEGER(hid_t dataset_id, hid_t file_space_id, hid_t mem_spa
     }
     herr_t herr = H5Dread(dataset_id, mem_type_id, mem_space_id, file_space_id, H5P_DEFAULT, buf );
     
-    SEXP buffer = PROTECT(allocVector(TYPEOF(Rval), LENGTH(Rval)));
 
     if (native) {
+      SEXP buffer = PROTECT(allocVector(TYPEOF(Rval), LENGTH(Rval)));
+      STRIDEJ;
       for (li = 0, lj = 0; li < LENGTH(Rval); li++) {
         INTEGER(buffer)[li] = INTEGER(Rval)[lj];
         CLICKJ;
@@ -290,7 +290,6 @@ SEXP H5Dread_helper_INTEGER(hid_t dataset_id, hid_t file_space_id, hid_t mem_spa
         
     if (length(_buf) == 0) {
       setAttrib(Rval, R_DimSymbol, Rdim);
-      UNPROTECT(2);
     }
   } else {  // Convert data to R-integer and replace overflow values with NA_integer
     hid_t dtypeNative;
@@ -452,7 +451,6 @@ SEXP H5Dread_helper_INTEGER(hid_t dataset_id, hid_t file_space_id, hid_t mem_spa
     free(intbuf);
     if (length(_buf) == 0) {
       setAttrib(Rval, R_DimSymbol, Rdim);
-      UNPROTECT(1);
     }
   }
 
@@ -472,6 +470,7 @@ SEXP H5Dread_helper_INTEGER(hid_t dataset_id, hid_t file_space_id, hid_t mem_spa
     }
   }
 
+  UNPROTECT( (length(_buf) == 0) + native );
   return(Rval);
 }
 
@@ -501,13 +500,12 @@ SEXP H5Dread_helper_FLOAT(hid_t dataset_id, hid_t file_space_id, hid_t mem_space
     Rval = _buf;
   }
   hid_t dim_space_id = file_space_id;
-  STRIDEJ
 
   herr_t herr = H5Dread(dataset_id, mem_type_id, mem_space_id, file_space_id, H5P_DEFAULT, buf );
 
-  SEXP buffer = PROTECT(allocVector(TYPEOF(Rval), LENGTH(Rval)));
-
   if (native) {
+    SEXP buffer = PROTECT(allocVector(TYPEOF(Rval), LENGTH(Rval)));
+    STRIDEJ;
     for (li = 0, lj = 0; li < LENGTH(Rval); li++) {
       REAL(buffer)[li] = REAL(Rval)[lj];
       CLICKJ;
@@ -517,8 +515,9 @@ SEXP H5Dread_helper_FLOAT(hid_t dataset_id, hid_t file_space_id, hid_t mem_space
 
   if (length(_buf) == 0) {
     setAttrib(Rval, R_DimSymbol, Rdim);
-    UNPROTECT(2);
   }
+
+  UNPROTECT( (length(_buf) == 0) + native );
   return(Rval);
 }
 
@@ -541,25 +540,15 @@ SEXP H5Dread_helper_STRING(hid_t dataset_id, hid_t file_space_id, hid_t mem_spac
   }
 
   hid_t dim_space_id = file_space_id;
-  STRIDEJ
 
   Rval = PROTECT(allocVector(STRSXP, n));
 
   if (H5Tis_variable_str(dtype_id)) {
     char *bufSTR[n];
     herr_t herr = H5Dread(dataset_id, mem_type_id, mem_space_id, file_space_id, H5P_DEFAULT, bufSTR );
-    if (native) {
-      for (li = 0, lj = 0; li < n; li++) {
-        SET_STRING_ELT(Rval, li, mkChar(bufSTR[lj]));
-        free(bufSTR[lj]);
-        CLICKJ
-      }
-    }
-    else {
-      for (int i=0; i<n; i++) {
-          SET_STRING_ELT(Rval, i, mkChar(bufSTR[i]));
-          free(bufSTR[i]);
-      }
+    for (int i=0; i<n; i++) {
+      SET_STRING_ELT(Rval, i, mkChar(bufSTR[i]));
+      free(bufSTR[i]);
     }
   } else {
     void* bufSTR = malloc(sizeof(char) * n * size);
@@ -585,17 +574,18 @@ SEXP H5Dread_helper_STRING(hid_t dataset_id, hid_t file_space_id, hid_t mem_spac
     free(bufSTR2);
   }
 
-  SEXP buffer = PROTECT(allocVector(TYPEOF(Rval), LENGTH(Rval)));
   if (native) {
+    SEXP buffer = PROTECT(allocVector(TYPEOF(Rval), LENGTH(Rval)));
+    STRIDEJ;
     for (li = 0, lj = 0; li < LENGTH(Rval); li++) {
       SEXP elt = STRING_ELT(Rval, lj);
       SET_STRING_ELT(buffer, li, elt);
-      CLICKJ
+      CLICKJ;
     }
     Rval = buffer;
   }
   setAttrib(Rval, R_DimSymbol, Rdim);
-  UNPROTECT(1);
+  UNPROTECT( 1 + native );
   return(Rval);
 }
 
@@ -993,10 +983,10 @@ SEXP _H5Dwrite( SEXP _dataset_id, SEXP _buf, SEXP _file_space_id, SEXP _mem_spac
   if (mem_space_id == H5S_ALL) {
     dim_space_id = dataset_id;
   }
-  STRIDEJ;
 
   const void * buf;
 
+  STRIDEJ;
   SEXP buffer;
   if (native)
       buffer = PROTECT(allocVector(TYPEOF(_buf), XLENGTH(_buf)));
@@ -1007,15 +997,7 @@ SEXP _H5Dwrite( SEXP _dataset_id, SEXP _buf, SEXP _file_space_id, SEXP _mem_spac
       if (native) {
         for (li = 0, lj = 0; li < LENGTH(_buf); li++) {
           INTEGER(buffer)[li] = INTEGER(_buf)[lj];
-    for (itmp = 0; itmp < ndims; itmp++) {                
-        if (iip[itmp] == dims[itmp] - 1) iip[itmp] = 0;   
-        else {                                            
-            iip[itmp]++;                                  
-            break;                                        
-        }                                                 
-    }                                                     
-    for (lj = 0, itmp = 0; itmp < ndims; itmp++)          
-        lj += iip[itmp] * stride[itmp];
+          CLICKJ;
         }
         _buf = buffer;
       }
@@ -1026,7 +1008,7 @@ SEXP _H5Dwrite( SEXP _dataset_id, SEXP _buf, SEXP _file_space_id, SEXP _mem_spac
       if (native) {
         for (li = 0, lj = 0; li < LENGTH(_buf); li++) {
           REAL(buffer)[li] = REAL(_buf)[lj];
-          CLICKJ
+          CLICKJ;
         }
         _buf = buffer;
       }
@@ -1037,7 +1019,7 @@ SEXP _H5Dwrite( SEXP _dataset_id, SEXP _buf, SEXP _file_space_id, SEXP _mem_spac
       if (native) {
         for (li = 0, lj = 0; li < LENGTH(_buf); li++) {
           LOGICAL(buffer)[li] = LOGICAL(_buf)[lj];
-          CLICKJ
+          CLICKJ;
         }
         _buf = buffer;
       }
@@ -1071,19 +1053,17 @@ SEXP _H5Dwrite( SEXP _dataset_id, SEXP _buf, SEXP _file_space_id, SEXP _mem_spac
       break;
     default :
       mem_type_id = -1;
+      UNPROTECT(native);
       Rf_error("Writing '%s' not supported.", Rf_type2char(TYPEOF(_buf)));
       break;
   }
-
-  if (native)
-      UNPROTECT(1);
 
   herr_t herr = 3;
   herr = H5Dwrite(dataset_id, mem_type_id, mem_space_id, file_space_id, H5P_DEFAULT, buf );
   SEXP Rval;
   PROTECT(Rval = allocVector(INTSXP, 1));
   INTEGER(Rval)[0] = herr;
-  UNPROTECT(1);
+  UNPROTECT( 1 + native );
   return Rval;
 }
 
