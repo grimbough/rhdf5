@@ -444,6 +444,13 @@ SEXP H5Dread_helper_INTEGER(hid_t dataset_id, hid_t file_space_id, hid_t mem_spa
 	    }
 	  }
 	}
+    if (native) {
+      for (li = 0, lj = 0; li < LENGTH(Rval); li++) {
+        INTEGER(buffer)[li] = INTEGER(Rval)[lj];
+        CLICKJ;
+      }
+      Rval = buffer;
+    }
 	SEXP la = PROTECT(mkString("integer64"));
 	setAttrib(Rval, R_ClassSymbol, la);
 	UNPROTECT(1);
@@ -630,6 +637,9 @@ SEXP H5Dread_helper_ENUM(hid_t dataset_id, hid_t file_space_id, hid_t mem_space_
 	mem_type_id = mem_type_id2;
       }
     }
+
+    hid_t dim_space_id = file_space_id;
+    STRIDEJ;
     
     void * buf;
     if (length(_buf) == 0) {
@@ -641,6 +651,13 @@ SEXP H5Dread_helper_ENUM(hid_t dataset_id, hid_t file_space_id, hid_t mem_space_
     }
 
     herr_t herr = H5Dread(dataset_id, mem_type_id, mem_space_id, file_space_id, H5P_DEFAULT, buf );
+    if (native) {
+      for (li = 0, lj = 0; li < LENGTH(Rval); li++) {
+        INTEGER(buffer)[li] = INTEGER(Rval)[lj];
+        CLICKJ;
+      }
+      Rval = buffer;
+    }
     if (length(_buf) == 0) {
       for (int i=0; i < n; i++) {
 	((int *)buf)[i] += 1;
