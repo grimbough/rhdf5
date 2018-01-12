@@ -24,8 +24,8 @@ h5loadData <- function(h5loc, L, all=FALSE, ...) {
     L
 }
 
-h5dump <- function( file, recursive = TRUE, load=TRUE, all=FALSE, index_type = h5default("H5_INDEX"), order = h5default("H5_ITER"), ...) {
-    loc = h5checktypeOrOpenLoc(file)
+h5dump <- function( file, recursive = TRUE, load=TRUE, all=FALSE, index_type = h5default("H5_INDEX"), order = h5default("H5_ITER"), ..., native=FALSE) {
+    loc = h5checktypeOrOpenLoc(file, native = native)
     on.exit( h5closeitLoc(loc) )
     
     index_type <- h5checkConstants( "H5_INDEX", index_type )

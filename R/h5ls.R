@@ -25,7 +25,7 @@ h5lsConvertToDataframe <- function(L, all=FALSE) {
 
 h5ls <- function( file, recursive = TRUE, all=FALSE, datasetinfo=TRUE, index_type = h5default("H5_INDEX"), order = h5default("H5_ITER"), native = FALSE ) {
     
-    loc = h5checktypeOrOpenLoc(file, readonly=TRUE)
+    loc = h5checktypeOrOpenLoc(file, readonly=TRUE, native = native)
     on.exit(h5closeitLoc(loc))
     
     if (length(datasetinfo)!=1 || !is.logical(datasetinfo)) stop("'datasetinfo' must be a logical of length 1")

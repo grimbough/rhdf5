@@ -44,7 +44,7 @@ h5writeDataset.logical      (...)
 h5writeDataset.character    (...)
 h5writeDataset.array        (obj, h5loc, name, index = NULL,
                              start=NULL, stride=NULL, block=NULL, count=NULL,
-                             size=NULL, level=7, native=FALSE)
+                             size=NULL, level=7)
 h5writeAttribute            (attr, h5obj, name, ...)
 h5writeAttribute.matrix     (...)
 h5writeAttribute.integer    (...)

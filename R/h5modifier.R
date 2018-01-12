@@ -1,7 +1,7 @@
 
-h5set_extent <- function(file, dataset, dims) {
+h5set_extent <- function(file, dataset, dims, native = FALSE) {
 
-    loc = h5checktypeOrOpenLoc(file)
+    loc = h5checktypeOrOpenLoc(file, native = native)
     on.exit( h5closeitLoc(loc) )
     
     if (is.character(dataset)) {

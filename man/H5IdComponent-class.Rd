@@ -15,6 +15,7 @@ Objects can be created by calls of \code{\link{H5Fcreate}}, \code{\link{H5Fopen}
 \section{Slots}{
   \describe{
     \item{\code{ID}:}{Object of class \code{"integer"}. Contains the handle of C-type hid_t. }
+    \item{\code{native}:}{Object of class \code{"logical"}. When TRUE, read and write objects in 'native' format, i.e., dimensions not transposed from external tools.}
   }
 }
 \section{Methods}{
