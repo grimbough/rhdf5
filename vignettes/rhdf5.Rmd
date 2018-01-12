@@ -280,7 +280,32 @@ with a C-program (\software{h5dump} or \software{HDFView}). This is due to the f
 fastest changing dimension on C is the last one, but on \R~ it is the
 first one (as in Fortran).}
 
-\section{64-bit integers}
+##Removing content from an HDF5 file
+As well as adding content to an HDF5 file, it is possible to remove entries using the function `h5delete()`.  To demonstrate it's use, we'll first list the contents of a file and examine the size of the file in bytes.
+
+```{r h5delete1}
+h5ls("myhdf5file.h5", recursive=2)
+file.size("myhdf5file.h5")
+```
+
+We then use `h5delete()` to remove the **df** dataset by providing the file name and the name of the dataset, e.g.
+
+```{r h5delete2}
+h5delete(file = "myhdf5file.h5", name = "df")
+h5ls("myhdf5file.h5", recursive=2)
+```
+
+We can see that the **df** entry has now disappeared from the listing.  In most cases, if you have a heirachy within the file, `h5delete()`  will remove children of the deleted entry too.  In this example we remove **foo** and the datasets below it are deleted too.  Notice too that the size of the file as decreased.
+
+```{r h5delete3}
+h5delete(file = "myhdf5file.h5", name = "foo")
+h5ls("myhdf5file.h5", recursive=2)
+file.size("myhdf5file.h5")
+```
+
+*N.B. `h5delete()` does not explicitly traverse the tree to remove child nodes.  It only removes the named entry, and HDF5 will then remove child nodes if they are now orphaned.  Hence it won't delete child nodes if you have a more complex structure where a child node has multiple parents and only one of these is removed.*
+
+#64-bit integers
 **R** does not support a native datatype for 64-bit integers. All integers in **R** are
 32-bit integers. When reading 64-bit integers from a HDF5-file, you
 may run into troubles. `r Biocpkg("rhdf5")` is able to deal with 64-bit integers, but
@@ -544,6 +569,14 @@ H5Fclose(h5file)
 #Session Info
 ```{r sessioninfo}
 sessionInfo()
+```
+
+```{r cleanup_after, echo=FALSE, include=FALSE}
+for(file in c('myhdf5file.h5', 'newfile.h5', 'newfile3.h5', 'newfile3.h5')) {
+    if(file.exists(file)) {
+        file.remove( file )
+    }
+}
 ```
 
 \end{document}
