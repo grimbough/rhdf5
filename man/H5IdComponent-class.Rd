@@ -15,7 +15,7 @@ Objects can be created by calls of \code{\link{H5Fcreate}}, \code{\link{H5Fopen}
 \section{Slots}{
   \describe{
     \item{\code{ID}:}{Object of class \code{"integer"}. Contains the handle of C-type hid_t. }
-    \item{\code{native}:}{Object of class \code{"logical"}. When TRUE, read and write objects in 'native' format, i.e., dimensions not transposed from external tools.}
+  \item{native}{An object of class \code{logical}. If TRUE, array-like objects are treated as stored in HDF5 row-major rather than R column-major orientation. Using \code{native = TRUE} increases HDF5 file portability between programming languages. A file written with \code{native = TRUE} should also be read with \code{native = TRUE}}.
   }
 }
 \section{Methods}{

@@ -15,8 +15,9 @@
 These functions are designed to provide file-level access to HDF5 files. 
 }
 \usage{
-H5Fcreate           (name, flags = h5default("H5F_ACC"), fcpl = NULL, fapl = NULL)
-H5Fopen             (name, flags = h5default("H5F_ACC_RD"))
+H5Fcreate           (name, flags = h5default("H5F_ACC"), fcpl = NULL,
+                     fapl = NULL, native = FALSE)
+H5Fopen             (name, flags = h5default("H5F_ACC_RD"), native = FALSE)
 H5Fclose            (h5file)
 H5Fflush            (h5file, scope = h5default("H5F_SCOPE"))
 H5Fis_hdf5          (name, showWarnings = TRUE)
@@ -31,6 +32,7 @@ H5Fget_access_plist (h5file)
   \item{flags}{See \code{h5const("H5F_ACC")} for possible arguments.}
   \item{fcpl}{An object of class \code{\link{H5IdComponent}} representing a H5 file creation property list. See \code{\link{H5Pcreate}}, \code{\link{H5Pcopy}} to create an object of this kind.}
   \item{fapl}{An object of class \code{\link{H5IdComponent}} representing a H5 file access property list. See \code{\link{H5Pcreate}}, \code{\link{H5Pcopy}} to create an object of this kind.}
+  \item{native}{An object of class \code{logical}. If TRUE, array-like objects are treated as stored in HDF5 row-major rather than R column-major orientation. Using \code{native = TRUE} increases HDF5 file portability between programming languages. A file written with \code{native = TRUE} should also be read with \code{native = TRUE}}.
   \item{h5file}{An object of class \code{\link{H5IdComponent}} representing a H5 file identifier as created by \code{H5Fcreate} or \code{H5Fopen}.}
   \item{scope}{See \code{h5const("H5F_ACC_RD")} for possible arguments.}
   \item{showWarnings}{If TRUE (default), a warning is given if an open HDF5 handle exists for this file.}

@@ -26,16 +26,20 @@ Reads and writes objects in HDF5 files. This function can be used to read and wr
 }
 \usage{
 h5read                      (file, name, index=NULL,
-                             start=NULL, stride=NULL, block=NULL, count=NULL,
-                             compoundAsDataFrame = TRUE, callGeneric = TRUE,
-			     read.attributes = FALSE, drop = FALSE, native = FALSE, ...)
-h5readAttributes            (file, name)
+                             start=NULL, stride=NULL, block=NULL,
+                             count=NULL, compoundAsDataFrame = TRUE,
+                             callGeneric = TRUE,
+                             read.attributes = FALSE, drop = FALSE,
+                             native = FALSE, ...)
+h5readAttributes            (file, name, native = FALSE)
 h5write                     (obj, file, name, ...)
 h5write.default             (obj, file, name, 
                              createnewfile = TRUE,
-                             write.attributes = FALSE, ...)
+                             write.attributes = FALSE, ...,
+                             native = FALSE)
 h5writeDataset              (obj, h5loc, name, ...)
-h5writeDataset.data.frame   (obj, h5loc, name, level=7, DataFrameAsCompound = TRUE)
+h5writeDataset.data.frame   (obj, h5loc, name, level=7,
+                             DataFrameAsCompound = TRUE)
 h5writeDataset.list         (obj, h5loc, name, level=7)
 h5writeDataset.matrix       (...)
 h5writeDataset.integer      (...)
@@ -67,6 +71,7 @@ h5writeAttribute.array      (attr, h5obj, name, size)
   \item{block}{The block size of the hyperslab. Read the introduction \url{http://ftp.hdfgroup.org/HDF5/Tutor/phypecont.html} before using this argument. R behaves like Fortran in this example. This argument is ignored, if index is not NULL.}
   \item{count}{The number of blocks to be written. This argument is ignored, if index is not NULL.}
   \item{level}{The compression level. An integer value between 0 (no compression) and 9 (highest and slowest compression). Only used, if the dataset does not yet exist. See \code{\link{h5createDataset}} to create an dataset.}
+  \item{native}{An object of class \code{logical}. If TRUE, array-like objects are treated as stored in HDF5 row-major rather than R column-major orientation. Using \code{native = TRUE} increases HDF5 file portability between programming languages. A file written with \code{native = TRUE} should also be read with \code{native = TRUE}}.
   \item{compoundAsDataFrame}{If true, a compound datatype will be coerced to a data.frame. This is not possible, if the dataset is multi-dimensional. Otherwise the compound datatype will be returned as a list. Nested compound data types will be returned as a nested list.}
   \item{DataFrameAsCompound}{If true, a data.frame will be saved as a compound data type. Otherwise it is saved like a list. The advantage of saving a data.frame as a compound data type is that it can be read as a table from python or with a struct-type from C. The disadvantage is that the data has to be rearranged on disk and thus can slow down I/O. If fast reading is required, DataFrameAsCompound=FALSE is recommended.}
   \item{callGeneric}{If TRUE a generic function h5read.classname will be called if it exists depending on the dataset's class attribute within the HDF5 file. This function can be used to convert the standard output of h5read depending on the class attribute. Note that h5read is not a S3 generic function. Dispatching is done based on the HDF5 attribute after the standard h5read function.}
@@ -75,7 +80,6 @@ h5writeAttribute.array      (attr, h5obj, name, size)
   \item{read.attributes}{(logical) If TRUE, the HDF5 attributes are read and attached to the respective R object.}
   \item{drop}{(logical) If TRUE, the HDF5 object is read as a vector with NULL dim attributes.}
   \item{write.attributes}{(logical) If TRUE, all R-attributes attached to the object \code{obj} are written to the HDF5 file.}
-  \item{native}{(logical) If TRUE, the \code{array} being written or read is transposed so that it will be stored in the R orientation in the HDF5 file. A file written with \code{native = TRUE} should also be read with \code{native = TRUE}}.
   \item{\dots}{Further arguments passed to \code{\link{H5Dread}}.}
 }
 \details{
