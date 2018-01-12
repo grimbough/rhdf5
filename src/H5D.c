@@ -3,40 +3,40 @@
 #include <time.h>
 
 #define STRIDEJ                                           \
-  int ndims, li, lj, itmp;                                \
+  int ndims2, li, lj, itmp;                               \
   hsize_t* dims;                                          \
   int* iip;                                               \
   int* stride;                                            \
                                                           \
   if (native) {                                           \
-    ndims = H5Sget_simple_extent_ndims(dim_space_id);     \
-    dims = (hsize_t *)R_alloc(ndims, sizeof(hsize_t));    \
+    ndims2 = H5Sget_simple_extent_ndims(dim_space_id);    \
+    dims = (hsize_t *)R_alloc(ndims2, sizeof(hsize_t));   \
     H5Sget_simple_extent_dims(dim_space_id, dims, NULL);  \
                                                           \
-    iip = (int *)R_alloc(ndims, sizeof(int));             \
-    stride = (int *)R_alloc(ndims, sizeof(int));          \
+    iip = (int *)R_alloc(ndims2, sizeof(int));            \
+    stride = (int *)R_alloc(ndims2, sizeof(int));         \
                                                           \
     iip[0] = 1;                                           \
-    for (int i = 1; i < ndims; i++) {                     \
-      iip[i] = iip[i-1] * dims[ndims-i];                  \
+    for (int i = 1; i < ndims2; i++) {                    \
+      iip[i] = iip[i-1] * dims[ndims2-i];                 \
     }                                                     \
                                                           \
-    for (int i = 0; i < ndims; i++) {                     \
-      stride[i] = iip[ndims-i-1];                         \
+    for (int i = 0; i < ndims2; i++) {                    \
+      stride[i] = iip[ndims2-i-1];                        \
     }                                                     \
                                                           \
-    for (int i = 0; i < ndims; iip[i++] = 0);             \
+    for (int i = 0; i < ndims2; iip[i++] = 0);            \
   }
 
 #define CLICKJ                                            \
-    for (itmp = 0; itmp < ndims; itmp++) {                \
+    for (itmp = 0; itmp < ndims2; itmp++) {               \
         if (iip[itmp] == dims[itmp] - 1) iip[itmp] = 0;   \
         else {                                            \
             iip[itmp]++;                                  \
             break;                                        \
         }                                                 \
     }                                                     \
-    for (lj = 0, itmp = 0; itmp < ndims; itmp++)          \
+    for (lj = 0, itmp = 0; itmp < ndims2; itmp++)         \
         lj += iip[itmp] * stride[itmp];
 
 
@@ -441,6 +441,8 @@ SEXP H5Dread_helper_INTEGER(hid_t dataset_id, hid_t file_space_id, hid_t mem_spa
 	  }
 	}
     if (native) {
+      SEXP buffer = PROTECT(allocVector(TYPEOF(Rval), LENGTH(Rval)));
+      STRIDEJ;
       for (li = 0, lj = 0; li < LENGTH(Rval); li++) {
         INTEGER(buffer)[li] = INTEGER(Rval)[lj];
         CLICKJ;
@@ -618,8 +620,6 @@ SEXP H5Dread_helper_ENUM(hid_t dataset_id, hid_t file_space_id, hid_t mem_space_
       }
     }
 
-    hid_t dim_space_id = file_space_id;
-    STRIDEJ;
     
     void * buf;
     if (length(_buf) == 0) {
@@ -631,7 +631,11 @@ SEXP H5Dread_helper_ENUM(hid_t dataset_id, hid_t file_space_id, hid_t mem_space_
     }
 
     herr_t herr = H5Dread(dataset_id, mem_type_id, mem_space_id, file_space_id, H5P_DEFAULT, buf );
+
     if (native) {
+      SEXP buffer = PROTECT(allocVector(TYPEOF(Rval), LENGTH(Rval)));
+      hid_t dim_space_id = file_space_id;
+      STRIDEJ;
       for (li = 0, lj = 0; li < LENGTH(Rval); li++) {
         INTEGER(buffer)[li] = INTEGER(Rval)[lj];
         CLICKJ;
@@ -639,14 +643,20 @@ SEXP H5Dread_helper_ENUM(hid_t dataset_id, hid_t file_space_id, hid_t mem_space_
       Rval = buffer;
     }
     if (length(_buf) == 0) {
+      if (native) {
+      for (int i=0; i < n; i++) {
+	INTEGER(Rval)[i] += 1;
+      }
+      } else {
       for (int i=0; i < n; i++) {
 	((int *)buf)[i] += 1;
       }
+    }
       setAttrib(Rval, R_DimSymbol, Rdim);
       setAttrib(Rval, mkString("levels"), levels);
       setAttrib(Rval, R_ClassSymbol, mkString("factor"));
-      UNPROTECT(1);
     }
+    UNPROTECT(native + (length(_buf) == 0));
   } else {
     double na = R_NaReal;
     Rval = PROTECT(allocVector(REALSXP, n));
@@ -713,6 +723,18 @@ SEXP H5Dread_helper_ARRAY(hid_t dataset_id, hid_t file_space_id, hid_t mem_space
     }
 
     herr_t herr = H5Dread(dataset_id, mem_type_id, mem_space_id, file_space_id, H5P_DEFAULT, buf );
+
+    if (native) {
+      SEXP buffer = PROTECT(allocVector(TYPEOF(Rval), LENGTH(Rval)));
+      hid_t dim_space_id = file_space_id;
+      STRIDEJ;
+      for (li = 0, lj = 0; li < LENGTH(Rval); li++) {
+        INTEGER(buffer)[li] = INTEGER(Rval)[lj];
+        CLICKJ;
+      }
+      Rval = buffer;
+    }
+
     if (length(_buf) == 0) {
       SEXP Rdima = PROTECT(allocVector(INTSXP, LENGTH(Rdim)+ndims));
       int i=0,j=0;

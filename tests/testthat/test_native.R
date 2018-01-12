@@ -1,23 +1,5 @@
 context("native")
 
-test_that("H5Dread/write supports native", {
-})
-
-test_that("H5Dset/get_extent supports native", {
-})
-
-test_that("H5Pset/get_chunk supports native", {
-})
-
-test_that("H5Sset/get_simple_extent supports native", {
-})
-
-test_that("H5Sselect_hyperslab supports native", {
-})
-
-test_that("H5Sselect_index supports native", {
-})
-
 test_that("H5ls supports native", {
     h5file <- tempfile(fileext = ".h5")
     h5createFile(file = h5file)
@@ -121,6 +103,38 @@ test_that("h5read/write supports native", {
     do_array(as.numeric(1:12), c(2, 3, 4), "B")
     do_array(sample(c(TRUE, FALSE), 12, replace=TRUE), c(2, 3, 4), "C")
     do_array(LETTERS[1:12], c(2, 3, 4), "D")
+})
+
+test_that("h5read native non-R hdff5 files", {
+    enum <- system.file("testfiles", "h5ex_t_enum.h5", package="rhdf5")
+    arr <- system.file("testfiles", "h5ex_t_array.h5", package="rhdf5")
+    compound <- system.file("testfiles", "h5ex_t_cmpd.h5", package="rhdf5")
+
+    do_reads <- function(file) {
+        m1 <- h5read(file = file, name = "/DS1", native = TRUE)
+        m2 <- h5read(file = file, name = "/DS1", native = FALSE)
+        expect_equivalent(m1, t(m2))
+    }
+
+    do_reads(enum)
+    #do_reads(arr)
+    #do_reads(compound)
+})
+
+test_that("H5F native functionality", {
+    h5 <- tempfile(fileext = ".h5")
+    h5createFile(file = h5)
+    h5createGroup(file = h5, group = "test")
+
+    A <- matrix(1:10, nr=5, nc=2)
+    h5write(A, h5, "test/A", naitve=TRUE)
+
+    h5f <- H5Fopen(h5, native=TRUE)
+
+    h5d <- h5f&"/test/A"
+    m0 <- h5d[,]
+
+    expect_equivalent(m0, A)
 })
 
 ## test_that("misc. fixes work", {
