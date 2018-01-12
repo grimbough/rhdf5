@@ -8,7 +8,7 @@ H5Acreate <- function( h5obj, name, dtype_id, h5space ) {
   h5checktype(h5space, "dataspace")
   aid <- .Call("_H5Acreate", h5obj@ID, name, dtype_id, h5space@ID, PACKAGE='rhdf5')
   if (aid > 0) {
-    h5attribute = new("H5IdComponent", ID = aid, native = .natve(h5obj))
+    h5attribute = new("H5IdComponent", ID = aid, native = h5obj@native)
   } else {
     message("HDF5: unable to create attribute")
     h5attribute = FALSE
