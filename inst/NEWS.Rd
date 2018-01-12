@@ -2,6 +2,15 @@
 \title{News for Package 'rhdf5'}
 
 \section{Changes in version 2.24.0}{
+  \subsection{NEW FEATURES}{
+    \itemize{
+      \item Removed bundled HDF5 library - rhdf5 now depends on Rhdf5lib.
+      This updates the version of HDF5 to 1.8.19.
+      \item Functions H5Ldelete() and h5delete() added to provide mechanisms
+      for removing items from HDF files.
+    }
+  }
+  
   \subsection{BUG FIXES}{
     \itemize{
       \item Datasets can now be subset using `[` and a range of values 
@@ -10,7 +19,7 @@
       DataFrameAsCompound=FALSE now works.
       \item Many functions that would leave open file handles after exiting
       under error conditions have been fixed.
-      \item Minor performance improvements in h5read().
+      \item Performance improvements in h5read().
     }
   }
 }
