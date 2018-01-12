@@ -572,7 +572,7 @@ sessionInfo()
 ```
 
 ```{r cleanup_after, echo=FALSE, include=FALSE}
-for(file in c('myhdf5file.h5', 'newfile.h5', 'newfile3.h5', 'newfile3.h5')) {
+for(file in c('myhdf5file.h5', 'newfile.h5', 'newfile2.h5', 'newfile3.h5')) {
     if(file.exists(file)) {
         file.remove( file )
     }
