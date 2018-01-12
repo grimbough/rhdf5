@@ -3,6 +3,7 @@
 \alias{H5Lexists}
 \alias{H5Lget_info}
 \alias{H5Lcreate_external}
+\alias{H5Ldelete}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{HDF5 Link Interface}
 \description{
@@ -12,6 +13,7 @@ The Link interface, H5L, functions create and manipulate links in an HDF5 group.
 H5Lcreate_external (target_file_name, target_obj_name, link_loc, link_name)
 H5Lexists          (h5loc, name)
 H5Lget_info        (h5loc, name)
+H5Ldelete          (h5loc, name)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -33,7 +35,7 @@ If \code{name} consists of a relative path containing group names, the function 
 \code{H5Lget_info} returns a list with the entries of the C-structure \code{H5L_info_t}.
 }
 \references{\url{http://www.hdfgroup.org/HDF5}}
-\author{Bernd Fischer}
+\author{Bernd Fischer, Mike Smith}
 \seealso{
 \link{rhdf5}
 }
@@ -47,6 +49,10 @@ fid <- H5Fopen("ex_H5L.h5")
 H5Lexists(fid, "foo")
 H5Lexists(fid, "baa")
 H5Lget_info(fid, "foo")
+
+H5Ldelete(fid, "foo")
+H5Lexists(fid, "foo")
+
 H5Fclose(fid)
 }
 \keyword{ programming }

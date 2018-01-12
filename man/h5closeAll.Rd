@@ -3,18 +3,14 @@
 
 \title{Close all open HDF5 handles}
 
-\description{Occasionally references to HDF5 files, group, obejects etc can be
+\description{Occasionally references to HDF5 files, groups, datasets etc can be
 created and not closed correctly.  This function identifies all open handles 
-and closes them.}
+and closes them.  It replaces the functionality previously supplied by 
+\code{\link{H5close}}.}
 
 \usage{
 h5closeAll()
 }
-
-\details{
-Creates an empty HDF5 file.
-}
-
 
 \author{Mike Smith}
 

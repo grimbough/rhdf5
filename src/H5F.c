@@ -112,8 +112,9 @@ SEXP _H5Fget_name( SEXP _obj_id ) {
   SEXP Rval;
   PROTECT(Rval = allocVector(STRSXP, 1));
   if (size >= 0) {
-    char name[size+1];
-    size = H5Fget_name( obj_id, &name, size+1);
+    //char name[size+1];
+    char *name = R_alloc(size+1, sizeof(char));
+    size = H5Fget_name( obj_id, name, size+1);
     if (size >= 0) {
       SET_STRING_ELT(Rval, 0, mkChar(name));
     } else {

@@ -130,9 +130,7 @@ h5createDataset <- function(file, dataset, dims, maxdims = dims, storage.mode = 
                             res <- TRUE
                         }
                     }
-                    #H5Sclose(sid)
                 }
-                #if (!is.null(dcpl)) { H5Pclose(dcpl) }
             } else {
                 message("Can not create dataset. 'dims' and 'maxdims' have to be numeric.")
             }

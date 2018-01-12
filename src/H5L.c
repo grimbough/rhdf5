@@ -57,3 +57,12 @@ SEXP _H5Lget_info( SEXP _loc_id, SEXP _name ) {
   return Rval;
 }
 
+
+/* herr_t H5Ldelete( hid_t loc_id, const char *name, hid_t lapl_id ) */
+SEXP _H5Ldelete( SEXP _loc_id, SEXP _name ) {
+    hid_t loc_id = INTEGER(_loc_id)[0];
+    const char *name = CHAR(STRING_ELT(_name, 0));
+    herr_t herr = H5Ldelete( loc_id, name, H5P_DEFAULT);
+    SEXP Rval = ScalarInteger(herr);
+    return Rval;
+}

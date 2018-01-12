@@ -49,6 +49,23 @@ test_that("Creating links between files", {
 })
 
 ############################################################
+context("H5Ldelete")
+############################################################
+
+test_that("Deleting links", {
+    expect_silent( fid <- H5Fopen(h5File) )
+    expect_error( H5Ldelete(fid, name = "not_here"), regexp = "link doesn't exist" )
+    
+    ## delete 'foo'
+    expect_silent( H5Ldelete(fid, "/foo") )
+    expect_silent( H5Fclose(fid) )
+    
+    ## check there are now no entries left
+    expect_is( res <- h5ls(h5File), "data.frame" )
+    expect_equal( nrow(res), 0 )
+})
+
+############################################################
 context("H5L cleanup")
 ##########################################################
 

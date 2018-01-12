@@ -108,7 +108,7 @@ h5checktypeOrOpenLoc <- function(file, fctname = deparse(match.call()[1]), creat
     file = normalizePath(file,mustWork = FALSE)
     if (file.exists(file)) {
       if (h5FileIsOpen(file)) {
-        warning("An open HDF5 file handle exists. If the file has changed on disk meanwhile, the function may not work properly. Run 'H5close()' to close all open HDF5 object handles.")
+        warning("An open HDF5 file handle exists. If the file has changed on disk meanwhile, the function may not work properly. Run 'h5closeAll()' to close all open HDF5 object handles.")
       }
       
       h5loc <- if (readonly) {

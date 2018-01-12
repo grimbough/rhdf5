@@ -6,6 +6,7 @@
 #include <R_ext/Rdynload.h>
 #include <R_ext/Error.h>
 #include "myhdf5.h"
+#include "HandleList.h"
 #include "H5constants.h"
 
 hsize_t H5Oget_num_attrs ( hid_t obj_id );
