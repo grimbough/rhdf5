@@ -127,7 +127,7 @@ test_that("H5F native functionality", {
     h5createGroup(file = h5, group = "test")
 
     A <- matrix(1:10, nr=5, nc=2)
-    h5write(A, h5, "test/A", naitve=TRUE)
+    h5write(A, h5, "test/A", native=TRUE)
 
     h5f <- H5Fopen(h5, native=TRUE)
 
@@ -135,6 +135,9 @@ test_that("H5F native functionality", {
     m0 <- h5d[,]
 
     expect_equivalent(m0, A)
+
+    H5Fclose(h5f)
+    H5Oclose(h5d)
 })
 
 ## test_that("misc. fixes work", {
