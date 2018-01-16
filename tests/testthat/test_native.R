@@ -110,15 +110,20 @@ test_that("h5read native non-R hdff5 files", {
     arr <- system.file("testfiles", "h5ex_t_array.h5", package="rhdf5")
     compound <- system.file("testfiles", "h5ex_t_cmpd.h5", package="rhdf5")
 
-    do_reads <- function(file) {
-        m1 <- h5read(file = file, name = "/DS1", native = TRUE)
-        m2 <- h5read(file = file, name = "/DS1", native = FALSE)
-        expect_equivalent(m1, t(m2))
-    }
+    # Test enums type
+    m1 <- h5read(file = enum, name = "/DS1", native = TRUE)
+    m2 <- h5read(file = enum, name = "/DS1", native = FALSE)
+    expect_equivalent(m1, t(m2))
 
-    do_reads(enum)
-    #do_reads(arr)
-    #do_reads(compound)
+    # Test arrays type
+    m1 <- h5read(file = arr, name = "/DS1", native = TRUE)
+    m2 <- h5read(file = arr, name = "/DS1", native = FALSE)
+    expect_equivalent(m1, aperm(m2))
+
+    # Test compound type (currently native provides no different functionality)
+    m1 <- h5read(file = compound, name = "/DS1", native = TRUE)
+    m2 <- h5read(file = compound, name = "/DS1", native = FALSE)
+    expect_equivalent(m1, m2)
 })
 
 test_that("H5F native functionality", {
@@ -135,6 +140,10 @@ test_that("H5F native functionality", {
 
         m0 <- h5d[,]
         expect_equivalent(m0, A)
+        expect_equivalent(m0[1,], A[1,])
+
+        h5d[,1] <- 11:15
+        expect_equivalent(h5d[,1], 11:15)
 
         H5Fclose(h5f)
         H5Oclose(h5d)
