@@ -246,7 +246,6 @@ SEXP H5Dread_helper_INTEGER(hid_t dataset_id, hid_t file_space_id, hid_t mem_spa
   int warn_NA = 0;
   int warn = 0;
   int warn_double = 0;
-  hid_t dim_space_id = file_space_id;
 
   if (((b < 4) | ((b == 4) & (sgn == H5T_SGN_2))) & (bit64conversion == 0)) {   // Read directly to R-integer without loss of data
     if (cpdType < 0) {
@@ -272,6 +271,7 @@ SEXP H5Dread_helper_INTEGER(hid_t dataset_id, hid_t file_space_id, hid_t mem_spa
 
     if (native) {
       SEXP buffer = PROTECT(allocVector(TYPEOF(Rval), LENGTH(Rval)));
+      hid_t dim_space_id = mem_space_id;
       STRIDEJ;
       for (li = 0, lj = 0; li < LENGTH(Rval); li++) {
         INTEGER(buffer)[li] = INTEGER(Rval)[lj];
@@ -442,6 +442,7 @@ SEXP H5Dread_helper_INTEGER(hid_t dataset_id, hid_t file_space_id, hid_t mem_spa
 	}
     if (native) {
       SEXP buffer = PROTECT(allocVector(TYPEOF(Rval), LENGTH(Rval)));
+      hid_t dim_space_id = mem_space_id;
       STRIDEJ;
       for (li = 0, lj = 0; li < LENGTH(Rval); li++) {
         INTEGER(buffer)[li] = INTEGER(Rval)[lj];
@@ -505,11 +506,11 @@ SEXP H5Dread_helper_FLOAT(hid_t dataset_id, hid_t file_space_id, hid_t mem_space
     buf = REAL(_buf);
     Rval = _buf;
   }
-  hid_t dim_space_id = file_space_id;
   herr_t herr = H5Dread(dataset_id, mem_type_id, mem_space_id, file_space_id, H5P_DEFAULT, buf );
 
   if (native) {
     SEXP buffer = PROTECT(allocVector(TYPEOF(Rval), LENGTH(Rval)));
+    hid_t dim_space_id = mem_space_id;
     STRIDEJ;
     for (li = 0, lj = 0; li < LENGTH(Rval); li++) {
       REAL(buffer)[li] = REAL(Rval)[lj];
@@ -543,7 +544,6 @@ SEXP H5Dread_helper_STRING(hid_t dataset_id, hid_t file_space_id, hid_t mem_spac
       mem_type_id = mem_type_id2;
     }
   }
-  hid_t dim_space_id = file_space_id;
   Rval = PROTECT(allocVector(STRSXP, n));
 
   if (H5Tis_variable_str(dtype_id)) {
@@ -577,6 +577,7 @@ SEXP H5Dread_helper_STRING(hid_t dataset_id, hid_t file_space_id, hid_t mem_spac
 
   if (native) {
     SEXP buffer = PROTECT(allocVector(TYPEOF(Rval), LENGTH(Rval)));
+    hid_t dim_space_id = mem_space_id;
     STRIDEJ;
     for (li = 0, lj = 0; li < LENGTH(Rval); li++) {
       SEXP elt = STRING_ELT(Rval, lj);
@@ -634,7 +635,7 @@ SEXP H5Dread_helper_ENUM(hid_t dataset_id, hid_t file_space_id, hid_t mem_space_
 
     if (native) {
       SEXP buffer = PROTECT(allocVector(TYPEOF(Rval), LENGTH(Rval)));
-      hid_t dim_space_id = file_space_id;
+      hid_t dim_space_id = mem_space_id;
       STRIDEJ;
       for (li = 0, lj = 0; li < LENGTH(Rval); li++) {
         INTEGER(buffer)[li] = INTEGER(Rval)[lj];
@@ -726,7 +727,7 @@ SEXP H5Dread_helper_ARRAY(hid_t dataset_id, hid_t file_space_id, hid_t mem_space
 
     if (native) {
       SEXP buffer = PROTECT(allocVector(TYPEOF(Rval), LENGTH(Rval)));
-      hid_t dim_space_id = file_space_id;
+      hid_t dim_space_id = mem_space_id;
       STRIDEJ;
       for (li = 0, lj = 0; li < LENGTH(Rval); li++) {
         INTEGER(buffer)[li] = INTEGER(Rval)[lj];
@@ -933,17 +934,7 @@ SEXP _H5Dread( SEXP _dataset_id, SEXP _file_space_id, SEXP _mem_space_id, SEXP _
     hsize_t size[rank];
     hsize_t maxsize[rank];
     H5Sget_simple_extent_dims(file_space_id, size, maxsize);
-    hsize_t dims[rank];
-    if(native) {
-      for (int i=0; i<rank; i++) {
-        dims[i] = size[rank-1-i];
-      }
-    } else {
-      for (int i=0; i<rank; i++) {
-        dims[i] = size[i];
-      }
-    }
-    mem_space_id = H5Screate_simple( rank, dims, dims);
+    mem_space_id = H5Screate_simple( rank, size, size );
   } else {
     mem_space_id = INTEGER(_mem_space_id)[0];
   }
@@ -964,7 +955,7 @@ SEXP _H5Dread( SEXP _dataset_id, SEXP _file_space_id, SEXP _mem_space_id, SEXP _
   if (!drop && rank > 0) {
     Rdim = PROTECT(allocVector(INTSXP, rank));
     for (int i=0; i<rank; i++) {
-      INTEGER(Rdim)[rank-i-1] = size[i];
+      INTEGER(Rdim)[rank-i-1] = native ? size[rank-i-1] : size[i];
     }
   } else {
     Rdim = NULL_USER_OBJECT;
@@ -1012,12 +1003,9 @@ SEXP _H5Dwrite( SEXP _dataset_id, SEXP _buf, SEXP _file_space_id, SEXP _mem_spac
 
   const void * buf;
 
-  hsize_t dim_space_id = mem_space_id;
-  if (mem_space_id == H5S_ALL) {
-    dim_space_id = dataset_id;
-  }
-  STRIDEJ;
   SEXP buffer;
+  hid_t dim_space_id = mem_space_id;
+  STRIDEJ;
   if (native)
       buffer = PROTECT(allocVector(TYPEOF(_buf), XLENGTH(_buf)));
 

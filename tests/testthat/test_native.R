@@ -122,22 +122,21 @@ test_that("h5read native non-R hdff5 files", {
 })
 
 test_that("H5F native functionality", {
-    h5 <- tempfile(fileext = ".h5")
-    h5createFile(file = h5)
-    h5createGroup(file = h5, group = "test")
+    for (native in c(FALSE, TRUE)) {
+        h5 <- tempfile(fileext = ".h5")
+        h5createFile(file = h5)
+        h5createGroup(file = h5, group = "test")
 
-    A <- matrix(1:10, nr=5, nc=2)
-    h5write(A, h5, "test/A", native=TRUE)
+        A <- matrix(1:10, nr=5, nc=2)
+        h5write(A, h5, "test/A", native=native)
 
-    h5f <- H5Fopen(h5, native=TRUE)
-
-    h5d <- h5f&"/test/A"
-    m0 <- h5d[,]
-
-    expect_equivalent(m0, A)
-
-    H5Fclose(h5f)
-    H5Oclose(h5d)
+        h5f <- H5Fopen(h5, native=native)
+        h5d <- h5f&"/test/A"
+        m0 <- h5d[,]
+        expect_equivalent(m0, A)
+        H5Fclose(h5f)
+        H5Oclose(h5d)
+    }
 })
 
 ## test_that("misc. fixes work", {
