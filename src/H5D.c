@@ -1004,7 +1004,7 @@ SEXP _H5Dwrite( SEXP _dataset_id, SEXP _buf, SEXP _file_space_id, SEXP _mem_spac
   const void * buf;
 
   SEXP buffer;
-  hid_t dim_space_id = mem_space_id;
+  hid_t dim_space_id = mem_space_id == H5S_ALL ? dataset_id : mem_space_id;
   STRIDEJ;
   if (native)
       buffer = PROTECT(allocVector(TYPEOF(_buf), XLENGTH(_buf)));

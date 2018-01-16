@@ -26,7 +26,7 @@ h5lsConvertToDataframe <- function(L, all=FALSE, native) {
     }
   } else {
     for (i in seq_len(length(L))) {
-      L[i] <- list(h5lsConvertToDataframe(L[[i]],all=all))
+      L[i] <- list(h5lsConvertToDataframe(L[[i]],all=all, native = native))
     }
   }
   L
