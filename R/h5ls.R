@@ -50,7 +50,7 @@ h5ls <- function( file, recursive = TRUE, all=FALSE, datasetinfo=TRUE, index_typ
     di <- ifelse(datasetinfo, 1L, 0L)
     L <- .Call("_h5ls", loc$H5Identifier@ID, depth, di, index_type, order, PACKAGE='rhdf5')
     L <- h5lsConvertToDataframe(L, all=all)
-    if (native) {
+    if (loc$H5Identifier@native) {
         dims <- strsplit(L[,'dim'], " x ")
         L[,'dim'] <- vapply(
             dims, function(x) paste(rev(x), collapse=" x "), character(1)
