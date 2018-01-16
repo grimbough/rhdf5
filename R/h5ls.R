@@ -1,5 +1,5 @@
 
-h5lsConvertToDataframe <- function(L, all=FALSE) {
+h5lsConvertToDataframe <- function(L, all=FALSE, native) {
   if (is.data.frame(L)) {
     L$ltype <- h5const2Factor("H5L_TYPE", L$ltype)
     L$otype <- h5const2Factor("H5I_TYPE", L$otype)
@@ -12,6 +12,15 @@ h5lsConvertToDataframe <- function(L, all=FALSE) {
 #    L$btime <- .POSIXct(L$btime)
 #    L$btime[L$btime == 0] <- NA
     ## L <- as.data.frame(L, stringsAsFactors=FALSE)
+    if (native) {
+      revdim <- function(elt) {
+        value <- strsplit(elt, " x ")
+        vapply(value, function(x) paste(rev(x), collapse = " x "), character(1))
+      }
+      L[["dim"]] <- revdim(L[["dim"]])
+      if (all)
+          L[["maxdim"]] <- revdim(L[["maxdim"]])
+    }
     if (!all) {
       L <- L[,c("group", "name", "otype", "dclass","dim")]
     }
@@ -49,14 +58,7 @@ h5ls <- function( file, recursive = TRUE, all=FALSE, datasetinfo=TRUE, index_typ
     }
     di <- ifelse(datasetinfo, 1L, 0L)
     L <- .Call("_h5ls", loc$H5Identifier@ID, depth, di, index_type, order, PACKAGE='rhdf5')
-    L <- h5lsConvertToDataframe(L, all=all)
-    if (loc$H5Identifier@native) {
-        dims <- strsplit(L[,'dim'], " x ")
-        L[,'dim'] <- vapply(
-            dims, function(x) paste(rev(x), collapse=" x "), character(1)
-        )
-    }
-    L
+    h5lsConvertToDataframe(L, all=all, native = loc$H5Identifier@native)
 }
 
 
