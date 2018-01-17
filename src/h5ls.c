@@ -26,13 +26,14 @@ typedef struct {
   char *group;
   long maxdepth;
   int showdatasetinfo;
+  int native;
   H5_index_t index_type;
   H5_iter_order_t order;
   opLinfoListElement *first;
   opLinfoListElement *last;
 } opLinfoList;
 
-herr_t opAddToLinfoList( hid_t g_id, const char *name, const H5L_info_t *info, void *op_data) {
+herr_t opAddToLinfoList( hid_t g_id, const char *name, const H5L_info_t *info, void *op_data ) {
   opLinfoList *data = op_data;
 
   herr_t herr = 0;
@@ -96,20 +97,34 @@ herr_t opAddToLinfoList( hid_t g_id, const char *name, const H5L_info_t *info, v
       } break;
       case H5S_SIMPLE: {
 	char* tmp = (char *)R_alloc(100*newElement->rank,sizeof(char));
-	sprintf(tmp, "%llu", size[newElement->rank-1]);
-	for(int i = newElement->rank-2; i >= 0; i--) {
-	  sprintf(tmp, "%s x %llu", tmp, size[i]);
-	}
+    if (data->native) {
+	  sprintf(tmp, "%llu", size[0]);
+	  for(int i = 1; i < newElement->rank; i++) {
+	    sprintf(tmp, "%s x %llu", tmp, size[i]);
+	  }
+    } else {
+	  sprintf(tmp, "%llu", size[newElement->rank-1]);
+	  for(int i = newElement->rank-2; i >= 0; i--) {
+	    sprintf(tmp, "%s x %llu", tmp, size[i]);
+	  }
+    }
 	sprintf(tmp, "%s", tmp);
 	newElement->dim = (char *)R_alloc((strlen(tmp)+1),sizeof(char));
 	strcpy(newElement->dim, tmp);
 	if(maxsize[0] == H5S_UNLIMITED) {
 	  sprintf(tmp, "UNLIMITED");
 	} else {
-	  sprintf(tmp, "%llu", maxsize[newElement->rank-1]);
-	  for(int i = newElement->rank-2; i >= 0 ; i--) {
-	    sprintf(tmp, "%s x %llu", tmp, maxsize[i]);
-	  }
+      if (data->native) {
+	    sprintf(tmp, "%llu", maxsize[0]);
+	    for(int i = 0; i < newElement->rank-1; i++) {
+	      sprintf(tmp, "%s x %llu", tmp, maxsize[i]);
+	    }
+      } else {
+	    sprintf(tmp, "%llu", maxsize[newElement->rank-1]);
+	    for(int i = newElement->rank-2; i >= 0 ; i--) {
+	      sprintf(tmp, "%s x %llu", tmp, maxsize[i]);
+	    }
+      }
 	  sprintf(tmp, "%s", tmp);
 	}
 	newElement->maxdim = (char *)R_alloc((strlen(tmp)+1),sizeof(char));
@@ -179,7 +194,7 @@ herr_t opAddToLinfoList( hid_t g_id, const char *name, const H5L_info_t *info, v
   return(herr);
 }
 
-SEXP _h5ls( SEXP _loc_id, SEXP _depth, SEXP _datasetinfo, SEXP _index_type, SEXP _order ) {
+SEXP _h5ls( SEXP _loc_id, SEXP _depth, SEXP _datasetinfo, SEXP _index_type, SEXP _order, SEXP _native ) {
   hid_t loc_id = INTEGER(_loc_id)[0];
   opLinfoList data;
   data.n = 0;
@@ -188,6 +203,7 @@ SEXP _h5ls( SEXP _loc_id, SEXP _depth, SEXP _datasetinfo, SEXP _index_type, SEXP
   data.group = (char *)R_alloc(2,sizeof(char));
   strcpy(data.group, "/");
   data.showdatasetinfo = INTEGER(_datasetinfo)[0];
+  data.native = INTEGER(_native)[0];
   data.first = NULL;
   data.last = NULL;
   data.index_type = INTEGER(_index_type)[0];

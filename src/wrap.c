@@ -281,7 +281,7 @@ static R_CallMethodDef libraryRCalls[] = {
   /* {"_H5Pcopy_prop", (DL_FUNC) &_H5Pcopy_prop, 3}, */
   /* {"_H5Premove", (DL_FUNC) &_H5Premove, 2}, */
   /* {"_H5Punregister", (DL_FUNC) &_H5Punregister, 2}, */
-  {"_h5ls", (DL_FUNC) &_h5ls, 5},
+  {"_h5ls", (DL_FUNC) &_h5ls, 6},
   {"_h5dump", (DL_FUNC) &_h5dump, 4},
   {"_h5listIdentifier", (DL_FUNC) &_h5listIdentifier, 0},
   {"_h5validObjects", (DL_FUNC) &_h5validObjects, 0},

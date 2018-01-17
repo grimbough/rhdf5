@@ -12,15 +12,15 @@ h5lsConvertToDataframe <- function(L, all=FALSE, native) {
 #    L$btime <- .POSIXct(L$btime)
 #    L$btime[L$btime == 0] <- NA
     ## L <- as.data.frame(L, stringsAsFactors=FALSE)
-    if (native) {
-      revdim <- function(elt) {
-        value <- strsplit(elt, " x ")
-        vapply(value, function(x) paste(rev(x), collapse = " x "), character(1))
-      }
-      L[["dim"]] <- revdim(L[["dim"]])
-      if (all)
-          L[["maxdim"]] <- revdim(L[["maxdim"]])
-    }
+#    if (native) {
+#      revdim <- function(elt) {
+#        value <- strsplit(elt, " x ")
+#        vapply(value, function(x) paste(rev(x), collapse = " x "), character(1))
+#      }
+#      L[["dim"]] <- revdim(L[["dim"]])
+#      if (all)
+#          L[["maxdim"]] <- revdim(L[["maxdim"]])
+#    }
     if (!all) {
       L <- L[,c("group", "name", "otype", "dclass","dim")]
     }
@@ -57,7 +57,7 @@ h5ls <- function( file, recursive = TRUE, all=FALSE, datasetinfo=TRUE, index_typ
         stop("'recursive' must be number or a logical")
     }
     di <- ifelse(datasetinfo, 1L, 0L)
-    L <- .Call("_h5ls", loc$H5Identifier@ID, depth, di, index_type, order, PACKAGE='rhdf5')
+    L <- .Call("_h5ls", loc$H5Identifier@ID, depth, di, index_type, order, loc$H5Identifier@native, PACKAGE='rhdf5')
     h5lsConvertToDataframe(L, all=all, native = loc$H5Identifier@native)
 }
 
