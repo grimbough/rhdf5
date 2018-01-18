@@ -96,9 +96,17 @@ herr_t opAddToLinfoList( hid_t g_id, const char *name, const H5L_info_t *info, v
       } break;
       case H5S_SIMPLE: {
 	char* tmp = (char *)R_alloc(100*newElement->rank,sizeof(char));
-	sprintf(tmp, "%llu", size[newElement->rank-1]);
+    #ifdef H5_HAVE_WINDOWS
+	    sprintf(tmp, "%I64u", size[newElement->rank-1]);
+    #else
+	    sprintf(tmp, "%llu", size[newElement->rank-1]);
+    #endif
 	for(int i = newElement->rank-2; i >= 0; i--) {
-	  sprintf(tmp, "%s x %llu", tmp, size[i]);
+      #ifdef H5_HAVE_WINDOWS      
+        sprintf(tmp, "%s x %I64u", tmp, size[i]);
+      #else
+        sprintf(tmp, "%s x %llu", tmp, size[i]);
+      #endif 
 	}
 	sprintf(tmp, "%s", tmp);
 	newElement->dim = (char *)R_alloc((strlen(tmp)+1),sizeof(char));
@@ -106,9 +114,17 @@ herr_t opAddToLinfoList( hid_t g_id, const char *name, const H5L_info_t *info, v
 	if(maxsize[0] == H5S_UNLIMITED) {
 	  sprintf(tmp, "UNLIMITED");
 	} else {
-	  sprintf(tmp, "%llu", maxsize[newElement->rank-1]);
+      #ifdef H5_HAVE_WINDOWS      
+	    sprintf(tmp, "%I64u", maxsize[newElement->rank-1]);
+      #else
+	    sprintf(tmp, "%llu", maxsize[newElement->rank-1]);
+      #endif 
 	  for(int i = newElement->rank-2; i >= 0 ; i--) {
-	    sprintf(tmp, "%s x %llu", tmp, maxsize[i]);
+        #ifdef H5_HAVE_WINDOWS      
+	      sprintf(tmp, "%s x %I64u", tmp, maxsize[i]);
+        #else
+	      sprintf(tmp, "%s x %llu", tmp, maxsize[i]);
+        #endif
 	  }
 	  sprintf(tmp, "%s", tmp);
 	}
