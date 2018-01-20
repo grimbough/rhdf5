@@ -138,9 +138,8 @@ test_that("H5F native functionality", {
         h5f <- H5Fopen(h5, native=native)
         h5d <- h5f&"/test/A"
 
-        m0 <- h5d[,]
-        expect_equivalent(m0, A)
-        expect_equivalent(m0[1,], A[1,])
+        expect_equivalent(h5d[,], A)
+        expect_equivalent(h5d[1,], A[1,])
 
         h5d[,1] <- 11:15
         expect_equivalent(h5d[,1], 11:15)
