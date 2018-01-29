@@ -35,7 +35,9 @@ h5closeAll <- function() {
                         H5I_FILE = H5Fclose,
                         H5I_GROUP = H5Gclose,
                         H5I_DATASET = H5Dclose,
-                        H5I_GENPROP_LST = H5Pclose
+                        H5I_GENPROP_LST = H5Pclose,
+                        H5I_DATASPACE = H5Sclose,
+                        stop("Error in h5closeAll(). Appropriate close function not found", call. = FALSE)
     )
     
     closeFunc(h5id)
