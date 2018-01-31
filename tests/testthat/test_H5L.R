@@ -56,6 +56,11 @@ test_that("Deleting links", {
     expect_silent( fid <- H5Fopen(h5File) )
     expect_error( H5Ldelete(fid, name = "not_here"), regexp = "link doesn't exist" )
     
+    expect_error( H5Ldelete(fid, name = 1L ), 
+                  regexp = "'name' must be a character string of length 1" )
+    expect_error( H5Ldelete(fid, name = c("foo", "baa")), 
+                  regexp = "'name' must be a character string of length 1" )
+    
     ## delete 'foo'
     expect_silent( H5Ldelete(fid, "/foo") )
     expect_silent( H5Fclose(fid) )
