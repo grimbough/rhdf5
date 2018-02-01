@@ -8,8 +8,6 @@ AC_CONFIG_SRCDIR([src])
 # determine if the filters package is installed
 FILTERS=`echo 'cat(if("hdf5Filters" %in% installed.packages()[[,"Package"]]) "_H5P_filters" else "undef")'|\
     "${R_HOME}/bin/R" --vanilla --slave`
-    
-echo $FILTERS
 
 INCLUDE_PATH=`echo 'cat(if("hdf5Filters" %in% installed.packages()[[,"Package"]]) hdf5Filters::pkgconfig("PKG_LIB") else "")'|\
     "${R_HOME}/bin/R" --vanilla --slave`
@@ -17,9 +15,6 @@ INCLUDE_PATH=`echo 'cat(if("hdf5Filters" %in% installed.packages()[[,"Package"]]
 echo $INCLUDE_PATH
 
 AC_SUBST(FILTERS)
-AC_CONFIG_FILES([src/external_filters.h])
-AC_OUTPUT
-
 AC_SUBST(INCLUDE_PATH)
-AC_CONFIG_FILES([src/Makevars])
+AC_CONFIG_FILES([src/external_filters.h src/Makevars])
 AC_OUTPUT

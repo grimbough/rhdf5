@@ -1,3 +1,3 @@
 RHDF5_LIBS=`echo 'Rhdf5lib::pkgconfig("PKG_CXX_LIBS")'|\
     "${R_HOME}/bin/R" --vanilla --slave`
-PKG_LIBS=$(RHDF5_LIBS)
+PKG_LIBS=$(RHDF5_LIBS) -Wl,-rpath=/home/msmith/Applications/R/R-devel/library/hdf5Filters/lib -L/home/msmith/Applications/R/R-devel/library/hdf5Filters/lib -llzf_filter -lH5Zlz4 -lh5blosc

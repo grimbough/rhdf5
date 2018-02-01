@@ -295,6 +295,7 @@ static R_CallMethodDef libraryRCalls[] = {
 #ifdef _H5P_filters
   {"_H5Pset_lzf", (DL_FUNC) &_H5Pset_lzf, 1},
   {"_H5Pset_lz4", (DL_FUNC) &_H5Pset_lz4, 1},
+  {"_H5Pset_blosc", (DL_FUNC) &_H5Pset_blosc, 1},
 #endif
   {NULL, NULL, 0}
 };
