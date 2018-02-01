@@ -292,7 +292,10 @@ static R_CallMethodDef libraryRCalls[] = {
   {"_getDatatypeClass", (DL_FUNC) &_getDatatypeClass, 1},
   {"_h5writeDataFrame", (DL_FUNC) &_h5writeDataFrame, 4},
   {"_h5errorHandling", (DL_FUNC) &_h5errorHandling, 1},
+#ifdef _H5P_filters
   {"_H5Pset_lzf", (DL_FUNC) &_H5Pset_lzf, 1},
+  {"_H5Pset_lz4", (DL_FUNC) &_H5Pset_lz4, 1},
+#endif
   {NULL, NULL, 0}
 };
 

@@ -1,0 +1,3 @@
+RHDF5_LIBS=`echo 'Rhdf5lib::pkgconfig("PKG_CXX_LIBS")'|\
+    "${R_HOME}/bin/R" --vanilla --slave`
+PKG_LIBS=$(RHDF5_LIBS) @INCLUDE_PATH@
