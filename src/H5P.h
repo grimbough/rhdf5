@@ -6,7 +6,7 @@
 #include <R_ext/Rdynload.h>
 #include <R_ext/Error.h>
 #include "myhdf5.h"
-#include "H5constants.h"
+//#include "H5constants.h"
 #include "HandleList.h"
 
 ////////////////////////////////////////////////////
@@ -256,5 +256,8 @@ SEXP _H5Pequal( SEXP _id1, SEXP _id2 );
 /* SEXP _H5Premove( SEXP _plid, SEXP _name ); */
 /* SEXP _H5Punregister( SEXP _class, SEXP _name ); */
 SEXP _H5Pclose_class( SEXP _class );
+
+/* Experimental LZ4 filter */
+SEXP _H5Pset_lz4( SEXP _plist_id );
 
 #endif

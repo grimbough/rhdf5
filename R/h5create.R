@@ -40,7 +40,7 @@ h5createGroup <- function(file, group) {
     res
 }
 
-h5createDataset <- function(file, dataset, dims, maxdims = dims, storage.mode = "double", H5type = NULL, size=NULL, chunk=dims, level=6, fillValue, showWarnings = TRUE) {
+h5createDataset <- function(file, dataset, dims, maxdims = dims, storage.mode = "double", H5type = NULL, size=NULL, chunk=dims, level=6, fillValue, showWarnings = TRUE, filter = "lz4") {
     
     loc = h5checktypeOrOpenLoc(file)
     on.exit( h5closeitLoc(loc) )
@@ -70,20 +70,23 @@ h5createDataset <- function(file, dataset, dims, maxdims = dims, storage.mode = 
                     chunk[which(chunk == 0)] = 1
                 }
                 dcpl = NULL
-                if ((level > 0) & (length(chunk) > 0)) {
-                    if (showWarnings & (prod(dims) > 1000000L) & (all(dims == chunk))) {
-                        warning("You created a large dataset with compression and chunking. The chunk size is equal to the dataset dimensions. If you want to read subsets of the dataset, you should test smaller chunk sizes to improve read times. Turn off this warning with showWarnings=FALSE.")
-                    }
-                    if (is.null(dcpl)) { 
-                        dcpl = H5Pcreate("H5P_DATASET_CREATE"); 
-                        on.exit(H5Pclose(dcpl), add = TRUE) 
-                    }
-                    H5Pset_fill_time( dcpl, "H5D_FILL_TIME_ALLOC" )
+                
+                if(filter == "lz4") {
+                    if (is.null(dcpl)) { dcpl = H5Pcreate("H5P_DATASET_CREATE") }
                     H5Pset_chunk( dcpl, chunk)
-                    if (level > 0) { 
-                        H5Pset_deflate( dcpl, level ) 
+                    H5Pset_lz4( dcpl )
+                } else {
+                    if ((level > 0) & (length(chunk) > 0)) {
+                        if (showWarnings & (prod(dims) > 1000000L) & (all(dims == chunk))) {
+                            warning("You created a large dataset with compression and chunking. The chunk size is equal to the dataset dimensions. If you want to read subsets of the dataset, you should test smaller chunk sizes to improve read times. Turn off this warning with showWarnings=FALSE.")
+                        }
+                        if (is.null(dcpl)) { dcpl = H5Pcreate("H5P_DATASET_CREATE") }
+                        H5Pset_fill_time( dcpl, "H5D_FILL_TIME_ALLOC" )
+                        H5Pset_chunk( dcpl, chunk)
+                        if (level > 0) { H5Pset_deflate( dcpl, level ) }
                     }
                 }
+                
                 if(!missing(fillValue)) {
                     if (is.null(dcpl)) { 
                         dcpl = H5Pcreate("H5P_DATASET_CREATE")

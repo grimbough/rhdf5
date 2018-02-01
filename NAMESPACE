@@ -1,6 +1,7 @@
 useDynLib(rhdf5)
 
 import(Rhdf5lib)
+import(hdf5Filters)
 import(methods)
 importFrom(utils, packageVersion)
 
@@ -270,6 +271,7 @@ export(H5Pequal)
 ## export(H5Pcopy_prop)
 ## export(H5Premove)
 ## export(H5Punregister)
+export(H5Pset_lzf)
 
 ## export(H5loadConstants)
 

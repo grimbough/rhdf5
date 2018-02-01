@@ -39,35 +39,6 @@ public :
     return handleList_.size();
   };
 
-  /*
-  inline void validIdentifier( std::vector<hid_t> &validIDs ) {
-    hid_t id;
-    std::vector<hid_t> invalidIDs;
-    std::set<hid_t>::iterator it;
-    for (it = handleList_.begin(); it != handleList_.end(); it++) {
-      id = (*it);
-      if (H5Iis_valid(id)) {
-	validIDs.push_back(id);
-      } else {
-	invalidIDs.push_back(id);
-      }
-    }
-    std::vector<hid_t>::iterator it2;
-    if (invalidIDs.size() > 0) {
-      for (it2 = invalidIDs.begin(); it2 != invalidIDs.end(); it2++) {
-	handleList_.erase(*it2);
-      }
-    }
-
-    hid_t* res = (hid_t *)malloc(sizeof(hid_t) * validIDs.size());
-    hsize_t i = 0;
-    for (it = handleList_.begin(); it != handleList_.end(); it++) {
-      res[i] = (*it);
-      i++;
-    }
-  };
-  */
-
   inline hsize_t validIdentifier( hid_t *validIDs, hsize_t size ) {
     hid_t id;
     std::vector<hid_t> invalidIDs;
@@ -91,12 +62,6 @@ public :
       }
     }
 
-    //    hid_t* res = (hid_t *)malloc(sizeof(hid_t) * validIDs.size());
-    /* hsize_t i = 0; */
-    /* for (it = handleList_.begin(); it != handleList_.end(); it++) { */
-    /*   res[i] = (*it); */
-    /*   i++; */
-    /* } */
     return i;
   };
 
