@@ -9,10 +9,10 @@ AC_CONFIG_SRCDIR([src])
 FILTERS=`echo 'cat(if("hdf5Filters" %in% installed.packages()[[,"Package"]]) "_H5P_filters" else "undef")'|\
     "${R_HOME}/bin/R" --vanilla --slave`
 
-INCLUDE_PATH=`echo 'cat(if("hdf5Filters" %in% installed.packages()[[,"Package"]]) hdf5Filters::pkgconfig("PKG_LIB") else "")'|\
-    "${R_HOME}/bin/R" --vanilla --slave`
-    
-echo $INCLUDE_PATH
+#INCLUDE_PATH=`echo 'cat(if("hdf5Filters" %in% installed.packages()[[,"Package"]]) hdf5Filters::pkgconfig("PKG_LIB") else "")'|\
+#    "${R_HOME}/bin/R" --vanilla --slave`
+INCLUDE_PATH=""
+#echo $INCLUDE_PATH
 
 AC_SUBST(FILTERS)
 AC_SUBST(INCLUDE_PATH)

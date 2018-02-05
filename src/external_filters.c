@@ -6,7 +6,7 @@ SEXP _H5Pset_lzf( SEXP _plist_id ) {
     
     herr_t herr;
     
-    int r = register_lzf();
+    //int r = register_lzf();
     hid_t plist_id = INTEGER(_plist_id)[0];
     herr = H5Pset_shuffle(plist_id);
     herr = H5Pset_filter(plist_id, H5PY_FILTER_LZF, H5Z_FLAG_OPTIONAL, 0, NULL);
