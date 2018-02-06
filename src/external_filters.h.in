@@ -9,13 +9,11 @@
 
 #define H5PY_FILTER_LZF_VERSION 4
 #define H5PY_FILTER_LZF 32000
-#define H5Z_FILTER_BLOSC 32001
 #define H5Z_FILTER_LZ4 32004
-
-//int register_lzf(void);
+#define H5Z_FILTER_BLOSC 32001
 
 SEXP _H5Pset_lzf( SEXP _plist_id );
-SEXP _H5Pset_blosc( SEXP _plist_id );
 SEXP _H5Pset_lz4( SEXP _plist_id );
+SEXP _H5Pset_blosc( SEXP _plist_id, SEXP _method, SEXP _level );
 
 #endif
