@@ -1,4 +1,31 @@
-context("native")
+library(rhdf5)
+
+############################################################
+context("h5create supports native funcitonality")
+############################################################
+
+test_that("H5create supports native", {
+    h5file <- tempfile(pattern = "ex_save", fileext = ".h5")
+    if(file.exists(h5file))
+        file.remove(h5file)
+
+    expect_true( h5createFile(file = h5File, native = TRUE) )
+    expect_true( file.exists(h5File) )
+    
+
+    expect_true( h5createDataset(file = h5File, dataset = "A", dims = c(2,1)), native = TRUE )
+    expect_true( "A" %in% names(h5dump(file = h5File)) )
+    A <- h5read(file = h5File, name = "A", native = TRUE)
+    
+    expect_is(A, "matrix")
+    expect_true(nrow(A) == 2)
+    expect_true(ncol(A) == 1)
+    expect_is(A[1,1], "numeric")
+})
+
+############################################################
+context("H5ls supports native functionality")
+############################################################
 
 test_that("H5ls supports native", {
     h5file <- tempfile(fileext = ".h5")
@@ -44,6 +71,10 @@ test_that("H5ls supports native", {
 
 test_that("h5read/writeDataset supports native", {
 })
+
+############################################################
+context("h5read/h5write supports native functionality")
+############################################################
 
 test_that("h5read/write supports native", {
     h5 <- tempfile(fileext = ".h5")
@@ -105,6 +136,10 @@ test_that("h5read/write supports native", {
     do_array(LETTERS[1:12], c(2, 3, 4), "D")
 })
 
+############################################################
+context("h5read supports native functionality misc.")
+############################################################
+
 test_that("h5read native non-R hdff5 files", {
     enum <- system.file("testfiles", "h5ex_t_enum.h5", package="rhdf5")
     arr <- system.file("testfiles", "h5ex_t_array.h5", package="rhdf5")
@@ -126,6 +161,72 @@ test_that("h5read native non-R hdff5 files", {
     expect_equivalent(m1, m2)
 })
 
+############################################################
+context("H5Screate supports native Functionality")
+############################################################
+
+test_that("H5Screate supports native", {    
+    expect_silent(sid <- H5Screate(native = TRUE))
+    H5Sset_extent_simple(sid, c(10, 20, 30))
+    size <- H5Sget_simple_extent_dims(sid)['size']
+    expectIdentical(size, c(10, 20, 30))
+
+    expect_silent(sid <- H5Screate(native = FALSE))
+    H5Sset_extent_simple(sid, c(10, 20, 30))
+    size <- H5Sget_simple_extent_dims(sid)['size']
+    expectIdentical(size, c(30, 20, 10))
+    
+    expect_silent(sid <- H5Screate_simple(c(10, 20, 30), native = TRUE))
+    size <- H5Sget_simple_extent_dims(sid)['size']
+    expect_identical(size, c(10, 20, 30))
+
+    expect_silent(sid <- H5Screate_simple(c(10, 20, 30), native = FALSE))
+    size <- H5Sget_simple_extent_dims(sid)['size']
+    expect_identical(size, c(30, 20, 10))
+})
+
+############################################################
+context("H5Sselect_hyperslab supports native functionality")
+############################################################
+
+test_that("Selecting hyperslabs", {
+    
+    expect_silent(sid <- H5Screate_simple(dims = c(10,20), native = TRUE))
+
+    expect_silent( H5Sselect_hyperslab(sid) )
+    
+    expect_silent(H5Sclose(sid))
+})
+
+############################################################
+context("H5Sselect_index supports native functionality")
+############################################################
+
+test_that("Selecting using an index", {
+    
+    expect_silent(sid <- H5Screate_simple(dims = c(10,20,30)))
+    
+    expect_silent( size <- H5Sselect_index(sid, index = list(1:5, 1:5, 11:15)) )
+    expect_identical( size, c(5,5,5) )
+    
+    expect_silent( size <- H5Sselect_index(sid, index = list(NULL, NULL, NULL)) )
+    expect_identical( size, c(10,20,30) )
+    
+    ## errors when not providing enough dimensions or incorrect dimensions
+    expect_error( H5Sselect_index(sid, index = list(10)),
+                  regexp = "length of list index not equal to h5space dimensional extension")
+    expect_error( H5Sselect_index(sid, index = list(1:5, 1:5, 0:5)), 
+                  regexp = "negative indices and 0 not supported" )
+    expect_error( H5Sselect_index(sid, index = list(1:15, 1:5, 1:5)), 
+                  regexp = "index exceeds HDF5-array dimension")
+    
+    expect_silent(H5Sclose(sid))
+})
+
+############################################################
+context("H5F supports native functionality")
+############################################################
+
 test_that("H5F native functionality", {
     for (native in c(FALSE, TRUE)) {
         h5 <- tempfile(fileext = ".h5")
@@ -145,21 +246,8 @@ test_that("H5F native functionality", {
         h5d[,1] <- 11:15
         expect_equivalent(h5d[,1], 11:15)
 
-        H5Fclose(h5f)
         H5Oclose(h5d)
+        H5Fclose(h5f)
     }
 })
 
-## test_that("misc. fixes work", {
-##     h5 <- tempfile(fileext = ".h5")
-##     h5createFile(file = h5)
-##     h5createGroup(file = h5, group = "test")
-
-##     m <- matrix(1:12, 3, 4)
-##     h5write(m, file = h5, name = "test/complex")
-##     m <- matrix(as.complex(1:12), 3, 4)
-##     expect_error(
-##         h5write(m, file = h5, name = "test/complex")
-##         "Writing 'complex' not supported"
-##     )
-## })
