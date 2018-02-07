@@ -9,6 +9,7 @@
   int* stride;                                            \
                                                           \
   if (native) {                                           \
+    int i = 0;                                            \
     ndims2 = H5Sget_simple_extent_ndims(dim_space_id);    \
     dims = (hsize_t *)R_alloc(ndims2, sizeof(hsize_t));   \
     H5Sget_simple_extent_dims(dim_space_id, dims, NULL);  \
@@ -17,15 +18,15 @@
     stride = (int *)R_alloc(ndims2, sizeof(int));         \
                                                           \
     iip[0] = 1;                                           \
-    for (int i = 1; i < ndims2; i++) {                    \
+    for (i = 1; i < ndims2; i++) {                        \
       iip[i] = iip[i-1] * dims[ndims2-i];                 \
     }                                                     \
                                                           \
-    for (int i = 0; i < ndims2; i++) {                    \
+    for (i = 0; i < ndims2; i++) {                        \
       stride[i] = iip[ndims2-i-1];                        \
     }                                                     \
                                                           \
-    for (int i = 0; i < ndims2; iip[i++] = 0);            \
+    for (i = 0; i < ndims2; iip[i++] = 0);                \
   }
 
 #define CLICKJ                                            \
@@ -729,7 +730,7 @@ SEXP H5Dread_helper_ARRAY(hid_t dataset_id, hid_t file_space_id, hid_t mem_space
       SEXP buffer = PROTECT(allocVector(TYPEOF(Rval), LENGTH(Rval)));
       hid_t dim_space_id = mem_space_id;
 
-      int ndims2, li, lj, itmp;
+      int ndims2, li, lj, itmp, i;
       hsize_t* dims;
       int* iip;
       int* stride;                                                          
@@ -739,10 +740,10 @@ SEXP H5Dread_helper_ARRAY(hid_t dataset_id, hid_t file_space_id, hid_t mem_space
       H5Sget_simple_extent_dims(dim_space_id, dims2, NULL);
 
       dims = (hsize_t *)R_alloc(ndims2 + ndims, sizeof(hsize_t));
-      for (int i = 0; i < ndims2; i++) {
+      for (i = 0; i < ndims2; i++) {
         dims[i] = dims2[ndims2-i-1];
       }
-      for (int i = ndims2; i < ndims + ndims2; i++) {
+      for (i = ndims2; i < ndims + ndims2; i++) {
         dims[i] = adims[i-ndims2];
       }
       ndims2 = ndims2 + ndims;
@@ -751,15 +752,15 @@ SEXP H5Dread_helper_ARRAY(hid_t dataset_id, hid_t file_space_id, hid_t mem_space
       stride = (int *)R_alloc(ndims2, sizeof(int));
 
       iip[0] = 1;
-      for (int i = 1; i < ndims2; i++) {                    
+      for (i = 1; i < ndims2; i++) {                    
         iip[i] = iip[i-1] * dims[ndims2-i];                 
       }                                                     
                                                           
-      for (int i = 0; i < ndims2; i++) {                    
+      for (i = 0; i < ndims2; i++) {                    
         stride[i] = iip[ndims2-i-1];                        
       }                                                     
                                                           
-      for (int i = 0; i < ndims2; iip[i++] = 0);            
+      for (i = 0; i < ndims2; iip[i++] = 0);            
 
       for (li = 0, lj = 0; li < LENGTH(Rval); li++) {
         INTEGER(buffer)[li] = INTEGER(Rval)[lj];
