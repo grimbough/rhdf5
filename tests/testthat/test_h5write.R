@@ -45,6 +45,32 @@ test_that("No open HDF5 objects are left", {
     expect_equal( length(h5validObjects()), 0 )
 })
 
+test_that("Write by index and hyperslab works.", {
+    h5createDataset(file = h5File, dataset = "D", dims = c(10, 9))
+
+    ## Test index works
+    h5write(rep(1, 4), file = h5File, name = "D", index = list(2:3, c(3, 6)))
+    res <- h5read(file = h5File, name = "D", index = list(2:3, c(3, 6)))
+    expect_identical(res, matrix(1, nrow = 2, ncol = 2))
+
+    ## Test hyperslabs without strude and block arguments work
+    h5write(matrix(2, nrow = 4, ncol = 3), file = h5File, name = "D", 
+        start = c(2, 2), stride = NULL, count = c(4, 3), block = NULL)
+    expect_identical(h5read(h5File, "D")[2:5, 2:4], matrix(2, nrow = 4, ncol = 3))
+    res <- h5read(file = h5File, name = "D", start = c(2, 2), stride = NULL,
+        count = c(4, 3), block = NULL)
+    expect_identical(res, matrix(2, nrow = 4, ncol = 3))
+
+    ## Test hyperslabs with all arguments work
+    h5write(matrix(3, nrow = 6, ncol = 8), file = h5File, name = "D", 
+        start = c(1, 1), stride = c(4, 5), count = c(2, 2), block = c(3, 4))
+    expect_identical(h5read(h5File, "D")[c(1:3, 5:7), c(1:4, 6:9)],
+        matrix(3, nrow = 6, ncol = 8))
+    res <- h5read(file = h5File, name = "D", start = c(1, 1), stride = c(4, 5),
+        count = c(2, 2), block = c(3, 4))
+    expect_identical(res, matrix(3, nrow = 6, ncol = 8))
+})
+
 ############################################################
 context("h5writeDataset")
 ############################################################
