@@ -44,6 +44,13 @@ h5createDataset <- function(file, dataset, dims, maxdims = dims, storage.mode = 
     
     loc = h5checktypeOrOpenLoc(file, native = native)
     on.exit( h5closeitLoc(loc) )
+
+    dims <- as.numeric(dims)
+    maxdims <- as.numeric(maxdims)
+    if (native) {
+        dims <- rev(dims)
+        maxdims <- rev(maxdims)
+    }
     
     res <- FALSE
     if (is.character(dataset)) {
