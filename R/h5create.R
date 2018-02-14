@@ -47,11 +47,7 @@ h5createDataset <- function(file, dataset, dims, maxdims = dims, storage.mode = 
 
     dims <- as.numeric(dims)
     maxdims <- as.numeric(maxdims)
-    if (native) {
-        dims <- rev(dims)
-        maxdims <- rev(maxdims)
-    }
-    
+
     res <- FALSE
     if (is.character(dataset)) {
         if (H5Lexists(loc$H5Identifier,dataset)) {

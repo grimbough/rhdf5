@@ -124,7 +124,7 @@ h5checktypeOrOpenLoc <- function(file, fctname = deparse(match.call()[1]), creat
       }
     } else {
       if (createnewfile) {
-        h5loc <- H5Fcreate(file)
+        h5loc <- H5Fcreate(file, native = native)
         if (!is(h5loc, "H5IdComponent")) {
           stop("Error in ",fctname,". Cannot create file.")
         } else {
