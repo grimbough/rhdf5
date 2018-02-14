@@ -1,7 +1,7 @@
 library(rhdf5)
 
 ############################################################
-context("H5ls supports native functionality")
+context("h5ls supports native functionality")
 ############################################################
 
 h5File <- tempfile(fileext = ".h5")
@@ -9,7 +9,7 @@ if(file.exists(h5File))
     file.remove(h5File)
 h5createFile(file = h5File)
 
-test_that("H5ls supports native", {
+test_that("h5ls supports native", {
     h5createGroup(file = h5File, group = "test")
     m0 <- matrix(1:12, 3, 4)
 

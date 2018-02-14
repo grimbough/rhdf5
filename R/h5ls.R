@@ -12,15 +12,6 @@ h5lsConvertToDataframe <- function(L, all=FALSE, native) {
 #    L$btime <- .POSIXct(L$btime)
 #    L$btime[L$btime == 0] <- NA
     ## L <- as.data.frame(L, stringsAsFactors=FALSE)
-#    if (native) {
-#      revdim <- function(elt) {
-#        value <- strsplit(elt, " x ")
-#        vapply(value, function(x) paste(rev(x), collapse = " x "), character(1))
-#      }
-#      L[["dim"]] <- revdim(L[["dim"]])
-#      if (all)
-#          L[["maxdim"]] <- revdim(L[["maxdim"]])
-#    }
     if (!all) {
       L <- L[,c("group", "name", "otype", "dclass","dim")]
     }
