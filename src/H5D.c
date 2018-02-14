@@ -2,44 +2,56 @@
 #include <stdlib.h>
 #include <time.h>
 
-#define STRIDEJ                                           \
-  int ndims2, li, lj, itmp;                               \
-  hsize_t* dims;                                          \
-  int* iip;                                               \
-  int* stride;                                            \
-                                                          \
-  if (native) {                                           \
-    int i = 0;                                            \
-    ndims2 = H5Sget_simple_extent_ndims(dim_space_id);    \
-    dims = (hsize_t *)R_alloc(ndims2, sizeof(hsize_t));   \
-    H5Sget_simple_extent_dims(dim_space_id, dims, NULL);  \
-                                                          \
-    iip = (int *)R_alloc(ndims2, sizeof(int));            \
-    stride = (int *)R_alloc(ndims2, sizeof(int));         \
-                                                          \
-    iip[0] = 1;                                           \
-    for (i = 1; i < ndims2; i++) {                        \
-      iip[i] = iip[i-1] * dims[ndims2-i];                 \
-    }                                                     \
-                                                          \
-    for (i = 0; i < ndims2; i++) {                        \
-      stride[i] = iip[ndims2-i-1];                        \
-    }                                                     \
-                                                          \
-    for (i = 0; i < ndims2; iip[i++] = 0);                \
+void click_setup(hid_t dim_space_id, int *rank_p, hsize_t **dims_p,
+                 int **iip_p, int **stride_p) {
+  int rank = H5Sget_simple_extent_ndims(dim_space_id);
+  hsize_t *dims = (hsize_t *) R_alloc(rank, sizeof(hsize_t));
+  int *iip = (int *) R_alloc(rank, sizeof(int));
+  int *stride = (int *) R_alloc(rank, sizeof(int));
+  H5Sget_simple_extent_dims(dim_space_id, dims, NULL);
+
+  for (int i = 0; i < rank; i++) {
+    if (i == 0)
+      iip[i] = 1;
+    else
+      iip[i] = iip[i-1] * dims[rank-i];
   }
 
-#define CLICKJ                                            \
-    for (itmp = 0; itmp < ndims2; itmp++) {               \
-        if (iip[itmp] == dims[itmp] - 1) iip[itmp] = 0;   \
-        else {                                            \
-            iip[itmp]++;                                  \
-            break;                                        \
-        }                                                 \
-    }                                                     \
-    for (lj = 0, itmp = 0; itmp < ndims2; itmp++)         \
-        lj += iip[itmp] * stride[itmp];
+  for (int i = 0; i < rank; i++)
+    stride[i] = iip[rank-i-1];
 
+  for (int i = 0; i < rank; iip[i++] = 0);
+
+  *rank_p = rank;
+  *dims_p = dims;
+  *iip_p = iip;
+  *stride_p = stride;
+}
+
+#define CLICKJ                                            \
+  for (itmp = 0; itmp < rank; itmp++) {                   \
+    if (iip[itmp] == dims[itmp] - 1)                      \
+      iip[itmp] = 0;                                      \
+    else {                                                \
+      iip[itmp]++;                                        \
+      break;                                              \
+    }                                                     \
+  }                                                       \
+  for (lj = 0, itmp = 0; itmp < rank; itmp++)             \
+    lj += iip[itmp] * stride[itmp];
+
+#define PERMUTE(FROM, ACCESSOR, DIM_SPACE_ID) do {                \
+  SEXP to = PROTECT(allocVector(TYPEOF(FROM), LENGTH(FROM)));     \
+  int rank, *iip, *stride;                                        \
+  hsize_t *dims;                                                  \
+  int li, lj, itmp;                                               \
+  click_setup(DIM_SPACE_ID, &rank, &dims, &iip, &stride);         \
+  for (li = 0, lj = 0; li < LENGTH(FROM); li++) {                 \
+    ACCESSOR(to)[li] = ACCESSOR(FROM)[lj];                        \
+    CLICKJ;                                                       \
+  }                                                               \
+  FROM = to;                                                      \
+} while(0)
 
 /* hid_t H5Dcreate( hid_t loc_id, const char *name, hid_t dtype_id, hid_t space_id, hid_t lcpl_id, hid_t dcpl_id, hid_t dapl_id ) */
 SEXP _H5Dcreate( SEXP _loc_id, SEXP _name, SEXP _dtype_id, SEXP _space_id, SEXP _lcpl_id, SEXP _dcpl_id, SEXP _dapl_id ) {
@@ -270,16 +282,8 @@ SEXP H5Dread_helper_INTEGER(hid_t dataset_id, hid_t file_space_id, hid_t mem_spa
     }
     herr_t herr = H5Dread(dataset_id, mem_type_id, mem_space_id, file_space_id, H5P_DEFAULT, buf );
 
-    if (native) {
-      SEXP buffer = PROTECT(allocVector(TYPEOF(Rval), LENGTH(Rval)));
-      hid_t dim_space_id = mem_space_id;
-      STRIDEJ;
-      for (li = 0, lj = 0; li < LENGTH(Rval); li++) {
-        INTEGER(buffer)[li] = INTEGER(Rval)[lj];
-        CLICKJ;
-      }
-      Rval = buffer;
-    }
+    if (native)
+      PERMUTE(Rval, INTEGER, mem_space_id);
 
     for (long long i=0; i<n; i++) {
       if (((int *)buf)[i] == INT_MIN) {
@@ -441,16 +445,8 @@ SEXP H5Dread_helper_INTEGER(hid_t dataset_id, hid_t file_space_id, hid_t mem_spa
 	    }
 	  }
 	}
-    if (native) {
-      SEXP buffer = PROTECT(allocVector(TYPEOF(Rval), LENGTH(Rval)));
-      hid_t dim_space_id = mem_space_id;
-      STRIDEJ;
-      for (li = 0, lj = 0; li < LENGTH(Rval); li++) {
-        INTEGER(buffer)[li] = INTEGER(Rval)[lj];
-        CLICKJ;
-      }
-      Rval = buffer;
-    }
+	if (native)
+	  PERMUTE(Rval, INTEGER, mem_space_id);
 	SEXP la = PROTECT(mkString("integer64"));
 	setAttrib(Rval, R_ClassSymbol, la);
 	UNPROTECT(1);
@@ -509,16 +505,8 @@ SEXP H5Dread_helper_FLOAT(hid_t dataset_id, hid_t file_space_id, hid_t mem_space
   }
   herr_t herr = H5Dread(dataset_id, mem_type_id, mem_space_id, file_space_id, H5P_DEFAULT, buf );
 
-  if (native) {
-    SEXP buffer = PROTECT(allocVector(TYPEOF(Rval), LENGTH(Rval)));
-    hid_t dim_space_id = mem_space_id;
-    STRIDEJ;
-    for (li = 0, lj = 0; li < LENGTH(Rval); li++) {
-      REAL(buffer)[li] = REAL(Rval)[lj];
-      CLICKJ;
-    }
-    Rval = buffer;
-  }
+  if (native)
+    PERMUTE(Rval, REAL, mem_space_id);
 
   if (length(_buf) == 0) {
     setAttrib(Rval, R_DimSymbol, Rdim);
@@ -576,17 +564,8 @@ SEXP H5Dread_helper_STRING(hid_t dataset_id, hid_t file_space_id, hid_t mem_spac
     free(bufSTR2);
   }
 
-  if (native) {
-    SEXP buffer = PROTECT(allocVector(TYPEOF(Rval), LENGTH(Rval)));
-    hid_t dim_space_id = mem_space_id;
-    STRIDEJ;
-    for (li = 0, lj = 0; li < LENGTH(Rval); li++) {
-      SEXP elt = STRING_ELT(Rval, lj);
-      SET_STRING_ELT(buffer, li, elt);
-      CLICKJ;
-    }
-    Rval = buffer;
-  }
+  if (native)
+    PERMUTE(Rval, STRING_PTR, mem_space_id);
   setAttrib(Rval, R_DimSymbol, Rdim);
   UNPROTECT( 1 + native );
   return(Rval);
@@ -634,26 +613,16 @@ SEXP H5Dread_helper_ENUM(hid_t dataset_id, hid_t file_space_id, hid_t mem_space_
 
     herr_t herr = H5Dread(dataset_id, mem_type_id, mem_space_id, file_space_id, H5P_DEFAULT, buf );
 
-    if (native) {
-      SEXP buffer = PROTECT(allocVector(TYPEOF(Rval), LENGTH(Rval)));
-      hid_t dim_space_id = mem_space_id;
-      STRIDEJ;
-      for (li = 0, lj = 0; li < LENGTH(Rval); li++) {
-        INTEGER(buffer)[li] = INTEGER(Rval)[lj];
-        CLICKJ;
-      }
-      Rval = buffer;
-    }
+    if (native)
+      PERMUTE(Rval, INTEGER, mem_space_id);
     if (length(_buf) == 0) {
       if (native) {
-      for (int i=0; i < n; i++) {
-	INTEGER(Rval)[i] += 1;
-      }
+        for (int i=0; i < n; i++)
+          INTEGER(Rval)[i] += 1;
       } else {
-      for (int i=0; i < n; i++) {
-	((int *)buf)[i] += 1;
+        for (int i=0; i < n; i++)
+          ((int *)buf)[i] += 1;
       }
-    }
       setAttrib(Rval, R_DimSymbol, Rdim);
       setAttrib(Rval, mkString("levels"), levels);
       setAttrib(Rval, R_ClassSymbol, mkString("factor"));
@@ -1046,56 +1015,31 @@ SEXP _H5Dwrite( SEXP _dataset_id, SEXP _buf, SEXP _file_space_id, SEXP _mem_spac
 
   const void * buf;
 
-  SEXP buffer;
   hid_t dim_space_id = mem_space_id == H5S_ALL ? dataset_id : mem_space_id;
-  STRIDEJ;
-  if (native)
-      buffer = PROTECT(allocVector(TYPEOF(_buf), XLENGTH(_buf)));
 
   switch(TYPEOF(_buf)) {
     case INTSXP :
       mem_type_id = H5T_NATIVE_INT;
-      if (native) {
-        for (li = 0, lj = 0; li < LENGTH(_buf); li++) {
-          INTEGER(buffer)[li] = INTEGER(_buf)[lj];
-          CLICKJ;
-        }
-        _buf = buffer;
-      }
+      if (native)
+        PERMUTE(_buf, INTEGER, dim_space_id);
       buf = INTEGER(_buf);
       break;
     case REALSXP :
       mem_type_id = H5T_NATIVE_DOUBLE;
-      if (native) {
-        for (li = 0, lj = 0; li < LENGTH(_buf); li++) {
-          REAL(buffer)[li] = REAL(_buf)[lj];
-          CLICKJ;
-        }
-        _buf = buffer;
-      }
+      if (native)
+        PERMUTE(_buf, REAL, dim_space_id);
       buf = REAL(_buf);
       break;
     case LGLSXP :
       mem_type_id = H5T_NATIVE_INT;
-      if (native) {
-        for (li = 0, lj = 0; li < LENGTH(_buf); li++) {
-          LOGICAL(buffer)[li] = LOGICAL(_buf)[lj];
-          CLICKJ;
-        }
-        _buf = buffer;
-      }
+      if (native)
+        PERMUTE(_buf, LOGICAL, dim_space_id);
       buf = LOGICAL(_buf);
       break;
     case STRSXP :
       mem_type_id = H5Dget_type(dataset_id);
-      /* native? */
-      if (native) {
-        for (li = 0, lj = 0; li < LENGTH(_buf); li++) {
-          SET_STRING_ELT(buffer, li, STRING_ELT(_buf, lj));
-          CLICKJ
-        }
-        _buf = buffer;
-      }
+      if (native)
+        PERMUTE(_buf, STRING_PTR, dim_space_id);
 
       /* prepare for hdf5 */
       size_t stsize = H5Tget_size( mem_type_id );
