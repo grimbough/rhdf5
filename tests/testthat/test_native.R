@@ -115,29 +115,29 @@ test_that("h5read/h5write supports index and hyperslab", {
     h5createDataset(file = h5File, dataset = "D", dims = c(10, 9), native = TRUE)
 
     ## Test index works
-    h5write(rep(1, 4), file = h5File, name = "D", index = list(2:3, c(3, 6)), native = TRUE)
+    h5write(1:4, file = h5File, name = "D", index = list(2:3, c(3, 6)), native = TRUE)
     res <- h5read(file = h5File, name = "D", index = list(2:3, c(3, 6)), native = TRUE)
-    expect_identical(res, matrix(1, nrow = 2, ncol = 2))
+    expect_equal(res, matrix(1:4, nrow = 2, ncol = 2))
 
     ## Test hyperslabs without stride and block arguments work
-    h5write(matrix(2, nrow = 4, ncol = 3), file = h5File, name = "D", 
+    h5write(matrix(1:12, nrow = 4, ncol = 3), file = h5File, name = "D", 
         start = c(2, 2), stride = NULL, count = c(4, 3), block = NULL, native = TRUE)
-    expect_identical(h5read(h5File, "D", native = TRUE)[2:5, 2:4], matrix(2, nrow = 4, ncol = 3))
+    expect_equal(h5read(h5File, "D", native = TRUE)[2:5, 2:4], matrix(1:12, nrow = 4, ncol = 3))
     res <- h5read(file = h5File, name = "D", start = c(2, 2), stride = NULL,
         count = c(4, 3), block = NULL, native = TRUE)
-    expect_identical(res, matrix(2, nrow = 4, ncol = 3))
+    expect_equal(res, matrix(1:12, nrow = 4, ncol = 3))
 
     ## Test hyperslabs with all arguments work
-    h5write(matrix(3, nrow = 6, ncol = 8), file = h5File, name = "D", 
+    h5write(matrix(1:48, nrow = 6, ncol = 8), file = h5File, name = "D", 
         start = c(1, 1), stride = c(4, 5), count = c(2, 2), block = c(3, 4), native = TRUE)
-    expect_identical(h5read(h5File, "D", native=TRUE)[c(1:3, 5:7), c(1:4, 6:9)],
-        matrix(3, nrow = 6, ncol = 8))
+    expect_equal(h5read(h5File, "D", native=TRUE)[c(1:3, 5:7), c(1:4, 6:9)],
+        matrix(1:48, nrow = 6, ncol = 8))
     res <- h5read(file = h5File, name = "D", start = c(1, 1), stride = c(4, 5),
         count = c(2, 2), block = c(3, 4), native = TRUE)
-    expect_identical(res, matrix(3, nrow = 6, ncol = 8))
+    expect_equal(res, matrix(1:48, nrow = 6, ncol = 8))
 })
 
-test_that("h5read native non-R hdff5 files", {
+test_that("h5read native non-R hdf5 files", {
     enum <- system.file("testfiles", "h5ex_t_enum.h5", package="rhdf5")
     arr <- system.file("testfiles", "h5ex_t_array.h5", package="rhdf5")
     compound <- system.file("testfiles", "h5ex_t_cmpd.h5", package="rhdf5")
