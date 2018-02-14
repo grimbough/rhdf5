@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-void click_setup(hid_t dim_space_id, int *rank_p, hsize_t **dims_p,
+void permute_setup(hid_t dim_space_id, int *rank_p, hsize_t **dims_p,
                  int **iip_p, int **stride_p) {
   int rank = H5Sget_simple_extent_ndims(dim_space_id);
   hsize_t *dims = (hsize_t *) R_alloc(rank, sizeof(hsize_t));
@@ -29,6 +29,7 @@ void click_setup(hid_t dim_space_id, int *rank_p, hsize_t **dims_p,
 }
 
 #define CLICKJ                                            \
+  int itmp;                                               \
   for (itmp = 0; itmp < rank; itmp++) {                   \
     if (iip[itmp] == dims[itmp] - 1)                      \
       iip[itmp] = 0;                                      \
@@ -44,9 +45,8 @@ void click_setup(hid_t dim_space_id, int *rank_p, hsize_t **dims_p,
   SEXP to = PROTECT(allocVector(TYPEOF(FROM), LENGTH(FROM)));     \
   int rank, *iip, *stride;                                        \
   hsize_t *dims;                                                  \
-  int li, lj, itmp;                                               \
-  click_setup(DIM_SPACE_ID, &rank, &dims, &iip, &stride);         \
-  for (li = 0, lj = 0; li < LENGTH(FROM); li++) {                 \
+  permute_setup(DIM_SPACE_ID, &rank, &dims, &iip, &stride);       \
+  for (int li = 0, lj = 0; li < LENGTH(FROM); li++) {             \
     ACCESSOR(to)[li] = ACCESSOR(FROM)[lj];                        \
     CLICKJ;                                                       \
   }                                                               \
@@ -696,42 +696,34 @@ SEXP H5Dread_helper_ARRAY(hid_t dataset_id, hid_t file_space_id, hid_t mem_space
     herr_t herr = H5Dread(dataset_id, mem_type_id, mem_space_id, file_space_id, H5P_DEFAULT, buf );
 
     if (native) {
+      int rank0 = H5Sget_simple_extent_ndims(mem_space_id);
+      hsize_t* dims0 = (hsize_t *) R_alloc(rank0, sizeof(hsize_t));
+      H5Sget_simple_extent_dims(mem_space_id, dims0, NULL);
+
+      int rank = rank0 + ndims;
+      hsize_t *dims = (hsize_t *) R_alloc(rank, sizeof(hsize_t));
+      int *iip = (int *) R_alloc(rank, sizeof(int));
+      int *stride = (int *) R_alloc(rank, sizeof(int));
+
+      for (int i = 0; i < rank0; i++)
+        dims[i] = dims0[rank0-i-1];
+      for (int i = rank0; i < rank; i++)
+        dims[i] = adims[i-rank0];
+
+      for (int i = 0; i < rank; i++) {
+        if (i == 0)
+          iip[0] = 1;
+        else
+          iip[i] = iip[i-1] * dims[rank-i];
+      }
+
+      for (int i = 0; i < rank; i++)
+        stride[i] = iip[rank-i-1];
+
+      for (int i = 0; i < rank; iip[i++] = 0);
+
       SEXP buffer = PROTECT(allocVector(TYPEOF(Rval), LENGTH(Rval)));
-      hid_t dim_space_id = mem_space_id;
-
-      int ndims2, li, lj, itmp, i;
-      hsize_t* dims;
-      int* iip;
-      int* stride;                                                          
-
-      ndims2 = H5Sget_simple_extent_ndims(dim_space_id);
-      hsize_t* dims2 = (hsize_t *)R_alloc(ndims2, sizeof(hsize_t));
-      H5Sget_simple_extent_dims(dim_space_id, dims2, NULL);
-
-      dims = (hsize_t *)R_alloc(ndims2 + ndims, sizeof(hsize_t));
-      for (i = 0; i < ndims2; i++) {
-        dims[i] = dims2[ndims2-i-1];
-      }
-      for (i = ndims2; i < ndims + ndims2; i++) {
-        dims[i] = adims[i-ndims2];
-      }
-      ndims2 = ndims2 + ndims;
-
-      iip = (int *)R_alloc(ndims2, sizeof(int));
-      stride = (int *)R_alloc(ndims2, sizeof(int));
-
-      iip[0] = 1;
-      for (i = 1; i < ndims2; i++) {                    
-        iip[i] = iip[i-1] * dims[ndims2-i];                 
-      }                                                     
-                                                          
-      for (i = 0; i < ndims2; i++) {                    
-        stride[i] = iip[ndims2-i-1];                        
-      }                                                     
-                                                          
-      for (i = 0; i < ndims2; iip[i++] = 0);            
-
-      for (li = 0, lj = 0; li < LENGTH(Rval); li++) {
+      for (int li = 0, lj = 0; li < LENGTH(Rval); li++) {
         INTEGER(buffer)[li] = INTEGER(Rval)[lj];
         CLICKJ;
       }
