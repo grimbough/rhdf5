@@ -52,14 +52,15 @@ SEXP _H5Pset_lz4( SEXP _plist_id ) {
 SEXP _H5Pset_blosc( SEXP _plist_id ) {
     
     herr_t herr;
-    unsigned int cd_values[6];
+    unsigned int cd_values[7];
     
     hid_t plist_id = INTEGER(_plist_id)[0];
     
-    cd_values[4] = 5;  
-    cd_values[5] = 1;  
-    herr = H5Pset_filter(plist_id, H5Z_FILTER_BLOSC, H5Z_FLAG_OPTIONAL, (size_t)6, cd_values);
-    SEXP Rval = ScalarInteger(herr);
+    cd_values[4] = 5;  // compression level
+    cd_values[5] = 1;  // shuffle - yes/no
+    cd_values[6] = 4;  // compression algorithm?
+    herr = H5Pset_filter(plist_id, H5Z_FILTER_BLOSC, H5Z_FLAG_OPTIONAL, (size_t)7, cd_values);
+    SEXP Rval = ScalarInteger(herr); 
     
     htri_t avail = H5Zfilter_avail(H5Z_FILTER_BLOSC);
     unsigned filter_config;
