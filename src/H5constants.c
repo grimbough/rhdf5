@@ -59,9 +59,9 @@ SEXP _H5constants( ) {
   const char *name_H5O_TYPE[] = { "H5O_TYPE_ALL", "H5O_TYPE_GROUP", "H5O_TYPE_DATASET", "H5O_TYPE_NAMED_DATATYPE"};
   addVector(i++, Rval, groupnames, "H5O_TYPE", 4, const_H5O_TYPE, name_H5O_TYPE);
 
-  int const_H5S[3]       = {  H5S_SCALAR,   H5S_SIMPLE,   H5S_NULL };
-  const char *name_H5S[] = { "H5S_SCALAR", "H5S_SIMPLE", "H5S_NULL"};
-  addVector(i++, Rval, groupnames, "H5S", 3, const_H5S, name_H5S);
+  int const_H5S[4]       = {  H5S_SCALAR,   H5S_SIMPLE,   H5S_NULL,   H5S_UNLIMITED };
+  const char *name_H5S[] = { "H5S_SCALAR", "H5S_SIMPLE", "H5S_NULL", "H5S_UNLIMITED"};
+  addVector(i++, Rval, groupnames, "H5S", 4, const_H5S, name_H5S);
 
   int const_H5S_SELECT[6]       = {  H5S_SELECT_SET,   H5S_SELECT_OR,   H5S_SELECT_AND,   H5S_SELECT_XOR,   H5S_SELECT_NOTB,   H5S_SELECT_NOTA };
   const char *name_H5S_SELECT[] = { "H5S_SELECT_SET", "H5S_SELECT_OR", "H5S_SELECT_AND", "H5S_SELECT_XOR", "H5S_SELECT_NOTB", "H5S_SELECT_NOTA"};

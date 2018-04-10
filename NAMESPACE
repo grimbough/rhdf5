@@ -83,6 +83,7 @@ export(H5Sset_extent_simple)
 export(H5Sis_simple)
 export(H5Sselect_index)
 export(H5Sselect_hyperslab)
+export(H5Sunlimited)
 
 export(H5Tcopy)
 export(H5Tset_size)
