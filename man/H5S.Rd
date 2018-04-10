@@ -9,6 +9,7 @@
 \alias{H5Sselect_hyperslab}
 \alias{H5Sselect_index}
 \alias{H5Sset_extent_simple}
+\alias{H5Sunlimited}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{HDF5 Dataspace Interface}
 \description{
@@ -25,6 +26,7 @@ H5Sset_extent_simple      (h5space, dims, maxdims)
 H5Sselect_hyperslab       (h5space, op = h5default("H5S_SELECT"), 
 			     start = NULL, stride = NULL, count = NULL, block = NULL)
 H5Sselect_index           (h5space, index)
+H5Sunlimited              ()
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -52,6 +54,8 @@ As an introduction to use hyperslabs see these tutorials: See these introduction
 \code{H5Sis_simple} returns a boolean.
 
 \code{H5Sget_simple_extent_dims} returns an integer vector.
+
+\code{H5Sunlimited} is a simple macro to return the constant \code{H5S_UNLIMITED} that can be provided to the \code{maxdims} arguments of \code{H5Screate_simple} to create and extensible dataspace.
 
 The other functions return the standard return value from their respective C-functions.
 }
