@@ -60,8 +60,8 @@ h5createDataset <- function(file, dataset, dims, maxdims = dims, storage.mode = 
                 if (any(maxdims != dims) & is.null(chunk)) {
                     stop('If "maxdims" is different from "dims", chunking is required.')
                 }
-                if (any(maxdims < dims)) {
-                    stop('All elements of "maxdims" have to be equal or larger than "dims".')
+                if (any(maxdims != h5constants$H5S["H5S_UNLIMITED"] & maxdims < dims)) {
+                    stop('All non-extensible elements of "maxdims" have to be equal or larger than "dims".')
                 }
                 if (any(dims < 0)) {
                     stop('All elements of "dims" must be non-negative.')

@@ -112,6 +112,39 @@ test_that("Datasets with different compression levels", {
     expect_lte( file.size(h5File_9), file.size(h5File_0) )
 })
 
+
+test_that("Extendible datasets", {
+    mtx4x3 <- matrix(runif(n=12), nrow = 4)
+    mtx3x3 <- matrix(runif(n=9), nrow = 3)
+    mtx7x2 <- matrix(runif(n=14), nrow = 7)
+    extendible <- H5Sunlimited()
+    h5createDataset(file = h5File, dataset = "extend", dims = c(4,3), maxdims = c(extendible, extendible))
+    h5write( mtx4x3, file = h5File, name = "extend")
+    expect_equal(h5read(h5File, "extend"), mtx4x3)
+
+    ## now extend in first dimension:
+    ## [ mtx4x3 ]
+    ## [ mtx3x3 ]
+
+    h5set_extent(h5File, "extend", c(7,3))
+    h5write(mtx3x3, file = h5File, name = "extend",
+            start = c(5,1))
+    expect_equal(h5read(h5File, "extend"),
+                 rbind(mtx4x3, mtx3x3))
+
+    
+    ## now extend in the other dimension:
+    ## [ mtx4x3 mtx7x2 ]
+    ## [ mtx3x3 mtx7x2 ]
+    h5set_extent(h5File, "extend", c(7,5))
+    h5write(mtx7x2, file = h5File, name = "extend",
+            start = c(1,4))
+    expect_equal(h5read(h5File, "extend"),
+                 cbind(rbind(mtx4x3, mtx3x3),
+                       mtx7x2))
+
+})
+
 ############################################################
 context("h5createAttribute")
 ############################################################

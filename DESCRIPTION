@@ -1,10 +1,12 @@
 Package: rhdf5
 Type: Package
 Title: HDF5 interface to R
-Version: 2.23.6
+Version: 2.23.8
 Authors@R: c(person("Bernd", "Fischer", role = c("aut")), 
         person("Gregoire", "Pau", role="aut"),
-        person("Mike", "Smith", role=c("aut", "cre"), email = "mike.smith@embl.de"))
+        person("Mike", "Smith", role=c("aut", "cre"), email = "mike.smith@embl.de"),
+        person("Martin", "Morgan", role = "ctb"),
+        person("Daniel", "van Twisk", role = "ctb"))
 Description: This package provides an interface between HDF5 and R. 
     HDF5's main features are the ability to store and access very large and/or
     complex datasets and a wide variety of metadata on mass storage (disk) 
