@@ -1,6 +1,6 @@
 
 setClass("H5IdComponent",
-         representation(ID = "integer")
+         representation(ID = "integer", native = "logical")
 )
 
 ## setClass("H5attribute",

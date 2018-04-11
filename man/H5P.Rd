@@ -11,7 +11,7 @@
 \title{HDF5 Property List Interface}
 \description{The functions, macros, and subroutines listed here are used to manipulate property list objects in various ways, including to reset property values. With the use of property lists, HDF5 functions have been implemented and can be used in applications with many fewer parameters than would be required without property lists.}
 \usage{
-H5Pcreate            (type = h5default("H5P"))
+H5Pcreate            (type = h5default("H5P"), native = FALSE)
 H5Pcopy              (h5plist)
 H5Pget_class         (h5plist)
 H5Pclose             (h5plist)
@@ -24,6 +24,7 @@ H5Pget_libver_bounds (h5plist)
 }
 \arguments{
   \item{type}{A character name of a property list type. See \code{h5const("H5P")} for possible property list types. Can also be an integer representing an HDF5 property list type.}
+  \item{native}{An object of class \code{logical}. If TRUE, array-like objects are treated as stored in HDF5 row-major rather than R column-major orientation. Using \code{native = TRUE} increases HDF5 file portability between programming languages. A file written with \code{native = TRUE} should also be read with \code{native = TRUE}}.
   \item{h5plist}{An object of class \code{\link{H5IdComponent}} representing a H5 property list identifier. See \code{\link{H5Pcreate}} or \code{\link{H5Pcopy}} to create an object of this kind.}
   \item{h5plistclass, h5plistclass1, h5plistclass2}{An object of class \code{\link{H5IdComponent}} representing a H5 property list class identifier. See \code{\link{H5Pget_class}} to create an object of this kind.}
   \item{libver_low}{A character value representing the lower bound on the library version for reading or writing the HDF5 file. See \code{h5const("H5F_LIBVER")} for possible arguments. Default is "H5F_LIBVER_18"}

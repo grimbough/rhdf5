@@ -1,5 +1,5 @@
 
-h5lsConvertToDataframe <- function(L, all=FALSE) {
+h5lsConvertToDataframe <- function(L, all=FALSE, native) {
   if (is.data.frame(L)) {
     L$ltype <- h5const2Factor("H5L_TYPE", L$ltype)
     L$otype <- h5const2Factor("H5I_TYPE", L$otype)
@@ -17,15 +17,15 @@ h5lsConvertToDataframe <- function(L, all=FALSE) {
     }
   } else {
     for (i in seq_len(length(L))) {
-      L[i] <- list(h5lsConvertToDataframe(L[[i]],all=all))
+      L[i] <- list(h5lsConvertToDataframe(L[[i]],all=all, native = native))
     }
   }
   L
 }
 
-h5ls <- function( file, recursive = TRUE, all=FALSE, datasetinfo=TRUE, index_type = h5default("H5_INDEX"), order = h5default("H5_ITER")) {
+h5ls <- function( file, recursive = TRUE, all=FALSE, datasetinfo=TRUE, index_type = h5default("H5_INDEX"), order = h5default("H5_ITER"), native = FALSE) {
     
-    loc = h5checktypeOrOpenLoc(file, readonly=TRUE)
+    loc = h5checktypeOrOpenLoc(file, readonly=TRUE, native = native)
     on.exit(h5closeitLoc(loc))
     
     if (length(datasetinfo)!=1 || !is.logical(datasetinfo)) stop("'datasetinfo' must be a logical of length 1")
@@ -48,9 +48,8 @@ h5ls <- function( file, recursive = TRUE, all=FALSE, datasetinfo=TRUE, index_typ
         stop("'recursive' must be number or a logical")
     }
     di <- ifelse(datasetinfo, 1L, 0L)
-    L <- .Call("_h5ls", loc$H5Identifier@ID, depth, di, index_type, order, PACKAGE='rhdf5')
-    L <- h5lsConvertToDataframe(L, all=all)
-    L
+    L <- .Call("_h5ls", loc$H5Identifier@ID, depth, di, index_type, order, loc$H5Identifier@native, PACKAGE='rhdf5')
+    h5lsConvertToDataframe(L, all=all, native = loc$H5Identifier@native)
 }
 
 

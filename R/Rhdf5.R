@@ -6,11 +6,11 @@ h5listIdentifier <- function() {
   res
 }
 
-h5validObjects <- function() {
+h5validObjects <- function(native = FALSE) {
   ids <- .Call("_h5validObjects", PACKAGE='rhdf5')
   res <- list()
   for (i in seq_len(length(ids))) {
-    res[[i]] <- new("H5IdComponent", ID = ids[i])
+    res[[i]] <- new("H5IdComponent", ID = ids[i], native = native)
   }
   res
 }

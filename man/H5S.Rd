@@ -16,15 +16,16 @@
 These functions create and manipulate the dataspace in which to store the elements of a dataset.
 }
 \usage{
-H5Screate                 (type = h5default("H5S"))
-H5Screate_simple          (dims, maxdims )
+H5Screate                 (type = h5default("H5S"), native = FALSE)
+H5Screate_simple          (dims, maxdims, native = FALSE)
 H5Scopy                   (h5space)
 H5Sclose                  (h5space)
 H5Sis_simple              (h5space)
 H5Sget_simple_extent_dims (h5space)
 H5Sset_extent_simple      (h5space, dims, maxdims)
 H5Sselect_hyperslab       (h5space, op = h5default("H5S_SELECT"), 
-			     start = NULL, stride = NULL, count = NULL, block = NULL)
+                           start = NULL, stride = NULL, count = NULL,
+                           block = NULL)
 H5Sselect_index           (h5space, index)
 H5Sunlimited              ()
 }
@@ -33,6 +34,7 @@ H5Sunlimited              ()
   \item{type}{See \code{h5const("H5S")} for possible types.}
   \item{dims}{Dimension of the dataspace. This argument is similar to the dim attribute of an array. When viewing the HDF5 dataset with an C-program (e.g. HDFView), the dimensions appear in inverted order, because the fastest changing dimension in R is the first one, and in C its the last one.}
   \item{maxdims}{Maximum extension of the dimension of the dataset in the file. If not provided, it is set to dims.}
+  \item{native}{An object of class \code{logical}. If TRUE, array-like objects are treated as stored in HDF5 row-major rather than R column-major orientation. Using \code{native = TRUE} increases HDF5 file portability between programming languages. A file written with \code{native = TRUE} should also be read with \code{native = TRUE}}.
   \item{h5space}{An object of class \code{\link{H5IdComponent}} representing a H5 dataspace identifier. See \code{\link{H5Dget_space}}, \code{\link{H5Screate_simple}}, \code{\link{H5Screate}} to create an object of this kind.}
   \item{index}{A list of integer indices. The length of the list corresponds to the number of dimensions of the HDF5 array.}
   \item{op}{See h5const("H5S_SELECT") for possible arguments.}

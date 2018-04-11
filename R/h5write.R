@@ -77,8 +77,8 @@ h5write <- function(obj, file, name, ...) {
   invisible(res)
 }
 
-h5write.default <- function(obj, file, name, createnewfile=TRUE, write.attributes = FALSE, ...) {
-  loc = h5checktypeOrOpenLoc(file, createnewfile = createnewfile)
+h5write.default <- function(obj, file, name, createnewfile=TRUE, write.attributes = FALSE, ..., native = FALSE) {
+  loc = h5checktypeOrOpenLoc(file, createnewfile = createnewfile, native = native)
   on.exit(h5closeitLoc(loc))
   
   res <- h5writeDataset(obj, loc$H5Identifier, name, ...)
@@ -203,7 +203,9 @@ h5writeDataset.array <- function(obj, h5loc, name, index = NULL, start=NULL, str
           size = 1
         }
       }
-      try( { h5createDataset(h5loc, name, dim(obj), storage.mode = storage.mode(obj), size = size, chunk=dim(obj), level=level) } )
+      dim <- dim(obj)
+      if (h5loc@native) dim <- rev(dim)
+      try( { h5createDataset(h5loc, name, dim, storage.mode = storage.mode(obj), size = size, chunk=dim, level=level) } )
     }
   }
   try ( { h5dataset <- H5Dopen(h5loc, name) } )

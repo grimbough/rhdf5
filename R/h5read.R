@@ -22,7 +22,7 @@ h5readDataset <- function (h5dataset, index = NULL, start = NULL, stride = NULL,
         try({
             size = H5Sselect_index(h5spaceFile, index)
         })
-        h5spaceMem = H5Screate_simple(size)
+        h5spaceMem = H5Screate_simple(size, native = h5dataset@native)
         on.exit(H5Sclose(h5spaceMem), add = TRUE)
     }
     else {
@@ -34,7 +34,7 @@ h5readDataset <- function (h5dataset, index = NULL, start = NULL, stride = NULL,
                                            start = start, stride = stride, count = count, 
                                            block = block)
             })
-            h5spaceMem = H5Screate_simple(size)
+            h5spaceMem = H5Screate_simple(size, native = h5dataset@native)
             on.exit(H5Sclose(h5spaceMem), add = TRUE)
         }
     }
@@ -71,9 +71,9 @@ h5readDataset <- function (h5dataset, index = NULL, start = NULL, stride = NULL,
     obj
 }
 
-h5read <- function(file, name, index=NULL, start=NULL, stride=NULL, block=NULL, count=NULL, compoundAsDataFrame = TRUE, callGeneric = TRUE, read.attributes=FALSE, drop = FALSE, ... ) {
+h5read <- function(file, name, index=NULL, start=NULL, stride=NULL, block=NULL, count=NULL, compoundAsDataFrame = TRUE, callGeneric = TRUE, read.attributes=FALSE, drop = FALSE, ..., native = FALSE) {
     
-    loc = h5checktypeOrOpenLoc(file, readonly=TRUE)
+    loc = h5checktypeOrOpenLoc(file, readonly=TRUE, native = native)
     on.exit( h5closeitLoc(loc) )
     
     if (!H5Lexists(loc$H5Identifier, name)) {

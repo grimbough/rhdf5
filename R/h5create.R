@@ -21,7 +21,7 @@ h5createFile <- function(file) {
 }
 
 h5createGroup <- function(file, group) {
-    loc = h5checktypeOrOpenLoc(file)
+    loc = h5checktypeOrOpenLoc(file, native = FALSE)
     on.exit(h5closeitLoc(loc))
     
     res <- FALSE
@@ -40,11 +40,14 @@ h5createGroup <- function(file, group) {
     res
 }
 
-h5createDataset <- function(file, dataset, dims, maxdims = dims, storage.mode = "double", H5type = NULL, size=NULL, chunk=dims, level=6, fillValue, showWarnings = TRUE) {
+h5createDataset <- function(file, dataset, dims, maxdims = dims, storage.mode = "double", H5type = NULL, size=NULL, chunk=dims, level=6, fillValue, showWarnings = TRUE, native = FALSE) {
     
-    loc = h5checktypeOrOpenLoc(file)
+    loc = h5checktypeOrOpenLoc(file, native = native)
     on.exit( h5closeitLoc(loc) )
-    
+
+    dims <- as.numeric(dims)
+    maxdims <- as.numeric(maxdims)
+
     res <- FALSE
     if (is.character(dataset)) {
         if (H5Lexists(loc$H5Identifier,dataset)) {
@@ -140,9 +143,9 @@ h5createDataset <- function(file, dataset, dims, maxdims = dims, storage.mode = 
     res
 }
 
-h5createAttribute <- function(obj, attr, dims, maxdims = dims, file, storage.mode = "double", H5type = NULL, size=NULL) {
+h5createAttribute <- function(obj, attr, dims, maxdims = dims, file, storage.mode = "double", H5type = NULL, size=NULL, native = FALSE) {
     
-    obj = h5checktypeOrOpenObj(obj, file)
+    obj = h5checktypeOrOpenObj(obj, file, native = native)
     on.exit(h5closeitObj(obj))
     
     res <- FALSE

@@ -1,5 +1,5 @@
 
-H5Fcreate <- function( name, flags = h5default("H5F_ACC"), fcpl = NULL, fapl = NULL) {
+H5Fcreate <- function( name, flags = h5default("H5F_ACC"), fcpl = NULL, fapl = NULL, native = FALSE) {
 
     if (length(name)!=1 || !is.character(name)) 
         stop("'name' must be a character string of length 1")
@@ -15,7 +15,7 @@ H5Fcreate <- function( name, flags = h5default("H5F_ACC"), fcpl = NULL, fapl = N
     fapl = h5checktypeAndPLC(fapl, "H5P_FILE_ACCESS", allowNULL = TRUE)
     fid <- .Call("_H5Fcreate", name, flags, fcpl@ID, fapl@ID, PACKAGE='rhdf5')
     if (fid > 0) {
-        h5file = new("H5IdComponent", ID = fid)
+        h5file = new("H5IdComponent", ID = fid, native = native)
     } else {
         message("HDF5: unable to create file")
         h5file = FALSE
@@ -23,13 +23,13 @@ H5Fcreate <- function( name, flags = h5default("H5F_ACC"), fcpl = NULL, fapl = N
     invisible(h5file)
 }
 
-H5Fopen <- function( name, flags = h5default("H5F_ACC_RD") ) {
+H5Fopen <- function( name, flags = h5default("H5F_ACC_RD"), native = FALSE ) {
   if (length(name)!=1 || !is.character(name)) stop("'name' must be a character string of length 1")
   name = normalizePath(name,mustWork = FALSE)
   flags <- h5checkConstants( "H5F_ACC_RD", flags )
   fid <- .Call("_H5Fopen", name, flags, PACKAGE='rhdf5')
   if (fid > 0) {
-    h5file = new("H5IdComponent", ID = fid)
+    h5file = new("H5IdComponent", ID = fid, native = native)
   } else {
     message("HDF5: unable to open file")
     h5file = FALSE
@@ -85,7 +85,7 @@ H5Fget_create_plist <- function( h5file ) {
   h5checktype(h5file, "file")
   pid <- .Call("_H5Fget_create_plist", h5file@ID, PACKAGE='rhdf5')
   if (pid > 0) {
-    h5plist = new("H5IdComponent", ID = pid)
+    h5plist = new("H5IdComponent", ID = pid, native = h5file@native)
   } else {
     message("HDF5: unable to create property list")
     h5plist = FALSE
@@ -98,7 +98,7 @@ H5Fget_access_plist <- function( h5file ) {
   h5checktype(h5file, "file")
   pid <- .Call("_H5Fget_access_plist", h5file@ID, PACKAGE='rhdf5')
   if (pid > 0) {
-    h5plist = new("H5IdComponent", ID = pid)
+    h5plist = new("H5IdComponent", ID = pid, native = h5file@native)
   } else {
     message("HDF5: unable to create property list")
     h5plist = FALSE
