@@ -8,6 +8,11 @@
       This updates the version of HDF5 to 1.8.19.
       \item Functions H5Ldelete() and h5delete() added to provide mechanisms
       for removing items from HDF files.
+      \item Added argument `native` to many functions, which allows data to be
+      treated as row-major rather than column-major, improving portability with
+      other programming languages.
+      \item Added function H5Sunlimited() allowing creation of extensible 
+      datasets - thanks to Brad Friedman 
     }
   }
   
