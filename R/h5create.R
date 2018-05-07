@@ -60,7 +60,7 @@ h5createDataset <- function(file, dataset, dims, maxdims = dims, storage.mode = 
                 if (any(maxdims != dims) & is.null(chunk)) {
                     stop('If "maxdims" is different from "dims", chunking is required.')
                 }
-                if (any(maxdims != h5constants$H5S["H5S_UNLIMITED"] & maxdims < dims)) {
+                if (any(maxdims != H5Sunlimited() & maxdims < dims)) {
                     stop('All non-extensible elements of "maxdims" have to be equal or larger than "dims".')
                 }
                 if (any(dims < 0)) {
@@ -73,7 +73,7 @@ h5createDataset <- function(file, dataset, dims, maxdims = dims, storage.mode = 
                     chunk[which(chunk == 0)] = 1
                 }
                 dcpl = NULL
-                if ((level > 0) & (length(chunk) > 0)) {
+                if (length(chunk) > 0) {
                     if (showWarnings & (prod(dims) > 1000000L) & (all(dims == chunk))) {
                         warning("You created a large dataset with compression and chunking. The chunk size is equal to the dataset dimensions. If you want to read subsets of the dataset, you should test smaller chunk sizes to improve read times. Turn off this warning with showWarnings=FALSE.")
                     }
