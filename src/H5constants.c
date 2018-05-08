@@ -67,7 +67,7 @@ SEXP _H5constants( ) {
   const char *name_H5S_SELECT[] = { "H5S_SELECT_SET", "H5S_SELECT_OR", "H5S_SELECT_AND", "H5S_SELECT_XOR", "H5S_SELECT_NOTB", "H5S_SELECT_NOTA"};
   addVector(i++, Rval, groupnames, "H5S_SELECT", 6, const_H5S_SELECT, name_H5S_SELECT);
 
-  int const_H5T[80]       = {  H5T_IEEE_F32BE,   H5T_IEEE_F32LE,   H5T_IEEE_F64BE,   H5T_IEEE_F64LE,   
+  int const_H5T[79]       = {  H5T_IEEE_F32BE,   H5T_IEEE_F32LE,   H5T_IEEE_F64BE,   H5T_IEEE_F64LE,   
 			       H5T_STD_I8BE,    H5T_STD_I8LE,    H5T_STD_I16BE,   H5T_STD_I16LE,   
 			       H5T_STD_I32BE,   H5T_STD_I32LE,   H5T_STD_I64BE,   H5T_STD_I64LE,   
 			       H5T_STD_U8BE,    H5T_STD_U8LE,    H5T_STD_U16BE,   H5T_STD_U16LE,   
