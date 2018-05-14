@@ -20,7 +20,7 @@ h5createDataset (file, dataset,
   \item{maxdims}{The maximum extension of the array. Use \code{H5Sunlimited()} to indicate an extensible dimension.}
   \item{storage.mode}{The storage mode of the data to be written. Can be obtained by \code{storage.mode(mydata)}.}
   \item{H5type}{Advanced programmers can specify the datatype of the dataset within the file. See \code{h5const("H5T")} for a list of available datatypes. If \code{H5type} is specified the argument \code{storage.mode} is ignored. It is recommended to use \code{storage.mode}}
-  \item{size}{For \code{storage.mode='character'} the maximum string length has to be specified. HDF5 then stores the string as fixed length character vectors. Together with compression, this should be efficient.}
+  \item{size}{For \code{storage.mode='character'} the maximum string length has to be specified. Note that HDF5 automatically adds a null terminator to strings, thus the value provided here should be the length of the longest string plus one.  HDF5 then stores the string as fixed length character vectors. Together with compression, this should be efficient.}
   \item{chunk}{The chunk size used to store the dataset. It is an integer vector of the same length as \code{dims}. This argument is usually set together with a compression property (argument \code{level}). }
   \item{level}{The compression level used. An integer value between 0 (no compression) and 9 (highest and slowest compression).}
   \item{fillValue}{Standard value for filling the dataset. The storage.mode of value has to be convertable to the dataset type by HDF5.}
@@ -46,10 +46,19 @@ h5createDataset("ex_createDataset.h5", "A", c(5,8), storage.mode = "integer", ch
 h5createDataset("ex_createDataset.h5", "B", c(5,8), storage.mode = "integer")
 h5createDataset("ex_createDataset.h5", "C", c(5,8), storage.mode = "double")
 
+# create a dataset of strings & define size to include null terminator
+ex_strings <- c('long', 'longer', 'longest')
+h5createDataset("ex_createDataset.h5", "D",  
+    storage.mode = "character", chunk = 3, level = 6,
+    dims = length(ex_strings), size = max(nchar(ex_strings)) + 1)
+
+
 # write data to dataset
 h5write(matrix(1:40,nr=5,nc=8), file="ex_createDataset.h5", name="A")
 # write second column
 h5write(matrix(1:5,nr=5,nc=1), file="ex_createDataset.h5", name="B", index=list(NULL,2))
+# write character vector
+h5write(ex_strings, file = "ex_createDataset.h5", name = "D")
 
 h5dump("ex_createDataset.h5")
 }
