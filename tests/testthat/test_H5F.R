@@ -31,10 +31,11 @@ test_that("Non-ASCII filename", {
 
     tmp_dir <- file.path(tempdir(), "éxample")
     dir.create(tmp_dir)
-    ## this gives a UTF-8 encoded file path
+    ## this gives a UTF-8 encoded file path on windows
     h5File <- normalizePath(tempfile(pattern = "H5F", fileext = ".h5", tmpdir = tmp_dir), 
                             mustWork = FALSE)
-    expect_true(grepl(x = Encoding(h5File), pattern = "UTF-?8"))
+    if(.Platform$OS.type == "windows")
+        expect_true(grepl(x = Encoding(h5File), pattern = "UTF-?8"))
     
     fid <- H5Fcreate(h5File)
     expect_true(file.exists(h5File))
