@@ -27,6 +27,25 @@ test_that("Default arguments", {
 #    H5Fclose(fid)
 #})
 
+test_that("Non-ASCII filename", {
+
+    tmp_dir <- file.path(tempdir(), "éxample")
+    dir.create(tmp_dir)
+    ## this gives a UTF-8 encoded file path on windows
+    h5File <- normalizePath(tempfile(pattern = "H5F", fileext = ".h5", tmpdir = tmp_dir), 
+                            mustWork = FALSE)
+    if(.Platform$OS.type == "windows")
+        expect_true(grepl(x = Encoding(h5File), pattern = "UTF-?8"))
+    
+    fid <- H5Fcreate(h5File)
+    expect_true(file.exists(h5File))
+    
+    if(file.exists(h5File)) {
+        H5Fclose(fid)
+        file.remove(h5File)
+    }
+})
+
 ############################################################
 context("H5Fis_hdf5")
 ############################################################

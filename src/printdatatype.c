@@ -187,7 +187,7 @@ getDatatypeName(hid_t type) {
       break;
 
     case H5T_STRING:
-      name = "HST_STRING";
+      name = "H5T_STRING";
       /* TODO: print string format correctly to name */
 /*                 /\* Make a copy of type in memory in case when TYPE is on disk, the size */
 /*                  * will be bigger than in memory.  This makes it easier to compare */
@@ -294,7 +294,7 @@ getDatatypeName(hid_t type) {
       break;
 
     case H5T_BITFIELD:
-      name = "HST_BITFIELD";
+      name = "H5T_BITFIELD";
       /* TODO: print BITFIELD format correctly to name */
 
 /*                 if (H5Tequal(type, H5T_STD_B8BE)==TRUE) { */
@@ -320,7 +320,7 @@ getDatatypeName(hid_t type) {
       break;
 
     case H5T_OPAQUE:
-      name = "HST_OPAQUE";
+      name = "H5T_OPAQUE";
       /* TODO: print OPAQUE format correctly to name */
       
 /*                 printf("\n"); */
@@ -332,7 +332,7 @@ getDatatypeName(hid_t type) {
       break;
 
     case H5T_COMPOUND:
-      name = "HST_COMPOUND";
+      name = "H5T_COMPOUND";
       /* TODO: print COMPOUND format correctly to name */
 /*                 nmembers = H5Tget_nmembers(type); */
 /*                 printf("H5T_COMPOUND %s\n", dump_header_format->structblockbegin); */
@@ -359,7 +359,7 @@ getDatatypeName(hid_t type) {
       break;
 
     case H5T_REFERENCE:
-      name = "HST_REFERENCE";
+      name = "H5T_REFERENCE";
       /* TODO: print REFERENCE format correctly to name */
 /*                 printf("H5T_REFERENCE"); */
 /*                 /\* The BNF document states that the type of reference should be */
@@ -377,7 +377,7 @@ getDatatypeName(hid_t type) {
       break;
 
     case H5T_ENUM:
-      name = "HST_ENUM";
+      name = "H5T_ENUM";
       /* TODO: print ENUM format correctly to name */
 /*                 printf("H5T_ENUM %s\n", dump_header_format->enumblockbegin); */
 /*                 indent += COL; */
@@ -392,7 +392,7 @@ getDatatypeName(hid_t type) {
       break;
 
     case H5T_VLEN:
-      name = "HST_VLEN";
+      name = "H5T_VLEN";
       /* TODO: print format correctly to name */
 /*                 printf("H5T_VLEN %s ", dump_header_format->vlenblockbegin); */
 /*                 super = H5Tget_super(type); */
@@ -404,7 +404,7 @@ getDatatypeName(hid_t type) {
       break;
 
     case H5T_ARRAY:
-      name = "HST_ARRAY";
+      name = "H5T_ARRAY";
       /* TODO: print format correctly to name */
 /*                 /\* Get array base type *\/ */
 /*                 super = H5Tget_super(type); */
