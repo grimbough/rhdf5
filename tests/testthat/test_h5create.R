@@ -143,6 +143,18 @@ test_that("Extendible datasets", {
                  cbind(rbind(mtx4x3, mtx3x3),
                        mtx7x2))
 
+    ## This case, level = 0, used to lead to an error because the chunking, which is required for
+    ## H5Sunlimited, was within a if(level > 0) branch. Mostly we are just checking here that
+    ## no error is thrown, but we'll also do the first extension
+    h5createDataset(file = h5File, dataset = "nonCompressed", dim = c(4,3), maxdims = c(extendible, extendible),
+                    level = 0)
+    h5write( mtx4x3, file = h5File, name = "nonCompressed")
+    h5set_extent(h5File, "nonCompressed", c(7,3))
+    h5write(mtx3x3, file = h5File, name = "nonCompressed",
+            start = c(5,1))
+    expect_equal(h5read(h5File, "nonCompressed"),
+                 rbind(mtx4x3, mtx3x3))
+
 })
 
 ############################################################
