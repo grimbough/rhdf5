@@ -18,7 +18,7 @@ H5Pclose             (h5plist)
 H5Pclose_class       (h5plistclass)
 H5Pequal             (h5plistclass1, h5plistclass2)
 H5Pset_libver_bounds (h5plist, 
-                      libver_low = "H5F_LIBVER_18", 
+                      libver_low = "H5F_LIBVER_EARLIEST", 
                       libver_high = "H5F_LIBVER_LATEST")
 H5Pget_libver_bounds (h5plist)
 }
@@ -27,7 +27,7 @@ H5Pget_libver_bounds (h5plist)
   \item{native}{An object of class \code{logical}. If TRUE, array-like objects are treated as stored in HDF5 row-major rather than R column-major orientation. Using \code{native = TRUE} increases HDF5 file portability between programming languages. A file written with \code{native = TRUE} should also be read with \code{native = TRUE}}.
   \item{h5plist}{An object of class \code{\link{H5IdComponent}} representing a H5 property list identifier. See \code{\link{H5Pcreate}} or \code{\link{H5Pcopy}} to create an object of this kind.}
   \item{h5plistclass, h5plistclass1, h5plistclass2}{An object of class \code{\link{H5IdComponent}} representing a H5 property list class identifier. See \code{\link{H5Pget_class}} to create an object of this kind.}
-  \item{libver_low}{A character value representing the lower bound on the library version for reading or writing the HDF5 file. See \code{h5const("H5F_LIBVER")} for possible arguments. Default is "H5F_LIBVER_18"}
+  \item{libver_low}{A character value representing the lower bound on the library version for reading or writing the HDF5 file. See \code{h5const("H5F_LIBVER")} for possible arguments. Default is "H5F_LIBVER_EARLIEST"}
   \item{libver_high}{A character value representing the higher bound on the library version for reading or writing the HDF5 file. See \code{h5const("H5F_LIBVER")} for possible arguments. Default is "H5F_LIBVER_LATEST"}
 }
 \details{

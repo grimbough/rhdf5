@@ -22,3 +22,4 @@ Depends: methods
 Suggests: bit64, BiocStyle, knitr, rmarkdown, testthat
 LinkingTo: Rhdf5lib
 biocViews: Infrastructure, DataImport
+Encoding: UTF-8

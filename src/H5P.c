@@ -688,7 +688,7 @@ SEXP _H5Pset_libver_bounds( SEXP _fapl_id, SEXP _libver_low, SEXP _libver_high )
   H5F_libver_t libver_low = INTEGER(_libver_low)[0];
   H5F_libver_t libver_high = INTEGER(_libver_high)[0];
   /* herr_t herr = H5Pset_libver_bounds(fapl_id, libver_low, libver_high); */
-  herr_t herr = H5Pset_libver_bounds(fapl_id, H5F_LIBVER_18, H5F_LIBVER_LATEST);
+  herr_t herr = H5Pset_libver_bounds(fapl_id, H5F_LIBVER_EARLIEST, H5F_LIBVER_LATEST);
   SEXP Rval = ScalarInteger(herr);
   return Rval;
 }

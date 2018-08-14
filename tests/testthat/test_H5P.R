@@ -30,7 +30,7 @@ test_that("setting and getting libhdf5 version bounds", {
     expect_equivalent(version_bounds, 
                       as.factor(c("H5F_LIBVER_EARLIEST","H5F_LIBVER_18")))
     
-    expect_silent( H5Pset_libver_bounds(pid1, libver_low = "H5F_LIBVER_18", libver_high = "H5F_LIBVER_LATEST") )
+    expect_silent( H5Pset_libver_bounds(pid1, libver_low = "H5F_LIBVER_EARLIEST", libver_high = "H5F_LIBVER_LATEST") )
     expect_output( version_bounds <- H5Pget_libver_bounds(pid1), 
                    regexp = "^low" )
     expect_equivalent(version_bounds, 
