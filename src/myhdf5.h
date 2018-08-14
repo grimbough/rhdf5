@@ -8,3 +8,6 @@
 #endif
 
 #endif
+
+
+#define STRSEXP_2_HID(x) (atoll(CHAR(asChar(x))));

@@ -6,13 +6,15 @@
 
 /* hid_t H5Pcreate( hid_t cls_id ) */
 SEXP _H5Pcreate( SEXP _cls_id ) {
-  hid_t cls_id =  INTEGER(_cls_id)[0];
+  hid_t cls_id =  atoll(CHAR(asChar(_cls_id)));
   hid_t hid = H5Pcreate( cls_id );
   addHandle(hid);
+  
+  char hid_str[21];
+  sprintf(hid_str, "%lld", hid);
 
   SEXP Rval;
-  PROTECT(Rval = allocVector(INTSXP, 1));
-  INTEGER(Rval)[0] = hid;
+  PROTECT(Rval = mkString(hid_str));
   UNPROTECT(1);
   return Rval;
 }
