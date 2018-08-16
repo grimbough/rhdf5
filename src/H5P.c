@@ -48,9 +48,7 @@ SEXP _H5Pclose( SEXP _plist ) {
         removeHandle(plist);
     }
     
-    SEXP Rval;
-    PROTECT(Rval = HID_2_STRSXP(herr));
-    UNPROTECT(1);
+    SEXP Rval = ScalarInteger(herr);
     return Rval;
 }
 
