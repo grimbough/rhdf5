@@ -1,12 +1,11 @@
 #include "H5G.h"
 
 void addVector( int pos, SEXP Rval, SEXP groupnames, const char *groupname, int N, long long int* cc, const char *names[] ) {
-  char tmpString[21];
+  
   SEXP Rconstants;
   PROTECT(Rconstants=allocVector(STRSXP,N));
   for (int i=0; i<N; i++) {
-      sprintf(tmpString, "%lld", cc[i]);
-      SET_STRING_ELT(Rconstants, i, mkChar(tmpString));
+      SET_STRING_ELT(Rconstants, i, HID_2_CHARSXP(cc[i]));
   }
 
   SEXP Rnames = PROTECT(allocVector(STRSXP, N));

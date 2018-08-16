@@ -95,7 +95,7 @@ SEXP  handleInfoName( hid_t ID) {
 }
 
 SEXP _handleInfo ( SEXP _ID ) {
-  hid_t ID = STRSEXP_2_HID(_ID);
+  hid_t ID = STRSXP_2_HID(_ID);
   int isvalid = H5Iis_valid(ID);
 
   SEXP Rval = PROTECT(allocVector(VECSXP, 3));
