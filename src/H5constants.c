@@ -27,8 +27,6 @@ SEXP _H5constants( ) {
   PROTECT(Rval = allocVector(VECSXP, 18));
   SEXP groupnames = PROTECT(allocVector(STRSXP, 18));
   int i=0;
-  
-  Rprintf("Testing: %d, %ld, %lld", H5P_OBJECT_CREATE, H5P_OBJECT_CREATE, H5P_OBJECT_CREATE);
 
   long long int const_H5F_ACC[2]       = {  H5F_ACC_TRUNC,   H5F_ACC_EXCL };
   const char *name_H5F_ACC[] = { "H5F_ACC_TRUNC", "H5F_ACC_EXCL"};

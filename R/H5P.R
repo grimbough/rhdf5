@@ -606,7 +606,8 @@ H5Pset_libver_bounds <- function( h5plist, libver_low = "H5F_LIBVER_EARLIEST", l
   h5checktype(h5plist, "plist")
   libver_low <- h5checkConstants( "H5F_LIBVER", libver_low )
   libver_high <- h5checkConstants( "H5F_LIBVER", libver_high )
-  res <- .Call("_H5Pset_libver_bounds", h5plist@ID, libver_low, libver_high, PACKAGE='rhdf5')
+  res <- .Call("_H5Pset_libver_bounds", h5plist@ID, 
+               as.integer(libver_low), as.integer(libver_high), PACKAGE='rhdf5')
   invisible(res)
 }
 

@@ -17,7 +17,7 @@ test_that("General library functions", {
 context("H5: closing everything")
 ############################################################
 
-h5File <- tempfile(pattern = "H5L_", fileext = ".h5")
+h5File <- tempfile(pattern = "H5_", fileext = ".h5")
 if(file.exists(h5File))
     file.remove(h5File)
 
