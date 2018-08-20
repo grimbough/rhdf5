@@ -176,7 +176,8 @@ h5createAttribute <- function(obj, attr, dims, maxdims = dims, file, storage.mod
             } else {
                 tid <- h5checkConstants("H5T", H5type)
             }
-            if (!is.numeric(tid)) {
+            ##if (!is.numeric(tid)) {
+            if(!grepl(pattern = "^[[:digit:]]+$", tid)) {
                 message("Can not create attribute. H5type unknown. Check h5const('H5T') for valid types.")
             } else {
                 if (H5Aexists(obj$H5Identifier,attr)) {
