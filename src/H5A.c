@@ -7,54 +7,63 @@
 
 /* hid_t H5Acreate( hid_t loc_id, const char *attr_name, hid_t type_id, hid_t space_id, hid_t acpl_id, hid_t aapl_id ) */
 SEXP _H5Acreate( SEXP _obj_id, SEXP _attr_name, SEXP _type_id, SEXP _space_id ) {
-  hid_t obj_id = INTEGER(_obj_id)[0];
+  //hid_t obj_id = INTEGER(_obj_id)[0];
+  hid_t obj_id = STRSXP_2_HID( _obj_id );
   const char *attr_name = CHAR(STRING_ELT(_attr_name, 0));
-  hid_t type_id = INTEGER(_type_id)[0];
-  hid_t space_id =  INTEGER(_space_id)[0];
+  //hid_t type_id = INTEGER(_type_id)[0];
+  //hid_t space_id =  INTEGER(_space_id)[0];
+  hid_t type_id = STRSXP_2_HID( _type_id );
+  hid_t space_id = STRSXP_2_HID( _space_id );
 
   hid_t hid = H5Acreate( obj_id, attr_name, type_id, space_id, 
 			 H5P_DEFAULT, H5P_DEFAULT );
   addHandle(hid);
 
   SEXP Rval;
-  PROTECT(Rval = allocVector(INTSXP, 1));
-  INTEGER(Rval)[0] = hid;
+  //PROTECT(Rval = allocVector(INTSXP, 1));
+  //INTEGER(Rval)[0] = hid;
+  PROTECT(Rval = HID_2_STRSXP(hid));
   UNPROTECT(1);
   return Rval;
 }
 
 /* hid_t H5Aopen( hid_t obj_id, const char *attr_name, hid_t aapl_id ) */
 SEXP _H5Aopen( SEXP _obj_id, SEXP _attr_name ) {
-  hid_t obj_id = INTEGER(_obj_id)[0];
+  //hid_t obj_id = INTEGER(_obj_id)[0];
+  hid_t obj_id = STRSXP_2_HID( _obj_id );
   const char *attr_name = CHAR(STRING_ELT(_attr_name, 0));
   hid_t hid = H5Aopen( obj_id, attr_name, H5P_DEFAULT );
   addHandle( hid );
 
   SEXP Rval;
-  PROTECT(Rval = allocVector(INTSXP, 1));
-  INTEGER(Rval)[0] = hid;
+  //PROTECT(Rval = allocVector(INTSXP, 1));
+  //INTEGER(Rval)[0] = hid;
+  PROTECT(Rval = HID_2_STRSXP(hid));
   UNPROTECT(1);
   return Rval;
 }
 
 /* hid_t H5Aopen_by_name( hid_t loc_id, const char *obj_name, const char *attr_name, hid_t aapl_id, hid_t lapl_id ) */
 SEXP _H5Aopen_by_name( SEXP _obj_id, SEXP _obj_name, SEXP _attr_name ) {
-  hid_t obj_id = INTEGER(_obj_id)[0];
+  //hid_t obj_id = INTEGER(_obj_id)[0];
+  hid_t obj_id = STRSXP_2_HID( _obj_id );
   const char *obj_name = CHAR(STRING_ELT(_obj_name, 0));
   const char *attr_name = CHAR(STRING_ELT(_attr_name, 0));
   hid_t hid = H5Aopen_by_name( obj_id, obj_name, attr_name, H5P_DEFAULT, H5P_DEFAULT );
   addHandle( hid );
 
   SEXP Rval;
-  PROTECT(Rval = allocVector(INTSXP, 1));
-  INTEGER(Rval)[0] = hid;
+  //PROTECT(Rval = allocVector(INTSXP, 1));
+  //INTEGER(Rval)[0] = hid;
+  PROTECT(Rval = HID_2_STRSXP(hid));
   UNPROTECT(1);
   return Rval;
 }
 
 /* hid_t H5Aopen_by_idx( hid_t loc_id, const char *obj_name, H5_index_t idx_type, H5_iter_order_t order, hsize_t n, hid_t aapl_id, hid_t lapl_id ) */
 SEXP _H5Aopen_by_idx( SEXP _obj_id, SEXP _obj_name, SEXP _idx_type, SEXP _order, SEXP _n ) {
-  hid_t obj_id = INTEGER(_obj_id)[0];
+  //hid_t obj_id = INTEGER(_obj_id)[0];
+  hid_t obj_id = STRSXP_2_HID( _obj_id );
   const char *obj_name = CHAR(STRING_ELT(_obj_name, 0));
   H5_index_t idx_type = INTEGER(_idx_type)[0];
   H5_iter_order_t order = INTEGER(_order)[0];
@@ -63,15 +72,17 @@ SEXP _H5Aopen_by_idx( SEXP _obj_id, SEXP _obj_name, SEXP _idx_type, SEXP _order,
   addHandle( hid );
 
   SEXP Rval;
-  PROTECT(Rval = allocVector(INTSXP, 1));
-  INTEGER(Rval)[0] = hid;
+  //PROTECT(Rval = allocVector(INTSXP, 1));
+  //INTEGER(Rval)[0] = hid;
+  PROTECT(Rval = HID_2_STRSXP(hid));
   UNPROTECT(1);
   return Rval;
 }
 
 /* htri_t H5Aexists( hid_t obj_id, const char *attr_name ) */
 SEXP _H5Aexists( SEXP _obj_id, SEXP _attr_name ) {
-  hid_t obj_id = INTEGER(_obj_id)[0];
+  //hid_t obj_id = INTEGER(_obj_id)[0];
+  hid_t obj_id = STRSXP_2_HID( _obj_id );
   const char *attr_name = CHAR(STRING_ELT(_attr_name, 0));
   htri_t htri = H5Aexists( obj_id, attr_name );
   SEXP Rval = ScalarInteger(htri);
@@ -95,7 +106,8 @@ SEXP _H5Aclose( SEXP _attr_id ) {
 
 /* herr_t H5Adelete( hid_t loc_id, const char *attr_name ) */
 SEXP _H5Adelete( SEXP _obj_id, SEXP _attr_name ) {
-  hid_t obj_id = INTEGER(_obj_id)[0];
+  //hid_t obj_id = INTEGER(_obj_id)[0];
+  hid_t obj_id = STRSXP_2_HID( _obj_id );
   const char *attr_name = CHAR(STRING_ELT(_attr_name, 0));
   herr_t herr = H5Adelete( obj_id, attr_name );
   SEXP Rval = ScalarInteger(herr);
@@ -347,7 +359,8 @@ SEXP _H5Aread( SEXP _attr_id, SEXP _buf ) {
   /***********************************************************************/
   /* attr_id                                                          */
   /***********************************************************************/
-  hid_t attr_id = INTEGER(_attr_id)[0];
+  //hid_t attr_id = INTEGER(_attr_id)[0];
+  hid_t attr_id = STRSXP_2_HID( _attr_id );
   /***********************************************************************/
   /* file_space_id and get dimensionality of output file_space and buf   */
   /***********************************************************************/
@@ -399,7 +412,8 @@ SEXP _H5Aread( SEXP _attr_id, SEXP _buf ) {
 
 /* herr_t H5Awrite(hid_t attr_id, hid_t mem_type_id, const void *buf ) */
 SEXP _H5Awrite( SEXP _attr_id, SEXP _buf) {
-  hid_t attr_id = INTEGER(_attr_id)[0];
+  //hid_t attr_id = INTEGER(_attr_id)[0];
+  hid_t attr_id = STRSXP_2_HID( _attr_id );
   hid_t mem_type_id;
 
   const void * buf;
@@ -445,7 +459,8 @@ SEXP _H5Awrite( SEXP _attr_id, SEXP _buf) {
 
 /* ssize_t H5Aget_name(hid_t attr_id, size_t buf_size, char *buf ) */
 SEXP _H5Aget_name(SEXP _attr_id ) {
-  hid_t attr_id = INTEGER(_attr_id)[0];
+  //hid_t attr_id = INTEGER(_attr_id)[0];
+  hid_t attr_id = STRSXP_2_HID( _attr_id );
   ssize_t s = H5Aget_name(attr_id, 0, NULL );
   char buf[s+1];
   H5Aget_name(attr_id, s+1, buf );
@@ -457,18 +472,26 @@ SEXP _H5Aget_name(SEXP _attr_id ) {
 
 /* hid_t H5Aget_space(hid_t attr_id) */
 SEXP _H5Aget_space(SEXP _attr_id ) {
-  hid_t attr_id = INTEGER(_attr_id)[0];
+  //hid_t attr_id = INTEGER(_attr_id)[0];
+  hid_t attr_id = STRSXP_2_HID( _attr_id );
   hid_t sid = H5Aget_space( attr_id );
   addHandle(sid);
-  SEXP Rval = ScalarInteger( sid );
+  //SEXP Rval = ScalarInteger( sid );
+  SEXP Rval;
+  PROTECT(Rval = HID_2_STRSXP(sid));
+  UNPROTECT(1);
   return Rval;
 }
 
 /* hid_t H5Aget_type(hid_t attr_id) */
 SEXP _H5Aget_type( SEXP _attr_id ) {
-  hid_t attr_id = INTEGER(_attr_id)[0];
+  //hid_t attr_id = INTEGER(_attr_id)[0];
+  hid_t attr_id = STRSXP_2_HID( _attr_id );
   hid_t hid = H5Aget_type( attr_id );
-  SEXP Rval = ScalarInteger(hid);
+  //SEXP Rval = ScalarInteger(hid);
+  SEXP Rval;
+  PROTECT(Rval = HID_2_STRSXP(hid));
+  UNPROTECT(1);
   return Rval;
 }
 
