@@ -91,7 +91,8 @@ SEXP _H5Aexists( SEXP _obj_id, SEXP _attr_name ) {
 
 /* herr_t H5Aclose(hid_t attr_id) */
 SEXP _H5Aclose( SEXP _attr_id ) {
-  hid_t attr_id = INTEGER(_attr_id)[0];
+  //hid_t attr_id = INTEGER(_attr_id)[0];
+  hid_t attr_id = STRSXP_2_HID( _attr_id );
   herr_t herr = H5Aclose( attr_id );
   if (herr == 0) {
     removeHandle(attr_id);

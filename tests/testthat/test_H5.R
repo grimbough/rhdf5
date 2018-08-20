@@ -33,9 +33,10 @@ test_that("H5closeAll", {
     gid <- H5Gcreate( fid, name = "group" )
     ## property list
     ## attribute
+    aid <- H5Acreate(did, "volume", "H5T_NATIVE_INT8", sid)
     ## object
     
-    expect_equal( nrow(h5listIdentifier()), 4 )
+    expect_equal( nrow(h5listIdentifier()), 5 )
     
     expect_silent( h5closeAll() )
     
