@@ -23,3 +23,4 @@ Suggests: bit64, BiocStyle, knitr, rmarkdown, testthat
 LinkingTo: Rhdf5lib
 biocViews: Infrastructure, DataImport
 Encoding: UTF-8
+RoxygenNote: 6.1.0
