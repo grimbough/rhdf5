@@ -9,8 +9,6 @@ SEXP _H5Gcreate( SEXP _loc_id, SEXP _name ) {
   hid_t hid = H5Gcreate( loc_id, name, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT );
   addHandle(hid);
   
-  Rprintf("hid %lld\n", hid);
-
   SEXP Rval;
   PROTECT(Rval = HID_2_STRSXP(hid));
   UNPROTECT(1);
