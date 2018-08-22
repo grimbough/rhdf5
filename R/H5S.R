@@ -175,7 +175,7 @@ H5Sselect_index <- function( h5space, index ) {
 }
 
 H5Sunlimited <- function()  {
-  as.integer(h5checkConstants("H5S_UNLIMITED", "H5S_UNLIMITED"))
+  h5checkConstants("H5S", "H5S_UNLIMITED")
 }
 
 ## c(1,which(index[seq_len(length(index)-1)+1]-1 != index[seq_len(length(index)-1)]))

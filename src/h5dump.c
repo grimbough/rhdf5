@@ -313,8 +313,7 @@ SEXP
     }
 
 SEXP _h5dump( SEXP _loc_id, SEXP _depth, SEXP _index_type, SEXP _order ) {
-    //hid_t loc_id = INTEGER(_loc_id)[0];
-    hid_t loc_id = STRSXP_2_HID( _loc_id );
+    hid_t loc_id = INTEGER(_loc_id)[0];
     opLinfoTree data;
     data.n = 0;
     data.maxdepth = INTEGER(_depth)[0];

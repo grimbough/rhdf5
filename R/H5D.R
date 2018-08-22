@@ -2,8 +2,7 @@
 H5Dcreate <- function( h5loc, name, dtype_id, h5space, lcpl=NULL, dcpl=NULL, dapl=NULL ) {
   h5checktype(h5loc, "loc")
   if (length(name)!=1 || !is.character(name)) stop("'name' must be a character string of length 1")
-  ## dont check if we have an H5T identifier already    
-  if (!grepl(pattern = "^[[:digit:]]+$", dtype_id)) {
+  if (!is.integer(dtype_id)) {
     dtype_id<- h5checkConstants( "H5T", dtype_id)
   }
   h5checktype(h5space, "dataspace")
@@ -25,7 +24,7 @@ H5Dopen <- function( h5loc, name, dapl = NULL ) {
   if (length(name)!=1 || !is.character(name)) stop("'filename' must be a character string of length 1")
   dapl = h5checktypeAndPLC(dapl, "H5P_DATASET_ACCESS", allowNULL = TRUE)
   did <- .Call("_H5Dopen", h5loc@ID, name, dapl@ID, PACKAGE='rhdf5')
-  if (as.numeric(did) > 0) {
+  if (did > 0) {
     h5dataset = new("H5IdComponent", ID = did, native = h5loc@native)
   } else {
     message("HDF5: unable to open dataset")

@@ -120,7 +120,7 @@ h5createDataset <- function(file, dataset, dims, maxdims = dims, storage.mode = 
                     } else {
                         tid <- h5checkConstants("H5T", H5type)
                     }
-                    if (is.na(tid)) {
+                    if (!is.numeric(tid)) {
                         message("Can not create dataset. H5type unknown. Check h5const('H5T') for valid types.")
                     } else {
                         did <- H5Dcreate(loc$H5Identifier, dataset, tid, sid, dcpl = dcpl)
@@ -176,8 +176,7 @@ h5createAttribute <- function(obj, attr, dims, maxdims = dims, file, storage.mod
             } else {
                 tid <- h5checkConstants("H5T", H5type)
             }
-            ##if (!is.numeric(tid)) {
-            if(!grepl(pattern = "^[[:digit:]]+$", tid)) {
+            if (!is.numeric(tid)) {
                 message("Can not create attribute. H5type unknown. Check h5const('H5T') for valid types.")
             } else {
                 if (H5Aexists(obj$H5Identifier,attr)) {

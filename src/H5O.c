@@ -15,8 +15,7 @@ hsize_t H5Oget_num_attrs ( hid_t obj_id ) {
 }
 
 SEXP _H5Oget_num_attrs ( SEXP _obj_id ) {
-  //hid_t obj_id = INTEGER(_obj_id)[0];
-  hid_t obj_id = STRSXP_2_HID( _obj_id );
+  hid_t obj_id = INTEGER(_obj_id)[0];
   hsize_t n = H5Oget_num_attrs ( obj_id );
   SEXP Rval = ScalarInteger(n);
   return(Rval);
@@ -51,23 +50,20 @@ SEXP H5O_info_t2SEXP (H5O_info_t *object_info) {
 */
 
 SEXP _H5Oopen( SEXP _loc_id, SEXP _name) {
-  //hid_t loc_id = INTEGER(_loc_id)[0];
-  hid_t loc_id = STRSXP_2_HID( _loc_id );
+  hid_t loc_id = INTEGER(_loc_id)[0];
   const char *name = CHAR(STRING_ELT(_name, 0));
   hid_t hid = H5Oopen( loc_id, name, H5P_DEFAULT );
   addHandle(hid);
 
   SEXP Rval;
-  //PROTECT(Rval = allocVector(INTSXP, 1));
-  //INTEGER(Rval)[0] = hid;
-  PROTECT(Rval = HID_2_STRSXP(hid));
+  PROTECT(Rval = allocVector(INTSXP, 1));
+  INTEGER(Rval)[0] = hid;
   UNPROTECT(1);
   return Rval;
 }
 
 SEXP _H5Oclose( SEXP _object_id ) {
-  //hid_t object_id =  INTEGER(_object_id)[0];
-  hid_t object_id = STRSXP_2_HID( _object_id );
+  hid_t object_id =  INTEGER(_object_id)[0];
   herr_t herr = H5Oclose( object_id );
   if (herr == 0) {
     removeHandle(object_id);

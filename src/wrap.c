@@ -299,14 +299,4 @@ void R_init_rhdf5 (DllInfo * winDll) {
   R_useDynamicSymbols (winDll, FALSE);
 }
 
-SEXP HID_2_CHARSXP(hid_t hid) {
-    char tmp_string[21]; 
-    sprintf(tmp_string, "%lld", hid);
-    return(mkChar(tmp_string));
-}
 
-SEXP HID_2_STRSXP(hid_t hid) {
-    char tmp_string[21]; 
-    sprintf(tmp_string, "%lld", hid);
-    return(mkString(tmp_string));
-}

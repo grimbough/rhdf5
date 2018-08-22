@@ -79,30 +79,6 @@ test_that("Check if HDF5", {
     expect_false(H5Fis_hdf5(name = txtFile))
 })
 
-############################################################
-context("H5F Misc")
-############################################################
-
-fid <- H5Fopen(name = h5File)
-
-test_that("H5Fflush doesn't error" , {
-    expect_silent( H5Fflush(h5file = fid) )
-})
-
-test_that("H5Fget_name" , {
-    expect_identical( H5Fget_name(h5obj = fid), h5File )
-})
-
-test_that("H5Fget_filesize" , {
-    expect_is( H5Fget_filesize(h5file = fid), "numeric" ) %>%
-        expect_lt(1000) %>%
-        expect_gt(0)
-})
-
-H5Fclose(fid)
-
-############################################################
-
 test_that("No open HDF5 objects are left", {
     expect_equal( length(h5validObjects()), 0 )
 })

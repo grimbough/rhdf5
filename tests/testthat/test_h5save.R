@@ -1,7 +1,7 @@
 library(rhdf5)
 
 context("h5save function")
-## h5save doesn't close files, so we have to use h5closeAll() after every call!
+## h5save doesn't close files, so we have to use H5close() after every call!
 
 A = 1:7;  
 B = 1:18; 
@@ -10,7 +10,7 @@ D = seq(0,1,by=0.1)
 h5File <- tempfile(pattern = "ex_save", fileext = ".h5")
 
 test_that("Default arguments", {
-    expect_silent(h5save(A, B, D, file = h5File))
+    h5save(A, B, D, file = h5File)
     h5closeAll()
 })
 
@@ -22,7 +22,7 @@ test_that("File exists", {
 
 test_that("Changing dataset names", {
     dsetNames <- c("dset1", "dset2", "dset3")
-    expect_silent(h5save(A, B, D, file = h5File, name = dsetNames))
+    h5save(A, B, D, file = h5File, name = dsetNames)
     h5closeAll()
     expect_true( file.exists(h5File) )
     expect_equal( names(h5dump(h5File)),
@@ -41,9 +41,9 @@ test_that("Fail if file doesn't exist", {
     h5closeAll()
 })
 
-#test_that("Suppress Internal error messages", {
-#    h5errorHandling(type = "suppress")
-#})
+test_that("Suppress Internal error messages", {
+    h5errorHandling(type = "suppress")
+})
 
 test_that("Adding to existing file", {
     h5save(A, file = h5File)

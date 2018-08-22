@@ -10,7 +10,7 @@ test_that("const groups", {
     ##     expect_length( n = 18 )
     
     expect_is( h5constType(), "character" ) %>%
-        expect_length(n = 19)
+        expect_length(n = 18)
 })
 
 test_that("constants", {
@@ -27,4 +27,3 @@ test_that("defaults", {
     
     expect_null( h5default("foobaa") )
 })
-
