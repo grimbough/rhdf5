@@ -1121,7 +1121,7 @@ SEXP _H5Dset_extent( SEXP _dataset_id, SEXP _size ) {
     if (rank > 0) {
         hsize_t size[rank];
         for (int i=0; i < rank; i++) {
-            size[i] = INTEGER(_size)[i];
+            size[i] = (hsize_t) REAL(_size)[i];
         }
         herr = H5Dset_extent( dataset_id, size );
     } else {
