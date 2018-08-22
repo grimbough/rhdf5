@@ -113,7 +113,7 @@ H5Dwrite <- function( h5dataset, buf, h5spaceMem=NULL, h5spaceFile=NULL ) {
 
 H5Dset_extent <- function( h5dataset, size) {
   h5checktype(h5dataset, "dataset")
-  size <- as.integer(size)
+  size <- as.numeric(size)
   if (!h5dataset@native) size <- rev(size)
   invisible(.Call("_H5Dset_extent", h5dataset@ID, size, PACKAGE='rhdf5'))
 }
