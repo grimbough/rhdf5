@@ -104,6 +104,7 @@ h5createDataset <- function(file, dataset, dims, maxdims = dims, storage.mode = 
                             tid <- switch(storage.mode[1],
                                           double = h5constants$H5T["H5T_NATIVE_DOUBLE"],
                                           integer = h5constants$H5T["H5T_NATIVE_INT32"],
+                                          integer64 = h5constants$H5T["H5T_NATIVE_INT64"],
                                           logical = h5constants$H5T["H5T_NATIVE_INT32"],
                                           character = {
                                               tid <- H5Tcopy("H5T_C_S1")
@@ -113,7 +114,8 @@ h5createDataset <- function(file, dataset, dims, maxdims = dims, storage.mode = 
                                               H5Tset_size(tid, size)
                                               tid
                                           },
-                                          { stop("datatype ",storage.mode," not yet implemented. Try 'double', 'integer', or 'character'.") } )
+                                          { stop("datatype ",storage.mode, " not yet implemented.\n", 
+                                                 "Try 'logical', 'double', 'integer', 'integer64' or 'character'.") } )
                         } else {
                             stop("Can not create dataset. 'storage.mode' has to be a character.")
                         }
