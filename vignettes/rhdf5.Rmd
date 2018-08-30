@@ -38,8 +38,9 @@ run the following commands from the **R** command shell to install the
 bioconductor package `r Biocpkg("rhdf5")`. 
 
 ```{r installation,eval=FALSE}
-source("http://bioconductor.org/biocLite.R")
-biocLite("rhdf5")
+if (!requireNamespace("BiocManager", quietly=TRUE))
+    install.packages("BiocManager")
+BiocManager::install("rhdf5")
 ```
 
 \section{High level \R-HDF5 functions}
