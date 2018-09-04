@@ -62,12 +62,6 @@ h5writeDatasetHelper <- function (obj, h5dataset, index = NULL, start = NULL, st
     res <- H5Dwrite(h5dataset, obj, h5spaceMem = h5spaceMem, 
                     h5spaceFile = h5spaceFile)
   })
-  #try({
-  #  H5Sclose(h5spaceMem)
-  #})
-  #try({
-  #  H5Sclose(h5spaceFile)
-  #})
   invisible(NULL)
 }
 
@@ -103,13 +97,6 @@ h5write.default <- function(obj, file, name, createnewfile=TRUE, write.attribute
     for (i in seq_len(length(Attr))) {
       h5writeAttribute(Attr[[i]], h5obj, name = names(Attr)[i])
     }
-    #if (type == "H5O_TYPE_GROUP") {
-    #  H5Gclose(h5obj)
-    #} else {
-    #  if (type == "H5O_TYPE_DATASET") {
-    #    H5Dclose(h5obj)
-    #  }
-    #}
   }
 
   invisible(res)
