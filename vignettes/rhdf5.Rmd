@@ -33,13 +33,11 @@ functions on **R** level to make a usage of HDF5 files more easy.
 
 #Installation of the HDF5 package
 To install the `r Biocpkg("rhdf5")` package, you need a current version
-(>2.15.0) of **R** (www.r-project.org). After installing **R** you can
-run the following commands from the **R** command shell to install the
-bioconductor package `r Biocpkg("rhdf5")`. 
+(>3.5.0) of **R** (www.r-project.org). After installing **R** you can
+run the following commands from the **R** command shell to install `r Biocpkg("rhdf5")`. 
 
 ```{r installation,eval=FALSE}
-if (!requireNamespace("BiocManager", quietly=TRUE))
-    install.packages("BiocManager")
+install.packages("BiocManager")
 BiocManager::install("rhdf5")
 ```
 
@@ -164,9 +162,9 @@ can be written sequentially.
 \paragraph{Influence of chunk size and compression level} The chosen
 chunk size and compression level have a strong impact on the reading
 and writing time as well as on the resulting file size. In an example
-an integer vector of size 10e7is written to an HDF5 file. The file is
+an integer vector of size 10e7 is written to an HDF5 file. The file is
 written in subvectors of size 10'000. The definition of the chunk size
-influences the reading as well as the writing time. In the chunk size
+influences the reading as well as the writing time. If the chunk size
 is much smaller or much larger than actually used, the runtime
 performance decreases dramatically. Furthermore the file size is
 larger for smaller chunk sizes, because of an overhead. The
@@ -327,7 +325,7 @@ There are three different ways of reading 64-bit integers in
 `bit64conversion` the specify the conversion method.
 
 By setting {\bf `bit64conversion='int'`}, a coercing to 32-bit
-integers is enforced, with the risc of data loss, but with the
+integers is enforced, with the risk of data loss, but with the
 insurance that numbers are represented as native integers.
 
 ```{r bit64integer2}
@@ -347,7 +345,7 @@ D64b
 storage.mode(D64b)
 ```
 
-`bit64conversion='bit64'` is recommended way of coercing. It
+`bit64conversion='bit64'` is the recommended way of coercing. It
 represents the 64-bit integers as objects of class *integer64* as
 defined in the package `r CRANpkg("bit64")`. Make sure that you have installed
 `r CRANpkg("bit64")`. 
