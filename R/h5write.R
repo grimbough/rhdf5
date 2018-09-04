@@ -98,15 +98,7 @@ h5write.default <- function(obj, file, name, createnewfile=TRUE, write.attribute
         for (i in seq_len(length(Attr))) {
             h5writeAttribute(Attr[[i]], h5obj, name = names(Attr)[i])
         }
-        #if (type == "H5O_TYPE_GROUP") {
-        #  H5Gclose(h5obj)
-        #} else {
-        #  if (type == "H5O_TYPE_DATASET") {
-        #    H5Dclose(h5obj)
-        #  }
-        #}
     }
-    
     invisible(res)
 }
 
