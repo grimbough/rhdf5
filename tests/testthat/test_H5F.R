@@ -90,7 +90,7 @@ test_that("H5Fflush doesn't error" , {
 })
 
 test_that("H5Fget_name" , {
-    expect_identical( H5Fget_name(h5obj = fid), h5File )
+    expect_true( grepl(x = H5Fget_name(h5obj = fid), pattern = h5File ) )
 })
 
 test_that("H5Fget_filesize" , {
