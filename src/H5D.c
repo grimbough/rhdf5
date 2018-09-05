@@ -1027,7 +1027,6 @@ SEXP _H5Dwrite( SEXP _dataset_id, SEXP _buf, SEXP _file_space_id, SEXP _mem_spac
         buf = INTEGER(_buf);
         break;
     case REALSXP :
-        Rprintf("double\n");
         mem_type_id = H5T_NATIVE_DOUBLE;
         if (native)
             PERMUTE(_buf, REAL, dim_space_id);
