@@ -305,16 +305,16 @@ SEXP H5Dread_helper_INTEGER(hid_t dataset_id, hid_t file_space_id, hid_t mem_spa
         void* intbuf;
         if ((b < 4) | ((b == 4) & (sgn == H5T_SGN_2))) {
             dtypeNative = H5T_NATIVE_INT;
-            intbuf = malloc(sizeof(int) * n);
+            intbuf = R_alloc(n, sizeof(int));
         } else if ((b == 4) & (sgn == H5T_SGN_NONE)) {
             dtypeNative = H5T_NATIVE_UINT;
-            intbuf = malloc(sizeof(unsigned int) * n);
+            intbuf = R_alloc(n, sizeof(unsigned int));
         } else if ((b == 8) & (sgn == H5T_SGN_2)) {
             dtypeNative = H5T_NATIVE_INT64;
-            intbuf = malloc(sizeof(long long) * n);
+            intbuf = R_alloc(n, sizeof(long long));
         } else if ((b == 8) & (sgn == H5T_SGN_NONE)) {
             dtypeNative = H5T_NATIVE_UINT64;
-            intbuf = malloc(sizeof(unsigned long long) * n);
+            intbuf = R_alloc(n, sizeof(unsigned long long));
         }
         if (intbuf == 0) {
             error("Not enough memory to read data! Try to read a subset of data by specifying the index or count parameter.");
@@ -459,7 +459,6 @@ SEXP H5Dread_helper_INTEGER(hid_t dataset_id, hid_t file_space_id, hid_t mem_spa
                 UNPROTECT(1);
             }
         }
-        free(intbuf);
         if (length(_buf) == 0) {
             setAttrib(Rval, R_DimSymbol, Rdim);
         }
@@ -467,10 +466,10 @@ SEXP H5Dread_helper_INTEGER(hid_t dataset_id, hid_t file_space_id, hid_t mem_spa
     
     if ((warn > 0) | (warn_NA > 0) | (warn_double > 0)) {
         if (warn > 0) {
-            warning("NAs produced by integer overflow while converting 64-bit integer or unsigned 32-bit integer from HDF5 to a 32-bit integer in R. Choose bit64conversion='bit64' or bit64conversion='double' to avoid data loss and see the vignette 'rhdf5' for more details about 64-bit integers.");
+            warning("NAs produced by integer overflow while converting 64-bit integer or unsigned 32-bit integer from HDF5 to a 32-bit integer in R.\nChoose bit64conversion='bit64' or bit64conversion='double' to avoid data loss and see the vignette 'rhdf5' for more details about 64-bit integers.");
         } else {
             if (warn_double > 0) {
-                warning("integer precision lost while converting 64-bit integer or unsigned 32-bit integer from HDF5 to double in R. Choose bit64conversion='bit64' to avoid data loss and see the vignette 'rhdf5' for more details about 64-bit integers.");
+                warning("integer precision lost while converting 64-bit integer or unsigned 32-bit integer from HDF5 to double in R.\nChoose bit64conversion='bit64' to avoid data loss and see the vignette 'rhdf5' for more details about 64-bit integers.");
             } else {
                 if (bit64conversion == 2) {
                     warning("integer value -2^31 replaced by NA. See the section 'Large integer data types' in the 'rhdf5' vignette for more details.");
@@ -550,12 +549,12 @@ SEXP H5Dread_helper_STRING(hid_t dataset_id, hid_t file_space_id, hid_t mem_spac
             free(bufSTR[i]);
         }
     } else {
-        void* bufSTR = malloc(sizeof(char) * n * size);
+        void* bufSTR = R_alloc(n * size, sizeof(char));
         if (bufSTR == 0) {
             error("Not enough memory to read data! Try to read a subset of data by specifying the index or count parameter.");
         }
         herr_t herr = H5Dread(dataset_id, mem_type_id, mem_space_id, file_space_id, H5P_DEFAULT, bufSTR );
-        char* bufSTR2 = malloc(sizeof(char)*(size+1));
+        char* bufSTR2 = R_alloc(size + 1, sizeof(char));
         if (bufSTR2 == 0) {
             error("Not enough memory to read data! Try to read a subset of data by specifying the index or count parameter.");
         }
@@ -567,8 +566,6 @@ SEXP H5Dread_helper_STRING(hid_t dataset_id, hid_t file_space_id, hid_t mem_spac
             }
             SET_STRING_ELT(Rval, i, mkChar(bufSTR2));
         }
-        free(bufSTR);
-        free(bufSTR2);
     }
     
     if (native)
@@ -1030,6 +1027,7 @@ SEXP _H5Dwrite( SEXP _dataset_id, SEXP _buf, SEXP _file_space_id, SEXP _mem_spac
         buf = INTEGER(_buf);
         break;
     case REALSXP :
+        Rprintf("double\n");
         mem_type_id = H5T_NATIVE_DOUBLE;
         if (native)
             PERMUTE(_buf, REAL, dim_space_id);
