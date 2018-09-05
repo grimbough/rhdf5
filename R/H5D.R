@@ -84,9 +84,9 @@ H5Dread <- function( h5dataset, h5spaceFile=NULL, h5spaceMem=NULL, buf = NULL, c
   if (missing(bit64conversion)) {
     bit64conv = 0L
   } else {
-    bit64conv = switch(bit64conversion, int = 1L,double = 2L,bit64 = 3L,default=0L)
+    bit64conv = switch(bit64conversion, int = 0L, double = 1L, bit64 = 2L, default = 0L)
   }
-  if (bit64conv == 3L) {
+  if (bit64conv == 2L) {
     if (!requireNamespace("bit64",quietly=TRUE)) {
       stop("install package 'bit64' before using bit64conversion='bit64'")
     }

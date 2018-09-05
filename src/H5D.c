@@ -267,7 +267,7 @@ SEXP H5Dread_helper_INTEGER(hid_t dataset_id, hid_t file_space_id, hid_t mem_spa
     int warn = 0;
     int warn_double = 0;
     
-    if (((b < 4) | ((b == 4) & (sgn == H5T_SGN_2))) & (bit64conversion == 0)) {   // Read directly to R-integer without loss of data
+    if ((b < 4) | ((b == 4) & (sgn == H5T_SGN_2))) {   // Read directly to R-integer without loss of data (short or signed int)
         if (cpdType < 0) {
             mem_type_id = H5T_NATIVE_INT32;
         } else {
@@ -300,7 +300,7 @@ SEXP H5Dread_helper_INTEGER(hid_t dataset_id, hid_t file_space_id, hid_t mem_spa
         if (length(_buf) == 0) {
             setAttrib(Rval, R_DimSymbol, Rdim);
         }
-    } else {  // Convert data to R-integer and replace overflow values with NA_integer
+    } else { 
         hid_t dtypeNative;
         void* intbuf;
         if ((b < 4) | ((b == 4) & (sgn == H5T_SGN_2))) {
@@ -333,7 +333,7 @@ SEXP H5Dread_helper_INTEGER(hid_t dataset_id, hid_t file_space_id, hid_t mem_spa
         
         herr_t herr = H5Dread(dataset_id, mem_type_id, mem_space_id, file_space_id, H5P_DEFAULT, intbuf );
         
-        if (bit64conversion == 0) {
+        if (bit64conversion == 0) {  // Convert data to R-integer and replace overflow values with NA_integer
             void * buf;
             if (length(_buf) == 0) {
                 Rval = PROTECT(allocVector(INTSXP, n));
@@ -390,7 +390,7 @@ SEXP H5Dread_helper_INTEGER(hid_t dataset_id, hid_t file_space_id, hid_t mem_spa
                 buf = REAL(_buf);
                 Rval = _buf;
             }
-            if (bit64conversion == 2) {
+            if (bit64conversion == 1) {  //convert to double
                 long long i;
                 if ((b < 4) | ((b == 4) & (sgn == H5T_SGN_2))) {
                     for (i=0; i<n; i++){
@@ -422,7 +422,7 @@ SEXP H5Dread_helper_INTEGER(hid_t dataset_id, hid_t file_space_id, hid_t mem_spa
                         }
                     }
                 }
-            } else {
+            } else { // convert to integer64 class
                 long long i;
                 if ((b < 4) | ((b == 4) & (sgn == H5T_SGN_2))) {
                     for (i=0; i<n; i++){
@@ -1024,14 +1024,12 @@ SEXP _H5Dwrite( SEXP _dataset_id, SEXP _buf, SEXP _file_space_id, SEXP _mem_spac
     
     switch(TYPEOF(_buf)) {
     case INTSXP :
-        Rprintf("integer\n");
         mem_type_id = H5T_NATIVE_INT;
         if (native)
             PERMUTE(_buf, INTEGER, dim_space_id);
         buf = INTEGER(_buf);
         break;
     case REALSXP :
-        Rprintf("double\n");
         mem_type_id = H5T_NATIVE_DOUBLE;
         if (native)
             PERMUTE(_buf, REAL, dim_space_id);
