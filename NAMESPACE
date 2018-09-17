@@ -323,3 +323,22 @@ export(h5set_extent)
 export(h5errorHandling)
 
 export(h5closeAll)
+
+
+## export S3 methods
+S3method(h5write, default)
+S3method(h5writeDataset, data.frame)
+S3method(h5writeDataset, list)
+S3method(h5writeDataset, array)
+S3method(h5writeDataset, matrix)
+S3method(h5writeDataset, integer)
+S3method(h5writeDataset, double)
+S3method(h5writeDataset, logical)
+S3method(h5writeDataset, character)
+S3method(h5writeAttribute, default)
+S3method(h5writeAttribute, array)
+S3method(h5writeAttribute, matrix)
+S3method(h5writeAttribute, integer)
+S3method(h5writeAttribute, double)
+S3method(h5writeAttribute, logical)
+S3method(h5writeAttribute, character)
