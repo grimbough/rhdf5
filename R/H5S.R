@@ -144,7 +144,6 @@ H5Sselect_index <- function( h5space, index ) {
   count <- list()
   for (i in seq_len(length(index))) {
     if (is.null(index[[i]])) {
-      ## index[[i]] <- seq_len(dim[i]) - 1L
       start[[i]] <- 0
       count[[i]] <- as.numeric(dim[i])
     } else {
@@ -170,6 +169,51 @@ H5Sselect_index <- function( h5space, index ) {
     count = rev(count)
   }
 
+  .Call("_H5Sselect_index", h5space@ID, start, count, PACKAGE='rhdf5')
+  invisible(size)
+}
+
+
+.H5Sselect_index <- function( h5space, index, index_null ) {
+  h5checktype(h5space, "dataspace")
+  dim <- H5Sget_simple_extent_dims(h5space)$size
+  if (!is.list(index)) {
+    index = list(index)
+  }
+  
+  if (length(index) != length(dim)) {
+    stop("length of list index not equal to h5space dimensional extension.")
+  }
+  
+  start <- list()
+  count <- list()
+  for (i in seq_len(length(index))) {
+      ## no need to do these things if we're sure it's already sorted & unique
+      if(!index_null[i]) {
+        if (any(index[[i]] > dim[i])) {
+          stop("index exceeds HDF5-array dimension.")
+        }
+        if (any(index[[i]] <= 0)) {
+          stop("negative indices and 0 not supported.")
+        }
+        ind <- sort(unique(index[[i]]))
+        #test <- ind[seq_len(length(ind)-1)+1]-1 != ind[seq_len(length(ind)-1)]
+        test <- diff(ind) > 1
+        I <- c(1, which(test) + 1)
+      } else {
+        ind <- index[[i]]
+        I <- 1
+      }
+      start[[i]] <- ind[I] - 1
+      I <- c(I,length(ind)+1)
+      count[[i]] <- I[seq_len(length(I)-1)+1] - I[seq_len(length(I)-1)]
+  }
+  size = sapply(count, sum)
+  if (!h5space@native) {
+    start = rev(start)
+    count = rev(count)
+  }
+  
   .Call("_H5Sselect_index", h5space@ID, start, count, PACKAGE='rhdf5')
   invisible(size)
 }

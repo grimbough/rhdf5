@@ -10,17 +10,22 @@ h5readDataset <- function (h5dataset, index = NULL, start = NULL, stride = NULL,
         if (length(index) != length(s)) {
             stop("length of index has to be equal to dimensional extension of HDF5 dataset.")
         }
-        for (i in seq_len(length(index))) {
+        
+        ## we record if an index entry was NULL, 
+        ## this saves potentially heavy (and unnecssary) reording later
+        index_null <- logical(length = length(index))
+        for (i in seq_along(index)) {
             if (is.null(index[[i]])) {
                 index[[i]] = seq_len(s[i])
-                ## if we passed an object to the index, we need to get its values    
+                index_null[i] <- TRUE
+            ## if we passed an object to the index, we need to get its values    
             } else if ( is.name(index[[i]]) | is.call(index[[i]]) ) {
                 index[[i]] <- eval(index[[i]])  
             }
         }
         size = 0
         try({
-            size = H5Sselect_index(h5spaceFile, index)
+            size = .H5Sselect_index(h5spaceFile, index, index_null)
         })
         h5spaceMem = H5Screate_simple(size, native = h5dataset@native)
         on.exit(H5Sclose(h5spaceMem), add = TRUE)
@@ -44,31 +49,28 @@ h5readDataset <- function (h5dataset, index = NULL, start = NULL, stride = NULL,
                        h5spaceMem = h5spaceMem,
                        compoundAsDataFrame = compoundAsDataFrame, drop = drop, ...)
     })
-    #if (!is.null(h5spaceMem)) {
-    #  try({
-    #    H5Sclose(h5spaceMem)
-    #  })
-    #}
+
+    ## Here we reorder data to match the order requested in index.
+    ## The calls to H5Sselect_index will have returned data linearly
+    ## from the file, not the potentially random order requested.
     if (!is.null(index)) {
         I = list()
-        for (i in seq_len(length(index))) {
-            tmp = unique(sort(index[[i]]))
-            I[[i]] = match(index[[i]], tmp)
+        for (i in seq_along(index)) {
+            if(!index_null[i]) { ## skip if the index was generated inside this function
+              tmp = unique(sort(index[[i]]))
+              I[[i]] = match(index[[i]], tmp)
+            } else {
+              I[[i]] <- index[[i]]
+            }
         }
-        #####################
-        ## This can take a long time for large datasets
-        ## can we find rules for skipping it? 
-        #obj <- do.call("[", c(list(obj), I, drop = FALSE))
         obj.dim <- lapply(dim(obj), FUN = seq_len)
-        if(!identical(I, obj.dim)) {
+        ## only need to compare the dimensions not set automatically
+        if(!identical(I[!index_null], obj.dim[!index_null])) {
             obj <- do.call("[", c(list(obj), I, drop = FALSE))
         } 
-        ####################
     }
-    #try({
-    #    H5Sclose(h5spaceFile)
-    #})
-    obj
+
+    return(obj)
 }
 
 h5read <- function(file, name, index=NULL, start=NULL, stride=NULL, block=NULL,
