@@ -57,7 +57,10 @@ h5readDataset <- function (h5dataset, index = NULL, start = NULL, stride = NULL,
         I = list()
         for (i in seq_along(index)) {
             if(!index_null[i]) { ## skip if the index was generated inside this function
-              tmp = unique(sort(index[[i]]))
+              tmp <- unique(index[[i]])
+              if(is.unsorted(tmp)) { 
+                tmp <- sort.int(tmp) 
+              } 
               I[[i]] = match(index[[i]], tmp)
             } else {
               I[[i]] <- index[[i]]

@@ -82,6 +82,16 @@ test_that("Error if asking for something that isn't there", {
 })
 
 ############################################################
+context("indexing")
+############################################################
+
+test_that("Columns specified multiple times", {
+  expect_silent(fooB <- h5read(h5File, name = "foo/B", index = list(NULL, c(9,1,1,5))))
+  expect_equal(ncol(fooB), 4L)
+  expect_identical(fooB[,2], fooB[,3])
+})
+
+############################################################
 context("64-bit conversion")
 ############################################################
 
