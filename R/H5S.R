@@ -173,7 +173,10 @@ H5Sselect_index <- function( h5space, index ) {
   invisible(size)
 }
 
-
+## internal version of H5Sselect_index.  The index_null argument is passed from
+## h5readDataset and indicates whether an index was automatically generated as
+## a response to NULL being passed.  These will always be a sequence along
+## the respective dimension, so we can bypass some of the (slow) checks
 .H5Sselect_index <- function( h5space, index, index_null ) {
   h5checktype(h5space, "dataspace")
   dim <- H5Sget_simple_extent_dims(h5space)$size
