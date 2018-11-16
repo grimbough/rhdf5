@@ -1,0 +1,69 @@
+---
+title: "**rhdf5** Practical Tips"
+author:
+- name: Mike L. Smith
+  affiliation: de.NBI & EMBL Heidelberg
+package: rhdf5
+output:
+  BiocStyle::html_document
+abstract: |
+  Description of your vignette
+vignette: |
+  %\VignetteIndexEntry{rhdf5 Practical Tips}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, echo = FALSE}
+library(rhdf5)
+```
+
+# Getting started
+
+# Reading subsets of rows or columns
+
+To demonstrate we'll create some example data.  This takes the form of a matrix with 100 rows and 20,000 columns, where the content of each column is the index of the column i.e. column 10 contains the value 10 repeated, column 20 contains 20 repeated etc.  We then write this matrix to an HDF5 file, calling the dataset 'counts'.
+
+```{r create data, echo=TRUE, warning=FALSE}
+m1 <- matrix(rep(1:20000, each = 100), ncol = 20000, byrow = FALSE)
+ex_file <- tempfile(fileext = ".h5")
+h5write(m1, file = ex_file, name = "counts", level = 6)
+```
+## Using `index`
+
+Now we'll use the `index` argument to selectively extract the first 10,000 columns.
+
+```{r extract1, echo = TRUE}
+system.time(res1 <- h5read(file = ex_file, name = "counts", index = list(NULL, 1:10000)))
+```
+
+Next, instead of selecting 10,000 consecutive columns we'll ask for every other column.  This should still return the same amount of data and involves the same amount of reading from disk.
+
+```{r extract2, echo = TRUE}
+index <- list(NULL, seq(from = 1, to = 20000, by = 2))
+system.time(res2 <- h5read(file = ex_file, name = "counts", index = index))
+```
+
+As we can see this is massively slower then the previous example.  This is because creating unions of hyperslabs is currently very slow in HDF5 (see [Union of non-consecutive hyperslabs is very slow](https://forum.hdfgroup.org/t/union-of-non-consecutive-hyperslabs-is-very-slow/5062) for another report of this behaviour).  When we use the `index` argument we *rhdf5* creates a hyperslab for each disjoint set of values we want to extract (in this case that's one for each of the 10,000 columns) and then merges them.
+
+## Using hyperslab terminology
+
+If there is a regular pattern to the regions you want to access, then it is likely you could also apply use HDF5s hyperslab selection method.
+
+```{r extract3, echo = TRUE}
+start <- c(1,1)
+stride <- c(1,2)
+block <- c(100,1)
+count <- c(1,10000)
+system.time(res3 <- h5read(file = ex_file, name = "counts", start = start,
+                           stride = stride, block = block, count = count))
+identical(res2, res3)
+```
+
+This is clearly significantly quicker than using the `index` argument, while return the same data.
+
+# Session info {.unnumbered}
+
+```{r sessionInfo, echo=FALSE}
+devtools::session_info()
+```
