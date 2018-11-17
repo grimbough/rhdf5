@@ -10,8 +10,10 @@ abstract: |
   Description of your vignette
 vignette: |
   %\VignetteIndexEntry{rhdf5 Practical Tips}
-  %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r setup, echo = FALSE}
@@ -61,6 +63,20 @@ identical(res2, res3)
 ```
 
 This is clearly significantly quicker than using the `index` argument, while return the same data.
+
+```{r}
+columns <- seq(from = 1, to = 20000, by = 2)
+f1 <- function(cols) { h5read(file = ex_file, name = 'counts', index = list(NULL, cols))}
+system.time(res4 <- vapply(columns, f1, integer(length = 100)))
+```
+
+```{r}
+h5createDataset(file = ex_file, dataset = "counts_chunked", dims = dim(m1),
+                storage.mode = "integer", chunk = c(100,1), level = 6)
+h5write(obj = m1, file = ex_file, name = "counts_chunked")
+f2 <- function(cols) { h5read(file = ex_file, name = 'counts_chunked', index = list(NULL, cols))}
+system.time(res5 <- vapply(columns, f2, integer(length = 100)))
+```
 
 # Session info {.unnumbered}
 
