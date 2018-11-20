@@ -81,6 +81,27 @@ test_that("Error if asking for something that isn't there", {
     
 })
 
+test_that("writing & reading empty vectors", {
+
+  h5File <- tempfile(pattern = "ex_read", fileext = ".h5")
+  expect_true(h5createFile(h5File))
+  expect_silent(h5write(obj = character(0), file = h5File, name = "char"))
+  expect_silent(h5write(obj = integer(0), file = h5File, name = "int"))
+  expect_silent(h5write(obj = double(0), file = h5File, name = "double"))
+  expect_silent(h5write(obj = logical(0), file = h5File, name = "logical"))
+  
+  expect_silent(tmp <- h5read(file = h5File, name = "char")) %>%
+    expect_is("character") %>%
+    expect_length(0)
+  expect_silent(h5read(file = h5File, name = "int")) %>%
+    expect_is("integer") %>%
+    expect_length(0)
+  expect_silent(h5read(file = h5File, name = "double")) %>%
+    expect_is("numeric") %>%
+    expect_length(0)
+
+})
+
 ############################################################
 context("indexing")
 ############################################################

@@ -297,7 +297,7 @@ SEXP H5Dread_helper_INTEGER(hid_t dataset_id, hid_t file_space_id, hid_t mem_spa
                 warn_NA = 1;
             }
         }
-        if (length(_buf) == 0) {
+        if (length(_buf) == 0 && n > 0) {
             setAttrib(Rval, R_DimSymbol, Rdim);
         }
     } else { 
@@ -459,7 +459,7 @@ SEXP H5Dread_helper_INTEGER(hid_t dataset_id, hid_t file_space_id, hid_t mem_spa
                 UNPROTECT(1);
             }
         }
-        if (length(_buf) == 0) {
+        if (length(_buf) == 0 && n > 0) {
             setAttrib(Rval, R_DimSymbol, Rdim);
         }
     }
@@ -509,13 +509,14 @@ SEXP H5Dread_helper_FLOAT(hid_t dataset_id, hid_t file_space_id, hid_t mem_space
         buf = REAL(_buf);
         Rval = _buf;
     }
+    
     herr_t herr = H5Dread(dataset_id, mem_type_id, mem_space_id, file_space_id, H5P_DEFAULT, buf );
     
     if (native)
-        PERMUTE(Rval, REAL, mem_space_id);
+      PERMUTE(Rval, REAL, mem_space_id);
     
-    if (length(_buf) == 0) {
-        setAttrib(Rval, R_DimSymbol, Rdim);
+    if (length(_buf) == 0 && n > 0) {
+      setAttrib(Rval, R_DimSymbol, Rdim);
     }
     
     UNPROTECT( (length(_buf) == 0) + native );
@@ -540,37 +541,38 @@ SEXP H5Dread_helper_STRING(hid_t dataset_id, hid_t file_space_id, hid_t mem_spac
         }
     }
     Rval = PROTECT(allocVector(STRSXP, n));
-    
-    if (H5Tis_variable_str(dtype_id)) {
-        char *bufSTR[n];
-        herr_t herr = H5Dread(dataset_id, mem_type_id, mem_space_id, file_space_id, H5P_DEFAULT, bufSTR );
-        for (int i=0; i<n; i++) {
-            SET_STRING_ELT(Rval, i, mkChar(bufSTR[i]));
-            free(bufSTR[i]);
-        }
-    } else {
-        void* bufSTR = R_alloc(n * size, sizeof(char));
-        if (bufSTR == 0) {
-            error("Not enough memory to read data! Try to read a subset of data by specifying the index or count parameter.");
-        }
-        herr_t herr = H5Dread(dataset_id, mem_type_id, mem_space_id, file_space_id, H5P_DEFAULT, bufSTR );
-        char* bufSTR2 = R_alloc(size + 1, sizeof(char));
-        if (bufSTR2 == 0) {
-            error("Not enough memory to read data! Try to read a subset of data by specifying the index or count parameter.");
-        }
-        bufSTR2[size] = '\0';
-        char* bufSTR3 = ((char* )bufSTR);
-        for (int i=0; i<n; i++) {
-            for (int j=0; j<size; j++) {
-                bufSTR2[j] = bufSTR3[i*sizeof(char)*size+j];
-            }
-            SET_STRING_ELT(Rval, i, mkChar(bufSTR2));
-        }
+
+    if(n > 0) { /* return empty vector if length == 0 */
+      if (H5Tis_variable_str(dtype_id)) {
+          char *bufSTR[n];
+          herr_t herr = H5Dread(dataset_id, mem_type_id, mem_space_id, file_space_id, H5P_DEFAULT, bufSTR );
+          for (int i=0; i<n; i++) {
+              SET_STRING_ELT(Rval, i, mkChar(bufSTR[i]));
+              free(bufSTR[i]);
+          }
+      } else {
+          void* bufSTR = R_alloc(n * size, sizeof(char));
+          if (bufSTR == 0) {
+              error("Not enough memory to read data! Try to read a subset of data by specifying the index or count parameter.");
+          }
+          herr_t herr = H5Dread(dataset_id, mem_type_id, mem_space_id, file_space_id, H5P_DEFAULT, bufSTR );
+          char* bufSTR2 = R_alloc(size + 1, sizeof(char));
+          if (bufSTR2 == 0) {
+              error("Not enough memory to read data! Try to read a subset of data by specifying the index or count parameter.");
+          }
+          bufSTR2[size] = '\0';
+          char* bufSTR3 = ((char* )bufSTR);
+          for (int i=0; i<n; i++) {
+              for (int j=0; j<size; j++) {
+                  bufSTR2[j] = bufSTR3[i*sizeof(char)*size+j];
+              }
+              SET_STRING_ELT(Rval, i, mkChar(bufSTR2));
+          }
+      }
+      if (native)
+          PERMUTE(Rval, STRING_PTR, mem_space_id);
+      setAttrib(Rval, R_DimSymbol, Rdim);
     }
-    
-    if (native)
-        PERMUTE(Rval, STRING_PTR, mem_space_id);
-    setAttrib(Rval, R_DimSymbol, Rdim);
     UNPROTECT( 1 + native );
     return(Rval);
 }
