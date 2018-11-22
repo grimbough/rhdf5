@@ -19,7 +19,8 @@ LazyLoad: true
 VignetteBuilder: knitr
 Imports: Rhdf5lib (>= 1.3.2)
 Depends: R (>= 3.5.0), methods
-Suggests: bit64, BiocStyle, knitr, rmarkdown, testthat, devtools, microbenchmark
+Suggests: bit64, BiocStyle, knitr, rmarkdown, testthat, devtools, 
+  microbenchmark, dplyr, ggplot2
 LinkingTo: Rhdf5lib
 biocViews: Infrastructure, DataImport
 Encoding: UTF-8
