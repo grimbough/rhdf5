@@ -12,7 +12,7 @@ h5readDataset <- function (h5dataset, index = NULL, start = NULL, stride = NULL,
         }
         
         ## we record if an index entry was NULL, 
-        ## this saves potentially heavy (and unnecssary) reording later
+        ## this saves potentially heavy (and unnecessary) reordering later
         index_null <- logical(length = length(index))
         for (i in seq_along(index)) {
             if (is.null(index[[i]])) {
