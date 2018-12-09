@@ -34,15 +34,17 @@ functions on **R** level to make a usage of HDF5 files more easy.
 #Installation of the HDF5 package
 To install the `r Biocpkg("rhdf5")` package, you need a current version
 (>3.5.0) of **R** (www.r-project.org). After installing **R** you can
-run the following commands from the **R** command shell to install `r Biocpkg("rhdf5")`. 
+run the following commands from the **R** command shell to install `r Biocpkg("rhdf5")`.
 
 ```{r installation,eval=FALSE}
 install.packages("BiocManager")
 BiocManager::install("rhdf5")
 ```
 
-\section{High level \R-HDF5 functions}
-##Creating an HDF5 file and group hierarchy
+# High level R-HDF5 functions
+
+## Creating an HDF5 file and group hierarchy
+
 An empty HDF5 file is created by
 ```{r createHDF5file}
 library(rhdf5)
@@ -58,11 +60,11 @@ h5createGroup("myhdf5file.h5","foo/foobaa")
 h5ls("myhdf5file.h5")
 ```
 
-##Writing and reading objects
+\subsection{Writing and reading objects}
 \label{sec_writeMatrix}
 
 Objects can be written to the HDF5 file. Attributes attached to an
-object are written as well, if \Robject{write.attributes=TRUE} is
+object are written as well, if `write.attributes=TRUE` is
 given as argument to `h5write`. Note that not all
 **R**-attributes can be written as HDF5 attributes.
 
@@ -83,7 +85,7 @@ D = h5read("myhdf5file.h5","foo/A")
 E = h5read("myhdf5file.h5","foo/B")
 F = h5read("myhdf5file.h5","foo/foobaa/C")
 G = h5read("myhdf5file.h5","df")
-``` 
+```
 
 If a dataset with the given `name` does not yet exist, a
 dataset is created in the HDF5 file and the object `obj` is
@@ -96,22 +98,22 @@ different, `h5write()` fails.
 \subsection{Writing and reading objects with file, group and dataset handles}
 \label{sec_writeMatrixHandle}
 
-File, group and dataset handles are a simpler way to read (and partially to write) HDF5 files. 
-A file is opened by `H5Fopen`. 
+File, group and dataset handles are a simpler way to read (and partially to write) HDF5 files.
+A file is opened by `H5Fopen`.
 
 ```{r accessorH5Fopen}
 h5f = H5Fopen("myhdf5file.h5")
 h5f
 ```
 
-The \Robject{\$} and \Robject{\&} operators can be used to access the next group level. While the \Robject{\$} operator reads the object from disk, the \Robject{\&} operator returns a group or dataset handle.
+The `$` and `&` operators can be used to access the next group level. While the `$` operator reads the object from disk, the `&` operator returns a group or dataset handle.
 
 ```{r accessorDF}
 h5f$df
 h5f&'df'
 ```
 
-Both of the following code lines return the matrix `C`. \warning{However, while first version reads the whole tree \Robject{/foo} in memory and then subsets to \Robject{/foobaa/C}, the second version only reads the matrix `C`. The first "\$" in "h5f\$foo\$foobaa\$C" reads the dataset, the other "\$" are accessors of a list. Remind that this can have severe consequences for large datasets and datastructures.}
+Both of the following code lines return the matrix `C`. Note however, that the first version reads the whole tree `/foo` in memory and then subsets to `/foobaa/C`, and the second version only reads the matrix `C`. The first `$` in `h5f$foo$foobaa$C` reads the dataset, the other `$` are accessors of a list. Remind that this can have severe consequences for large datasets and datastructures.
 
 ```{r accessorC1}
 h5f$foo$foobaa$C
@@ -157,7 +159,7 @@ submatrices. Before writing subsetting or hyperslabbing, the dataset
 with full dimensions has to be created in the HDF5 file. This can be
 achieved by writing once an array with full dimensions as in Section
 \ref{sec_writeMatrix} or by creating a dataset. Afterwards the dataset
-can be written sequentially. 
+can be written sequentially.
 
 \paragraph{Influence of chunk size and compression level} The chosen
 chunk size and compression level have a strong impact on the reading
@@ -170,37 +172,37 @@ performance decreases dramatically. Furthermore the file size is
 larger for smaller chunk sizes, because of an overhead. The
 compression can be much more efficient when the chunk size is very
 large. The following figure illustrates the runtime and file size
-behaviour as a function of the chunk size for a small toy dataset. 
+behaviour as a function of the chunk size for a small toy dataset.
 
 
 ![](../inst/demoChunkSize/chunksize-1.png)
 
 After the creation of the dataset, the data can be written
 sequentially to the HDF5 file. Subsetting in **R**-style needs the
-specification of the argument index to `h5read()` and 
+specification of the argument index to `h5read()` and
 `h5write()`.
 ```{r writeMatrixSubsetting}
-h5createDataset("myhdf5file.h5", "foo/S", c(5,8), 
+h5createDataset("myhdf5file.h5", "foo/S", c(5,8),
                 storage.mode = "integer", chunk=c(5,1), level=7)
-h5write(matrix(1:5,nr=5,nc=1), file="myhdf5file.h5", 
+h5write(matrix(1:5,nr=5,nc=1), file="myhdf5file.h5",
         name="foo/S", index=list(NULL,1))
 h5read("myhdf5file.h5", "foo/S")
 h5write(6:10, file="myhdf5file.h5",
         name="foo/S", index=list(1,2:6))
 h5read("myhdf5file.h5", "foo/S")
-h5write(matrix(11:40,nr=5,nc=6), file="myhdf5file.h5", 
+h5write(matrix(11:40,nr=5,nc=6), file="myhdf5file.h5",
         name="foo/S", index=list(1:5,3:8))
 h5read("myhdf5file.h5", "foo/S")
-h5write(matrix(141:144,nr=2,nc=2), file="myhdf5file.h5", 
+h5write(matrix(141:144,nr=2,nc=2), file="myhdf5file.h5",
         name="foo/S", index=list(3:4,1:2))
 h5read("myhdf5file.h5", "foo/S")
-h5write(matrix(151:154,nr=2,nc=2), file="myhdf5file.h5", 
+h5write(matrix(151:154,nr=2,nc=2), file="myhdf5file.h5",
         name="foo/S", index=list(2:3,c(3,6)))
 h5read("myhdf5file.h5", "foo/S")
 h5read("myhdf5file.h5", "foo/S", index=list(2:3,2:3))
 h5read("myhdf5file.h5", "foo/S", index=list(2:3,c(2,4)))
 h5read("myhdf5file.h5", "foo/S", index=list(2:3,c(1,2,4,5)))
-``` 
+```
 
 The HDF5 hyperslabs are defined by some of the arguments
 `start`, `stride`, `count`, and
@@ -209,28 +211,28 @@ The HDF5 hyperslabs are defined by some of the arguments
 ```{r writeMatrixHyperslab}
 h5createDataset("myhdf5file.h5", "foo/H", c(5,8), storage.mode = "integer",
                 chunk=c(5,1), level=7)
-h5write(matrix(1:5,nr=5,nc=1), file="myhdf5file.h5", name="foo/H", 
+h5write(matrix(1:5,nr=5,nc=1), file="myhdf5file.h5", name="foo/H",
         start=c(1,1))
 h5read("myhdf5file.h5", "foo/H")
 h5write(6:10, file="myhdf5file.h5", name="foo/H",
         start=c(1,2), count=c(1,5))
 h5read("myhdf5file.h5", "foo/H")
-h5write(matrix(11:40,nr=5,nc=6), file="myhdf5file.h5", name="foo/H", 
+h5write(matrix(11:40,nr=5,nc=6), file="myhdf5file.h5", name="foo/H",
         start=c(1,3))
 h5read("myhdf5file.h5", "foo/H")
-h5write(matrix(141:144,nr=2,nc=2), file="myhdf5file.h5", name="foo/H", 
+h5write(matrix(141:144,nr=2,nc=2), file="myhdf5file.h5", name="foo/H",
         start=c(3,1))
 h5read("myhdf5file.h5", "foo/H")
 h5write(matrix(151:154,nr=2,nc=2), file="myhdf5file.h5", name="foo/H",
         start=c(2,3), stride=c(1,3))
 h5read("myhdf5file.h5", "foo/H")
-h5read("myhdf5file.h5", "foo/H", 
+h5read("myhdf5file.h5", "foo/H",
        start=c(2,2), count=c(2,2))
-h5read("myhdf5file.h5", "foo/H", 
+h5read("myhdf5file.h5", "foo/H",
        start=c(2,2), stride=c(1,2),count=c(2,2))
-h5read("myhdf5file.h5", "foo/H", 
+h5read("myhdf5file.h5", "foo/H",
        start=c(2,1), stride=c(1,3),count=c(2,2), block=c(1,2))
-``` 
+```
 
 \subsection{Saving multiple objects to an HDF5 file (h5save)}
 
@@ -251,7 +253,7 @@ The function `h5ls()` provides some ways of viewing the content of an HDF5 file.
 h5ls("myhdf5file.h5")
 h5ls("myhdf5file.h5", all=TRUE)
 h5ls("myhdf5file.h5", recursive=2)
-``` 
+```
 
 ##Dump the content of an HDF5 file
 The function `h5dump()` is similar to the function `h5ls()`. If
@@ -263,17 +265,17 @@ datasets from the HDF5 file are read.
 ```{r h5dump}
 h5dump("myhdf5file.h5",load=FALSE)
 D <- h5dump("myhdf5file.h5")
-``` 
+```
 
 ##Reading HDF5 files with external software
 The content of the HDF5 file can be checked with the command line tool
 **h5dump** (available on linux-like systems with the HDF5 tools
 package installed) or with the graphical user interface **HDFView**
 (http://www.hdfgroup.org/hdf-java-html/hdfview/) available for all
-major platforms. 
+major platforms.
 ```{r h5dump2, eval=FALSE}
 system("h5dump myhdf5file.h5")
-``` 
+```
 \warning{Please note, that arrays appear as transposed matrices when opening it
 with a C-program (\software{h5dump} or \software{HDFView}). This is due to the fact the
 fastest changing dimension on C is the last one, but on \R~ it is the
@@ -349,7 +351,7 @@ storage.mode(D64b)
 `bit64conversion='bit64'` is the recommended way of coercing. It
 represents the 64-bit integers as objects of class *integer64* as
 defined in the package `r CRANpkg("bit64")`. Make sure that you have installed
-`r CRANpkg("bit64")`. 
+`r CRANpkg("bit64")`.
 *The datatype *integer64* is not part of base **R**, but defined
 in an external package. This can produce unexpected behaviour when
 working with the data.* When choosing this option the package `r CRANpkg("bit64")`
@@ -499,7 +501,7 @@ Create a file.
 library(rhdf5)
 h5file = H5Fcreate("newfile.h5")
 h5file
-``` 
+```
 
 and a group hierarchy
 ```{r create_groups, quiet=FALSE}
@@ -507,7 +509,7 @@ h5group1 <- H5Gcreate(h5file, "foo")
 h5group2 <- H5Gcreate(h5file, "baa")
 h5group3 <- H5Gcreate(h5group1, "foobaa")
 h5group3
-``` 
+```
 
 ##Writing data to an HDF5 file
 
@@ -521,15 +523,15 @@ h5space3 = H5Scopy(h5space1)
 h5space4 = H5Screate("H5S_SCALAR")
 h5space1
 H5Sis_simple(h5space1)
-``` 
+```
 
-Create two datasets, one with integer and one with floating point numbers. 
+Create two datasets, one with integer and one with floating point numbers.
 
 ```{r create_dataset}
 h5dataset1 = H5Dcreate( h5file, "dataset1", "H5T_IEEE_F32LE", h5space1 )
 h5dataset2 = H5Dcreate( h5group2, "dataset2", "H5T_STD_I32LE", h5space1 )
 h5dataset1
-``` 
+```
 
 Now lets write data to the datasets.
 ```{r writedata}
@@ -537,7 +539,7 @@ A = seq(0.1,3.5,length.out=5*7)
 H5Dwrite(h5dataset1, A)
 B = 1:35
 H5Dwrite(h5dataset2, B)
-``` 
+```
 
 To release resources and to ensure that the data is written on disk,
 we have to close datasets, dataspaces, and the file. There are
@@ -562,7 +564,7 @@ H5Fclose(h5file)
 % We can now check how it looks like on disk.
 % ```{r h5dump}
 % system("h5dump newfile2.h5")
-% ``` 
+% ```
 % Please note, that arrays appear as transposed matrices when opening it with a C-program (h5dump). This is due to the fact the fastest changing dimension on C is the last one, but on \R~ it is the first one (as in Fortran).
 -->
 
@@ -578,7 +580,3 @@ for(file in c('myhdf5file.h5', 'newfile.h5', 'newfile2.h5', 'newfile3.h5')) {
     }
 }
 ```
-
-\end{document}
-
-
