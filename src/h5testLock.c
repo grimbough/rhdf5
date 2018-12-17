@@ -1,24 +1,23 @@
 #include "h5testLock.h"
 
-SEXP _h5fileLock() {
+SEXP _h5fileLock(SEXP _file_name) {
   
   SEXP Rval;
-  const char *name = "/tmp/test_file";
+  const char *file_name = CHAR(STRING_ELT(_file_name, 0));
   int fd = -1;
   int lk = -1;
   int lk2 = -1;
-  int o_flags = O_RDWR | O_CREAT | O_TRUNC;
-  int lock_flags = LOCK_EX;
+
+  /* create the temporary file */
+  fd = HDopen(file_name, O_RDWR | O_CREAT | O_TRUNC, 0666);
+
+  /* try to lock file */
+  lk = HDflock(fd, LOCK_EX | LOCK_NB);
   
-  fd = HDopen(name, o_flags, 0666);
-  //fd = open(name, o_flags);
-  
-  lk = HDflock(fd, lock_flags | LOCK_NB);
-  
-  Rprintf("fd: %d lk: %d\n", fd, lk);
-  
+  /* unlock so we can remove */
   lk2 = HDflock(fd, LOCK_UN);
   
+  /* return value of lock attempt */
   PROTECT(Rval = allocVector(INTSXP, 1));
   INTEGER(Rval)[0] = lk;
   UNPROTECT(1);
