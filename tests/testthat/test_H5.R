@@ -1,5 +1,9 @@
 library(rhdf5)
 
+## disable file locking if required e.g. Solaris, Lustre, NFS etc
+if(!h5testFileLocking(tempdir()))
+  h5disableFileLocking()
+
 ############################################################
 context("H5: basic HDF5 functions")
 ############################################################

@@ -25,7 +25,7 @@ h5testFileLocking <- function(location) {
 }
 
 h5disableFileLocking <- function() {
-  Sys.setenv("HDF5_USE_FILE_LOCKING=FALSE")
+  Sys.setenv(HDF5_USE_FILE_LOCKING = "FALSE")
 }
 
 h5enableFileLocking <- function() {
