@@ -274,7 +274,7 @@ package installed) or with the graphical user interface **HDFView**
 (http://www.hdfgroup.org/hdf-java-html/hdfview/) available for all
 major platforms.
 ```{r h5dump2, eval=FALSE}
-system("h5dump myhdf5file.h5")
+system2("h5dump", "myhdf5file.h5")
 ```
 \warning{Please note, that arrays appear as transposed matrices when opening it
 with a C-program (\software{h5dump} or \software{HDFView}). This is due to the fact the

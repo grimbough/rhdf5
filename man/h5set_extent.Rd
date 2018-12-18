@@ -17,7 +17,6 @@ h5set_extent(file, dataset, dims, native = FALSE)
 \author{Bernd Fischer}
 \seealso{\link{rhdf5}}
 \examples{
-library(rhdf5)
 tmpfile <- tempfile()
 h5createFile(file=tmpfile)
 h5createDataset(tmpfile, "A", c(10,12), c(20,24))
