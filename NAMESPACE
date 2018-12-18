@@ -3,6 +3,7 @@ useDynLib(rhdf5)
 import(Rhdf5lib)
 import(methods)
 importFrom(utils, packageVersion)
+importFrom(utils, file_test)
 
 exportClasses(H5IdComponent)
 ## exportClasses(H5file)
@@ -324,6 +325,9 @@ export(h5errorHandling)
 
 export(h5closeAll)
 
+export(h5testFileLocking)
+export(h5disableFileLocking)
+export(h5enableFileLocking)
 
 ## export S3 methods
 S3method(h5write, default)

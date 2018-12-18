@@ -1,6 +1,31 @@
 \name{NEWS}
 \title{News for Package 'rhdf5'}
 
+\section{Changes in version 2.28.0}{
+  \subsection{NEW FEATURES}{
+    \itemize{
+      \item Functions to test and set file locking have added.  These can help
+      identify and address problems on Lustre and ZFS file systems.
+    }
+  }
+  
+  \subsection{BUG FIXES}{
+    \itemize{
+      \item Some improvements to performance when selecting subsets
+      of datasets using the `index` argument.
+    }
+  }
+}
+
+\section{Changes in version 2.26.0}{
+
+  \subsection{BUG FIXES}{
+    \itemize{
+      \item Compilation problem on Solaris have been addressed.
+    }
+  }
+}
+
 \section{Changes in version 2.24.0}{
   \subsection{NEW FEATURES}{
     \itemize{

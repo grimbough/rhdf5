@@ -46,16 +46,20 @@ h5write(m1, file = ex_file, name = "counts", level = 6)
 Now we'll use the `index` argument to selectively extract the first 10,000 columns and time how long this takes.
 
 ```{r extract1, echo = TRUE}
-system.time(res1 <- h5read(file = ex_file, name = "counts", 
-                           index = list(NULL, 1:10000)))
+system.time(
+  res1 <- h5read(file = ex_file, name = "counts", 
+                 index = list(NULL, 1:10000))
+)
 ```
 
 Next, instead of selecting 10,000 consecutive columns we'll ask for every other column.  This should still return the same amount of data and since our dataset is not chunked involves reading the same volume from disk.
 
 ```{r extract2, echo = TRUE}
 index <- list(NULL, seq(from = 1, to = 20000, by = 2))
-system.time(res2 <- h5read(file = ex_file, name = "counts", 
-                           index = index))
+system.time(
+  res2 <- h5read(file = ex_file, name = "counts", 
+                 index = index)
+)
 ```
 
 As we can see this is massively slower than the previous example.  This is because creating unions of hyperslabs is currently very slow in HDF5 (see [Union of non-consecutive hyperslabs is very slow](https://forum.hdfgroup.org/t/union-of-non-consecutive-hyperslabs-is-very-slow/5062) for another report of this behaviour), with the performance penalty increasing exponentially relative to the number of unions.  When we use the `index` argument *rhdf5* creates a hyperslab for each disjoint set of values we want to extract and then merges them. In our first example this only require the creation of a single 100 $\times$ 10,000 hyperslab, where as in the second case we require 10,000 hyperslabs of dimension 100 $\times$ 1 and 9,999 merge operations.
@@ -69,8 +73,10 @@ start <- c(1,1)
 stride <- c(1,2)
 block <- c(100,1)
 count <- c(1,10000)
-system.time(res3 <- h5read(file = ex_file, name = "counts", start = start,
-                           stride = stride, block = block, count = count))
+system.time(
+  res3 <- h5read(file = ex_file, name = "counts", start = start,
+                 stride = stride, block = block, count = count)
+)
 identical(res2, res3)
 ```
 
@@ -78,7 +84,7 @@ This is clearly significantly quicker than using the `index` argument in the exa
 
 *rhdf5* is sophisticated enough to combine consecutive columns into a single call, so selecting completely disjoint alternative columns represents a worst case scenario.  The impact would be far less if, for example, we wanted to extract columns 1 - 5,000 and 6,001 - 11,000.  In that scenario it would probably not be noticeably beneficial to move away from using the `index` argument, but for less contiguous selections making use of the hyperslab selection parameters can be extremely beneficial.
 
-```{r, eval = FALSE, echo = FALSE}
+```{r, eval = TRUE, echo = FALSE, fig.width=6, fig.height=3, fig.wide = TRUE}
 ## this code demonstrates the exponential increase in time as the 
 ## number of hyberslab unions increases
 
@@ -112,7 +118,7 @@ bm <- microbenchmark::microbenchmark(
              time = time / 1e9)
 
 ggplot(bm,aes(x = n, y = time)) +
-  geom_jitter() + 
+  geom_point() + 
   scale_x_log10() + 
   scale_y_log10() +
   theme_bw() +
