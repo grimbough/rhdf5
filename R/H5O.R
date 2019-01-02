@@ -1,7 +1,7 @@
 
 
 #H5OconvertTypes <- function(L) {
-#  L$type <- h5const2Factor("H5O_TYPE", L$type)
+#  L$type <- h5const2String("H5O_TYPE", L$type)
 #  L$atime <- .POSIXct(L$atime)
 #  L$atime[L$atime == 0] <- NA
 #  L$mtime <- .POSIXct(L$mtime)
