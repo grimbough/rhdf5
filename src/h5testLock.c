@@ -17,6 +17,9 @@ SEXP _h5fileLock(SEXP _file_name) {
   /* unlock so we can remove */
   lk2 = HDflock(fd, LOCK_UN);
   
+  /* close */
+  HDclose(fd);
+  
   /* return value of lock attempt */
   PROTECT(Rval = allocVector(INTSXP, 1));
   INTEGER(Rval)[0] = lk;

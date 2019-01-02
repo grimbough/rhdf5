@@ -12,14 +12,4 @@
 #endif
 
 
-/*
-#if defined(H5_HAVE_FLOCK)
-  #define HDflock(F,L)    flock(F,L)
-#elif defined(H5_HAVE_FCNTL)
-  #define HDflock(F,L)    Pflock(F,L)
-#else
-  #define HDflock(F,L)    Nflock(F,L)
-#endif
-#endif */
-
 SEXP _h5fileLock();
