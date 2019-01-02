@@ -614,7 +614,7 @@ H5Pset_libver_bounds <- function( h5plist, libver_low = "H5F_LIBVER_EARLIEST", l
 H5Pget_libver_bounds <- function( h5plist ) {
   h5checktype(h5plist, "plist")
   res <- .Call("_H5Pget_libver_bounds", h5plist@ID, PACKAGE='rhdf5')
-  res <- h5const2Factor("H5F_LIBVER", res)
+  res <- h5const2String("H5F_LIBVER", res)
   names(res) = c("libver_low","libver_high")
   res
 }
@@ -705,7 +705,7 @@ H5Pset_char_encoding <- function( h5plist, encoding = h5default("H5T_CSET")) {
 H5Pget_char_encoding <- function( h5plist ) {
   h5checktypeAndPLC(h5plist, "H5P_LINK_CREATE")
   res <- .Call("_H5Pget_char_encoding", h5plist@ID, PACKAGE='rhdf5')
-  res <- h5const2Factor("H5T_CSET", res)
+  res <- h5const2String("H5T_CSET", res)
   res
 }
 
@@ -822,7 +822,7 @@ H5Pset_layout <- function( h5plist, layout = h5default("H5D") ) {
 H5Pget_layout <- function( h5plist ) {
   h5checktypeAndPLC(h5plist, "H5P_DATASET_CREATE")
   res <- .Call("_H5Pget_layout", h5plist@ID, PACKAGE='rhdf5')
-  res <- h5const2Factor("H5D", res)
+  res <- h5const2String("H5D", res)
   res
 }
 
@@ -891,7 +891,7 @@ H5Pset_fill_time <- function( h5plist, fill_time = h5default("H5D_FILL_TIME") ) 
 H5Pget_fill_time <- function( h5plist ) {
   h5checktypeAndPLC(h5plist, "H5P_DATASET_CREATE")
   res <- .Call("_H5Pget_fill_time", h5plist@ID, PACKAGE='rhdf5')
-  res <- h5const2Factor("H5D_FILL_TIME", res)
+  res <- h5const2String("H5D_FILL_TIME", res)
   res
 }
 
@@ -905,7 +905,7 @@ H5Pset_alloc_time <- function( h5plist, alloc_time = h5default("H5D_ALLOC_TIME")
 H5Pget_alloc_time <- function( h5plist ) {
   h5checktypeAndPLC(h5plist, "H5P_DATASET_CREATE")
   res <- .Call("_H5Pget_alloc_time", h5plist@ID, PACKAGE='rhdf5')
-  res <- h5const2Factor("H5D_ALLOC_TIME", res)
+  res <- h5const2String("H5D_ALLOC_TIME", res)
   res
 }
 

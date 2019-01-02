@@ -1,7 +1,7 @@
 
 h5listIdentifier <- function() {
   res <- .Call("_h5listIdentifier", PACKAGE='rhdf5')
-  res$type = h5const2Factor("H5I_TYPE",res$type)
+  res$type = h5const2String("H5I_TYPE",res$type)
   res = as.data.frame(res)
   res
 }

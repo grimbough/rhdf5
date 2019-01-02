@@ -30,7 +30,7 @@ H5Lget_info <- function( h5loc, name ) {
   if (length(name)!=1 || !is.character(name)) stop("'name' must be a character string of length 1")
 
   res <- .Call("_H5Lget_info", h5loc@ID, name, PACKAGE='rhdf5')
-  res$type <- h5const2Factor("H5L_TYPE", res$type)
+  res$type <- h5const2String("H5L_TYPE", res$type)
   res
 }
 

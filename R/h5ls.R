@@ -1,8 +1,8 @@
 
 h5lsConvertToDataframe <- function(L, all=FALSE, native) {
   if (is.data.frame(L)) {
-    L$ltype <- h5const2Factor("H5L_TYPE", L$ltype)
-    L$otype <- h5const2Factor("H5I_TYPE", L$otype)
+    L$ltype <- h5const2String("H5L_TYPE", L$ltype)
+    L$otype <- h5const2String("H5I_TYPE", L$otype)
 #    L$atime <- .POSIXct(L$atime)
 #    L$atime[L$atime == 0] <- NA
 #    L$mtime <- .POSIXct(L$mtime)

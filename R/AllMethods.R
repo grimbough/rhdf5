@@ -1,7 +1,7 @@
 
 setMethod("show",signature="H5IdComponent", function(object) {
   res <- .Call("_handleInfo", object@ID, PACKAGE='rhdf5')
-  res$type = as.character(h5const2Factor("H5I_TYPE",res$type))
+  res$type = h5const2String("H5I_TYPE",res$type)
   res$type = substr(res$type,5,1000)
   cat(sprintf("HDF5 %s",res$type),
       if (object@native) "(native)",
