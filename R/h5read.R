@@ -1,9 +1,8 @@
 h5readDataset <- function (h5dataset, index = NULL, start = NULL, stride = NULL, 
                            block = NULL, count = NULL, compoundAsDataFrame = TRUE, drop = FALSE, ...) {
-    try({
-        h5spaceFile <- H5Dget_space(h5dataset)
-        on.exit(H5Sclose(h5spaceFile))
-    })
+
+    h5spaceFile <- H5Dget_space(h5dataset)
+    on.exit(H5Sclose(h5spaceFile))
     h5spaceMem = NULL
     if (!is.null(index)) {
         s <- H5Sget_simple_extent_dims(h5spaceFile)$size
@@ -11,22 +10,31 @@ h5readDataset <- function (h5dataset, index = NULL, start = NULL, stride = NULL,
             stop("length of index has to be equal to dimensional extension of HDF5 dataset.")
         }
         
-        ## we record if an index entry was NULL, 
-        ## this saves potentially heavy (and unnecessary) reordering later
-        index_null <- logical(length = length(index))
-        for (i in seq_along(index)) {
-            if (is.null(index[[i]])) {
-                index[[i]] = seq_len(s[i])
-                index_null[i] <- TRUE
-            ## if we passed an object to the index, we need to get its values    
-            } else if ( is.name(index[[i]]) | is.call(index[[i]]) ) {
-                index[[i]] <- eval(index[[i]])  
+        index_null <- sapply(index, is.null)
+        
+        ## if we are only selecting in one dimension, try faster code
+        if(sum(!index_null) == 1) {
+            size <- .H5Sselect_dim( h5spaceFile, index)
+            for (i in seq_along(index)) {
+                if (is.null(index[[i]])) {
+                    index[[i]] = seq_len(s[i])
+                }
             }
-        }
-        size = 0
-        try({
+        } else {
+        
+            ## we record if an index entry was NULL, 
+            ## this saves potentially heavy (and unnecessary) reordering later
+            index_null <- logical(length = length(index))
+            for (i in seq_along(index)) {
+                if (is.null(index[[i]])) {
+                    index[[i]] = seq_len(s[i])
+                ## if we passed an object to the index, we need to get its values    
+                } else if ( is.name(index[[i]]) | is.call(index[[i]]) ) {
+                    index[[i]] <- eval(index[[i]])  
+                }
+            }
             size = .H5Sselect_index(h5spaceFile, index, index_null)
-        })
+        }
         h5spaceMem = H5Screate_simple(size, native = h5dataset@native)
         on.exit(H5Sclose(h5spaceMem), add = TRUE)
     }

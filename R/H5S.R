@@ -225,7 +225,7 @@ H5Sunlimited <- function()  {
   as.integer(h5checkConstants("H5S_UNLIMITED", "H5S_UNLIMITED"))
 }
 
-H5Sselect_dim <- function( h5space, index ) {
+.H5Sselect_dim <- function( h5space, index ) {
   
   rhdf5:::h5checktype(h5space, "dataspace")
   dims <- H5Sget_simple_extent_dims(h5space)$size
