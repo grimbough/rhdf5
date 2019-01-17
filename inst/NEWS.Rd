@@ -21,7 +21,7 @@
 
   \subsection{BUG FIXES}{
     \itemize{
-      \item Compilation problem on Solaris have been addressed.
+      \item Compilation problems on Solaris have been addressed.
     }
   }
 }
