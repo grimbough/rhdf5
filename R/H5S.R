@@ -225,4 +225,41 @@ H5Sunlimited <- function()  {
   as.integer(h5checkConstants("H5S_UNLIMITED", "H5S_UNLIMITED"))
 }
 
-## c(1,which(index[seq_len(length(index)-1)+1]-1 != index[seq_len(length(index)-1)]))
+H5Sselect_dim <- function( h5space, index ) {
+  
+  rhdf5:::h5checktype(h5space, "dataspace")
+  dims <- H5Sget_simple_extent_dims(h5space)$size
+  .Call("_H5Sselect_none", h5space@ID, PACKAGE = "rhdf5")
+  
+  res_dim <- integer(length = length(dims))
+  
+  for(i in seq_along(index)) {
+    if(is.null(index[[i]])) {
+      res_dim[i] <- dims[i]
+    } else {
+      this_dim <- i
+      pre <- length(which(seq_along(dims) < this_dim))
+      post <- length(which(seq_along(dims) > this_dim))
+      
+      index_copy <- sort(unique(index[[i]]))
+      res_dim[i] <- length(index_copy)
+      start <- count <- stride <- block <- NULL
+      
+      while(length(index_copy)) {
+        if(length(index_copy) > 1) {
+          tmp <- rle(diff(index_copy))
+        } else {
+          tmp <- list(lengths = 0, values = 1) 
+        }
+        start <- c(rep(1, pre), index_copy[1], rep(1, post))
+        count <- c(rep(1, pre), tmp$lengths[1] + 1, rep(1, post))
+        stride <- c(rep(1, pre), tmp$values[1], rep(1, post))
+        block <- c(dims[seq_along(dims) < this_dim], 1, dims[seq_along(dims) > this_dim])
+        H5Sselect_hyperslab(h5space = h5space, op = "H5S_SELECT_OR", 
+                            start = start, stride = stride, count = count, block = block)
+        index_copy <- tail(index_copy, -(tmp$lengths[1] + 1))
+      }
+    }
+  }
+  invisible(res_dim)
+}

@@ -14,7 +14,6 @@ SEXP _H5Screate( SEXP _type ) {
 
 /* hid_t H5Scopy( hid_t space_id ) */
 SEXP _H5Scopy( SEXP _space_id ) {
-    //hid_t space_id =  INTEGER(_space_id)[0];
     hid_t space_id = STRSXP_2_HID( _space_id );
     hid_t hid = H5Scopy( space_id );
     addHandle(hid);
@@ -27,7 +26,6 @@ SEXP _H5Scopy( SEXP _space_id ) {
 
 /* herr_t H5Sclose( hid_t space_id ) */
 SEXP _H5Sclose( SEXP _space_id ) {
-    //hid_t space_id =  INTEGER(_space_id)[0];
     hid_t space_id = STRSXP_2_HID( _space_id );
     herr_t herr = H5Sclose( space_id );
     if (herr == 0) {
@@ -74,7 +72,6 @@ SEXP _H5Screate_simple( SEXP _dims, SEXP _maxdims ) {
 
 /* htri_t H5Sis_simple( hid_t space_id ) */
 SEXP _H5Sis_simple( SEXP _space_id ) {
-    //hid_t space_id =  INTEGER(_space_id)[0];
     hid_t space_id = STRSXP_2_HID( _space_id );
     htri_t htri = H5Sis_simple( space_id );
     
@@ -87,13 +84,11 @@ SEXP _H5Sis_simple( SEXP _space_id ) {
 
 /* int H5Sget_simple_extent_dims(hid_t space_id, hsize_t *dims, hsize_t *maxdims ) */
 SEXP _H5Sget_simple_extent_dims( SEXP _space_id ) {
-    //hid_t space_id =  INTEGER(_space_id)[0];
     hid_t space_id = STRSXP_2_HID( _space_id );
     hsize_t   size[H5S_MAX_RANK];
     hsize_t   maxsize[H5S_MAX_RANK];
     int rank = H5Sget_simple_extent_dims(space_id, size, maxsize);
     
-    /* printf("%d ( %d %d )\n", rank, size[0], maxsize[0] ); */
     SEXP Rval = PROTECT(allocVector(VECSXP, 3));
     SET_VECTOR_ELT(Rval,0,ScalarInteger(rank));
     
@@ -139,7 +134,6 @@ SEXP _H5Sget_simple_extent_dims( SEXP _space_id ) {
 
 /* herr_t H5Sset_extent_simple( hid_t space_id, int rank, const hsize_t *current_size, const hsize_t *maximum_size ) */
 SEXP _H5Sset_extent_simple( SEXP _space_id, SEXP _current_size, SEXP _maximum_size ) {
-    //hid_t space_id =  INTEGER(_space_id)[0];  
     hid_t space_id = STRSXP_2_HID( _space_id );
     hid_t herr;
     int rank = length(_current_size);
@@ -166,9 +160,18 @@ SEXP _H5Sset_extent_simple( SEXP _space_id, SEXP _current_size, SEXP _maximum_si
     return Rval;
 }
 
+/* herr_t H5Sselect_none(hid_t spaceid) */
+SEXP _H5Sselect_none( SEXP _space_id ) {
+  
+  hid_t space_id = STRSXP_2_HID( _space_id );
+  herr_t herr = H5Sselect_none(space_id);
+  
+  SEXP Rval = ScalarInteger(herr);
+  return Rval;
+}
+
 /* herr_t H5Sselect_hyperslab(hid_t space_id, H5S_seloper_t op, const hsize_t *start, const hsize_t *stride, const hsize_t *count, const hsize_t *block ) */
 SEXP _H5Sselect_hyperslab( SEXP _space_id, SEXP _op, SEXP _start, SEXP _stride, SEXP _count, SEXP _block ) {
-    //hid_t space_id =  INTEGER(_space_id)[0];  
     hid_t space_id = STRSXP_2_HID( _space_id );
     H5S_seloper_t op =  INTEGER(_op)[0];
     hsize_t start[LENGTH(_start)];
@@ -196,9 +199,38 @@ SEXP _H5Sselect_hyperslab( SEXP _space_id, SEXP _op, SEXP _start, SEXP _stride, 
     
 }
 
+SEXP _H5Sselect_cols( SEXP _space_id, SEXP _start, SEXP _stride, SEXP _count, SEXP _block ) {
+  
+  hid_t space_id = STRSXP_2_HID( _space_id );
+  herr_t herr = H5Sselect_none(space_id);
+
+  hsize_t start[2];
+  hsize_t stride[2];
+  hsize_t count[2];
+  hsize_t block[2];
+  
+  int i, j;
+  for(i = 0; i < LENGTH(_start); i++) {
+    
+    start[1] = 0;
+    stride[1] = 1;
+    count[1] = 1;
+    block[1] = REAL(_block)[i];
+    
+    start[0] = REAL(_start)[i];
+    stride[0] = REAL(_stride)[i];
+    count[0] = REAL(_count)[i];
+    block[0] = 1;
+    
+    herr = H5Sselect_hyperslab(space_id, H5S_SELECT_OR, start, stride, count, block);
+  }
+  
+  SEXP Rval = ScalarInteger(herr);
+  return Rval;
+}
+
 /* H5Sselect_index is not part of the standart H5S interfaces. It is a iteratie call to H5Sselect_point. */
 SEXP _H5Sselect_index( SEXP _space_id, SEXP _start, SEXP _count) {
-    //hid_t space_id =  INTEGER(_space_id)[0];
     hid_t space_id = STRSXP_2_HID( _space_id );
     
     int l = LENGTH(_start);

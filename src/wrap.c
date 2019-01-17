@@ -94,6 +94,7 @@ static R_CallMethodDef libraryRCalls[] = {
   {"_H5Screate_simple", (DL_FUNC) &_H5Screate_simple, 2},
   {"_H5Sis_simple", (DL_FUNC) &_H5Sis_simple, 1},
   {"_H5Sget_simple_extent_dims", (DL_FUNC) &_H5Sget_simple_extent_dims, 1},
+  {"_H5Sselect_none", (DL_FUNC) &_H5Sselect_none, 1},
   {"_H5Sset_extent_simple", (DL_FUNC) &_H5Sset_extent_simple, 3},
   {"_H5Sselect_hyperslab", (DL_FUNC) &_H5Sselect_hyperslab, 6},
   {"_H5Sselect_index", (DL_FUNC) &_H5Sselect_index, 3},
@@ -293,6 +294,7 @@ static R_CallMethodDef libraryRCalls[] = {
   {"_h5writeDataFrame", (DL_FUNC) &_h5writeDataFrame, 4},
   {"_h5errorHandling", (DL_FUNC) &_h5errorHandling, 1},
   {"_h5fileLock", (DL_FUNC) &_h5fileLock, 1},
+  {"_H5Sselect_cols", (DL_FUNC) &_H5Sselect_cols, 5},
   {NULL, NULL, 0}
 };
 
