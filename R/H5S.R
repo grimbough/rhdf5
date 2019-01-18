@@ -263,3 +263,66 @@ H5Sunlimited <- function()  {
   }
   invisible(res_dim)
 }
+
+.H5Sselect_dim2 <- function( h5space, index ) {
+  
+  rhdf5:::h5checktype(h5space, "dataspace")
+  dims <- H5Sget_simple_extent_dims(h5space)$size
+  .Call("_H5Sselect_none", h5space@ID, PACKAGE = "rhdf5")
+  
+  res_dim <- integer(length = length(dims))
+  
+  hslab_list <- list()
+  starts <- counts <- strides <- blocks <- list()
+  
+  ## creating the set of hyperslabs in each dimension
+  for(i in seq_along(index)) {
+    if(is.null(index[[i]])) {
+      res_dim[i] <- dims[i]
+      hslab_list[[i]] <- list(start = 1, count = 1,
+                              stride = 1, block = dims[i])
+      starts[[i]] <- 1
+      counts[[i]] <- 1
+      strides[[i]] <- 1
+      blocks[[i]] <- dims[i]
+    } else {
+      this_dim <- i
+      
+      index_copy <- sort(unique(index[[i]]))
+      res_dim[i] <- length(index_copy)
+      start <- count <- stride <- block <- NULL
+      
+      while(length(index_copy)) {
+        if(length(index_copy) > 1) {
+          tmp <- rle(diff(index_copy))
+        } else {
+          tmp <- list(lengths = 0, values = 1) 
+        }
+        start <- c(start, index_copy[1])
+        count <- c(count, tmp$lengths[1] + 1)
+        stride <- c(stride, tmp$values[1])
+        block <- c(block, 1)
+        index_copy <- tail(index_copy, -(tmp$lengths[1] + 1))
+      }
+      hslab_list[[i]] <- list(start = start, count = count, 
+                              stride = stride, block =  block)
+      starts[[i]] <- start
+      counts[[i]] <- count
+      strides[[i]] <- stride
+      blocks[[i]] <- block
+    }
+  }
+  
+  starts2 <- expand.grid(starts)
+  counts2 <- expand.grid(counts)
+  strides2 <- expand.grid(strides)
+  blocks2 <- expand.grid(blocks)
+  
+  for(i in seq_len(nrow(starts2))) {
+    H5Sselect_hyperslab(h5space = h5space, op = "H5S_SELECT_OR", 
+                        start = as.numeric(starts2[i,]), stride = as.numeric(strides2[i,]), 
+                        count = as.numeric(counts2[i,]), block = as.numeric(blocks2[i,]))
+  }
+  
+  invisible(res_dim)
+}
