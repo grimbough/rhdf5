@@ -14,7 +14,7 @@ h5readDataset <- function (h5dataset, index = NULL, start = NULL, stride = NULL,
         
         ## if we are only selecting in one dimension, try faster code
         if(sum(!index_null) == 1) {
-            size <- .H5Sselect_dim( h5spaceFile, index)
+            size <- .H5Sselect_dim2( h5spaceFile, index)
             for (i in seq_along(index)) {
                 if (is.null(index[[i]])) {
                     index[[i]] = seq_len(s[i])

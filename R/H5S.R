@@ -271,41 +271,57 @@ H5Sunlimited <- function()  {
   .Call("_H5Sselect_none", h5space@ID, PACKAGE = "rhdf5")
   
   res_dim <- integer(length = length(dims))
-  
-  hslab_list <- list()
+
   starts <- counts <- strides <- blocks <- list()
   
   ## creating the set of hyperslabs in each dimension
   for(i in seq_along(index)) {
     if(is.null(index[[i]])) {
       res_dim[i] <- dims[i]
-      hslab_list[[i]] <- list(start = 1, count = 1,
-                              stride = 1, block = dims[i])
       starts[[i]] <- 1
       counts[[i]] <- 1
       strides[[i]] <- 1
       blocks[[i]] <- dims[i]
     } else {
-      this_dim <- i
-      
       index_copy <- sort(unique(index[[i]]))
       res_dim[i] <- length(index_copy)
       start <- count <- stride <- block <- NULL
       
-      while(length(index_copy)) {
-        if(length(index_copy) > 1) {
-          tmp <- rle(diff(index_copy))
-        } else {
-          tmp <- list(lengths = 0, values = 1) 
-        }
-        start <- c(start, index_copy[1])
-        count <- c(count, tmp$lengths[1] + 1)
-        stride <- c(stride, tmp$values[1])
+      differences <- rle(diff(index_copy))
+      diff_idx <- 1
+      index_copy_idx <- 1
+      
+      while(index_copy_idx <= length(index_copy)) {
+        start <- c(start, index_copy[ index_copy_idx ])
+        count <- c(count, differences$lengths[ diff_idx ] + 1)
+        stride <- c(stride, differences$values[ diff_idx ])
         block <- c(block, 1)
-        index_copy <- tail(index_copy, -(tmp$lengths[1] + 1))
+        #index_copy <- tail(index_copy, -(differences$lengths[1] + 1))
+        index_copy_idx <- index_copy_idx + differences$lengths[ diff_idx ]  + 1
+        
+        #if(length(index_copy) - index_copy_idx >= 1) {
+
+            diff_idx <- diff_idx + 1
+            if( differences$lengths[ diff_idx ] == 1 && diff_idx < length(differences$lengths) ) {
+                diff_idx <- diff_idx + 1
+            } else {
+                differences$lengths[ diff_idx ] <-  differences$lengths[ diff_idx ] - 1
+            }
+            
+             # tmp <- list(lengths = tmp$lengths[-1], 
+             #             values = tmp$values[-1])
+             # if(tmp$lengths[1] == 1) {
+             #     tmp <- list(lengths = tmp$lengths[-1], 
+             #                 values = tmp$values[-1])
+             # } else {
+             #    tmp$lengths[1] <- tmp$length[1] - 1
+             # }
+        #tmp <- rle(diff(index_copy))
+        #} else {
+        #    differences <- list(lengths = 0, values = 1) 
+        #}
       }
-      hslab_list[[i]] <- list(start = start, count = count, 
-                              stride = stride, block =  block)
+      
       starts[[i]] <- start
       counts[[i]] <- count
       strides[[i]] <- stride
@@ -317,6 +333,8 @@ H5Sunlimited <- function()  {
   counts2 <- expand.grid(counts)
   strides2 <- expand.grid(strides)
   blocks2 <- expand.grid(blocks)
+  
+  message(nrow(starts2))
   
   for(i in seq_len(nrow(starts2))) {
     H5Sselect_hyperslab(h5space = h5space, op = "H5S_SELECT_OR", 
