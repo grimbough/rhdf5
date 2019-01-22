@@ -13,28 +13,30 @@ h5readDataset <- function (h5dataset, index = NULL, start = NULL, stride = NULL,
         index_null <- sapply(index, is.null)
         
         ## if we are only selecting in one dimension, try faster code
-        if(sum(!index_null) == 1) {
-            size <- .H5Sselect_dim2( h5spaceFile, index)
-            for (i in seq_along(index)) {
-                if (is.null(index[[i]])) {
-                    index[[i]] = seq_len(s[i])
-                }
-            }
-        } else {
+        #if(sum(!index_null) == 1) {
+        #    size <- .H5Sselect_dim3( h5spaceFile, index)
+        #    for (i in seq_along(index)) {
+        #        if (is.null(index[[i]])) {
+        #            index[[i]] = seq_len(s[i])
+        #        }
+        #    }
+        #} else {
         
             ## we record if an index entry was NULL, 
             ## this saves potentially heavy (and unnecessary) reordering later
-            index_null <- logical(length = length(index))
+        #    index_null <- logical(length = length(index))
             for (i in seq_along(index)) {
-                if (is.null(index[[i]])) {
-                    index[[i]] = seq_len(s[i])
+        #        if (is.null(index[[i]])) {
+        #            index[[i]] = seq_len(s[i])
                 ## if we passed an object to the index, we need to get its values    
-                } else if ( is.name(index[[i]]) | is.call(index[[i]]) ) {
+                #} else 
+                if ( is.name(index[[i]]) | is.call(index[[i]]) ) {
                     index[[i]] <- eval(index[[i]])  
                 }
             }
-            size = .H5Sselect_index(h5spaceFile, index, index_null)
-        }
+            #size = .H5Sselect_index(h5spaceFile, index, index_null)
+            size <- .H5Sselect_dim3( h5spaceFile, index)
+        #}
         h5spaceMem = H5Screate_simple(size, native = h5dataset@native)
         on.exit(H5Sclose(h5spaceMem), add = TRUE)
     }
@@ -71,7 +73,7 @@ h5readDataset <- function (h5dataset, index = NULL, start = NULL, stride = NULL,
               } 
               I[[i]] = match(index[[i]], tmp)
             } else {
-              I[[i]] <- index[[i]]
+              I[[i]] <- seq_len(s[i])
             }
         }
         obj.dim <- lapply(dim(obj), FUN = seq_len)

@@ -106,9 +106,16 @@ test_that("writing & reading empty vectors", {
 context("indexing")
 ############################################################
 
+test_that("Columns and rows", {
+    expect_silent(fooB <- h5read(h5File, name = "foo/B", index = list(NULL, c(9,1,1,5))))
+    expect_equal(ncol(fooB), 4L)
+    expect_identical(fooB[,2], fooB[,3])
+})
+
 test_that("Columns specified multiple times", {
   expect_silent(fooB <- h5read(h5File, name = "foo/B", index = list(NULL, c(9,1,1,5))))
   expect_equal(ncol(fooB), 4L)
+  expect_equal(nrow(fooB), 2L)
   expect_identical(fooB[,2], fooB[,3])
 })
 

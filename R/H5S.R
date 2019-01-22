@@ -225,122 +225,119 @@ H5Sunlimited <- function()  {
   as.integer(h5checkConstants("H5S_UNLIMITED", "H5S_UNLIMITED"))
 }
 
-.H5Sselect_dim <- function( h5space, index ) {
-  
-  rhdf5:::h5checktype(h5space, "dataspace")
-  dims <- H5Sget_simple_extent_dims(h5space)$size
-  .Call("_H5Sselect_none", h5space@ID, PACKAGE = "rhdf5")
-  
-  res_dim <- integer(length = length(dims))
-  
-  for(i in seq_along(index)) {
-    if(is.null(index[[i]])) {
-      res_dim[i] <- dims[i]
-    } else {
-      this_dim <- i
-      pre <- length(which(seq_along(dims) < this_dim))
-      post <- length(which(seq_along(dims) > this_dim))
-      
-      index_copy <- sort(unique(index[[i]]))
-      res_dim[i] <- length(index_copy)
-      start <- count <- stride <- block <- NULL
-      
-      while(length(index_copy)) {
-        if(length(index_copy) > 1) {
-          tmp <- rle(diff(index_copy))
-        } else {
-          tmp <- list(lengths = 0, values = 1) 
-        }
-        start <- c(rep(1, pre), index_copy[1], rep(1, post))
-        count <- c(rep(1, pre), tmp$lengths[1] + 1, rep(1, post))
-        stride <- c(rep(1, pre), tmp$values[1], rep(1, post))
-        block <- c(dims[seq_along(dims) < this_dim], 1, dims[seq_along(dims) > this_dim])
-        H5Sselect_hyperslab(h5space = h5space, op = "H5S_SELECT_OR", 
-                            start = start, stride = stride, count = count, block = block)
-        index_copy <- tail(index_copy, -(tmp$lengths[1] + 1))
-      }
+
+.validIndex <- function(index, dim) {
+    if (any(index > dim)) {
+        stop("index exceeds HDF5-array dimension.")
     }
-  }
-  invisible(res_dim)
+    if (any(index <= 0)) {
+        stop("negative indices and 0 not supported.")
+    }
 }
 
-.H5Sselect_dim2 <- function( h5space, index ) {
-  
-  rhdf5:::h5checktype(h5space, "dataspace")
-  dims <- H5Sget_simple_extent_dims(h5space)$size
-  .Call("_H5Sselect_none", h5space@ID, PACKAGE = "rhdf5")
-  
-  res_dim <- integer(length = length(dims))
-
-  starts <- counts <- strides <- blocks <- list()
-  
-  ## creating the set of hyperslabs in each dimension
-  for(i in seq_along(index)) {
-    if(is.null(index[[i]])) {
-      res_dim[i] <- dims[i]
-      starts[[i]] <- 1
-      counts[[i]] <- 1
-      strides[[i]] <- 1
-      blocks[[i]] <- dims[i]
-    } else {
-      index_copy <- sort(unique(index[[i]]))
-      res_dim[i] <- length(index_copy)
-      start <- count <- stride <- block <- NULL
-      
-      differences <- rle(diff(index_copy))
-      diff_idx <- 1
-      index_copy_idx <- 1
-      
-      while(index_copy_idx <= length(index_copy)) {
-        start <- c(start, index_copy[ index_copy_idx ])
-        count <- c(count, differences$lengths[ diff_idx ] + 1)
-        stride <- c(stride, differences$values[ diff_idx ])
-        block <- c(block, 1)
-        #index_copy <- tail(index_copy, -(differences$lengths[1] + 1))
-        index_copy_idx <- index_copy_idx + differences$lengths[ diff_idx ]  + 1
-        
-        #if(length(index_copy) - index_copy_idx >= 1) {
-
-            diff_idx <- diff_idx + 1
-            if( differences$lengths[ diff_idx ] == 1 && diff_idx < length(differences$lengths) ) {
-                diff_idx <- diff_idx + 1
-            } else {
-                differences$lengths[ diff_idx ] <-  differences$lengths[ diff_idx ] - 1
-            }
+.H5Sselect_dim3 <- function( h5space, index ) {
+    
+    rhdf5:::h5checktype(h5space, "dataspace")
+    dims <- H5Sget_simple_extent_dims(h5space)$size
+    .Call("_H5Sselect_none", h5space@ID, PACKAGE = "rhdf5")
+    
+    res_dim <- integer(length = length(dims))
+    
+    starts <- counts <- strides <- blocks <- list()
+    
+    ## creating the set of hyperslabs in each dimension
+    for(i in seq_along(index)) {
+        if(is.null(index[[i]])) {
+            res_dim[i] <- dims[i]
+            starts[[i]] <- 1
+            counts[[i]] <- 1
+            strides[[i]] <- 1
+            blocks[[i]] <- as.numeric(dims[i])
+        } else if (length(index[[i]]) == 1) {
+            .validIndex(index[[i]], dims[i])
             
-             # tmp <- list(lengths = tmp$lengths[-1], 
-             #             values = tmp$values[-1])
-             # if(tmp$lengths[1] == 1) {
-             #     tmp <- list(lengths = tmp$lengths[-1], 
-             #                 values = tmp$values[-1])
-             # } else {
-             #    tmp$lengths[1] <- tmp$length[1] - 1
-             # }
-        #tmp <- rle(diff(index_copy))
-        #} else {
-        #    differences <- list(lengths = 0, values = 1) 
-        #}
-      }
-      
-      starts[[i]] <- start
-      counts[[i]] <- count
-      strides[[i]] <- stride
-      blocks[[i]] <- block
+            res_dim[i] <- 1
+            starts[[i]] <- index[[i]][1]
+            counts[[i]] <- 1
+            strides[[i]] <- 1
+            blocks[[i]] <- 1
+        } else {
+            .validIndex(index[[i]], dims[i])
+            
+            index_copy <- sort(unique(floor(index[[i]])))
+            res_dim[i] <- length(index_copy)
+            start <- count <- stride <- block <- NULL
+            
+            ## selecting the optimal break up of the indices
+            ## this is not optimised
+            if(length(index_copy) > 1) {
+                lag <- which.min(sapply(seq_len(min(10, length(index_copy)-1)), 
+                                        FUN = function(i, index_copy) { 
+                                            i + length(rle(diff(index_copy, lag = i))$lengths) 
+                                        },
+                                        index_copy))
+            } else { lag <- 1 }
+            
+            indices <- split(index_copy, seq_along(index_copy) %% lag)
+            
+            for(j in seq_len(lag)) {
+                if(length(indices[[j]]) == 1) {
+                    start <- c(start, indices[[j]][1])
+                    count <- c(count, 1)
+                    stride <- c(stride, 1)
+                    ## block is always 1, so define outside of the loop
+                    #block <- c(block, 1)
+                } else {
+                    differences <- rle(diff(indices[[j]]))
+                    diff_idx <- 1
+                    index_copy_idx <- 1
+                    
+                    while(index_copy_idx <= length(indices[[j]])) {
+                        start <- c(start, indices[[j]][ index_copy_idx ])
+                        count <- c(count, differences$lengths[ diff_idx ] + 1)
+                        stride <- c(stride, differences$values[ diff_idx ])
+                        ## block is always 1, so define outside of the loop
+                        #block <- c(block, 1)
+                        index_copy_idx <- index_copy_idx + differences$lengths[ diff_idx ]  + 1
+                        
+                        diff_idx <- diff_idx + 1
+                        if( differences$lengths[ diff_idx ] == 1 && diff_idx < length(differences$lengths) ) {
+                            diff_idx <- diff_idx + 1
+                        } else {
+                            differences$lengths[ diff_idx ] <-  differences$lengths[ diff_idx ] - 1
+                        }
+                    }
+                }
+            }
+            block <- rep(1, length(start))
+            
+            starts[[i]] <- start
+            counts[[i]] <- count
+            strides[[i]] <- stride
+            blocks[[i]] <- block
+        }
     }
-  }
-  
-  starts2 <- expand.grid(starts)
-  counts2 <- expand.grid(counts)
-  strides2 <- expand.grid(strides)
-  blocks2 <- expand.grid(blocks)
-  
-  message(nrow(starts2))
-  
-  for(i in seq_len(nrow(starts2))) {
-    H5Sselect_hyperslab(h5space = h5space, op = "H5S_SELECT_OR", 
-                        start = as.numeric(starts2[i,]), stride = as.numeric(strides2[i,]), 
-                        count = as.numeric(counts2[i,]), block = as.numeric(blocks2[i,]))
-  }
-  
-  invisible(res_dim)
+    
+    if (!h5space@native) {
+        starts2 <- as.matrix(rev(expand.grid(starts)-1))
+        strides2 <- as.matrix(rev(expand.grid(strides)))
+        counts2 <- as.matrix(rev(expand.grid(counts)))
+        blocks2 <- as.matrix(rev(expand.grid(blocks)))
+    } else {
+        starts2 <- as.matrix(expand.grid(starts)-1)
+        strides2 <- as.matrix(expand.grid(strides))
+        counts2 <- as.matrix(expand.grid(counts))
+        blocks2 <- as.matrix(expand.grid(blocks))
+    }
+    
+    
+    op <- rhdf5:::h5checkConstants( "H5S_SELECT", "H5S_SELECT_OR" )
+    for(i in seq_len(nrow(starts2))) {
+        .Call("_H5Sselect_hyperslab", h5space@ID, op, 
+              starts2[i,], strides2[i,], 
+              counts2[i,], blocks2[i,], 
+              PACKAGE='rhdf5')
+    }
+    
+    invisible(res_dim)
 }
