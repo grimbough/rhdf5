@@ -17,5 +17,7 @@ H5Tset_size <- function( dtype_id = h5default(type="H5T"), size) {
   invisible(.Call("_H5Tset_size", dtype_id, size, PACKAGE='rhdf5'))
 }
 
-
-
+## not currently exported - MLS 23-01-2019
+H5Tget_size <- function( dtype_id = h5default(type="H5T")) {
+  .Call("_H5Tget_size", dtype_id, PACKAGE='rhdf5')
+}

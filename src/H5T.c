@@ -28,3 +28,15 @@ SEXP _H5Tset_size( SEXP _dtype_id, SEXP _size ) {
   return Rval;
 }
 
+/* size_t H5Tget_size(hid_t type_id); */
+SEXP _H5Tget_size( SEXP _dtype_id ) {
+  
+  hid_t dtype_id = STRSXP_2_HID( _dtype_id );
+  size_t size = H5Tget_size( dtype_id );
+  
+  SEXP Rval;
+  PROTECT(Rval = allocVector(INTSXP, 1));
+  INTEGER(Rval)[0] = size;
+  UNPROTECT(1);
+  return Rval;
+}

@@ -157,6 +157,34 @@ test_that("Extendible datasets", {
 
 })
 
+test_that("Invalid inputs", {
+    expect_message(suppressWarnings(
+      h5createDataset(file = h5File, dataset = "fail", dims = "twenty"))
+      ) %>%
+      expect_false()
+    expect_message(h5createDataset(file = h5File, dataset = "A", dims = c(20, 10))) %>%
+      expect_false()
+    expect_error(h5createDataset(file = h5File, dataset = "fail", dims = c(-10, 20)))
+    expect_error(h5createDataset(file = h5File, dataset = "fail", dims = c(10, 20), maxdims = c(20)))
+    expect_error(h5createDataset(file = h5File, dataset = "fail", 
+                                 dims = c(10, 20), maxdims = c(20, 20), chunk = NULL))
+    expect_error(h5createDataset(file = h5File, dataset = "fail", dims = c(10, 20), maxdims = c(20, 10)))
+    expect_warning(h5createDataset(file = h5File, dataset = "fail", dims = c(10, 20), level = 1, chunk = NULL))
+    
+})
+
+test_that("Using chunks greater than 4GB", {
+    expect_message(h5createDataset(file = h5File, dataset = "large_double", 
+                                   dims = c(25000, 25000), storage.mode = "double")) %>%
+    expect_true()
+    expect_message(h5createDataset(file = h5File, dataset = "large_int", 
+                                  dims = c(50000, 50000), storage.mode = "integer")) %>%
+    expect_true()
+    expect_silent(h5createDataset(file = h5File, dataset = "small_int", 
+                                  dims = c(500, 500), storage.mode = "integer")) %>%
+    expect_true()
+})
+
 ############################################################
 context("h5createAttribute")
 ############################################################

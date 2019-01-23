@@ -99,6 +99,7 @@ static R_CallMethodDef libraryRCalls[] = {
   {"_H5Sselect_index", (DL_FUNC) &_H5Sselect_index, 3},
   {"_H5Tcopy", (DL_FUNC) &_H5Tcopy, 1},
   {"_H5Tset_size", (DL_FUNC) &_H5Tset_size, 2},
+  {"_H5Tget_size", (DL_FUNC) &_H5Tget_size, 1},
   {"_H5Pcreate", (DL_FUNC) &_H5Pcreate, 1},
   {"_H5Pget_class", (DL_FUNC) &_H5Pget_class, 1},
   {"_H5Pcopy", (DL_FUNC) &_H5Pcopy, 1},
