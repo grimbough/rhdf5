@@ -38,7 +38,7 @@ h5write.default             (obj, file, name,
                              write.attributes = FALSE, ...,
                              native = FALSE)
 h5writeDataset              (obj, h5loc, name, ...)
-h5writeDataset.data.frame   (obj, h5loc, name, level=7,
+h5writeDataset.data.frame   (obj, h5loc, name, level=7, chunk,
                              DataFrameAsCompound = TRUE)
 h5writeDataset.list         (obj, h5loc, name, level=7)
 h5writeDataset.matrix       (...)
@@ -71,6 +71,7 @@ h5writeAttribute.array      (attr, h5obj, name, size)
   \item{block}{The block size of the hyperslab. Read the introduction \url{http://ftp.hdfgroup.org/HDF5/Tutor/phypecont.html} before using this argument. R behaves like Fortran in this example. This argument is ignored, if index is not NULL.}
   \item{count}{The number of blocks to be written. This argument is ignored, if index is not NULL.}
   \item{level}{The compression level. An integer value between 0 (no compression) and 9 (highest and slowest compression). Only used, if the dataset does not yet exist. See \code{\link{h5createDataset}} to create an dataset.}
+  \item{chunk}{Specifies the number of items to be include in an HDF5 chunk.  When writing a \code{data.frame} this represents the number of rows to be included in a chunk.  If left unspecified the defaults is the smaller of: the total number of rows or the number of rows that fit within 4GB of memory.}
   \item{native}{An object of class \code{logical}. If TRUE, array-like objects are treated as stored in HDF5 row-major rather than R column-major orientation. Using \code{native = TRUE} increases HDF5 file portability between programming languages. A file written with \code{native = TRUE} should also be read with \code{native = TRUE}}.
   \item{compoundAsDataFrame}{If true, a compound datatype will be coerced to a data.frame. This is not possible, if the dataset is multi-dimensional. Otherwise the compound datatype will be returned as a list. Nested compound data types will be returned as a nested list.}
   \item{DataFrameAsCompound}{If true, a data.frame will be saved as a compound data type. Otherwise it is saved like a list. The advantage of saving a data.frame as a compound data type is that it can be read as a table from python or with a struct-type from C. The disadvantage is that the data has to be rearranged on disk and thus can slow down I/O. If fast reading is required, DataFrameAsCompound=FALSE is recommended.}

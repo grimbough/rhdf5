@@ -112,7 +112,7 @@ bm <- microbenchmark::microbenchmark(
   select_index(100), select_index(200), select_index(500),
   select_index(1000), select_index(2000), select_index(5000),
   select_index(10000),
-  times = 5
+  times = 3
 ) %>% mutate(n = gsub(".*\\(([0-9]+)\\)", "\\1", expr) 
              %>% as.integer(),
              time = time / 1e9)

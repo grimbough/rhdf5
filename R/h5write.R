@@ -108,13 +108,19 @@ h5writeDataset <- function(obj, h5loc, name, ...) {
     invisible(res)
 }
 
-h5writeDataset.data.frame <- function(obj, h5loc, name, level=7, DataFrameAsCompound = TRUE) {
+h5writeDataset.data.frame <- function(obj, h5loc, name, level=7, chunk, DataFrameAsCompound = TRUE) {
     if (DataFrameAsCompound) {
         if (H5Lexists(h5loc, name)) {
             stop("Cannot write data.frame. Object already exists. Subsetting for compound datatype not supported.")
         }
-        if (!is.null(level)) { level = as.integer(level) }
-        .Call("_h5writeDataFrame", obj, h5loc@ID, name, level, PACKAGE='rhdf5')
+        if (!is.null(level)) { 
+            level = as.integer(level)
+            if(missing(chunk)) 
+                chunk <- nrow(obj)
+        }
+        did <- .Call("_h5createDataFrame", obj, h5loc@ID, name, level, as.integer(chunk), PACKAGE='rhdf5')
+        .Call("_h5writeDataFrame", obj, did, PACKAGE='rhdf5')
+        .Call("_H5Dclose", did, PACKAGE='rhdf5')
         res <- 0
     } else {
         a <- attr(obj,"names")

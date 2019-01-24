@@ -96,6 +96,39 @@ test_that("Writing to file handle", {
 })
 
 ############################################################
+context("h5write with data.frames")
+############################################################
+
+h5f1 <- tempfile(fileext = ".h5")
+h5f2 <- tempfile(fileext = ".h5")
+
+h5createFile(h5f1)
+h5createFile(h5f2)
+
+## we use file size as a proxy for chunk size
+## larger chunks should compress better in this example
+test_that("Changing chunk size works", {
+    expect_silent(h5write(data.frame("A" = rep(1:100), "B" = 201:300),
+                          h5f1, "dset", level = 7, chunk = 1L))
+    expect_silent(h5write(data.frame("A" = rep(1:100), "B" = 201:300),
+                          h5f2, "dset", level = 7, chunk = 100L))
+    expect_true(file.size(h5f2) < file.size(h5f1))
+})
+
+
+counts_1 <- rep(0, 500000000)
+d1 <- data.frame(counts_1, counts_1, counts_1, counts_1)
+
+test_that("Very large data.frames are limited to chunk size < 4GB", {
+    fid <- H5Fcreate(name = h5File)
+    expect_silent(did <- .Call("_h5createDataFrame", d1, fid@ID, "test", 7L, nrow(d1), PACKAGE='rhdf5'))
+    expect_gt(as.numeric(did), 0)
+    expect_equal(.Call("_H5Dclose", did, PACKAGE='rhdf5'), 0)
+    H5Fclose(fid)
+})
+
+
+############################################################
 context("Writing a datset subset")
 ############################################################
 

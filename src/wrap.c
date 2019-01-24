@@ -291,7 +291,8 @@ static R_CallMethodDef libraryRCalls[] = {
   {"_handleInfo", (DL_FUNC) &_handleInfo, 1},
   {"_getDatatypeName", (DL_FUNC) &_getDatatypeName, 1},
   {"_getDatatypeClass", (DL_FUNC) &_getDatatypeClass, 1},
-  {"_h5writeDataFrame", (DL_FUNC) &_h5writeDataFrame, 4},
+  {"_h5writeDataFrame", (DL_FUNC) &_h5writeDataFrame, 2},
+  {"_h5createDataFrame", (DL_FUNC) &_h5createDataFrame, 5},
   {"_h5errorHandling", (DL_FUNC) &_h5errorHandling, 1},
   {"_h5fileLock", (DL_FUNC) &_h5fileLock, 1},
   {NULL, NULL, 0}
