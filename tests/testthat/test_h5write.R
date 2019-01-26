@@ -115,17 +115,18 @@ test_that("Changing chunk size works", {
     expect_true(file.size(h5f2) < file.size(h5f1))
 })
 
-
-counts_1 <- rep(0, 500000000)
-d1 <- data.frame(counts_1, counts_1, counts_1, counts_1)
-
-test_that("Very large data.frames are limited to chunk size < 4GB", {
-    fid <- H5Fcreate(name = h5File)
-    expect_silent(did <- .Call("_h5createDataFrame", d1, fid@ID, "test", 7L, nrow(d1), PACKAGE='rhdf5'))
-    expect_gt(as.numeric(did), 0)
-    expect_equal(.Call("_H5Dclose", did, PACKAGE='rhdf5'), 0)
-    H5Fclose(fid)
-})
+if(.Platform$r_arch != "i386") {
+    counts_1 <- rep(0, 500000000)
+    d1 <- data.frame(counts_1, counts_1, counts_1, counts_1)
+    
+    test_that("Very large data.frames are limited to chunk size < 4GB", {
+        fid <- H5Fcreate(name = h5File)
+        expect_silent(did <- .Call("_h5createDataFrame", d1, fid@ID, "test", 7L, nrow(d1), PACKAGE='rhdf5'))
+        expect_gt(as.numeric(did), 0)
+        expect_equal(.Call("_H5Dclose", did, PACKAGE='rhdf5'), 0)
+        H5Fclose(fid)
+    })
+}
 
 
 ############################################################
