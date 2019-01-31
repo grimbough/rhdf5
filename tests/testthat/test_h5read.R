@@ -106,10 +106,45 @@ test_that("writing & reading empty vectors", {
 context("indexing")
 ############################################################
 
+A = matrix(1:100, ncol = 10); 
+B = array(1:1000, dim = c(10,10,10))
+
+## output file name
+h5File <- tempfile(pattern = "ex_read", fileext = ".h5")
+
+# create file with group heirachy  
+h5createFile(h5File)
+h5write(obj = A, file = h5File, name = "A")
+h5write(obj = B, file = h5File, name = "B")
+
+test_that("Works with a dimension of length 1", {
+    expect_silent(A2 <- h5read(h5File, name = "A", index = list(NULL, 5)))
+    expect_is(A2, "matrix")
+    expect_equal(ncol(A2), 1L)
+    expect_equal(nrow(A2), 10L)
+    expect_identical(A2[,1], A[,5])
+})
+
 test_that("Columns specified multiple times", {
-  expect_silent(fooB <- h5read(h5File, name = "foo/B", index = list(NULL, c(9,1,1,5))))
-  expect_equal(ncol(fooB), 4L)
-  expect_identical(fooB[,2], fooB[,3])
+  expect_silent(A2 <- h5read(h5File, name = "A", index = list(NULL, c(9,1,1,5))))
+  expect_equal(ncol(A2), 4L)
+  expect_equal(nrow(A2), 10L)
+  expect_identical(A2[,2], A[,1])
+})
+
+
+test_that("Indexing multiple dimensions works", {
+    expect_silent(A2 <- h5read(h5File, name = "A", index = list(c(1,3), c(1,5,10))))
+    expect_equal(ncol(A2), 3L)
+    expect_equal(nrow(A2), 2L)
+    expect_equal(A2[2,3], A[3,10])
+    
+    expect_silent(B2 <- h5read(h5File, name = "B", index = list(c(1,8,10), NULL, NULL)))
+    expect_equal(dim(B2), c(3,10,10))
+    expect_identical(B2[3,,], B[10,,])
+    expect_silent(B2 <- h5read(h5File, name = "B", index = list(c(8), NULL, c(4,6))))
+    expect_equal(dim(B2), c(1,10,2))
+    expect_identical(B2[1,6,], B[8,6,c(4,6)])
 })
 
 ############################################################

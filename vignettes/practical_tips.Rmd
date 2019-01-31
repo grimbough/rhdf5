@@ -267,5 +267,5 @@ H5Fclose(fid)
 # Session info {.unnumbered}
 
 ```{r sessionInfo, echo=FALSE}
-devtools::session_info()
+sessionInfo()
 ```

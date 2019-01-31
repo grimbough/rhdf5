@@ -1,9 +1,8 @@
 h5readDataset <- function (h5dataset, index = NULL, start = NULL, stride = NULL, 
                            block = NULL, count = NULL, compoundAsDataFrame = TRUE, drop = FALSE, ...) {
-    try({
-        h5spaceFile <- H5Dget_space(h5dataset)
-        on.exit(H5Sclose(h5spaceFile))
-    })
+
+    h5spaceFile <- H5Dget_space(h5dataset)
+    on.exit(H5Sclose(h5spaceFile))
     h5spaceMem = NULL
     if (!is.null(index)) {
         s <- H5Sget_simple_extent_dims(h5spaceFile)$size
@@ -11,22 +10,14 @@ h5readDataset <- function (h5dataset, index = NULL, start = NULL, stride = NULL,
             stop("length of index has to be equal to dimensional extension of HDF5 dataset.")
         }
         
-        ## we record if an index entry was NULL, 
-        ## this saves potentially heavy (and unnecessary) reordering later
-        index_null <- logical(length = length(index))
+        index_null <- sapply(index, is.null)
+        
         for (i in seq_along(index)) {
-            if (is.null(index[[i]])) {
-                index[[i]] = seq_len(s[i])
-                index_null[i] <- TRUE
-            ## if we passed an object to the index, we need to get its values    
-            } else if ( is.name(index[[i]]) | is.call(index[[i]]) ) {
+            if ( is.name(index[[i]]) | is.call(index[[i]]) ) {
                 index[[i]] <- eval(index[[i]])  
             }
         }
-        size = 0
-        try({
-            size = .H5Sselect_index(h5spaceFile, index, index_null)
-        })
+        size <- .H5Sselect_dim( h5spaceFile, index)
         h5spaceMem = H5Screate_simple(size, native = h5dataset@native)
         on.exit(H5Sclose(h5spaceMem), add = TRUE)
     }
@@ -63,7 +54,7 @@ h5readDataset <- function (h5dataset, index = NULL, start = NULL, stride = NULL,
               } 
               I[[i]] = match(index[[i]], tmp)
             } else {
-              I[[i]] <- index[[i]]
+              I[[i]] <- seq_len(s[i])
             }
         }
         obj.dim <- lapply(dim(obj), FUN = seq_len)
@@ -95,23 +86,21 @@ h5read <- function(file, name, index=NULL, start=NULL, stride=NULL, block=NULL,
             gid <- H5Gopen(loc$H5Identifier, name)
             obj = h5dump(gid, start=start, stride=stride, block=block, count=count, compoundAsDataFrame = compoundAsDataFrame, callGeneric = callGeneric, ...)
             H5Gclose(gid)
-        } else {
-            if (type == "H5I_DATASET") {
-                try( { h5dataset <- H5Dopen(loc$H5Identifier, name) } )
-                obj <- h5readDataset(h5dataset, index = index, start = start, stride = stride, 
-                                     block = block, count = count, compoundAsDataFrame = compoundAsDataFrame, drop = drop, ...)
-                try( { H5Dclose(h5dataset) } )
-                
-                cl <- attr(obj,"class")
-                if (!is.null(cl) & callGeneric) {
-                    if (exists(paste("h5read",cl,sep="."),mode="function")) {
-                        obj <- do.call(paste("h5read",cl,sep="."), args=list(obj = obj))
-                    }
+        } else if (type == "H5I_DATASET") {
+            try( { h5dataset <- H5Dopen(loc$H5Identifier, name) } )
+            obj <- h5readDataset(h5dataset, index = index, start = start, stride = stride, 
+                                 block = block, count = count, compoundAsDataFrame = compoundAsDataFrame, drop = drop, ...)
+            try( { H5Dclose(h5dataset) } )
+            
+            cl <- attr(obj,"class")
+            if (!is.null(cl) & callGeneric) {
+                if (exists(paste("h5read",cl,sep="."),mode="function")) {
+                    obj <- do.call(paste("h5read",cl,sep="."), args=list(obj = obj))
                 }
-            } else {
-                message("Reading of object type not supported.")
-                obj <- NULL
-            } ## DATASET
+            }
+        } else {
+            message("Reading of object type not supported.")
+            obj <- NULL
         } ## GROUP
         if (read.attributes & (num_attrs > 0) & !is.null(obj)) {
             for (i in seq_len(num_attrs)) {
