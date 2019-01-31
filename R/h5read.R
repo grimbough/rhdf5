@@ -12,31 +12,12 @@ h5readDataset <- function (h5dataset, index = NULL, start = NULL, stride = NULL,
         
         index_null <- sapply(index, is.null)
         
-        ## if we are only selecting in one dimension, try faster code
-        #if(sum(!index_null) == 1) {
-        #    size <- .H5Sselect_dim3( h5spaceFile, index)
-        #    for (i in seq_along(index)) {
-        #        if (is.null(index[[i]])) {
-        #            index[[i]] = seq_len(s[i])
-        #        }
-        #    }
-        #} else {
-        
-            ## we record if an index entry was NULL, 
-            ## this saves potentially heavy (and unnecessary) reordering later
-        #    index_null <- logical(length = length(index))
-            for (i in seq_along(index)) {
-        #        if (is.null(index[[i]])) {
-        #            index[[i]] = seq_len(s[i])
-                ## if we passed an object to the index, we need to get its values    
-                #} else 
-                if ( is.name(index[[i]]) | is.call(index[[i]]) ) {
-                    index[[i]] <- eval(index[[i]])  
-                }
+        for (i in seq_along(index)) {
+            if ( is.name(index[[i]]) | is.call(index[[i]]) ) {
+                index[[i]] <- eval(index[[i]])  
             }
-            #size = .H5Sselect_index(h5spaceFile, index, index_null)
-            size <- .H5Sselect_dim3( h5spaceFile, index)
-        #}
+        }
+        size <- .H5Sselect_dim( h5spaceFile, index)
         h5spaceMem = H5Screate_simple(size, native = h5dataset@native)
         on.exit(H5Sclose(h5spaceMem), add = TRUE)
     }
@@ -105,23 +86,21 @@ h5read <- function(file, name, index=NULL, start=NULL, stride=NULL, block=NULL,
             gid <- H5Gopen(loc$H5Identifier, name)
             obj = h5dump(gid, start=start, stride=stride, block=block, count=count, compoundAsDataFrame = compoundAsDataFrame, callGeneric = callGeneric, ...)
             H5Gclose(gid)
-        } else {
-            if (type == "H5I_DATASET") {
-                try( { h5dataset <- H5Dopen(loc$H5Identifier, name) } )
-                obj <- h5readDataset(h5dataset, index = index, start = start, stride = stride, 
-                                     block = block, count = count, compoundAsDataFrame = compoundAsDataFrame, drop = drop, ...)
-                try( { H5Dclose(h5dataset) } )
-                
-                cl <- attr(obj,"class")
-                if (!is.null(cl) & callGeneric) {
-                    if (exists(paste("h5read",cl,sep="."),mode="function")) {
-                        obj <- do.call(paste("h5read",cl,sep="."), args=list(obj = obj))
-                    }
+        } else if (type == "H5I_DATASET") {
+            try( { h5dataset <- H5Dopen(loc$H5Identifier, name) } )
+            obj <- h5readDataset(h5dataset, index = index, start = start, stride = stride, 
+                                 block = block, count = count, compoundAsDataFrame = compoundAsDataFrame, drop = drop, ...)
+            try( { H5Dclose(h5dataset) } )
+            
+            cl <- attr(obj,"class")
+            if (!is.null(cl) & callGeneric) {
+                if (exists(paste("h5read",cl,sep="."),mode="function")) {
+                    obj <- do.call(paste("h5read",cl,sep="."), args=list(obj = obj))
                 }
-            } else {
-                message("Reading of object type not supported.")
-                obj <- NULL
-            } ## DATASET
+            }
+        } else {
+            message("Reading of object type not supported.")
+            obj <- NULL
         } ## GROUP
         if (read.attributes & (num_attrs > 0) & !is.null(obj)) {
             for (i in seq_len(num_attrs)) {

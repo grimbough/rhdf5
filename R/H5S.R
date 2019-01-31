@@ -225,7 +225,8 @@ H5Sunlimited <- function()  {
   as.integer(h5checkConstants("H5S_UNLIMITED", "H5S_UNLIMITED"))
 }
 
-
+## check that the provided index doesn't violate 
+## and assumption on the size of the dataset
 .validIndex <- function(index, dim) {
     if (any(index > dim)) {
         stop("index exceeds HDF5-array dimension.")
@@ -235,9 +236,9 @@ H5Sunlimited <- function()  {
     }
 }
 
-.H5Sselect_dim3 <- function( h5space, index ) {
+.H5Sselect_dim <- function( h5space, index ) {
     
-    rhdf5:::h5checktype(h5space, "dataspace")
+    h5checktype(h5space, "dataspace")
     dims <- H5Sget_simple_extent_dims(h5space)$size
     .Call("_H5Sselect_none", h5space@ID, PACKAGE = "rhdf5")
     
@@ -247,13 +248,17 @@ H5Sunlimited <- function()  {
     
     ## creating the set of hyperslabs in each dimension
     for(i in seq_along(index)) {
+        
         if(is.null(index[[i]])) {
+            ## null index implies we want everything in this dimension
             res_dim[i] <- dims[i]
             starts[[i]] <- 1
             counts[[i]] <- 1
             strides[[i]] <- 1
             blocks[[i]] <- as.numeric(dims[i])
         } else if (length(index[[i]]) == 1) {
+            ## catch the special case of only requesting a single entry
+            ## in this dimension. This breaks the loop below in its current form.
             .validIndex(index[[i]], dims[i])
             
             res_dim[i] <- 1
@@ -262,6 +267,7 @@ H5Sunlimited <- function()  {
             strides[[i]] <- 1
             blocks[[i]] <- 1
         } else {
+            ## two or more entries from this dim
             .validIndex(index[[i]], dims[i])
             
             index_copy <- sort(unique(floor(index[[i]])))
@@ -269,7 +275,8 @@ H5Sunlimited <- function()  {
             start <- count <- stride <- block <- NULL
             
             ## selecting the optimal break up of the indices
-            ## this is not optimised
+            ## This is not optimised!  We check lags 1:10 and pick the
+            ## value with the fewest number of runs.
             if(length(index_copy) > 1) {
                 lag <- which.min(sapply(seq_len(min(10, length(index_copy)-1)), 
                                         FUN = function(i, index_copy) { 
@@ -282,12 +289,13 @@ H5Sunlimited <- function()  {
             
             for(j in seq_len(lag)) {
                 if(length(indices[[j]]) == 1) {
+                    ## no sequence, just a single entry
                     start <- c(start, indices[[j]][1])
                     count <- c(count, 1)
                     stride <- c(stride, 1)
                     ## block is always 1, so define outside of the loop
-                    #block <- c(block, 1)
                 } else {
+                    ## rle for this subset of indices
                     differences <- rle(diff(indices[[j]]))
                     diff_idx <- 1
                     index_copy_idx <- 1
@@ -297,9 +305,8 @@ H5Sunlimited <- function()  {
                         count <- c(count, differences$lengths[ diff_idx ] + 1)
                         stride <- c(stride, differences$values[ diff_idx ])
                         ## block is always 1, so define outside of the loop
-                        #block <- c(block, 1)
-                        index_copy_idx <- index_copy_idx + differences$lengths[ diff_idx ]  + 1
                         
+                        index_copy_idx <- index_copy_idx + differences$lengths[ diff_idx ]  + 1
                         diff_idx <- diff_idx + 1
                         if( differences$lengths[ diff_idx ] == 1 && diff_idx < length(differences$lengths) ) {
                             diff_idx <- diff_idx + 1
@@ -318,6 +325,8 @@ H5Sunlimited <- function()  {
         }
     }
     
+    ## create all combinations of hyperslab parameters
+    ## using as.matrix() here is more efficient than doing it later
     if (!h5space@native) {
         starts2 <- as.matrix(rev(expand.grid(starts)-1))
         strides2 <- as.matrix(rev(expand.grid(strides)))
@@ -330,8 +339,7 @@ H5Sunlimited <- function()  {
         blocks2 <- as.matrix(expand.grid(blocks))
     }
     
-    
-    op <- rhdf5:::h5checkConstants( "H5S_SELECT", "H5S_SELECT_OR" )
+    op <- h5checkConstants( "H5S_SELECT", "H5S_SELECT_OR" )
     for(i in seq_len(nrow(starts2))) {
         .Call("_H5Sselect_hyperslab", h5space@ID, op, 
               starts2[i,], strides2[i,], 

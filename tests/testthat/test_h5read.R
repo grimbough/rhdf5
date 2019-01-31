@@ -117,11 +117,19 @@ h5createFile(h5File)
 h5write(obj = A, file = h5File, name = "A")
 h5write(obj = B, file = h5File, name = "B")
 
+test_that("Works with a dimension of length 1", {
+    expect_silent(A2 <- h5read(h5File, name = "A", index = list(NULL, 5)))
+    expect_is(A2, "matrix")
+    expect_equal(ncol(A2), 1L)
+    expect_equal(nrow(A2), 10L)
+    expect_identical(A2[,1], A[,5])
+})
+
 test_that("Columns specified multiple times", {
   expect_silent(A2 <- h5read(h5File, name = "A", index = list(NULL, c(9,1,1,5))))
   expect_equal(ncol(A2), 4L)
-  expect_equal(nrow(A2), 2L)
-  expect_identical(A2[,2], B2[,3])
+  expect_equal(nrow(A2), 10L)
+  expect_identical(A2[,2], A[,1])
 })
 
 
