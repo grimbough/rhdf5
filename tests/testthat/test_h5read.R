@@ -120,6 +120,7 @@ h5write(obj = B, file = h5File, name = "B")
 test_that("Columns specified multiple times", {
   expect_silent(A2 <- h5read(h5File, name = "A", index = list(NULL, c(9,1,1,5))))
   expect_equal(ncol(A2), 4L)
+  expect_equal(nrow(A2), 2L)
   expect_identical(A2[,2], B2[,3])
 })
 
