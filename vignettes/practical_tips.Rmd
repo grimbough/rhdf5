@@ -80,7 +80,7 @@ system.time(
 identical(res2, res3)
 ```
 
-This is clearly significantly quicker than using the `index` argument in the example, and the call to `identical()` confirms we're returning the same data.  
+This is clearly significantly quicker than using the `index` argument in the example, and the call to `identical()` confirms we're returning the same data.
 
 *rhdf5* is sophisticated enough to combine consecutive columns into a single call, so selecting completely disjoint alternative columns represents a worst case scenario.  The impact would be far less if, for example, we wanted to extract columns 1 - 5,000 and 6,001 - 11,000.  In that scenario it would probably not be noticeably beneficial to move away from using the `index` argument, but for less contiguous selections making use of the hyperslab selection parameters can be extremely beneficial.
 
