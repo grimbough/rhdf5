@@ -25,7 +25,7 @@ if(file.exists('newfile3.h5'))
     file.remove('newfile3.h5')
 ```
 
-#Introduction
+# Introduction
 The package is an R interface for HDF5. On the one hand it implements
 **R** interfaces to many of the low level functions from the C
 interface. On the other hand it provides high level convenience
