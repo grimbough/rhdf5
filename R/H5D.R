@@ -91,7 +91,8 @@ H5Dread <- function( h5dataset, h5spaceFile=NULL, h5spaceMem=NULL, buf = NULL, c
       stop("install package 'bit64' before using bit64conversion='bit64'")
     }
   }
-  res <- .Call("_H5Dread", h5dataset@ID, sidFile, sidMem, buf, compoundAsDataFrame, bit64conv, drop, h5dataset@native, PACKAGE='rhdf5')
+  res <- .Call("_H5Dread", h5dataset@ID, sidFile, sidMem, buf, compoundAsDataFrame, 
+               bit64conv, drop, h5dataset@native, PACKAGE='rhdf5')
   if (H5Aexists(h5obj=h5dataset, name="storage.mode")) {
     att = H5Aopen(h5obj=h5dataset, name="storage.mode")
     if (H5Aread(h5attribute=att) == "logical") {

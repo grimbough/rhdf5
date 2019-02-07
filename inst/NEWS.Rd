@@ -9,10 +9,22 @@
     }
   }
   
+  \subsection{USER VISIBLE CHANGES}{
+    \itemize{
+      \item Reading a dataset of rank one will now return an R vector, rather 
+       than a one dimensional array.
+    }
+  }
+  
   \subsection{BUG FIXES}{
     \itemize{
-      \item Some improvements to performance when selecting subsets
+      \item Large improvements to performances when selecting subsets
       of datasets using the `index` argument.
+      \item Resolved limitations where large datasets would exceed HDF5's 4GB
+      maximum chunk size.  The default options will now check if this will 
+      occur and adjust chunking automatically.
+      \item Single-rank datasets larger than 2^31-1 entries can now be read
+      into R vectors.
     }
   }
 }

@@ -3,9 +3,6 @@
 h5writeDatasetHelper <- function (obj, h5dataset, index = NULL, start = NULL, stride = NULL, 
                                   block = NULL, count = NULL)
 {
-    if (is.null(dim(obj))) {
-        dim(obj) = length(obj)
-    }
     try({
         h5spaceFile <- H5Dget_space(h5dataset)
         on.exit(H5Sclose(h5spaceFile))
@@ -26,9 +23,12 @@ h5writeDatasetHelper <- function (obj, h5dataset, index = NULL, start = NULL, st
         try({
             H5Sselect_index(h5spaceFile, index)
         })
-        d = sapply(index, length)
-        d[d == 0] = dim(obj)[d == 0]
-        dim(obj) = d
+        if(length(index) > 1) {
+            ## indexing an array
+            d = sapply(index, length)
+            d[d == 0] = dim(obj)[d == 0]
+            dim(obj) = d
+        } 
         I = list()
         for (i in seq_len(length(index))) {
             m <- match(index[[i]], unique(sort(index[[i]])))
@@ -41,8 +41,13 @@ h5writeDatasetHelper <- function (obj, h5dataset, index = NULL, start = NULL, st
         if (any(c(!is.null(start), !is.null(stride), !is.null(block), 
                   !is.null(count)))) {
             if (is.null(block) & is.null(count)) {
-                block = rep(1, length(dim(obj)))
-                count = dim(obj)
+                if(is.null(dim(obj))) {
+                    block <- 1
+                    count <- 1
+                } else {
+                    block = rep(1, length(dim(obj)))
+                    count = dim(obj)
+                }
             }
             try({
                 H5Sselect_hyperslab(h5spaceFile, start = start, 
@@ -182,9 +187,9 @@ h5writeDataset.logical <- function(...) { h5writeDataset.array(...) }
 h5writeDataset.character <- function(...) { h5writeDataset.array(...) }
 
 h5writeDataset.array <- function(obj, h5loc, name, index = NULL, start=NULL, stride=NULL, block=NULL, count=NULL, size=NULL, level=7) {
-    if (is.null(dim(obj))) {
-        dim(obj) = length(obj)
-    }
+    #if (is.null(dim(obj))) {
+    #    dim(obj) = length(obj)
+    #}
     exists <- try( { H5Lexists(h5loc, name) } )
     if (!exists) {
         if (is.null(size)) {
@@ -196,9 +201,14 @@ h5writeDataset.array <- function(obj, h5loc, name, index = NULL, start=NULL, str
                     size = 1
                 }
             }
-            dim <- dim(obj)
-            if (h5loc@native) dim <- rev(dim)
-            try( { h5createDataset(h5loc, name, dim, storage.mode = storage.mode(obj), size = size, chunk=dim, level=level) } )
+            if (is.null(dim(obj))) {
+                dim <- length(obj) 
+            } else {
+                dim <- dim(obj)
+                if (h5loc@native) dim <- rev(dim)
+            }
+            h5createDataset(h5loc, name, dim, storage.mode = storage.mode(obj), 
+                            size = size, chunk=dim, level=level) 
         }
     }
     try ( { h5dataset <- H5Dopen(h5loc, name) } )

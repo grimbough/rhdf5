@@ -81,6 +81,22 @@ test_that("Error if asking for something that isn't there", {
     
 })
 
+
+test_that("Read / write vector longer than 2^31-1", {
+    
+    expect_silent(
+        h5createDataset(file = h5File, dataset = "too_long", dims = (2^31)+1000, 
+                        level = 1, storage.mode = "integer", chunk = 10000)
+    )
+    expect_silent(
+        h5write(obj = integer(length = (2^31)+1000), file = h5File, name = "too_long")
+    )
+    
+    expect_silent( h5read(file = h5File, name = "too_long") ) %>%
+        expect_is("integer") %>%
+        expect_length((2^31)+1000)
+})
+
 test_that("writing & reading empty vectors", {
 
   h5File <- tempfile(pattern = "ex_read", fileext = ".h5")
@@ -167,11 +183,11 @@ h5write(obj = 2^31 + 1:50, file = h5File, name = "uint32")
 
 test_that("Signed 32bit integers are unchanged for all conversion arguments", {
     
-    expect_is(x1 <- h5read(h5File, name = "int32", bit64conversion = "int"), "array")
+    expect_is(x1 <- h5read(h5File, name = "int32", bit64conversion = "int"), "integer")
     expect_equal(storage.mode(x1), "integer")
-    expect_is(x2 <- h5read(h5File, name = "int32", bit64conversion = "double"), "array")
+    expect_is(x2 <- h5read(h5File, name = "int32", bit64conversion = "double"), "integer")
     expect_equal(storage.mode(x2), "integer")
-    expect_is(x3 <- h5read(h5File, name = "int32", bit64conversion = "bit64"), "array")
+    expect_is(x3 <- h5read(h5File, name = "int32", bit64conversion = "bit64"), "integer")
     expect_equal(storage.mode(x3), "integer")
     
     expect_identical(x1, x2)
@@ -180,9 +196,9 @@ test_that("Signed 32bit integers are unchanged for all conversion arguments", {
 
 test_that("signed 64-bit integers are converted", {
     
-    expect_is(x1 <- h5read(h5File, name = "int64", bit64conversion = "int"), "array")
+    expect_is(x1 <- h5read(h5File, name = "int64", bit64conversion = "int"), "integer")
     expect_equal(storage.mode(x1), "integer")
-    expect_is(x2 <- h5read(h5File, name = "int64", bit64conversion = "double"), "array")
+    expect_is(x2 <- h5read(h5File, name = "int64", bit64conversion = "double"), "numeric")
     expect_equal(storage.mode(x2), "double")
     expect_is(x3 <- h5read(h5File, name = "int64", bit64conversion = "bit64"), "integer64")
     expect_equal(storage.mode(x2), "double")
@@ -197,7 +213,7 @@ test_that("Unsigned 32bit integers are converted to NA out of range", {
 
 test_that("Unsigned 32bit integers are converted properly to double/bit64", {
     
-    expect_is(x2 <- h5read(h5File, name = "uint32", bit64conversion = "double"), "array") 
+    expect_is(x2 <- h5read(h5File, name = "uint32", bit64conversion = "double"), "numeric") 
     expect_equal(storage.mode(x2), "double")
     expect_equivalent(x2, 2^31 + 1:50)
     
