@@ -877,6 +877,7 @@ SEXP H5Dread_helper(hid_t dataset_id, hid_t file_space_id, hid_t mem_space_id, h
                                        bit64conversion, native );
     } break;
     case H5T_ENUM: {
+        Rprintf("Enum helper\n");
         Rval = H5Dread_helper_ENUM(dataset_id, file_space_id, mem_space_id, n, Rdim, _buf,
                                    dtype_id, cpdType, cpdNField, cpdField, compoundAsDataFrame, native );
     } break;
@@ -972,7 +973,10 @@ SEXP _H5Dread( SEXP _dataset_id, SEXP _file_space_id, SEXP _mem_space_id, SEXP _
     SEXP Rdim;
     int protect_bool = 0;
     
-    if( (dtypeclass_id == H5T_INTEGER || dtypeclass_id == H5T_FLOAT || dtypeclass_id == H5T_STRING) &&
+    if( dtypeclass_id = H5T_ENUM ) {
+        /* do all ENUM have rank 0? */ 
+        Rdim = NULL_USER_OBJECT;
+    } else if( (dtypeclass_id == H5T_INTEGER || dtypeclass_id == H5T_FLOAT || dtypeclass_id == H5T_STRING) &&
         (drop || rank == 1 || too_large) ) {
         Rdim = NULL_USER_OBJECT;
     } else {
