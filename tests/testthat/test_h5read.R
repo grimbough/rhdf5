@@ -6,8 +6,10 @@ context("h5read")
 
 A = 1L:7L;  
 B = matrix(1:18, ncol = 2); 
+C = c(TRUE, TRUE, FALSE)
 D = seq(0, 1, by=0.1)
 attr(D, "scale") <- "centimeters"
+
 
 ## output file name
 h5File <- tempfile(pattern = "ex_read", fileext = ".h5")
@@ -23,12 +25,17 @@ h5createDataset(file = h5File, dataset = "foo/B", dims = c(2, length(B)/2 ))
 h5write(obj = B, file = h5File, name = "foo/B")
 h5createDataset(file = h5File, dataset = "baa", dims = c(1, length(D) ))
 h5write(obj = D, file = h5File, name = "baa", write.attributes = TRUE)
+h5write(obj = C, file = h5File, name = "logi")
 
 test_that("Reading a dataset", {
     
-    baa <- h5read(h5File, name = "baa")
-    expect_is( baa, "matrix" )
-    expect_equal( dim(baa), c(1, length(D)) )
+    expect_silent(baa <- h5read(h5File, name = "baa", read.attributes = TRUE)) %>%
+    expect_is("matrix" )
+    expect_identical( dim(baa), c(1L, length(D)) )
+    
+    expect_silent(h5read(h5File, name = "logi")) %>%
+        expect_is("logical") %>%
+        expect_identical(C)
     
 })
 
@@ -113,6 +120,7 @@ test_that("writing & reading empty vectors", {
   expect_silent(h5write(obj = integer(0), file = h5File, name = "int"))
   expect_silent(h5write(obj = double(0), file = h5File, name = "double"))
   expect_silent(h5write(obj = logical(0), file = h5File, name = "logical"))
+  #expect_silent(h5write(obj = factor(levels = c("L1", "L2")), file = h5File, name = "factor"))
   
   expect_silent(tmp <- h5read(file = h5File, name = "char")) %>%
     expect_is("character") %>%
@@ -123,6 +131,9 @@ test_that("writing & reading empty vectors", {
   expect_silent(h5read(file = h5File, name = "double")) %>%
     expect_is("numeric") %>%
     expect_length(0)
+  expect_silent(h5read(file = h5File, name = "logical")) %>%
+      expect_is("logical") %>%
+      expect_length(0)
 
 })
 

@@ -102,6 +102,26 @@ test_that("H5Fget_filesize" , {
 H5Fclose(fid)
 
 ############################################################
+context("H5F plists")
+############################################################
+
+test_that("Property list getters", {
+    expect_silent(fid <- H5Fopen(name = h5File))
+    
+    expect_silent(create_plist <- H5Fget_create_plist(fid)) %>%
+        expect_is("H5IdComponent") 
+    expect_output(show(create_plist), "HDF5 GENPROP_LST")
+    expect_silent(H5Pclose(create_plist))
+    
+    expect_silent(access_plist <- H5Fget_access_plist(fid)) %>%
+        expect_is("H5IdComponent")
+    expect_output(show(access_plist), "HDF5 GENPROP_LST")
+    expect_silent(H5Pclose(access_plist))
+    
+    expect_silent(H5Fclose(fid))
+})
+
+############################################################
 
 test_that("No open HDF5 objects are left", {
     expect_equal( length(h5validObjects()), 0 )
