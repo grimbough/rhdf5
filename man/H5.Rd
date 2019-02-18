@@ -27,6 +27,12 @@ These low level functions provide general general libary functions for HDF5 C-li
 \code{\link{h5version}}, \link{rhdf5}
 }
 \examples{
+
+# test for file locking
+if( !h5testFileLocking( tempdir() ) ) {
+      h5disableFileLocking()
+}
+
 H5open()
 H5close()
 H5garbage_collect()
