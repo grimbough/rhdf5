@@ -15,6 +15,7 @@
 #include "H5S.h"
 #include "H5T.h"
 #include "H5P.h"
+#include "H5Z.h"
 #include "h5ls.h"
 #include "HandleList.h"
 #include "h5dump.h"
@@ -284,6 +285,7 @@ static R_CallMethodDef libraryRCalls[] = {
   /* {"_H5Pcopy_prop", (DL_FUNC) &_H5Pcopy_prop, 3}, */
   /* {"_H5Premove", (DL_FUNC) &_H5Premove, 2}, */
   /* {"_H5Punregister", (DL_FUNC) &_H5Punregister, 2}, */
+  {"_H5Zfilter_avail", (DL_FUNC) &_H5Zfilter_avail, 1},
   {"_h5ls", (DL_FUNC) &_h5ls, 6},
   {"_h5dump", (DL_FUNC) &_h5dump, 4},
   {"_h5listIdentifier", (DL_FUNC) &_h5listIdentifier, 0},
