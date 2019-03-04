@@ -920,19 +920,17 @@ H5Pget_alloc_time <- function( h5plist ) {
 ##   invisible(res)
 ## }
 
-## H5Pall_filters_avail <- function( plist_id ) {
-##   h5checktype(h5plist, "plist")
-##   res <- .Call("_H5Pall_filters_avail", plist_id, PACKAGE='rhdf5')
-##   SEXP Rval = R_NilValue;
-##   invisible(res)
-## }
+H5Pall_filters_avail <- function( h5plist ) {
+    h5checktypeAndPLC(h5plist, "H5P_DATASET_CREATE")
+    res <- .Call("_H5Pall_filters_avail", h5plist@ID, PACKAGE='rhdf5')
+    return(res)
+}
 
-## H5Pget_nfilters <- function( plist ) {
-##   h5checktype(h5plist, "plist")
-##   res <- .Call("_H5Pget_nfilters", plist, PACKAGE='rhdf5')
-##   SEXP Rval = R_NilValue;
-##   invisible(res)
-## }
+H5Pget_nfilters <- function( h5plist ) {
+    h5checktypeAndPLC(h5plist, "H5P_DATASET_CREATE")
+    res <- .Call("_H5Pget_nfilters", h5plist@ID, PACKAGE='rhdf5')
+    res
+}
 
 ## H5Pget_filter1 <- function( plist_id, idx, flags, cd_nelmts, cd_values, namelen, name[] ) {
 ##   h5checktype(h5plist, "plist")

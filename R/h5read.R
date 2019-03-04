@@ -40,7 +40,7 @@ h5readDataset <- function (h5dataset, index = NULL, start = NULL, stride = NULL,
                        h5spaceMem = h5spaceMem,
                        compoundAsDataFrame = compoundAsDataFrame, drop = drop, ...)
     },
-        error = function(e) { print("hello") }
+        error = function(e) { h5checkFilters(h5dataset) }
     )
 
     ## Here we reorder data to match the order requested in index.

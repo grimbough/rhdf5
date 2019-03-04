@@ -1124,21 +1124,21 @@ SEXP _H5Pget_alloc_time( SEXP _plist_id ) {
 /*   return Rval; */
 /* } */
 
-/* /\* htri_t H5Pall_filters_avail(hid_t plist_id) *\/ */
-/* SEXP _H5Pall_filters_avail( SEXP _plist_id ) { */
-/*   hid_t plist_id = INTEGER(_plist_id)[0]; */
-/*   htri_t htri = H5Pall_filters_avail(hid_tplist_id); */
-/*   SEXP Rval = ScalarInteger(htri); */
-/*   return Rval; */
-/* } */
+/* htri_t H5Pall_filters_avail(hid_t plist_id) */
+SEXP _H5Pall_filters_avail( SEXP _plist_id ) {
+    hid_t plist_id  = STRSXP_2_HID( _plist_id );
+    htri_t htri = H5Pall_filters_avail(plist_id);
+    SEXP Rval = ScalarInteger(htri);
+    return Rval; 
+} 
 
-/* /\* int H5Pget_nfilters(hid_t plist) *\/ */
-/* SEXP _H5Pget_nfilters( SEXP _plist ) { */
-/*   hid_t plist = INTEGER(_plist)[0]; */
-/*   int n = H5Pget_nfilters(hid_tplist); */
-/*   SEXP Rval = ScalarInteger(n); */
-/*   return Rval; */
-/* } */
+/* int H5Pget_nfilters(hid_t plist) */
+SEXP _H5Pget_nfilters( SEXP _plist) {
+    hid_t plist  = STRSXP_2_HID( _plist );
+    int n = H5Pget_nfilters(plist);
+    SEXP Rval = ScalarInteger(n);
+    return Rval;
+}
 
 /* /\* H5Z_filter_t H5Pget_filter1(hid_t plist_id, unsigned int idx, unsigned int * flags, size_t * cd_nelmts, unsigned int * cd_values, size_t namelen, char name[]) *\/ */
 /* SEXP _H5Pget_filter1( SEXP _plist_id, SEXP _idx, SEXP _flags, SEXP _cd_nelmts, SEXP _cd_values, SEXP _namelen, SEXP _name[] ) { */
