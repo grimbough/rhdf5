@@ -979,11 +979,14 @@ SEXP _H5Dread( SEXP _dataset_id, SEXP _file_space_id, SEXP _mem_space_id, SEXP _
         (drop || rank <= 1 || too_large) ) {
         Rdim = NULL_USER_OBJECT;
     } else {
+        Rprintf("here\nRank: ");
         protect_bool = 1;
         Rdim = PROTECT(allocVector(INTSXP, rank));
         for (int i=0; i<rank; i++) {
+            Rprintf("%lld ", (unsigned long long) size[i]);
             INTEGER(Rdim)[rank-i-1] = native ? size[rank-i-1] : size[i];
         }
+        Rprintf("\n");
     }
     
     if(!drop && rank > 1 && too_large) {
