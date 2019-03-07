@@ -256,9 +256,17 @@ H5Sunlimited <- function()  {
             counts[[i]] <- 1
             strides[[i]] <- 1
             blocks[[i]] <- as.numeric(dims[i])
+        } else if (length(index[[i]]) == 0) {
+            .validIndex(index[[i]], dims[i])
+            res_dim[i] <- 0
+            starts[[i]] <- NA
+            counts[[i]] <- 0
+            strides[[i]] <- 1
+            blocks[[i]] <- 1
         } else if (length(index[[i]]) == 1) {
             ## catch the special case of only requesting a single entry
             ## in this dimension. This breaks the loop below in its current form.
+            
             .validIndex(index[[i]], dims[i])
             
             res_dim[i] <- 1
@@ -268,6 +276,7 @@ H5Sunlimited <- function()  {
             blocks[[i]] <- 1
         } else {
             ## two or more entries from this dim
+            
             .validIndex(index[[i]], dims[i])
             
             index_copy <- sort(unique(floor(index[[i]])))
@@ -349,3 +358,5 @@ H5Sunlimited <- function()  {
     
     invisible(res_dim)
 }
+
+

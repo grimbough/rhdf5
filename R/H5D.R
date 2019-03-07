@@ -118,3 +118,16 @@ H5Dset_extent <- function( h5dataset, size) {
   if (!h5dataset@native) size <- rev(size)
   invisible(.Call("_H5Dset_extent", h5dataset@ID, size, PACKAGE='rhdf5'))
 }
+
+H5Dchunk_dims <- function(h5dataset) {
+    h5checktype(h5dataset, "dataset")
+    
+    pid <- H5Dget_create_plist(did)
+    on.exit(H5Pclose(pid), add=TRUE)
+    
+    if (H5Pget_layout(pid) != "H5D_CHUNKED")
+        return(NULL)
+    else 
+        return(rev(H5Pget_chunk(pid)))
+}
+    
