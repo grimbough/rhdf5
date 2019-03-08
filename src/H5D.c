@@ -976,7 +976,7 @@ SEXP _H5Dread( SEXP _dataset_id, SEXP _file_space_id, SEXP _mem_space_id, SEXP _
         /* do all ENUM have rank 0? */ 
         Rdim = NULL_USER_OBJECT;
     } else if( (dtypeclass_id == H5T_INTEGER || dtypeclass_id == H5T_FLOAT || dtypeclass_id == H5T_STRING) &&
-        (drop || rank <= 1 || too_large) ) {
+        (drop || too_large) ) {
         Rdim = NULL_USER_OBJECT;
     } else {
         protect_bool = 1;
