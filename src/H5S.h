@@ -30,7 +30,7 @@ SEXP _H5Sset_extent_simple( SEXP _space_id, SEXP _current_size, SEXP _maximum_si
 /* H5Sget_select_npoints */
 /* H5Sget_select_hyper_nblocks */
 /* H5Sget_select_hyper_blocklist */
-      	
+SEXP _H5Sget_select_npoints( SEXP _space_id );
 /* H5Sget_select_elem_npoints */
 /* H5Sget_select_elem_pointlist */
 /* H5Sget_select_bounds */
