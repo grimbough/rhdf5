@@ -122,7 +122,7 @@ H5Dset_extent <- function( h5dataset, size) {
 H5Dchunk_dims <- function(h5dataset) {
     h5checktype(h5dataset, "dataset")
     
-    pid <- H5Dget_create_plist(did)
+    pid <- H5Dget_create_plist(h5dataset)
     on.exit(H5Pclose(pid), add=TRUE)
     
     if (H5Pget_layout(pid) != "H5D_CHUNKED")

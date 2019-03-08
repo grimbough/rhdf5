@@ -286,7 +286,7 @@ SEXP H5Dread_helper_INTEGER(hid_t dataset_id, hid_t file_space_id, hid_t mem_spa
             Rval = _buf;
         }
         herr_t herr = H5Dread(dataset_id, mem_type_id, mem_space_id, file_space_id, H5P_DEFAULT, buf );
-        
+
         if (native)
             PERMUTE(Rval, INTEGER, mem_space_id);
         
@@ -295,7 +295,8 @@ SEXP H5Dread_helper_INTEGER(hid_t dataset_id, hid_t file_space_id, hid_t mem_spa
                 warn_NA = 1;
             }
         }
-        if (length(_buf) == 0 && n > 0) {
+        //if (length(_buf) == 0 && n > 0) {
+        if (length(_buf) == 0) {
             setAttrib(Rval, R_DimSymbol, Rdim);
         }
     } else { 
@@ -457,7 +458,7 @@ SEXP H5Dread_helper_INTEGER(hid_t dataset_id, hid_t file_space_id, hid_t mem_spa
                 UNPROTECT(1);
             }
         }
-        if (length(_buf) == 0 && n > 0) {
+        if (length(_buf) == 0) {
             setAttrib(Rval, R_DimSymbol, Rdim);
         }
     }
@@ -513,7 +514,7 @@ SEXP H5Dread_helper_FLOAT(hid_t dataset_id, hid_t file_space_id, hid_t mem_space
     if (native)
       PERMUTE(Rval, REAL, mem_space_id);
     
-    if (length(_buf) == 0 && n > 0) {
+    if (length(_buf) == 0) {
       setAttrib(Rval, R_DimSymbol, Rdim);
     }
     
@@ -843,8 +844,7 @@ SEXP H5Dread_helper_COMPOUND(hid_t dataset_id, hid_t file_space_id, hid_t mem_sp
 
 
 
-SEXP H5Dread_helper(hid_t dataset_id, hid_t file_space_id, hid_t mem_space_id, hsize_t n, 
-                    SEXP Rdim,
+SEXP H5Dread_helper(hid_t dataset_id, hid_t file_space_id, hid_t mem_space_id, hsize_t n, SEXP Rdim,
                     SEXP _buf, hid_t cpdType, int cpdNField, char ** cpdField, int compoundAsDataFrame,
                     int bit64conversion, int native ) {
     
@@ -979,14 +979,11 @@ SEXP _H5Dread( SEXP _dataset_id, SEXP _file_space_id, SEXP _mem_space_id, SEXP _
         (drop || rank <= 1 || too_large) ) {
         Rdim = NULL_USER_OBJECT;
     } else {
-        Rprintf("here\nRank: ");
         protect_bool = 1;
         Rdim = PROTECT(allocVector(INTSXP, rank));
         for (int i=0; i<rank; i++) {
-            Rprintf("%lld ", (unsigned long long) size[i]);
             INTEGER(Rdim)[rank-i-1] = native ? size[rank-i-1] : size[i];
         }
-        Rprintf("\n");
     }
     
     if(!drop && rank > 1 && too_large) {

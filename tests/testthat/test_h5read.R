@@ -137,6 +137,17 @@ test_that("writing & reading empty vectors", {
 
 })
 
+test_that("writing & reading empty arrays", {
+    
+    h5File <- tempfile(pattern = "ex_read", fileext = ".h5")
+    expect_true(h5createFile(h5File))
+    expect_silent(h5write(obj = matrix(nrow = 0, ncol = 0), file = h5File, name = "mat"))
+
+    expect_silent(tmp <- h5read(file = h5File, name = "mat")) %>%
+        expect_is("matrix") %>%
+        expect_length(0)
+})
+
 ############################################################
 context("indexing")
 ############################################################
@@ -180,6 +191,29 @@ test_that("Indexing multiple dimensions works", {
     expect_silent(B2 <- h5read(h5File, name = "B", index = list(c(8), NULL, c(4,6))))
     expect_equal(dim(B2), c(1,10,2))
     expect_identical(B2[1,6,], B[8,6,c(4,6)])
+})
+
+
+test_that("Empty index retain dimensionality", {
+    expect_silent(A2 <- h5read(h5File, name = "A", index = list(integer(0), 5))) %>%
+        expect_is("matrix")
+    expect_equal(dim(A2), c(0,1))
+    expect_silent(A2 <- h5read(h5File, name = "A", index = list(integer(0), 1:5)))  %>%
+        expect_is("matrix")
+    expect_equal(dim(A2), c(0,5))
+    expect_silent(A2 <- h5read(h5File, name = "A", index = list(integer(0), integer(0))))  %>%
+        expect_is("matrix")
+    expect_equal(dim(A2), c(0,0))
+    
+    expect_silent(B2 <- h5read(h5File, name = "B", index = list(integer(0), integer(0), 5))) %>%
+        expect_is("array")
+    expect_equal(dim(B2), c(0,0,1))
+    expect_silent(B2 <- h5read(h5File, name = "B", index = list(integer(0), 1:5, 6)))  %>%
+        expect_is("array")
+    expect_equal(dim(B2), c(0,5,1))
+    expect_silent(B2 <- h5read(h5File, name = "B", index = list(integer(0), integer(0), integer(0))))  %>%
+        expect_is("array")
+    expect_equal(dim(B2), c(0,0,0))
 })
 
 ############################################################
