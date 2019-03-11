@@ -151,6 +151,20 @@ test_that("writing & reading empty arrays", {
         expect_length(0)
 })
 
+test_that("reading & writing scalar dataspaces", {
+    h5File <- tempfile(pattern = "ex_read", fileext = ".h5")
+    expect_silent(fid <- H5Fcreate(h5File))
+    expect_silent(sid <- H5Screate(type = "H5S_SCALAR"))
+    expect_silent(tid <- H5Tcopy("H5T_C_S1"))
+    expect_silent(H5Tset_size(tid, 12))
+    expect_silent(did <- H5Dcreate(fid, "scalar", tid, h5space = sid))
+    expect_silent(H5Dwrite(did, "test string"))
+    expect_silent(H5Dclose(did))
+    expect_silent(H5Sclose(sid))
+    expect_silent(H5Fclose(fid))
+    
+})
+
 ############################################################
 context("indexing")
 ############################################################

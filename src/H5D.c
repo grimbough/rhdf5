@@ -972,8 +972,11 @@ SEXP _H5Dread( SEXP _dataset_id, SEXP _file_space_id, SEXP _mem_space_id, SEXP _
     SEXP Rdim;
     int protect_bool = 0;
     
-    if( dtypeclass_id == H5T_ENUM && rank == 0 ) {
-        /* do all ENUM have rank 0? */ 
+    if( rank == 0 ) {
+    /* scalar with no dimentsions */
+        Rdim = NULL_USER_OBJECT;
+    } else if( dtypeclass_id == H5T_ENUM && rank == 0 ) {
+    /* do all ENUM have rank 0? */ 
         Rdim = NULL_USER_OBJECT;
     } else if( (dtypeclass_id == H5T_INTEGER || dtypeclass_id == H5T_FLOAT || dtypeclass_id == H5T_STRING) &&
         (drop || too_large) ) {
