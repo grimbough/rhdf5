@@ -150,7 +150,7 @@ SEXP _H5Pget_alloc_time( SEXP _plist_id );
 SEXP _H5Pall_filters_avail( SEXP _plist_id );
 SEXP _H5Pget_nfilters( SEXP _plist );
 /* SEXP _H5Pget_filter1( SEXP _plist_id, SEXP _idx, SEXP _flags, SEXP _cd_nelmts, SEXP _cd_values, SEXP _namelen, SEXP _name[] ); */
-/* SEXP _H5Pget_filter2( SEXP _plist_id, SEXP _idx, SEXP _flags, SEXP _cd_nelmts, SEXP _cd_values[], SEXP _namelen, SEXP _name[], SEXP _filter_config ); */
+SEXP _H5Pget_filter( SEXP _plist_id, SEXP _idx );
 /* SEXP _H5Pget_filter_by_id1( SEXP _plist_id, SEXP _filter_id, SEXP _flags, SEXP _cd_nelmts, SEXP _cd_values[], SEXP _namelen, SEXP _name[] ); */
 /* SEXP _H5Pget_filter_by_id2( SEXP _plist_id, SEXP _filter_id, SEXP _flags, SEXP _cd_nelmts, SEXP _cd_values[], SEXP _namelen, SEXP _name[], SEXP _filter_config ); */
 /* SEXP _H5Pmodify_filter( SEXP _plist_id, SEXP _filter_id, SEXP _flags, SEXP _cd_nelmts, SEXP _cd_values[] ); */

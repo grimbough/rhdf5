@@ -1007,8 +1007,6 @@ SEXP _H5Pset_deflate( SEXP _plist_id, SEXP _level ) {
 
 /* herr_t H5Pset_fill_value(hid_t plist_id, hid_t type_id, const void * value) */
 SEXP _H5Pset_fill_value( SEXP _plist_id, SEXP _type_id, SEXP _value ) {
-    //hid_t plist_id = INTEGER(_plist_id)[0];
-    //hid_t type_id = INTEGER(_type_id)[0];
     hid_t plist_id = STRSXP_2_HID( _plist_id );
     hid_t type_id = STRSXP_2_HID( _type_id );
     void * value;
@@ -1155,21 +1153,27 @@ SEXP _H5Pget_nfilters( SEXP _plist) {
 /* TODO: UNKOWN RETURN VALUE */
 /* } */
 
-/* /\* H5Z_filter_t H5Pget_filter2(hid_t plist_id, unsigned idx, unsigned int * flags, size_t * cd_nelmts, unsigned cd_values[], size_t namelen, char name[], unsigned * filter_config) *\/ */
-/* SEXP _H5Pget_filter2( SEXP _plist_id, SEXP _idx, SEXP _flags, SEXP _cd_nelmts, SEXP _cd_values[], SEXP _namelen, SEXP _name[], SEXP _filter_config ) { */
-/*   hid_t plist_id = INTEGER(_plist_id)[0]; */
-/*   unsigned idx = INTEGER(_idx)[0]; */
-/*   TODO: unsigned int * flags = _flags */
-/*   TODO: size_t * cd_nelmts = _cd_nelmts */
-/*   unsigned cd_values[] = INTEGER(_cd_values[])[0]; */
-/*   size_t namelen = INTEGER(_namelen)[0]; */
-/*   TODO: char name[] = INTEGER(_name[])[0]; */
-/*   TODO: unsigned * filter_config = _filter_config */
-/* H5Pget_filter2(hid_tplist_id, unsignedidx, unsigned int *flags, size_t *cd_nelmts, unsignedcd_values[], size_tnamelen, charname[], unsigned *filter_config); */
-/*   SEXP Rval = R_NilValue; */
-/*   return Rval; */
-/* TODO: UNKOWN RETURN VALUE */
-/* } */
+/* H5Z_filter_t H5Pget_filter2(hid_t plist_id, unsigned idx, unsigned int * flags, size_t * cd_nelmts, unsigned cd_values[], size_t namelen, char name[], unsigned * filter_config) */
+SEXP _H5Pget_filter( SEXP _plist_id, SEXP _idx ) { 
+    hid_t plist_id  = STRSXP_2_HID( _plist_id );
+    unsigned idx = INTEGER(_idx)[0]; 
+  
+    unsigned int flags;
+    size_t cd_nelmts; 
+    unsigned int cd_values;
+    size_t namelen = 50; 
+    char *name = R_alloc(namelen, sizeof(char)); 
+    unsigned int filter_config;
+
+    H5Z_filter_t filt_id = H5Pget_filter2(plist_id, idx, &flags, &cd_nelmts, &cd_values, namelen, name, &filter_config); 
+
+    //const char *names[] = {"id", "name", ""};
+    SEXP Rval = PROTECT(allocVector(VECSXP, 2)); 
+    SET_VECTOR_ELT(Rval, 0, ScalarInteger(filt_id));
+    SET_VECTOR_ELT(Rval, 1, mkString(name));
+    UNPROTECT(1);
+    return Rval; 
+}
 
 /* /\* herr_t H5Pget_filter_by_id1(hid_t plist_id, H5Z_filter_t filter_id, unsigned int * flags, size_t * cd_nelmts, unsigned int cd_values[], size_t namelen, char name[]) *\/ */
 /* SEXP _H5Pget_filter_by_id1( SEXP _plist_id, SEXP _filter_id, SEXP _flags, SEXP _cd_nelmts, SEXP _cd_values[], SEXP _namelen, SEXP _name[] ) { */

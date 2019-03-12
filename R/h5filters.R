@@ -12,8 +12,22 @@ h5checkFilters <- function(h5id) {
         pid <- h5checktypeAndPLC(h5id, "H5P_DATASET_CREATE")
     }
     
-    if( (H5Pget_nfilters(pid) > 0) && (H5Pall_filters_avail(pid) == 0) )
+    nfilters = H5Pget_nfilters(pid)
+    if( (nfilters > 0) && (H5Pall_filters_avail(pid) == 0) ) {
+        
         message("Not all required filters are available")
+        missing <- NULL
+        for(i in seq_along( nfilters )) {
+            filter <- H5Pget_filter(pid, i-1)
+            avail <- H5Zfilter_avail(filter_id = filter[[1]])
+            if(!avail) {
+                missing <- c(missing, filter[[2]])
+            }
+        }
+        .H5close(h5id)
+        stop("Missing filters: ", paste(missing, collapse = " "))
+        
+    }
     
     return(TRUE)
 }

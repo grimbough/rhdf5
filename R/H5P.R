@@ -959,6 +959,13 @@ H5Pget_nfilters <- function( h5plist ) {
 ##   invisible(res)
 ## }
 
+H5Pget_filter <- function( h5plist, idx ) {
+    h5checktypeAndPLC(h5plist, "H5P_DATASET_CREATE")
+    idx <- as.integer(idx)
+    res <- .Call("_H5Pget_filter", h5plist@ID, idx, PACKAGE='rhdf5')
+    return(res)
+}
+
 ## H5Pget_filter_by_id1 <- function( plist_id, filter_id, flags, cd_nelmts, cd_values[], namelen, name[] ) {
 ##   h5checktype(h5plist, "plist")
 ##   TODO: filter_id = as.TYPE(filter_id)

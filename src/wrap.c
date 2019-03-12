@@ -210,7 +210,7 @@ static R_CallMethodDef libraryRCalls[] = {
   {"_H5Pall_filters_avail", (DL_FUNC) &_H5Pall_filters_avail, 1},
   {"_H5Pget_nfilters", (DL_FUNC) &_H5Pget_nfilters, 1},
   /* {"_H5Pget_filter1", (DL_FUNC) &_H5Pget_filter1, 7}, */
-  /* {"_H5Pget_filter2", (DL_FUNC) &_H5Pget_filter2, 8}, */
+  {"_H5Pget_filter", (DL_FUNC) &_H5Pget_filter, 2},
   /* {"_H5Pget_filter_by_id1", (DL_FUNC) &_H5Pget_filter_by_id1, 7}, */
   /* {"_H5Pget_filter_by_id2", (DL_FUNC) &_H5Pget_filter_by_id2, 8}, */
   /* {"_H5Pmodify_filter", (DL_FUNC) &_H5Pmodify_filter, 5}, */
