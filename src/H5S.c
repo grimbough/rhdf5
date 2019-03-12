@@ -160,6 +160,17 @@ SEXP _H5Sset_extent_simple( SEXP _space_id, SEXP _current_size, SEXP _maximum_si
     return Rval;
 }
 
+
+/* hssize_t H5S_GET_SELECT_NPOINTS(hid_t spaceid) */
+SEXP _H5Sget_select_npoints( SEXP _space_id ) {
+  hid_t space_id = STRSXP_2_HID( _space_id );
+  
+  hssize_t npoints = H5Sget_select_npoints(space_id);
+  SEXP Rval = ScalarReal( (double) npoints);
+  return Rval;
+}
+
+
 /* herr_t H5Sselect_none(hid_t spaceid) */
 SEXP _H5Sselect_none( SEXP _space_id ) {
   
