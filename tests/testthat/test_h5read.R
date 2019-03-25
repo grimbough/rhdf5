@@ -306,7 +306,8 @@ test_that("Reading SZIP", {
 
 test_that("Failing to read BLOSC", {
     blosc_file <- system.file("testfiles", "h5ex_d_blosc.h5", package = "rhdf5")
-    expect_message(h5read(blosc_file, "dset"), "Unable to read dataset")
+    expect_error(h5read(blosc_file, "dset"), "Unable to read dataset")
+    h5closeAll()
 })
 
 ############################################################

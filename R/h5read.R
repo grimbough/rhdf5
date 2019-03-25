@@ -41,8 +41,11 @@ h5readDataset <- function (h5dataset, index = NULL, start = NULL, stride = NULL,
                        compoundAsDataFrame = compoundAsDataFrame, drop = drop, ...)
     },
         error = function(e) { 
-            h5checkFilters(h5dataset) 
-            stop(e)
+            err <- h5checkFilters(h5dataset) 
+            if(nchar(err) > 0)
+                stop(err, call. = FALSE)
+            else 
+                stop(e)
         }
     )
 
