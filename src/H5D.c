@@ -510,6 +510,9 @@ SEXP H5Dread_helper_FLOAT(hid_t dataset_id, hid_t file_space_id, hid_t mem_space
     }
     
     herr_t herr = H5Dread(dataset_id, mem_type_id, mem_space_id, file_space_id, H5P_DEFAULT, buf );
+    if(herr < 0) {
+      error("Unable to read dataset");
+    }
     
     if (native)
       PERMUTE(Rval, REAL, mem_space_id);
