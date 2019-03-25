@@ -42,7 +42,7 @@ h5readDataset <- function (h5dataset, index = NULL, start = NULL, stride = NULL,
     },
         error = function(e) { 
             h5checkFilters(h5dataset) 
-            e
+            stop(e)
         }
     )
 

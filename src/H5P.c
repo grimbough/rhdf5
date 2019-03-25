@@ -1159,15 +1159,15 @@ SEXP _H5Pget_filter( SEXP _plist_id, SEXP _idx ) {
     unsigned idx = INTEGER(_idx)[0]; 
   
     unsigned int flags;
-    size_t cd_nelmts; 
-    unsigned int cd_values;
+    /* this is an abritry value of 10 for now - MLS 25.03.19 */
+    size_t cd_nelmts = 10; 
+    unsigned int cd_values[10];
     size_t namelen = 50; 
     char *name = R_alloc(namelen, sizeof(char)); 
     unsigned int filter_config;
 
-    H5Z_filter_t filt_id = H5Pget_filter2(plist_id, idx, &flags, &cd_nelmts, &cd_values, namelen, name, &filter_config); 
+    H5Z_filter_t filt_id = H5Pget_filter2(plist_id, idx, &flags, &cd_nelmts, cd_values, namelen, name, &filter_config); 
 
-    //const char *names[] = {"id", "name", ""};
     SEXP Rval = PROTECT(allocVector(VECSXP, 2)); 
     SET_VECTOR_ELT(Rval, 0, ScalarInteger(filt_id));
     SET_VECTOR_ELT(Rval, 1, mkString(name));
