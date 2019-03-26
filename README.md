@@ -1,9 +1,3 @@
-<style>
-table {
-    width:100%;
-}
-</style>
-
 # rhdf5
 
 <img align = "right" src="https://raw.githubusercontent.com/Bioconductor/BiocStickers/master/rhdf5/rhdf5.png" height="200">
