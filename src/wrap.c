@@ -15,6 +15,7 @@
 #include "H5S.h"
 #include "H5T.h"
 #include "H5P.h"
+#include "H5Z.h"
 #include "h5ls.h"
 #include "HandleList.h"
 #include "h5dump.h"
@@ -207,10 +208,10 @@ static R_CallMethodDef libraryRCalls[] = {
   {"_H5Pset_alloc_time", (DL_FUNC) &_H5Pset_alloc_time, 2},
   {"_H5Pget_alloc_time", (DL_FUNC) &_H5Pget_alloc_time, 1},
   /* {"_H5Pset_filter", (DL_FUNC) &_H5Pset_filter, 5}, */
-  /* {"_H5Pall_filters_avail", (DL_FUNC) &_H5Pall_filters_avail, 1}, */
-  /* {"_H5Pget_nfilters", (DL_FUNC) &_H5Pget_nfilters, 1}, */
+  {"_H5Pall_filters_avail", (DL_FUNC) &_H5Pall_filters_avail, 1},
+  {"_H5Pget_nfilters", (DL_FUNC) &_H5Pget_nfilters, 1},
   /* {"_H5Pget_filter1", (DL_FUNC) &_H5Pget_filter1, 7}, */
-  /* {"_H5Pget_filter2", (DL_FUNC) &_H5Pget_filter2, 8}, */
+  {"_H5Pget_filter", (DL_FUNC) &_H5Pget_filter, 2},
   /* {"_H5Pget_filter_by_id1", (DL_FUNC) &_H5Pget_filter_by_id1, 7}, */
   /* {"_H5Pget_filter_by_id2", (DL_FUNC) &_H5Pget_filter_by_id2, 8}, */
   /* {"_H5Pmodify_filter", (DL_FUNC) &_H5Pmodify_filter, 5}, */
@@ -285,6 +286,7 @@ static R_CallMethodDef libraryRCalls[] = {
   /* {"_H5Pcopy_prop", (DL_FUNC) &_H5Pcopy_prop, 3}, */
   /* {"_H5Premove", (DL_FUNC) &_H5Premove, 2}, */
   /* {"_H5Punregister", (DL_FUNC) &_H5Punregister, 2}, */
+  {"_H5Zfilter_avail", (DL_FUNC) &_H5Zfilter_avail, 1},
   {"_h5ls", (DL_FUNC) &_h5ls, 6},
   {"_h5dump", (DL_FUNC) &_h5dump, 4},
   {"_h5listIdentifier", (DL_FUNC) &_h5listIdentifier, 0},

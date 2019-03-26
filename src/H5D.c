@@ -510,6 +510,9 @@ SEXP H5Dread_helper_FLOAT(hid_t dataset_id, hid_t file_space_id, hid_t mem_space
     }
     
     herr_t herr = H5Dread(dataset_id, mem_type_id, mem_space_id, file_space_id, H5P_DEFAULT, buf );
+    if(herr < 0) {
+      error("Unable to read dataset");
+    }
     
     if (native)
       PERMUTE(Rval, REAL, mem_space_id);
@@ -545,6 +548,9 @@ SEXP H5Dread_helper_STRING(hid_t dataset_id, hid_t file_space_id, hid_t mem_spac
       if (H5Tis_variable_str(dtype_id)) {
           char *bufSTR[n];
           herr_t herr = H5Dread(dataset_id, mem_type_id, mem_space_id, file_space_id, H5P_DEFAULT, bufSTR );
+          if(herr < 0) {
+            error("Unable to read dataset");
+          }
           for (int i=0; i<n; i++) {
               SET_STRING_ELT(Rval, i, mkChar(bufSTR[i]));
               free(bufSTR[i]);
@@ -555,6 +561,9 @@ SEXP H5Dread_helper_STRING(hid_t dataset_id, hid_t file_space_id, hid_t mem_spac
               error("Not enough memory to read data! Try to read a subset of data by specifying the index or count parameter.");
           }
           herr_t herr = H5Dread(dataset_id, mem_type_id, mem_space_id, file_space_id, H5P_DEFAULT, bufSTR );
+          if(herr < 0) { 
+            error("Unable to read dataset");
+          }
           char* bufSTR2 = R_alloc(size + 1, sizeof(char));
           if (bufSTR2 == 0) {
               error("Not enough memory to read data! Try to read a subset of data by specifying the index or count parameter.");
@@ -617,6 +626,9 @@ SEXP H5Dread_helper_ENUM(hid_t dataset_id, hid_t file_space_id, hid_t mem_space_
         }
         
         herr_t herr = H5Dread(dataset_id, mem_type_id, mem_space_id, file_space_id, H5P_DEFAULT, buf );
+        if(herr < 0) {
+          error("Unable to read dataset");
+        }
         
         if (native)
             PERMUTE(Rval, INTEGER, mem_space_id);
@@ -699,6 +711,9 @@ SEXP H5Dread_helper_ARRAY(hid_t dataset_id, hid_t file_space_id, hid_t mem_space
         }
         
         herr_t herr = H5Dread(dataset_id, mem_type_id, mem_space_id, file_space_id, H5P_DEFAULT, buf );
+        if(herr < 0) {
+          error("Unable to read dataset");
+        }
         
         if (native) {
             int rank0 = H5Sget_simple_extent_ndims(mem_space_id);

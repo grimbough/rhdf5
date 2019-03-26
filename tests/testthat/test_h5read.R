@@ -294,6 +294,23 @@ test_that("Unsigned 32bit integers are converted properly to double/bit64", {
 })
 
 ############################################################
+context("Using filters other than ZLIB")
+###########################################################
+
+test_that("Reading SZIP", {
+    szip_file <- system.file("testfiles", "h5ex_d_szip.h5", package = "rhdf5")
+    expect_silent(h5read(szip_file, "DS1")) %>%
+        expect_is("matrix") %>% 
+        dim() %>% expect_equal(c(64,32))
+})
+
+test_that("Failing to read BLOSC", {
+    blosc_file <- system.file("testfiles", "h5ex_d_blosc.h5", package = "rhdf5")
+    expect_error(h5read(blosc_file, "dset"), "Unable to read dataset")
+    h5closeAll()
+})
+
+############################################################
 
 test_that("No open HDF5 objects are left", {
     expect_equal( length(h5validObjects()), 0 )

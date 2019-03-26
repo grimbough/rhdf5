@@ -35,11 +35,19 @@ h5readDataset <- function (h5dataset, index = NULL, start = NULL, stride = NULL,
         }
     }
     obj <- NULL
-    try({
+    tryCatch({
         obj <- H5Dread(h5dataset = h5dataset, h5spaceFile = h5spaceFile, 
                        h5spaceMem = h5spaceMem,
                        compoundAsDataFrame = compoundAsDataFrame, drop = drop, ...)
-    })
+    },
+        error = function(e) { 
+            err <- h5checkFilters(h5dataset) 
+            if(nchar(err) > 0)
+                stop(err, call. = FALSE)
+            else 
+                stop(e)
+        }
+    )
 
     ## Here we reorder data to match the order requested in index.
     ## The calls to H5Sselect_index will have returned data linearly
