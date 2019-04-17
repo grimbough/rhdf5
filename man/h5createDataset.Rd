@@ -31,7 +31,7 @@ h5createDataset (file, dataset,
 Creates a new dataset. in an existing HDF5 file. The function will fail, if the file doesn't exist or if there exists already another dataset with the same name within the specified file.
 }
 \value{Returns TRUE is dataset was created successfully and FALSE otherwise.}
-\references{\url{http://www.hdfgroup.org/HDF5}}
+\references{\url{https://portal.hdfgroup.org/display/HDF5}}
 \author{Bernd Fischer}
 \seealso{
 \code{\link{h5createFile}}, \code{\link{h5createGroup}}, \code{\link{h5read}}, \code{\link{h5write}}, \link{rhdf5}

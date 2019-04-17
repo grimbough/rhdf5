@@ -13,7 +13,7 @@ h5set_extent(file, dataset, dims, native = FALSE)
   \item{native}{An object of class \code{logical}. If TRUE, array-like objects are treated as stored in HDF5 row-major rather than R column-major orientation. Using \code{native = TRUE} increases HDF5 file portability between programming languages. A file written with \code{native = TRUE} should also be read with \code{native = TRUE}}.
 }
 \value{Returns 0 if the dimension of the dataset was changed successfully and a negative value otherwise.}
-\references{\url{http://www.hdfgroup.org/HDF5}}
+\references{\url{https://portal.hdfgroup.org/display/HDF5}}
 \author{Bernd Fischer}
 \seealso{\link{rhdf5}}
 \examples{

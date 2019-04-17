@@ -16,10 +16,10 @@ H5Iis_valid(h5identifier)
   \item{h5obj}{An object of class \code{\link{H5IdComponent}} representing a H5 object identifier (file, group, or dataset). See \code{\link{H5Fcreate}}, \code{\link{H5Fopen}}, \code{\link{H5Gcreate}}, \code{\link{H5Gopen}}, \code{\link{H5Dcreate}}, or \code{\link{H5Dopen}} to create an object of this kind.}
 }
 \details{
-Interface to the HDF5 C-library libhdf5. See \url{http://www.hdfgroup.org/HDF5/doc/RM/RM_H5I.html} for further details.
+Interface to the HDF5 C-library libhdf5. See \url{https://portal.hdfgroup.org/display/HDF5/Identifiers} for further details.
 }
 \value{\code{H5Iget_type} returns the type of the H5 identifier, \code{H5Iget_name} the name of the object, and \code{H5Iis_valid} checks if the object is a valid H5 identifier. }
-\references{\url{http://www.hdfgroup.org/HDF5}}
+\references{\url{https://portal.hdfgroup.org/display/HDF5}}
 \author{Bernd Fischer}
 \seealso{
 \link{rhdf5}

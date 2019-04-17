@@ -34,7 +34,7 @@ H5Gget_info_by_name (h5loc, group_name)
   \item{order}{See \code{h5const("H5_ITER")} for possible arguments.}
 }
 \details{
-Interface to the HDF5 C-library libhdf5. See \url{http://www.hdfgroup.org/HDF5/doc/RM/RM_H5G.html} for further details.
+Interface to the HDF5 C-library libhdf5. See \url{https://portal.hdfgroup.org/display/HDF5/Groups} for further details.
 }
 \value{
 \code{H5Gcreate}, \code{H5Gcreate_anon}, and \code{H5Gopen} return an object of class \code{\link{H5IdComponent}} representing a H5 group identifier.
@@ -43,7 +43,7 @@ Interface to the HDF5 C-library libhdf5. See \url{http://www.hdfgroup.org/HDF5/d
 
 The other functions return the standard return value from their respective C-functions.
 }
-\references{\url{http://www.hdfgroup.org/HDF5}}
+\references{\url{https://portal.hdfgroup.org/display/HDF5}}
 \author{Bernd Fischer}
 \seealso{
 \link{rhdf5}

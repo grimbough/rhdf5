@@ -18,7 +18,7 @@ h5save(..., file, name = NULL, createnewfile = TRUE, native = FALSE)
 The objects will be saved to the HDF5 file. If the file does not exists it will be created. The data can be read again by either \code{\link{h5dump}} or individually for each dataset by \code{\link{h5read}}.
 }
 \value{Nothing returned.}
-\references{\url{http://www.hdfgroup.org/HDF5}}
+\references{\url{https://portal.hdfgroup.org/display/HDF5}}
 \author{Bernd Fischer}
 \seealso{
 \code{\link{h5ls}}, \code{\link{h5write}}, \link{rhdf5}

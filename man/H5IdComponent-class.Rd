@@ -23,7 +23,7 @@ Objects can be created by calls of \code{\link{H5Fcreate}}, \code{\link{H5Fopen}
 	\item{show}{\code{signature(object = "H5IdComponent")}: Shows the filename. }
     }
 }
-\references{\url{http://www.hdfgroup.org/HDF5}}
+\references{\url{https://portal.hdfgroup.org/display/HDF5}}
 \author{Bernd Fischer}
 \seealso{
 \link{rhdf5}

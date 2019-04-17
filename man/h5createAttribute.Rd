@@ -27,7 +27,7 @@ Creates a new attribute and attaches it to an existing HDF5 object. The function
 You can use \code{\link{h5writeAttribute}} immediately. It will create the attribute for you.
 }
 \value{Returns TRUE is attribute was created successfully and FALSE otherwise.}
-\references{\url{http://www.hdfgroup.org/HDF5}}
+\references{\url{https://portal.hdfgroup.org/display/HDF5}}
 \author{Bernd Fischer}
 \seealso{
 \code{\link{h5createFile}}, \code{\link{h5createGroup}}, \code{\link{h5createDataset}}, \code{\link{h5read}}, \code{\link{h5write}}, \link{rhdf5}

@@ -17,12 +17,12 @@ H5Tset_size (dtype_id = h5default(type = "H5T"), size)
   \item{size}{The total size in bytes.}
 }
 \details{
-Interface to the HDF5 C-library libhdf5. See \url{http://www.hdfgroup.org/HDF5/doc/RM/RM_H5T.html} for further details.
+Interface to the HDF5 C-library libhdf5. See \url{https://portal.hdfgroup.org/display/HDF5/Datatypes} for further details.
 }
 \value{
 The functions return the standard return value from their respective C-functions.
 }
-\references{\url{http://www.hdfgroup.org/HDF5}}
+\references{\url{https://portal.hdfgroup.org/display/HDF5}}
 \author{Bernd Fischer}
 \seealso{
 \link{rhdf5}

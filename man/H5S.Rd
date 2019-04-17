@@ -44,9 +44,9 @@ H5Sunlimited              ()
   \item{block}{The block size of the hyperslab. Read the introduction \url{http://ftp.hdfgroup.org/HDF5/Tutor/phypecont.html} before using this argument. R behaves like Fortran in this example.}
 }
 \details{
-Interface to the HDF5 C-library libhdf5. See \url{http://www.hdfgroup.org/HDF5/doc/RM/RM_H5S.html} for further details.
+Interface to the HDF5 C-library libhdf5. See \url{https://portal.hdfgroup.org/display/HDF5/Dataspaces} for further details.
 
-As an introduction to use hyperslabs see these tutorials: See these introductions to hyperslabs: \url{http://www.hdfgroup.org/HDF5/Tutor/selectsimple.html}, \url{http://www.hdfgroup.org/HDF5/Tutor/select.html} and \url{http://ftp.hdfgroup.org/HDF5/Tutor/phypecont.html}. Please note that in R the first dimension is the fastest changing dimension. When viewing the HDF5 datasets with any C-program (e.g. HDFView), the order of dimensions is inverted. In the R interface counting starts with 1, whereas in the C-programs (e.g. HDFView) counting starts with 0.
+As an introduction to use hyperslabs see these tutorials: See these introductions to hyperslabs: \url{https://support.hdfgroup.org/HDF5/Tutor/selectsimple.html}, \url{https://support.hdfgroup.org/HDF5/Tutor/select.html} and \url{http://ftp.hdfgroup.org/HDF5/Tutor/phypecont.html}. Please note that in R the first dimension is the fastest changing dimension. When viewing the HDF5 datasets with any C-program (e.g. HDFView), the order of dimensions is inverted. In the R interface counting starts with 1, whereas in the C-programs (e.g. HDFView) counting starts with 0.
 
 \code{H5Sselect_index}  is not part of the standard HDF5 C interface. It performes an iterative call to H5select_points by iterating through the given index positions. This function avoids a for loop in R. If a list element is NULL, all elements of the respective dimension are considered.
 }
@@ -61,7 +61,7 @@ As an introduction to use hyperslabs see these tutorials: See these introduction
 
 The other functions return the standard return value from their respective C-functions.
 }
-\references{\url{http://www.hdfgroup.org/HDF5}}
+\references{\url{https://portal.hdfgroup.org/display/HDF5}}
 \author{Bernd Fischer}
 \seealso{
 \link{rhdf5}

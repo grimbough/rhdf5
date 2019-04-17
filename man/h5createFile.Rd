@@ -14,7 +14,7 @@ h5createFile (file)
 Creates an empty HDF5 file.
 }
 \value{Returns TRUE is file was created successfully and FALSE otherwise.}
-\references{\url{http://www.hdfgroup.org/HDF5}}
+\references{\url{https://portal.hdfgroup.org/display/HDF5}}
 \author{Bernd Fischer}
 \seealso{
 \code{\link{h5createGroup}}, \code{\link{h5createDataset}}, \code{\link{h5read}}, \code{\link{h5write}}, \link{rhdf5}

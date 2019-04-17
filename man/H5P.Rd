@@ -31,7 +31,7 @@ H5Pget_libver_bounds (h5plist)
   \item{libver_high}{A character value representing the higher bound on the library version for reading or writing the HDF5 file. See \code{h5const("H5F_LIBVER")} for possible arguments. Default is "H5F_LIBVER_LATEST"}
 }
 \details{
-Interface to the HDF5 C-library libhdf5. See \url{http://www.hdfgroup.org/HDF5/doc/RM/RM_H5P.html} for further details.
+Interface to the HDF5 C-library libhdf5. See \url{https://portal.hdfgroup.org/display/HDF5/Property+Lists} for further details.
 }
 \value{
 \code{H5Pcreate} and \code{H5Pcopy} return an object of class \code{\link{H5IdComponent}} representing a H5 property list identifier.
@@ -40,7 +40,7 @@ Interface to the HDF5 C-library libhdf5. See \url{http://www.hdfgroup.org/HDF5/d
 
 The other functions return the standard return value from their respective C-functions.
 }
-\references{\url{http://www.hdfgroup.org/HDF5}}
+\references{\url{https://portal.hdfgroup.org/display/HDF5}}
 \author{Bernd Fischer}
 \seealso{
 \link{rhdf5}, \link{H5P_DATASET_CREATE}

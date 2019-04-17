@@ -72,12 +72,12 @@ H5Pget_alloc_time                  ( h5plist )
   \item{alloc_time}{A character name of a H5D_ALLOC_TIME type. See \code{h5const("H5D_ALLOC_TIME")} for possible property list types. Can also be an integer representing an HDF5 H5D_ALLOC_TIME type.}
 }
 \details{
-Interface to the HDF5 C-library libhdf5. See \url{http://www.hdfgroup.org/HDF5/doc/RM/RM_H5P.html} for further details. See \link{H5P} for documentation of more functions to manupulate property lists of other property list classes. 
+Interface to the HDF5 C-library libhdf5. See \url{https://portal.hdfgroup.org/display/HDF5/Dataset+Creation+Properties} for further details. See \link{H5P} for documentation of more functions to manupulate property lists of other property list classes. 
 }
 \value{
 The functions return the standard return value from their respective C-functions.
 }
-\references{\url{http://www.hdfgroup.org/HDF5}}
+\references{\url{https://portal.hdfgroup.org/display/HDF5}}
 \author{Bernd Fischer}
 \seealso{
 \link{rhdf5}, \link{H5P}

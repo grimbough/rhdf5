@@ -84,7 +84,7 @@ h5writeAttribute.array      (attr, h5obj, name, size)
   \item{\dots}{Further arguments passed to \code{\link{H5Dread}}.}
 }
 \details{
-Read/writes an R object from/to an HDF5 file. If neither of the arguments \code{start, stride, block, count} is specified, the dataset has the same dimension in the HDF5 file and in memory. If the dataset already exists in the HDF5 file, one can read/write subarrays, so called hyperslabs from/to the HDF5 file. The arguments \code{start, stride, block, count} define the subset of the dataset in the HDF5 file that is to be read/written. See these introductions to hyperslabs: \url{http://www.hdfgroup.org/HDF5/Tutor/selectsimple.html}, \url{http://www.hdfgroup.org/HDF5/Tutor/select.html} and \url{http://ftp.hdfgroup.org/HDF5/Tutor/phypecont.html}. Please note that in R the first dimension is the fastest changing dimension.
+Read/writes an R object from/to an HDF5 file. If neither of the arguments \code{start, stride, block, count} is specified, the dataset has the same dimension in the HDF5 file and in memory. If the dataset already exists in the HDF5 file, one can read/write subarrays, so called hyperslabs from/to the HDF5 file. The arguments \code{start, stride, block, count} define the subset of the dataset in the HDF5 file that is to be read/written. See these introductions to hyperslabs: \url{https://support.hdfgroup.org/HDF5/Tutor/selectsimple.html}, \url{https://support.hdfgroup.org/HDF5/Tutor/select.html} and \url{http://ftp.hdfgroup.org/HDF5/Tutor/phypecont.html}. Please note that in R the first dimension is the fastest changing dimension.
 
 When viewing the HDF5 datasets with any C-program (e.g. HDFView), the order of dimensions is inverted. In the R interface counting starts with 1, whereas in the C-programs (e.g. HDFView) counting starts with 0.
 }
@@ -95,7 +95,7 @@ When viewing the HDF5 datasets with any C-program (e.g. HDFView), the order of d
 
 \code{h5write} returns 0 if successful.
 }
-\references{\url{http://www.hdfgroup.org/HDF5}}
+\references{\url{https://portal.hdfgroup.org/display/HDF5}}
 \author{Bernd Fischer}
 \seealso{
 \code{\link{h5ls}}, \code{\link{h5createFile}}, \code{\link{h5createDataset}}, \link{rhdf5}

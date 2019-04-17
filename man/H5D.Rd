@@ -47,7 +47,7 @@ H5Dset_extent       (h5dataset, size)
   \item{dapl}{An object of class \code{\link{H5IdComponent}} representing a H5 dataset access property list. See \code{\link{H5Pcreate}}, \code{\link{H5Pcopy}} to create an object of this kind.}
 }
 \details{
-Interface to the HDF5 C-library libhdf5. See \url{http://www.hdfgroup.org/HDF5/doc/RM/RM_H5D.html} for further details.
+Interface to the HDF5 C-library libhdf5. See \url{https://portal.hdfgroup.org/display/HDF5/Datasets} for further details.
 }
 \value{
 \code{H5Dcreate} and \code{H5Dopen} return an object of class \code{\link{H5IdComponent}} represinting a H5 dataset identifier.
@@ -58,7 +58,7 @@ Interface to the HDF5 C-library libhdf5. See \url{http://www.hdfgroup.org/HDF5/d
 
 The other functions return the standard return value from their respective C-functions.
 }
-\references{\url{http://www.hdfgroup.org/HDF5}}
+\references{\url{https://portal.hdfgroup.org/display/HDF5}}
 \author{Bernd Fischer}
 \seealso{
 \link{rhdf5}

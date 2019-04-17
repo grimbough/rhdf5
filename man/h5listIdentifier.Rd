@@ -13,7 +13,7 @@ h5validObjects(native = FALSE)
 \value{
 \code{h5validObjects} returns a list of \code{\link{H5IdComponent}} objects. \code{h5listIdentifier} prints the valid identifiers on screen and returns NULL.
 }
-\references{\url{http://www.hdfgroup.org/HDF5}}
+\references{\url{https://portal.hdfgroup.org/display/HDF5}}
 \author{Bernd Fischer}
 \seealso{
 \link{rhdf5}

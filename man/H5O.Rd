@@ -26,12 +26,12 @@ H5Oget_num_attrs_by_name(h5loc, name)
   \item{name}{The name of the link to be checked.}
 }
 \details{
-Interface to the HDF5 C-library libhdf5. See \url{http://www.hdfgroup.org/HDF5/doc/RM/RM_H5O.html} for further details.
+Interface to the HDF5 C-library libhdf5. See \url{https://portal.hdfgroup.org/display/HDF5/Objects} for further details.
 }
 \value{
 \code{H5Oopen} opens an object (a file, group, or dataset) and returns an object of class \code{\link{H5IdComponent}}. \code{H5Oclose} closed the object again. \code{H5Oget_num_attrs} and \code{H5Oget_num_attrs_by_name} return the number of attributes of an object.
 }
-\references{\url{http://www.hdfgroup.org/HDF5}}
+\references{\url{https://portal.hdfgroup.org/display/HDF5}}
 \author{Bernd Fischer}
 \seealso{
 \link{rhdf5}

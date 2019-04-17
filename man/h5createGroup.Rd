@@ -17,7 +17,7 @@ h5createGroup (file, group)
 Creates a new group within an HDF5 file. 
 }
 \value{Returns TRUE is group was created successfully and FALSE otherwise.}
-\references{\url{http://www.hdfgroup.org/HDF5}}
+\references{\url{https://portal.hdfgroup.org/display/HDF5}}
 \author{Bernd Fischer}
 \seealso{
 \code{\link{h5createFile}}, \code{\link{h5createDataset}}, \code{\link{h5read}}, \code{\link{h5write}}, \link{rhdf5}

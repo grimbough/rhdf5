@@ -70,7 +70,7 @@ There are a number of high level R functions that provide a convinient way of ac
   Heidelberg
   Germany
 
-  The package contains the HDF5 library (\url{http://www.hdfgroup.org/HDF5}).
+  The package contains the HDF5 library (\url{https://portal.hdfgroup.org/display/HDF5}).
 }
 
 \examples{

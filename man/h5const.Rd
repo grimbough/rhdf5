@@ -22,7 +22,7 @@ These functions provide a list of HDF5 constants that are defined in the R packa
 \value{
 A character vector with names of HDF5 constants or groups.
 }
-\references{\url{http://www.hdfgroup.org/HDF5}}
+\references{\url{https://portal.hdfgroup.org/display/HDF5}}
 \author{Bernd Fischer}
 \seealso{
 \link{rhdf5}

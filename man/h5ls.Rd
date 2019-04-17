@@ -40,7 +40,7 @@ h5dump (file,
 
 \code{h5dump} returns a hierarchical list structure representing the HDF5 group hierarchy. It either returns the datasets within the list structure (\code{load=TRUE}) or it returns a data.frame for each datset with the dataset header information \code{load=FALSE}.
 }
-\references{\url{http://www.hdfgroup.org/HDF5}}
+\references{\url{https://portal.hdfgroup.org/display/HDF5}}
 \author{Bernd Fischer}
 \seealso{
 \code{\link{h5read}}, \code{\link{h5write}}, \link{rhdf5}

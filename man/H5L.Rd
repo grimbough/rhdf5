@@ -25,7 +25,7 @@ H5Ldelete          (h5loc, name)
   \item{name}{The name of the link to be checked.}
 }
 \details{
-Interface to the HDF5 C-library libhdf5. See \url{http://www.hdfgroup.org/HDF5/doc/RM/RM_H5L.html} for further details.
+Interface to the HDF5 C-library libhdf5. See \url{https://portal.hdfgroup.org/display/HDF5/Links} for further details.
 
 If \code{name} consists of a relative path containing group names, the function \code{H5Lexists} checks recursively if the links exists which is a different behaviour to the C-function.
 }
@@ -34,7 +34,7 @@ If \code{name} consists of a relative path containing group names, the function 
 
 \code{H5Lget_info} returns a list with the entries of the C-structure \code{H5L_info_t}.
 }
-\references{\url{http://www.hdfgroup.org/HDF5}}
+\references{\url{https://portal.hdfgroup.org/display/HDF5}}
 \author{Bernd Fischer, Mike Smith}
 \seealso{
 \link{rhdf5}
