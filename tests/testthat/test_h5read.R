@@ -108,7 +108,8 @@ test_that("Read / write vector longer than 2^31-1", {
         
         expect_silent( tmp <- h5read(file = h5File, name = "too_long") ) %>%
             expect_is("integer") %>%
-            expect_length((2^31)+1000)
+            length() %>%
+            expect_equal((2^31)+1000)
     }
 })
 
