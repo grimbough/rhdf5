@@ -217,6 +217,10 @@ h5writeDataset.array <- function(obj, h5loc, name, index = NULL, start=NULL, str
                          block = block, count = count)
     if(storage.mode(obj) == "character" && any(is.na(obj))) {
         h5writeAttribute(1L, h5dataset, name = "as.na")
+        if(any(obj == "NA", na.rm = TRUE)) {
+            warning("Both NA_character_ and the string 'NA' detected.\n",
+                    "These will all be coerced to NA_character_ when read using h5read()")
+        }
     }
 
     invisible(NULL)

@@ -167,6 +167,26 @@ test_that("reading & writing scalar dataspaces", {
 })
 
 ############################################################
+context("NA values")
+############################################################
+
+## output file name
+h5File <- tempfile(pattern = "ex_read", fileext = ".h5")
+if(file.exists(h5File))
+  file.remove(h5File)
+
+h5createFile(h5File)
+
+test_that("NA characters are supported", {
+  
+  expect_silent(h5write(c(NA_character_, LETTERS), h5File, "NA_char"))
+  expect_true( any(is.na(h5read(h5File, name = "NA_char")) ) )
+  
+  expect_warning(h5write(c(NA_character_, LETTERS, "NA"), h5File, "NA_char_2"),
+                 "Both NA_character_ and the string 'NA' detected")
+})
+
+############################################################
 context("indexing")
 ############################################################
 
