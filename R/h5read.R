@@ -95,9 +95,15 @@ h5read <- function(file, name, index=NULL, start=NULL, stride=NULL, block=NULL,
             obj = h5dump(gid, start=start, stride=stride, block=block, count=count, compoundAsDataFrame = compoundAsDataFrame, callGeneric = callGeneric, ...)
             H5Gclose(gid)
         } else if (type == "H5I_DATASET") {
-            try( { h5dataset <- H5Dopen(loc$H5Identifier, name) } )
+            h5dataset <- H5Dopen(loc$H5Identifier, name)
             obj <- h5readDataset(h5dataset, index = index, start = start, stride = stride, 
                                  block = block, count = count, compoundAsDataFrame = compoundAsDataFrame, drop = drop, ...)
+            ## coerce the string "NA" to NA if required
+            if(storage.mode(obj) == "character" && H5Aexists(h5dataset, name = "as.na")) {
+                if(any(obj == "NA")) {
+                    obj[obj == "NA"] <- NA_character_
+                }
+            }
             try( { H5Dclose(h5dataset) } )
             
             cl <- attr(obj,"class")

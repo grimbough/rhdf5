@@ -187,18 +187,18 @@ h5writeDataset.logical <- function(...) { h5writeDataset.array(...) }
 h5writeDataset.character <- function(...) { h5writeDataset.array(...) }
 
 h5writeDataset.array <- function(obj, h5loc, name, index = NULL, start=NULL, stride=NULL, block=NULL, count=NULL, size=NULL, level=7) {
-    #if (is.null(dim(obj))) {
-    #    dim(obj) = length(obj)
-    #}
+
     exists <- try( { H5Lexists(h5loc, name) } )
     if (!exists) {
         if (is.null(size)) {
             size = NULL
             if (storage.mode(obj) == "character") {
                 if (length(obj) > 0) {
-                    size = max(nchar(obj))+1
+                    size <- max(nchar(obj), na.rm = TRUE)+1
+                    ## if any NA, the minimum string length is 3
+                    if(any(is.na(obj)) && size < 3) { size <- 3 }
                 } else {
-                    size = 1
+                    size <- 1
                 }
             }
             if (is.null(dim(obj))) {
@@ -211,11 +211,14 @@ h5writeDataset.array <- function(obj, h5loc, name, index = NULL, start=NULL, str
                             size = size, chunk=dim, level=level) 
         }
     }
-    try ( { h5dataset <- H5Dopen(h5loc, name) } )
+    h5dataset <- H5Dopen(h5loc, name)
+    on.exit( H5Dclose(h5dataset) )
     h5writeDatasetHelper(obj=obj, h5dataset=h5dataset, index = index, start = start, stride = stride, 
                          block = block, count = count)
-    try( { H5Dclose(h5dataset) } )
-    #  invisible(res)
+    if(storage.mode(obj) == "character" && any(is.na(obj))) {
+        h5writeAttribute(1L, h5dataset, name = "as.na")
+    }
+
     invisible(NULL)
 }
 
