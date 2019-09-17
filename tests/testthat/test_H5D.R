@@ -24,5 +24,3 @@ test_that("Extracting property list", {
     expect_silent( H5Dclose(did) )
     expect_silent( H5Fclose(fid) )
 })
-
- 

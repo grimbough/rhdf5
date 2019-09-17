@@ -1,6 +1,43 @@
 \name{NEWS}
 \title{News for Package 'rhdf5'}
 
+\section{Changes in version 2.28.0}{
+  \subsection{NEW FEATURES}{
+    \itemize{
+      \item Functions to test and set file locking have added.  These can help
+      identify and address problems on Lustre and ZFS file systems.
+    }
+  }
+  
+  \subsection{USER VISIBLE CHANGES}{
+    \itemize{
+      \item Reading a dataset of rank one will now return an R vector, rather 
+       than a one dimensional array.
+    }
+  }
+  
+  \subsection{BUG FIXES}{
+    \itemize{
+      \item Large improvements to performances when selecting subsets
+      of datasets using the `index` argument.
+      \item Resolved limitations where large datasets would exceed HDF5's 4GB
+      maximum chunk size.  The default options will now check if this will 
+      occur and adjust chunking automatically.
+      \item Single-rank datasets larger than 2^31-1 entries can now be read
+      into R vectors.
+    }
+  }
+}
+
+\section{Changes in version 2.26.0}{
+
+  \subsection{BUG FIXES}{
+    \itemize{
+      \item Compilation problems on Solaris have been addressed.
+    }
+  }
+}
+
 \section{Changes in version 2.24.0}{
   \subsection{NEW FEATURES}{
     \itemize{
@@ -8,6 +45,11 @@
       This updates the version of HDF5 to 1.8.19.
       \item Functions H5Ldelete() and h5delete() added to provide mechanisms
       for removing items from HDF files.
+      \item Added argument `native` to many functions, which allows data to be
+      treated as row-major rather than column-major, improving portability with
+      other programming languages.
+      \item Added function H5Sunlimited() allowing creation of extensible 
+      datasets - thanks to Brad Friedman 
     }
   }
   

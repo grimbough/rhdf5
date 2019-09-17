@@ -1,6 +1,6 @@
 
-h5readAttributes <- function(file, name) {
-  loc = h5checktypeOrOpenLoc(file, readonly=TRUE)
+h5readAttributes <- function(file, name, native = FALSE) {
+  loc = h5checktypeOrOpenLoc(file, readonly=TRUE, native = native)
 
   if (!H5Lexists(loc$H5Identifier, name)) {
     h5closeitLoc(loc)

@@ -1,10 +1,11 @@
 #include "H5G.h"
 
-void addVector( int pos, SEXP Rval, SEXP groupnames, const char *groupname, int N, int* cc, const char *names[] ) {
+void addVector_int( int pos, SEXP Rval, SEXP groupnames, const char *groupname, int N, int* cc, const char *names[] ) {
+  
   SEXP Rconstants;
-  PROTECT(Rconstants=allocVector(INTSXP,N));
+  PROTECT(Rconstants=allocVector(INTSXP, N));
   for (int i=0; i<N; i++) {
-    INTEGER(Rconstants)[i] = cc[i];
+      INTEGER(Rconstants)[i] = cc[i];
   }
 
   SEXP Rnames = PROTECT(allocVector(STRSXP, N));
@@ -20,54 +21,79 @@ void addVector( int pos, SEXP Rval, SEXP groupnames, const char *groupname, int 
   SET_STRING_ELT(groupnames, pos, mkChar(groupname));
 }
 
+void addVector_hid( int pos, SEXP Rval, SEXP groupnames, const char *groupname, int N, hid_t* cc, const char *names[] ) {
+    
+    SEXP Rconstants;
+    PROTECT(Rconstants=allocVector(STRSXP,N));
+    for (int i=0; i<N; i++) {
+        SET_STRING_ELT(Rconstants, i, HID_2_CHARSXP(cc[i]));
+    }
+    
+    SEXP Rnames = PROTECT(allocVector(STRSXP, N));
+    for (int i=0; i<N; i++) {
+        SET_STRING_ELT(Rnames, i, mkChar(names[i]));
+    }
+    SET_NAMES(Rconstants, Rnames);
+    UNPROTECT(1); // Rnames
+    
+    UNPROTECT(1); // Rconstants
+    
+    SET_VECTOR_ELT(Rval,pos,Rconstants);
+    SET_STRING_ELT(groupnames, pos, mkChar(groupname));
+}
+
 
 SEXP _H5constants( ) {
   SEXP Rval;
-  PROTECT(Rval = allocVector(VECSXP, 18));
-  SEXP groupnames = PROTECT(allocVector(STRSXP, 18));
+  PROTECT(Rval = allocVector(VECSXP, 19));
+  SEXP groupnames = PROTECT(allocVector(STRSXP, 19));
   int i=0;
 
   int const_H5F_ACC[2]       = {  H5F_ACC_TRUNC,   H5F_ACC_EXCL };
   const char *name_H5F_ACC[] = { "H5F_ACC_TRUNC", "H5F_ACC_EXCL"};
-  addVector(i++, Rval, groupnames, "H5F_ACC", 2, const_H5F_ACC, name_H5F_ACC);
+  addVector_int(i++, Rval, groupnames, "H5F_ACC", 2, const_H5F_ACC, name_H5F_ACC);
 
   int const_H5F_ACC_RD[2]       = {  H5F_ACC_RDWR,   H5F_ACC_RDONLY };
   const char *name_H5F_ACC_RD[] = { "H5F_ACC_RDWR", "H5F_ACC_RDONLY"};
-  addVector(i++, Rval, groupnames, "H5F_ACC_RD", 2, const_H5F_ACC_RD, name_H5F_ACC_RD);
+  addVector_int(i++, Rval, groupnames, "H5F_ACC_RD", 2, const_H5F_ACC_RD, name_H5F_ACC_RD);
 
   int const_H5F_SCOPE[2]       = {  H5F_SCOPE_GLOBAL,   H5F_SCOPE_LOCAL };
   const char *name_H5F_SCOPE[] = { "H5F_SCOPE_GLOBAL", "H5F_SCOPE_LOCAL"};
-  addVector(i++, Rval, groupnames, "H5F_SCOPE", 2, const_H5F_SCOPE, name_H5F_SCOPE);
+  addVector_int(i++, Rval, groupnames, "H5F_SCOPE", 2, const_H5F_SCOPE, name_H5F_SCOPE);
 
-  int const_H5F_LIBVER[3]       = {  H5F_LIBVER_18,   H5F_LIBVER_EARLIEST,   H5F_LIBVER_LATEST };
-  const char *name_H5F_LIBVER[] = { "H5F_LIBVER_18", "H5F_LIBVER_EARLIEST", "H5F_LIBVER_LATEST"};
-  addVector(i++, Rval, groupnames, "H5F_LIBVER", 3, const_H5F_LIBVER, name_H5F_LIBVER);
+  int const_H5F_LIBVER[4]       = {  H5F_LIBVER_EARLIEST,   H5F_LIBVER_LATEST,   H5F_LIBVER_V18 ,  H5F_LIBVER_V110  };
+  const char *name_H5F_LIBVER[] = { "H5F_LIBVER_EARLIEST", "H5F_LIBVER_LATEST", "H5F_LIBVER_V18", "H5F_LIBVER_V110" };
+  addVector_int(i++, Rval, groupnames, "H5F_LIBVER", 4, const_H5F_LIBVER, name_H5F_LIBVER);
 
   int const_H5_INDEX[2]       = {  H5_INDEX_NAME,   H5_INDEX_CRT_ORDER };
   const char *name_H5_INDEX[] = { "H5_INDEX_NAME", "H5_INDEX_CRT_ORDER"};
-  addVector(i++, Rval, groupnames, "H5_INDEX", 2, const_H5_INDEX, name_H5_INDEX);
+  addVector_int(i++, Rval, groupnames, "H5_INDEX", 2, const_H5_INDEX, name_H5_INDEX);
 
   int const_H5_ITER[3]       = {  H5_ITER_INC,   H5_ITER_DEC,   H5_ITER_NATIVE };
   const char *name_H5_ITER[] = { "H5_ITER_INC", "H5_ITER_DEC", "H5_ITER_NATIVE"};
-  addVector(i++, Rval, groupnames, "H5_ITER", 3, const_H5_ITER, name_H5_ITER);
+  addVector_int(i++, Rval, groupnames, "H5_ITER", 3, const_H5_ITER, name_H5_ITER);
 
   int const_H5L_TYPE[4]       = {  H5L_TYPE_HARD,   H5L_TYPE_SOFT,   H5L_TYPE_EXTERNAL,   H5L_TYPE_ERROR };
   const char *name_H5L_TYPE[] = { "H5L_TYPE_HARD", "H5L_TYPE_SOFT", "H5L_TYPE_EXTERNAL", "H5L_TYPE_ERROR"};
-  addVector(i++, Rval, groupnames, "H5L_TYPE", 4, const_H5L_TYPE, name_H5L_TYPE);
+  addVector_int(i++, Rval, groupnames, "H5L_TYPE", 4, const_H5L_TYPE, name_H5L_TYPE);
 
   int const_H5O_TYPE[4]       = {  -1,             H5O_TYPE_GROUP,   H5O_TYPE_DATASET,   H5O_TYPE_NAMED_DATATYPE };
   const char *name_H5O_TYPE[] = { "H5O_TYPE_ALL", "H5O_TYPE_GROUP", "H5O_TYPE_DATASET", "H5O_TYPE_NAMED_DATATYPE"};
-  addVector(i++, Rval, groupnames, "H5O_TYPE", 4, const_H5O_TYPE, name_H5O_TYPE);
+  addVector_int(i++, Rval, groupnames, "H5O_TYPE", 4, const_H5O_TYPE, name_H5O_TYPE);
 
   int const_H5S[3]       = {  H5S_SCALAR,   H5S_SIMPLE,   H5S_NULL };
   const char *name_H5S[] = { "H5S_SCALAR", "H5S_SIMPLE", "H5S_NULL"};
-  addVector(i++, Rval, groupnames, "H5S", 3, const_H5S, name_H5S);
+  addVector_int(i++, Rval, groupnames, "H5S", 3, const_H5S, name_H5S);
+  
+  hid_t const_H5S_UNLIMITED[1]       = {  H5S_UNLIMITED };
+  const char *name_H5S_UNLIMITED[] = { "H5S_UNLIMITED" };
+  addVector_hid(i++, Rval, groupnames, "H5S_UNLIMITED", 1, const_H5S_UNLIMITED, name_H5S_UNLIMITED);
 
   int const_H5S_SELECT[6]       = {  H5S_SELECT_SET,   H5S_SELECT_OR,   H5S_SELECT_AND,   H5S_SELECT_XOR,   H5S_SELECT_NOTB,   H5S_SELECT_NOTA };
   const char *name_H5S_SELECT[] = { "H5S_SELECT_SET", "H5S_SELECT_OR", "H5S_SELECT_AND", "H5S_SELECT_XOR", "H5S_SELECT_NOTB", "H5S_SELECT_NOTA"};
-  addVector(i++, Rval, groupnames, "H5S_SELECT", 6, const_H5S_SELECT, name_H5S_SELECT);
+  addVector_int(i++, Rval, groupnames, "H5S_SELECT", 6, const_H5S_SELECT, name_H5S_SELECT);
 
-  int const_H5T[80]       = {  H5T_IEEE_F32BE,   H5T_IEEE_F32LE,   H5T_IEEE_F64BE,   H5T_IEEE_F64LE,   
+  hid_t const_H5T[79]       = {  H5T_IEEE_F32BE,   H5T_IEEE_F32LE,   H5T_IEEE_F64BE,   H5T_IEEE_F64LE,   
 			       H5T_STD_I8BE,    H5T_STD_I8LE,    H5T_STD_I16BE,   H5T_STD_I16LE,   
 			       H5T_STD_I32BE,   H5T_STD_I32LE,   H5T_STD_I64BE,   H5T_STD_I64LE,   
 			       H5T_STD_U8BE,    H5T_STD_U8LE,    H5T_STD_U16BE,   H5T_STD_U16LE,   
@@ -87,7 +113,7 @@ SEXP _H5constants( ) {
 			       H5T_NATIVE_INT32, H5T_NATIVE_UINT32, H5T_NATIVE_INT_LEAST32, H5T_NATIVE_UINT_LEAST32, H5T_NATIVE_INT_FAST32, H5T_NATIVE_UINT_FAST32,
 			       H5T_NATIVE_INT64, H5T_NATIVE_UINT64, H5T_NATIVE_INT_LEAST64, H5T_NATIVE_UINT_LEAST64, H5T_NATIVE_INT_FAST64, H5T_NATIVE_UINT_FAST64,
 			       H5T_NATIVE_DOUBLE,
-			       H5T_STRING, H5T_C_S1, H5T_FORTRAN_S1 };
+			       H5T_C_S1, H5T_FORTRAN_S1 };
 			      /* H5T_UNIX_D32BE,  H5T_UNIX_D32LE,  H5T_UNIX_D64BE,  H5T_UNIX_D64LE, */
 			      /* H5T_C_S1, H5T_FORTRAN_S1, */
 			      /* H5T_INTEL_I8,    H5T_INTEL_I16,   H5T_INTEL_I32,   H5T_INTEL_I64, */
@@ -124,7 +150,7 @@ SEXP _H5constants( ) {
 			     "H5T_NATIVE_INT32", "H5T_NATIVE_UINT32", "H5T_NATIVE_INT_LEAST32", "H5T_NATIVE_UINT_LEAST32", "H5T_NATIVE_INT_FAST32", "H5T_NATIVE_UINT_FAST32",
 			     "H5T_NATIVE_INT64", "H5T_NATIVE_UINT64", "H5T_NATIVE_INT_LEAST64", "H5T_NATIVE_UINT_LEAST64", "H5T_NATIVE_INT_FAST64", "H5T_NATIVE_UINT_FAST64",
 			     "H5T_NATIVE_DOUBLE",
-			     "H5T_STRING", "H5T_C_S1", "H5T_FORTRAN_S1" };
+			     "H5T_C_S1", "H5T_FORTRAN_S1" };
 
 			     /* "H5T_UNIX_D32BE", "H5T_UNIX_D32LE", "H5T_UNIX_D64BE", "H5T_UNIX_D64LE", */
 			     /* "H5T_INTEL_I8", "H5T_INTEL_I16", "H5T_INTEL_I32", "H5T_INTEL_I64", */
@@ -141,16 +167,16 @@ SEXP _H5constants( ) {
 			     /* "H5T_MIPS_U8", "H5T_MIPS_U16", "H5T_MIPS_U32", "H5T_MIPS_U64", */
 			     /* "H5T_MIPS_F32", "H5T_MIPS_F64" */
 
-  addVector(i++, Rval, groupnames, "H5T", 80, const_H5T, name_H5T);
+  addVector_hid(i++, Rval, groupnames, "H5T", 79, const_H5T, name_H5T);
   /* There are more platform specific datatypes */
 
   int const_H5T_CLASS[11]      = {  H5T_INTEGER,   H5T_FLOAT,   H5T_TIME,   H5T_STRING,   H5T_BITFIELD,   H5T_OPAQUE,   H5T_COMPOUND,   H5T_REFERENCE,   H5T_ENUM,   H5T_VLEN,   H5T_ARRAY };
   const char *name_H5T_CLASS[] = { "H5T_INTEGER", "H5T_FLOAT", "H5T_TIME", "H5T_STRING", "H5T_BITFIELD", "H5T_OPAQUE", "H5T_COMPOUND", "H5T_REFERENCE", "H5T_ENUM", "H5T_VLEN", "H5T_ARRAY"};
-  addVector(i++, Rval, groupnames, "H5T_CLASS", 11, const_H5T_CLASS, name_H5T_CLASS);
+  addVector_int(i++, Rval, groupnames, "H5T_CLASS", 11, const_H5T_CLASS, name_H5T_CLASS);
 
   int const_H5T_CSET[2]      = { H5T_CSET_ASCII, H5T_CSET_UTF8 };
   const char *name_H5T_CSET[] = { "H5T_CSET_ASCII", "H5T_CSET_UTF8" };
-  addVector(i++, Rval, groupnames, "H5T_CSET", 2, const_H5T_CSET, name_H5T_CSET);
+  addVector_int(i++, Rval, groupnames, "H5T_CSET", 2, const_H5T_CSET, name_H5T_CSET);
 
   int const_H5I_TYPE[15]       = { H5I_FILE, H5I_GROUP, H5I_DATATYPE, H5I_DATASPACE, H5I_DATASET, H5I_ATTR, 
 				   H5I_BADID, H5I_UNINIT,
@@ -160,27 +186,27 @@ SEXP _H5constants( ) {
 				   "H5I_BADID", "H5I_UNINIT",
 				   "H5I_REFERENCE", "H5I_VFL", "H5I_GENPROP_CLS", "H5I_GENPROP_LST", 
 				   "H5I_ERROR_CLASS", "H5I_ERROR_MSG", "H5I_ERROR_STACK" };
-  addVector(i++, Rval, groupnames, "H5I_TYPE", 15, const_H5I_TYPE, name_H5I_TYPE);
+  addVector_int(i++, Rval, groupnames, "H5I_TYPE", 15, const_H5I_TYPE, name_H5I_TYPE);
 
-  int const_H5P[16]      = {  H5P_OBJECT_CREATE, H5P_FILE_CREATE, H5P_FILE_ACCESS, H5P_DATASET_CREATE, H5P_DATASET_ACCESS, H5P_DATASET_XFER,
+  hid_t const_H5P[16]      = {  H5P_OBJECT_CREATE, H5P_FILE_CREATE, H5P_FILE_ACCESS, H5P_DATASET_CREATE, H5P_DATASET_ACCESS, H5P_DATASET_XFER,
 			      H5P_FILE_MOUNT, H5P_GROUP_CREATE, H5P_GROUP_ACCESS, H5P_DATATYPE_CREATE, H5P_DATATYPE_ACCESS, H5P_STRING_CREATE,
 			      H5P_ATTRIBUTE_CREATE, H5P_OBJECT_COPY, H5P_LINK_CREATE, H5P_LINK_ACCESS };
   const char *name_H5P[] = {  "H5P_OBJECT_CREATE", "H5P_FILE_CREATE", "H5P_FILE_ACCESS", "H5P_DATASET_CREATE", "H5P_DATASET_ACCESS", "H5P_DATASET_XFER",
 			      "H5P_FILE_MOUNT", "H5P_GROUP_CREATE", "H5P_GROUP_ACCESS", "H5P_DATATYPE_CREATE", "H5P_DATATYPE_ACCESS", "H5P_STRING_CREATE",
 			      "H5P_ATTRIBUTE_CREATE", "H5P_OBJECT_COPY", "H5P_LINK_CREATE", "H5P_LINK_ACCESS" };
-  addVector(i++, Rval, groupnames, "H5P", 16, const_H5P, name_H5P);
+  addVector_hid(i++, Rval, groupnames, "H5P", 16, const_H5P, name_H5P);
 
   int const_H5D[3]      = { H5D_COMPACT, H5D_CONTIGUOUS, H5D_CHUNKED };
   const char *name_H5D[] = { "H5D_COMPACT", "H5D_CONTIGUOUS", "H5D_CHUNKED" };
-  addVector(i++, Rval, groupnames, "H5D", 3, const_H5D, name_H5D);
+  addVector_int(i++, Rval, groupnames, "H5D", 3, const_H5D, name_H5D);
 
   int const_H5D_FILL_TIME[3]      = { H5D_FILL_TIME_IFSET, H5D_FILL_TIME_ALLOC, H5D_FILL_TIME_NEVER };
   const char *name_H5D_FILL_TIME[] = { "H5D_FILL_TIME_IFSET", "H5D_FILL_TIME_ALLOC", "H5D_FILL_TIME_NEVER" };
-  addVector(i++, Rval, groupnames, "H5D_FILL_TIME", 3, const_H5D_FILL_TIME, name_H5D_FILL_TIME);
+  addVector_int(i++, Rval, groupnames, "H5D_FILL_TIME", 3, const_H5D_FILL_TIME, name_H5D_FILL_TIME);
 
   int const_H5D_ALLOC_TIME[4]      = { H5D_ALLOC_TIME_DEFAULT, H5D_ALLOC_TIME_EARLY, H5D_ALLOC_TIME_INCR, H5D_ALLOC_TIME_LATE };
   const char *name_H5D_ALLOC_TIME[] = { "H5D_ALLOC_TIME_DEFAULT", "H5D_ALLOC_TIME_EARLY", "H5D_ALLOC_TIME_INCR", "H5D_ALLOC_TIME_LATE" };
-  addVector(i++, Rval, groupnames, "H5D_ALLOC_TIME", 4, const_H5D_ALLOC_TIME, name_H5D_ALLOC_TIME);
+  addVector_int(i++, Rval, groupnames, "H5D_ALLOC_TIME", 4, const_H5D_ALLOC_TIME, name_H5D_ALLOC_TIME);
 
   /*################################*/
   /* return constants */

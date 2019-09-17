@@ -4,13 +4,14 @@
 // extern "C" {
 #include "HandleList.h"
 
-void addHandle( hid_t id ) {
-    addHandleCPP( id );
-}
+void
+    addHandle( hid_t id ) {
+        addHandleCPP( id );
+    }
 
 SEXP _h5listIdentifier( ) {
     hsize_t n_max = idListSizeCPP();
-    hid_t * validIDs = (hid_t *)malloc( sizeof(hid_t) * n_max );
+    hid_t * validIDs = (hid_t *)R_alloc( n_max, sizeof(hid_t) );
     hsize_t n = validIdentifierCPP( validIDs, n_max );
     
     SEXP Rval = PROTECT(allocVector(VECSXP, 2));
@@ -39,8 +40,8 @@ SEXP _h5listIdentifier( ) {
         }
     }
     
-    free(validIDs);
-    
+    //free(validIDs);
+
     SET_VECTOR_ELT(Rval,0,type);
     SET_VECTOR_ELT(Rval,1,name);
     
@@ -55,19 +56,19 @@ SEXP _h5listIdentifier( ) {
 
 SEXP _h5validObjects( ) {
     hsize_t n_max = idListSizeCPP();
-    hid_t * validIDs = (hid_t *)malloc( sizeof(hid_t) * n_max );
+    hid_t * validIDs = (hid_t *)R_alloc( n_max, sizeof(hid_t) );
     hsize_t n = validIdentifierCPP( validIDs, n_max );
     
-    SEXP Rval = PROTECT(allocVector(INTSXP, n));
+    //SEXP Rval = PROTECT(allocVector(INTSXP, n));
+    SEXP Rval = PROTECT(allocVector(STRSXP, n));
     if (n > 0) {
         hsize_t i;
         for (i=0; i < n; i++) {
-            INTEGER(Rval)[i] = validIDs[i];
+            //INTEGER(Rval)[i] = validIDs[i];
+            SET_STRING_ELT(Rval, i, HID_2_CHARSXP(validIDs[i]));
         }
     }
     UNPROTECT(1);
-    
-    free(validIDs);
     
     return(Rval);
 }
@@ -94,7 +95,8 @@ SEXP  handleInfoName( hid_t ID) {
 }
 
 SEXP _handleInfo ( SEXP _ID ) {
-    int ID = INTEGER(_ID)[0];
+
+    hid_t ID = STRSXP_2_HID(_ID);
     int isvalid = H5Iis_valid(ID);
     
     SEXP Rval = PROTECT(allocVector(VECSXP, 3));

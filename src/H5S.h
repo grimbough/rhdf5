@@ -30,16 +30,16 @@ SEXP _H5Sset_extent_simple( SEXP _space_id, SEXP _current_size, SEXP _maximum_si
 /* H5Sget_select_npoints */
 /* H5Sget_select_hyper_nblocks */
 /* H5Sget_select_hyper_blocklist */
-      	
+SEXP _H5Sget_select_npoints( SEXP _space_id );
 /* H5Sget_select_elem_npoints */
 /* H5Sget_select_elem_pointlist */
 /* H5Sget_select_bounds */
 /* H5Sselect_elements */
 /* H5Sselect_all */
-/* H5Sselect_none */
+SEXP _H5Sselect_none( SEXP _space_id);
 /* H5Sselect_valid */
 SEXP _H5Sselect_hyperslab( SEXP _space_id, SEXP _op, SEXP _start, SEXP _stride, SEXP _count, SEXP _block );
 SEXP _H5Sselect_index( SEXP _space_id, SEXP _start, SEXP _count);
-
+SEXP _H5Sselect_cols( SEXP _space_id, SEXP _start, SEXP _stride, SEXP _count, SEXP _block);
 
 #endif

@@ -26,16 +26,20 @@ Reads and writes objects in HDF5 files. This function can be used to read and wr
 }
 \usage{
 h5read                      (file, name, index=NULL,
-                             start=NULL, stride=NULL, block=NULL, count=NULL,
-                             compoundAsDataFrame = TRUE, callGeneric = TRUE,
-			     read.attributes = FALSE, drop = FALSE, ...)
-h5readAttributes            (file, name)
+                             start=NULL, stride=NULL, block=NULL,
+                             count=NULL, compoundAsDataFrame = TRUE,
+                             callGeneric = TRUE,
+                             read.attributes = FALSE, drop = FALSE,
+                             ..., native = FALSE)
+h5readAttributes            (file, name, native = FALSE)
 h5write                     (obj, file, name, ...)
 h5write.default             (obj, file, name, 
                              createnewfile = TRUE,
-                             write.attributes = FALSE, ...)
+                             write.attributes = FALSE, ...,
+                             native = FALSE)
 h5writeDataset              (obj, h5loc, name, ...)
-h5writeDataset.data.frame   (obj, h5loc, name, level=7, DataFrameAsCompound = TRUE)
+h5writeDataset.data.frame   (obj, h5loc, name, level=7, chunk,
+                             DataFrameAsCompound = TRUE)
 h5writeDataset.list         (obj, h5loc, name, level=7)
 h5writeDataset.matrix       (...)
 h5writeDataset.integer      (...)
@@ -67,6 +71,8 @@ h5writeAttribute.array      (attr, h5obj, name, size)
   \item{block}{The block size of the hyperslab. Read the introduction \url{http://ftp.hdfgroup.org/HDF5/Tutor/phypecont.html} before using this argument. R behaves like Fortran in this example. This argument is ignored, if index is not NULL.}
   \item{count}{The number of blocks to be written. This argument is ignored, if index is not NULL.}
   \item{level}{The compression level. An integer value between 0 (no compression) and 9 (highest and slowest compression). Only used, if the dataset does not yet exist. See \code{\link{h5createDataset}} to create an dataset.}
+  \item{chunk}{Specifies the number of items to be include in an HDF5 chunk.  When writing a \code{data.frame} this represents the number of rows to be included in a chunk.  If left unspecified the defaults is the smaller of: the total number of rows or the number of rows that fit within 4GB of memory.}
+  \item{native}{An object of class \code{logical}. If TRUE, array-like objects are treated as stored in HDF5 row-major rather than R column-major orientation. Using \code{native = TRUE} increases HDF5 file portability between programming languages. A file written with \code{native = TRUE} should also be read with \code{native = TRUE}}.
   \item{compoundAsDataFrame}{If true, a compound datatype will be coerced to a data.frame. This is not possible, if the dataset is multi-dimensional. Otherwise the compound datatype will be returned as a list. Nested compound data types will be returned as a nested list.}
   \item{DataFrameAsCompound}{If true, a data.frame will be saved as a compound data type. Otherwise it is saved like a list. The advantage of saving a data.frame as a compound data type is that it can be read as a table from python or with a struct-type from C. The disadvantage is that the data has to be rearranged on disk and thus can slow down I/O. If fast reading is required, DataFrameAsCompound=FALSE is recommended.}
   \item{callGeneric}{If TRUE a generic function h5read.classname will be called if it exists depending on the dataset's class attribute within the HDF5 file. This function can be used to convert the standard output of h5read depending on the class attribute. Note that h5read is not a S3 generic function. Dispatching is done based on the HDF5 attribute after the standard h5read function.}
@@ -78,7 +84,7 @@ h5writeAttribute.array      (attr, h5obj, name, size)
   \item{\dots}{Further arguments passed to \code{\link{H5Dread}}.}
 }
 \details{
-Read/writes an R object from/to an HDF5 file. If neither of the arguments \code{start, stride, block, count} is specified, the dataset has the same dimension in the HDF5 file and in memory. If the dataset already exists in the HDF5 file, one can read/write subarrays, so called hyperslabs from/to the HDF5 file. The arguments \code{start, stride, block, count} define the subset of the dataset in the HDF5 file that is to be read/written. See these introductions to hyperslabs: \url{http://www.hdfgroup.org/HDF5/Tutor/selectsimple.html}, \url{http://www.hdfgroup.org/HDF5/Tutor/select.html} and \url{http://ftp.hdfgroup.org/HDF5/Tutor/phypecont.html}. Please note that in R the first dimension is the fastest changing dimension.
+Read/writes an R object from/to an HDF5 file. If neither of the arguments \code{start, stride, block, count} is specified, the dataset has the same dimension in the HDF5 file and in memory. If the dataset already exists in the HDF5 file, one can read/write subarrays, so called hyperslabs from/to the HDF5 file. The arguments \code{start, stride, block, count} define the subset of the dataset in the HDF5 file that is to be read/written. See these introductions to hyperslabs: \url{https://support.hdfgroup.org/HDF5/Tutor/selectsimple.html}, \url{https://support.hdfgroup.org/HDF5/Tutor/select.html} and \url{http://ftp.hdfgroup.org/HDF5/Tutor/phypecont.html}. Please note that in R the first dimension is the fastest changing dimension.
 
 When viewing the HDF5 datasets with any C-program (e.g. HDFView), the order of dimensions is inverted. In the R interface counting starts with 1, whereas in the C-programs (e.g. HDFView) counting starts with 0.
 }
@@ -89,7 +95,7 @@ When viewing the HDF5 datasets with any C-program (e.g. HDFView), the order of d
 
 \code{h5write} returns 0 if successful.
 }
-\references{\url{http://www.hdfgroup.org/HDF5}}
+\references{\url{https://portal.hdfgroup.org/display/HDF5}}
 \author{Bernd Fischer}
 \seealso{
 \code{\link{h5ls}}, \code{\link{h5createFile}}, \code{\link{h5createDataset}}, \link{rhdf5}

@@ -14,7 +14,7 @@ h5errorHandling (type="normal")
 Sets the options for HDF5 error hanlding.
 }
 \value{Returns 0 if options are set successfully.}
-\references{\url{http://www.hdfgroup.org/HDF5}}
+\references{\url{https://portal.hdfgroup.org/display/HDF5}}
 \author{Bernd Fischer}
 \seealso{
 \link{rhdf5}

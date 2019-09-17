@@ -1,16 +1,16 @@
 
 h5listIdentifier <- function() {
   res <- .Call("_h5listIdentifier", PACKAGE='rhdf5')
-  res$type = h5const2Factor("H5I_TYPE",res$type)
+  res$type = h5const2String("H5I_TYPE",res$type)
   res = as.data.frame(res)
   res
 }
 
-h5validObjects <- function() {
+h5validObjects <- function(native = FALSE) {
   ids <- .Call("_h5validObjects", PACKAGE='rhdf5')
   res <- list()
   for (i in seq_len(length(ids))) {
-    res[[i]] <- new("H5IdComponent", ID = ids[i])
+    res[[i]] <- new("H5IdComponent", ID = ids[i], native = native)
   }
   res
 }

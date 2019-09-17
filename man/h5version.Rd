@@ -7,7 +7,7 @@
 h5version()
 }
 \value{A list of major, minor and release number.}
-\references{\url{http://www.hdfgroup.org/HDF5}}
+\references{\url{https://portal.hdfgroup.org/display/HDF5}}
 \author{Bernd Fischer}
 \seealso{
 \code{\link{rhdf5}}

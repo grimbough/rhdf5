@@ -3,11 +3,11 @@
 ## General Property List Operations
 ####################################################
 
-H5Pcreate <- function( type = h5default("H5P") ) {
+H5Pcreate <- function( type = h5default("H5P"), native = FALSE ) {
   type <- h5checkConstants( "H5P", type )
   pid <- .Call("_H5Pcreate", type, PACKAGE='rhdf5')
   if (pid > 0) {
-    h5plist = new("H5IdComponent", ID = pid)
+    h5plist = new("H5IdComponent", ID = pid, native = native)
   } else {
     message("HDF5: unable to create property list")
     h5plist = FALSE
@@ -19,7 +19,7 @@ H5Pget_class <- function( h5plist ) {
   h5checktype(h5plist, "plist")
   pclid <- .Call("_H5Pget_class", h5plist@ID, PACKAGE='rhdf5')
   if (pclid > 0) {
-    h5plistclass = new("H5IdComponent", ID = pclid)
+    h5plistclass = new("H5IdComponent", ID = pclid, native = h5plist@native)
   } else {
     message("HDF5: unable to get property list class")
     h5plistclass = FALSE
@@ -31,7 +31,7 @@ H5Pcopy <- function( h5plist ) {
   h5checktype(h5plist, "plist")
   pid <- .Call("_H5Pcopy", h5plist@ID, PACKAGE='rhdf5')
   if (pid > 0) {
-    h5plistnew = new("H5IdComponent", ID = pid)
+    h5plistnew = new("H5IdComponent", ID = pid, native = h5plist@native)
   } else {
     message("HDF5: unable to copy property list")
     h5plistnew = FALSE
@@ -602,18 +602,19 @@ H5Pclose <- function( h5plist ) {
 ##   invisible(res)
 ## }
 
-H5Pset_libver_bounds <- function( h5plist, libver_low = "H5F_LIBVER_18", libver_high = "H5F_LIBVER_LATEST") {
+H5Pset_libver_bounds <- function( h5plist, libver_low = "H5F_LIBVER_EARLIEST", libver_high = "H5F_LIBVER_LATEST") {
   h5checktype(h5plist, "plist")
   libver_low <- h5checkConstants( "H5F_LIBVER", libver_low )
   libver_high <- h5checkConstants( "H5F_LIBVER", libver_high )
-  res <- .Call("_H5Pset_libver_bounds", h5plist@ID, libver_low, libver_high, PACKAGE='rhdf5')
+  res <- .Call("_H5Pset_libver_bounds", h5plist@ID, 
+               libver_low, libver_high, PACKAGE='rhdf5')
   invisible(res)
 }
 
 H5Pget_libver_bounds <- function( h5plist ) {
   h5checktype(h5plist, "plist")
   res <- .Call("_H5Pget_libver_bounds", h5plist@ID, PACKAGE='rhdf5')
-  res <- h5const2Factor("H5F_LIBVER", res)
+  res <- h5const2String("H5F_LIBVER", res)
   names(res) = c("libver_low","libver_high")
   res
 }
@@ -704,7 +705,7 @@ H5Pset_char_encoding <- function( h5plist, encoding = h5default("H5T_CSET")) {
 H5Pget_char_encoding <- function( h5plist ) {
   h5checktypeAndPLC(h5plist, "H5P_LINK_CREATE")
   res <- .Call("_H5Pget_char_encoding", h5plist@ID, PACKAGE='rhdf5')
-  res <- h5const2Factor("H5T_CSET", res)
+  res <- h5const2String("H5T_CSET", res)
   res
 }
 
@@ -821,13 +822,13 @@ H5Pset_layout <- function( h5plist, layout = h5default("H5D") ) {
 H5Pget_layout <- function( h5plist ) {
   h5checktypeAndPLC(h5plist, "H5P_DATASET_CREATE")
   res <- .Call("_H5Pget_layout", h5plist@ID, PACKAGE='rhdf5')
-  res <- h5const2Factor("H5D", res)
+  res <- h5const2String("H5D", res)
   res
 }
 
 H5Pset_chunk <- function( h5plist, dim ) {
   h5checktypeAndPLC(h5plist, "H5P_DATASET_CREATE")
-  if (!is.null(dim)) { dim = rev(as.integer(dim)) }
+  if (!is.null(dim) && !h5plist@native) { dim = rev(as.integer(dim)) }
   res <- .Call("_H5Pset_chunk", h5plist@ID, dim, PACKAGE='rhdf5')
   invisible(res)
 }
@@ -890,7 +891,7 @@ H5Pset_fill_time <- function( h5plist, fill_time = h5default("H5D_FILL_TIME") ) 
 H5Pget_fill_time <- function( h5plist ) {
   h5checktypeAndPLC(h5plist, "H5P_DATASET_CREATE")
   res <- .Call("_H5Pget_fill_time", h5plist@ID, PACKAGE='rhdf5')
-  res <- h5const2Factor("H5D_FILL_TIME", res)
+  res <- h5const2String("H5D_FILL_TIME", res)
   res
 }
 
@@ -904,7 +905,7 @@ H5Pset_alloc_time <- function( h5plist, alloc_time = h5default("H5D_ALLOC_TIME")
 H5Pget_alloc_time <- function( h5plist ) {
   h5checktypeAndPLC(h5plist, "H5P_DATASET_CREATE")
   res <- .Call("_H5Pget_alloc_time", h5plist@ID, PACKAGE='rhdf5')
-  res <- h5const2Factor("H5D_ALLOC_TIME", res)
+  res <- h5const2String("H5D_ALLOC_TIME", res)
   res
 }
 
@@ -919,19 +920,17 @@ H5Pget_alloc_time <- function( h5plist ) {
 ##   invisible(res)
 ## }
 
-## H5Pall_filters_avail <- function( plist_id ) {
-##   h5checktype(h5plist, "plist")
-##   res <- .Call("_H5Pall_filters_avail", plist_id, PACKAGE='rhdf5')
-##   SEXP Rval = R_NilValue;
-##   invisible(res)
-## }
+H5Pall_filters_avail <- function( h5plist ) {
+    h5checktypeAndPLC(h5plist, "H5P_DATASET_CREATE")
+    res <- .Call("_H5Pall_filters_avail", h5plist@ID, PACKAGE='rhdf5')
+    return(res)
+}
 
-## H5Pget_nfilters <- function( plist ) {
-##   h5checktype(h5plist, "plist")
-##   res <- .Call("_H5Pget_nfilters", plist, PACKAGE='rhdf5')
-##   SEXP Rval = R_NilValue;
-##   invisible(res)
-## }
+H5Pget_nfilters <- function( h5plist ) {
+    h5checktypeAndPLC(h5plist, "H5P_DATASET_CREATE")
+    res <- .Call("_H5Pget_nfilters", h5plist@ID, PACKAGE='rhdf5')
+    res
+}
 
 ## H5Pget_filter1 <- function( plist_id, idx, flags, cd_nelmts, cd_values, namelen, name[] ) {
 ##   h5checktype(h5plist, "plist")
@@ -959,6 +958,13 @@ H5Pget_alloc_time <- function( h5plist ) {
 ##   SEXP Rval = R_NilValue;
 ##   invisible(res)
 ## }
+
+H5Pget_filter <- function( h5plist, idx ) {
+    h5checktypeAndPLC(h5plist, "H5P_DATASET_CREATE")
+    idx <- as.integer(idx)
+    res <- .Call("_H5Pget_filter", h5plist@ID, idx, PACKAGE='rhdf5')
+    return(res)
+}
 
 ## H5Pget_filter_by_id1 <- function( plist_id, filter_id, flags, cd_nelmts, cd_values[], namelen, name[] ) {
 ##   h5checktype(h5plist, "plist")

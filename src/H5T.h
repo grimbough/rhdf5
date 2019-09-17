@@ -10,5 +10,6 @@
 
 SEXP _H5Tcopy( SEXP _dtype_id );
 SEXP _H5Tset_size( SEXP _dtype_id, SEXP _size );
+SEXP _H5Tget_size( SEXP _dtype_id );
 
 #endif

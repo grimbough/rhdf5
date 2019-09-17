@@ -1,5 +1,9 @@
 library(rhdf5)
 
+## disable file locking if required e.g. Solaris, Lustre, NFS etc
+if(!h5testFileLocking(tempdir()))
+  h5disableFileLocking()
+
 ############################################################
 context("H5: basic HDF5 functions")
 ############################################################
@@ -17,7 +21,7 @@ test_that("General library functions", {
 context("H5: closing everything")
 ############################################################
 
-h5File <- tempfile(pattern = "H5L_", fileext = ".h5")
+h5File <- tempfile(pattern = "H5_", fileext = ".h5")
 if(file.exists(h5File))
     file.remove(h5File)
 
@@ -33,9 +37,10 @@ test_that("H5closeAll", {
     gid <- H5Gcreate( fid, name = "group" )
     ## property list
     ## attribute
+    aid <- H5Acreate(did, "volume", "H5T_NATIVE_INT8", sid)
     ## object
     
-    expect_equal( nrow(h5listIdentifier()), 4 )
+    expect_equal( nrow(h5listIdentifier()), 5 )
     
     expect_silent( h5closeAll() )
     

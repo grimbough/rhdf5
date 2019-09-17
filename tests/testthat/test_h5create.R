@@ -112,6 +112,79 @@ test_that("Datasets with different compression levels", {
     expect_lte( file.size(h5File_9), file.size(h5File_0) )
 })
 
+
+test_that("Extendible datasets", {
+    mtx4x3 <- matrix(runif(n=12), nrow = 4)
+    mtx3x3 <- matrix(runif(n=9), nrow = 3)
+    mtx7x2 <- matrix(runif(n=14), nrow = 7)
+    extendible <- H5Sunlimited()
+    h5createDataset(file = h5File, dataset = "extend", dims = c(4,3), maxdims = c(extendible, extendible))
+    h5write( mtx4x3, file = h5File, name = "extend")
+    expect_equal(h5read(h5File, "extend"), mtx4x3)
+
+    ## now extend in first dimension:
+    ## [ mtx4x3 ]
+    ## [ mtx3x3 ]
+
+    h5set_extent(h5File, "extend", c(7,3))
+    h5write(mtx3x3, file = h5File, name = "extend",
+            start = c(5,1))
+    expect_equal(h5read(h5File, "extend"),
+                 rbind(mtx4x3, mtx3x3))
+
+    
+    ## now extend in the other dimension:
+    ## [ mtx4x3 mtx7x2 ]
+    ## [ mtx3x3 mtx7x2 ]
+    h5set_extent(h5File, "extend", c(7,5))
+    h5write(mtx7x2, file = h5File, name = "extend",
+            start = c(1,4))
+    expect_equal(h5read(h5File, "extend"),
+                 cbind(rbind(mtx4x3, mtx3x3),
+                       mtx7x2))
+
+    ## This case, level = 0, used to lead to an error because the chunking, which is required for
+    ## H5Sunlimited, was within a if(level > 0) branch. Mostly we are just checking here that
+    ## no error is thrown, but we'll also do the first extension
+    h5createDataset(file = h5File, dataset = "nonCompressed", dim = c(4,3), maxdims = c(extendible, extendible),
+                    level = 0)
+    h5write( mtx4x3, file = h5File, name = "nonCompressed")
+    h5set_extent(h5File, "nonCompressed", c(7,3))
+    h5write(mtx3x3, file = h5File, name = "nonCompressed",
+            start = c(5,1))
+    expect_equal(h5read(h5File, "nonCompressed"),
+                 rbind(mtx4x3, mtx3x3))
+
+})
+
+test_that("Invalid inputs", {
+    expect_message(suppressWarnings(
+      h5createDataset(file = h5File, dataset = "fail", dims = "twenty"))
+      ) %>%
+      expect_false()
+    expect_message(h5createDataset(file = h5File, dataset = "A", dims = c(20, 10))) %>%
+      expect_false()
+    expect_error(h5createDataset(file = h5File, dataset = "fail", dims = c(-10, 20)))
+    expect_error(h5createDataset(file = h5File, dataset = "fail", dims = c(10, 20), maxdims = c(20)))
+    expect_error(h5createDataset(file = h5File, dataset = "fail", 
+                                 dims = c(10, 20), maxdims = c(20, 20), chunk = NULL))
+    expect_error(h5createDataset(file = h5File, dataset = "fail", dims = c(10, 20), maxdims = c(20, 10)))
+    expect_warning(h5createDataset(file = h5File, dataset = "fail", dims = c(10, 20), level = 1, chunk = NULL))
+    
+})
+
+test_that("Using chunks greater than 4GB", {
+    expect_message(h5createDataset(file = h5File, dataset = "large_double", 
+                                   dims = c(25000, 25000), storage.mode = "double")) %>%
+    expect_true()
+    expect_message(h5createDataset(file = h5File, dataset = "large_int", 
+                                  dims = c(50000, 50000), storage.mode = "integer")) %>%
+    expect_true()
+    expect_silent(h5createDataset(file = h5File, dataset = "small_int", 
+                                  dims = c(500, 500), storage.mode = "integer")) %>%
+    expect_true()
+})
+
 ############################################################
 context("h5createAttribute")
 ############################################################

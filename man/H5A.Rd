@@ -43,7 +43,7 @@ H5Awrite        (h5attribute, buf)
   \item{buf}{Reading and writing buffer containing the data to written/read. When using the buffer for reading, the buffer size has to fit the size of the memory space \code{h5spaceMem}. No extra memory will be allocated for the data. A pointer to the same data is returned.}
 }
 \details{
-Interface to the HDF5 C-library libhdf5. See \url{http://www.hdfgroup.org/HDF5/doc/RM/RM_H5A.html} for further details.
+Interface to the HDF5 C-library libhdf5. See \url{https://portal.hdfgroup.org/display/HDF5/Attributes} for further details.
 }
 \value{
 \code{H5Acreate}, \code{H5Aopen}, \code{H5Aopen_by_name}, \code{H5Aopen_by_idx}  return an object of class \code{\link{H5IdComponent}} representing a H5 attribute identifier.
@@ -54,7 +54,7 @@ Interface to the HDF5 C-library libhdf5. See \url{http://www.hdfgroup.org/HDF5/d
 
 The other functions return the standard return value from their respective C-functions.
 }
-\references{\url{http://www.hdfgroup.org/HDF5}}
+\references{\url{https://portal.hdfgroup.org/display/HDF5}}
 \author{Bernd Fischer}
 \seealso{
 \link{rhdf5}

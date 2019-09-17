@@ -9,28 +9,29 @@ h5createDataset (file, dataset,
 		dims, maxdims = dims, 
 		storage.mode = "double", H5type = NULL, 
 		size = NULL, chunk = dims, level = 6,
-		fillValue,
-                showWarnings=TRUE)
+		fillValue, showWarnings, native = FALSE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{file}{The filename (character) of the file in which the dataset will be located. For advanced programmers it is possible to provide an object of class \code{\link{H5IdComponent}} representing a H5 location identifier (file or group). See \code{\link{H5Fcreate}}, \code{\link{H5Fopen}}, \code{\link{H5Gcreate}}, \code{\link{H5Gopen}} to create an object of this kind.}
   \item{dataset}{Name of the dataset to be created. The name can contain group names, e.g. 'group/dataset', but the function will fail, if the group does not yet exist.}
   \item{dims}{The dimensions of the array as they will appear in the file. Note, the dimensions will appear in inverted order when viewing the file with a C-programm (e.g. HDFView), because the fastest changing dimension in R is the first one, whereas the fastest changing dimension in C is the last one.}
-  \item{maxdims}{The maximum extension of the array.}
+  \item{maxdims}{The maximum extension of the array. Use \code{H5Sunlimited()} to indicate an extensible dimension.}
   \item{storage.mode}{The storage mode of the data to be written. Can be obtained by \code{storage.mode(mydata)}.}
   \item{H5type}{Advanced programmers can specify the datatype of the dataset within the file. See \code{h5const("H5T")} for a list of available datatypes. If \code{H5type} is specified the argument \code{storage.mode} is ignored. It is recommended to use \code{storage.mode}}
-  \item{size}{For \code{storage.mode='character'} the maximum string length has to be specified. HDF5 then stores the string as fixed length character vectors. Together with compression, this should be efficient.}
+  \item{size}{For \code{storage.mode='character'} the maximum string length has to be specified. Note that HDF5 automatically adds a null terminator to strings, thus the value provided here should be the length of the longest string plus one.  HDF5 then stores the string as fixed length character vectors. Together with compression, this should be efficient.}
   \item{chunk}{The chunk size used to store the dataset. It is an integer vector of the same length as \code{dims}. This argument is usually set together with a compression property (argument \code{level}). }
   \item{level}{The compression level used. An integer value between 0 (no compression) and 9 (highest and slowest compression).}
   \item{fillValue}{Standard value for filling the dataset. The storage.mode of value has to be convertable to the dataset type by HDF5.}
-  \item{showWarnings}{If TRUE (default), a warning is given if the chunk size is equal to the dataset dimension for large compressed datasets.}
+  \item{showWarnings}{Deprecated. Use \code{\link{suppressMessages}} and 
+       \code{\link{suppressWarnings}} to limit messages printed to screen.}
+  \item{native}{An object of class \code{logical}. If TRUE, array-like objects are treated as stored in HDF5 row-major rather than R column-major orientation. Using \code{native = TRUE} increases HDF5 file portability between programming languages. A file written with \code{native = TRUE} should also be read with \code{native = TRUE}}.
 }
 \details{
 Creates a new dataset. in an existing HDF5 file. The function will fail, if the file doesn't exist or if there exists already another dataset with the same name within the specified file.
 }
 \value{Returns TRUE is dataset was created successfully and FALSE otherwise.}
-\references{\url{http://www.hdfgroup.org/HDF5}}
+\references{\url{https://portal.hdfgroup.org/display/HDF5}}
 \author{Bernd Fischer}
 \seealso{
 \code{\link{h5createFile}}, \code{\link{h5createGroup}}, \code{\link{h5read}}, \code{\link{h5write}}, \link{rhdf5}
@@ -45,10 +46,19 @@ h5createDataset("ex_createDataset.h5", "A", c(5,8), storage.mode = "integer", ch
 h5createDataset("ex_createDataset.h5", "B", c(5,8), storage.mode = "integer")
 h5createDataset("ex_createDataset.h5", "C", c(5,8), storage.mode = "double")
 
+# create a dataset of strings & define size to include null terminator
+ex_strings <- c('long', 'longer', 'longest')
+h5createDataset("ex_createDataset.h5", "D",  
+    storage.mode = "character", chunk = 3, level = 6,
+    dims = length(ex_strings), size = max(nchar(ex_strings)) + 1)
+
+
 # write data to dataset
 h5write(matrix(1:40,nr=5,nc=8), file="ex_createDataset.h5", name="A")
 # write second column
 h5write(matrix(1:5,nr=5,nc=1), file="ex_createDataset.h5", name="B", index=list(NULL,2))
+# write character vector
+h5write(ex_strings, file = "ex_createDataset.h5", name = "D")
 
 h5dump("ex_createDataset.h5")
 }

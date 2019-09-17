@@ -15,12 +15,14 @@
 #include "H5S.h"
 #include "H5T.h"
 #include "H5P.h"
+#include "H5Z.h"
 #include "h5ls.h"
 #include "HandleList.h"
 #include "h5dump.h"
 #include "H5constants.h"
 #include "h5writeDataFrame.h"
 #include "printdatatype.h"
+#include "h5testLock.h"
 #include "external_filters.h"
 
 SEXP _H5open(void);
@@ -54,8 +56,8 @@ static R_CallMethodDef libraryRCalls[] = {
   {"_H5Dget_space", (DL_FUNC) &_H5Dget_space, 1},
   {"_H5Dget_storage_size", (DL_FUNC) &_H5Dget_space, 1},
   {"_create_Integer_test_file", (DL_FUNC) &_create_Integer_test_file, 0},
-  {"_H5Dread", (DL_FUNC) &_H5Dread, 7},
-  {"_H5Dwrite", (DL_FUNC) &_H5Dwrite, 4},
+  {"_H5Dread", (DL_FUNC) &_H5Dread, 8},
+  {"_H5Dwrite", (DL_FUNC) &_H5Dwrite, 5},
   {"_H5Dset_extent", (DL_FUNC) &_H5Dset_extent, 2},
   {"_H5Fcreate", (DL_FUNC) &_H5Fcreate, 4},
   {"_H5Fopen", (DL_FUNC) &_H5Fopen, 2},
@@ -95,10 +97,13 @@ static R_CallMethodDef libraryRCalls[] = {
   {"_H5Sis_simple", (DL_FUNC) &_H5Sis_simple, 1},
   {"_H5Sget_simple_extent_dims", (DL_FUNC) &_H5Sget_simple_extent_dims, 1},
   {"_H5Sset_extent_simple", (DL_FUNC) &_H5Sset_extent_simple, 3},
+  {"_H5Sget_select_npoints", (DL_FUNC) &_H5Sget_select_npoints, 1},
+  {"_H5Sselect_none", (DL_FUNC) &_H5Sselect_none, 1},
   {"_H5Sselect_hyperslab", (DL_FUNC) &_H5Sselect_hyperslab, 6},
   {"_H5Sselect_index", (DL_FUNC) &_H5Sselect_index, 3},
   {"_H5Tcopy", (DL_FUNC) &_H5Tcopy, 1},
   {"_H5Tset_size", (DL_FUNC) &_H5Tset_size, 2},
+  {"_H5Tget_size", (DL_FUNC) &_H5Tget_size, 1},
   {"_H5Pcreate", (DL_FUNC) &_H5Pcreate, 1},
   {"_H5Pget_class", (DL_FUNC) &_H5Pget_class, 1},
   {"_H5Pcopy", (DL_FUNC) &_H5Pcopy, 1},
@@ -204,10 +209,10 @@ static R_CallMethodDef libraryRCalls[] = {
   {"_H5Pset_alloc_time", (DL_FUNC) &_H5Pset_alloc_time, 2},
   {"_H5Pget_alloc_time", (DL_FUNC) &_H5Pget_alloc_time, 1},
   /* {"_H5Pset_filter", (DL_FUNC) &_H5Pset_filter, 5}, */
-  /* {"_H5Pall_filters_avail", (DL_FUNC) &_H5Pall_filters_avail, 1}, */
-  /* {"_H5Pget_nfilters", (DL_FUNC) &_H5Pget_nfilters, 1}, */
+  {"_H5Pall_filters_avail", (DL_FUNC) &_H5Pall_filters_avail, 1},
+  {"_H5Pget_nfilters", (DL_FUNC) &_H5Pget_nfilters, 1},
   /* {"_H5Pget_filter1", (DL_FUNC) &_H5Pget_filter1, 7}, */
-  /* {"_H5Pget_filter2", (DL_FUNC) &_H5Pget_filter2, 8}, */
+  {"_H5Pget_filter", (DL_FUNC) &_H5Pget_filter, 2},
   /* {"_H5Pget_filter_by_id1", (DL_FUNC) &_H5Pget_filter_by_id1, 7}, */
   /* {"_H5Pget_filter_by_id2", (DL_FUNC) &_H5Pget_filter_by_id2, 8}, */
   /* {"_H5Pmodify_filter", (DL_FUNC) &_H5Pmodify_filter, 5}, */
@@ -282,7 +287,8 @@ static R_CallMethodDef libraryRCalls[] = {
   /* {"_H5Pcopy_prop", (DL_FUNC) &_H5Pcopy_prop, 3}, */
   /* {"_H5Premove", (DL_FUNC) &_H5Premove, 2}, */
   /* {"_H5Punregister", (DL_FUNC) &_H5Punregister, 2}, */
-  {"_h5ls", (DL_FUNC) &_h5ls, 5},
+  {"_H5Zfilter_avail", (DL_FUNC) &_H5Zfilter_avail, 1},
+  {"_h5ls", (DL_FUNC) &_h5ls, 6},
   {"_h5dump", (DL_FUNC) &_h5dump, 4},
   {"_h5listIdentifier", (DL_FUNC) &_h5listIdentifier, 0},
   {"_h5validObjects", (DL_FUNC) &_h5validObjects, 0},
@@ -290,8 +296,11 @@ static R_CallMethodDef libraryRCalls[] = {
   {"_handleInfo", (DL_FUNC) &_handleInfo, 1},
   {"_getDatatypeName", (DL_FUNC) &_getDatatypeName, 1},
   {"_getDatatypeClass", (DL_FUNC) &_getDatatypeClass, 1},
-  {"_h5writeDataFrame", (DL_FUNC) &_h5writeDataFrame, 4},
+  {"_h5writeDataFrame", (DL_FUNC) &_h5writeDataFrame, 2},
+  {"_h5createDataFrame", (DL_FUNC) &_h5createDataFrame, 5},
   {"_h5errorHandling", (DL_FUNC) &_h5errorHandling, 1},
+  {"_h5fileLock", (DL_FUNC) &_h5fileLock, 1},
+  {"_H5Sselect_cols", (DL_FUNC) &_H5Sselect_cols, 5},
 #ifdef _H5P_filters
   {"_H5Pset_lzf", (DL_FUNC) &_H5Pset_lzf, 1},
   {"_H5Pset_lz4", (DL_FUNC) &_H5Pset_lz4, 1},
@@ -305,4 +314,14 @@ void R_init_rhdf5 (DllInfo * winDll) {
   R_useDynamicSymbols (winDll, FALSE);
 }
 
+SEXP HID_2_CHARSXP(hid_t hid) {
+    char tmp_string[21]; 
+    sprintf(tmp_string, "%lld", (long long) hid);
+    return(mkChar(tmp_string));
+}
 
+SEXP HID_2_STRSXP(hid_t hid) {
+    char tmp_string[21]; 
+    sprintf(tmp_string, "%lld", (long long) hid);
+    return(mkString(tmp_string));
+}
