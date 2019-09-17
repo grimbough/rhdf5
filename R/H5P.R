@@ -836,6 +836,7 @@ H5Pset_chunk <- function( h5plist, dim ) {
 H5Pget_chunk <- function( h5plist ) {
   h5checktypeAndPLC(h5plist, "H5P_DATASET_CREATE")
   res <- .Call("_H5Pget_chunk", h5plist@ID, PACKAGE='rhdf5')
+  ## should we reverse the dimensions here, to be consistent with the setter?
   res
 }
 
