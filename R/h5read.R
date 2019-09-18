@@ -41,7 +41,9 @@ h5readDataset <- function (h5dataset, index = NULL, start = NULL, stride = NULL,
                        compoundAsDataFrame = compoundAsDataFrame, drop = drop, ...)
     },
         error = function(e) { 
-            err <- h5checkFilters(h5dataset) 
+            err <- h5checkFilters(h5dataset)
+            ## if we fail here it doesn't make it to the usual H5Dclose call
+            on.exit(H5Dclose(h5dataset))
             if(nchar(err) > 0)
                 stop(err, call. = FALSE)
             else 
