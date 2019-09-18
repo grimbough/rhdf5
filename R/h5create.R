@@ -71,7 +71,7 @@ h5createGroup <- function(file, group) {
   return(tid)
 }
 
-.createDCPL <- function(chunk, dims, level, fillValue, dtype) {
+.createDCPL <- function(chunk, dims, level, fillValue, dtype, filter) {
   
   dcpl <- H5Pcreate("H5P_DATASET_CREATE"); 
   if (length(chunk) > 0) {
@@ -93,10 +93,28 @@ h5createGroup <- function(file, group) {
     }
     H5Pset_fill_time( dcpl, "H5D_FILL_TIME_ALLOC" )
     H5Pset_chunk( dcpl, chunk)
-    if (level > 0) { 
-      H5Pset_deflate( dcpl, level ) 
+    
+    ## set the selected compression filter
+    filter <- toupper(filter)
+    if(!filter %in% c("GZIP", "ZLIB", "DEFLATE", 
+                      "SZIP",
+                      "BLOSC_BLOSCLZ", "BLOSC_LZ4", "BLOSC_LZ4HC", "BLOSC_SNAPPY", "BLOSC_ZLIB",
+                      "NONE")) {
+      warning("Filter not found, using default: DEFLATE")
+      filter <- "DEFLATE"
     }
+      
+    if (filter %in% c("GZIP", "ZLIB", "DEFLATE")) { 
+      H5Pset_deflate( dcpl, level = level) 
+    } else if(filter == "SZIP") {
+      H5Pset_szip(dcpl, 1L, 32L)
+    } else if (grepl(pattern = "BLOSC", x = filter)) {
+      method <- which(c("BLOSC_BLOSCLZ", "BLOSC_LZ4", "BLOSC_LZ4HC", "BLOSC_SNAPPY", "BLOSC_ZLIB") == filter)
+      hdf5Filters::H5Pset_blosc(dcpl, method = method, level = level )
+    }
+    
   }
+  
   if(!missing(fillValue)) {
     H5Pset_fill_value(dcpl, fillValue)
   }
@@ -105,13 +123,9 @@ h5createGroup <- function(file, group) {
 
 h5createDataset <- function(file, dataset, dims, maxdims = dims, 
                             storage.mode = "double", H5type = NULL, size = NULL,
-                            chunk = dims, level = 6, fillValue, showWarnings,
+                            chunk = dims, fillValue, 
+                            level = 6, filter = "gzip",
                             native = FALSE) {
-  
-  if(!missing(showWarnings)) {
-    message("The 'showWarnings' argument has been deprecated and will be removed.\n",
-            "Use suppressMessages() and suppressWarnings() to limit messages printed to screen")
-  }
   
   loc = h5checktypeOrOpenLoc(file, native = native)
   on.exit( h5closeitLoc(loc) )
@@ -150,7 +164,7 @@ h5createDataset <- function(file, dataset, dims, maxdims = dims,
         tid <- .setDataType(H5type, storage.mode, size)
         
         ## create dataset property list
-        dcpl <- .createDCPL(chunk, dims, level, fillValue, dtype = tid)
+        dcpl <- .createDCPL(chunk, dims, level, fillValue, dtype = tid, filter = filter)
         on.exit(H5Pclose(dcpl), add = TRUE)
         
         ## create dataspace

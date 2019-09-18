@@ -221,7 +221,7 @@ static R_CallMethodDef libraryRCalls[] = {
   /* {"_H5Pset_nbit", (DL_FUNC) &_H5Pset_nbit, 1}, */
   /* {"_H5Pset_scaleoffset", (DL_FUNC) &_H5Pset_scaleoffset, 3}, */
   /* {"_H5Pset_shuffle", (DL_FUNC) &_H5Pset_shuffle, 1}, */
-  /* {"_H5Pset_szip", (DL_FUNC) &_H5Pset_szip, 3}, */
+  {"_H5Pset_szip", (DL_FUNC) &_H5Pset_szip, 3},
   /* {"_H5Pset_external", (DL_FUNC) &_H5Pset_external, 4}, */
   /* {"_H5Pget_external_count", (DL_FUNC) &_H5Pget_external_count, 1}, */
   /* {"_H5Pget_external", (DL_FUNC) &_H5Pget_external, 6}, */

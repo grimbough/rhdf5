@@ -5,7 +5,7 @@
 #include <Rdefines.h>
 #include <R_ext/Rdynload.h>
 #include <R_ext/Error.h>
-#include "hdf5.h"
+#include "myhdf5.h"
 
 #define H5PY_FILTER_LZF_VERSION 4
 #define H5PY_FILTER_LZF 32000

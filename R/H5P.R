@@ -1042,14 +1042,13 @@ H5Pget_filter <- function( h5plist, idx ) {
 ##   invisible(res)
 ## }
 
-## H5Pset_szip <- function( plist, options_mask, pixels_per_block ) {
-##   h5checktype(h5plist, "plist")
-##   options_mask = as.integer(options_mask)
-##   pixels_per_block = as.integer(pixels_per_block)
-##   res <- .Call("_H5Pset_szip", plist, options_mask, pixels_per_block, PACKAGE='rhdf5')
-##   SEXP Rval = R_NilValue;
-##   invisible(res)
-## }
+H5Pset_szip <- function( h5plist, options_mask, pixels_per_block ) {
+  h5checktypeAndPLC(h5plist, "H5P_DATASET_CREATE")
+  options_mask = as.integer(options_mask)
+  pixels_per_block = as.integer(pixels_per_block)
+  res <- .Call("_H5Pset_szip", h5plist@ID, options_mask, pixels_per_block, PACKAGE='rhdf5')
+  invisible(res)
+}
 
 ## H5Pset_external <- function( plist, *name, offset, size ) {
 ##   h5checktype(h5plist, "plist")

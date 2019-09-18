@@ -1259,15 +1259,15 @@ SEXP _H5Pget_filter( SEXP _plist_id, SEXP _idx ) {
 /*   return Rval; */
 /* } */
 
-/* /\* herr_t H5Pset_szip(hid_t plist, unsigned int options_mask, unsigned int pixels_per_block) *\/ */
-/* SEXP _H5Pset_szip( SEXP _plist, SEXP _options_mask, SEXP _pixels_per_block ) { */
-/*   hid_t plist = INTEGER(_plist)[0]; */
-/*   unsigned int options_mask = INTEGER(_options_mask)[0]; */
-/*   unsigned int pixels_per_block = INTEGER(_pixels_per_block)[0]; */
-/*   herr_t herr = H5Pset_szip(hid_tplist, unsigned intoptions_mask, unsigned intpixels_per_block); */
-/*   SEXP Rval = ScalarInteger(herr); */
-/*   return Rval; */
-/* } */
+/* herr_t H5Pset_szip(hid_t plist, unsigned int options_mask, unsigned int pixels_per_block) *\/ */
+SEXP _H5Pset_szip( SEXP _plist_id, SEXP _options_mask, SEXP _pixels_per_block ) {
+  hid_t plist_id = STRSXP_2_HID( _plist_id );
+  unsigned int options_mask = INTEGER(_options_mask)[0];
+  unsigned int pixels_per_block = INTEGER(_pixels_per_block)[0];
+  herr_t herr = H5Pset_szip(plist_id, options_mask, pixels_per_block);
+  SEXP Rval = ScalarInteger(herr);
+  return Rval;
+} 
 
 /* /\* herr_t H5Pset_external(hid_t plist, const char *name, off_t offset, hsize_t size) *\/ */
 /* SEXP _H5Pset_external( SEXP _plist, SEXP _*name, SEXP _offset, SEXP _size ) { */

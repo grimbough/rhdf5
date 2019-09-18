@@ -35,8 +35,7 @@ SEXP _H5Pset_blosc( SEXP _plist_id, SEXP _method, SEXP _level ) {
     herr_t herr;
     unsigned int cd_values[7];
     
-    hid_t plist_id = INTEGER(_plist_id)[0];
-    
+    hid_t plist_id = STRSXP_2_HID( _plist_id );
     cd_values[4] = INTEGER(_level)[0]; // compression level 
     cd_values[5] = 1; // shuffle yes/no 
     cd_values[6] = INTEGER(_method)[0]; // compression algorithm

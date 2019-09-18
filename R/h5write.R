@@ -186,7 +186,9 @@ h5writeDataset.double <- function(...) { h5writeDataset.array(...) }
 h5writeDataset.logical <- function(...) { h5writeDataset.array(...) }
 h5writeDataset.character <- function(...) { h5writeDataset.array(...) }
 
-h5writeDataset.array <- function(obj, h5loc, name, index = NULL, start=NULL, stride=NULL, block=NULL, count=NULL, size=NULL, level=7) {
+h5writeDataset.array <- function(obj, h5loc, name, index = NULL, 
+                                 start=NULL, stride=NULL, block=NULL, count=NULL, 
+                                 size=NULL, level=7) {
 
     exists <- try( { H5Lexists(h5loc, name) } )
     if (!exists) {
