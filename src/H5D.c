@@ -72,7 +72,6 @@ SEXP _H5Dcreate( SEXP _loc_id, SEXP _name, SEXP _dtype_id, SEXP _space_id, SEXP 
                            lcpl_id, dcpl_id, dapl_id );
     
     addHandle(hid);
-    //SEXP Rval = ScalarInteger(hid);
     SEXP Rval;
     PROTECT(Rval = HID_2_STRSXP(hid));
     UNPROTECT(1);
@@ -112,11 +111,12 @@ SEXP _H5Dclose( SEXP _dataset_id ) {
 
 /* hsize_t H5Dget_storage_size( hid_t dataset_id ) */
 SEXP _H5Dget_storage_size( SEXP _dataset_id ) {
-    //hid_t dataset_id = INTEGER(_dataset_id)[0];
+    Rprintf("here\n");
     hid_t dataset_id = STRSXP_2_HID( _dataset_id );
     hsize_t size = H5Dget_storage_size( dataset_id );
+    Rprintf("Size: %ld\n", size);
     
-    SEXP Rval;
+    SEXP Rval = ScalarInteger(0);
     if (size <= INT_MAX) {
         Rval = ScalarInteger(size);
     } else {

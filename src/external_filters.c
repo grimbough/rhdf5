@@ -1,7 +1,7 @@
 #include "external_filters.h"
 
 #ifdef _H5P_filters
-
+/*
 SEXP _H5Pset_lzf( SEXP _plist_id ) {
     
     herr_t herr;
@@ -14,9 +14,10 @@ SEXP _H5Pset_lzf( SEXP _plist_id ) {
     
     return Rval;
 }
-  
+*/
      
  /* LZ4 filter */
+/*
 SEXP _H5Pset_lz4( SEXP _plist_id ) {
     
     herr_t herr;
@@ -28,7 +29,22 @@ SEXP _H5Pset_lz4( SEXP _plist_id ) {
     SEXP Rval = ScalarInteger(herr);
     
     return Rval;
+} */
+
+/* Bzip2 filter */
+SEXP  _H5Pset_bzip2( SEXP _plist_id, SEXP _level ) {
+  
+  herr_t herr;
+  unsigned int cd_values[1];
+  
+  hid_t plist_id = STRSXP_2_HID( _plist_id );
+  cd_values[0] = INTEGER(_level)[0];
+  herr = H5Pset_filter (plist_id, H5Z_FILTER_BZIP2, H5Z_FLAG_MANDATORY, (size_t)1, cd_values);
+  SEXP Rval = ScalarInteger(herr);
+  
+  return Rval;
 }
+
 
 SEXP _H5Pset_blosc( SEXP _plist_id, SEXP _method, SEXP _level ) {
     
@@ -40,6 +56,7 @@ SEXP _H5Pset_blosc( SEXP _plist_id, SEXP _method, SEXP _level ) {
     cd_values[5] = 1; // shuffle yes/no 
     cd_values[6] = INTEGER(_method)[0]; // compression algorithm
     herr = H5Pset_filter(plist_id, H5Z_FILTER_BLOSC, H5Z_FLAG_OPTIONAL, (size_t)7, cd_values);
+    Rprintf("Set filter return: %i\n", herr);
     SEXP Rval = ScalarInteger(herr);
     
     return Rval;

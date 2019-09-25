@@ -54,7 +54,7 @@ static R_CallMethodDef libraryRCalls[] = {
   {"_H5Dget_type", (DL_FUNC) &_H5Dget_type, 1},
   {"_H5Dget_create_plist", (DL_FUNC) &_H5Dget_create_plist, 1},
   {"_H5Dget_space", (DL_FUNC) &_H5Dget_space, 1},
-  {"_H5Dget_storage_size", (DL_FUNC) &_H5Dget_space, 1},
+  {"_H5Dget_storage_size", (DL_FUNC) &_H5Dget_storage_size, 1},
   {"_create_Integer_test_file", (DL_FUNC) &_create_Integer_test_file, 0},
   {"_H5Dread", (DL_FUNC) &_H5Dread, 8},
   {"_H5Dwrite", (DL_FUNC) &_H5Dwrite, 5},
@@ -302,8 +302,9 @@ static R_CallMethodDef libraryRCalls[] = {
   {"_h5fileLock", (DL_FUNC) &_h5fileLock, 1},
   {"_H5Sselect_cols", (DL_FUNC) &_H5Sselect_cols, 5},
 #ifdef _H5P_filters
-  {"_H5Pset_lzf", (DL_FUNC) &_H5Pset_lzf, 1},
-  {"_H5Pset_lz4", (DL_FUNC) &_H5Pset_lz4, 1},
+  //{"_H5Pset_lzf", (DL_FUNC) &_H5Pset_lzf, 1},
+  //{"_H5Pset_lz4", (DL_FUNC) &_H5Pset_lz4, 1},
+  {"_H5Pset_bzip2", (DL_FUNC) &_H5Pset_bzip2, 2},
   {"_H5Pset_blosc", (DL_FUNC) &_H5Pset_blosc, 3},
 #endif
   {NULL, NULL, 0}
