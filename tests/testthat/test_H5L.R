@@ -117,7 +117,9 @@ that_that("links can be copied", {
     contents <- h5ls(h5File)
     expect_equal(contents$group, c("/", "/foo", "/foo", "/"))
     expect_equal(contents$name, c("foo", "pos3", "pos4", "pos5"))
+    expect_equal( h5read(h5File, "/foo/pos3"), h5read(h5File, "pos5") )
 })
+
 
 ############################################################
 context("H5L cleanup")
