@@ -60,10 +60,45 @@ SEXP _H5Lget_info( SEXP _loc_id, SEXP _name ) {
 
 /* herr_t H5Ldelete( hid_t loc_id, const char *name, hid_t lapl_id ) */
 SEXP _H5Ldelete( SEXP _loc_id, SEXP _name ) {
-    //hid_t loc_id = INTEGER(_loc_id)[0];
     hid_t loc_id = STRSXP_2_HID( _loc_id );
     const char *name = CHAR(STRING_ELT(_name, 0));
     herr_t herr = H5Ldelete( loc_id, name, H5P_DEFAULT);
     SEXP Rval = ScalarInteger(herr);
     return Rval;
+}
+
+/* herr_t H5Lmove( hid_t src_loc_id, const char *src_name, hid_t dest_loc_id, const char *dest_name, hid_t lcpl_id, hid_t lapl_id ) */
+SEXP _H5Lmove( SEXP _src_loc_id, SEXP _src_name, SEXP _dest_loc_id, SEXP _dest_name, SEXP _lcpl_id, SEXP _lapl_id ) {
+    
+    hid_t src_loc_id = STRSXP_2_HID( _src_loc_id );
+    const char *src_name = CHAR(STRING_ELT(_src_name, 0));
+    
+    hid_t dest_loc_id = STRSXP_2_HID( _dest_loc_id );
+    const char *dest_name = CHAR(STRING_ELT(_dest_name, 0));
+    
+    hid_t lcpl_id = STRSXP_2_HID( _lcpl_id );
+    hid_t lapl_id = STRSXP_2_HID( _lapl_id );
+    
+    herr_t herr = H5Lmove( src_loc_id, src_name, dest_loc_id, dest_name, lcpl_id, lapl_id );
+    SEXP Rval = ScalarInteger(herr);
+    return Rval;
+    
+}
+
+/* herr_t H5Lcopy( hid_t src_loc_id, const char *src_name, hid_t dest_loc_id, const char *dest_name, hid_t lcpl_id, hid_t lapl_id ) */
+SEXP _H5Lcopy( SEXP _src_loc_id, SEXP _src_name, SEXP _dest_loc_id, SEXP _dest_name, SEXP _lcpl_id, SEXP _lapl_id ) {
+    
+    hid_t src_loc_id = STRSXP_2_HID( _src_loc_id );
+    const char *src_name = CHAR(STRING_ELT(_src_name, 0));
+    
+    hid_t dest_loc_id = STRSXP_2_HID( _dest_loc_id );
+    const char *dest_name = CHAR(STRING_ELT(_dest_name, 0));
+    
+    hid_t lcpl_id = STRSXP_2_HID( _lcpl_id );
+    hid_t lapl_id = STRSXP_2_HID( _lapl_id );
+    
+    herr_t herr = H5Lcopy( src_loc_id, src_name, dest_loc_id, dest_name, lcpl_id, lapl_id );
+    SEXP Rval = ScalarInteger(herr);
+    return Rval;
+    
 }

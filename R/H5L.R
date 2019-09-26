@@ -53,3 +53,70 @@ H5Ldelete <- function( h5loc, name ) {
         return( invisible(res) )
     }
 }
+
+H5Lmove <- function( h5loc, name, h5loc_dest, name_dest, dcpl = NULL, dapl = NULL ) {
+    
+    h5checktype(h5loc, "loc")
+    h5checktype(h5loc_dest, "loc")
+
+    ## if not provided a creation property list, use the one from the source    
+    if(is.null(dcpl)) {
+        did <- H5Dopen( h5loc, name )
+        on.exit(H5Dclose(did), add = TRUE)
+        dcpl <- H5Dget_create_plist(did)
+        on.exit(H5Pclose(dcpl), add = TRUE)
+    } else {
+        dcpl <- h5checktypeAndPLC(dcpl, "H5P_DATASET_CREATE", allowNULL = FALSE)
+    }
+    
+    ## use default access property list if not given
+    if(is.null(dapl)) {
+        dapl <- H5Pcreate("H5P_DATASET_ACCESS")
+        on.exit(H5Pclose(dapl), add = TRUE)
+    } else {
+        dapl <- h5checktypeAndPLC(dapl, "H5P_DATASET_ACCESS", allowNULL = FALSE) 
+    }
+    
+    res <- .Call("_H5Lmove", h5loc@ID, name, h5loc_dest@ID, name_dest, dcpl, dapl, PACKAGE='rhdf5')
+    
+    if(res < 0) {
+        stop('Link deletion failed')
+    } else {
+        return( invisible(res) )
+    }
+  
+}
+
+
+H5Lcopy <- function( h5loc, name, h5loc_dest, name_dest, dcpl = NULL, dapl = NULL ) {
+    
+    h5checktype(h5loc, "loc")
+    h5checktype(h5loc_dest, "loc")
+    
+    ## if not provided a creation property list, use the one from the source    
+    if(is.null(dcpl)) {
+        did <- H5Dopen( h5loc, name )
+        on.exit(H5Dclose(did), add = TRUE)
+        dcpl <- H5Dget_create_plist(did)
+        on.exit(H5Pclose(dcpl), add = TRUE)
+    } else {
+        dcpl <- h5checktypeAndPLC(dcpl, "H5P_DATASET_CREATE", allowNULL = FALSE)
+    }
+    
+    ## use default access property list if not given
+    if(is.null(dapl)) {
+        dapl <- H5Pcreate("H5P_DATASET_ACCESS")
+        on.exit(H5Pclose(dapl), add = TRUE)
+    } else {
+        dapl <- h5checktypeAndPLC(dapl, "H5P_DATASET_ACCESS", allowNULL = FALSE) 
+    }
+    
+    res <- .Call("_H5Lcopy", h5loc@ID, name, h5loc_dest@ID, name_dest, dcpl, dapl, PACKAGE='rhdf5')
+    
+    if(res < 0) {
+        stop('Link deletion failed')
+    } else {
+        return( invisible(res) )
+    }
+    
+}
