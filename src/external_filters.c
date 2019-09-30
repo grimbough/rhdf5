@@ -46,17 +46,20 @@ SEXP  _H5Pset_bzip2( SEXP _plist_id, SEXP _level ) {
 }
 
 
-SEXP _H5Pset_blosc( SEXP _plist_id, SEXP _method, SEXP _level ) {
+SEXP _H5Pset_blosc( SEXP _plist_id, SEXP _method, SEXP _level, SEXP _typesize, SEXP _buffersize ) {
     
     herr_t herr;
     unsigned int cd_values[7];
     
     hid_t plist_id = STRSXP_2_HID( _plist_id );
+    cd_values[0] = 2; // H5Z_FILTER_BLOSC_VERSION;
+    cd_values[1] = 2; // BLOSC_VERSION_FORMAT
+    cd_values[2] = INTEGER(_typesize)[0];
+    cd_values[3] = INTEGER(_buffersize)[0];
     cd_values[4] = INTEGER(_level)[0]; // compression level 
     cd_values[5] = 1; // shuffle yes/no 
     cd_values[6] = INTEGER(_method)[0]; // compression algorithm
     herr = H5Pset_filter(plist_id, H5Z_FILTER_BLOSC, H5Z_FLAG_OPTIONAL, (size_t)7, cd_values);
-    Rprintf("Set filter return: %i\n", herr);
     SEXP Rval = ScalarInteger(herr);
     
     return Rval;

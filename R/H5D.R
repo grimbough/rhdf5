@@ -70,7 +70,6 @@ H5Dget_space <- function( h5dataset ) {
 }
 
 H5Dget_storage_size <- function( h5dataset ) {
-  message("testing")
   h5checktype(h5dataset, "dataset")
   size <- .Call("_H5Dget_storage_size", h5dataset@ID, PACKAGE='rhdf5')
   return(size)

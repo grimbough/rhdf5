@@ -111,7 +111,7 @@ SEXP _H5Dclose( SEXP _dataset_id ) {
 
 /* hsize_t H5Dget_storage_size( hid_t dataset_id ) */
 SEXP _H5Dget_storage_size( SEXP _dataset_id ) {
-    Rprintf("here\n");
+
     hid_t dataset_id = STRSXP_2_HID( _dataset_id );
     hsize_t size = H5Dget_storage_size( dataset_id );
     Rprintf("Size: %ld\n", size);
