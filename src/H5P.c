@@ -1251,13 +1251,13 @@ SEXP _H5Pget_filter( SEXP _plist_id, SEXP _idx ) {
 /*   return Rval; */
 /* } */
 
-/* /\* herr_t H5Pset_shuffle(hid_t plist_id) *\/ */
-/* SEXP _H5Pset_shuffle( SEXP _plist_id ) { */
-/*   hid_t plist_id = INTEGER(_plist_id)[0]; */
-/*   herr_t herr = H5Pset_shuffle(hid_tplist_id); */
-/*   SEXP Rval = ScalarInteger(herr); */
-/*   return Rval; */
-/* } */
+/* herr_t H5Pset_shuffle(hid_t plist_id) */
+SEXP _H5Pset_shuffle( SEXP _plist_id ) { 
+  hid_t plist_id = STRSXP_2_HID( _plist_id );
+  herr_t herr = H5Pset_shuffle(plist_id);
+  SEXP Rval = ScalarInteger(herr);
+  return Rval;
+}
 
 /* herr_t H5Pset_szip(hid_t plist, unsigned int options_mask, unsigned int pixels_per_block) *\/ */
 SEXP _H5Pset_szip( SEXP _plist_id, SEXP _options_mask, SEXP _pixels_per_block ) {

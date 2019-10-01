@@ -158,7 +158,7 @@ SEXP _H5Pget_filter( SEXP _plist_id, SEXP _idx );
 /* SEXP _H5Pset_fletcher32( SEXP _plist_id ); */
 /* SEXP _H5Pset_nbit( SEXP _plist_id ); */
 /* SEXP _H5Pset_scaleoffset( SEXP _plist_id, SEXP _scale_type, SEXP _scale_factor ); */
-/* SEXP _H5Pset_shuffle( SEXP _plist_id ); */
+SEXP _H5Pset_shuffle( SEXP _plist_id );
 SEXP _H5Pset_szip( SEXP _plist, SEXP _options_mask, SEXP _pixels_per_block );
 /* SEXP _H5Pset_external( SEXP _plist, SEXP _*name, SEXP _offset, SEXP _size ); */
 /* SEXP _H5Pget_external_count( SEXP _plist ); */

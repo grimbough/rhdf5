@@ -220,7 +220,7 @@ static R_CallMethodDef libraryRCalls[] = {
   /* {"_H5Pset_fletcher32", (DL_FUNC) &_H5Pset_fletcher32, 1}, */
   /* {"_H5Pset_nbit", (DL_FUNC) &_H5Pset_nbit, 1}, */
   /* {"_H5Pset_scaleoffset", (DL_FUNC) &_H5Pset_scaleoffset, 3}, */
-  /* {"_H5Pset_shuffle", (DL_FUNC) &_H5Pset_shuffle, 1}, */
+  {"_H5Pset_shuffle", (DL_FUNC) &_H5Pset_shuffle, 1},
   {"_H5Pset_szip", (DL_FUNC) &_H5Pset_szip, 3},
   /* {"_H5Pset_external", (DL_FUNC) &_H5Pset_external, 4}, */
   /* {"_H5Pget_external_count", (DL_FUNC) &_H5Pget_external_count, 1}, */
@@ -305,7 +305,7 @@ static R_CallMethodDef libraryRCalls[] = {
   //{"_H5Pset_lzf", (DL_FUNC) &_H5Pset_lzf, 1},
   //{"_H5Pset_lz4", (DL_FUNC) &_H5Pset_lz4, 1},
   {"_H5Pset_bzip2", (DL_FUNC) &_H5Pset_bzip2, 2},
-  {"_H5Pset_blosc", (DL_FUNC) &_H5Pset_blosc, 5},
+  {"_H5Pset_blosc", (DL_FUNC) &_H5Pset_blosc, 6},
 #endif
   {NULL, NULL, 0}
 };

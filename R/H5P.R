@@ -1035,12 +1035,11 @@ H5Pget_filter <- function( h5plist, idx ) {
 ##   invisible(res)
 ## }
 
-## H5Pset_shuffle <- function( plist_id ) {
-##   h5checktype(h5plist, "plist")
-##   res <- .Call("_H5Pset_shuffle", plist_id, PACKAGE='rhdf5')
-##   SEXP Rval = R_NilValue;
-##   invisible(res)
-## }
+H5Pset_shuffle <- function( h5plist ) {
+  h5checktypeAndPLC(h5plist, "H5P_DATASET_CREATE")
+  res <- .Call("_H5Pset_shuffle", h5plist@ID, PACKAGE='rhdf5')
+  invisible(res)
+}
 
 H5Pset_szip <- function( h5plist, options_mask, pixels_per_block ) {
   h5checktypeAndPLC(h5plist, "H5P_DATASET_CREATE")
