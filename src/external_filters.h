@@ -11,6 +11,6 @@
 #define H5Z_FILTER_BLOSC 32001
 
 SEXP _H5Pset_bzip2( SEXP _plist_id, SEXP _level );
-SEXP _H5Pset_blosc( SEXP _plist_id, SEXP _method, SEXP _level, SEXP _typesize, SEXP _buffersize );
+SEXP _H5Pset_blosc( SEXP _plist_id, SEXP _method, SEXP _level, SEXP _shuffle, SEXP _typesize, SEXP _buffersize );
 
 #endif
