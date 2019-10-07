@@ -99,7 +99,7 @@ h5createGroup <- function(file, group) {
     if(!filter %in% c("GZIP", "ZLIB", "DEFLATE", 
                       "SZIP",
                       "BZIP2",
-                      "BLOSC_BLOSCLZ", "BLOSC_LZ4", "BLOSC_LZ4HC", "BLOSC_SNAPPY", "BLOSC_ZLIB",
+                      "BLOSC_BLOSCLZ", "BLOSC_LZ4", "BLOSC_LZ4HC", "BLOSC_SNAPPY", "BLOSC_ZLIB", "BLOSC_ZSTD",
                       "NONE")) {
       warning("Filter not found, using default: DEFLATE")
       filter <- "DEFLATE"
