@@ -39,7 +39,7 @@ SEXP  _H5Pset_bzip2( SEXP _plist_id, SEXP _level ) {
   
   hid_t plist_id = STRSXP_2_HID( _plist_id );
   cd_values[0] = INTEGER(_level)[0];
-  herr = H5Pset_filter (plist_id, H5Z_FILTER_BZIP2, H5Z_FLAG_MANDATORY, (size_t)1, cd_values);
+  herr = H5Pset_filter (plist_id, H5Z_FILTER_BZIP2, H5Z_FLAG_OPTIONAL, (size_t)1, cd_values);
   SEXP Rval = ScalarInteger(herr);
   
   return Rval;

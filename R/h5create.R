@@ -71,7 +71,7 @@ h5createGroup <- function(file, group) {
   return(tid)
 }
 
-.createDCPL <- function(chunk, dims, level, fillValue, dtype, filter) {
+.createDCPL <- function(chunk, dims, level, fillValue, dtype, filter, shuffle = FALSE) {
   
   dcpl <- H5Pcreate("H5P_DATASET_CREATE"); 
   if (length(chunk) > 0) {
@@ -98,19 +98,28 @@ h5createGroup <- function(file, group) {
     filter <- toupper(filter)
     if(!filter %in% c("GZIP", "ZLIB", "DEFLATE", 
                       "SZIP",
+                      "BZIP2",
                       "BLOSC_BLOSCLZ", "BLOSC_LZ4", "BLOSC_LZ4HC", "BLOSC_SNAPPY", "BLOSC_ZLIB",
                       "NONE")) {
       warning("Filter not found, using default: DEFLATE")
       filter <- "DEFLATE"
     }
-      
+    
+    ## only use this shuffle if not using blosc filter
+    if(shuffle && !grepl("BLOSC", x = filter)) {
+      H5Pset_shuffle(dcpl)
+    }
+    
+    ## set the appropriate filter
     if (filter %in% c("GZIP", "ZLIB", "DEFLATE")) { 
       H5Pset_deflate( dcpl, level = level) 
     } else if(filter == "SZIP") {
       H5Pset_szip(dcpl, 1L, 32L)
-    } else if (grepl(pattern = "BLOSC", x = filter)) {
-      method <- which(c("BLOSC_BLOSCLZ", "BLOSC_LZ4", "BLOSC_LZ4HC", "BLOSC_SNAPPY", "BLOSC_ZLIB") == filter)
-      hdf5Filters::H5Pset_blosc(dcpl, method = method, level = level )
+    } else if(filter == "BZIP2") {
+      hdf5Filters::H5Pset_bzip2( dcpl, level = level )
+    }else if (grepl(pattern = "BLOSC", x = filter)) {
+      method <- which(c("BLOSC_BLOSCLZ", "BLOSC_LZ4", "BLOSC_LZ4HC", "BLOSC_SNAPPY", "BLOSC_ZLIB", "BLOSC_ZSTD") == filter)
+      hdf5Filters::H5Pset_blosc(dcpl, method = method, h5tid = dtype, level = level, shuffle = shuffle )
     }
     
   }
@@ -124,7 +133,7 @@ h5createGroup <- function(file, group) {
 h5createDataset <- function(file, dataset, dims, maxdims = dims, 
                             storage.mode = "double", H5type = NULL, size = NULL,
                             chunk = dims, fillValue, 
-                            level = 6, filter = "gzip",
+                            level = 6, filter = "gzip", shuffle = TRUE,
                             native = FALSE) {
   
   loc = h5checktypeOrOpenLoc(file, native = native)
@@ -164,7 +173,7 @@ h5createDataset <- function(file, dataset, dims, maxdims = dims,
         tid <- .setDataType(H5type, storage.mode, size)
         
         ## create dataset property list
-        dcpl <- .createDCPL(chunk, dims, level, fillValue, dtype = tid, filter = filter)
+        dcpl <- .createDCPL(chunk, dims, level, fillValue, dtype = tid, filter = filter, shuffle = shuffle)
         on.exit(H5Pclose(dcpl), add = TRUE)
         
         ## create dataspace
