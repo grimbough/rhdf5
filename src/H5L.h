@@ -13,8 +13,8 @@
 /* H5Lcreate_external */
 SEXP _H5Lcreate_external( SEXP _target_file_name, SEXP _target_obj_name, SEXP _link_loc_id, SEXP _link_name);
 SEXP _H5Lexists( SEXP _loc_id, SEXP _name );
-/* H5Lmove */
-/* H5Lcopy */
+SEXP _H5Lmove( SEXP _src_loc_id, SEXP _src_name, SEXP _dest_loc_id, SEXP _dest_name, SEXP _lcpl_id, SEXP _lapl_id );
+SEXP _H5Lcopy( SEXP _src_loc_id, SEXP _src_name, SEXP _dest_loc_id, SEXP _dest_name, SEXP _lcpl_id, SEXP _lapl_id );
 /* H5Ldelete */
 SEXP _H5Ldelete( SEXP _loc_id, SEXP _name );
 

@@ -67,6 +67,8 @@ export(H5Lcreate_external)
 export(H5Lexists)
 export(H5Lget_info)
 export(H5Ldelete)
+export(H5Lmove)
+export(H5Lcopy)
 
 export(H5Oopen)
 export(H5Oclose)

@@ -53,3 +53,66 @@ H5Ldelete <- function( h5loc, name ) {
         return( invisible(res) )
     }
 }
+
+H5Lmove <- function( h5loc, name, h5loc_dest, name_dest, lcpl = NULL, lapl = NULL ) {
+    
+    h5checktype(h5loc, "loc")
+    h5checktype(h5loc_dest, "loc")
+
+    ## if not provided a creation property list, use the default   
+    if(is.null(lcpl)) {
+        lcpl <- H5Pcreate("H5P_LINK_CREATE")
+        on.exit(H5Pclose(lcpl), add = TRUE)
+    } else {
+        lcpl <- h5checktypeAndPLC(lcpl, "H5P_LINK_CREATE", allowNULL = FALSE)
+    }
+    
+    ## use default access property list if not given
+    if(is.null(lapl)) {
+        lapl <- H5Pcreate("H5P_LINK_ACCESS")
+        on.exit(H5Pclose(lapl), add = TRUE)
+    } else {
+        lapl <- h5checktypeAndPLC(lapl, "H5P_LINK_ACCESS", allowNULL = FALSE) 
+    }
+    
+    res <- .Call("_H5Lmove", h5loc@ID, name, h5loc_dest@ID, name_dest, lcpl, lapl, PACKAGE='rhdf5')
+    
+    if(res < 0) {
+        stop('Link deletion failed')
+    } else {
+        return( invisible(res) )
+    }
+  
+}
+
+
+H5Lcopy <- function( h5loc, name, h5loc_dest, name_dest, lcpl = NULL, lapl = NULL ) {
+    
+    h5checktype(h5loc, "loc")
+    h5checktype(h5loc_dest, "loc")
+    
+    ## if not provided a creation property list, use the one from the source    
+    if(is.null(dcpl)) {
+        lcpl <- H5Pcreate("H5P_LINK_CREATE")
+        on.exit(H5Pclose(lcpl), add = TRUE)
+    } else {
+        lcpl <- h5checktypeAndPLC(lcpl, "H5P_LINK_CREATE", allowNULL = FALSE)
+    }
+    
+    ## use default access property list if not given
+    if(is.null(lapl)) {
+        lapl <- H5Pcreate("H5P_LINK_ACCESS")
+        on.exit(H5Pclose(lapl), add = TRUE)
+    } else {
+        lapl <- h5checktypeAndPLC(lapl, "H5P_LINK_ACCESS", allowNULL = FALSE) 
+    }
+    
+    res <- .Call("_H5Lcopy", h5loc@ID, name, h5loc_dest@ID, name_dest, lcpl, lapl, PACKAGE='rhdf5')
+    
+    if(res < 0) {
+        stop('Link deletion failed')
+    } else {
+        return( invisible(res) )
+    }
+    
+}

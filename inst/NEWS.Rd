@@ -1,6 +1,22 @@
 \name{NEWS}
 \title{News for Package 'rhdf5'}
 
+\section{Changes in version 2.30.0}{
+  \subsection{NEW FEATURES}{
+    \itemize{
+      \item Functions H5Lmove & H5Lcopy are now exported and accessible.
+    }
+  }
+  \subsection{BUG FIXES}{
+    \itemize{
+      \item Source file names are no longer mangled when printing error 
+      messages.
+      \item NA values in a character() vector can now be written to
+      an HDF5 dataset.
+    }
+  }
+}
+
 \section{Changes in version 2.28.0}{
   \subsection{NEW FEATURES}{
     \itemize{
@@ -18,7 +34,7 @@
   
   \subsection{BUG FIXES}{
     \itemize{
-      \item Large improvements to performances when selecting subsets
+      \item Large improvements to performance when selecting subsets
       of datasets using the `index` argument.
       \item Resolved limitations where large datasets would exceed HDF5's 4GB
       maximum chunk size.  The default options will now check if this will 
