@@ -92,7 +92,7 @@ H5Lcopy <- function( h5loc, name, h5loc_dest, name_dest, lcpl = NULL, lapl = NUL
     h5checktype(h5loc_dest, "loc")
     
     ## if not provided a creation property list, use the one from the source    
-    if(is.null(dcpl)) {
+    if(is.null(lcpl)) {
         lcpl <- H5Pcreate("H5P_LINK_CREATE")
         on.exit(H5Pclose(lcpl), add = TRUE)
     } else {

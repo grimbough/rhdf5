@@ -109,7 +109,7 @@ test_that("links can be moved to a new group", {
 context("Copy Links: H5Lcopy")
 ############################################################
 
-that_that("links can be copied", {
+test_that("links can be copied", {
     expect_silent( fid <- H5Fopen(h5File) )
     expect_silent( H5Lcopy(h5loc = fid, name = "/foo/pos3", h5loc_dest = fid, name_dest = "/foo/pos4") )
     expect_silent( H5Lcopy(h5loc = fid, name = "/foo/pos3", h5loc_dest = fid, name_dest = "pos5") )
