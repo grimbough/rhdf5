@@ -26,7 +26,10 @@ H5Lmove            (h5loc, name, h5loc_dest, name_dest, lcpl = NULL, lapl = NULL
   \item{link_loc}{An object of class \code{\link{H5IdComponent}} representing a H5 location identifier (file or group) where the new link is placed.}
   \item{link_name}{The name of the new link.}
   \item{h5loc}{An object of class \code{\link{H5IdComponent}} representing a H5 location identifier (file or group). See \code{\link{H5Fcreate}}, \code{\link{H5Fopen}}, \code{\link{H5Gcreate}}, \code{\link{H5Gopen}} to create an object of this kind.}
-  \item{name}{The name of the link to be checked.}
+  \item{h5loc_dest}{An object of class \code{\link{H5IdComponent}} representing
+  the destination file or group where a copied or moved link should be created.}
+  \item{name}{The name of the link to be checked, copied or moved.}
+  \item{name_dest}{The name of the link to be created when copying or moving.}
   \item{lcpl}{Link creation property list.}
   \item{lapl}{Link access property list.}
 }
