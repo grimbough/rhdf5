@@ -17,5 +17,7 @@ SEXP _h5validObjects( );
 
 SEXP _handleInfo(SEXP _ID);
 
+SEXP _whatisopen(SEXP _file_id);
+
 #endif
 

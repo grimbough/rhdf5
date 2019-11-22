@@ -125,3 +125,45 @@ SEXP _handleInfo ( SEXP _ID ) {
 
 // }
 
+
+SEXP _whatisopen( SEXP _file_id ) {
+    ssize_t count;
+    int howmany;
+    int i;
+    H5I_type_t ot;
+    hid_t anobj;
+    hid_t *objs;
+    char name[1024];
+    herr_t status;
+    
+    hid_t file_id = STRSXP_2_HID( _file_id );
+    
+    count = H5Fget_obj_count(file_id, H5F_OBJ_ALL);
+    
+    SEXP Rval = PROTECT(allocVector(INTSXP, 1));
+    if (count <= 0) {
+        INTEGER(Rval)[0] = 0;
+        UNPROTECT(1);
+        return(Rval);
+    }
+    
+    Rprintf("%ld object(s) open\n", count);
+    
+    objs = (hid_t *) R_alloc(count, sizeof(hid_t));
+    
+    howmany = H5Fget_obj_ids(file_id, H5F_OBJ_ALL, count, objs);
+    
+    Rprintf("open objects:\n");
+    
+    for (i = 0; i < howmany; i++ ) {
+        anobj = *objs++;
+        ot = H5Iget_type(anobj);
+        status = H5Iget_name(anobj, name, 1024);
+        Rprintf(" %d: type %d, name %s\n",i,ot,name);
+    }
+    
+    INTEGER(Rval)[0] = 1;
+    UNPROTECT(1);
+    return(Rval);
+}
+
