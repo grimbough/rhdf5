@@ -126,132 +126,6 @@ SEXP _H5Dget_storage_size( SEXP _dataset_id ) {
     return Rval;
 }
 
-void getMemSpaceDim( hid_t file_space_id, hsize_t *size) {
-    hssize_t sel_hyper_nblocks = H5Sget_select_hyper_nblocks( file_space_id );
-    int rank = H5Sget_simple_extent_ndims( file_space_id );
-    hsize_t sizebuf[2*rank*sel_hyper_nblocks];
-    H5Sget_select_hyper_blocklist(file_space_id, 0, sel_hyper_nblocks, sizebuf );
-    
-    int isnew;
-    for (int i=0; i < rank; i++) {
-        size[i] = 0;
-        for (int j=0; j < sel_hyper_nblocks; j++) {
-            isnew = 1;
-            for (int k=0; k < j; k++) {
-                if ((sizebuf[j*2*rank+i] == sizebuf[k*2*rank+i]) 
-                        & (sizebuf[j*2*rank+i+rank] == sizebuf[k*2*rank+i+rank])) {
-                    isnew=0;
-                }
-            }
-            if (isnew != 0) {
-                size[i] += (sizebuf[j*2*rank+i+rank] - sizebuf[j*2*rank+i] + 1);
-            }
-        }
-    }
-}
-
-SEXP _create_Integer_test_file() {
-    /* long long x[17]; */
-    /* unsigned long long y[11]; */
-    
-    /* y[0] = ULONG_MAX; */
-    /* y[1] = LLONG_MAX; */
-    /* y[1] = y[1] + 1; */
-    /* y[2] = LLONG_MAX; */
-    /* y[3] = 0x0020000000000000UL; */
-    /* y[4] = 0x001fffffffffffffUL; */
-    /* y[5] = UINT_MAX; */
-    /* y[5] = y[5] + 1; */
-    /* y[6] = UINT_MAX; */
-    /* y[7] = INT_MAX; */
-    /* y[7] = y[7] + 1; */
-    /* y[8] = INT_MAX; */
-    /* y[9] = 1; */
-    /* y[10] = 0; */
-    
-    /* printf("\n"); */
-    /* for (int i=0; i<11; i++) { */
-    /*   printf("y[%d] = %llu\n",i, y[i]); */
-    /* } */
-    /* printf("\n"); */
-    
-    /* x[0] = LLONG_MAX; */
-    /* x[1] = 0x0020000000000000L; */
-    /* x[2] = 0x001fffffffffffffL; */
-    /* x[3] = UINT_MAX; */
-    /* x[3] = x[3] + 1; */
-    /* x[4] = UINT_MAX; */
-    /* x[5] = INT_MAX; */
-    /* x[5] = x[5] + 1; */
-    /* x[6] = INT_MAX; */
-    /* x[7] = 1; */
-    /* x[8] = 0; */
-    /* x[9] = -1; */
-    /* x[10] = INT_MIN+1; */
-    /* x[11] = INT_MIN; */
-    /* x[12] = INT_MIN; */
-    /* x[12] = x[12]-1; */
-    /* x[13] = 0xffe0000000000001L; */
-    /* x[14] = 0xffe0000000000000L; */
-    /* x[15] = LLONG_MIN+1; */
-    /* x[16] = LLONG_MIN; */
-    
-    /* for (int i=0; i<17; i++) { */
-    /*   printf("x[%d] = %ld\n",i, x[i]); */
-    /* } */
-    /* printf("\n"); */
-    
-    /* hid_t fid = H5Fcreate("integer_test.h5",H5F_ACC_TRUNC,H5P_DEFAULT,H5P_DEFAULT); */
-    /* int rank = 1; */
-    /* hsize_t current_dims[1]; */
-    /* current_dims[0] = 17; */
-    /* hid_t sid = H5Screate_simple( rank, &current_dims, &current_dims ); */
-    /* hid_t did; */
-    /* herr_t herr; */
-    
-    /* did = H5Dcreate( fid, "I8", H5T_STD_I8LE, sid, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT ); */
-    /* herr = H5Dwrite( did, H5T_NATIVE_LLONG, sid, sid,H5P_DEFAULT, &x ); */
-    /* H5Dclose(did); */
-    
-    /* did = H5Dcreate( fid, "I16", H5T_STD_I16LE, sid, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT ); */
-    /* herr = H5Dwrite( did, H5T_NATIVE_LLONG, sid, sid,H5P_DEFAULT, &x ); */
-    /* H5Dclose(did); */
-    
-    /* did = H5Dcreate( fid, "I32", H5T_STD_I32LE, sid, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT ); */
-    /* herr = H5Dwrite( did, H5T_NATIVE_LLONG, sid, sid,H5P_DEFAULT, &x ); */
-    /* H5Dclose(did); */
-    
-    /* did = H5Dcreate( fid, "I64", H5T_STD_I64LE, sid, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT ); */
-    /* herr = H5Dwrite( did, H5T_NATIVE_LLONG, sid, sid,H5P_DEFAULT, &x ); */
-    /* H5Dclose(did); */
-    
-    /* H5Sclose(sid); */
-    /* current_dims[0] = 11; */
-    /* sid = H5Screate_simple( rank, &current_dims, &current_dims ); */
-    
-    /* did = H5Dcreate( fid, "U8", H5T_STD_U8LE, sid, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT ); */
-    /* herr = H5Dwrite( did, H5T_NATIVE_ULLONG, sid, sid,H5P_DEFAULT, &y ); */
-    /* H5Dclose(did); */
-    
-    /* did = H5Dcreate( fid, "U16", H5T_STD_U16LE, sid, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT ); */
-    /* herr = H5Dwrite( did, H5T_NATIVE_ULLONG, sid, sid,H5P_DEFAULT, &y ); */
-    /* H5Dclose(did); */
-    
-    /* did = H5Dcreate( fid, "U32", H5T_STD_U32LE, sid, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT ); */
-    /* herr = H5Dwrite( did, H5T_NATIVE_ULLONG, sid, sid,H5P_DEFAULT, &y ); */
-    /* H5Dclose(did); */
-    
-    /* did = H5Dcreate( fid, "U64", H5T_STD_U64LE, sid, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT ); */
-    /* herr = H5Dwrite( did, H5T_NATIVE_ULLONG, sid, sid,H5P_DEFAULT, &y ); */
-    /* H5Dclose(did); */
-    
-    /* H5Sclose(sid); */
-    /* H5Fclose(fid); */
-    
-    SEXP Rval = R_NilValue;
-    return Rval;
-}
-
 SEXP H5Dread_helper_INTEGER(hid_t dataset_id, hid_t file_space_id, hid_t mem_space_id, hsize_t n, SEXP Rdim, SEXP _buf, 
                             hid_t dtype_id, hid_t cpdType, int cpdNField, char ** cpdField, int compoundAsDataFrame,
                             int bit64conversion, int native ) {
@@ -528,17 +402,19 @@ SEXP H5Dread_helper_FLOAT(hid_t dataset_id, hid_t file_space_id, hid_t mem_space
 SEXP H5Dread_helper_STRING(hid_t dataset_id, hid_t file_space_id, hid_t mem_space_id, hsize_t n, SEXP Rdim, SEXP _buf, 
                            hid_t dtype_id, hid_t cpdType, int cpdNField, char ** cpdField, int compoundAsDataFrame, int native ) {
     hid_t mem_type_id = -1;
-    
+  
+    herr_t status;
     SEXP Rval;
+    
     size_t size = H5Tget_size(dtype_id);
     if (cpdType < 0) {
         mem_type_id = dtype_id;
     } else {
         mem_type_id = H5Tcreate(H5T_COMPOUND, size);
-        herr_t status = H5Tinsert(mem_type_id, cpdField[0], 0, dtype_id);
+        status = H5Tinsert(mem_type_id, cpdField[0], 0, dtype_id);
         for (int i=1; i<cpdNField; i++) {
             hid_t mem_type_id2 = H5Tcreate(H5T_COMPOUND, size);
-            herr_t status = H5Tinsert(mem_type_id2, cpdField[i], 0, mem_type_id);
+            status = H5Tinsert(mem_type_id2, cpdField[i], 0, mem_type_id);
             mem_type_id = mem_type_id2;
         }
     }
@@ -546,22 +422,26 @@ SEXP H5Dread_helper_STRING(hid_t dataset_id, hid_t file_space_id, hid_t mem_spac
 
     if(n > 0) { /* return empty vector if length == 0 */
       if (H5Tis_variable_str(dtype_id)) {
-          char *bufSTR[n];
-          herr_t herr = H5Dread(dataset_id, mem_type_id, mem_space_id, file_space_id, H5P_DEFAULT, bufSTR );
-          if(herr < 0) {
+          Rprintf("here\n");
+          char **bufSTR = (char **) R_alloc(n, sizeof(char *));
+          status = H5Dread(dataset_id, mem_type_id, mem_space_id, file_space_id, H5P_DEFAULT, bufSTR );
+          if(status < 0) {
             error("Unable to read dataset");
           }
           for (int i=0; i<n; i++) {
               SET_STRING_ELT(Rval, i, mkChar(bufSTR[i]));
-              free(bufSTR[i]);
+          }
+          status = H5Dvlen_reclaim(mem_type_id, file_space_id, H5P_DEFAULT, bufSTR);
+          if(status < 0) {
+              error("Unable to reclaim variable length buffer\n");
           }
       } else {
           void* bufSTR = R_alloc(n * size, sizeof(char));
           if (bufSTR == 0) {
               error("Not enough memory to read data! Try to read a subset of data by specifying the index or count parameter.");
           }
-          herr_t herr = H5Dread(dataset_id, mem_type_id, mem_space_id, file_space_id, H5P_DEFAULT, bufSTR );
-          if(herr < 0) { 
+          status = H5Dread(dataset_id, mem_type_id, mem_space_id, file_space_id, H5P_DEFAULT, bufSTR );
+          if(status < 0) { 
             error("Unable to read dataset");
           }
           char* bufSTR2 = R_alloc(size + 1, sizeof(char));
@@ -916,6 +796,8 @@ SEXP H5Dread_helper(hid_t dataset_id, hid_t file_space_id, hid_t mem_space_id, h
     } break;
     }
     
+    herr_t status = H5Tclose(dtype_id);
+    
     return(Rval);
 }
 
@@ -988,7 +870,7 @@ SEXP _H5Dread( SEXP _dataset_id, SEXP _file_space_id, SEXP _mem_space_id, SEXP _
     int protect_bool = 0;
     
     if( rank == 0 ) {
-    /* scalar with no dimentsions */
+    /* scalar with no dimensions */
         Rdim = NULL_USER_OBJECT;
     } else if( dtypeclass_id == H5T_ENUM && rank == 0 ) {
     /* do all ENUM have rank 0? */ 
@@ -1016,6 +898,9 @@ SEXP _H5Dread( SEXP _dataset_id, SEXP _file_space_id, SEXP _mem_space_id, SEXP _
     SEXP Rval = H5Dread_helper(dataset_id, file_space_id, mem_space_id, n, 
                                Rdim, _buf, 
                                -1, -1, NULL, compoundAsDataFrame, bit64conversion, native);
+    
+    // close data type
+    H5Tclose(dtype_id);
     
     // close mem space
     if (length(_mem_space_id) == 0) {
@@ -1078,7 +963,6 @@ SEXP _H5Dwrite( SEXP _dataset_id, SEXP _buf, SEXP _file_space_id, SEXP _mem_spac
         mem_type_id = H5Dget_type(dataset_id);
         if (native)
             PERMUTE(_buf, STRING_PTR, dim_space_id);
-        
         /* prepare for hdf5 */
         size_t stsize = H5Tget_size( mem_type_id );
         char * strbuf = (char *)R_alloc(LENGTH(_buf),stsize);
