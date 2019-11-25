@@ -141,7 +141,7 @@ h5writeDataset.data.frame <- function(obj, h5loc, name, level=7, chunk, DataFram
         colClass <- sapply(obj, is.factor)
         if(any(colClass)) {
             #obj[,which(colClass)] <- as.character(obj[,which(colClass)])
-            obj[,which(colClass)] <- lapply(obj[,which(colClass)], FUN = as.character)
+            obj[ which(colClass) ] <- lapply(obj[ ,which(colClass), drop=FALSE], FUN = as.character)
         }
         
         res <- h5writeDataset.list(obj=obj, h5loc=h5loc, name=name, level=level)
