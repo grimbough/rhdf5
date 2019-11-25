@@ -1,6 +1,15 @@
 \name{NEWS}
 \title{News for Package 'rhdf5'}
 
+\section{Changes in version 2.32.0}{
+  \subsection{BUG FIXES}{
+    \itemize{
+      \item Writing data.frames with more than one factor column
+      no longer leads to memory explosion.
+    }
+  }
+}
+
 \section{Changes in version 2.30.0}{
   \subsection{NEW FEATURES}{
     \itemize{

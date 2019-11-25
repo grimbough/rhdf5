@@ -131,6 +131,24 @@ if(.Platform$r_arch != "i386") {
     }
 }
 
+test_that("We can write a data.frame with multiple factor columns", {
+    
+    if(file.exists(h5f1))
+        file.remove(h5f1)
+    
+    Z <- data.frame(
+        X=sample(LETTERS, 20000, replace=TRUE),
+        Y=sample(LETTERS, 20000, replace=TRUE),
+        stringsAsFactors = FALSE
+    )
+    
+    expect_silent(h5write(Z, file=h5f1, name='data', DataFrameAsCompound=FALSE))
+    expect_equivalent(h5read(file = h5f1, name = "data/X"),
+                 as.character(Z$X))
+    expect_equivalent(h5read(file = h5f1, name = "data/Y"),
+                      as.character(Z$Y))
+})
+
 
 ############################################################
 context("Writing a datset subset")
