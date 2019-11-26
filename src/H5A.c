@@ -116,30 +116,6 @@ SEXP _H5Adelete( SEXP _obj_id, SEXP _attr_name ) {
 }
 
 
-/* void getMemSpaceDim( hid_t file_space_id, hsize_t *size) { */
-/*   hssize_t sel_hyper_nblocks = H5Sget_select_hyper_nblocks( file_space_id ); */
-/*   int rank = H5Sget_simple_extent_ndims( file_space_id ); */
-/*   hsize_t sizebuf[2*rank*sel_hyper_nblocks]; */
-/*   H5Sget_select_hyper_blocklist(file_space_id, 0, sel_hyper_nblocks, sizebuf ); */
-  
-/*   int isnew; */
-/*   for (int i=0; i < rank; i++) { */
-/*     size[i] = 0; */
-/*     for (int j=0; j < sel_hyper_nblocks; j++) { */
-/*       isnew = 1; */
-/*       for (int k=0; k < j; k++) { */
-/* 	if ((sizebuf[j*2*rank+i] == sizebuf[k*2*rank+i])  */
-/* 	    & (sizebuf[j*2*rank+i+rank] == sizebuf[k*2*rank+i+rank])) { */
-/* 	  isnew=0; */
-/* 	} */
-/*       } */
-/*       if (isnew != 0) { */
-/* 	size[i] += (sizebuf[j*2*rank+i+rank] - sizebuf[j*2*rank+i] + 1); */
-/*       } */
-/*     } */
-/*   } */
-/* } */
-
 SEXP H5Aread_helper_INTEGER(hid_t attr_id, hsize_t n, SEXP Rdim, SEXP _buf, hid_t dtype_id) {
   hid_t mem_type_id = -1;
 

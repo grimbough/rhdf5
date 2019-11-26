@@ -6,6 +6,8 @@
     \itemize{
       \item Writing data.frames with more than one factor column
       no longer leads to memory explosion.
+      \item Patched bug in h5write which left an unclosed HDF5 datatype 
+      object when writing strings.
     }
   }
 }
