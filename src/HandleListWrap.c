@@ -126,7 +126,7 @@ SEXP _handleInfo ( SEXP _ID ) {
 // }
 
 
-SEXP _whatisopen( SEXP _file_id ) {
+SEXP _h5listOpenObjects( SEXP _file_id ) {
     ssize_t count;
     int howmany;
     int i;

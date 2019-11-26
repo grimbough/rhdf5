@@ -422,7 +422,6 @@ SEXP H5Dread_helper_STRING(hid_t dataset_id, hid_t file_space_id, hid_t mem_spac
 
     if(n > 0) { /* return empty vector if length == 0 */
       if (H5Tis_variable_str(dtype_id)) {
-          Rprintf("here\n");
           char **bufSTR = (char **) R_alloc(n, sizeof(char *));
           status = H5Dread(dataset_id, mem_type_id, mem_space_id, file_space_id, H5P_DEFAULT, bufSTR );
           if(status < 0) {

@@ -301,7 +301,7 @@ static R_CallMethodDef libraryRCalls[] = {
   {"_h5errorHandling", (DL_FUNC) &_h5errorHandling, 1},
   {"_h5fileLock", (DL_FUNC) &_h5fileLock, 1},
   {"_H5Sselect_cols", (DL_FUNC) &_H5Sselect_cols, 5},
-  {"_whatisopen", (DL_FUNC) &_whatisopen, 1},
+  {"_h5listOpenObjects", (DL_FUNC) &_h5listOpenObjects, 1},
   {NULL, NULL, 0}
 };
 
