@@ -3,6 +3,22 @@
 #include <stdio.h>
 #include "printdatatype.h"
 
+#include <stdlib.h>
+#include <string.h>
+
+void concat(char *s1, hsize_t next_dim, int index)
+{
+    Rprintf("%d\t%s\n", index, s1);
+    char tmp[100];
+    strncpy(tmp, s1, 100);
+    
+#ifdef H5_HAVE_WINDOWS
+    snprintf(s1, 100, "%s%s%I64u", tmp, index?" x ":"", next_dim);
+#else
+    snprintf(s1, 100, "%s%s%llu", tmp, index ? " x " : "", next_dim);
+#endif
+}
+
 typedef struct opLinfoListElement {
     long idx;
     char *name;
@@ -97,6 +113,7 @@ herr_t opAddToLinfoList( hid_t g_id, const char *name, const H5L_info_t *info, v
             } break;
             case H5S_SIMPLE: {
                 char* tmp = (char *)R_alloc(100*newElement->rank,sizeof(char));
+                memset(tmp, '\0', 100 * sizeof(char));
                 if (data->native) {
 #ifdef H5_HAVE_WINDOWS
                     sprintf(tmp, "%I64u", size[0]);
@@ -111,17 +128,9 @@ herr_t opAddToLinfoList( hid_t g_id, const char *name, const H5L_info_t *info, v
 #endif
                     }
                 } else {
-#ifdef H5_HAVE_WINDOWS
-                    sprintf(tmp, "%I64u", size[newElement->rank-1]);
-#else
-                    sprintf(tmp, "%llu", size[newElement->rank-1]);
-#endif
-                    for(int i = newElement->rank-2; i >= 0; i--) {
-#ifdef H5_HAVE_WINDOWS
-                        sprintf(tmp, "%s x %I64u", tmp, size[i]);
-#else
-                        sprintf(tmp, "%s x %llu", tmp, size[i]);
-#endif
+                    for(int i = 0; i < newElement->rank; i++) {
+                        concat(tmp, size[i], i);
+                        Rprintf("Rversion: %s\n", tmp);
                     }
                 }
                 sprintf(tmp, "%s", tmp);
@@ -172,17 +181,8 @@ herr_t opAddToLinfoList( hid_t g_id, const char *name, const H5L_info_t *info, v
                 newElement->maxdim = "unknown dataspace"; 
             } break;
             } /* end switch */
-            H5Sclose(sid);
+                    H5Sclose(sid);
             
-            /* printf("type=%ld\n",H5T_STD_I32LE); */
-            /* printf("type=%ld\n",H5T_IEEE_F32LE); */
-            /* const char *typename = getDatatypeName(type, 1); */
-            /* printf("type=%ld\n",hid); */
-            /* char *typename; */
-            /* typename = malloc(1001*sizeof(char)); */
-            /* ssize_t s = H5Iget_name( hid, typename, 1000 ); */
-            /* printf("size=%ld\n",s); */
-            /* printf("name=%s\n\n",typename); */
             H5Dclose(did);
         } else {
             newElement->datatype = "";
@@ -227,7 +227,7 @@ herr_t opAddToLinfoList( hid_t g_id, const char *name, const H5L_info_t *info, v
 }
 
 SEXP _h5ls( SEXP _loc_id, SEXP _depth, SEXP _datasetinfo, SEXP _index_type, SEXP _order, SEXP _native ) {
-    //hid_t loc_id = INTEGER(_loc_id)[0];
+    
     hid_t loc_id = STRSXP_2_HID( _loc_id );
     opLinfoList data;
     data.n = 0;
@@ -241,10 +241,7 @@ SEXP _h5ls( SEXP _loc_id, SEXP _depth, SEXP _datasetinfo, SEXP _index_type, SEXP
     data.last = NULL;
     data.index_type = INTEGER(_index_type)[0];
     data.order = INTEGER(_order)[0];
-    // H5_index_t index_type = H5_INDEX_NAME; 
-    // H5_iter_order_t order = H5_ITER_INC; 
     hsize_t idx=0;
-    //   printf("Start visit.\n"); 
     
     herr_t herr = H5Literate( loc_id, data.index_type, data.order, &idx, &opAddToLinfoList, &data );
     
@@ -256,21 +253,13 @@ SEXP _h5ls( SEXP _loc_id, SEXP _depth, SEXP _datasetinfo, SEXP _index_type, SEXP
         UNPROTECT(1);
     } else {
         PROTECT(Rval= allocVector(VECSXP, 14));
-        // SEXP elementnames = PROTECT(allocVector(STRSXP, 0)); 
         SEXP group = PROTECT(allocVector(STRSXP, data.n));
         SEXP elementnames = PROTECT(allocVector(STRSXP, data.n));
         SEXP ltype = PROTECT(allocVector(INTSXP, data.n));
         SEXP corder_valid = PROTECT(allocVector(LGLSXP, data.n));
         SEXP corder = PROTECT(allocVector(INTSXP, data.n));
         SEXP cset = PROTECT(allocVector(INTSXP, data.n));
-        //   SEXP fileno = PROTECT(allocVector(INTSXP, data.n));
-        //    SEXP addr = PROTECT(allocVector(INTSXP, data.n));
         SEXP otype = PROTECT(allocVector(INTSXP, data.n));
-        //    SEXP rc = PROTECT(allocVector(INTSXP, data.n));
-        //    SEXP atime = PROTECT(allocVector(REALSXP, data.n));
-        //    SEXP mtime = PROTECT(allocVector(REALSXP, data.n));
-        //    SEXP ctime = PROTECT(allocVector(REALSXP, data.n));
-        //    SEXP btime = PROTECT(allocVector(REALSXP, data.n));
         SEXP num_attrs = PROTECT(allocVector(INTSXP, data.n));
         SEXP dclass = PROTECT(allocVector(STRSXP, data.n));
         SEXP dtype = PROTECT(allocVector(STRSXP, data.n));
@@ -283,21 +272,13 @@ SEXP _h5ls( SEXP _loc_id, SEXP _depth, SEXP _datasetinfo, SEXP _index_type, SEXP
         opLinfoListElement *el = data.first;
         opLinfoListElement *elnext;
         while (el != NULL) {
-            // printf("element %d\n",el->idx); 
             SET_STRING_ELT(group, el->idx, mkChar(el->group));
             SET_STRING_ELT(elementnames, el->idx, mkChar(el->name));
             INTEGER(ltype)[el->idx] = el->info.type;
             LOGICAL(corder_valid)[el->idx] = el->info.corder_valid;
             INTEGER(corder)[el->idx] = el->info.corder;
             INTEGER(cset)[el->idx] = el->info.cset;
-            //      INTEGER(fileno)[el->idx] = el->object_info.fileno;
-            //      INTEGER(addr)[el->idx] = el->object_info.addr;
             INTEGER(otype)[el->idx] = el->type;
-            //      INTEGER(rc)[el->idx] = el->object_info.rc;
-            //      REAL(atime)[el->idx] = el->object_info.atime;
-            //      REAL(mtime)[el->idx] = el->object_info.mtime;
-            //      REAL(ctime)[el->idx] = el->object_info.ctime;
-            //      REAL(btime)[el->idx] = el->object_info.btime;
             INTEGER(num_attrs)[el->idx] = el->num_attrs;
             SET_STRING_ELT(dclass, el->idx, mkChar(el->class));
             SET_STRING_ELT(dtype, el->idx, mkChar(el->datatype));
@@ -316,14 +297,7 @@ SEXP _h5ls( SEXP _loc_id, SEXP _depth, SEXP _datasetinfo, SEXP _index_type, SEXP
         SET_VECTOR_ELT(Rval,3,corder_valid);
         SET_VECTOR_ELT(Rval,4,corder);
         SET_VECTOR_ELT(Rval,5,cset);
-        //    SET_VECTOR_ELT(Rval,6,fileno);
-        //    SET_VECTOR_ELT(Rval,7,addr);
         SET_VECTOR_ELT(Rval,6,otype);
-        //    SET_VECTOR_ELT(Rval,9,rc);
-        //    SET_VECTOR_ELT(Rval,10,atime);
-        //    SET_VECTOR_ELT(Rval,11,mtime);
-        //    SET_VECTOR_ELT(Rval,12,ctime);
-        //    SET_VECTOR_ELT(Rval,13,btime);
         SET_VECTOR_ELT(Rval,7,num_attrs);
         SET_VECTOR_ELT(Rval,8,dclass);
         SET_VECTOR_ELT(Rval,9,dtype);
@@ -339,14 +313,7 @@ SEXP _h5ls( SEXP _loc_id, SEXP _depth, SEXP _datasetinfo, SEXP _index_type, SEXP
         SET_STRING_ELT(names, 3, mkChar("corder_valid"));
         SET_STRING_ELT(names, 4, mkChar("corder"));
         SET_STRING_ELT(names, 5, mkChar("cset"));
-        //    SET_STRING_ELT(names, 6, mkChar("fileno"));
-        //    SET_STRING_ELT(names, 7, mkChar("addr"));
         SET_STRING_ELT(names, 6, mkChar("otype"));
-        //    SET_STRING_ELT(names, 9, mkChar("rc"));
-        //    SET_STRING_ELT(names, 10, mkChar("atime"));
-        //    SET_STRING_ELT(names, 11, mkChar("mtime"));
-        //    SET_STRING_ELT(names, 12, mkChar("ctime"));
-        //    SET_STRING_ELT(names, 13, mkChar("btime"));
         SET_STRING_ELT(names, 7, mkChar("num_attrs"));
         SET_STRING_ELT(names, 8, mkChar("dclass"));
         SET_STRING_ELT(names, 9, mkChar("dtype"));
