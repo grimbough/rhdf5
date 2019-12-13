@@ -8,7 +8,18 @@
 
 void concat(char *s1, hsize_t next_dim, int index)
 {
-    Rprintf("%d\t%s\n", index, s1);
+    char tmp[100];
+    strncpy(tmp, s1, 100);
+    
+#ifdef H5_HAVE_WINDOWS
+    snprintf(s1, 100, "%s%I64u%s", tmp, next_dim, index?" x ":"");
+#else
+    snprintf(s1, 100, "%s%llu%s", tmp, next_dim, index ? " x " : "");
+#endif
+}
+
+void concatnative(char *s1, hsize_t next_dim, int index)
+{
     char tmp[100];
     strncpy(tmp, s1, 100);
     
@@ -32,7 +43,6 @@ typedef struct opLinfoListElement {
     H5L_info_t info;
     H5I_type_t type;
     hsize_t num_attrs;
-    //  H5O_info_t object_info;
     struct opLinfoListElement *next;
 } opLinfoListElement;
 
@@ -55,7 +65,6 @@ herr_t opAddToLinfoList( hid_t g_id, const char *name, const H5L_info_t *info, v
     herr_t herr = 0;
     opLinfoListElement *newElement = (opLinfoListElement *)R_alloc(1,sizeof(struct opLinfoListElement) );
     newElement->idx = data->n;
-    //  printf("sizeof = %ld cset=%ld group=>%s< name=>%s<\n", strlen(name), info->cset, data->group, name);
     newElement->name = (char *)R_alloc(1,(strlen(name)+1)*sizeof(char));
     strcpy(newElement->name, name);
     newElement->group = (char *)R_alloc(1,(strlen(data->group)+1)*sizeof(char));
@@ -82,7 +91,6 @@ herr_t opAddToLinfoList( hid_t g_id, const char *name, const H5L_info_t *info, v
         data->last = newElement;
     } else {
         hid_t oid = H5Oopen( g_id, name, H5P_DEFAULT );
-        // herr_t herr = H5Oget_info( oid, &(newElement->object_info) );
         newElement->type = H5Iget_type(oid);
         newElement->num_attrs = H5Oget_num_attrs(oid);
         if ((data->showdatasetinfo) & (newElement->type == H5I_DATASET)) {
@@ -90,7 +98,6 @@ herr_t opAddToLinfoList( hid_t g_id, const char *name, const H5L_info_t *info, v
             hid_t type = H5Dget_type(did);
             newElement->datatype = getDatatypeName(type);
             newElement->class = getDatatypeClass(type);
-            /* H5Tclose(type); */
             hid_t sid = H5Dget_space( did );
             hsize_t   size[H5S_MAX_RANK];
             hsize_t   maxsize[H5S_MAX_RANK];
@@ -115,58 +122,29 @@ herr_t opAddToLinfoList( hid_t g_id, const char *name, const H5L_info_t *info, v
                 char* tmp = (char *)R_alloc(100*newElement->rank,sizeof(char));
                 memset(tmp, '\0', 100 * sizeof(char));
                 if (data->native) {
-#ifdef H5_HAVE_WINDOWS
-                    sprintf(tmp, "%I64u", size[0]);
-#else
-                    sprintf(tmp, "%llu", size[0]);
-#endif
-                    for(int i = 1; i < newElement->rank; i++) {
-#ifdef H5_HAVE_WINDOWS
-                        sprintf(tmp, "%s x %I64u", tmp, size[i]);
-#else
-                        sprintf(tmp, "%s x %llu", tmp, size[i]);
-#endif
+                    //TODO: can we end up here?
+                    for(int i = 0; i < newElement->rank; i++) {
+                        concatnative(tmp, size[i], i);
                     }
                 } else {
-                    for(int i = 0; i < newElement->rank; i++) {
+                    for(int i = newElement->rank-1; i >= 0; i--) {
                         concat(tmp, size[i], i);
-                        Rprintf("Rversion: %s\n", tmp);
                     }
                 }
-                sprintf(tmp, "%s", tmp);
                 newElement->dim = (char *)R_alloc((strlen(tmp)+1),sizeof(char));
                 strcpy(newElement->dim, tmp);
+                
                 if(maxsize[0] == H5S_UNLIMITED) {
                     sprintf(tmp, "UNLIMITED");
                 } else {
+                    memset(tmp, '\0', 100 * sizeof(char));
                     if (data->native) {
-#ifdef H5_HAVE_WINDOWS
-                        sprintf(tmp, "%I64u", maxsize[0]);
-#else
-                        sprintf(tmp, "%llu", maxsize[0]);
-#endif
-                        for(int i = 1; i < newElement->rank ; i++) {
-#ifdef H5_HAVE_WINDOWS      
-                            sprintf(tmp, "%s x %I64u", tmp, maxsize[i]);
-#else
-                            sprintf(tmp, "%s x %llu", tmp, maxsize[i]);
-#endif
-                        }
+                        //TODO: can we end up here?
                     } else {
-#ifdef H5_HAVE_WINDOWS
-                        sprintf(tmp, "%I64u", maxsize[newElement->rank-1]);
-#else
-                        sprintf(tmp, "%llu", maxsize[newElement->rank-1]);
-#endif
-                        for(int i = newElement->rank-2; i >= 0 ; i--) {
-#ifdef H5_HAVE_WINDOWS
-                            sprintf(tmp, "%s x %I64u", tmp, maxsize[i]);
-#else
-                            sprintf(tmp, "%s x %llu", tmp, maxsize[i]);
-#endif
+                        for(int i = 0; i < newElement->rank; i++) {
+                            concat(tmp, maxsize[i], i);
                         }
                     }
-                    sprintf(tmp, "%s", tmp);
                 }
                 newElement->maxdim = (char *)R_alloc((strlen(tmp)+1),sizeof(char));
                 strcpy(newElement->maxdim, tmp);
