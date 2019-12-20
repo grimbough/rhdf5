@@ -56,11 +56,13 @@ H5Pall_filters_avail               ( h5plist )
 % H5Pset_fletcher32                  ( plist_id )
 % H5Pset_nbit                        ( plist_id )
 % H5Pset_scaleoffset                 ( plist_id, scale_type, scale_factor )
-% H5Pset_shuffle                     ( plist_id )
-% H5Pset_szip                        ( plist, options_mask, pixels_per_block )
+H5Pset_shuffle                     ( plist_id )
+H5Pset_szip                        ( plist, options_mask, pixels_per_block )
 % H5Pset_external                    ( plist, *name, offset, size )
 % H5Pget_external_count              ( plist )
 % H5Pget_external                    ( plist, idx, name_size, *name, *offset, *size )
+H5Pset_blosc                       ( h5plist, h5tid, method = 1L, level = 6L, shuffle = TRUE )
+H5Pset_bzip2                       ( h5plist, level = 2L )  
 }
 \arguments{
   \item{h5plist}{An object of class \code{\link{H5IdComponent}} representing a H5 property list identifier of class H5P_DATASET_CREATE. See \code{\link{H5Pcreate}} or \code{\link{H5Pcopy}} to create an object of this kind.}
@@ -70,6 +72,9 @@ H5Pall_filters_avail               ( h5plist )
   \item{value}{Standard value for filling the dataset. The storage.mode of value has to be convertable to the dataset type by HDF5.}
   \item{fill_time}{A character name of a H5D_FILL_TIME type. See \code{h5const("H5D_FILL_TIME")} for possible values. Can also be an integer representing an HDF5 H5D_FILL_TIME type.}
   \item{alloc_time}{A character name of a H5D_ALLOC_TIME type. See \code{h5const("H5D_ALLOC_TIME")} for possible property list types. Can also be an integer representing an HDF5 H5D_ALLOC_TIME type.}
+  \item{h5tid}{HDF5 type ID.}
+  \item{method}{When using the BLOSC filter, defines which compression tool should be used.}
+  \item{shuffle}{Logical value determining whether byte shuffling should be applied before compression is applied. This only applies to the BLOSC filter.}
 }
 \details{
 Interface to the HDF5 C-library libhdf5. See \url{https://portal.hdfgroup.org/display/HDF5/Dataset+Creation+Properties} for further details. See \link{H5P} for documentation of more functions to manupulate property lists of other property list classes. 
