@@ -1,34 +1,4 @@
-#include "H5G.h"
-#include "H5O.h"
-#include <stdio.h>
-#include "printdatatype.h"
-
-#include <stdlib.h>
-#include <string.h>
-
-void concat(char *s1, hsize_t next_dim, int index)
-{
-    char tmp[100];
-    strncpy(tmp, s1, 100);
-    
-#ifdef H5_HAVE_WINDOWS
-    snprintf(s1, 100, "%s%I64u%s", tmp, next_dim, index?" x ":"");
-#else
-    snprintf(s1, 100, "%s%llu%s", tmp, next_dim, index ? " x " : "");
-#endif
-}
-
-void concatnative(char *s1, hsize_t next_dim, int index)
-{
-    char tmp[100];
-    strncpy(tmp, s1, 100);
-    
-#ifdef H5_HAVE_WINDOWS
-    snprintf(s1, 100, "%s%s%I64u", tmp, index?" x ":"", next_dim);
-#else
-    snprintf(s1, 100, "%s%s%llu", tmp, index ? " x " : "", next_dim);
-#endif
-}
+#include "h5ls.h"
 
 typedef struct opLinfoListElement {
     long idx;
@@ -122,13 +92,12 @@ herr_t opAddToLinfoList( hid_t g_id, const char *name, const H5L_info_t *info, v
                 char* tmp = (char *)R_alloc(100*newElement->rank,sizeof(char));
                 memset(tmp, '\0', 100 * sizeof(char));
                 if (data->native) {
-                    //TODO: can we end up here?
                     for(int i = 0; i < newElement->rank; i++) {
-                        concatnative(tmp, size[i], i);
+                        concatdim_native(tmp, size[i], i);
                     }
                 } else {
                     for(int i = newElement->rank-1; i >= 0; i--) {
-                        concat(tmp, size[i], i);
+                        concatdim(tmp, size[i], i);
                     }
                 }
                 newElement->dim = (char *)R_alloc((strlen(tmp)+1),sizeof(char));
@@ -139,10 +108,12 @@ herr_t opAddToLinfoList( hid_t g_id, const char *name, const H5L_info_t *info, v
                 } else {
                     memset(tmp, '\0', 100 * sizeof(char));
                     if (data->native) {
-                        //TODO: can we end up here?
-                    } else {
                         for(int i = 0; i < newElement->rank; i++) {
-                            concat(tmp, maxsize[i], i);
+                            concatdim_native(tmp, size[i], i);
+                        }
+                    } else {
+                        for(int i = newElement->rank-1; i >= 0; i--) {
+                            concatdim(tmp, size[i], i);
                         }
                     }
                 }

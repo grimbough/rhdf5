@@ -463,14 +463,12 @@ getDatatypeClass(hid_t type) {
 }
 
 SEXP _getDatatypeName(SEXP _type) {
-  //hid_t type = INTEGER(_type)[0];
   hid_t type = STRSXP_2_HID( _type );
   SEXP Rval = mkString(getDatatypeName(type));
   return(Rval);
 }
 
 SEXP _getDatatypeClass(SEXP _type) {
-  //hid_t type = INTEGER(_type)[0];
   hid_t type = STRSXP_2_HID( _type );
   SEXP Rval = mkString(getDatatypeClass(type));
   return(Rval);

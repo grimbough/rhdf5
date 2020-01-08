@@ -1,7 +1,4 @@
-#include "H5G.h"
-#include "H5O.h"
-#include <stdio.h>
-#include "printdatatype.h"
+#include "h5dump.h"
 
 /*################################*/
 /* constants */
@@ -112,37 +109,19 @@ herr_t opAddToLinfoTree( hid_t g_id, const char *name, const H5L_info_t *info, v
             } break;
             case H5S_SIMPLE: {
                 char* tmp = (char *)R_alloc(100*newElement->rank,sizeof(char));
-                #ifdef H5_HAVE_WINDOWS
-                    sprintf(tmp, "%I64u", size[newElement->rank-1]);
-                #else
-                    sprintf(tmp, "%llu", size[newElement->rank-1]);
-                #endif
-                for(int i = newElement->rank-2; i >= 0; i--) {
-                    #ifdef H5_HAVE_WINDOWS      
-                        sprintf(tmp, "%s x %I64u", tmp, size[i]);
-                    #else
-                        sprintf(tmp, "%s x %llu", tmp, size[i]);
-                    #endif    
+                memset(tmp, '\0', 100 * sizeof(char));
+                for(int i = newElement->rank-1; i >= 0; i--) {
+                    concatdim(tmp, size[i], i);
                 }
-                sprintf(tmp, "%s", tmp);
                 newElement->dim = (char *)R_alloc((strlen(tmp)+1),sizeof(char));
                 strcpy(newElement->dim, tmp);
                 if(maxsize[0] == H5S_UNLIMITED) {
                     sprintf(tmp, "UNLIMITED");
                 } else {
-                    #ifdef H5_HAVE_WINDOWS      
-                        sprintf(tmp, "%I64u", maxsize[newElement->rank-1]);
-                    #else
-                        sprintf(tmp, "%llu", maxsize[newElement->rank-1]);
-                    #endif 
-                    for(int i = newElement->rank-2; i >= 0 ; i--) {
-                        #ifdef H5_HAVE_WINDOWS      
-                            sprintf(tmp, "%s x %I64u", tmp, maxsize[i]);
-                        #else
-                            sprintf(tmp, "%s x %llu", tmp, maxsize[i]);
-                        #endif 
+                    memset(tmp, '\0', 100 * sizeof(char));
+                    for(int i = newElement->rank-1; i >= 0; i--) {
+                        concatdim(tmp, size[i], i);
                     }
-                    sprintf(tmp, "%s", tmp);
                 }
                 newElement->maxdim = (char *)R_alloc((strlen(tmp)+1),sizeof(char));
                 strcpy(newElement->maxdim, tmp);
@@ -158,16 +137,6 @@ herr_t opAddToLinfoTree( hid_t g_id, const char *name, const H5L_info_t *info, v
             } break;
             } /* end switch */
             H5Sclose(sid);
-            
-            /* printf("type=%ld\n",H5T_STD_I32LE); */
-            /* printf("type=%ld\n",H5T_IEEE_F32LE); */
-            /* const char *typename = getDatatypeName(type, 1); */
-            /* printf("type=%ld\n",hid); */
-            /* char *typename; */
-            /* typename = malloc(1001*sizeof(char)); */
-            /* ssize_t s = H5Iget_name( hid, typename, 1000 ); */
-            /* printf("size=%ld\n",s); */
-            /* printf("name=%s\n\n",typename); */
             H5Dclose(did);
         } else {
             newElement->datatype = "";
