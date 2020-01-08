@@ -6,6 +6,8 @@
     \itemize{
       \item Writing data.frames with more than one factor column
       no longer leads to memory explosion.
+      \item Bug in h5ls() which could lead to failure in printing the dataset 
+      dimensions has been fixed.
     }
   }
 }
