@@ -8,6 +8,8 @@
       no longer leads to memory explosion.
       \item Bug in h5ls() which could lead to failure in printing the dataset 
       dimensions has been fixed.
+      \item Patched bug in h5write which left an unclosed HDF5 datatype 
+      object when writing strings.
     }
   }
 }

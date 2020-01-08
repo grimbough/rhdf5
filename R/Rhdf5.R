@@ -15,6 +15,11 @@ h5validObjects <- function(native = FALSE) {
   res
 }
 
+h5listOpenObjects <- function(h5file) {
+  h5checktype(h5file, "file")
+  invisible(.Call("_h5listOpenObjects", h5file@ID, PACKAGE = "rhdf5"))
+}
+
 getDatatypeName <- function(type) {
   .Call("_getDatatypeName", type, PACKAGE='rhdf5')
 }

@@ -54,7 +54,6 @@ static R_CallMethodDef libraryRCalls[] = {
   {"_H5Dget_create_plist", (DL_FUNC) &_H5Dget_create_plist, 1},
   {"_H5Dget_space", (DL_FUNC) &_H5Dget_space, 1},
   {"_H5Dget_storage_size", (DL_FUNC) &_H5Dget_space, 1},
-  {"_create_Integer_test_file", (DL_FUNC) &_create_Integer_test_file, 0},
   {"_H5Dread", (DL_FUNC) &_H5Dread, 8},
   {"_H5Dwrite", (DL_FUNC) &_H5Dwrite, 5},
   {"_H5Dset_extent", (DL_FUNC) &_H5Dset_extent, 2},
@@ -302,6 +301,7 @@ static R_CallMethodDef libraryRCalls[] = {
   {"_h5errorHandling", (DL_FUNC) &_h5errorHandling, 1},
   {"_h5fileLock", (DL_FUNC) &_h5fileLock, 1},
   {"_H5Sselect_cols", (DL_FUNC) &_H5Sselect_cols, 5},
+  {"_h5listOpenObjects", (DL_FUNC) &_h5listOpenObjects, 1},
   {NULL, NULL, 0}
 };
 
