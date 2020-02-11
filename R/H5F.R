@@ -6,9 +6,9 @@ H5Fcreate <- function( name, flags = h5default("H5F_ACC"), fcpl = NULL, fapl = N
     name <- normalizePath(name, mustWork = FALSE)
     
     ## converting a UTF-8 path on windows to native
-    if(Encoding(name) == "UTF-8" && .Platform$OS.type == "windows") {
-        name <- enc2native(name)
-    }
+    #if(Encoding(name) == "UTF-8" && .Platform$OS.type == "windows") {
+    #    name <- enc2native(name)
+    #}
     
     flags <- h5checkConstants( "H5F_ACC", flags )
     fcpl = h5checktypeAndPLC(fcpl, "H5P_FILE_CREATE", allowNULL = TRUE)
