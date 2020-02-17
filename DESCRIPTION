@@ -28,7 +28,7 @@ Depends: R (>= 3.5.0), methods
 Suggests: bit64, BiocStyle, knitr, rmarkdown, testthat,  
   microbenchmark, dplyr, ggplot2
 LinkingTo: Rhdf5lib
-SystemRequirements: GNU make, C++11
+SystemRequirements: GNU make
 biocViews: Infrastructure, DataImport
 Encoding: UTF-8
 RoxygenNote: 6.1.1
