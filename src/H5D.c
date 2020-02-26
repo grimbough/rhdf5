@@ -940,6 +940,12 @@ SEXP _H5Dwrite( SEXP _dataset_id, SEXP _buf, SEXP _file_space_id, SEXP _mem_spac
     hid_t dim_space_id = mem_space_id == H5S_ALL ? dataset_id : mem_space_id;
     
     switch(TYPEOF(_buf)) {
+    case RAWSXP :
+        mem_type_id = H5T_STD_U8LE;
+        if (native)
+            PERMUTE(_buf, RAW, dim_space_id);
+        buf = RAW(_buf);
+        break;
     case INTSXP :
         mem_type_id = H5T_NATIVE_INT;
         if (native)
