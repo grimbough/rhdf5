@@ -48,7 +48,8 @@ h5createGroup <- function(file, group) {
                     double = h5constants$H5T["H5T_NATIVE_DOUBLE"],
                     integer = h5constants$H5T["H5T_NATIVE_INT32"],
                     integer64 = h5constants$H5T["H5T_NATIVE_INT64"],
-                    logical = h5constants$H5T["H5T_NATIVE_INT32"],
+                    logical = h5constants$H5T["H5T_NATIVE_UCHAR"],
+                    raw = h5constants$H5T["H5T_NATIVE_UCHAR"],
                     character = {
                       tid <- H5Tcopy("H5T_C_S1")
                       if (!is.numeric(size)) {

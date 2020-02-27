@@ -181,11 +181,12 @@ h5writeDataset.list <- function(obj, h5loc, name, level=7) {
     }
 }
 
-h5writeDataset.matrix <- function(...) { h5writeDataset.array(...) }
-h5writeDataset.integer <- function(...) { h5writeDataset.array(...) }
-h5writeDataset.double <- function(...) { h5writeDataset.array(...) }
-h5writeDataset.logical <- function(...) { h5writeDataset.array(...) }
+h5writeDataset.matrix    <- function(...) { h5writeDataset.array(...) }
+h5writeDataset.integer   <- function(...) { h5writeDataset.array(...) }
+h5writeDataset.double    <- function(...) { h5writeDataset.array(...) }
+h5writeDataset.logical   <- function(...) { h5writeDataset.array(...) }
 h5writeDataset.character <- function(...) { h5writeDataset.array(...) }
+h5writeDataset.raw       <- function(...) { h5writeDataset.array(...) }
 
 h5writeDataset.array <- function(obj, h5loc, name, index = NULL, start=NULL, stride=NULL, block=NULL, count=NULL, size=NULL, level=7) {
 

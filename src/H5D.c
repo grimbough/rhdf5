@@ -139,7 +139,29 @@ SEXP H5Dread_helper_INTEGER(hid_t dataset_id, hid_t file_space_id, hid_t mem_spa
     int warn = 0;
     int warn_double = 0;
     
-    if ((b < 4) | ((b == 4) & (sgn == H5T_SGN_2))) {   // Read directly to R-integer without loss of data (short or signed int)
+    if(b == 1) {
+      
+      mem_type_id = H5T_NATIVE_UCHAR;
+      
+      void * buf;
+      if (length(_buf) == 0) {
+        Rval = PROTECT(allocVector(RAWSXP, n));
+        buf = RAW(Rval);
+      } else {
+        buf = RAW(_buf);
+        Rval = _buf;
+      }
+      herr_t herr = H5Dread(dataset_id, mem_type_id, mem_space_id, file_space_id, H5P_DEFAULT, buf );
+      
+      if (native)
+        PERMUTE(Rval, RAW, mem_space_id);
+      
+      if (length(_buf) == 0) {
+        setAttrib(Rval, R_DimSymbol, Rdim);
+      }
+    
+    } else {
+    if ( ((b >= 2) & (b < 4)) | ((b == 4) & (sgn == H5T_SGN_2))) {   // Read directly to R-integer without loss of data (short or signed int)
         if (cpdType < 0) {
             mem_type_id = H5T_NATIVE_INT32;
         } else {
@@ -335,6 +357,7 @@ SEXP H5Dread_helper_INTEGER(hid_t dataset_id, hid_t file_space_id, hid_t mem_spa
         if (length(_buf) == 0) {
             setAttrib(Rval, R_DimSymbol, Rdim);
         }
+    }
     }
     
     if ((warn > 0) | (warn_NA > 0) | (warn_double > 0)) {
@@ -941,7 +964,7 @@ SEXP _H5Dwrite( SEXP _dataset_id, SEXP _buf, SEXP _file_space_id, SEXP _mem_spac
     
     switch(TYPEOF(_buf)) {
     case RAWSXP :
-        mem_type_id = H5T_STD_U8LE;
+        mem_type_id = H5T_NATIVE_UCHAR;
         if (native)
             PERMUTE(_buf, RAW, dim_space_id);
         buf = RAW(_buf);
