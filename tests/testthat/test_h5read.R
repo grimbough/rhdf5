@@ -4,10 +4,12 @@ library(rhdf5)
 context("h5read")
 ############################################################
 
+set.seed(1234)
 A = 1L:7L;  
 B = matrix(1:18, ncol = 2); 
 C = c(TRUE, TRUE, FALSE)
 D = seq(0, 1, by=0.1)
+E = as.raw(sample(0:255, size = 5))
 attr(D, "scale") <- "centimeters"
 
 
@@ -26,6 +28,7 @@ h5write(obj = B, file = h5File, name = "foo/B")
 h5createDataset(file = h5File, dataset = "baa", dims = c(1, length(D) ))
 h5write(obj = D, file = h5File, name = "baa", write.attributes = TRUE)
 h5write(obj = C, file = h5File, name = "logi")
+h5write(obj = E, file = h5File, name = "raw")
 
 test_that("Reading a dataset", {
     
@@ -37,6 +40,11 @@ test_that("Reading a dataset", {
         expect_is("array") %>%
         expect_identical(as.array(C))
     expect_identical(storage.mode(C2), "logical")
+    
+    expect_silent(E2 <- h5read(h5File, name = "raw")) %>%
+      expect_is("array") %>%
+      expect_identical(as.array(E2))
+    expect_identical(storage.mode(E2), "raw")
 })
 
 test_that("Reading a group", {
@@ -89,29 +97,29 @@ test_that("Error if asking for something that isn't there", {
 })
 
 
-test_that("Read / write vector longer than 2^31-1", {
-    
-    ## travis doesn't have resources to create an 8GB vector, so we skip there
-    long_vector <- tryCatch(integer(length = (2^31)+1000),
-                            error = function(e) NULL)
-    
-    if(!is.null(long_vector)) {
-        expect_silent(
-            h5createDataset(file = h5File, dataset = "too_long", dims = length(long_vector), 
-                            level = 0, storage.mode = "integer", chunk = 1e6)
-        )
-        expect_silent(
-            h5write(obj = long_vector, file = h5File, name = "too_long")
-        )
-        
-        rm(long_vector)
-        
-        expect_silent( tmp <- h5read(file = h5File, name = "too_long") ) %>%
-            expect_is("integer") %>%
-            length() %>%
-            expect_equal((2^31)+1000)
-    }
-})
+# test_that("Read / write vector longer than 2^31-1", {
+#     
+#     ## travis doesn't have resources to create an 8GB vector, so we skip there
+#     long_vector <- tryCatch(integer(length = (2^31)+1000),
+#                             error = function(e) NULL)
+#     
+#     if(!is.null(long_vector)) {
+#         expect_silent(
+#             h5createDataset(file = h5File, dataset = "too_long", dims = length(long_vector), 
+#                             level = 0, storage.mode = "integer", chunk = 1e6)
+#         )
+#         expect_silent(
+#             h5write(obj = long_vector, file = h5File, name = "too_long")
+#         )
+#         
+#         rm(long_vector)
+#         
+#         expect_silent( tmp <- h5read(file = h5File, name = "too_long") ) %>%
+#             expect_is("integer") %>%
+#             length() %>%
+#             expect_equal((2^31)+1000)
+#     }
+# })
 
 test_that("writing & reading empty vectors", {
     
@@ -121,6 +129,7 @@ test_that("writing & reading empty vectors", {
     expect_silent(h5write(obj = integer(0), file = h5File, name = "int"))
     expect_silent(h5write(obj = double(0), file = h5File, name = "double"))
     expect_silent(h5write(obj = logical(0), file = h5File, name = "logical"))
+    expect_silent(h5write(obj = raw(0), file = h5File, name = "raw"))
     #expect_silent(h5write(obj = factor(levels = c("L1", "L2")), file = h5File, name = "factor"))
     
     expect_silent(tmp <- h5read(file = h5File, name = "char")) %>%
@@ -138,6 +147,10 @@ test_that("writing & reading empty vectors", {
         expect_is("array") %>%
         expect_length(0) %>%
         storage.mode() %>% expect_identical("logical")  
+    expect_silent(h5read(file = h5File, name = "raw")) %>%
+        expect_is("array") %>%
+        expect_length(0) %>%
+        storage.mode() %>% expect_identical("raw") 
 
 })
 
@@ -267,7 +280,7 @@ if(file.exists(h5File))
 h5createFile(h5File)
 h5createDataset(h5File, "int32", dims=50, storage.mode="integer")
 h5createDataset(h5File, "int64", dims=50, storage.mode="integer64")
-h5createDataset(h5File, "uint32", dims=50, H5type = "H5T_NATIVE_UINT32")
+h5createDataset(h5File, "uint32", dims=50, H5type = "H5T_STD_U32LE")
 h5write(obj = 1:50, file = h5File, name = "int32")
 h5write(obj = 1:50, file = h5File, name = "int64")
 h5write(obj = 2^31 + 1:50, file = h5File, name = "uint32")

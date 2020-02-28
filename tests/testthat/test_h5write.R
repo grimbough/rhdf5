@@ -15,8 +15,6 @@ test_that("Error if file doesn't exist", {
 })
 
 test_that("Writing works", {
-    #expect_true( h5createFile(h5File) )
-    #expect_true( file.exists(h5File) )
     ## writing to a file name
     expect_silent( h5write(obj = A, file = h5File, name = "A") )
     expect_equal( as.integer(h5read(file = h5File, name = "A")), A )
@@ -169,10 +167,6 @@ test_that("Overwriting a subset", {
     expect_true( all(mat[,2] == 0) )
     
 })
-
-
-## remove this later
-#H5close()
 
 test_that("No open HDF5 objects are left", {
     expect_equal( length(h5validObjects()), 0 )

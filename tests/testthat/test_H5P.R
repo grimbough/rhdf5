@@ -45,7 +45,7 @@ test_that("setting and getting libhdf5 version bounds", {
     expect_silent(H5Pclose(pid1))
 })  
 
-test_that("Dataset creation properties", {
+test_that("Dataset creation properties can be set", {
     
     expect_silent(pid <- H5Pcreate("H5P_DATASET_CREATE"))
     
@@ -75,6 +75,7 @@ test_that("Dataset creation properties", {
     
     expect_silent(H5Pclose(pid))
 })
+
 
 test_that("No open HDF5 objects are left", {
     expect_equal( length(h5validObjects()), 0 )
