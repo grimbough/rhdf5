@@ -1010,14 +1010,14 @@ SEXP _H5Pset_fill_value( SEXP _plist_id, SEXP _type_id, SEXP _value ) {
     hid_t plist_id = STRSXP_2_HID( _plist_id );
     hid_t type_id = STRSXP_2_HID( _type_id );
     void * value;
-    if (type_id == H5T_NATIVE_DOUBLE) {
+    if (type_id == H5T_IEEE_F64LE) {
         value = REAL(_value);
+    } else if (type_id == H5T_STD_I32LE) {
+        value = INTEGER(_value);
+    } else if (type_id == H5T_STD_U8LE) {
+        value = LOGICAL(_value);
     } else {
-        if (type_id == H5T_NATIVE_INT32) {
-            value = INTEGER(_value);
-        } else {
-            value = (void *)CHAR(STRING_ELT(_value, 0));
-        }
+        value = (void *)CHAR(STRING_ELT(_value, 0));
     }
     herr_t herr = H5Pset_fill_value(plist_id, type_id, value);
     SEXP Rval = ScalarInteger(herr);

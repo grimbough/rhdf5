@@ -848,14 +848,11 @@ H5Pset_deflate <- function( h5plist, level ) {
 
 H5Pset_fill_value <- function( h5plist, value ) {
   h5checktypeAndPLC(h5plist, "H5P_DATASET_CREATE")
-  # TODO: check if class is H5P_DATASET_CREATE
-  ## a = H5Pget_class(p)
-  ## H5Pget_class
   storage.mode = storage.mode(value)
   tid <- switch(storage.mode,
-                double = h5constants$H5T["H5T_NATIVE_DOUBLE"],
-                integer = h5constants$H5T["H5T_NATIVE_INT32"],
-                logical = h5constants$H5T["H5T_NATIVE_INT32"],
+                double = h5constants$H5T["H5T_IEEE_F64LE"],
+                integer = h5constants$H5T["H5T_STD_I32LE"],
+                logical = h5constants$H5T["H5T_STD_U8LE"],
                 character = {
                     tid <- H5Tcopy("H5T_C_S1")
                     size <- nchar(value)+1
