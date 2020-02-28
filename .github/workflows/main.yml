@@ -2,6 +2,7 @@ on:
   push:
     branches:
       - master
+      - raw-datatype
   pull_request:
     branches:
       - master
