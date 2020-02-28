@@ -2,6 +2,18 @@
 \title{News for Package 'rhdf5'}
 
 \section{Changes in version 2.32.0}{
+  \subsection{NEW FEATURES}{
+    \itemize{
+      \item Added support for writing and reading datasets using the R 'raw'
+      datatype.
+    }
+  }
+  \subsection{Minor changes}{
+    \itemize{
+      \item R 'logical' values are now stored as 8-bit integers rather than
+      32-bit integers.
+    }
+  }
   \subsection{BUG FIXES}{
     \itemize{
       \item Writing data.frames with more than one factor column
