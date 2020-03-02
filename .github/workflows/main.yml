@@ -2,7 +2,7 @@ on:
   push:
     branches:
       - master
-      - raw-datatype
+      - string-padding
   pull_request:
     branches:
       - master
