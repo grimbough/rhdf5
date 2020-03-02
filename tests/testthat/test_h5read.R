@@ -18,7 +18,7 @@ h5File <- tempfile(pattern = "ex_read", fileext = ".h5")
 if(file.exists(h5File))
     file.remove(h5File)
 
-# create file with group heirachy  
+# create file with group hierarchy  
 h5createFile(h5File)
 h5createGroup(file = h5File, group = "foo")
 h5createDataset(file = h5File, dataset = "foo/A", dims = c(1, length(A) ), storage.mode = "integer")

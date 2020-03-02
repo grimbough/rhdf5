@@ -982,7 +982,8 @@ SEXP _H5Dwrite( SEXP _dataset_id, SEXP _buf, SEXP _file_space_id, SEXP _mem_spac
         buf = REAL(_buf);
         break;
     case LGLSXP :
-        mem_type_id = H5T_NATIVE_UCHAR;
+        /* R logical is 32-bit, so this must stay as NATIVE_INT */
+        mem_type_id = H5T_NATIVE_INT;
         if (native)
             PERMUTE(_buf, LOGICAL, dim_space_id);
         buf = LOGICAL(_buf);

@@ -5,3 +5,4 @@ _config.yml
 BinaryFiles
 .covrignore
 .BBSoptions
+.github
