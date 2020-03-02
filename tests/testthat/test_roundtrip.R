@@ -1,0 +1,48 @@
+## These tests are intended to check if we write something to HDF5 and then 
+## read back into R, we get the same thing. 
+## Current caveat is that we typically return an array even when there is only
+## one dimension.
+
+h5file <- tempfile(pattern = "h5_roundtrip_", fileext = ".h5")
+
+test_that("data.frame columns survive a round trip", {
+
+    set.seed(1234)
+        
+    test_frame <- data.frame(
+        integer = as.integer(1:10),
+        ## random words of length 5-20
+        words = vapply(1:10, FUN = function(x) { 
+                paste(
+                    sample(c(letters, LETTERS), size = sample(5:20, 1), replace = TRUE), 
+                    collapse = "") 
+            }, 
+            character(1) ),
+        stringsAsFactors = FALSE
+    )
+    
+    
+    expect_silent(h5write(obj = test_frame, file = h5file, name = 'data_frame'))
+    
+    expect_silent(back_frame <- h5read(file = h5file, name = "data_frame") )
+    expect_equivalent(back_frame$integer, test_frame$integer)
+    expect_equivalent(back_frame$words, test_frame$words)
+    
+})
+
+
+test_that("character vectors survive a round trip", {
+    
+    words <- vapply(1:10, FUN = function(x) { 
+            paste(
+                sample(c(letters, LETTERS), size = sample(5:20, 1), replace = TRUE), 
+                collapse = "") 
+        }, 
+        character(1) )
+
+    expect_silent(h5write(obj = words, file = h5file, name = 'char'))
+    
+    expect_silent(back_words <- h5read(file = h5file, name = "char") )
+    expect_equivalent(words, back_words)
+    
+})
