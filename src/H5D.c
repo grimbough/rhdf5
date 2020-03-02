@@ -998,7 +998,7 @@ SEXP _H5Dwrite( SEXP _dataset_id, SEXP _buf, SEXP _file_space_id, SEXP _mem_spac
         int z=0;
         int j;
         for (int i=0; i < LENGTH(_buf); i++) {
-            for (j=0; (j < LENGTH(STRING_ELT(_buf,i))) & (j < (stsize-1)); j++) {
+            for (j=0; (j < LENGTH(STRING_ELT(_buf,i))) & (j < stsize); j++) {
                 strbuf[z++] = CHAR(STRING_ELT(_buf,i))[j];
             }
             for (; j < stsize; j++) {

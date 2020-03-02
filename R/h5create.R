@@ -52,6 +52,7 @@ h5createGroup <- function(file, group) {
                     raw = h5constants$H5T["H5T_STD_U8LE"],
                     character = {
                       tid <- H5Tcopy("H5T_C_S1")
+                      H5Tset_strpad(tid, strpad = "NULLPAD")
                       if (!is.numeric(size)) {
                         stop("parameter 'size' has to be defined for storage.mode character.")
                       }
@@ -206,7 +207,6 @@ h5createAttribute <- function(obj, attr, dims, maxdims = dims, file, storage.mod
             } else {
                 tid <- h5checkConstants("H5T", H5type)
             }
-            ##if (!is.numeric(tid)) {
             if(!grepl(pattern = "^[[:digit:]]+$", tid)) {
                 message("Can not create attribute. H5type unknown. Check h5const('H5T') for valid types.")
             } else {

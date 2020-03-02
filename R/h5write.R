@@ -196,9 +196,9 @@ h5writeDataset.array <- function(obj, h5loc, name, index = NULL, start=NULL, str
             size = NULL
             if (storage.mode(obj) == "character") {
                 if (length(obj) > 0) {
-                    size <- max(nchar(obj), na.rm = TRUE)+1
+                    size <- max(nchar(obj), na.rm = TRUE)
                     ## if any NA, the minimum string length is 3
-                    if(any(is.na(obj)) && size < 3) { size <- 3 }
+                    if(any(is.na(obj)) && size < 2) { size <- 2 }
                 } else {
                     size <- 1
                 }
