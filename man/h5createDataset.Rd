@@ -40,7 +40,7 @@ Creates a new dataset. in an existing HDF5 file. The function will fail, if the 
 h5createFile("ex_createDataset.h5")
 
 # create dataset with compression
-h5createDataset("ex_createDataset.h5", "A", c(5,8), storage.mode = "integer", chunk=c(5,1), level=7)
+h5createDataset("ex_createDataset.h5", "A", c(5,8), storage.mode = "integer", chunk=c(5,1), level=6)
 
 # create dataset without compression
 h5createDataset("ex_createDataset.h5", "B", c(5,8), storage.mode = "integer")

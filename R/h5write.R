@@ -113,7 +113,7 @@ h5writeDataset <- function(obj, h5loc, name, ...) {
     invisible(res)
 }
 
-h5writeDataset.data.frame <- function(obj, h5loc, name, level=7, chunk, DataFrameAsCompound = TRUE) {
+h5writeDataset.data.frame <- function(obj, h5loc, name, level=6, chunk, DataFrameAsCompound = TRUE) {
     if (DataFrameAsCompound) {
         if (H5Lexists(h5loc, name)) {
             stop("Cannot write data.frame. Object already exists. Subsetting for compound datatype not supported.")
@@ -149,7 +149,7 @@ h5writeDataset.data.frame <- function(obj, h5loc, name, level=7, chunk, DataFram
     invisible(res)
 }
 
-h5writeDataset.list <- function(obj, h5loc, name, level=7) {
+h5writeDataset.list <- function(obj, h5loc, name, level=6) {
     exists <- try( { H5Lexists(h5loc, name) } )
     if (exists) {
         message("Existing object within HDF5 file cannot be overwritten with a list object. First delete the group or dataset from the HDF5 file.")
@@ -188,7 +188,7 @@ h5writeDataset.logical   <- function(...) { h5writeDataset.array(...) }
 h5writeDataset.character <- function(...) { h5writeDataset.array(...) }
 h5writeDataset.raw       <- function(...) { h5writeDataset.array(...) }
 
-h5writeDataset.array <- function(obj, h5loc, name, index = NULL, start=NULL, stride=NULL, block=NULL, count=NULL, size=NULL, level=7) {
+h5writeDataset.array <- function(obj, h5loc, name, index = NULL, start=NULL, stride=NULL, block=NULL, count=NULL, size=NULL, level=6) {
 
     exists <- try( { H5Lexists(h5loc, name) } )
     if (!exists) {
@@ -197,7 +197,7 @@ h5writeDataset.array <- function(obj, h5loc, name, index = NULL, start=NULL, str
             if (storage.mode(obj) == "character") {
                 if (length(obj) > 0) {
                     size <- max(nchar(obj), na.rm = TRUE)
-                    ## if any NA, the minimum string length is 3
+                    ## if any NA, the minimum string length is 2
                     if(any(is.na(obj)) && size < 2) { size <- 2 }
                 } else {
                     size <- 1
