@@ -255,8 +255,8 @@ static R_CallMethodDef libraryRCalls[] = {
   /* {"_H5Pget_mpio_no_collective_cause", (DL_FUNC) &_H5Pget_mpio_no_collective_cause, 3}, */
   /* {"_H5Pset_create_intermediate_group", (DL_FUNC) &_H5Pset_create_intermediate_group, 2}, */
   /* {"_H5Pget_create_intermediate_group", (DL_FUNC) &_H5Pget_create_intermediate_group, 2}, */
-  /* {"_H5Pset_obj_track_times", (DL_FUNC) &_H5Pset_obj_track_times, 2}, */
-  /* {"_H5Pget_obj_track_times", (DL_FUNC) &_H5Pget_obj_track_times, 2}, */
+  {"_H5Pset_obj_track_times", (DL_FUNC) &_H5Pset_obj_track_times, 2},
+  {"_H5Pget_obj_track_times", (DL_FUNC) &_H5Pget_obj_track_times, 1},
   /* {"_H5Pset_attr_phase_change", (DL_FUNC) &_H5Pset_attr_phase_change, 3}, */
   /* {"_H5Pget_attr_phase_change", (DL_FUNC) &_H5Pget_attr_phase_change, 3}, */
   /* {"_H5Pset_attr_creation_order", (DL_FUNC) &_H5Pset_attr_creation_order, 2}, */

@@ -1344,21 +1344,16 @@ H5Pset_chunk_cache <- function( h5plist, rdcc_nslots, rdcc_nbytes, rdcc_w0 ) {
 ##   invisible(res)
 ## }
 
-## H5Pset_obj_track_times <- function( ocpl_id, track_times ) {
-##   TODO: ocpl_id = as.TYPE(ocpl_id)
-##   TODO: track_times = as.TYPE(track_times)
-##   res <- .Call("_H5Pset_obj_track_times", ocpl_id, track_times, PACKAGE='rhdf5')
-##   SEXP Rval = R_NilValue;
-##   invisible(res)
-## }
+H5Pset_obj_track_times <- function( h5plist, track_times = TRUE ) {
 
-## H5Pget_obj_track_times <- function( ocpl_id, track_times ) {
-##   TODO: ocpl_id = as.TYPE(ocpl_id)
-##   TODO: track_times = as.TYPE(track_times)
-##   res <- .Call("_H5Pget_obj_track_times", ocpl_id, track_times, PACKAGE='rhdf5')
-##   SEXP Rval = R_NilValue;
-##   invisible(res)
-## }
+   res <- .Call("_H5Pset_obj_track_times", h5plist@ID, as.integer(track_times), PACKAGE='rhdf5')
+   invisible(res)
+}
+
+H5Pget_obj_track_times <- function( h5plist ) {
+   res <- .Call("_H5Pget_obj_track_times", h5plist@ID, PACKAGE='rhdf5')
+   return(res)
+}
 
 ## H5Pset_attr_phase_change <- function( ocpl_id, max_compact, min_dense ) {
 ##   TODO: ocpl_id = as.TYPE(ocpl_id)

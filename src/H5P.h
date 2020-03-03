@@ -208,8 +208,8 @@ SEXP _H5Pset_chunk_cache( SEXP _dapl_id, SEXP _rdcc_nslots, SEXP _rdcc_nbytes, S
 
 /* SEXP _H5Pset_create_intermediate_group( SEXP _lcpl_id, SEXP _crt_intermed_group ); */
 /* SEXP _H5Pget_create_intermediate_group( SEXP _lcpl_id, SEXP _crt_intermed_group ); */
-/* SEXP _H5Pset_obj_track_times( SEXP _ocpl_id, SEXP _track_times ); */
-/* SEXP _H5Pget_obj_track_times( SEXP _ocpl_id, SEXP _track_times ); */
+SEXP _H5Pset_obj_track_times( SEXP _ocpl_id, SEXP _track_times );
+SEXP _H5Pget_obj_track_times( SEXP _ocpl_id );
 /* SEXP _H5Pset_attr_phase_change( SEXP _ocpl_id, SEXP _max_compact, SEXP _min_dense ); */
 /* SEXP _H5Pget_attr_phase_change( SEXP _ocpl_id, SEXP _max_compact, SEXP _min_dense ); */
 /* SEXP _H5Pset_attr_creation_order( SEXP _ocpl_id, SEXP _crt_order_flags ); */
