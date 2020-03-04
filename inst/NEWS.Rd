@@ -6,12 +6,19 @@
     \itemize{
       \item Added support for writing and reading datasets using the R 'raw'
       datatype.
+      \item HDF5 functions H5Tset_strbuf and H5Tget_strbuf are now exposed.
     }
   }
-  \subsection{Minor changes}{
+  \subsection{CHANGES}{
     \itemize{
       \item R 'logical' values are now stored as 8-bit integers rather than
       32-bit integers.
+      (Response to suggestions in https://github.com/grimbough/rhdf5/pull/55)
+      \item Default compression level is 6 for all functions, rather than a
+      mix of 6 or 7 in different places.
+      \item Character vectors writen as HDF5 strings are now null padded by 
+      default, rather than null terminated. 
+      (Response to https://github.com/grimbough/rhdf5/pull/50)
     }
   }
   \subsection{BUG FIXES}{

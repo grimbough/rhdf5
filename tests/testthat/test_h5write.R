@@ -113,6 +113,7 @@ test_that("Changing chunk size works", {
     expect_true(file.size(h5f2) < file.size(h5f1))
 })
 
+## only run this test on 64bit OS with space to allocate more than 4GB RAM
 if(.Platform$r_arch != "i386") {
     counts_1 <- tryCatch(rep(0, 500000000),
 		error = function(e) NULL)
