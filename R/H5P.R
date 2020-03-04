@@ -1345,6 +1345,10 @@ H5Pset_chunk_cache <- function( h5plist, rdcc_nslots, rdcc_nbytes, rdcc_w0 ) {
 ## }
 
 H5Pset_obj_track_times <- function( h5plist, track_times = TRUE ) {
+  
+  if(!is.logical(track_times) | is.na(track_times)) {
+    stop("Argument 'track_times' must be either TRUE or FALSE")
+  }
 
    res <- .Call("_H5Pset_obj_track_times", h5plist@ID, as.integer(track_times), PACKAGE='rhdf5')
    invisible(res)
