@@ -56,8 +56,8 @@ test_that("Dataset creation properties can be set", {
     ## change to chunked
     expect_silent( H5Pset_layout(pid, layout = "H5D_CHUNKED") )
     ## check changes
-    expect_silent( layout_new <- H5Pget_layout(pid) )
-    expect_match( as.character(layout_new), "H5D_CHUNKED")
+    expect_silent( H5Pget_layout(pid) ) %>%
+    expect_match( "H5D_CHUNKED")
     
     ## seting chunk sizes
     expect_null( H5Pget_chunk( pid ) )
@@ -72,6 +72,24 @@ test_that("Dataset creation properties can be set", {
     expect_silent( H5Pset_fill_value( pid, "foo" ) )
     expect_silent( H5Pset_fill_value( pid, TRUE ) )
     expect_error( H5Pset_fill_value( pid, sum ))
+    
+    ## setting whether times are tracked
+    expect_silent(H5Pset_obj_track_times(pid, TRUE))
+    expect_true(H5Pget_obj_track_times(pid))
+    expect_silent(H5Pset_obj_track_times(pid, FALSE))
+    expect_false(H5Pget_obj_track_times(pid))
+                  
+    
+    expect_silent(H5Pclose(pid))
+})
+
+test_that("H5P error handling works", {
+    
+    expect_silent(pid <- H5Pcreate("H5P_DATASET_CREATE"))
+    
+    expect_error(H5Pset_obj_track_times(pid, track_times = "TEST"))
+    expect_error(H5Pset_obj_track_times(pid, track_times = 1L))
+    expect_error(H5Pset_obj_track_times(pid, track_times = NA))
     
     expect_silent(H5Pclose(pid))
 })

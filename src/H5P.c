@@ -804,7 +804,7 @@ SEXP _H5Pset_char_encoding( SEXP _plist_id, SEXP _encoding ) {
 
 /* herr_t H5Pget_char_encoding(hid_t plist_id, H5T_cset_t encoding) */
 SEXP _H5Pget_char_encoding( SEXP _plist_id ) {
-    //hid_t plist_id = INTEGER(_plist_id)[0];
+
     hid_t plist_id = STRSXP_2_HID( _plist_id );
     H5T_cset_t encoding;
     herr_t herr = H5Pget_char_encoding(plist_id, &encoding);
@@ -1307,7 +1307,7 @@ SEXP _H5Pget_filter( SEXP _plist_id, SEXP _idx ) {
 
 /* herr_t H5Pset_chunk_cache(hid_t dapl_id, size_t rdcc_nslots, size_t rdcc_nbytes, double rdcc_w0) */
 SEXP _H5Pset_chunk_cache( SEXP _dapl_id, SEXP _rdcc_nslots, SEXP _rdcc_nbytes, SEXP _rdcc_w0 ) {
-    //hid_t dapl_id = INTEGER(_dapl_id)[0];
+
     hid_t dapl_id = STRSXP_2_HID( _dapl_id );
     size_t rdcc_nslots = INTEGER(_rdcc_nslots)[0];
     size_t rdcc_nbytes = INTEGER(_rdcc_nbytes)[0];
@@ -1607,23 +1607,31 @@ SEXP _H5Pset_chunk_cache( SEXP _dapl_id, SEXP _rdcc_nslots, SEXP _rdcc_nbytes, S
 /*   return Rval; */
 /* } */
 
-/* /\* herr_t H5Pset_obj_track_times(hid_t ocpl_id, hbool_t track_times) *\/ */
-/* SEXP _H5Pset_obj_track_times( SEXP _ocpl_id, SEXP _track_times ) { */
-/*   hid_t ocpl_id = INTEGER(_ocpl_id)[0]; */
-/*   TODO: hbool_t track_times = _track_times */
-/*   herr_t herr = H5Pset_obj_track_times(hid_tocpl_id, hbool_ttrack_times); */
-/*   SEXP Rval = ScalarInteger(herr); */
-/*   return Rval; */
-/* } */
+/* herr_t H5Pset_obj_track_times(hid_t ocpl_id, hbool_t track_times) *\/ */
+SEXP _H5Pset_obj_track_times( SEXP _ocpl_id, SEXP _track_times ) {
+  hid_t ocpl_id = STRSXP_2_HID( _ocpl_id );
+  hbool_t track_times = INTEGER(_track_times)[0];
+  herr_t herr = H5Pset_obj_track_times(ocpl_id, track_times);
+  SEXP Rval = ScalarInteger(herr);
+  return Rval;
+}
 
-/* /\* herr_t H5Pget_obj_track_times(hid_t ocpl_id, hbool_t track_times) *\/ */
-/* SEXP _H5Pget_obj_track_times( SEXP _ocpl_id, SEXP _track_times ) { */
-/*   hid_t ocpl_id = INTEGER(_ocpl_id)[0]; */
-/*   TODO: hbool_t track_times = _track_times */
-/*   herr_t herr = H5Pget_obj_track_times(hid_tocpl_id, hbool_ttrack_times); */
-/*   SEXP Rval = ScalarInteger(herr); */
-/*   return Rval; */
-/* } */
+/* herr_t H5Pget_obj_track_times(hid_t ocpl_id, hbool_t track_times) */
+SEXP _H5Pget_obj_track_times( SEXP _ocpl_id ) { 
+    
+    hid_t ocpl_id = STRSXP_2_HID( _ocpl_id );
+    hbool_t track_times;
+    SEXP Rval;
+    
+    herr_t herr = H5Pget_obj_track_times(ocpl_id, &track_times);
+    
+    if (herr < 0) {
+        Rval = R_NilValue;
+    } else {
+        Rval = ScalarLogical(track_times);
+    }
+    return Rval;
+} 
 
 /* /\* herr_t H5Pset_attr_phase_change(hid_t ocpl_id, unsigned max_compact, unsigned min_dense) *\/ */
 /* SEXP _H5Pset_attr_phase_change( SEXP _ocpl_id, SEXP _max_compact, SEXP _min_dense ) { */
@@ -1912,8 +1920,6 @@ SEXP _H5Pset_chunk_cache( SEXP _dapl_id, SEXP _rdcc_nslots, SEXP _rdcc_nbytes, S
 
 /* htri_t H5Pequal(hid_t id1, hid_t id2) */
 SEXP _H5Pequal( SEXP _id1, SEXP _id2 ) {
-    //hid_t id1 = INTEGER(_id1)[0];
-    //hid_t id2 = INTEGER(_id2)[0];
     hid_t id1 = STRSXP_2_HID( _id1 );
     hid_t id2 = STRSXP_2_HID( _id2 );
     htri_t htri = H5Pequal(id1, id2);
@@ -1962,7 +1968,6 @@ SEXP _H5Pequal( SEXP _id1, SEXP _id2 ) {
 
 /* herr_t H5Pclose_class( hid_t class ) */
 SEXP _H5Pclose_class( SEXP _class ) {
-    //hid_t class =  INTEGER(_class)[0];
     hid_t class = STRSXP_2_HID( _class );
     herr_t herr = H5Pclose_class( class );
     if (herr == 0) {

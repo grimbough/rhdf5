@@ -102,6 +102,10 @@ h5createGroup <- function(file, group) {
   if(!missing(fillValue)) {
     H5Pset_fill_value(dcpl, fillValue)
   }
+  
+  ## turn off time stamp
+  H5Pset_obj_track_times(dcpl, FALSE)
+  
   return(dcpl)
 }
 
@@ -151,7 +155,7 @@ h5createDataset <- function(file, dataset, dims, maxdims = dims,
         ## determine data type
         tid <- .setDataType(H5type, storage.mode, size)
         
-        ## create dataset property list
+        ## dataset creation property list
         dcpl <- .createDCPL(chunk, dims, level, fillValue, dtype = tid)
         on.exit(H5Pclose(dcpl), add = TRUE)
         
