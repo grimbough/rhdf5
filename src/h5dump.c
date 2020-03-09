@@ -18,7 +18,7 @@ typedef struct opLinfoTreeElement {
     int rank;
     char *dim;
     char *maxdim;
-    H5L_info_t info;
+    H5L_info1_t info;
     H5I_type_t type;
     hsize_t num_attrs;
     // H5O_info_t object_info;
@@ -39,7 +39,7 @@ typedef struct {
     int insertAsChild;
 } opLinfoTree;
 
-herr_t opAddToLinfoTree( hid_t g_id, const char *name, const H5L_info_t *info, void *op_data) {
+herr_t opAddToLinfoTree( hid_t g_id, const char *name, const H5L_info1_t *info, void *op_data) {
     opLinfoTree *data = op_data;
     
     herr_t herr = 0;
@@ -176,7 +176,7 @@ herr_t opAddToLinfoTree( hid_t g_id, const char *name, const H5L_info_t *info, v
                 data->insertAsChild = 1;
                 opLinfoTreeElement *last = data->last;
                 data->depth = data->depth + 1;
-                herr = H5Literate( oid, data->index_type, data->order, &idx, &opAddToLinfoTree, op_data );
+                herr = H5Literate1( oid, data->index_type, data->order, &idx, &opAddToLinfoTree, op_data );
                 data->depth = data->depth - 1;
                 data->insertAsChild = 0;
                 data->last = last;
@@ -298,7 +298,7 @@ SEXP _h5dump( SEXP _loc_id, SEXP _depth, SEXP _index_type, SEXP _order ) {
     data.order = INTEGER(_order)[0];
     hsize_t idx=0;
     /* printf("Start visit.\n"); */
-    herr_t herr = H5Literate( loc_id, data.index_type, data.order, &idx, &opAddToLinfoTree, &data );
+    herr_t herr = H5Literate1( loc_id, data.index_type, data.order, &idx, &opAddToLinfoTree, &data );
     
     SEXP Rval;
     Rval = getTree(data.first, &data, loc_id, 0);

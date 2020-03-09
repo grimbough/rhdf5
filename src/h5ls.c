@@ -10,7 +10,7 @@ typedef struct opLinfoListElement {
     int rank;
     char *dim;
     char *maxdim;
-    H5L_info_t info;
+    H5L_info1_t info;
     H5I_type_t type;
     hsize_t num_attrs;
     struct opLinfoListElement *next;
@@ -29,7 +29,7 @@ typedef struct {
     opLinfoListElement *last;
 } opLinfoList;
 
-herr_t opAddToLinfoList( hid_t g_id, const char *name, const H5L_info_t *info, void *op_data ) {
+herr_t opAddToLinfoList( hid_t g_id, const char *name, const H5L_info1_t *info, void *op_data ) {
     opLinfoList *data = op_data;
     
     herr_t herr = 0;
@@ -163,7 +163,7 @@ herr_t opAddToLinfoList( hid_t g_id, const char *name, const H5L_info_t *info, v
                 }
                 strcat(data->group, name);
                 data->depth = data->depth + 1;
-                herr = H5Literate( oid, data->index_type, data->order, &idx, &opAddToLinfoList, op_data );
+                herr = H5Literate1( oid, data->index_type, data->order, &idx, &opAddToLinfoList, op_data );
                 data->depth = data->depth - 1;
                 data->group = group;
             }
@@ -192,7 +192,7 @@ SEXP _h5ls( SEXP _loc_id, SEXP _depth, SEXP _datasetinfo, SEXP _index_type, SEXP
     data.order = INTEGER(_order)[0];
     hsize_t idx=0;
     
-    herr_t herr = H5Literate( loc_id, data.index_type, data.order, &idx, &opAddToLinfoList, &data );
+    herr_t herr = H5Literate1( loc_id, data.index_type, data.order, &idx, &opAddToLinfoList, &data );
     
     SEXP Rval;
     

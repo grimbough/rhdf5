@@ -2,7 +2,7 @@ on:
   push:
     branches:
       - master
-      - string-padding
+      - 1-12-0
   pull_request:
     branches:
       - master
@@ -59,8 +59,3 @@ jobs:
         with:
           name: ${{ runner.os }}-r${{ matrix.config.r }}-results
           path: check
-          
-#      - name: Test coverage
-#        if: matrix.config.os == 'macOS-latest' && matrix.config.r == 'release'
-#        run: Rscript -e 'install.packages("covr")' -e 'covr::codecov(type = "all", token = "${{secrets.CODECOV_TOKEN}}")'
-
