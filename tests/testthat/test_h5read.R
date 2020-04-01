@@ -309,10 +309,14 @@ context("Using filters other than ZLIB")
 ###########################################################
 
 test_that("Reading SZIP", {
+  
+  ## SIZP not included in R-winlib binary.  This should be fixed!
+  if( Sys.info()[['sysname']] != "Windows" ) {
     szip_file <- system.file("testfiles", "h5ex_d_szip.h5", package = "rhdf5")
     expect_silent(h5read(szip_file, "DS1")) %>%
         expect_is("matrix") %>% 
         dim() %>% expect_equal(c(64,32))
+  }
 })
 
 test_that("Failing to read BLOSC", {
