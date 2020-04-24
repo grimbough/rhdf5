@@ -1,12 +1,12 @@
 Package: rhdf5
 Type: Package
 Title: R Interface to HDF5
-Version: 2.31.10
+Version: 2.31.11
 Authors@R: c(person("Bernd", "Fischer", role = c("aut")), 
         person("Mike", "Smith", 
             role=c("aut", "cre"), 
             email = "mike.smith@embl.de",
-            comment = c(ORCID = "0000-0002-7800-384")
+            comment = c(ORCID = "0000-0002-7800-3848")
         ),
         person("Gregoire", "Pau", role="aut"),
         person("Martin", "Morgan", role = "ctb"),
