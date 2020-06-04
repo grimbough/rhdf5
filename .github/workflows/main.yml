@@ -47,7 +47,7 @@ jobs:
       - name: Install dependencies
         run: |
           Rscript -e "install.packages(c('BiocManager', 'remotes'))"
-          Rscript -e "BiocManager::install(c('rcmdcheck', 'rmarkdown', 'knitr', 'testthat', 'BiocStyle', 'bit64', 'microbenchmark', 'dplyr', 'ggplot2'))""
+          Rscript -e "BiocManager::install(c('rcmdcheck', 'rmarkdown', 'knitr', 'testthat', 'BiocStyle', 'bit64', 'microbenchmark', 'dplyr', 'ggplot2'))"
 
       - name: Check
         run: Rscript -e "rcmdcheck::rcmdcheck(args = '--no-manual', error_on = 'warning', check_dir = 'check')"
