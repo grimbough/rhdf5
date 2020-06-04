@@ -26,6 +26,8 @@
 \alias{H5Pset_scaleoffset}
 \alias{H5Pset_shuffle}
 \alias{H5Pset_szip}
+\alias{H5Pset_bzip2}
+\alias{H5Pset_blosc}
 \alias{H5Pset_external}
 \alias{H5Pget_external_count}
 \alias{H5Pget_external}
@@ -56,8 +58,8 @@ H5Pall_filters_avail               ( h5plist )
 % H5Pset_fletcher32                  ( plist_id )
 % H5Pset_nbit                        ( plist_id )
 % H5Pset_scaleoffset                 ( plist_id, scale_type, scale_factor )
-H5Pset_shuffle                     ( plist_id )
-H5Pset_szip                        ( plist, options_mask, pixels_per_block )
+H5Pset_shuffle                     ( h5plist )
+H5Pset_szip                        ( h5plist, options_mask, pixels_per_block )
 % H5Pset_external                    ( plist, *name, offset, size )
 % H5Pget_external_count              ( plist )
 % H5Pget_external                    ( plist, idx, name_size, *name, *offset, *size )
@@ -75,6 +77,8 @@ H5Pset_bzip2                       ( h5plist, level = 2L )
   \item{h5tid}{HDF5 type ID.}
   \item{method}{When using the BLOSC filter, defines which compression tool should be used.}
   \item{shuffle}{Logical value determining whether byte shuffling should be applied before compression is applied. This only applies to the BLOSC filter.}
+  \item{options_mask}{See \url{https://portal.hdfgroup.org/display/HDF5/H5P_SET_SZIP} for more details.}
+  \item{pixels_per_block}{See \url{https://portal.hdfgroup.org/display/HDF5/H5P_SET_SZIP} for more details.}
 }
 \details{
 Interface to the HDF5 C-library libhdf5. See \url{https://portal.hdfgroup.org/display/HDF5/Dataset+Creation+Properties} for further details. See \link{H5P} for documentation of more functions to manupulate property lists of other property list classes. 
@@ -82,8 +86,11 @@ Interface to the HDF5 C-library libhdf5. See \url{https://portal.hdfgroup.org/di
 \value{
 The functions return the standard return value from their respective C-functions.
 }
-\references{\url{https://portal.hdfgroup.org/display/HDF5}}
-\author{Bernd Fischer}
+\references{
+  \url{https://portal.hdfgroup.org/display/HDF5},
+  \url{https://portal.hdfgroup.org/display/HDF5/Szip+Compression+in+HDF+Products}
+}
+\author{Bernd Fischer, Mike L. Smith}
 \seealso{
 \link{rhdf5}, \link{H5P}
 }

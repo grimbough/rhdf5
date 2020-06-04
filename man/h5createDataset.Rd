@@ -8,8 +8,9 @@
 h5createDataset (file, dataset, 
 		dims, maxdims = dims, 
 		storage.mode = "double", H5type = NULL, 
-		size = NULL, chunk = dims, level = 6,
-		fillValue, showWarnings, native = FALSE)
+		size = NULL, chunk = dims, fillValue, 
+		level = 6, filter = "gzip", shuffle = TRUE,
+        native = FALSE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -25,18 +26,68 @@ h5createDataset (file, dataset,
   the string as fixed length character vectors. Together with compression, this
   should be efficient.}
   \item{chunk}{The chunk size used to store the dataset. It is an integer vector of the same length as \code{dims}. This argument is usually set together with a compression property (argument \code{level}). }
-  \item{level}{The compression level used. An integer value between 0 (no compression) and 9 (highest and slowest compression).}
   \item{fillValue}{Standard value for filling the dataset. The storage.mode of value has to be convertable to the dataset type by HDF5.}
-  \item{showWarnings}{Deprecated. Use \code{\link{suppressMessages}} and 
-       \code{\link{suppressWarnings}} to limit messages printed to screen.}
+  \item{level}{The compression level used. An integer value between 0 (no compression) and 9 (highest and slowest compression).}
+  \item{filter}{Character defining which compression filter should be applied 
+  to the chunks of the dataset.  See the Details section for more information
+  on the options that can be provided here.}
+  \item{shuffle}{Logical defining whether the byte-shuffle algorithm should be 
+  applied to data prior to compression.}
   \item{native}{An object of class \code{logical}. If TRUE, array-like objects are treated as stored in HDF5 row-major rather than R column-major orientation. Using \code{native = TRUE} increases HDF5 file portability between programming languages. A file written with \code{native = TRUE} should also be read with \code{native = TRUE}}.
 }
 \details{
-Creates a new dataset. in an existing HDF5 file. The function will fail, if the file doesn't exist or if there exists already another dataset with the same name within the specified file.
+Creates a new dataset in an existing HDF5 file. The function will fail if the 
+file doesn't exist or if there exists already another dataset with the same 
+name within the specified file.
+
+The \code{filter} argument can take several options matching to compression
+filters distributed in either with the HDF5 library in \pkg{Rhdf5lib} or via the 
+\pkg{rhdf5filters} package.  The plugins available and the corresponding values 
+for selecting them are shown below:
+
+\describe{
+\item{zlib:  Ubiquitous deflate compression algrithm used in GZIP or ZIP files.  
+    All three options below achieve the same result.}{
+    \itemize{
+        \item{\code{"GZIP"}}, 
+        \item{\code{"ZLIB"}}, 
+        \item{\code{"DEFLATE"}}
+    }
 }
+\item{szip: Compression algorithm maintained by the HDF5 group.}{
+    \itemize{
+        \item{\code{"SZIP"}}
+    }
+}
+\item{bzip2}{
+    \itemize{
+        \item{\code{"BZIP2"}}
+    }
+}
+\item{BLOSC meta compressor: As a meta-compressor BLOSC wraps several different
+    compression algorithms.  Each of the options below will active a different 
+    compression filter. }{
+    \itemize{
+        \item{\code{"BLOSC_BLOSCLZ"}}
+        \item{\code{"BLOSC_LZ4"}}
+        \item{\code{"BLOSC_LZ4HC"}}
+        \item{\code{"BLOSC_SNAPPY"}}
+        \item{\code{"BLOSC_ZLIB"}}
+        \item{\code{"BLOSC_ZSTD"}}
+    }
+}
+\item{Disable: It is possible to write chunks without and compression 
+    applied.}{
+    \itemize{
+        \item{\code{"NONE"}}
+    }
+}
+}
+}
+
 \value{Returns TRUE is dataset was created successfully and FALSE otherwise.}
 \references{\url{https://portal.hdfgroup.org/display/HDF5}}
-\author{Bernd Fischer}
+\author{Bernd Fischer, Mike L. Smith}
 \seealso{
 \code{\link{h5createFile}}, \code{\link{h5createGroup}}, \code{\link{h5read}}, \code{\link{h5write}}, \link{rhdf5}
 }
