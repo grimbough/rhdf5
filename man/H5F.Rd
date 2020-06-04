@@ -17,7 +17,8 @@ These functions are designed to provide file-level access to HDF5 files.
 \usage{
 H5Fcreate           (name, flags = h5default("H5F_ACC"), fcpl = NULL,
                      fapl = NULL, native = FALSE)
-H5Fopen             (name, flags = h5default("H5F_ACC_RD"), native = FALSE)
+H5Fopen             (name, flags = h5default("H5F_ACC_RD"), fapl = NULL, 
+                     native = FALSE)
 H5Fclose            (h5file)
 H5Fflush            (h5file, scope = h5default("H5F_SCOPE"))
 H5Fis_hdf5          (name, showWarnings = TRUE)

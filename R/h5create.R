@@ -103,8 +103,8 @@ h5createGroup <- function(file, group) {
                       "BZIP2",
                       "BLOSC_BLOSCLZ", "BLOSC_LZ4", "BLOSC_LZ4HC", "BLOSC_SNAPPY", "BLOSC_ZLIB", "BLOSC_ZSTD",
                       "NONE")) {
-      warning("Filter not found, using default: DEFLATE")
-      filter <- "DEFLATE"
+      warning("Filter not found, using default: ZLIB")
+      filter <- "ZLIB"
     }
     
     ## only use this shuffle if not using blosc filter
@@ -118,10 +118,10 @@ h5createGroup <- function(file, group) {
     } else if(filter == "SZIP") {
       H5Pset_szip(dcpl, 1L, 32L)
     } else if(filter == "BZIP2") {
-      hdf5Filters::H5Pset_bzip2( dcpl, level = level )
-    }else if (grepl(pattern = "BLOSC", x = filter)) {
+      H5Pset_bzip2( dcpl, level = level )
+    } else if (grepl(pattern = "BLOSC", x = filter)) {
       method <- which(c("BLOSC_BLOSCLZ", "BLOSC_LZ4", "BLOSC_LZ4HC", "BLOSC_SNAPPY", "BLOSC_ZLIB", "BLOSC_ZSTD") == filter)
-      hdf5Filters::H5Pset_blosc(dcpl, method = method, h5tid = dtype, level = level, shuffle = shuffle )
+      H5Pset_blosc(dcpl, method = method, h5tid = dtype, level = level, shuffle = shuffle )
     }
     
   }

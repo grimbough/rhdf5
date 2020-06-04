@@ -1,6 +1,7 @@
 useDynLib(rhdf5)
 
 import(Rhdf5lib)
+import(rhdf5filters)
 import(methods)
 importFrom(utils, packageVersion)
 importFrom(utils, file_test)

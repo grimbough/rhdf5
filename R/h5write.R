@@ -190,7 +190,7 @@ h5writeDataset.raw       <- function(...) { h5writeDataset.array(...) }
 
 h5writeDataset.array <- function(obj, h5loc, name, index = NULL, 
                                  start=NULL, stride=NULL, block=NULL, count=NULL, 
-                                 size=NULL, level=7) {
+                                 size=NULL, level=6) {
 
     exists <- try( { H5Lexists(h5loc, name) } )
     if (!exists) {
