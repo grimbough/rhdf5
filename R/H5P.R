@@ -418,6 +418,21 @@ H5Pclose <- function( h5plist ) {
 ##   invisible(res)
 ## }
 
+H5Pset_fapl_ros3 <- function( h5plist, authenticate = FALSE, aws_region = NULL, 
+                              access_key_id = NULL, secret_access_key = NULL ) {
+    ## this should really check it's a fapl, not just a plist.
+    h5checktype(h5plist, "plist")
+  
+    if( is.null(access_key_id) | is.null(secret_access_key) ) {
+      authenticate = FALSE
+    }
+  
+    res <- .Call('_H5Pset_fapl_ros3', h5plist@ID, authenticate, 
+                 aws_region, access_key_id, secret_access_key, 
+                 PACKAGE = "rhdf5")
+    invisible(res)
+}
+
 ## H5Pset_fapl_stdio <- function( fapl_id ) {
 ##   # TODO: check type fapl
 ##   res <- .Call("_H5Pset_fapl_stdio", fapl_id, PACKAGE='rhdf5')

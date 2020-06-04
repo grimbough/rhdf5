@@ -682,14 +682,12 @@ SEXP _H5Pset_libver_bounds( SEXP _fapl_id, SEXP _libver_low, SEXP _libver_high )
     H5F_libver_t libver_low = INTEGER(_libver_low)[0];
     H5F_libver_t libver_high = INTEGER(_libver_high)[0];
     herr_t herr = H5Pset_libver_bounds(fapl_id, libver_low, libver_high);
-    //herr_t herr = H5Pset_libver_bounds(fapl_id, H5F_LIBVER_EARLIEST, H5F_LIBVER_LATEST);
     SEXP Rval = ScalarInteger(herr);
     return Rval;
 }
 
 /* /\* herr_t H5Pget_libver_bounds(hid_t fapl_id, H5F_libver_t * libver_low, H5F_libver_t * libver_high) *\/ */
 SEXP _H5Pget_libver_bounds( SEXP _fapl_id ) {
-   // hid_t fapl_id = INTEGER(_fapl_id)[0];
     hid_t fapl_id = STRSXP_2_HID( _fapl_id );
     H5F_libver_t libver_low;
     H5F_libver_t libver_high;
@@ -705,6 +703,31 @@ SEXP _H5Pget_libver_bounds( SEXP _fapl_id ) {
     UNPROTECT(1);
     return Rval;
 }
+
+/* herr_t H5Pset_fapl_ros3(hid_t fapl_id, H5FD_ros3_fapl_t *fa) */
+/* We pass the components of the H5FD_ros3_fapl_t separately */
+SEXP _H5Pset_fapl_ros3( SEXP _fapl_id, SEXP _authenticate, SEXP _aws_region, SEXP _access_key_id, SEXP _secret_access_key ) {
+    
+    hid_t fapl_id = STRSXP_2_HID( _fapl_id );
+    
+    // initialise in an non-authenticating fapl configuration 
+    H5FD_ros3_fapl_t fa = { 1, 0, "", "", "" };
+    int should_authenticate = INTEGER(_authenticate)[0];
+    const char *the_region = CHAR(STRING_ELT(_aws_region, 0));
+    const char *the_access_key_id = CHAR(STRING_ELT(_access_key_id, 0));
+    const char *the_secret_access_key = CHAR(STRING_ELT(_secret_access_key, 0));
+    
+    fa.authenticate = should_authenticate; /* 0 (FALSE) or 1 (TRUE) */
+    strncpy(fa.aws_region, the_region, H5FD_ROS3_MAX_REGION_LEN);
+    strncpy(fa.secret_id, the_access_key_id, H5FD_ROS3_MAX_SECRET_ID_LEN);
+    strncpy(fa.secret_key, the_secret_access_key, H5FD_ROS3_MAX_SECRET_KEY_LEN);
+    
+    herr_t herr = H5Pset_fapl_ros3(fapl_id, &fa);
+    SEXP Rval = ScalarInteger(herr);
+    return Rval;
+}
+
+
 
 
 ////////////////////////////////////////////////////

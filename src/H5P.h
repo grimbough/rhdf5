@@ -92,6 +92,7 @@ SEXP _H5Pclose( SEXP _plist );
 /* SEXP _H5Pget_small_data_block_size( SEXP _fapl_id, SEXP _size ); */
 SEXP _H5Pset_libver_bounds( SEXP _fapl_id, SEXP _libver_low, SEXP _libver_high );
 SEXP _H5Pget_libver_bounds( SEXP _fapl_id );
+SEXP _H5Pset_fapl_ros3( SEXP _fapl_id, SEXP _authenticate, SEXP _aws_region, SEXP _access_key_id, SEXP _secret_acces_key );
 
 ////////////////////////////////////////////////////
 // Group Creation Properties

@@ -23,7 +23,8 @@ h5lsConvertToDataframe <- function(L, all=FALSE, native) {
   L
 }
 
-h5ls <- function( file, recursive = TRUE, all=FALSE, datasetinfo=TRUE, index_type = h5default("H5_INDEX"), order = h5default("H5_ITER"), native = FALSE) {
+h5ls <- function( file, recursive = TRUE, all=FALSE, datasetinfo=TRUE, 
+                  index_type = h5default("H5_INDEX"), order = h5default("H5_ITER"), native = FALSE) {
     
     loc = h5checktypeOrOpenLoc(file, readonly=TRUE, native = native)
     on.exit(h5closeitLoc(loc))

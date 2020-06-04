@@ -22,10 +22,12 @@ SEXP _H5Fcreate( SEXP _name, SEXP _flags, SEXP _fcpl_id, SEXP _fapl_id ) {
 
 /* hid_t H5Fopen( const char *name, unsigned flags, hid_t fapl_id ) */
 /* TODO more parameters: , unsigned flags, hid_t fapl_id */
-SEXP _H5Fopen( SEXP _name, SEXP _flags ) {
+SEXP _H5Fopen( SEXP _name, SEXP _flags, SEXP _fapl_id ) {
   const char *name = CHAR(STRING_ELT(_name, 0));
   unsigned flags = INTEGER(_flags)[0];
-  hid_t hid = H5Fopen( name, flags, H5P_DEFAULT );
+  hid_t fapl_id = STRSXP_2_HID( _fapl_id );
+  
+  hid_t hid = H5Fopen( name, flags, fapl_id );
   addHandle(hid);
 
   SEXP Rval;

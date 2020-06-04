@@ -29,11 +29,23 @@ H5Fcreate <- function( name, flags = h5default("H5F_ACC"), fcpl = NULL, fapl = N
     invisible(h5file)
 }
 
-H5Fopen <- function( name, flags = h5default("H5F_ACC_RD"), native = FALSE ) {
-  if (length(name)!=1 || !is.character(name)) stop("'name' must be a character string of length 1")
-  name = normalizePath(name,mustWork = FALSE)
+H5Fopen <- function( name, flags = h5default("H5F_ACC_RD"), fapl = NULL, native = FALSE ) {
+  
+  if (length(name)!=1 || !is.character(name)) {
+    stop("'name' must be a character string of length 1")
+  }
+  name <- normalizePath(name, mustWork = FALSE)
   flags <- h5checkConstants( "H5F_ACC_RD", flags )
-  fid <- .Call("_H5Fopen", name, flags, PACKAGE='rhdf5')
+  
+  if (is.null(fapl)) {
+    ## create a new file access property list
+    fapl <- H5Pcreate("H5P_FILE_ACCESS")
+    on.exit(H5Pclose(fapl))
+  } else {
+    fapl <- h5checktypeAndPLC(fapl, "H5P_FILE_ACCESS", allowNULL = FALSE)
+  }
+  
+  fid <- .Call("_H5Fopen", name, flags, fapl@ID, PACKAGE='rhdf5')
   if (fid > 0) {
     h5file = new("H5IdComponent", ID = fid, native = native)
   } else {
