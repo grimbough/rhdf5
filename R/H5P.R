@@ -418,16 +418,22 @@ H5Pclose <- function( h5plist ) {
 ##   invisible(res)
 ## }
 
-H5Pset_fapl_ros3 <- function( h5plist, authenticate = FALSE, aws_region = NULL, 
-                              access_key_id = NULL, secret_access_key = NULL ) {
+H5Pset_fapl_ros3 <- function( h5plist, s3credentials = NULL ) {
     ## this should really check it's a fapl, not just a plist.
     h5checktype(h5plist, "plist")
   
-    if( is.null(access_key_id) | is.null(secret_access_key) ) {
-      authenticate = FALSE
+    ## only do authentication if s3credentials are provided
+    if(!is.null(s3credentials)) {
+      auth <- TRUE
+      aws_region <- s3credentials[[1]]
+      access_key_id <- s3credentials[[2]]
+      secret_access_key <- s3credentials[[3]]
+    } else {
+      auth <- FALSE
+      aws_region <- access_key_id <- secret_access_key <- ""
     }
   
-    res <- .Call('_H5Pset_fapl_ros3', h5plist@ID, authenticate, 
+    res <- .Call('_H5Pset_fapl_ros3', h5plist@ID, auth, 
                  aws_region, access_key_id, secret_access_key, 
                  PACKAGE = "rhdf5")
     invisible(res)
