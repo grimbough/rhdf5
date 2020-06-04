@@ -60,8 +60,7 @@ h5createGroup("myhdf5file.h5","foo/foobaa")
 h5ls("myhdf5file.h5")
 ```
 
-\subsection{Writing and reading objects}
-\label{sec_writeMatrix}
+## Writing and reading objects
 
 Objects can be written to the HDF5 file. Attributes attached to an
 object are written as well, if `write.attributes=TRUE` is
@@ -95,8 +94,7 @@ the object `obj`, the data in the file is overwritten. If the
 dataset already exists and either the datatype or the dimensions are
 different, `h5write()` fails.
 
-\subsection{Writing and reading objects with file, group and dataset handles}
-\label{sec_writeMatrixHandle}
+## Writing and reading objects with file, group and dataset handles
 
 File, group and dataset handles are a simpler way to read (and partially to write) HDF5 files.
 A file is opened by `H5Fopen`.
@@ -181,6 +179,7 @@ After the creation of the dataset, the data can be written
 sequentially to the HDF5 file. Subsetting in **R**-style needs the
 specification of the argument index to `h5read()` and
 `h5write()`.
+
 ```{r writeMatrixSubsetting}
 h5createDataset("myhdf5file.h5", "foo/S", c(5,8),
                 storage.mode = "integer", chunk=c(5,1), level=7)
@@ -208,6 +207,7 @@ The HDF5 hyperslabs are defined by some of the arguments
 `start`, `stride`, `count`, and
 `block`. These arguments are not effective, if the argument
 `index` is specified.
+
 ```{r writeMatrixHyperslab}
 h5createDataset("myhdf5file.h5", "foo/H", c(5,8), storage.mode = "integer",
                 chunk=c(5,1), level=7)
@@ -234,7 +234,7 @@ h5read("myhdf5file.h5", "foo/H",
        start=c(2,1), stride=c(1,3),count=c(2,2), block=c(1,2))
 ```
 
-\subsection{Saving multiple objects to an HDF5 file (h5save)}
+## Saving multiple objects to an HDF5 file (h5save)
 
 A number of objects can be written to the top level group of an HDF5
 file with the function `h5save()` (as analogous to the base
@@ -245,7 +245,7 @@ h5save(A, B, D, file="newfile2.h5")
 h5dump("newfile2.h5")
 ```
 
-##List the content of an HDF5 file
+## List the content of an HDF5 file
 
 The function `h5ls()` provides some ways of viewing the content of an HDF5 file.
 
@@ -255,7 +255,8 @@ h5ls("myhdf5file.h5", all=TRUE)
 h5ls("myhdf5file.h5", recursive=2)
 ```
 
-##Dump the content of an HDF5 file
+## Dump the content of an HDF5 file
+
 The function `h5dump()` is similar to the function `h5ls()`. If
 used with the argument `load=FALSE`, it produces the same result
 as `h5ls()`, but with the group structure resolved as a hierarchy
@@ -267,21 +268,24 @@ h5dump("myhdf5file.h5",load=FALSE)
 D <- h5dump("myhdf5file.h5")
 ```
 
-##Reading HDF5 files with external software
+## Reading HDF5 files with external software
+
 The content of the HDF5 file can be checked with the command line tool
 **h5dump** (available on linux-like systems with the HDF5 tools
 package installed) or with the graphical user interface **HDFView**
 (http://www.hdfgroup.org/hdf-java-html/hdfview/) available for all
 major platforms.
+
 ```{r h5dump2, eval=FALSE}
 system2("h5dump", "myhdf5file.h5")
 ```
-\warning{Please note, that arrays appear as transposed matrices when opening it
-with a C-program (\software{h5dump} or \software{HDFView}). This is due to the fact the
-fastest changing dimension on C is the last one, but on \R~ it is the
-first one (as in Fortran).}
+*Please note, that arrays appear as transposed matrices when opening it
+with a C-program (**h5dump** or **HDFView**). This is due to the fact the
+fastest changing dimension on C is the last one, but on R it is the
+first one (as in Fortran).*
 
-##Removing content from an HDF5 file
+## Removing content from an HDF5 file
+
 As well as adding content to an HDF5 file, it is possible to remove entries using the function `h5delete()`.  To demonstrate it's use, we'll first list the contents of a file and examine the size of the file in bytes.
 
 ```{r h5delete1}
@@ -306,7 +310,7 @@ file.size("myhdf5file.h5")
 
 *N.B. `h5delete()` does not explicitly traverse the tree to remove child nodes.  It only removes the named entry, and HDF5 will then remove child nodes if they are now orphaned.  Hence it won't delete child nodes if you have a more complex structure where a child node has multiple parents and only one of these is removed.*
 
-#64-bit integers
+# 64-bit integers
 
 **R** does not support a native datatype for 64-bit integers. All integers in **R** are
 32-bit integers. When reading 64-bit integers from a HDF5-file, you
@@ -493,8 +497,8 @@ files cannot be displayed in R. Note that this can happen for both
 an HDF5 file, it is recommended to use signed 32-bit integers.
 -->
 
-#Low level HDF5 functions
-##Creating an HDF5 file and a group hierarchy
+# Low level HDF5 functions
+## Creating an HDF5 file and a group hierarchy
 
 Create a file.
 ```{r createfile,quiet=FALSE}
@@ -511,7 +515,7 @@ h5group3 <- H5Gcreate(h5group1, "foobaa")
 h5group3
 ```
 
-##Writing data to an HDF5 file
+## Writing data to an HDF5 file
 
 Create 4 different simple and scalar data spaces. The data space sets the dimensions for the datasets.
 
@@ -568,7 +572,8 @@ H5Fclose(h5file)
 % Please note, that arrays appear as transposed matrices when opening it with a C-program (h5dump). This is due to the fact the fastest changing dimension on C is the last one, but on \R~ it is the first one (as in Fortran).
 -->
 
-#Session Info
+# Session Info
+
 ```{r sessioninfo}
 sessionInfo()
 ```
