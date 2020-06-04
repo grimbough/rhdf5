@@ -6,9 +6,9 @@ AC_INIT([rhdf5], [2.41], [grimbough@gmail.com])
 AC_CONFIG_SRCDIR([src])
 
 # determine if the filters package is installed
-FILTERS=`echo 'cat(if("hdf5Filters" %in% installed.packages()[[,"Package"]]) "_H5P_filters" else "undef")'|\
+FILTERS=`echo 'cat(if("rhdf5Filters" %in% installed.packages()[[,"Package"]]) "_H5P_filters" else "undef")'|\
     "${R_HOME}/bin/R" --vanilla --slave`
 
 AC_SUBST(FILTERS)
-AC_CONFIG_FILES([src/external_filters.h src/Makevars])
+AC_CONFIG_FILES([src/external_filters.h])
 AC_OUTPUT
