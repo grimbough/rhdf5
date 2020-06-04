@@ -38,9 +38,9 @@ h5write.default             (obj, file, name,
                              write.attributes = FALSE, ...,
                              native = FALSE)
 h5writeDataset              (obj, h5loc, name, ...)
-h5writeDataset.data.frame   (obj, h5loc, name, level=7, chunk,
+h5writeDataset.data.frame   (obj, h5loc, name, level=6, chunk,
                              DataFrameAsCompound = TRUE)
-h5writeDataset.list         (obj, h5loc, name, level=7)
+h5writeDataset.list         (obj, h5loc, name, level=6)
 h5writeDataset.matrix       (...)
 h5writeDataset.integer      (...)
 h5writeDataset.double       (...)
@@ -48,7 +48,7 @@ h5writeDataset.logical      (...)
 h5writeDataset.character    (...)
 h5writeDataset.array        (obj, h5loc, name, index = NULL,
                              start=NULL, stride=NULL, block=NULL, count=NULL,
-                             size=NULL, level=7)
+                             size=NULL, level=6)
 h5writeAttribute            (attr, h5obj, name, ...)
 h5writeAttribute.matrix     (...)
 h5writeAttribute.integer    (...)

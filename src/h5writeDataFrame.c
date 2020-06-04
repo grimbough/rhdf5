@@ -21,7 +21,6 @@ SEXP _h5createDataFrame(SEXP _obj, SEXP _loc_id, SEXP _name, SEXP _level, SEXP _
                 s2 = LENGTH(STRING_ELT(VECTOR_ELT(_obj,i),j));
                 if (s2 > strsize[i]) { strsize[i] = s2; }
             }
-            strsize[i] = strsize[i] + 1;
             size = size + strsize[i];
         }
     }
@@ -38,6 +37,7 @@ SEXP _h5createDataFrame(SEXP _obj, SEXP _loc_id, SEXP _name, SEXP _level, SEXP _
             offset = offset + H5Tget_size(H5T_NATIVE_DOUBLE);
         } else if (TYPEOF(VECTOR_ELT(_obj,i)) == STRSXP) {
             hid_t tid2 = H5Tcopy(H5T_C_S1);
+            H5Tset_strpad(tid2, H5T_STR_NULLPAD);
             H5Tset_size(tid2, strsize[i]);
             H5Tinsert (tid, nn, offset, tid2);
             offset = offset + strsize[i];
@@ -95,7 +95,6 @@ SEXP _h5writeDataFrame(SEXP _obj, SEXP _dset_id) {
                 s2 = LENGTH(STRING_ELT(VECTOR_ELT(_obj,i),j));
                 if (s2 > strsize[i]) { strsize[i] = s2; }
             }
-            strsize[i] = strsize[i] + 1;
         }
     }
 
@@ -114,6 +113,7 @@ SEXP _h5writeDataFrame(SEXP _obj, SEXP _dset_id) {
         } else if (TYPEOF(VECTOR_ELT(_obj,i)) == STRSXP) {
             hid_t tidn = H5Tcreate(H5T_COMPOUND, strsize[i]);
             hid_t tid2 = H5Tcopy(H5T_C_S1);
+            H5Tset_strpad(tid2, H5T_STR_NULLPAD);
             H5Tset_size(tid2, strsize[i]);
             H5Tinsert (tidn, nn, 0, tid2);
             
@@ -121,7 +121,7 @@ SEXP _h5writeDataFrame(SEXP _obj, SEXP _dset_id) {
             int z=0;
             int j;
             for (int k=0; k < LENGTH(VECTOR_ELT(_obj,i)); k++) {
-                for (j=0; (j < LENGTH(STRING_ELT(VECTOR_ELT(_obj,i),k))) & (j < (strsize[i]-1)); j++) {
+                for (j=0; (j < LENGTH(STRING_ELT(VECTOR_ELT(_obj,i),k))) & (j < (strsize[i])); j++) {
                     strbuf[z++] = CHAR(STRING_ELT(VECTOR_ELT(_obj,i),k))[j];
                 }
                 for (; j < strsize[i]; j++) {

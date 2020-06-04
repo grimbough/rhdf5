@@ -682,14 +682,12 @@ SEXP _H5Pset_libver_bounds( SEXP _fapl_id, SEXP _libver_low, SEXP _libver_high )
     H5F_libver_t libver_low = INTEGER(_libver_low)[0];
     H5F_libver_t libver_high = INTEGER(_libver_high)[0];
     herr_t herr = H5Pset_libver_bounds(fapl_id, libver_low, libver_high);
-    //herr_t herr = H5Pset_libver_bounds(fapl_id, H5F_LIBVER_EARLIEST, H5F_LIBVER_LATEST);
     SEXP Rval = ScalarInteger(herr);
     return Rval;
 }
 
 /* /\* herr_t H5Pget_libver_bounds(hid_t fapl_id, H5F_libver_t * libver_low, H5F_libver_t * libver_high) *\/ */
 SEXP _H5Pget_libver_bounds( SEXP _fapl_id ) {
-   // hid_t fapl_id = INTEGER(_fapl_id)[0];
     hid_t fapl_id = STRSXP_2_HID( _fapl_id );
     H5F_libver_t libver_low;
     H5F_libver_t libver_high;
@@ -705,6 +703,31 @@ SEXP _H5Pget_libver_bounds( SEXP _fapl_id ) {
     UNPROTECT(1);
     return Rval;
 }
+
+/* herr_t H5Pset_fapl_ros3(hid_t fapl_id, H5FD_ros3_fapl_t *fa) */
+/* We pass the components of the H5FD_ros3_fapl_t separately */
+SEXP _H5Pset_fapl_ros3( SEXP _fapl_id, SEXP _authenticate, SEXP _aws_region, SEXP _access_key_id, SEXP _secret_access_key ) {
+    
+    hid_t fapl_id = STRSXP_2_HID( _fapl_id );
+    
+    // initialise in an non-authenticating fapl configuration 
+    H5FD_ros3_fapl_t fa = { 1, 0, "", "", "" };
+    int should_authenticate = INTEGER(_authenticate)[0];
+    const char *the_region = CHAR(STRING_ELT(_aws_region, 0));
+    const char *the_access_key_id = CHAR(STRING_ELT(_access_key_id, 0));
+    const char *the_secret_access_key = CHAR(STRING_ELT(_secret_access_key, 0));
+    
+    fa.authenticate = should_authenticate; /* 0 (FALSE) or 1 (TRUE) */
+    strncpy(fa.aws_region, the_region, H5FD_ROS3_MAX_REGION_LEN);
+    strncpy(fa.secret_id, the_access_key_id, H5FD_ROS3_MAX_SECRET_ID_LEN);
+    strncpy(fa.secret_key, the_secret_access_key, H5FD_ROS3_MAX_SECRET_KEY_LEN);
+    
+    herr_t herr = H5Pset_fapl_ros3(fapl_id, &fa);
+    SEXP Rval = ScalarInteger(herr);
+    return Rval;
+}
+
+
 
 
 ////////////////////////////////////////////////////
@@ -804,7 +827,7 @@ SEXP _H5Pset_char_encoding( SEXP _plist_id, SEXP _encoding ) {
 
 /* herr_t H5Pget_char_encoding(hid_t plist_id, H5T_cset_t encoding) */
 SEXP _H5Pget_char_encoding( SEXP _plist_id ) {
-    //hid_t plist_id = INTEGER(_plist_id)[0];
+
     hid_t plist_id = STRSXP_2_HID( _plist_id );
     H5T_cset_t encoding;
     herr_t herr = H5Pget_char_encoding(plist_id, &encoding);
@@ -1010,14 +1033,14 @@ SEXP _H5Pset_fill_value( SEXP _plist_id, SEXP _type_id, SEXP _value ) {
     hid_t plist_id = STRSXP_2_HID( _plist_id );
     hid_t type_id = STRSXP_2_HID( _type_id );
     void * value;
-    if (type_id == H5T_NATIVE_DOUBLE) {
+    if (type_id == H5T_IEEE_F64LE) {
         value = REAL(_value);
+    } else if (type_id == H5T_STD_I32LE) {
+        value = INTEGER(_value);
+    } else if (type_id == H5T_STD_U8LE) {
+        value = LOGICAL(_value);
     } else {
-        if (type_id == H5T_NATIVE_INT32) {
-            value = INTEGER(_value);
-        } else {
-            value = (void *)CHAR(STRING_ELT(_value, 0));
-        }
+        value = (void *)CHAR(STRING_ELT(_value, 0));
     }
     herr_t herr = H5Pset_fill_value(plist_id, type_id, value);
     SEXP Rval = ScalarInteger(herr);
@@ -1307,7 +1330,7 @@ SEXP _H5Pset_szip( SEXP _plist_id, SEXP _options_mask, SEXP _pixels_per_block ) 
 
 /* herr_t H5Pset_chunk_cache(hid_t dapl_id, size_t rdcc_nslots, size_t rdcc_nbytes, double rdcc_w0) */
 SEXP _H5Pset_chunk_cache( SEXP _dapl_id, SEXP _rdcc_nslots, SEXP _rdcc_nbytes, SEXP _rdcc_w0 ) {
-    //hid_t dapl_id = INTEGER(_dapl_id)[0];
+
     hid_t dapl_id = STRSXP_2_HID( _dapl_id );
     size_t rdcc_nslots = INTEGER(_rdcc_nslots)[0];
     size_t rdcc_nbytes = INTEGER(_rdcc_nbytes)[0];
@@ -1607,23 +1630,31 @@ SEXP _H5Pset_chunk_cache( SEXP _dapl_id, SEXP _rdcc_nslots, SEXP _rdcc_nbytes, S
 /*   return Rval; */
 /* } */
 
-/* /\* herr_t H5Pset_obj_track_times(hid_t ocpl_id, hbool_t track_times) *\/ */
-/* SEXP _H5Pset_obj_track_times( SEXP _ocpl_id, SEXP _track_times ) { */
-/*   hid_t ocpl_id = INTEGER(_ocpl_id)[0]; */
-/*   TODO: hbool_t track_times = _track_times */
-/*   herr_t herr = H5Pset_obj_track_times(hid_tocpl_id, hbool_ttrack_times); */
-/*   SEXP Rval = ScalarInteger(herr); */
-/*   return Rval; */
-/* } */
+/* herr_t H5Pset_obj_track_times(hid_t ocpl_id, hbool_t track_times) *\/ */
+SEXP _H5Pset_obj_track_times( SEXP _ocpl_id, SEXP _track_times ) {
+  hid_t ocpl_id = STRSXP_2_HID( _ocpl_id );
+  hbool_t track_times = INTEGER(_track_times)[0];
+  herr_t herr = H5Pset_obj_track_times(ocpl_id, track_times);
+  SEXP Rval = ScalarInteger(herr);
+  return Rval;
+}
 
-/* /\* herr_t H5Pget_obj_track_times(hid_t ocpl_id, hbool_t track_times) *\/ */
-/* SEXP _H5Pget_obj_track_times( SEXP _ocpl_id, SEXP _track_times ) { */
-/*   hid_t ocpl_id = INTEGER(_ocpl_id)[0]; */
-/*   TODO: hbool_t track_times = _track_times */
-/*   herr_t herr = H5Pget_obj_track_times(hid_tocpl_id, hbool_ttrack_times); */
-/*   SEXP Rval = ScalarInteger(herr); */
-/*   return Rval; */
-/* } */
+/* herr_t H5Pget_obj_track_times(hid_t ocpl_id, hbool_t track_times) */
+SEXP _H5Pget_obj_track_times( SEXP _ocpl_id ) { 
+    
+    hid_t ocpl_id = STRSXP_2_HID( _ocpl_id );
+    hbool_t track_times;
+    SEXP Rval;
+    
+    herr_t herr = H5Pget_obj_track_times(ocpl_id, &track_times);
+    
+    if (herr < 0) {
+        Rval = R_NilValue;
+    } else {
+        Rval = ScalarLogical(track_times);
+    }
+    return Rval;
+} 
 
 /* /\* herr_t H5Pset_attr_phase_change(hid_t ocpl_id, unsigned max_compact, unsigned min_dense) *\/ */
 /* SEXP _H5Pset_attr_phase_change( SEXP _ocpl_id, SEXP _max_compact, SEXP _min_dense ) { */
@@ -1912,8 +1943,6 @@ SEXP _H5Pset_chunk_cache( SEXP _dapl_id, SEXP _rdcc_nslots, SEXP _rdcc_nbytes, S
 
 /* htri_t H5Pequal(hid_t id1, hid_t id2) */
 SEXP _H5Pequal( SEXP _id1, SEXP _id2 ) {
-    //hid_t id1 = INTEGER(_id1)[0];
-    //hid_t id2 = INTEGER(_id2)[0];
     hid_t id1 = STRSXP_2_HID( _id1 );
     hid_t id2 = STRSXP_2_HID( _id2 );
     htri_t htri = H5Pequal(id1, id2);
@@ -1962,7 +1991,6 @@ SEXP _H5Pequal( SEXP _id1, SEXP _id2 ) {
 
 /* herr_t H5Pclose_class( hid_t class ) */
 SEXP _H5Pclose_class( SEXP _class ) {
-    //hid_t class =  INTEGER(_class)[0];
     hid_t class = STRSXP_2_HID( _class );
     herr_t herr = H5Pclose_class( class );
     if (herr == 0) {

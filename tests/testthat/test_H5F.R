@@ -29,7 +29,10 @@ test_that("Default arguments", {
 
 test_that("Non-ASCII filename", {
 
-    tmp_dir <- file.path(tempdir(), "éxample")
+    
+    for(name in c("éxample", "år")) {
+    
+    tmp_dir <- file.path(tempdir(), name)
     dir.create(tmp_dir)
     ## this gives a UTF-8 encoded file path on windows
     h5File <- normalizePath(tempfile(pattern = "H5F", fileext = ".h5", tmpdir = tmp_dir), 
@@ -43,6 +46,7 @@ test_that("Non-ASCII filename", {
     if(file.exists(h5File)) {
         H5Fclose(fid)
         file.remove(h5File)
+    }
     }
 })
 

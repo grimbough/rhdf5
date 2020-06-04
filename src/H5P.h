@@ -92,6 +92,7 @@ SEXP _H5Pclose( SEXP _plist );
 /* SEXP _H5Pget_small_data_block_size( SEXP _fapl_id, SEXP _size ); */
 SEXP _H5Pset_libver_bounds( SEXP _fapl_id, SEXP _libver_low, SEXP _libver_high );
 SEXP _H5Pget_libver_bounds( SEXP _fapl_id );
+SEXP _H5Pset_fapl_ros3( SEXP _fapl_id, SEXP _authenticate, SEXP _aws_region, SEXP _access_key_id, SEXP _secret_acces_key );
 
 ////////////////////////////////////////////////////
 // Group Creation Properties
@@ -208,8 +209,8 @@ SEXP _H5Pset_chunk_cache( SEXP _dapl_id, SEXP _rdcc_nslots, SEXP _rdcc_nbytes, S
 
 /* SEXP _H5Pset_create_intermediate_group( SEXP _lcpl_id, SEXP _crt_intermed_group ); */
 /* SEXP _H5Pget_create_intermediate_group( SEXP _lcpl_id, SEXP _crt_intermed_group ); */
-/* SEXP _H5Pset_obj_track_times( SEXP _ocpl_id, SEXP _track_times ); */
-/* SEXP _H5Pget_obj_track_times( SEXP _ocpl_id, SEXP _track_times ); */
+SEXP _H5Pset_obj_track_times( SEXP _ocpl_id, SEXP _track_times );
+SEXP _H5Pget_obj_track_times( SEXP _ocpl_id );
 /* SEXP _H5Pset_attr_phase_change( SEXP _ocpl_id, SEXP _max_compact, SEXP _min_dense ); */
 /* SEXP _H5Pget_attr_phase_change( SEXP _ocpl_id, SEXP _max_compact, SEXP _min_dense ); */
 /* SEXP _H5Pset_attr_creation_order( SEXP _ocpl_id, SEXP _crt_order_flags ); */

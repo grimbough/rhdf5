@@ -418,6 +418,27 @@ H5Pclose <- function( h5plist ) {
 ##   invisible(res)
 ## }
 
+H5Pset_fapl_ros3 <- function( h5plist, s3credentials = NULL ) {
+    ## this should really check it's a fapl, not just a plist.
+    h5checktype(h5plist, "plist")
+  
+    ## only do authentication if s3credentials are provided
+    if(!is.null(s3credentials)) {
+      auth <- TRUE
+      aws_region <- s3credentials[[1]]
+      access_key_id <- s3credentials[[2]]
+      secret_access_key <- s3credentials[[3]]
+    } else {
+      auth <- FALSE
+      aws_region <- access_key_id <- secret_access_key <- ""
+    }
+  
+    res <- .Call('_H5Pset_fapl_ros3', h5plist@ID, auth, 
+                 aws_region, access_key_id, secret_access_key, 
+                 PACKAGE = "rhdf5")
+    invisible(res)
+}
+
 ## H5Pset_fapl_stdio <- function( fapl_id ) {
 ##   # TODO: check type fapl
 ##   res <- .Call("_H5Pset_fapl_stdio", fapl_id, PACKAGE='rhdf5')
@@ -848,14 +869,11 @@ H5Pset_deflate <- function( h5plist, level ) {
 
 H5Pset_fill_value <- function( h5plist, value ) {
   h5checktypeAndPLC(h5plist, "H5P_DATASET_CREATE")
-  # TODO: check if class is H5P_DATASET_CREATE
-  ## a = H5Pget_class(p)
-  ## H5Pget_class
   storage.mode = storage.mode(value)
   tid <- switch(storage.mode,
-                double = h5constants$H5T["H5T_NATIVE_DOUBLE"],
-                integer = h5constants$H5T["H5T_NATIVE_INT32"],
-                logical = h5constants$H5T["H5T_NATIVE_INT32"],
+                double = h5constants$H5T["H5T_IEEE_F64LE"],
+                integer = h5constants$H5T["H5T_STD_I32LE"],
+                logical = h5constants$H5T["H5T_STD_U8LE"],
                 character = {
                     tid <- H5Tcopy("H5T_C_S1")
                     size <- nchar(value)+1
@@ -1345,21 +1363,20 @@ H5Pset_chunk_cache <- function( h5plist, rdcc_nslots, rdcc_nbytes, rdcc_w0 ) {
 ##   invisible(res)
 ## }
 
-## H5Pset_obj_track_times <- function( ocpl_id, track_times ) {
-##   TODO: ocpl_id = as.TYPE(ocpl_id)
-##   TODO: track_times = as.TYPE(track_times)
-##   res <- .Call("_H5Pset_obj_track_times", ocpl_id, track_times, PACKAGE='rhdf5')
-##   SEXP Rval = R_NilValue;
-##   invisible(res)
-## }
+H5Pset_obj_track_times <- function( h5plist, track_times = TRUE ) {
+  
+  if(!is.logical(track_times) | is.na(track_times)) {
+    stop("Argument 'track_times' must be either TRUE or FALSE")
+  }
 
-## H5Pget_obj_track_times <- function( ocpl_id, track_times ) {
-##   TODO: ocpl_id = as.TYPE(ocpl_id)
-##   TODO: track_times = as.TYPE(track_times)
-##   res <- .Call("_H5Pget_obj_track_times", ocpl_id, track_times, PACKAGE='rhdf5')
-##   SEXP Rval = R_NilValue;
-##   invisible(res)
-## }
+   res <- .Call("_H5Pset_obj_track_times", h5plist@ID, as.integer(track_times), PACKAGE='rhdf5')
+   invisible(res)
+}
+
+H5Pget_obj_track_times <- function( h5plist ) {
+   res <- .Call("_H5Pget_obj_track_times", h5plist@ID, PACKAGE='rhdf5')
+   return(res)
+}
 
 ## H5Pset_attr_phase_change <- function( ocpl_id, max_compact, min_dense ) {
 ##   TODO: ocpl_id = as.TYPE(ocpl_id)

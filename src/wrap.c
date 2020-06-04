@@ -54,13 +54,17 @@ static R_CallMethodDef libraryRCalls[] = {
   {"_H5Dget_type", (DL_FUNC) &_H5Dget_type, 1},
   {"_H5Dget_create_plist", (DL_FUNC) &_H5Dget_create_plist, 1},
   {"_H5Dget_space", (DL_FUNC) &_H5Dget_space, 1},
+<<<<<<< HEAD
   {"_H5Dget_storage_size", (DL_FUNC) &_H5Dget_storage_size, 1},
   {"_create_Integer_test_file", (DL_FUNC) &_create_Integer_test_file, 0},
+=======
+  {"_H5Dget_storage_size", (DL_FUNC) &_H5Dget_space, 1},
+>>>>>>> master
   {"_H5Dread", (DL_FUNC) &_H5Dread, 8},
   {"_H5Dwrite", (DL_FUNC) &_H5Dwrite, 5},
   {"_H5Dset_extent", (DL_FUNC) &_H5Dset_extent, 2},
   {"_H5Fcreate", (DL_FUNC) &_H5Fcreate, 4},
-  {"_H5Fopen", (DL_FUNC) &_H5Fopen, 2},
+  {"_H5Fopen", (DL_FUNC) &_H5Fopen, 3},
   {"_H5Freopen", (DL_FUNC) &_H5Freopen, 1},
   {"_H5Fclose", (DL_FUNC) &_H5Fclose, 1},
   {"_H5Fflush", (DL_FUNC) &_H5Fflush, 2},
@@ -106,6 +110,8 @@ static R_CallMethodDef libraryRCalls[] = {
   {"_H5Tcopy", (DL_FUNC) &_H5Tcopy, 1},
   {"_H5Tset_size", (DL_FUNC) &_H5Tset_size, 2},
   {"_H5Tget_size", (DL_FUNC) &_H5Tget_size, 1},
+  {"_H5Tset_strpad", (DL_FUNC) &_H5Tset_strpad, 2},
+  {"_H5Tget_strpad", (DL_FUNC) &_H5Tget_strpad, 1},
   {"_H5Pcreate", (DL_FUNC) &_H5Pcreate, 1},
   {"_H5Pget_class", (DL_FUNC) &_H5Pget_class, 1},
   {"_H5Pcopy", (DL_FUNC) &_H5Pcopy, 1},
@@ -176,6 +182,7 @@ static R_CallMethodDef libraryRCalls[] = {
   /* {"_H5Pget_small_data_block_size", (DL_FUNC) &_H5Pget_small_data_block_size, 2}, */
   {"_H5Pset_libver_bounds", (DL_FUNC) &_H5Pset_libver_bounds, 3},
   {"_H5Pget_libver_bounds", (DL_FUNC) &_H5Pget_libver_bounds, 1},
+  {"_H5Pset_fapl_ros3", (DL_FUNC) &_H5Pset_fapl_ros3, 5},
   /* {"_H5Pset_local_heap_size_hint", (DL_FUNC) &_H5Pset_local_heap_size_hint, 2}, */
   /* {"_H5Pget_local_heap_size_hint", (DL_FUNC) &_H5Pget_local_heap_size_hint, 2}, */
   /* {"_H5Pset_link_creation_order", (DL_FUNC) &_H5Pset_link_creation_order, 2}, */
@@ -257,8 +264,8 @@ static R_CallMethodDef libraryRCalls[] = {
   /* {"_H5Pget_mpio_no_collective_cause", (DL_FUNC) &_H5Pget_mpio_no_collective_cause, 3}, */
   /* {"_H5Pset_create_intermediate_group", (DL_FUNC) &_H5Pset_create_intermediate_group, 2}, */
   /* {"_H5Pget_create_intermediate_group", (DL_FUNC) &_H5Pget_create_intermediate_group, 2}, */
-  /* {"_H5Pset_obj_track_times", (DL_FUNC) &_H5Pset_obj_track_times, 2}, */
-  /* {"_H5Pget_obj_track_times", (DL_FUNC) &_H5Pget_obj_track_times, 2}, */
+  {"_H5Pset_obj_track_times", (DL_FUNC) &_H5Pset_obj_track_times, 2},
+  {"_H5Pget_obj_track_times", (DL_FUNC) &_H5Pget_obj_track_times, 1},
   /* {"_H5Pset_attr_phase_change", (DL_FUNC) &_H5Pset_attr_phase_change, 3}, */
   /* {"_H5Pget_attr_phase_change", (DL_FUNC) &_H5Pget_attr_phase_change, 3}, */
   /* {"_H5Pset_attr_creation_order", (DL_FUNC) &_H5Pset_attr_creation_order, 2}, */
@@ -303,6 +310,7 @@ static R_CallMethodDef libraryRCalls[] = {
   {"_h5errorHandling", (DL_FUNC) &_h5errorHandling, 1},
   {"_h5fileLock", (DL_FUNC) &_h5fileLock, 1},
   {"_H5Sselect_cols", (DL_FUNC) &_H5Sselect_cols, 5},
+  {"_h5listOpenObjects", (DL_FUNC) &_h5listOpenObjects, 1},
 #ifdef _H5P_filters
   //{"_H5Pset_lzf", (DL_FUNC) &_H5Pset_lzf, 1},
   //{"_H5Pset_lz4", (DL_FUNC) &_H5Pset_lz4, 1},

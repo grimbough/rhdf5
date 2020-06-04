@@ -1,0 +1,74 @@
+---
+title: "Reading HDF5 Files In The Cloud"
+author:
+- name: Mike L. Smith
+  affiliation: de.NBI & EMBL Heidelberg
+package: rhdf5
+output:
+  BiocStyle::html_document
+vignette: |
+  %\VignetteIndexEntry{rhdf5}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+The `r Biocpkg("rhdf5")` provides limited support for read-only access to HDF5 files stored in Amazon S3 buckets.  This is implemented via the (HDF5 S3 Virtual File Driver)[https://portal.hdfgroup.org/display/HDF5/Virtual+File+Drivers+-+S3+and+HDFS] and allowes access to HDF5 files hosted in both public and private S3 buckets.  
+
+Currently only the functions `h5ls()` and `h5dump()` are supported, but reading of targeted subsets will be provided soon.
+
+```{r, load-library}
+library(rhdf5)
+```
+
+# Public S3 Buckets
+
+To access a file in a public Amazon S3 bucket you provide the file's URL to the `file` argument.  You also need to set the argument `s3 = TRUE`, otherwise `h5ls()` will treat the URL as a path on the local disk fail.
+
+```{r, public-h5ls}
+public_S3_url <- "https://rhdf5-public.s3.eu-central-1.amazonaws.com/h5ex_t_array.h5"
+h5ls(file = public_S3_url,
+     s3 = TRUE)
+```
+
+The same arguments are also valid for using `h5dump()` to retrieve the contents of a file.
+
+```{r, public-h5dump}
+public_S3_url <- "https://rhdf5-public.s3.eu-central-1.amazonaws.com/h5ex_t_cmpd.h5"
+h5dump(file = public_S3_url,
+     s3 = TRUE)
+```
+
+# Private S3 Buckets
+
+To access files in a private Amazon S3 bucket you will need to provide three additional details: The AWS region where the files are hosted, your AWS access key ID, and your AWS secret access key.  More information on how to obtain AWS access keys can be found under [AWS Security Credentials](https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys).
+
+These three values need to be stored in a list like below.  *Important note: for now they must be in this specific order.*
+
+```{r, private-mock-credentials}
+## these are example credentials and will not work
+s3_cred <- list(
+    aws_region = "eu-central-1",
+    access_key_id = "AKIAIOSFODNN7EXAMPLE",
+    secret_access_key = "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
+)
+```
+
+Finally we pass this list to `h5ls()` via the `s3credentials` argument.
+
+```{r, private-h5ls, eval = FALSE}
+public_S3_url <- "https://rhdf5-private.s3.eu-central-1.amazonaws.com/h5ex_t_array.h5"
+h5ls(file = public_S3_url,
+     s3 = TRUE,
+     s3credentials = s3_cred)
+```
+
+
+# Session Info
+```{r sessioninfo}
+sessionInfo()
+```
+

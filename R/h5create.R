@@ -45,12 +45,14 @@ h5createGroup <- function(file, group) {
   if (is.null(H5type)) {
     if (is.character(storage.mode)) {
       tid <- switch(storage.mode[1],
-                    double = h5constants$H5T["H5T_NATIVE_DOUBLE"],
-                    integer = h5constants$H5T["H5T_NATIVE_INT32"],
-                    integer64 = h5constants$H5T["H5T_NATIVE_INT64"],
-                    logical = h5constants$H5T["H5T_NATIVE_INT32"],
+                    double = h5constants$H5T["H5T_IEEE_F64LE"],
+                    integer = h5constants$H5T["H5T_STD_I32LE"],
+                    integer64 = h5constants$H5T["H5T_STD_I64LE"],
+                    logical = h5constants$H5T["H5T_STD_U8LE"],
+                    raw = h5constants$H5T["H5T_STD_U8LE"],
                     character = {
                       tid <- H5Tcopy("H5T_C_S1")
+                      H5Tset_strpad(tid, strpad = "NULLPAD")
                       if (!is.numeric(size)) {
                         stop("parameter 'size' has to be defined for storage.mode character.")
                       }
@@ -127,6 +129,10 @@ h5createGroup <- function(file, group) {
   if(!missing(fillValue)) {
     H5Pset_fill_value(dcpl, fillValue)
   }
+  
+  ## turn off time stamp
+  H5Pset_obj_track_times(dcpl, FALSE)
+  
   return(dcpl)
 }
 
@@ -172,7 +178,6 @@ h5createDataset <- function(file, dataset, dims, maxdims = dims,
         ## determine data type
         tid <- .setDataType(H5type, storage.mode, size)
         
-        ## create dataset property list
         dcpl <- .createDCPL(chunk, dims, level, fillValue, dtype = tid, filter = filter, shuffle = shuffle)
         on.exit(H5Pclose(dcpl), add = TRUE)
         
@@ -211,8 +216,8 @@ h5createAttribute <- function(obj, attr, dims, maxdims = dims, file, storage.mod
             if (is.null(H5type)) {
                 if (is.character(storage.mode)) {
                     tid <- switch(storage.mode[1],
-                                  double = h5constants$H5T["H5T_NATIVE_DOUBLE"],
-                                  integer = h5constants$H5T["H5T_NATIVE_INT32"],
+                                  double = h5constants$H5T["H5T_IEEE_F64LE"],
+                                  integer = h5constants$H5T["H5T_STD_I32LE"],
                                   character = {
                                       tid <- H5Tcopy("H5T_C_S1")
                                       if (!is.numeric(size)) {
@@ -228,7 +233,6 @@ h5createAttribute <- function(obj, attr, dims, maxdims = dims, file, storage.mod
             } else {
                 tid <- h5checkConstants("H5T", H5type)
             }
-            ##if (!is.numeric(tid)) {
             if(!grepl(pattern = "^[[:digit:]]+$", tid)) {
                 message("Can not create attribute. H5type unknown. Check h5const('H5T') for valid types.")
             } else {

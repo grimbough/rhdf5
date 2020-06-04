@@ -13,7 +13,7 @@ context("H5D: getting property lists")
 
 ## The property list interface is really limited at the moment
 ## so there aren't many functions that we can check
-test_that("Extracting property list", {
+test_that("we can extract the property lists", {
     expect_silent( fid <- H5Fopen(h5File) )
     expect_silent( did <- H5Dopen(fid, name = "foo") )
     

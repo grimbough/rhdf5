@@ -92,8 +92,10 @@ H5Dread <- function( h5dataset, h5spaceFile=NULL, h5spaceMem=NULL, buf = NULL, c
       stop("install package 'bit64' before using bit64conversion='bit64'")
     }
   }
+  
   res <- .Call("_H5Dread", h5dataset@ID, sidFile, sidMem, buf, compoundAsDataFrame, 
                bit64conv, drop, h5dataset@native, PACKAGE='rhdf5')
+  
   if (H5Aexists(h5obj=h5dataset, name="storage.mode")) {
     att = H5Aopen(h5obj=h5dataset, name="storage.mode")
     if (H5Aread(h5attribute=att) == "logical") {
@@ -114,10 +116,10 @@ H5Dwrite <- function( h5dataset, buf, h5spaceMem=NULL, h5spaceFile=NULL ) {
 }
 
 H5Dset_extent <- function( h5dataset, size) {
-  h5checktype(h5dataset, "dataset")
-  size <- as.numeric(size)
-  if (!h5dataset@native) size <- rev(size)
-  invisible(.Call("_H5Dset_extent", h5dataset@ID, size, PACKAGE='rhdf5'))
+    h5checktype(h5dataset, "dataset")
+    size <- as.numeric(size)
+    if (!h5dataset@native) size <- rev(size)
+    invisible(.Call("_H5Dset_extent", h5dataset@ID, size, PACKAGE='rhdf5'))
 }
 
 H5Dchunk_dims <- function(h5dataset) {

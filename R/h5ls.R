@@ -23,10 +23,19 @@ h5lsConvertToDataframe <- function(L, all=FALSE, native) {
   L
 }
 
-h5ls <- function( file, recursive = TRUE, all=FALSE, datasetinfo=TRUE, index_type = h5default("H5_INDEX"), order = h5default("H5_ITER"), native = FALSE) {
-    
-    loc = h5checktypeOrOpenLoc(file, readonly=TRUE, native = native)
-    on.exit(h5closeitLoc(loc))
+h5ls <- function( file, recursive = TRUE, all=FALSE, datasetinfo=TRUE, 
+                  index_type = h5default("H5_INDEX"), order = h5default("H5_ITER"), 
+                  s3 = FALSE, s3credentials = NULL, native = FALSE) {
+  
+    if(isTRUE(s3)) {
+      fapl <- H5Pcreate("H5P_FILE_ACCESS")
+      on.exit(H5Pclose(fapl))
+      H5Pset_fapl_ros3(fapl, s3credentials)
+      loc <- h5checktypeOrOpenLocS3(file, readonly = TRUE, fapl = fapl, native = native)
+    } else {
+      loc <- h5checktypeOrOpenLoc(file, readonly = TRUE, fapl = NULL, native = native)
+    }
+    on.exit(h5closeitLoc(loc), add = TRUE)
     
     if (length(datasetinfo)!=1 || !is.logical(datasetinfo)) stop("'datasetinfo' must be a logical of length 1")
     index_type <- h5checkConstants( "H5_INDEX", index_type )

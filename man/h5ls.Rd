@@ -9,16 +9,23 @@ Lists the content of an HDF5 file.
 \usage{
 h5ls   (file,
         recursive = TRUE,
-	all = FALSE, 
-	datasetinfo = TRUE,
-	index_type = h5default("H5_INDEX"),
-	order = h5default("H5_ITER"), native = FALSE)
+	    all = FALSE, 
+	    datasetinfo = TRUE,
+	    index_type = h5default("H5_INDEX"),
+	    order = h5default("H5_ITER"), 
+	    s3 = FALSE, 
+	    s3credentials = NULL,
+	    native = FALSE)
+	    
 h5dump (file,
         recursive = TRUE,
-	load = TRUE,
-	all = FALSE,
+	    load = TRUE,
+	    all = FALSE,
         index_type = h5default("H5_INDEX"),
-        order = h5default("H5_ITER"), ..., native = FALSE)
+        order = h5default("H5_ITER"), 
+        s3 = FALSE, 
+        s3credentials = NULL,
+        ..., native = FALSE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -29,6 +36,9 @@ h5dump (file,
   \item{index_type}{See \code{h5const("H5_INDEX")} for possible arguments.}
   \item{order}{See \code{h5const("H5_ITER")} for possible arguments.}
   \item{load}{If TRUE the datasets are read in, not only the header information. Note, that this can cause memory problems for very large files. In this case choose \code{load=FALSE} and load the datasets successively.}
+  \item{s3}{Logical value indicating whether the file argument should be 
+  treated as a URL to an Amazon S3 bucket, rather than a local file path.}
+  \item{s3credentials}{A list of length three, providing the credentials for accessing files in a private Amazon S3 bucket.}
   \item{native}{An object of class \code{logical}. If TRUE, array-like objects are treated as stored in HDF5 row-major rather than R column-major orientation. Using \code{native = TRUE} increases HDF5 file portability between programming languages. A file written with \code{native = TRUE} should also be read with \code{native = TRUE}}.
   \item{\dots}{Arguments passed to \code{\link{h5read}}}
 }
@@ -41,7 +51,7 @@ h5dump (file,
 \code{h5dump} returns a hierarchical list structure representing the HDF5 group hierarchy. It either returns the datasets within the list structure (\code{load=TRUE}) or it returns a data.frame for each datset with the dataset header information \code{load=FALSE}.
 }
 \references{\url{https://portal.hdfgroup.org/display/HDF5}}
-\author{Bernd Fischer}
+\author{Bernd Fischer, Mike L. Smith}
 \seealso{
 \code{\link{h5read}}, \code{\link{h5write}}, \link{rhdf5}
 }
@@ -60,6 +70,10 @@ h5write(B, "ex_ls_dump.h5","foo/B")
 # list content of hdf5 file
 h5ls("ex_ls_dump.h5",all=TRUE)
 h5dump("ex_ls_dump.h5")
+
+# list content of an hdf5 file in a public S3 bucket
+h5ls(file = "https://rhdf5-public.s3.eu-central-1.amazonaws.com/h5ex_t_array.h5", s3 = TRUE)
+h5dump(file = "https://rhdf5-public.s3.eu-central-1.amazonaws.com/h5ex_t_array.h5", s3 = TRUE)
 }
 \keyword{ programming }
 \keyword{ interface }
