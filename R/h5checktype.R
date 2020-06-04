@@ -102,22 +102,22 @@ h5FileIsOpen <- function(filename) {
   isopen
 }
 
-h5checktypeOrOpenLoc <- function(file, fctname = deparse(match.call()[1]), createnewfile=FALSE, readonly=FALSE, native) {
+h5checktypeOrOpenLoc <- function(file, fctname = deparse(match.call()[1]), createnewfile=FALSE, readonly=FALSE, fapl = NULL, native) {
   res = list()
   if (is.character(file)) {
     file = normalizePath(file,mustWork = FALSE)
     if (file.exists(file)) {
       if (h5FileIsOpen(file)) {
-        warning("An open HDF5 file handle exists. If the file has changed on disk meanwhile, the function may not work properly. Run 'h5closeAll()' to close all open HDF5 object handles.")
+        warning("An open HDF5 file handle exists. ",
+        "If the file has changed on disk meanwhile, the function may not work properly. ",
+        "Run 'h5closeAll()' to close all open HDF5 object handles.")
       }
       
-      h5loc <- if (readonly) {
-          H5Fopen(file,"H5F_ACC_RDONLY", native=native)
-        } else {
-          H5Fopen(file, native = native)
-        }
+      flags <- ifelse(readonly, "H5F_ACC_RDONLY", "H5F_ACC_RDWR")
+      h5loc <-  H5Fopen(file, flags = flags,fapl = fapl, native = native)
+
       if (!is(h5loc, "H5IdComponent")) {
-        stop("Error in ",fctname,". File '",file,"' is not a valid HDF5 file.")
+        stop("Error in ", fctname, ". File '", file, "' is not a valid HDF5 file.")
       } else {
         res$H5Identifier = h5loc
         res$closeit = TRUE
@@ -129,7 +129,6 @@ h5checktypeOrOpenLoc <- function(file, fctname = deparse(match.call()[1]), creat
           stop("Error in ",fctname,". Cannot create file.")
         } else {
           res$H5Identifier = h5loc
-          #res$closeit = FALSE
           res$closeit = TRUE
         }
       } else {
@@ -138,6 +137,29 @@ h5checktypeOrOpenLoc <- function(file, fctname = deparse(match.call()[1]), creat
     }
   } else {
     ## We have passed an H5IdComponent, so it should not be closed after  
+    h5checktype(file, "loc", fctname = fctname, allow.character = TRUE)
+    res$H5Identifier = file
+    res$closeit = FALSE
+  }
+  invisible(res)
+}
+
+h5checktypeOrOpenLocS3 <- function(file, fctname = deparse(match.call()[1]), createnewfile=FALSE, readonly=FALSE, fapl = NULL, native) {
+  res = list()
+  if (is.character(file)) {
+
+    flags <- ifelse(readonly, "H5F_ACC_RDONLY", "H5F_ACC_RDWR")
+    h5loc <-  H5Fopen(file, flags = flags,fapl = fapl, native = native)
+    
+    if (!is(h5loc, "H5IdComponent")) {
+      stop("Error in ", fctname, ". File '", file, "' is not a valid HDF5 file.")
+    } else {
+      res$H5Identifier = h5loc
+      res$closeit = TRUE
+    }
+  
+  } else {
+  ## We have passed an H5IdComponent, so it should not be closed after  
     h5checktype(file, "loc", fctname = fctname, allow.character = TRUE)
     res$H5Identifier = file
     res$closeit = FALSE
