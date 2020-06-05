@@ -28,7 +28,7 @@ library(rhdf5)
 
 To access a file in a public Amazon S3 bucket you provide the file's URL to the `file` argument.  You also need to set the argument `s3 = TRUE`, otherwise `h5ls()` will treat the URL as a path on the local disk fail.
 
-```{r, public-h5ls}
+```{r, public-h5ls, error = TRUE, purl = FALSE}
 public_S3_url <- "https://rhdf5-public.s3.eu-central-1.amazonaws.com/h5ex_t_array.h5"
 h5ls(file = public_S3_url,
      s3 = TRUE)
@@ -36,7 +36,7 @@ h5ls(file = public_S3_url,
 
 The same arguments are also valid for using `h5dump()` to retrieve the contents of a file.
 
-```{r, public-h5dump}
+```{r, public-h5dump, error = TRUE, purl = FALSE}
 public_S3_url <- "https://rhdf5-public.s3.eu-central-1.amazonaws.com/h5ex_t_cmpd.h5"
 h5dump(file = public_S3_url,
      s3 = TRUE)
