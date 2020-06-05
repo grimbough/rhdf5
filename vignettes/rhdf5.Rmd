@@ -9,7 +9,7 @@ package: rhdf5
 output:
   BiocStyle::html_document
 vignette: |
-  %\VignetteIndexEntry{rhdf5}
+  %\VignetteIndexEntry{rhdf5 - HDF5 interface for R}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

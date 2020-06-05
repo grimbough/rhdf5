@@ -18,7 +18,6 @@ bioc_packages: BiocCheck
 
 r_github_packages:
   - jimhester/covr
-  - grimbough/Rhdf5lib
   
 after_script:
   - R CMD BiocCheck *tar.gz  

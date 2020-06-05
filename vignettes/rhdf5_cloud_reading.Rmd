@@ -7,7 +7,7 @@ package: rhdf5
 output:
   BiocStyle::html_document
 vignette: |
-  %\VignetteIndexEntry{rhdf5}
+  %\VignetteIndexEntry{Reading HDF5 Files In The Cloud}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
