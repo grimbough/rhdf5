@@ -33,7 +33,12 @@ jobs:
           git config --global core.autocrlf false
           git config --global user.email "ghau@example.com"
           git config --global user.name "GitHub Actions User"
-        
+          
+      - name: Install system libraries
+        if: ${{ matrix.config.os == 'ubuntu-18.04' }}
+        run: |
+          sudo apt-get install libcurl4-openssl-dev
+          
       - uses: actions/checkout@v1
           
       - name: Setup R
@@ -47,8 +52,11 @@ jobs:
         run: |
           Rscript -e "install.packages(c('BiocManager', 'remotes'))"
           Rscript -e "BiocManager::install(version = 'devel', ask = FALSE)"
-          Rscript -e "BiocManager::install(c('rcmdcheck', 'rmarkdown', 'Rhdf5lib', 'rhdf5filters', 'knitr', 'testthat', 
-                                             'BiocStyle', 'bit64', 'microbenchmark', 'dplyr', 'ggplot2'), 
+          Rscript -e "BiocManager::install(c('grimbough/Rhdf5lib'), 
+                                             version = 'devel', ask = FALSE)"
+          Rscript -e "BiocManager::install(c('rcmdcheck', 'rhdf5filters'), 
+                                             version = 'devel', ask = FALSE)"
+          Rscript -e "BiocManager::install('rhdf5', dependencies = TRUE, 
                                              version = 'devel', ask = FALSE)"
 
       - name: Check
