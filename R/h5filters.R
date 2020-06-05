@@ -51,7 +51,7 @@ H5Pset_blosc <- function( h5plist, h5tid, method = 1L, level = 6L, shuffle = TRU
     
     if(!method %in% 1:6) {
         method <- 1L
-        warning('Invalid method selected.  Using BLOSC_LZ')
+        warning('Invalid method selected. Using BLOSC_LZ')
     }
     
     ## START: simplified reimplementation of C code from H5Zblosc.c
