@@ -60,3 +60,5 @@ if(requireNamespace("rhdf5filters", quietly = TRUE)) {
     
     H5Fclose(fid)
 }
+
+h5closeAll()
