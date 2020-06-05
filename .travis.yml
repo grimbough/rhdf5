@@ -14,7 +14,9 @@ r: bioc-devel
 
 warnings_are_errors: false
 
-bioc_packages: BiocCheck
+bioc_packages: 
+  - BiocCheck
+  - rhdf5filters
 
 r_github_packages:
   - jimhester/covr

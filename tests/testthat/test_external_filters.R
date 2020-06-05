@@ -1,4 +1,4 @@
-#only run these tests if the rhdf5Filters package is present
+#only run these tests if the rhdf5filters package is present
 if(requireNamespace("rhdf5filters", quietly = TRUE)) {
     
     library(rhdf5)

@@ -1,4 +1,5 @@
 #include "H5P.h"
+#include "H5pubconf.h"
 
 ////////////////////////////////////////////////////
 // General Property List Operations
@@ -704,6 +705,8 @@ SEXP _H5Pget_libver_bounds( SEXP _fapl_id ) {
     return Rval;
 }
 
+
+#ifdef H5_HAVE_ROS3_VFD
 /* herr_t H5Pset_fapl_ros3(hid_t fapl_id, H5FD_ros3_fapl_t *fa) */
 /* We pass the components of the H5FD_ros3_fapl_t separately */
 SEXP _H5Pset_fapl_ros3( SEXP _fapl_id, SEXP _authenticate, SEXP _aws_region, SEXP _access_key_id, SEXP _secret_access_key ) {
@@ -726,6 +729,16 @@ SEXP _H5Pset_fapl_ros3( SEXP _fapl_id, SEXP _authenticate, SEXP _aws_region, SEX
     SEXP Rval = ScalarInteger(herr);
     return Rval;
 }
+#else
+SEXP _H5Pset_fapl_ros3( SEXP _fapl_id, SEXP _authenticate, SEXP _aws_region, SEXP _access_key_id, SEXP _secret_access_key ) {
+    
+    error("Rhdf5lib was not compiled with support for the S3 VFD\n");
+
+    herr_t herr = 0;
+    SEXP Rval = ScalarInteger(herr);
+    return Rval;
+}
+#endif
 
 
 

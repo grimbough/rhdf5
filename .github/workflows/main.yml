@@ -52,8 +52,7 @@ jobs:
         run: |
           Rscript -e "install.packages(c('BiocManager', 'remotes'))"
           Rscript -e "BiocManager::install(version = 'devel', ask = FALSE)"
-          Rscript -e "BiocManager::install(c('grimbough/Rhdf5lib'), 
-                                             version = 'devel', ask = FALSE)"
+          Rscript -e "BiocManager::install(c('grimbough/Rhdf5lib'), ask = FALSE)"
           Rscript -e "BiocManager::install(c('rcmdcheck', 'rhdf5filters'), 
                                              version = 'devel', ask = FALSE)"
           Rscript -e "BiocManager::install('rhdf5', dependencies = TRUE, 
