@@ -9,6 +9,12 @@
       distributed in \pkg{rhdf5filters}.
     }
   }
+  \subsection{BUG FIXES}{
+    \itemize{
+      \item Fix bug in H5Dget_storage_size() where the wrong C function was 
+      called.
+    }
+  }
 }
 
 \section{Changes in version 2.32.0}{
