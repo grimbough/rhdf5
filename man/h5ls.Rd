@@ -72,10 +72,11 @@ h5ls("ex_ls_dump.h5",all=TRUE)
 h5dump("ex_ls_dump.h5")
 
 # list content of an hdf5 file in a public S3 bucket
-\dontrun{
-    h5ls(file = "https://rhdf5-public.s3.eu-central-1.amazonaws.com/h5ex_t_array.h5", s3 = TRUE)
-    h5dump(file = "https://rhdf5-public.s3.eu-central-1.amazonaws.com/h5ex_t_array.h5", s3 = TRUE)
+\donttest{
+h5ls(file = "https://rhdf5-public.s3.eu-central-1.amazonaws.com/h5ex_t_array.h5", s3 = TRUE)
+h5dump(file = "https://rhdf5-public.s3.eu-central-1.amazonaws.com/h5ex_t_array.h5", s3 = TRUE)
 }
+
 }
 \keyword{ programming }
 \keyword{ interface }

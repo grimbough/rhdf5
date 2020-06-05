@@ -37,9 +37,11 @@ The functions return the standard return value from their respective C-functions
 \examples{
 
 ## creating a fapl for accessing a public S3 bucket
+\donttest{
 pid <- H5Pcreate("H5P_FILE_ACCESS")
 H5Pset_fapl_ros3( pid )
 H5Pclose(pid)
+}
 
 ## creating a fapl for accessing a private S3 bucket
 ## and provding required S3 credentials list
@@ -51,9 +53,11 @@ s3_cred <- list(
     secret_access_key = "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
 )
 
+\donttest{
 pid <- H5Pcreate("H5P_FILE_ACCESS")
 H5Pset_fapl_ros3( pid, s3credentials = s3_cred )
 H5Pclose(pid)
+}
 
 }
 \keyword{ interface }
