@@ -1,6 +1,16 @@
 \name{NEWS}
 \title{News for Package 'rhdf5'}
 
+\section{Changes in version 2.34.0}{
+  \subsection{NEW FEATURES}{
+    \itemize{
+      \item Added support for read access to files in Amazon S3 buckets.
+      \item Included read and write support for dynamic compression filters 
+      distributed in \pkg{rhdf5filters}.
+    }
+  }
+}
+
 \section{Changes in version 2.32.0}{
   \subsection{NEW FEATURES}{
     \itemize{
