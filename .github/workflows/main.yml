@@ -47,7 +47,7 @@ jobs:
         run: |
           Rscript -e "install.packages(c('BiocManager', 'remotes'))"
           Rscript -e "BiocManager::install(version = 'devel', ask = FALSE)"
-          Rscript -e "BiocManager::install(c('rcmdcheck', 'rmarkdown', 'Rhdf5lib', 'knitr', 'testthat', 
+          Rscript -e "BiocManager::install(c('rcmdcheck', 'rmarkdown', 'Rhdf5lib', 'rhdf5filters', 'knitr', 'testthat', 
                                              'BiocStyle', 'bit64', 'microbenchmark', 'dplyr', 'ggplot2'), 
                                              version = 'devel', ask = FALSE)"
 
