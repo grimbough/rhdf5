@@ -24,3 +24,17 @@ test_that("we can extract the property lists", {
     expect_silent( H5Dclose(did) )
     expect_silent( H5Fclose(fid) )
 })
+
+test_that("dataset size is reported", {
+    
+    expect_silent( fid <- H5Fopen(h5File) )
+    expect_silent( did <- H5Dopen(fid, name = "foo") )
+    
+    expect_silent( dset_size <- H5Dget_storage_size(did) )
+    expect_is( dset_size, "integer")
+    expect_gt( dset_size, 0 )
+    
+    expect_silent( H5Dclose(did) )
+    expect_silent( H5Fclose(fid) )
+    
+})

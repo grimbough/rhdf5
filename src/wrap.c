@@ -54,7 +54,7 @@ static R_CallMethodDef libraryRCalls[] = {
   {"_H5Dget_type", (DL_FUNC) &_H5Dget_type, 1},
   {"_H5Dget_create_plist", (DL_FUNC) &_H5Dget_create_plist, 1},
   {"_H5Dget_space", (DL_FUNC) &_H5Dget_space, 1},
-  {"_H5Dget_storage_size", (DL_FUNC) &_H5Dget_space, 1},
+  {"_H5Dget_storage_size", (DL_FUNC) &_H5Dget_storage_size, 1},
   {"_H5Dread", (DL_FUNC) &_H5Dread, 8},
   {"_H5Dwrite", (DL_FUNC) &_H5Dwrite, 5},
   {"_H5Dset_extent", (DL_FUNC) &_H5Dset_extent, 2},

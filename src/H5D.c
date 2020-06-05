@@ -114,8 +114,7 @@ SEXP _H5Dget_storage_size( SEXP _dataset_id ) {
 
     hid_t dataset_id = STRSXP_2_HID( _dataset_id );
     hsize_t size = H5Dget_storage_size( dataset_id );
-    Rprintf("Size: %ld\n", size);
-    
+
     SEXP Rval = ScalarInteger(0);
     if (size <= INT_MAX) {
         Rval = ScalarInteger(size);
