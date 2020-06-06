@@ -1,5 +1,5 @@
 RHDF5_LIBS = $(shell "$(R_HOME)/bin/Rscript" --vanilla --slave -e 'Rhdf5lib::pkgconfig("PKG_C_LIBS")')
-PKG_LIBS = $(RHDF5_LIBS) -lcurl
+PKG_LIBS = $(RHDF5_LIBS)
 
 # uncomment below to print the contents of $(PKG_LIBS)
 # $(info $$PKG_LIBS is [${PKG_LIBS}])
