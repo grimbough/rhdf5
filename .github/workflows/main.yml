@@ -51,12 +51,17 @@ jobs:
       - name: Install dependencies
         run: |
           Rscript -e "install.packages(c('BiocManager', 'remotes'))"
-          Rscript -e "BiocManager::install(version = 'devel', ask = FALSE)"
-          Rscript -e "BiocManager::install(c('grimbough/Rhdf5lib'), ask = FALSE)"
-          Rscript -e "BiocManager::install(c('rcmdcheck', 'rhdf5filters'), 
-                                             version = 'devel', ask = FALSE)"
-          Rscript -e "BiocManager::install('rhdf5', dependencies = TRUE, 
-                                             version = 'devel', ask = FALSE)"
+          Rscript -e "BiocManager::install(version = 'devel', ask = FALSE, update = FALSE)"
+          Rscript -e "BiocManager::install(c('grimbough/Rhdf5lib'), ask = FALSE, update = FALSE)"
+          Rscript -e "BiocManager::install(c('rcmdcheck', 'rhdf5filters'), ask = FALSE, update = FALSE)"
+          Rscript -e "BiocManager::install('rhdf5', dependencies = TRUE, ask = FALSE, update = FALSE)"
 
-      - name: Check
-        run: Rscript -e "rcmdcheck::rcmdcheck(args = '--no-manual', error_on = 'warning', check_dir = 'check')"
+      - name: Non-windows check
+        if: ${{ matrix.config.os != 'windows-latest' }}
+        run: |
+          Rscript -e "rcmdcheck::rcmdcheck(args = c('--no-manual'), error_on = 'warning', check_dir = 'check')"
+          
+      - name: Windows check
+        if: ${{ matrix.config.os == 'windows-latest' }}
+        run: |
+          Rscript -e "rcmdcheck::rcmdcheck(args = c('--no-manual', '--force-multiarch', '--install-args=`"--force-biarch`"'), error_on = 'warning', check_dir = 'check')"
