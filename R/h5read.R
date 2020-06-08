@@ -115,7 +115,7 @@ h5read <- function(file, name, index=NULL, start=NULL, stride=NULL, block=NULL,
                     target <- paste0("dimnames", i)
                     if (H5Aexists(h5dataset, target)) { 
                         thing <- H5Aopen(h5dataset, target)
-                        dimnames[[i]] <- H5Aread(thing)
+                        dimnames[[i]] <- as.character(H5Aread(thing))
                         H5Aclose(thing)
                     }
                 }
