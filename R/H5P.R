@@ -419,6 +419,11 @@ H5Pclose <- function( h5plist ) {
 ## }
 
 H5Pset_fapl_ros3 <- function( h5plist, s3credentials = NULL ) {
+  
+  if(.Platform$OS.type == "windows") {
+    stop("H5Pset_fapl_ros3() is only supported on non-windows operating systems.")
+  }
+  
     ## this should really check it's a fapl, not just a plist.
     h5checktype(h5plist, "plist")
   
