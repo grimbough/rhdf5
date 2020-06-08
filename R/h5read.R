@@ -108,8 +108,8 @@ h5read <- function(file, name, index=NULL, start=NULL, stride=NULL, block=NULL,
                 }
             }
 
-            ## Add back the dimnames. Note that this is not yet start/stride/block/count-aware.
-            if (is.null(index) && is.null(start) && is.null(stride) && is.null(count) && is.null(block)) {
+            ## Add back the dimnames. 
+            if (is.null(index)) {
                 dimnames <- vector("list", length(dim(obj)))
                 for (i in seq_along(dimnames)) {
                     target <- paste0("dimnames", i)
@@ -119,7 +119,10 @@ h5read <- function(file, name, index=NULL, start=NULL, stride=NULL, block=NULL,
                         H5Aclose(thing)
                     }
                 }
+
                 if (any(!vapply(dimnames, is.null, FALSE))) {
+                    dimnames <- .block_dimnames(dimnames, start=start, stride=stride,
+                                                block=block, count=count)
                     dimnames(obj) <- dimnames
                 }
             }
@@ -149,4 +152,20 @@ h5read <- function(file, name, index=NULL, start=NULL, stride=NULL, block=NULL,
     }  # !H5Lexists
     
     obj
+}
+
+.block_dimnames <- function(dimnames, start, stride, block, count) {
+    if (is.null(start) || is.null(stride) || is.null(block) || is.null(count)) {
+        # Do these things have any defaults?
+        return(dimnames)
+    }
+
+    for (i in seq_along(dimnames)) {
+        nblocks <- count[i]
+        blocksize <- block[i]
+        chosen <- outer(seq_len(blocksize), (seq_len(nblocks) - 1) * stride[i], FUN="+")
+        dimnames[[i]] <- dimnames[[i]][start[i] + as.vector(chosen)]                        
+    }
+
+    dimnames
 }
