@@ -1,0 +1,7 @@
+#!/bin/sh
+
+## use R to remove SSE2 or AVX2 references from BLOSC Makefiles
+"${R_HOME}/bin${R_ARCH_BIN}/Rscript.exe" -e 'lines <- gsub("@FILTERS@", "_H5P_filters", readLines("src/external_filters.h.in"));
+             out_file <- file("src/external_filters.h", open="wb");
+             writeLines(lines, con = out_file, sep = "\n");
+             close(out_file);'
