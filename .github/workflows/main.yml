@@ -52,9 +52,9 @@ jobs:
         run: |
           Rscript -e "install.packages(c('BiocManager', 'remotes'))"
           Rscript -e "BiocManager::install(version = 'devel', ask = FALSE, update = FALSE)"
-          Rscript -e "BiocManager::install(c('grimbough/Rhdf5lib'), ask = FALSE, update = FALSE)"
-          Rscript -e "BiocManager::install(c('rcmdcheck', 'rhdf5filters'), ask = FALSE, update = FALSE)"
-          Rscript -e "BiocManager::install('rhdf5', dependencies = TRUE, ask = FALSE, update = FALSE)"
+          Rscript -e "BiocManager::install(c('grimbough/Rhdf5lib'), ask = FALSE, update = FALSE, INSTALL_opts = '--force-biarch')"
+          Rscript -e "BiocManager::install(c('rcmdcheck', 'rhdf5filters'), ask = FALSE, update = FALSE, INSTALL_opts = '--force-biarch')"
+          Rscript -e "BiocManager::install('rhdf5', dependencies = TRUE, ask = FALSE, update = FALSE, INSTALL_opts = '--force-biarch')"
 
       - name: Non-windows check
         if: ${{ matrix.config.os != 'windows-latest' }}
