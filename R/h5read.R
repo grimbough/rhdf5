@@ -107,8 +107,25 @@ h5read <- function(file, name, index=NULL, start=NULL, stride=NULL, block=NULL,
                     obj[obj == "NA"] <- NA_character_
                 }
             }
+
+            ## Add back the dimnames. Note that this is not yet start/stride/block/count-aware.
+            if (is.null(index) && is.null(start) && is.null(stride) && is.null(count) && is.null(block)) {
+                dimnames <- vector("list", length(dim(obj)))
+                for (i in seq_along(dimnames)) {
+                    target <- paste0("dimnames", i)
+                    if (H5Aexists(h5dataset, target)) { 
+                        thing <- H5Aopen(h5dataset, target)
+                        dimnames[[i]] <- H5Aread(thing)
+                        H5Aclose(thing)
+                    }
+                }
+                if (any(!vapply(dimnames, is.null, FALSE))) {
+                    dimnames(obj) <- dimnames
+                }
+            }
+
             try( { H5Dclose(h5dataset) } )
-            
+
             cl <- attr(obj,"class")
             if (!is.null(cl) & callGeneric) {
                 if (exists(paste("h5read",cl,sep="."),mode="function")) {

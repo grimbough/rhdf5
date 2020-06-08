@@ -227,6 +227,16 @@ h5writeDataset.array <- function(obj, h5loc, name, index = NULL,
         }
     }
 
+    # Adding dimension names to the attributes.
+    d <- dimnames(obj)
+    if (!is.null(d) && any(!vapply(d, is.null, FALSE))) {
+        for (i in seq_along(d)) {
+            if (!is.null(d[[i]])) {
+                h5writeAttribute(d[[i]], h5dataset, paste0("dimnames", i))
+            }
+        }
+    }
+
     invisible(NULL)
 }
 
