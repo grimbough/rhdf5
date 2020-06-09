@@ -4,7 +4,8 @@
 \section{Changes in version 2.34.0}{
   \subsection{NEW FEATURES}{
     \itemize{
-      \item Added support for read access to files in Amazon S3 buckets.
+      \item Added support for read access to files in Amazon S3 buckets 
+      (currently only available on non-Windows platforms).
       \item Included read and write support for dynamic compression filters 
       distributed in \pkg{rhdf5filters}.
     }
@@ -13,6 +14,9 @@
     \itemize{
       \item Fix bug in H5Dget_storage_size() where the wrong C function was 
       called.
+      \item \code{NA} values in logical datatypes are now preserved when 
+      written and read back into R 
+      (https://github.com/grimbough/rhdf5/issues/58).
     }
   }
 }

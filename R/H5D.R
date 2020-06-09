@@ -99,6 +99,10 @@ H5Dread <- function( h5dataset, h5spaceFile=NULL, h5spaceMem=NULL, buf = NULL, c
   if (H5Aexists(h5obj=h5dataset, name="storage.mode")) {
     att = H5Aopen(h5obj=h5dataset, name="storage.mode")
     if (H5Aread(h5attribute=att) == "logical") {
+      na_idx <- which(res == -128)
+      if(any(na_idx)) {
+        res[na_idx] <- NA_integer_
+      }
       storage.mode(res) = "logical"
     }
     H5Aclose(att)
