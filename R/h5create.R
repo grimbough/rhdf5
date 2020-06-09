@@ -48,7 +48,7 @@ h5createGroup <- function(file, group) {
                     double = h5constants$H5T["H5T_IEEE_F64LE"],
                     integer = h5constants$H5T["H5T_STD_I32LE"],
                     integer64 = h5constants$H5T["H5T_STD_I64LE"],
-                    logical = h5constants$H5T["H5T_STD_U8LE"],
+                    logical = h5constants$H5T["H5T_STD_I8LE"],
                     raw = h5constants$H5T["H5T_STD_U8LE"],
                     character = {
                       tid <- H5Tcopy("H5T_C_S1")

@@ -139,27 +139,43 @@ SEXP H5Dread_helper_INTEGER(hid_t dataset_id, hid_t file_space_id, hid_t mem_spa
     int warn = 0;
     int warn_double = 0;
     
+    /* 1-byte integers. Reading strategy is dependent on whether these 
+     * are signed or unsigned (RAWSXP vs INTSXP) */
     if(b == 1) {
-      
-      mem_type_id = H5T_NATIVE_UCHAR;
-      
       void * buf;
-      if (length(_buf) == 0) {
-        Rval = PROTECT(allocVector(RAWSXP, n));
-        buf = RAW(Rval);
+      if(sgn == H5T_SGN_NONE) {
+        
+        mem_type_id = H5T_NATIVE_UCHAR;
+        if (length(_buf) == 0) {
+          Rval = PROTECT(allocVector(RAWSXP, n));
+          buf = RAW(Rval);
+        } else {
+          buf = RAW(_buf);
+          Rval = _buf;
+        }
+        herr_t herr = H5Dread(dataset_id, mem_type_id, mem_space_id, file_space_id, H5P_DEFAULT, buf );
+        if (native)
+          PERMUTE(Rval, RAW, mem_space_id);
+        
       } else {
-        buf = RAW(_buf);
-        Rval = _buf;
+        
+        mem_type_id = H5T_NATIVE_INT32;
+        if (length(_buf) == 0) {
+          Rval = PROTECT(allocVector(INTSXP, n));
+          buf = INTEGER(Rval);
+        } else {
+          buf = INTEGER(_buf);
+          Rval = _buf;
+        }
+        herr_t herr = H5Dread(dataset_id, mem_type_id, mem_space_id, file_space_id, H5P_DEFAULT, buf );
+        if (native)
+          PERMUTE(Rval, INTEGER, mem_space_id);
+        
       }
-      herr_t herr = H5Dread(dataset_id, mem_type_id, mem_space_id, file_space_id, H5P_DEFAULT, buf );
-      
-      if (native)
-        PERMUTE(Rval, RAW, mem_space_id);
-      
       if (length(_buf) == 0) {
         setAttrib(Rval, R_DimSymbol, Rdim);
       }
-    
+      
     } else {
     if ( ((b >= 2) & (b < 4)) | ((b == 4) & (sgn == H5T_SGN_2))) {   // Read directly to R-integer without loss of data (short or signed int)
         if (cpdType < 0) {

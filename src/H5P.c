@@ -1014,7 +1014,7 @@ SEXP _H5Pset_fill_value( SEXP _plist_id, SEXP _type_id, SEXP _value ) {
         value = REAL(_value);
     } else if (type_id == H5T_STD_I32LE) {
         value = INTEGER(_value);
-    } else if (type_id == H5T_STD_U8LE) {
+    } else if (type_id == H5T_STD_I8LE) {
         value = LOGICAL(_value);
     } else {
         value = (void *)CHAR(STRING_ELT(_value, 0));
