@@ -104,13 +104,12 @@ SEXP _H5Fget_filesize( SEXP _file_id ) {
 
 /* ssize_t H5Fget_name(hid_t obj_id, char *name, size_t size ) */
 SEXP _H5Fget_name( SEXP _obj_id ) {
-  //hid_t obj_id =  INTEGER(_obj_id)[0];
+
   hid_t obj_id = STRSXP_2_HID( _obj_id );
   ssize_t size = H5Fget_name( obj_id, NULL, 0);
   SEXP Rval;
   PROTECT(Rval = allocVector(STRSXP, 1));
   if (size >= 0) {
-    //char name[size+1];
     char *name = R_alloc(size+1, sizeof(char));
     size = H5Fget_name( obj_id, name, size+1);
     if (size >= 0) {
@@ -129,10 +128,9 @@ SEXP _H5Fget_name( SEXP _obj_id ) {
 
 /* hid_t H5Fget_create_plist(hid_t file_id ) { */
 SEXP _H5Fget_create_plist( SEXP _file_id ) {
-  //hid_t file_id =  INTEGER(_file_id)[0];
+
   hid_t file_id = STRSXP_2_HID( _file_id );
   hid_t plist_id = H5Fget_create_plist( file_id );
-  //SEXP Rval = ScalarInteger(plist_id);
   SEXP Rval;
   PROTECT(Rval = HID_2_STRSXP(plist_id));
   UNPROTECT(1);
@@ -141,10 +139,9 @@ SEXP _H5Fget_create_plist( SEXP _file_id ) {
 
 /* hid_t H5Fget_access_plist(hid_t file_id ) { */
 SEXP _H5Fget_access_plist( SEXP _file_id ) {
-  //hid_t file_id =  INTEGER(_file_id)[0];
+
   hid_t file_id = STRSXP_2_HID( _file_id );
   hid_t plist_id = H5Fget_access_plist( file_id );
-  //SEXP Rval = ScalarInteger(plist_id);
   SEXP Rval;
   PROTECT(Rval = HID_2_STRSXP(plist_id));
   UNPROTECT(1);

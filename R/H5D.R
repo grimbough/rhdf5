@@ -75,6 +75,39 @@ H5Dget_storage_size <- function( h5dataset ) {
   return(size)
 }
 
+.postProcessDataSet <- function(h5dataset, res) {
+  
+  ## handle NA values in logical dataset
+  if (H5Aexists(h5obj=h5dataset, name="storage.mode")) {
+    att <- H5Aopen(h5obj=h5dataset, name="storage.mode")
+    on.exit(H5Aclose(att))
+    if (H5Aread(h5attribute = att) == "logical") {
+      na_idx <- which(res == -128)
+      if(any(na_idx)) {
+        res[na_idx] <- NA_integer_
+      }
+      storage.mode(res) = "logical"
+    }
+  }
+    
+  ## warn about NA conversion for integers if 'na.ok' is missing
+  if(!H5Aexists(h5obj = h5dataset, name = "na.ok")) {
+    if( (is(res, "integer") || is(res, "integer64")) && any(is.na(res))) {
+      if(is(res, "integer")) {
+        na_val <- "-2^31"
+      } else if (is(res, "integer64")) {
+        na_val <- "-2^63"
+      } else { ## we should never end up here
+        na_val <- "DEFAULT"
+      }
+      warning("The value ", na_val, " was detected in the dataset.\n",
+              "This has been converted to NA within R.")
+    }
+  }
+
+  res
+}
+
 H5Dread <- function( h5dataset, h5spaceFile=NULL, h5spaceMem=NULL, buf = NULL, compoundAsDataFrame = TRUE,
                      bit64conversion, drop = FALSE ) {
   h5checktype(h5dataset, "dataset")
@@ -96,17 +129,7 @@ H5Dread <- function( h5dataset, h5spaceFile=NULL, h5spaceMem=NULL, buf = NULL, c
   res <- .Call("_H5Dread", h5dataset@ID, sidFile, sidMem, buf, compoundAsDataFrame, 
                bit64conv, drop, h5dataset@native, PACKAGE='rhdf5')
   
-  if (H5Aexists(h5obj=h5dataset, name="storage.mode")) {
-    att = H5Aopen(h5obj=h5dataset, name="storage.mode")
-    if (H5Aread(h5attribute=att) == "logical") {
-      na_idx <- which(res == -128)
-      if(any(na_idx)) {
-        res[na_idx] <- NA_integer_
-      }
-      storage.mode(res) = "logical"
-    }
-    H5Aclose(att)
-  }
+  res <- .postProcessDataSet(h5dataset, res)
   res
 }
 

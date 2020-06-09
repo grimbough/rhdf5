@@ -83,7 +83,6 @@ h5write.default <- function(obj, file, name, createnewfile=TRUE, write.attribute
     
     res <- h5writeDataset(obj, loc$H5Identifier, name, ...)
     if (write.attributes) {
-        # type = H5Oget_info_by_name(loc$H5Identifier, name)$type
         oid = H5Oopen(loc$H5Identifier, name)
         type = H5Iget_type(oid)
         H5Oclose(oid)
@@ -140,7 +139,6 @@ h5writeDataset.data.frame <- function(obj, h5loc, name, level=6, chunk, DataFram
         ## we can't write out factors, so convert any to character
         colClass <- sapply(obj, is.factor)
         if(any(colClass)) {
-            #obj[,which(colClass)] <- as.character(obj[,which(colClass)])
             obj[ which(colClass) ] <- lapply(obj[ ,which(colClass), drop=FALSE], FUN = as.character)
         }
         
@@ -219,6 +217,8 @@ h5writeDataset.array <- function(obj, h5loc, name, index = NULL,
     on.exit( H5Dclose(h5dataset) )
     h5writeDatasetHelper(obj=obj, h5dataset=h5dataset, index = index, start = start, stride = stride, 
                          block = block, count = count)
+    h5writeAttribute(1L, h5dataset, name = "na.ok")
+    
     if(storage.mode(obj) == "character" && any(is.na(obj))) {
         h5writeAttribute(1L, h5dataset, name = "as.na")
         if(any(obj == "NA", na.rm = TRUE)) {

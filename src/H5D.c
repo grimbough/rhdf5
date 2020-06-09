@@ -134,7 +134,7 @@ SEXP H5Dread_helper_INTEGER(hid_t dataset_id, hid_t file_space_id, hid_t mem_spa
     int b = H5Tget_size(dtype_id);
     H5T_sign_t sgn = H5Tget_sign(dtype_id);
     
-    int warn_NA = 0;
+    //int warn_NA = 0;
     int warn = 0;
     int warn_double = 0;
     
@@ -201,12 +201,11 @@ SEXP H5Dread_helper_INTEGER(hid_t dataset_id, hid_t file_space_id, hid_t mem_spa
         if (native)
             PERMUTE(Rval, INTEGER, mem_space_id);
         
-        for (long long i=0; i<n; i++) {
-            if (((int *)buf)[i] == INT_MIN) {
-                warn_NA = 1;
-            }
-        }
-        //if (length(_buf) == 0 && n > 0) {
+        //for (long long i=0; i<n; i++) {
+        //    if (((int *)buf)[i] == INT_MIN) {
+        //        warn_NA = 1;
+        //    }
+        //}
         if (length(_buf) == 0) {
             setAttrib(Rval, R_DimSymbol, Rdim);
         }
@@ -276,9 +275,9 @@ SEXP H5Dread_helper_INTEGER(hid_t dataset_id, hid_t file_space_id, hid_t mem_spa
                         ((int *)buf)[i] = INT_MIN;
                         warn = 1;
                     }
-                    if (((long long *)intbuf)[i] == INT_MIN) {
-                        warn_NA = 1;
-                    }
+                    //if (((long long *)intbuf)[i] == INT_MIN) {
+                    //    warn_NA = 1;
+                    //}
                 }
             } else if ((b == 8) & (sgn == H5T_SGN_NONE)) {
                 for (i=0; i<n; i++) {
@@ -346,11 +345,11 @@ SEXP H5Dread_helper_INTEGER(hid_t dataset_id, hid_t file_space_id, hid_t mem_spa
                     for (i=0; i<n; i++){
                         ((long long *)buf)[i] = ((long long *)intbuf)[i];
                     }
-                    for (i=0; i<n; i++) {
-                        if (((long long *)intbuf)[i] == LLONG_MIN) {
-                            warn_NA = 1;
-                        }
-                    }
+                    //for (i=0; i<n; i++) {
+                    //    if (((long long *)intbuf)[i] == LLONG_MIN) {
+                    //        warn_NA = 1;
+                    //    }
+                    //}
                 } else if ((b == 8) & (sgn == H5T_SGN_NONE)) {
                     for (i=0; i<n; i++){
                         ((long long *)buf)[i] = ((unsigned long long *)intbuf)[i];
@@ -375,19 +374,20 @@ SEXP H5Dread_helper_INTEGER(hid_t dataset_id, hid_t file_space_id, hid_t mem_spa
     }
     }
     
-    if ((warn > 0) | (warn_NA > 0) | (warn_double > 0)) {
+    //if ((warn > 0) | (warn_NA > 0) | (warn_double > 0)) {
+    if ((warn > 0) | (warn_double > 0)) {
         if (warn > 0) {
             warning("NAs produced by integer overflow while converting 64-bit integer or unsigned 32-bit integer from HDF5 to a 32-bit integer in R.\nChoose bit64conversion='bit64' or bit64conversion='double' to avoid data loss and see the vignette 'rhdf5' for more details about 64-bit integers.");
         } else {
             if (warn_double > 0) {
                 warning("integer precision lost while converting 64-bit integer or unsigned 32-bit integer from HDF5 to double in R.\nChoose bit64conversion='bit64' to avoid data loss and see the vignette 'rhdf5' for more details about 64-bit integers.");
-            } else {
-                if (bit64conversion == 2) {
-                    warning("integer value -2^31 replaced by NA. See the section 'Large integer data types' in the 'rhdf5' vignette for more details.");
-                } else {
-                    warning("integer value -2^63 replaced NA. See the section 'Large integer data types' in the 'rhdf5' vignette for more details.");
-                }
-            }
+            }// else {
+             //   if (bit64conversion == 2) {
+            //        warning("integer value -2^31 replaced by NA. See the section 'Large integer data types' in the 'rhdf5' vignette for more details.");
+            //    } else {
+            //        warning("integer value -2^63 replaced NA. See the section 'Large integer data types' in the 'rhdf5' vignette for more details.");
+            //    }
+            //}
         }
     }
     
