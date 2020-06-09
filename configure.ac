@@ -7,7 +7,7 @@ AC_CONFIG_SRCDIR([src])
 
 # determine if the filters package is installed
 FILTERS=`echo 'cat(if("rhdf5filters" %in% installed.packages()[[,"Package"]]) "_H5P_filters" else "undef")'|\
-    "${R_HOME}/bin/R" --vanilla --slave`
+    "${R_HOME}/bin/R" --slave`
 
 AC_SUBST(FILTERS)
 AC_CONFIG_FILES([src/external_filters.h])
