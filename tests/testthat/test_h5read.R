@@ -245,6 +245,34 @@ test_that("Empty index retain dimensionality", {
 })
 
 ############################################################
+context("dimnames")
+############################################################
+
+test_that("dimnames are preserved in array reads", {
+    library(testthat); library(rhdf5)
+    B <- matrix(runif(100), 10, 10)
+    dimnames(B) <- list(LETTERS[1:10], letters[10:19])
+
+    target <- tempfile()
+    h5createFile(target)
+    h5write(B, target, "thing")
+
+    # Basic read.
+    expect_identical(B, h5read(target, "thing"))
+
+    # Indexed read.
+    expect_identical(B[1:5,6:2], h5read(target, "thing", index=list(1:5, 6:2)))
+    expect_identical(B[1:5,], h5read(target, "thing", index=list(1:5, NULL)))
+    expect_identical(B[,1:5], h5read(target, "thing", index=list(NULL, 1:5)))
+
+    # Block/stride reads.
+    expect_identical(B, h5read(target, "thing", start=c(1,1)))
+    
+    out <- h5read(target, "thing", start=c(1,2), stride=c(4, 3), block=c(3,2), count=c(2, 3))
+    expect_identical(B[rownames(out),colnames(out)], out)
+})
+
+############################################################
 context("64-bit conversion")
 ############################################################
 
