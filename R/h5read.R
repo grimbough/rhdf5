@@ -109,23 +109,17 @@ h5read <- function(file, name, index=NULL, start=NULL, stride=NULL, block=NULL,
             }
 
             ## Add back the dimnames. 
-            if (is.null(index)) {
-                dimnames <- vector("list", length(dim(obj)))
-                for (i in seq_along(dimnames)) {
-                    target <- paste0("dimnames", i)
-                    if (H5Aexists(h5dataset, target)) { 
-                        thing <- H5Aopen(h5dataset, target)
-                        dimnames[[i]] <- as.character(H5Aread(thing))
-                        H5Aclose(thing)
-                    }
-                }
-
-                if (any(!vapply(dimnames, is.null, FALSE))) {
-                    dimnames <- .block_dimnames(dimnames, start=start, stride=stride,
-                                                block=block, count=count)
-                    dimnames(obj) <- dimnames
+            dimnames <- vector("list", length(dim(obj)))
+            for (i in seq_along(dimnames)) {
+                target <- paste0("dimnames", i)
+                if (H5Aexists(h5dataset, target)) { 
+                    thing <- H5Aopen(h5dataset, target)
+                    dimnames[[i]] <- as.character(H5Aread(thing))
+                    H5Aclose(thing)
                 }
             }
+            dimnames(obj) <- .choose_dimnames(dim(obj), dimnames, index=index, start=start, 
+                                              stride=stride, block=block, count=count)
 
             try( { H5Dclose(h5dataset) } )
 
@@ -154,17 +148,40 @@ h5read <- function(file, name, index=NULL, start=NULL, stride=NULL, block=NULL,
     obj
 }
 
-.block_dimnames <- function(dimnames, start, stride, block, count) {
-    if (is.null(start) || is.null(stride) || is.null(block) || is.null(count)) {
-        # Do these things have any defaults?
+.choose_dimnames <- function(dims, dimnames, index, start, stride, block, count) {
+    if (all(vapply(dimnames, is.null, FALSE))) {
         return(dimnames)
     }
 
-    for (i in seq_along(dimnames)) {
-        nblocks <- count[i]
-        blocksize <- block[i]
-        chosen <- outer(seq_len(blocksize), (seq_len(nblocks) - 1) * stride[i], FUN="+")
-        dimnames[[i]] <- dimnames[[i]][start[i] + as.vector(chosen)]                        
+    # The rest of this function duplicates h5readDataset and
+    # H5Sselect_hyperslab. There must be a better way!
+    if (!is.null(index)) {
+        for (i in seq_along(dimnames)) {
+            if (!is.null(index[[i]])) {
+                dimnames[[i]] <- dimnames[[i]][index[[i]]]
+            }
+        }
+
+    } else if (any(c(!is.null(start), !is.null(stride), !is.null(block), !is.null(count)))) {
+        if (is.null(start)) {
+            start <- rep(1L, length(dimnames))
+        }
+        if (is.null(stride)) {
+            stride <- rep(1L, length(dimnames)) 
+        }
+        if (is.null(block)) {
+            block <- rep(1L, length(dimnames)) 
+        }
+        if (is.null(count)) {
+            count <- dims 
+        }
+
+        for (i in seq_along(dimnames)) {
+            nblocks <- count[i]
+            blocksize <- block[i]
+            chosen <- outer(seq_len(blocksize), (seq_len(nblocks) - 1) * stride[i], FUN="+")
+            dimnames[[i]] <- dimnames[[i]][start[i] - 1L + as.vector(chosen)]
+        }
     }
 
     dimnames
