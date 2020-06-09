@@ -7,7 +7,7 @@ context("h5read")
 set.seed(1234)
 A = 1L:7L;  
 B = matrix(1:18, ncol = 2); 
-C = c(TRUE, TRUE, FALSE)
+C = c(TRUE, TRUE, FALSE, NA)
 D = seq(0, 1, by=0.1)
 E = as.raw(sample(0:255, size = 5))
 attr(D, "scale") <- "centimeters"
