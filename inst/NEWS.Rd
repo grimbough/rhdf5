@@ -10,6 +10,16 @@
       distributed in \pkg{rhdf5filters}.
     }
   }
+  
+  \subsection{CHANGES}{
+    \itemize{
+      \item All datasets written with h5write() now have the attribute 
+      \code{rhdf5-NA.OK} added to them.  This is used to indicate that rhdf5
+      was used to create the file and that the user does not need to be 
+      informed that specific values will be mapped to \code{NA} in R.
+    }
+  }
+    
   \subsection{BUG FIXES}{
     \itemize{
       \item Fix bug in H5Dget_storage_size() where the wrong C function was 
@@ -17,6 +27,8 @@
       \item \code{NA} values in logical datatypes are now preserved when 
       written and read back into R 
       (https://github.com/grimbough/rhdf5/issues/58).
+      \item Fixed error when trying to write a vector containing only empty
+      strings (https://github.com/grimbough/rhdf5/issues/60).
     }
   }
 }
