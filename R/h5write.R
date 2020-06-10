@@ -228,6 +228,20 @@ h5writeDataset.array <- function(obj, h5loc, name, index = NULL,
         }
     }
 
+    # Adding dimension names to the attributes. If NULL,
+    # wiping the corresponding attribute if it already exists.
+    d <- dimnames(obj)
+    if (!is.null(d) && any(!vapply(d, is.null, FALSE))) {
+        for (i in seq_along(d)) {
+            target <- paste0("dimnames", i)
+            if (!is.null(d[[i]])) {
+                h5writeAttribute(d[[i]], h5dataset, target)
+            } else if (H5Aexists(h5dataset, target)) {
+                H5Adelete(h5dataset, target)
+            }
+        }
+    }
+
     invisible(NULL)
 }
 

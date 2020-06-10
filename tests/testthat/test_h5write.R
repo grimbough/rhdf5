@@ -94,6 +94,33 @@ test_that("Writing to file handle", {
 })
 
 ############################################################
+context("h5write with named arrays")
+############################################################
+
+## output file name
+h5File <- tempfile(pattern = "ex_writeDataset_", fileext = ".h5")
+
+test_that("Writing a named array", {
+    B <- array(seq(0.1,2.0,by=0.1),dim=c(5,2,2))
+
+    fid <- H5Fcreate(name = h5File)
+    expect_silent(h5writeDataset(B, fid, "unnamed"))
+    expect_identical(h5read(fid, "unnamed"), B)
+
+    dimnames(B) <- list(1:5, LETTERS[1:2], letters[20:21])
+    expect_silent(h5writeDataset(B, fid, "named"))
+    expect_identical(h5read(fid, "named"), B)
+
+    # Partial NULLs. Also checks that we wipe the previous
+    # attributes if they were non-NULL.
+    dimnames(B) <- list(NULL, LETTERS[10+1:2], NULL)
+    expect_silent(h5writeDataset(B, fid, "named"))
+    expect_identical(h5read(fid, "named"), B)
+
+    H5Fclose(fid)
+})
+
+############################################################
 context("h5write with data.frames")
 ############################################################
 
