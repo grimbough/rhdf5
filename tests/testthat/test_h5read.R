@@ -176,6 +176,26 @@ test_that("NA characters are supported", {
                  "Both NA_character_ and the string 'NA' detected")
 })
 
+test_that("No warnings are generated for integers containing NA written from R", {
+  
+  expect_silent(h5write(c(NA_integer_, 1:5), h5File, "NA_int"))
+  expect_silent( na_int <- h5read(h5File, name = "NA_int") )
+  expect_true( is.na( na_int[1] ) )
+  
+})
+  
+test_that("Warnings are generated for integers containing NA written outside rhdf5", {
+  ## remove the rhdf5-NA.OK attribute to simulate data not written by rhdf5
+  fid <- H5Fopen(name = h5File)
+  did <- H5Dopen(fid, name = "NA_int")
+  H5Adelete(did, "rhdf5-NA.OK")
+  H5Dclose(did)
+  H5Fclose(fid)
+  expect_message(h5read(h5File, name = "NA_int"),
+                 "The value -2^31 was detected in the dataset", 
+                 fixed = TRUE)
+})
+
 ############################################################
 context("indexing")
 ############################################################

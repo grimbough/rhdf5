@@ -196,9 +196,9 @@ if(file.exists(h5File))
 h5createFile(h5File)
 h5write(1:1, h5File, "foo")
 
-test_that("Add attribute using file name", {
+test_that("attributes can be added using file name", {
     expect_true( h5createAttribute(obj = "foo", file = h5File, attr = "foo_attr", dims = c(1,1)) )
-    expect_match( names(h5readAttributes(file = h5File, name = "foo")), "foo_attr" )
+    expect_true( "foo_attr" %in% names(h5readAttributes(file = h5File, name = "foo")) )
 })
 
 test_that("Fail is attribute already exists", {

@@ -193,7 +193,6 @@ h5writeDataset.array <- function(obj, h5loc, name, index = NULL,
     exists <- try( { H5Lexists(h5loc, name) } )
     if (!exists) {
         if (is.null(size)) {
-            size = NULL
             if (storage.mode(obj) == "character") {
                 if (length(obj) > 0) {
                     size <- max(nchar(obj), na.rm = TRUE)
@@ -217,7 +216,7 @@ h5writeDataset.array <- function(obj, h5loc, name, index = NULL,
     on.exit( H5Dclose(h5dataset) )
     h5writeDatasetHelper(obj=obj, h5dataset=h5dataset, index = index, start = start, stride = stride, 
                          block = block, count = count)
-    h5writeAttribute(1L, h5dataset, name = "na.ok")
+    h5writeAttribute(1L, h5dataset, name = "rhdf5-NA.OK")
     
     if(storage.mode(obj) == "character" && any(is.na(obj))) {
         h5writeAttribute(1L, h5dataset, name = "as.na")

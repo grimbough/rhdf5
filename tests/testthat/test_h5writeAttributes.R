@@ -33,7 +33,7 @@ test_that("Adding attribute to file", {
     
     attr_back <- h5readAttributes(h5File, name = "/")
     expect_length(attr_back, n = 4)
-    expect_true( all(names(attr_back) %in% c("char_attr", "int_attr", "numeric_attr", "matrix_attr")) )
+    expect_true( all(c("char_attr", "int_attr", "numeric_attr", "matrix_attr") %in% names(attr_back)) )
     expect_is(attr_back$char_attr[1], "character")
     expect_is(attr_back$int_attr[1], "integer")
     expect_is(attr_back$numeric_attr[1], "numeric")
@@ -63,7 +63,7 @@ test_that("Adding attribute to group", {
     
     attr_back <- h5readAttributes(h5File, name = "foo_group")
     expect_length(attr_back, n = 4)
-    expect_true( all(names(attr_back) %in% c("char_attr", "int_attr", "numeric_attr", "matrix_attr")) )
+    expect_true( all(c("char_attr", "int_attr", "numeric_attr", "matrix_attr") %in% names(attr_back)) )
     expect_is(attr_back$char_attr[1], "character")
     expect_is(attr_back$int_attr[1], "integer")
     expect_is(attr_back$numeric_attr[1], "numeric")

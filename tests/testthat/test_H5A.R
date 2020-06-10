@@ -57,10 +57,10 @@ test_that("Opening attributes", {
     expect_output(print(aid), regexp = "time")
     expect_silent( H5Aclose(aid) )
     
-    expect_silent( aid <- H5Aopen_by_idx(fid, n = 0, objname = "A") )
+    expect_silent( aid <- H5Aopen_by_idx(fid, n = 1, objname = "A") )
     expect_identical(H5Aget_name(aid), "time")
     expect_silent( H5Aclose(aid) )
-    expect_silent( aid <- H5Aopen_by_idx(fid, n = 1, objname = "A") )
+    expect_silent( aid <- H5Aopen_by_idx(fid, n = 2, objname = "A") )
     expect_identical(H5Aget_name(aid), "volume")
     expect_silent( H5Aclose(aid) )
 
