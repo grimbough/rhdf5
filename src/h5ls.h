@@ -13,5 +13,6 @@
 #include "utils.h"
 
 SEXP _h5ls( SEXP _loc_id, SEXP _depth, SEXP _datasetinfo, SEXP _index_type, SEXP _order, SEXP _native );
+SEXP _h5ls2( SEXP _loc_id, SEXP _depth, SEXP _datasetinfo, SEXP _index_type, SEXP _order, SEXP _native );
 
 #endif

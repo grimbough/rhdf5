@@ -34,7 +34,7 @@ test_that("Default arguments", {
 test_that("Expanded information", {
     
     ls_output <- h5ls( file = h5File, all = TRUE )
-    expect_equal( dim(ls_output), c(4, 14) )
+    expect_equal( dim(ls_output), c(4, 12) )
     
 })
 
