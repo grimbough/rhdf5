@@ -5,8 +5,8 @@ typedef struct opObjListElement {
     char *name;
     char *group;
     char *datatype;
-    char *class;
-    char *spacetype;
+    char *dataclass;
+    char spacetype[20];
     int rank;
     char *dim;
     char *maxdim;
@@ -50,6 +50,58 @@ else
 /* Recursively examine the next node */
 }
 
+void format_dimensions (H5S_class_t space_type, opObjListElement *newElement, hsize_t *size, hsize_t *maxsize, int native) {
+    
+    switch(space_type) {
+    case H5S_SCALAR: {
+        newElement->dim = "( 0 )";
+        newElement->maxdim = "( 0 )";
+    } break;
+    case H5S_SIMPLE: {
+        char* tmp = (char *) R_alloc(100 * newElement->rank, sizeof(char));
+        memset(tmp, '\0', 100 * sizeof(char));
+        if (native) {
+            for(int i = 0; i < newElement->rank; i++) {
+                concatdim_native(tmp, size[i], i);
+            }
+        } else {
+            for(int i = newElement->rank-1; i >= 0; i--) {
+                concatdim(tmp, size[i], i);
+            }
+        }
+        newElement->dim = (char *) R_alloc((strlen(tmp)+1), sizeof(char));
+        strcpy(newElement->dim, tmp);
+        
+        if(maxsize[0] == H5S_UNLIMITED) {
+            sprintf(tmp, "UNLIMITED");
+        } else {
+            memset(tmp, '\0', 100 * sizeof(char));
+            if (native) {
+                for(int i = 0; i < newElement->rank; i++) {
+                    concatdim_native(tmp, maxsize[i], i);
+                }
+            } else {
+                for(int i = newElement->rank-1; i >= 0; i--) {
+                    concatdim(tmp, maxsize[i], i);
+                }
+            }
+        }
+        newElement->maxdim = (char *) R_alloc((strlen(tmp)+1), sizeof(char));
+        strcpy(newElement->maxdim, tmp);
+    } break;
+    case H5S_NULL: {
+        newElement->dim = (char *) R_alloc(1 * newElement->rank, sizeof(char));
+        memset(newElement->dim, '\0', sizeof(char)); 
+        newElement->dim = (char *) R_alloc(1 * newElement->rank, sizeof(char));
+        memset(newElement->maxdim, '\0', sizeof(char)); 
+    } break;
+    case H5S_NO_CLASS:
+    default:  {
+        newElement->dim = "unknown dataspace"; 
+        newElement->maxdim = "unknown dataspace"; 
+    } break;
+    } 
+}
 
 herr_t opAddToObjList( hid_t g_id, const char *name, const H5L_info_t *info, void *op_data ) {
     
@@ -77,14 +129,14 @@ herr_t opAddToObjList( hid_t g_id, const char *name, const H5L_info_t *info, voi
     case H5O_TYPE_GROUP:
         /* check if we have an recursive loop in the hierarchy */
         if ( data->n > 0 && group_check (data->last, infobuf.addr) ) {
-            Rprintf ("Warning: Loop detected!\n");
+            warning ("Recursive loop detected!\n");
         } else { /* otherwise create a new element in our linked list */
         
         /* for a group these features don't really apply */
         newElement->datatype = "";
-        newElement->class = "";
+        newElement->dataclass = "";
         newElement->rank = 0;
-        newElement->spacetype = "";
+        strncpy(newElement->spacetype, "\0", 20);
         newElement->dim = "";
         newElement->maxdim = "";
         
@@ -119,7 +171,7 @@ herr_t opAddToObjList( hid_t g_id, const char *name, const H5L_info_t *info, voi
         hid_t did = H5Dopen( g_id, name, H5P_DEFAULT );
         hid_t type = H5Dget_type(did);
         newElement->datatype = getDatatypeName(type);
-        newElement->class = getDatatypeClass(type);
+        newElement->dataclass = getDatatypeClass(type);
         hid_t sid = H5Dget_space( did );
         hsize_t   size[H5S_MAX_RANK];
         hsize_t   maxsize[H5S_MAX_RANK];
@@ -127,62 +179,27 @@ herr_t opAddToObjList( hid_t g_id, const char *name, const H5L_info_t *info, voi
         
         H5S_class_t space_type = H5Sget_simple_extent_type(sid);
         switch(space_type) {
-            case H5S_SCALAR:   newElement->spacetype = "SCALAR"; break;
-            case H5S_SIMPLE:   newElement->spacetype = "SIMPLE"; break;
-            case H5S_NULL:     newElement->spacetype = "NULL"; break;
-            case H5S_NO_CLASS: newElement->spacetype = "NO_CLASS"; break;
-            default:           newElement->spacetype = "unknown dataspace"; break;
+        case H5S_SCALAR:   
+            strncpy(newElement->spacetype, "SCALAR", 20); 
+            break;
+        case H5S_SIMPLE:   
+            strncpy(newElement->spacetype, "SIMPLE", 20); 
+            break;
+        case H5S_NULL:     
+            strncpy(newElement->spacetype, "NULL", 20); 
+            break;
+        case H5S_NO_CLASS: 
+            strncpy(newElement->spacetype, "NO_CLASS", 20); 
+            break;
+        default:           
+            strncpy(newElement->spacetype, "unknown dataspace", 20);
+            break;
         } /* end switch */
         newElement->dim = "";
         newElement->maxdim = "";
         
-        switch(space_type) {
-            case H5S_SCALAR: {
-                newElement->dim = "( 0 )";
-                newElement->maxdim = "( 0 )";
-            } break;
-            case H5S_SIMPLE: {
-                char* tmp = (char *)R_alloc(100*newElement->rank,sizeof(char));
-                memset(tmp, '\0', 100 * sizeof(char));
-                if (data->native) {
-                    for(int i = 0; i < newElement->rank; i++) {
-                        concatdim_native(tmp, size[i], i);
-                    }
-                } else {
-                    for(int i = newElement->rank-1; i >= 0; i--) {
-                        concatdim(tmp, size[i], i);
-                    }
-                }
-                newElement->dim = (char *)R_alloc((strlen(tmp)+1),sizeof(char));
-                strcpy(newElement->dim, tmp);
-                
-                if(maxsize[0] == H5S_UNLIMITED) {
-                    sprintf(tmp, "UNLIMITED");
-                } else {
-                    memset(tmp, '\0', 100 * sizeof(char));
-                    if (data->native) {
-                        for(int i = 0; i < newElement->rank; i++) {
-                            concatdim_native(tmp, size[i], i);
-                        }
-                    } else {
-                        for(int i = newElement->rank-1; i >= 0; i--) {
-                            concatdim(tmp, size[i], i);
-                        }
-                    }
-                }
-                newElement->maxdim = (char *)R_alloc((strlen(tmp)+1),sizeof(char));
-                strcpy(newElement->maxdim, tmp);
-            } break;
-            case H5S_NULL: {
-                newElement->dim = ""; 
-                newElement->maxdim = ""; 
-            } break;
-            case H5S_NO_CLASS:
-            default:  {
-                newElement->dim = "unknown dataspace"; 
-                newElement->maxdim = "unknown dataspace"; 
-            } break;
-        } /* end switch */
+        format_dimensions(space_type, newElement, size, maxsize, data->native);
+
         H5Sclose(sid);
         H5Dclose(did);
         
@@ -192,7 +209,6 @@ herr_t opAddToObjList( hid_t g_id, const char *name, const H5L_info_t *info, voi
         if (data->first == NULL) {
             data->first = newElement;
         } 
-        
         break;
     case H5O_TYPE_NAMED_DATATYPE:
         Rprintf ("Datatype: %s\n", name);
@@ -213,14 +229,14 @@ SEXP _h5ls( SEXP _loc_id, SEXP _depth, SEXP _datasetinfo, SEXP _index_type, SEXP
         data.n = 0;
         data.maxdepth = INTEGER(_depth)[0];
         data.depth = 1;
-        data.group = (char *)R_alloc(2, sizeof(char));
+        data.group = (char *) R_alloc(2, sizeof(char));
         strcpy(data.group, "/");
         data.showdatasetinfo = INTEGER(_datasetinfo)[0];
         data.native = INTEGER(_native)[0];
         data.first = NULL;
         data.last = NULL;
-        data.index_type = INTEGER(_index_type)[0];
-        data.order = INTEGER(_order)[0];
+        data.index_type = (H5_index_t) INTEGER(_index_type)[0];
+        data.order = (H5_iter_order_t) INTEGER(_order)[0];
         hsize_t idx=0;
         
         herr_t herr = H5Literate( loc_id, data.index_type, data.order, &idx, &opAddToObjList, &data );
@@ -256,7 +272,7 @@ SEXP _h5ls( SEXP _loc_id, SEXP _depth, SEXP _datasetinfo, SEXP _index_type, SEXP
                 INTEGER(cset)[el->idx] = el->info.cset;
                 INTEGER(otype)[el->idx] = el->type;
                 INTEGER(num_attrs)[el->idx] = el->num_attrs;
-                SET_STRING_ELT(dclass, el->idx, mkChar(el->class));
+                SET_STRING_ELT(dclass, el->idx, mkChar(el->dataclass));
                 SET_STRING_ELT(dtype, el->idx, mkChar(el->datatype));
                 SET_STRING_ELT(stype, el->idx, mkChar(el->spacetype));
                 INTEGER(rank)[el->idx] = el->rank;
