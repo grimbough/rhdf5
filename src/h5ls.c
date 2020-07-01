@@ -1,103 +1,5 @@
 #include "h5ls.h"
 
-typedef struct opObjListElement {
-    long idx;
-    char *name;
-    char *group;
-    char *datatype;
-    char *dataclass;
-    char spacetype[20];
-    int rank;
-    char dim[100];
-    char maxdim[100];
-    H5L_info_t info;
-    H5I_type_t type;
-    hsize_t num_attrs;
-    struct opObjListElement *prev; /* Pointer to previous element */
-    haddr_t addr;                  /* Group address */
-} opObjListElement;
-
-typedef struct opObjList {
-    long n;
-    long depth;
-    char *group;
-    long maxdepth;
-    int showdatasetinfo;
-    int native;
-    H5_index_t index_type;
-    H5_iter_order_t order;
-    opObjListElement *first;
-    opObjListElement *last;
-} opObjList;
-
-
-/************************************************************
- 
- This function recursively searches the linked list of
- opdata structures for one whose address matches
- target_addr.  Returns 1 if a match is found, and 0
- otherwise.
- 
- ************************************************************/
-int group_check (struct opObjListElement *od, haddr_t target_addr)
-{
-    if (od->addr == target_addr)    /* Addresses match */
-        return 1;      
-    else if (!od->prev)             /* Root group reached with no matches */
-        return 0;       
-    else                            /* Recursively examine the next node */
-        return group_check (od->prev, target_addr);
-}
-
-void format_dimensions (H5S_class_t space_type, opObjListElement *newElement, hsize_t *size, hsize_t *maxsize, int native) {
-    
-    switch(space_type) {
-        case H5S_SCALAR: {
-            strncpy(newElement->dim, "( 0 )", 100);
-            strncpy(newElement->maxdim, "( 0 )", 100);
-        } break;
-        case H5S_SIMPLE: {
-            char* tmp = (char *) R_alloc(100 * newElement->rank, sizeof(char));
-            memset(tmp, '\0', 100 * sizeof(char));
-            if (native) {
-                for(int i = 0; i < newElement->rank; i++) {
-                    concatdim_native(tmp, size[i], i);
-                }
-            } else {
-                for(int i = newElement->rank-1; i >= 0; i--) {
-                    concatdim(tmp, size[i], i);
-                }
-            }
-            strcpy(newElement->dim, tmp);
-            
-            if(maxsize[0] == H5S_UNLIMITED) {
-                sprintf(tmp, "UNLIMITED");
-            } else {
-                memset(tmp, '\0', 100 * sizeof(char));
-                if (native) {
-                    for(int i = 0; i < newElement->rank; i++) {
-                        concatdim_native(tmp, maxsize[i], i);
-                    }
-                } else {
-                    for(int i = newElement->rank-1; i >= 0; i--) {
-                        concatdim(tmp, maxsize[i], i);
-                    }
-                }
-            }
-            strcpy(newElement->maxdim, tmp);
-        } break;
-        case H5S_NULL: {;
-            memset(newElement->dim, '\0', sizeof(char)); 
-            memset(newElement->maxdim, '\0', sizeof(char)); 
-        } break;
-        case H5S_NO_CLASS:
-        default:  {
-            strncpy(newElement->dim, "unknown dataspace", 100); 
-            strncpy(newElement->maxdim, "unknown dataspace", 100); 
-        } break;
-    } 
-}
-
 herr_t opAddToObjList( hid_t g_id, const char *name, const H5L_info_t *info, void *op_data ) {
     
     H5O_info_t infobuf;
@@ -124,7 +26,7 @@ herr_t opAddToObjList( hid_t g_id, const char *name, const H5L_info_t *info, voi
         case H5O_TYPE_GROUP: {
             /* check if we have an recursive loop in the hierarchy */
             if ( data->n > 0 && group_check (data->last, infobuf.addr) ) {
-                warning ("Recursive loop detected!\n");
+                warning ("Identical objects found\n");
             } else { /* otherwise create a new element in our linked list */
             
             /* for a group these features don't really apply so we make them empty */

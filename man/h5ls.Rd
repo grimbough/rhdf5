@@ -9,23 +9,24 @@ Lists the content of an HDF5 file.
 \usage{
 h5ls   (file,
         recursive = TRUE,
-	    all = FALSE, 
-	    datasetinfo = TRUE,
-	    index_type = h5default("H5_INDEX"),
-	    order = h5default("H5_ITER"), 
-	    s3 = FALSE, 
-	    s3credentials = NULL,
-	    native = FALSE)
-	    
-h5dump (file,
-        recursive = TRUE,
-	    load = TRUE,
-	    all = FALSE,
+        all = FALSE, 
+        datasetinfo = TRUE,
         index_type = h5default("H5_INDEX"),
         order = h5default("H5_ITER"), 
         s3 = FALSE, 
         s3credentials = NULL,
-        ..., native = FALSE)
+        native = FALSE)
+	    
+h5dump (file,
+        recursive = TRUE,
+        load = TRUE,
+        all = FALSE,
+        index_type = h5default("H5_INDEX"),
+        order = h5default("H5_ITER"), 
+        s3 = FALSE, 
+        s3credentials = NULL,
+        ..., 
+        native = FALSE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{

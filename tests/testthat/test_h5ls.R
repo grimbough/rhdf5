@@ -15,9 +15,9 @@ if(file.exists(h5File))
 # create file with group heirachy  
 h5createFile(h5File)
 h5createGroup(file = h5File, group = "foo")
-h5createDataset(file = h5File, dataset = "foo/A", dims = c(1, length(A) ))
+h5createDataset(file = h5File, dataset = "foo/A", dims = c(1, length(A) ), maxdims = c(2, 50))
 h5write(obj = A, file = h5File, name = "foo/A")
-h5createDataset(file = h5File, dataset = "foo/B", dims = c(1,length(B) ), maxdims = c(2, 50))
+h5createDataset(file = h5File, dataset = "foo/B", dims = c(1,length(B) ))
 h5write(obj = B, file = h5File, name = "foo/B")
 h5createDataset(file = h5File, dataset = "baa", dims = c(1,length(D) ))
 h5write(obj = D, file = h5File, name = "baa")
@@ -42,7 +42,7 @@ test_that("h5ls reads dimensions correctly", {
     
     ls_output <- h5ls( file = h5File, all = TRUE )
     expect_equal(ls_output[3, "dim"], "1 x 7")
-    expect_equal(ls_output[3, "dim"], "2 x 50")
+    expect_equal(ls_output[3, "maxdim"], "2 x 50")
     
 })
 
@@ -74,6 +74,26 @@ test_that('Passing H5Identifier does not close it', {
     fid <- H5Fopen(h5File)
     expect_is( h5ls(file = fid), class = 'data.frame')
     expect_silent( H5Fclose(fid) )
+})
+
+
+
+test_that("h5ls warns if identical groups are detected", {
+    
+    createFileWithCopiedGroup <- function(h5file) {
+        h5createFile(h5file)
+        h5createGroup(h5file, group = "/group1")
+        h5createDataset(h5file, dataset = "/dset1", dims = list(50))
+        h5write(1:50, h5file, name = "/group1/dset1")
+        fid <- H5Fopen(h5file)
+        H5Lcopy(fid, "/group1", fid, "/group2")
+        H5Fclose(fid)
+    }
+    
+    h5file <- tempfile()
+    createFileWithCopiedGroup(h5file)
+    expect_warning(h5ls(h5file), regexp = "Identical objects found")
+    
 })
 
 ############################################################
