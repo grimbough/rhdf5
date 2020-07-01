@@ -17,7 +17,7 @@ h5createFile(h5File)
 h5createGroup(file = h5File, group = "foo")
 h5createDataset(file = h5File, dataset = "foo/A", dims = c(1, length(A) ))
 h5write(obj = A, file = h5File, name = "foo/A")
-h5createDataset(file = h5File, dataset = "foo/B", dims = c(1,length(B) ))
+h5createDataset(file = h5File, dataset = "foo/B", dims = c(1,length(B) ), maxdims = c(2, 50))
 h5write(obj = B, file = h5File, name = "foo/B")
 h5createDataset(file = h5File, dataset = "baa", dims = c(1,length(D) ))
 h5write(obj = D, file = h5File, name = "baa")
@@ -35,6 +35,14 @@ test_that("Expanded information", {
     
     ls_output <- h5ls( file = h5File, all = TRUE )
     expect_equal( dim(ls_output), c(4, 12) )
+    
+})
+
+test_that("h5ls reads dimensions correctly", {
+    
+    ls_output <- h5ls( file = h5File, all = TRUE )
+    expect_equal(ls_output[3, "dim"], "1 x 7")
+    expect_equal(ls_output[3, "dim"], "2 x 50")
     
 })
 

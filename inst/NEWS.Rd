@@ -29,6 +29,8 @@
       (https://github.com/grimbough/rhdf5/issues/58).
       \item Fixed error when trying to write a vector containing only empty
       strings (https://github.com/grimbough/rhdf5/issues/60).
+      \item \code{h5ls()} no longer crashes when given a file containing loops
+      of groups (https://github.com/grimbough/rhdf5/issues/48).
     }
   }
 }
