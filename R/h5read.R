@@ -79,19 +79,27 @@ h5readDataset <- function (h5dataset, index = NULL, start = NULL, stride = NULL,
 
 h5read <- function(file, name, index=NULL, start=NULL, stride=NULL, block=NULL,
                    count = NULL, compoundAsDataFrame = TRUE, callGeneric = TRUE,
-                   read.attributes=FALSE, drop = FALSE, ..., native = FALSE) {
+                   read.attributes=FALSE, drop = FALSE, ..., native = FALSE,
+                   s3 = FALSE, s3credentials = NULL) {
     
-    loc = h5checktypeOrOpenLoc(file, readonly=TRUE, native = native)
-    on.exit( h5closeitLoc(loc) )
+    if(isTRUE(s3)) {
+        fapl <- H5Pcreate("H5P_FILE_ACCESS")
+        on.exit(H5Pclose(fapl))
+        H5Pset_fapl_ros3(fapl, s3credentials)
+        loc <- h5checktypeOrOpenLocS3(file, readonly = TRUE, fapl = fapl, native = native)
+    } else {
+        loc <- h5checktypeOrOpenLoc(file, readonly = TRUE, fapl = NULL, native = native)
+    }
+    on.exit(h5closeitLoc(loc), add = TRUE)
     
     if (!H5Lexists(loc$H5Identifier, name)) {
         stop("Object '", name, "' does not exist in this HDF5 file.")
     } else {
         oid = H5Oopen(loc$H5Identifier, name)
+        on.exit(H5Oclose(oid), add = TRUE)
         type = H5Iget_type(oid)
         num_attrs = H5Oget_num_attrs(oid)
         if (is.na(num_attrs)) { num_attrs = 0 }
-        H5Oclose(oid)
         if (type == "H5I_GROUP") {
             gid <- H5Gopen(loc$H5Identifier, name)
             obj = h5dump(gid, start=start, stride=stride, block=block, 
@@ -99,6 +107,7 @@ h5read <- function(file, name, index=NULL, start=NULL, stride=NULL, block=NULL,
             H5Gclose(gid)
         } else if (type == "H5I_DATASET") {
             h5dataset <- H5Dopen(loc$H5Identifier, name)
+            on.exit(H5Dclose(h5dataset), add = TRUE)
             obj <- h5readDataset(h5dataset, index = index, start = start, stride = stride, 
                                  block = block, count = count, compoundAsDataFrame = compoundAsDataFrame, drop = drop, ...)
             ## coerce the string "NA" to NA if required
@@ -107,8 +116,7 @@ h5read <- function(file, name, index=NULL, start=NULL, stride=NULL, block=NULL,
                     obj[obj == "NA"] <- NA_character_
                 }
             }
-            try( { H5Dclose(h5dataset) } )
-            
+
             cl <- attr(obj,"class")
             if (!is.null(cl) & callGeneric) {
                 if (exists(paste("h5read",cl,sep="."),mode="function")) {
@@ -126,6 +134,8 @@ h5read <- function(file, name, index=NULL, start=NULL, stride=NULL, block=NULL,
                 if (attrname != "dim") {
                     attr(obj, attrname) = H5Aread(A)
                 }
+                ## Don't put this in on.exit() 
+                ## A is overwritten in the loop and we lose track of it
                 H5Aclose(A)
             }
         }

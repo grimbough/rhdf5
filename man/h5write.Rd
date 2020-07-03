@@ -30,7 +30,8 @@ h5read                      (file, name, index=NULL,
                              count=NULL, compoundAsDataFrame = TRUE,
                              callGeneric = TRUE,
                              read.attributes = FALSE, drop = FALSE,
-                             ..., native = FALSE)
+                             ..., native = FALSE,
+                             s3 = FALSE, s3credentials = NULL)
 h5readAttributes            (file, name, native = FALSE)
 h5write                     (obj, file, name, ...)
 h5write.default             (obj, file, name, 
@@ -81,6 +82,9 @@ h5writeAttribute.array      (attr, h5obj, name, size)
   \item{read.attributes}{(logical) If TRUE, the HDF5 attributes are read and attached to the respective R object.}
   \item{drop}{(logical) If TRUE, the HDF5 object is read as a vector with NULL dim attributes.}
   \item{write.attributes}{(logical) If TRUE, all R-attributes attached to the object \code{obj} are written to the HDF5 file.}
+  \item{s3}{Logical value indicating whether the file argument should be 
+  treated as a URL to an Amazon S3 bucket, rather than a local file path.}
+  \item{s3credentials}{A list of length three, providing the credentials for accessing files in a private Amazon S3 bucket.}
   \item{\dots}{Further arguments passed to \code{\link{H5Dread}}.}
 }
 \details{
@@ -117,8 +121,11 @@ h5write(matrix(1:5,nr=5,nc=1), file="ex_hdf5file.h5", name="S", index=list(NULL,
 h5read("ex_hdf5file.h5", "S")
 h5read("ex_hdf5file.h5", "S", index=list(NULL,2:3))
 
-# list content of hdf5 file
-h5ls("ex_hdf5file.h5")
+# Read a subset of an hdf5 file in a public S3 bucket
+\donttest{
+h5read('https://rhdf5-public.s3.eu-central-1.amazonaws.com/rhdf5ex_t_float_3d.h5', 
+      s3 = TRUE, name = "a1", index = list(NULL, 3, NULL))
+}
 
 }
 \keyword{ programming }

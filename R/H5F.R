@@ -5,15 +5,10 @@ H5Fcreate <- function( name, flags = h5default("H5F_ACC"), fcpl = NULL, fapl = N
         stop("'name' must be a character string of length 1")
     name <- normalizePath(name, mustWork = FALSE)
     
-    ## converting a UTF-8 path on windows to native
-    #if(Encoding(name) == "UTF-8" && .Platform$OS.type == "windows") {
-    #    name <- enc2native(name)
-    #}
-    
     flags <- h5checkConstants( "H5F_ACC", flags )
     fcpl = h5checktypeAndPLC(fcpl, "H5P_FILE_CREATE", allowNULL = TRUE)
     if (is.null(fapl)) {
-        ## create a new propery list, and make sure it is closed
+        ## create a new property list, and make sure it is closed
         fapl = H5Pcreate("H5P_FILE_ACCESS")
         on.exit(H5Pclose(fapl))
         H5Pset_libver_bounds(fapl, libver_low = "H5F_LIBVER_EARLIEST", libver_high = "H5F_LIBVER_LATEST")

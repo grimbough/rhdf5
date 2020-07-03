@@ -16,9 +16,9 @@ vignette: |
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-The `r Biocpkg("rhdf5")` provides limited support for read-only access to HDF5 files stored in Amazon S3 buckets.  This is implemented via the (HDF5 S3 Virtual File Driver)[https://portal.hdfgroup.org/display/HDF5/Virtual+File+Drivers+-+S3+and+HDFS] and allowes access to HDF5 files hosted in both public and private S3 buckets.  
+The `r Biocpkg("rhdf5")` provides limited support for read-only access to HDF5 files stored in Amazon S3 buckets.  This is implemented via the (HDF5 S3 Virtual File Driver)[https://portal.hdfgroup.org/display/HDF5/Virtual+File+Drivers+-+S3+and+HDFS] and allows access to HDF5 files hosted in both public and private S3 buckets.  
 
-Currently only the functions `h5ls()` and `h5dump()` are supported, but reading of targeted subsets will be provided soon.
+Currently only the functions `h5ls()`, `h5dump()` and `h5read()` are supported.
 
 ```{r, load-library}
 library(rhdf5)
@@ -42,6 +42,17 @@ h5dump(file = public_S3_url,
      s3 = TRUE)
 ```
 
+In addition to examining and reading whole files, we can also extract just a subset, without needed to read or download the entire file.  In the example below we use `h5ls()` to examine a file in an S3 bucket and identify the name of a dataset within it (`a1`) and the number of dimensions for that dataset (3).  We can then use `h5read()` along with the `name` and `index` arguments to read only a subset of the dataset into our R session.
+
+```{r, public-h5read, error = TRUE, purl = FALSE}
+public_S3_url <- 'https://rhdf5-public.s3.eu-central-1.amazonaws.com/rhdf5ex_t_float_3d.h5'
+h5ls(file = public_S3_url, s3 = TRUE)
+h5read(public_S3_url, 
+       name = "a1", 
+       index = list(1:2, 3, NULL),
+       s3 = TRUE)
+```
+
 # Private S3 Buckets
 
 To access files in a private Amazon S3 bucket you will need to provide three additional details: The AWS region where the files are hosted, your AWS access key ID, and your AWS secret access key.  More information on how to obtain AWS access keys can be found under [AWS Security Credentials](https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys).
@@ -57,7 +68,7 @@ s3_cred <- list(
 )
 ```
 
-Finally we pass this list to `h5ls()` via the `s3credentials` argument.
+Finally we pass this list to `h5ls()` via the `s3credentials` argument.  
 
 ```{r, private-h5ls, eval = FALSE}
 public_S3_url <- "https://rhdf5-private.s3.eu-central-1.amazonaws.com/h5ex_t_array.h5"
@@ -66,6 +77,7 @@ h5ls(file = public_S3_url,
      s3credentials = s3_cred)
 ```
 
+The `s3credentials` arguments is used in exactly the same way for `h5dump()` and `h5read()`.
 
 # Session Info
 ```{r sessioninfo}
