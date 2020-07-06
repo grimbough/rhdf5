@@ -3,9 +3,17 @@
 herr_t opAddToDumpTree( hid_t g_id, const char *name, const H5L_info_t *info, void *op_data) {
     
     H5O_info_t infobuf;
+    H5L_info_t Linfobuf;
     opDumpTree *data = (opDumpTree *) op_data;
     herr_t herr = 0;
 
+    /* we skip soft links */
+    herr = H5Lget_info(g_id, name, &Linfobuf, H5P_DEFAULT);
+    if(Linfobuf.type == H5L_TYPE_SOFT) {
+        char *linkVal = (char *) R_alloc(Linfobuf.u.val_size, sizeof(char));
+        H5Lget_val(g_id, name, linkVal, Linfobuf.u.val_size, H5P_DEFAULT);
+        return herr;
+    }
     herr = H5Oget_info_by_name (g_id, name, &infobuf, H5P_DEFAULT);
 
     opObjListElement *newElement = (opObjListElement *) R_alloc(1, sizeof(struct opObjListElement) );
