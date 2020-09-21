@@ -3,25 +3,26 @@
 
 void concatdim(char *s1, hsize_t next_dim, int index)
 {
-    char tmp[100];
-    strncpy(tmp, s1, 100);
+    
+    char tmp[1000];
+    strncpy(tmp, s1, 1000);
     
 #ifdef H5_HAVE_WINDOWS
-    snprintf(s1, 100, "%s%I64u%s", tmp, next_dim, index ? " x ": "");
+    snprintf(s1, 1000, "%.977s%I64u.3%s", tmp, next_dim, index ? " x ": "");
 #else
-    snprintf(s1, 100, "%s%llu%s", tmp, next_dim, index ? " x " : "");
+    snprintf(s1, 1000, "%.977s%llu%.3s", tmp, next_dim, index ? " x " : "");
 #endif
 }
 
 void concatdim_native(char *s1, hsize_t next_dim, int index)
 {
-    char tmp[100];
-    strncpy(tmp, s1, 100);
+    char tmp[1000];
+    strncpy(tmp, s1, 1000);
     
 #ifdef H5_HAVE_WINDOWS
-    snprintf(s1, 100, "%s%s%I64u", tmp, index ? " x ": "", next_dim);
+    snprintf(s1, 1000, "%.977s%.3s%I64u", tmp, index ? " x ": "", next_dim);
 #else
-    snprintf(s1, 100, "%s%s%llu", tmp, index ? " x " : "", next_dim);
+    snprintf(s1, 1000, "%.977s%.3s%llu", tmp, index ? " x " : "", next_dim);
 #endif
 }
 
@@ -30,12 +31,12 @@ void format_dimensions (H5S_class_t space_type, opObjListElement *newElement, hs
     
     switch(space_type) {
     case H5S_SCALAR: {
-        strncpy(newElement->dim, "( 0 )", 100);
-        strncpy(newElement->maxdim, "( 0 )", 100);
+        strncpy(newElement->dim, "( 0 )", 1000);
+        strncpy(newElement->maxdim, "( 0 )", 1000);
     } break;
     case H5S_SIMPLE: {
-        char* tmp = (char *) R_alloc(100 * newElement->rank, sizeof(char));
-        memset(tmp, '\0', 100 * sizeof(char));
+        char* tmp = (char *) R_alloc(1000 * newElement->rank, sizeof(char));
+        memset(tmp, '\0', 1000 * sizeof(char));
         if (native) {
             for(int i = 0; i < newElement->rank; i++) {
                 concatdim_native(tmp, size[i], i);
@@ -50,7 +51,7 @@ void format_dimensions (H5S_class_t space_type, opObjListElement *newElement, hs
         if(maxsize[0] == H5S_UNLIMITED) {
             sprintf(tmp, "UNLIMITED");
         } else {
-            memset(tmp, '\0', 100 * sizeof(char));
+            memset(tmp, '\0', 1000 * sizeof(char));
             if (native) {
                 for(int i = 0; i < newElement->rank; i++) {
                     concatdim_native(tmp, maxsize[i], i);
@@ -69,8 +70,8 @@ void format_dimensions (H5S_class_t space_type, opObjListElement *newElement, hs
     } break;
     case H5S_NO_CLASS:
     default:  {
-        strncpy(newElement->dim, "unknown dataspace", 100); 
-        strncpy(newElement->maxdim, "unknown dataspace", 100); 
+        strncpy(newElement->dim, "unknown dataspace", 1000); 
+        strncpy(newElement->maxdim, "unknown dataspace", 1000); 
     } break;
     } 
 }

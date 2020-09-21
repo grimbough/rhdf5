@@ -14,8 +14,8 @@ typedef struct opObjListElement {
     char *dataclass;
     char spacetype[20];
     int rank;
-    char dim[100];
-    char maxdim[100];
+    char dim[1000];
+    char maxdim[1000];
     H5L_info_t info;
     H5I_type_t type;
     hsize_t num_attrs;
