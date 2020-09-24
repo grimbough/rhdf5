@@ -55,6 +55,7 @@ jobs:
           Rscript -e "BiocManager::install(c('grimbough/Rhdf5lib'), ask = FALSE, update = FALSE, INSTALL_opts = '--force-biarch')"
           Rscript -e "BiocManager::install(c('rcmdcheck', 'rhdf5filters'), ask = FALSE, update = FALSE, INSTALL_opts = '--force-biarch')"
           Rscript -e "BiocManager::install('rhdf5', dependencies = TRUE, ask = FALSE, update = FALSE, INSTALL_opts = '--force-biarch')"
+          Rscript -e "BiocManager::install('Bioconductor/BiocStyle', ask = FALSE, update = FALSE)"
 
       - name: Non-windows check
         if: ${{ matrix.config.os != 'windows-latest' }}
