@@ -32,6 +32,10 @@
       \item \code{h5ls()} and \code{h5dump()} no longer crashe when given a 
       file containing recursive or duplicated groups 
       (https://github.com/grimbough/rhdf5/issues/48).
+      \item Reading compound datasets with at least one 8-bit integer field
+      now works (https://github.com/grimbough/rhdf5/issues/71).
+      \item Fixed problem when writing a data.frame containing a column of raw 
+      values. These columns were ommitted when creating a compound dataset.
     }
   }
 }

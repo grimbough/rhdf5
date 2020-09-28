@@ -142,9 +142,20 @@ SEXP H5Dread_helper_INTEGER(hid_t dataset_id, hid_t file_space_id, hid_t mem_spa
      * are signed or unsigned (RAWSXP vs INTSXP) */
     if(b == 1) {
       void * buf;
+
       if(sgn == H5T_SGN_NONE) {
+        if (cpdType < 0) {
+          mem_type_id = H5T_NATIVE_UCHAR;
+        } else {
+          mem_type_id = H5Tcreate(H5T_COMPOUND, H5Tget_size(H5T_NATIVE_UCHAR));
+          herr_t status = H5Tinsert(mem_type_id, cpdField[0], 0, H5T_NATIVE_UCHAR);
+          for (int i=1; i<cpdNField; i++) {
+            hid_t mem_type_id2 = H5Tcreate(H5T_COMPOUND, H5Tget_size(H5T_NATIVE_UCHAR));
+            herr_t status = H5Tinsert(mem_type_id2, cpdField[i], 0, mem_type_id);
+            mem_type_id = mem_type_id2;
+          }
+        }
         
-        mem_type_id = H5T_NATIVE_UCHAR;
         if (length(_buf) == 0) {
           Rval = PROTECT(allocVector(RAWSXP, n));
           buf = RAW(Rval);
@@ -158,7 +169,17 @@ SEXP H5Dread_helper_INTEGER(hid_t dataset_id, hid_t file_space_id, hid_t mem_spa
         
       } else {
         
-        mem_type_id = H5T_NATIVE_INT32;
+        if (cpdType < 0) {
+          mem_type_id = H5T_NATIVE_INT32;
+        } else {
+          mem_type_id = H5Tcreate(H5T_COMPOUND, H5Tget_size(H5T_NATIVE_INT32));
+          herr_t status = H5Tinsert(mem_type_id, cpdField[0], 0, H5T_NATIVE_INT32);
+          for (int i=1; i<cpdNField; i++) {
+            hid_t mem_type_id2 = H5Tcreate(H5T_COMPOUND, H5Tget_size(H5T_NATIVE_INT32));
+            herr_t status = H5Tinsert(mem_type_id2, cpdField[i], 0, mem_type_id);
+            mem_type_id = mem_type_id2;
+          }
+        }
         if (length(_buf) == 0) {
           Rval = PROTECT(allocVector(INTSXP, n));
           buf = INTEGER(Rval);
