@@ -11,7 +11,7 @@ C = c(TRUE, TRUE, FALSE, NA)
 D = seq(0, 1, by=0.1)
 E = as.raw(sample(0:255, size = 5))
 attr(D, "scale") <- "centimeters"
-
+G = data.frame("col_A" = 1:10, "col_B" = letters[1:10], "col_C" = as.raw(1:10))
 
 ## output file name
 h5File <- tempfile(pattern = "ex_read", fileext = ".h5")
@@ -29,6 +29,7 @@ h5createDataset(file = h5File, dataset = "baa", dims = c(1, length(D) ))
 h5write(obj = D, file = h5File, name = "baa", write.attributes = TRUE)
 h5write(obj = C, file = h5File, name = "logi")
 h5write(obj = E, file = h5File, name = "raw")
+h5write(obj = G, file = h5File, name = "data.frame")
 
 test_that("Reading a dataset", {
     

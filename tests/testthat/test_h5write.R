@@ -148,6 +148,22 @@ test_that("We can write a data.frame with multiple factor columns", {
                       as.character(Z$Y))
 })
 
+test_that("We can write a data.frame with many data types", {
+    
+    if(file.exists(h5f1))
+        file.remove(h5f1)
+    
+    Z <- data.frame("col_A" = 1:10, "col_B" = letters[1:10], 
+                    "col_C" = as.raw(1:10), "col_D" = as.integer(1:10))
+    
+    expect_silent(h5write(Z, file=h5f1, name='data', DataFrameAsCompound=TRUE))
+    Z2 <- h5read(file = h5f1, name = "data")
+    expect_identical(dim(Z), dim(Z2))
+    ##  this test is a bit weird, testthat doesn't consider RAW and as.array(RAW) equivalent
+    for(i in seq_along(Z))
+        expect_equivalent(as.array(Z[[i]]), Z2[[i]])
+})
+
 
 ############################################################
 context("Writing a datset subset")

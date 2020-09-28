@@ -22,6 +22,8 @@ SEXP _h5createDataFrame(SEXP _obj, SEXP _loc_id, SEXP _name, SEXP _level, SEXP _
                 if (s2 > strsize[i]) { strsize[i] = s2; }
             }
             size = size + strsize[i];
+        } else if (TYPEOF(VECTOR_ELT(_obj,i)) == RAWSXP) {
+            size = size + H5Tget_size(H5T_NATIVE_UCHAR);
         }
     }
     hid_t tid = H5Tcreate (H5T_COMPOUND, size);
@@ -41,6 +43,9 @@ SEXP _h5createDataFrame(SEXP _obj, SEXP _loc_id, SEXP _name, SEXP _level, SEXP _
             H5Tset_size(tid2, strsize[i]);
             H5Tinsert (tid, nn, offset, tid2);
             offset = offset + strsize[i];
+        } else if (TYPEOF(VECTOR_ELT(_obj,i)) == RAWSXP) {
+            H5Tinsert (tid, nn, offset, H5T_NATIVE_UCHAR);
+            offset = offset + H5Tget_size(H5T_NATIVE_UCHAR);
         }
     }
     hsize_t n = LENGTH(VECTOR_ELT(_obj,0));
@@ -129,6 +134,11 @@ SEXP _h5writeDataFrame(SEXP _obj, SEXP _dset_id) {
                 }
             }
             H5Dwrite(dset_id, tidn, space, space, H5P_DEFAULT, strbuf);
+            H5Tclose(tidn);
+        } else if (TYPEOF(VECTOR_ELT(_obj,i)) == RAWSXP) {
+            hid_t tidn = H5Tcreate (H5T_COMPOUND, H5Tget_size(H5T_NATIVE_UCHAR));
+            H5Tinsert (tidn, nn, 0, H5T_NATIVE_UCHAR);
+            H5Dwrite(dset_id, tidn, space, space, H5P_DEFAULT, RAW(VECTOR_ELT(_obj,i)));
             H5Tclose(tidn);
         }
     }
