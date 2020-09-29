@@ -69,12 +69,12 @@ jobs:
           Rscript -e "rcmdcheck::rcmdcheck(args = c('--no-manual', '--force-multiarch', '--install-args=`"--force-biarch`"'), error_on = 'warning', check_dir = 'check')"
 
       - name: Build binary
-        if: runner.os != "Linux"
+        if: runner.os != 'Linux'
         run: |
           Rscript -e "devtools::build(binary = TRUE)"
           
       - name: Upload binary
-        if: runner.os != "Linux"
+        if: runner.os != 'Linux'
         uses: actions/upload-artifact@master
         with:
           path: |
