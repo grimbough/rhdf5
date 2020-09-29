@@ -22,6 +22,7 @@ jobs:
         - { os: windows-latest, r: '4.0'}
         - { os: macOS-latest, r: '4.0'}
         - { os: ubuntu-18.04, r: '4.0', rspm: "https://demo.rstudiopm.com/all/__linux__/bionic/latest"}
+        - { os: ubuntu-20.04, r: '4.0', rspm: "https://demo.rstudiopm.com/all/__linux__/bionic/latest"}
 
     env:
       R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
@@ -66,3 +67,16 @@ jobs:
         if: ${{ matrix.config.os == 'windows-latest' }}
         run: |
           Rscript -e "rcmdcheck::rcmdcheck(args = c('--no-manual', '--force-multiarch', '--install-args=`"--force-biarch`"'), error_on = 'warning', check_dir = 'check')"
+
+      - name: Build binary
+        if: runner.os != "Linux"
+        run: |
+          Rscript -e "devtools::build(binary = TRUE)"
+          
+      - name: Upload binary
+        if: runner.os != "Linux"
+        uses: actions/upload-artifact@master
+        with:
+          path: |
+            rhdf5*.zip
+            rhdf5*.tgz

@@ -29,7 +29,7 @@
       (https://github.com/grimbough/rhdf5/issues/58).
       \item Fixed error when trying to write a vector containing only empty
       strings (https://github.com/grimbough/rhdf5/issues/60).
-      \item \code{h5ls()} and \code{h5dump()} no longer crashe when given a 
+      \item \code{h5ls()} and \code{h5dump()} no longer crash when given a 
       file containing recursive or duplicated groups 
       (https://github.com/grimbough/rhdf5/issues/48).
       \item Reading compound datasets with at least one 8-bit integer field
