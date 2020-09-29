@@ -56,20 +56,20 @@ jobs:
           Rscript -e "BiocManager::install(c('rcmdcheck', 'devtools'), ask = FALSE, update = FALSE, INSTALL_opts = '--force-biarch')"
           Rscript -e "BiocManager::install('rhdf5', dependencies = TRUE, ask = FALSE, update = FALSE, INSTALL_opts = '--force-biarch')"
 
-      - name: Non-windows check
-        if: ${{ matrix.config.os != 'windows-latest' }}
-        run: |
-          Rscript -e "rcmdcheck::rcmdcheck(args = c('--no-manual'), error_on = 'warning', check_dir = 'check')"
-          
-      - name: Windows check
-        if: ${{ matrix.config.os == 'windows-latest' }}
-        run: |
-          Rscript -e "rcmdcheck::rcmdcheck(args = c('--no-manual', '--force-multiarch', '--install-args=`"--force-biarch`"'), error_on = 'warning', check_dir = 'check')"
+      # - name: Non-windows check
+      #   if: ${{ matrix.config.os != 'windows-latest' }}
+      #   run: |
+      #     Rscript -e "rcmdcheck::rcmdcheck(args = c('--no-manual'), error_on = 'warning', check_dir = 'check')"
+      #     
+      # - name: Windows check
+      #   if: ${{ matrix.config.os == 'windows-latest' }}
+      #   run: |
+      #     Rscript -e "rcmdcheck::rcmdcheck(args = c('--no-manual', '--force-multiarch', '--install-args=`"--force-biarch`"'), error_on = 'warning', check_dir = 'check')"
 
       - name: Build binary
         if: runner.os != 'Linux'
         run: |
-          Rscript -e "devtools::build(binary = TRUE)"
+          Rscript -e "devtools::build(binary = TRUE, path = ".")"
           
       - name: Upload binary
         if: runner.os != 'Linux'
