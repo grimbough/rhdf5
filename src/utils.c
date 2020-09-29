@@ -5,7 +5,8 @@ void concatdim(char *s1, hsize_t next_dim, int index)
 {
     
     char tmp[1000];
-    strncpy(tmp, s1, 1000);
+    memset(tmp, '\0',1000);
+    strncpy(tmp, s1, 999);
     
 #ifdef H5_HAVE_WINDOWS
     snprintf(s1, 1000, "%s%I64u%s", tmp, next_dim, index ? " x ": "");
@@ -17,7 +18,8 @@ void concatdim(char *s1, hsize_t next_dim, int index)
 void concatdim_native(char *s1, hsize_t next_dim, int index)
 {
     char tmp[1000];
-    strncpy(tmp, s1, 1000);
+    memset(tmp, '\0',1000);
+    strncpy(tmp, s1, 999);
     
 #ifdef H5_HAVE_WINDOWS
     snprintf(s1, 1000, "%s%s%I64u", tmp, index ? " x ": "", next_dim);
