@@ -1,7 +1,7 @@
 \name{NEWS}
 \title{News for Package 'rhdf5'}
 
-\section{Changes in version 2.32.2}{
+\section{Changes in version 2.32.4}{
   \subsection{BUG FIXES}{
     \itemize{
       \item \code{NA} values in logical datatypes are now preserved when 
@@ -9,6 +9,8 @@
       (https://github.com/grimbough/rhdf5/issues/58).
       \item Fixed error when trying to write a vector containing only empty
       strings (https://github.com/grimbough/rhdf5/issues/60).
+      \item Patch early UNPROTECT() when reading a Enum type that could cause a
+      segmentation fault (https://github.com/grimbough/rhdf5/issues/73)
     }
   }
 }
