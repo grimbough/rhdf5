@@ -517,7 +517,6 @@ SEXP H5Dread_helper_ENUM(hid_t dataset_id, hid_t file_space_id, hid_t mem_space_
             SET_STRING_ELT(levels, i, mkChar(st));
             herr_t status = H5Tenum_insert (enumtype, st, &i);
         }
-        UNPROTECT(1);
         
         if (cpdType < 0) {
             mem_type_id = enumtype;
@@ -560,7 +559,7 @@ SEXP H5Dread_helper_ENUM(hid_t dataset_id, hid_t file_space_id, hid_t mem_space_
             setAttrib(Rval, mkString("levels"), levels);
             setAttrib(Rval, R_ClassSymbol, mkString("factor"));
         }
-        UNPROTECT(native + (length(_buf) == 0));
+        UNPROTECT(native + (length(_buf) == 0) + 1);
     } else {
         double na = R_NaReal;
         Rval = PROTECT(allocVector(REALSXP, n));

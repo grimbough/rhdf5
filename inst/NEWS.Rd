@@ -36,6 +36,8 @@
       now works (https://github.com/grimbough/rhdf5/issues/71).
       \item Fixed problem when writing a data.frame containing a column of raw 
       values. These columns were ommitted when creating a compound dataset.
+      \item Patch early UNPROTECT() when reading a Enum type that could cause a
+      segmentation fault (https://github.com/grimbough/rhdf5/issues/73)
     }
   }
 }
