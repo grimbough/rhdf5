@@ -27,11 +27,6 @@ jobs:
     #env:
     #  R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
     #  CRAN: ${{ matrix.config.rspm }}
-    
-    steps: 
-      - run: |
-        echo "R_REMOTES_NO_ERRORS_FROM_WARNINGS=true" >> $GITHUB_ENV
-        echo "CRAN=${{ matrix.config.rspm }}" >> $GITHUB_ENV
         
     steps:
       - name: Configure git
@@ -69,9 +64,12 @@ jobs:
           restore-keys: ${{ runner.os }}-r-${{ matrix.config.r }}-1-
 
       - name: Install dependencies
+        env:
+          R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
+          CRAN: ${{ matrix.config.rspm }}
         run: |
           install.packages(c('BiocManager', 'rcmdcheck'))
-          toInstall <- remotes::dev_package_deps(dependencies = TRUE)[,'package']; \
+          toInstall <- remotes::dev_package_deps(dependencies = TRUE)[,'package']
           BiocManager::install(toInstall, ask = FALSE, update = TRUE, version = 'devel', INSTALL_opts = '--force-biarch')
         shell: Rscript {0}
 
