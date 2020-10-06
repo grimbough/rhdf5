@@ -21,8 +21,8 @@ jobs:
         config:
         - { os: windows-latest, r: '4.0'}
         - { os: macOS-latest, r: '4.0'}
-        - { os: ubuntu-18.04, r: '4.0', rspm: "https://demo.rstudiopm.com/all/__linux__/bionic/latest"}
-        - { os: ubuntu-20.04, r: '4.0', rspm: "https://demo.rstudiopm.com/all/__linux__/focal/latest"}
+        - { os: ubuntu-18.04, r: '4.0', rspm: "https://packagemanager.rstudio.com/all/__linux__/bionic/latest"}
+        - { os: ubuntu-20.04, r: '4.0', rspm: "https://packagemanager.rstudio.com/all/__linux__/focal/latest"}
 
     env:
       R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
@@ -48,13 +48,27 @@ jobs:
           r-version: ${{ matrix.config.r }}
 
       - uses: r-lib/actions/setup-pandoc@master
+      
+      - name: Query dependencies
+        run: |
+          install.packages('remotes')
+          saveRDS(remotes::dev_package_deps(dependencies = TRUE), ".github/depends.Rds", version = 2)
+        shell: Rscript {0}
+
+      - name: Cache R packages
+        if: runner.os != 'Windows'
+        uses: actions/cache@v2
+        with:
+          path: ${{ env.R_LIBS_USER }}
+          key: ${{ runner.os }}-r-${{ matrix.config.r }}-1-${{ hashFiles('.github/depends.Rds') }}
+          restore-keys: ${{ runner.os }}-r-${{ matrix.config.r }}-1-
 
       - name: Install dependencies
         run: |
-          Rscript -e "install.packages(c('BiocManager', 'remotes'))"
-          Rscript -e "BiocManager::install(version = 'devel', ask = FALSE, update = FALSE)"
-          Rscript -e "BiocManager::install(c('rcmdcheck', 'devtools'), ask = FALSE, update = FALSE, INSTALL_opts = '--force-biarch')"
-          Rscript -e "BiocManager::install('rhdf5', dependencies = TRUE, ask = FALSE, update = FALSE, INSTALL_opts = '--force-biarch')"
+          install.packages(c('BiocManager', 'rcmdcheck'))
+          toInstall <- remotes::dev_package_deps(dependencies = TRUE)[,'package']; \
+          BiocManager::install(toInstall, ask = FALSE, update = TRUE, version = 'devel', INSTALL_opts = '--force-biarch')
+        shell: Rscript {0}
 
       - name: Non-windows check
         if: ${{ matrix.config.os != 'windows-latest' }}
