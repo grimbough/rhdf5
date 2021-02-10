@@ -74,6 +74,11 @@ jobs:
           toInstall <- remotes::dev_package_deps(dependencies = TRUE)[,'package']
           BiocManager::install(toInstall, ask = FALSE, update = TRUE, INSTALL_opts = '--force-biarch')
         shell: Rscript {0}
+        
+      - name: Install Rhdf5lib 1.10.7
+        run: |
+          BiocManager::install('grimbough/Rhdf5lib' ref = "1-10-7", ask = FALSE, update = FALSE, INSTALL_opts = '--force-biarch')
+        shell: Rscript {0}
 
       - name: Non-windows check
         if: ${{ matrix.config.os != 'windows-latest' }}
