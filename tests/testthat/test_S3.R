@@ -7,9 +7,6 @@ HDF5_conf_file <- system.file("include/H5pubconf.h", package  = "Rhdf5lib")
 if(file.exists(HDF5_conf_file)) {
     run_test <- any(grepl(x = readLines(HDF5_conf_file), "H5_HAVE_ROS3_VFD[[:blank:]]+1"))
 } 
-if(.Platform$OS.type == "windows") {
-    run_test <- FALSE
-}
 
 if(run_test) {
 
