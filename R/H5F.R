@@ -35,7 +35,6 @@ H5Fopen <- function( name, flags = h5default("H5F_ACC_RD"), fapl = NULL, native 
   if(!grepl("^http[s]?://", x = name)) {
     name <- normalizePath(name, mustWork = FALSE)
   }
-  message(name)
   flags <- h5checkConstants( "H5F_ACC_RD", flags )
   
   if (is.null(fapl)) {

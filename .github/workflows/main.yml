@@ -19,10 +19,10 @@ jobs:
       fail-fast: false
       matrix:
         config:
-        - { os: windows-latest, r: '4.0'}
-        - { os: macOS-latest, r: '4.0'}
-        - { os: ubuntu-18.04, r: '4.0', rspm: "https://packagemanager.rstudio.com/all/__linux__/bionic/latest"}
-        - { os: ubuntu-20.04, r: '4.0', rspm: "https://packagemanager.rstudio.com/all/__linux__/focal/latest"}
+        - { os: windows-latest, r: 'devel'}
+        - { os: macOS-latest, r: 'devel'}
+        - { os: ubuntu-18.04, r: 'devel', rspm: "https://packagemanager.rstudio.com/all/__linux__/bionic/latest"}
+        - { os: ubuntu-20.04, r: 'devel', rspm: "https://packagemanager.rstudio.com/all/__linux__/focal/latest"}
 
     env:
       CRAN: ${{ matrix.config.rspm }}
