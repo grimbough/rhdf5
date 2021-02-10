@@ -4,6 +4,9 @@ H5Fcreate <- function( name, flags = h5default("H5F_ACC"), fcpl = NULL, fapl = N
     if (length(name)!=1 || !is.character(name)) 
         stop("'name' must be a character string of length 1")
     name <- normalizePath(name, mustWork = FALSE)
+    if(.Platform$OS.type == "windows") {
+      name <- enc2utf8(name)
+    }
     
     flags <- h5checkConstants( "H5F_ACC", flags )
     fcpl = h5checktypeAndPLC(fcpl, "H5P_FILE_CREATE", allowNULL = TRUE)
@@ -29,7 +32,10 @@ H5Fopen <- function( name, flags = h5default("H5F_ACC_RD"), fapl = NULL, native 
   if (length(name)!=1 || !is.character(name)) {
     stop("'name' must be a character string of length 1")
   }
-  name <- normalizePath(name, mustWork = FALSE)
+  if(!grepl("^http[s]?://", x = name)) {
+    name <- normalizePath(name, mustWork = FALSE)
+  }
+  message(name)
   flags <- h5checkConstants( "H5F_ACC_RD", flags )
   
   if (is.null(fapl)) {
