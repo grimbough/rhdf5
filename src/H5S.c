@@ -203,47 +203,127 @@ SEXP _H5Sselect_hyperslab( SEXP _space_id, SEXP _op, SEXP _start, SEXP _stride, 
         block[i] = REAL(_block)[i];
     }
     
-    herr_t herr = H5Sselect_hyperslab( space_id, op, start, stride, count, block );
+    herr_t herr = H5Sselect_hyperslab( space_id, H5S_SELECT_XOR, start, stride, count, block );
+
+    /*
+    if(H5Sis_regular_hyperslab(space_id)) {
+      Rprintf("Regular\n");
+    } else {
+      Rprintf("Not regular\n");
+    }
     
-    SEXP Rval = ScalarInteger(herr);
+    if(H5Sselect_valid(space_id) > 0) {
+      Rprintf("Valid\n");
+    } else {
+      Rprintf("Not valid\n");
+    }
+    
+    int npoints = H5Sget_select_npoints(space_id);
+    int nblocks = H5Sget_select_hyper_nblocks(space_id);
+    Rprintf("N points: %d - N blocks: %d\n", npoints, nblocks);
+    
+    int RANK2 = 2;
+    int l, k;
+    hsize_t *buf = (hsize_t *)malloc(sizeof(hsize_t)*2*RANK2*nblocks);
+    
+    H5Sget_select_hyper_blocklist (space_id, (hsize_t)0, nblocks, buf);
+    
+    for (l=0; l<nblocks; l++) {
+      Rprintf("(");
+      for (k=0; k<RANK2-1; k++) 
+        Rprintf("%d,", (int)buf[k]);
+      Rprintf("%d ) - (", (int)buf[k]);
+      for (k=0; k<RANK2-1; k++) 
+        Rprintf("%d,", (int)buf[RANK2+k]);
+      Rprintf("%d)\n", (int)buf[RANK2+k]);
+    }
+    free(buf);
+    
+    hsize_t start_out[2],stride_out[2],count_out[2],block_out[2];
+    if (H5Sis_regular_hyperslab(space_id)) {
+      H5Sget_regular_hyperslab (space_id, start_out, stride_out, count_out, block_out);
+      Rprintf("         start  = [%llu, %llu] \n", (unsigned long long)start_out[0], (unsigned long long)start_out[1]);
+      Rprintf("         stride = [%llu, %llu] \n", (unsigned long long)stride_out[0], (unsigned long long)stride_out[1]);
+      Rprintf("         count  = [%llu, %llu] \n", (unsigned long long)count_out[0], (unsigned long long)count_out[1]);
+      Rprintf("         block  = [%llu, %llu] \n", (unsigned long long)block_out[0], (unsigned long long)block_out[1]);
+    } */
+
+    SEXP Rval = ScalarInteger(0);
     return Rval;
     
 }
 
-SEXP _H5Sselect_cols( SEXP _space_id, SEXP _start, SEXP _stride, SEXP _count, SEXP _block ) {
-  
+/* hid_t  H5Scombine_hyperslab ( hid_t space_id, H5S_seloper_t op, const hsize_t start[],
+ const hsize_t stride[], const hsize_t count[], const hsize_t block[] ) */
+SEXP _H5Scombine_hyperslab( SEXP _space_id, SEXP _start, SEXP _stride, SEXP _count, SEXP _block ) {
   hid_t space_id = STRSXP_2_HID( _space_id );
-  herr_t herr = H5Sselect_none(space_id);
-
-  hsize_t start[2];
-  hsize_t stride[2];
-  hsize_t count[2];
-  hsize_t block[2];
-  
-  int i, j;
-  for(i = 0; i < LENGTH(_start); i++) {
-    
-    start[1] = 0;
-    stride[1] = 1;
-    count[1] = 1;
-    block[1] = REAL(_block)[i];
-    
-    start[0] = REAL(_start)[i];
-    stride[0] = REAL(_stride)[i];
-    count[0] = REAL(_count)[i];
-    block[0] = 1;
-    
-    herr = H5Sselect_hyperslab(space_id, H5S_SELECT_OR, start, stride, count, block);
+  hsize_t start[LENGTH(_start)];
+  hsize_t stride[LENGTH(_stride)];
+  hsize_t count[LENGTH(_count)];
+  hsize_t block[LENGTH(_block)];
+  int i;
+  for (i=0; i < LENGTH(_start); i++) {
+    start[i] = REAL(_start)[i];
+  }
+  for (i=0; i < LENGTH(_stride); i++) {
+    stride[i] = REAL(_stride)[i];
+  }
+  for (i=0; i < LENGTH(_count); i++) {
+    count[i] = REAL(_count)[i];
+  }
+  for (i=0; i < LENGTH(_block); i++) {
+    block[i] = REAL(_block)[i];
   }
   
-  SEXP Rval = ScalarInteger(herr);
+  space_id = H5Scombine_hyperslab( space_id, H5S_SELECT_XOR, start, stride, count, block );
+   /*
+  if(H5Sis_regular_hyperslab(space_id)) {
+    Rprintf("Regular\n");
+  } else {
+    Rprintf("Not regular\n");
+  }
+  
+  int npoints = H5Sget_select_npoints(space_id);
+  int nblocks = H5Sget_select_hyper_nblocks(space_id);
+  Rprintf("N points: %d - N blocks: %d\n", npoints, nblocks);
+  
+  int RANK2 = 2;
+  int l, k;
+  hsize_t *buf = (hsize_t *)malloc(sizeof(hsize_t)*2*RANK2*nblocks);
+  
+  H5Sget_select_hyper_blocklist (space_id, (hsize_t)0, nblocks, buf);
+  
+  for (l=0; l<nblocks; l++) {
+    Rprintf("(");
+    for (k=0; k<RANK2-1; k++) 
+      Rprintf("%d,", (int)buf[k]);
+    Rprintf("%d ) - (", (int)buf[k]);
+    for (k=0; k<RANK2-1; k++) 
+      Rprintf("%d,", (int)buf[RANK2+k]);
+    Rprintf("%d)\n", (int)buf[RANK2+k]);
+  }
+  free(buf);
+  
+  hsize_t start_out[2],stride_out[2],count_out[2],block_out[2];
+  if (H5Sis_regular_hyperslab(space_id)) {
+    H5Sget_regular_hyperslab (space_id, start_out, stride_out, count_out, block_out);
+    Rprintf("         start  = [%llu, %llu] \n", (unsigned long long)start_out[0], (unsigned long long)start_out[1]);
+    Rprintf("         stride = [%llu, %llu] \n", (unsigned long long)stride_out[0], (unsigned long long)stride_out[1]);
+    Rprintf("         count  = [%llu, %llu] \n", (unsigned long long)count_out[0], (unsigned long long)count_out[1]);
+    Rprintf("         block  = [%llu, %llu] \n", (unsigned long long)block_out[0], (unsigned long long)block_out[1]);
+  } */
+
+  SEXP Rval;
+  PROTECT(Rval = HID_2_STRSXP(space_id));
+  UNPROTECT(1);
   return Rval;
+  
 }
 
 /* H5Sselect_index is not part of the standart H5S interfaces. It is a iteratie call to H5Sselect_point. */
 SEXP _H5Sselect_index( SEXP _space_id, SEXP _start, SEXP _count) {
     hid_t space_id = STRSXP_2_HID( _space_id );
-    
+  
     int l = LENGTH(_start);
     
     herr_t herr = H5Sselect_none(space_id);
@@ -294,6 +374,7 @@ SEXP _H5Sselect_index( SEXP _space_id, SEXP _start, SEXP _count) {
             }
         }
     }
+    
     SEXP Rval = ScalarInteger(herr);
     return Rval;
 }

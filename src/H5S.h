@@ -39,7 +39,7 @@ SEXP _H5Sget_select_npoints( SEXP _space_id );
 SEXP _H5Sselect_none( SEXP _space_id);
 /* H5Sselect_valid */
 SEXP _H5Sselect_hyperslab( SEXP _space_id, SEXP _op, SEXP _start, SEXP _stride, SEXP _count, SEXP _block );
+SEXP _H5Scombine_hyperslab( SEXP _space_id, SEXP _start, SEXP _stride, SEXP _count, SEXP _block );
 SEXP _H5Sselect_index( SEXP _space_id, SEXP _start, SEXP _count);
-SEXP _H5Sselect_cols( SEXP _space_id, SEXP _start, SEXP _stride, SEXP _count, SEXP _block);
 
 #endif

@@ -101,6 +101,7 @@ static R_CallMethodDef libraryRCalls[] = {
   {"_H5Sget_select_npoints", (DL_FUNC) &_H5Sget_select_npoints, 1},
   {"_H5Sselect_none", (DL_FUNC) &_H5Sselect_none, 1},
   {"_H5Sselect_hyperslab", (DL_FUNC) &_H5Sselect_hyperslab, 6},
+  {"_H5Scombine_hyperslab", (DL_FUNC) &_H5Scombine_hyperslab, 5},
   {"_H5Sselect_index", (DL_FUNC) &_H5Sselect_index, 3},
   {"_H5Tcopy", (DL_FUNC) &_H5Tcopy, 1},
   {"_H5Tset_size", (DL_FUNC) &_H5Tset_size, 2},
@@ -304,7 +305,6 @@ static R_CallMethodDef libraryRCalls[] = {
   {"_h5createDataFrame", (DL_FUNC) &_h5createDataFrame, 5},
   {"_h5errorHandling", (DL_FUNC) &_h5errorHandling, 1},
   {"_h5fileLock", (DL_FUNC) &_h5fileLock, 1},
-  {"_H5Sselect_cols", (DL_FUNC) &_H5Sselect_cols, 5},
   {"_h5listOpenObjects", (DL_FUNC) &_h5listOpenObjects, 1},
 #ifdef _H5P_filters
   //{"_H5Pset_lzf", (DL_FUNC) &_H5Pset_lzf, 1},
