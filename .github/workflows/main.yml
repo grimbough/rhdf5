@@ -44,6 +44,12 @@ jobs:
         run: |
           sudo apt-get install libcurl4-openssl-dev
           
+      - name: Install windows system libraries
+        if: ${{ runner.os == "Windows" }}
+        run: |
+          pacman -Sy mingw-w64-{i686,x86_64}-dlfcn
+        shell: bash
+          
       - uses: actions/checkout@v1
           
       - name: Setup R
