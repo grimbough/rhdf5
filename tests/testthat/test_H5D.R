@@ -5,7 +5,7 @@ if(file.exists(h5File))
     file.remove(h5File)
 
 expect_true( h5createFile(h5File) )
-expect_silent( h5write(matrix(1:20, ncol = 2), file = h5File, name = "foo") )
+expect_silent( h5write(matrix(1:200, ncol = 2), file = h5File, name = "foo") )
 
 ############################################################
 context("H5D: getting property lists")

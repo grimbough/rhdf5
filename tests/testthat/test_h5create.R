@@ -128,7 +128,7 @@ test_that("Extendible datasets", {
 
     h5set_extent(h5File, "extend", c(7,3))
     h5write(mtx3x3, file = h5File, name = "extend",
-            start = c(5,1))
+            index = list(5:7, 1:3))
     expect_equal(h5read(h5File, "extend"),
                  rbind(mtx4x3, mtx3x3))
 
@@ -138,7 +138,7 @@ test_that("Extendible datasets", {
     ## [ mtx3x3 mtx7x2 ]
     h5set_extent(h5File, "extend", c(7,5))
     h5write(mtx7x2, file = h5File, name = "extend",
-            start = c(1,4))
+            index = list(1:7, 4:5))
     expect_equal(h5read(h5File, "extend"),
                  cbind(rbind(mtx4x3, mtx3x3),
                        mtx7x2))
@@ -151,7 +151,7 @@ test_that("Extendible datasets", {
     h5write( mtx4x3, file = h5File, name = "nonCompressed")
     h5set_extent(h5File, "nonCompressed", c(7,3))
     h5write(mtx3x3, file = h5File, name = "nonCompressed",
-            start = c(5,1))
+            index = list(5:7, 1:3))
     expect_equal(h5read(h5File, "nonCompressed"),
                  rbind(mtx4x3, mtx3x3))
 

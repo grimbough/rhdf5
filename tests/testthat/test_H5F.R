@@ -33,7 +33,7 @@ test_that("Non-ASCII filename", {
     for(name in c("éxample", "år")) {
     
     tmp_dir <- file.path(tempdir(), name)
-    dir.create(tmp_dir)
+    dir.create(tmp_dir, showWarnings = FALSE)
     ## this gives a UTF-8 encoded file path on windows
     h5File <- normalizePath(tempfile(pattern = "H5F", fileext = ".h5", tmpdir = tmp_dir), 
                             mustWork = FALSE)
