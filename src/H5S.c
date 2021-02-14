@@ -203,7 +203,7 @@ SEXP _H5Sselect_hyperslab( SEXP _space_id, SEXP _op, SEXP _start, SEXP _stride, 
         block[i] = REAL(_block)[i];
     }
     
-    herr_t herr = H5Sselect_hyperslab( space_id, H5S_SELECT_XOR, start, stride, count, block );
+    herr_t herr = H5Sselect_hyperslab( space_id, op, start, stride, count, block );
 
     /*
     if(H5Sis_regular_hyperslab(space_id)) {

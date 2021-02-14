@@ -18,6 +18,7 @@ h5readDataset <- function (h5dataset, index = NULL, start = NULL, stride = NULL,
             }
         }
         size <- .H5Sselect_dim( h5spaceFile, index)
+        #size <- .H5Sselect_index( h5spaceFile, index, index_null)
         h5spaceMem = H5Screate_simple(size, native = h5dataset@native)
         on.exit(H5Sclose(h5spaceMem), add = TRUE)
     }
