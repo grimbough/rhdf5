@@ -90,14 +90,3 @@ jobs:
         run: |
           Rscript -e "rcmdcheck::rcmdcheck(args = c('--no-manual', '--force-multiarch', '--install-args=`"--force-biarch`"'), error_on = 'warning', check_dir = 'check')"
 
-      - name: Build binary
-        if: runner.os != 'Linux'
-        run: |
-          Rscript -e "devtools::build(binary = TRUE, path = '.')"
-      - name: Upload binary
-        if: runner.os != 'Linux'
-        uses: actions/upload-artifact@master
-        with:
-          path: |
-            rhdf5*.zip
-            rhdf5*.tgz
