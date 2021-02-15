@@ -220,6 +220,15 @@ test_that("Works with a dimension of length 1", {
     expect_identical(A2[,1], A[,5])
 })
 
+
+test_that("indices that resolve to a single hyperslab are ok", {
+  expect_silent(A2 <- h5read(h5File, name = "A", index = list(2:3, c(1,2,4,5))))
+  expect_is(A2, "matrix")
+  expect_equal(ncol(A2), 4)
+  expect_equal(nrow(A2), 2)
+  expect_identical(A2, A[2:3,c(1,2,4,5)])
+})
+
 test_that("Columns specified multiple times", {
   expect_silent(A2 <- h5read(h5File, name = "A", index = list(NULL, c(9,1,1,5))))
   expect_equal(ncol(A2), 4L)

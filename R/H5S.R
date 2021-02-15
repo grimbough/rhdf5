@@ -241,8 +241,7 @@ H5Sunlimited <- function()  {
     
     h5checktype(h5space, "dataspace")
     dims <- H5Sget_simple_extent_dims(h5space)$size
-    .Call("_H5Sselect_none", h5space@ID, PACKAGE = "rhdf5")
-    
+
     res_dim <- integer(length = length(dims))
     
     starts <- counts <- strides <- blocks <- list()
@@ -295,7 +294,12 @@ H5Sunlimited <- function()  {
                                         index_copy))
             } else { lag <- 1 }
             
-            indices <- split(index_copy, seq_along(index_copy) %% lag)
+            ## HDF 1.10.7 seems to have a bug in combined hyperslabs when 'start' parameters
+            ## are not in increaseing order. This operation ensures we don't have a 0-th group
+            ## that would be used first, but is really our lag-th group
+            hyperslab_groups <- seq_along(index_copy) %% lag
+            hyperslab_groups[hyperslab_groups == 0] <- lag
+            indices <- split(index_copy, hyperslab_groups)
             
             for(j in seq_len(lag)) {
                 if(length(indices[[j]]) == 1) {
@@ -337,26 +341,18 @@ H5Sunlimited <- function()  {
     
     ## create all combinations of hyperslab parameters
     ## using as.matrix() here is more efficient than doing it later
-    if (!h5space@native) {
-        starts2 <- as.matrix(rev(expand.grid(starts)-1))
-        strides2 <- as.matrix(rev(expand.grid(strides)))
-        counts2 <- as.matrix(rev(expand.grid(counts)))
-        blocks2 <- as.matrix(rev(expand.grid(blocks)))
-    } else {
-        starts2 <- as.matrix(expand.grid(starts)-1)
-        strides2 <- as.matrix(expand.grid(strides))
-        counts2 <- as.matrix(expand.grid(counts))
-        blocks2 <- as.matrix(expand.grid(blocks))
-    }
-    
-    op <- h5checkConstants( "H5S_SELECT", "H5S_SELECT_OR" )
+    starts2 <- as.matrix(expand.grid(starts))
+    strides2 <- as.matrix(expand.grid(strides))
+    counts2 <- as.matrix(expand.grid(counts))
+    blocks2 <- as.matrix(expand.grid(blocks))
+
     for(i in seq_len(nrow(starts2))) {
-        res <- .Call("_H5Sselect_hyperslab", h5space@ID, op,
-             starts2[i,], strides2[i,],
-             counts2[i,], blocks2[i,],
-             PACKAGE='rhdf5')
+        op <- ifelse(i == 1, "H5S_SELECT_SET", "H5S_SELECT_OR")
+        res <- H5Sselect_hyperslab(h5space, op = op,
+                                   start = starts2[i,], stride = strides2[i,],
+                                   count = counts2[i,], block = blocks2[i,])
     }
-    
+
     invisible(res_dim)
 }
 
