@@ -170,6 +170,15 @@ SEXP _H5Sget_select_npoints( SEXP _space_id ) {
   return Rval;
 }
 
+/* herr_t H5Sselect_none(hid_t spaceid) */
+SEXP _H5Sselect_all( SEXP _space_id ) {
+  
+  hid_t space_id = STRSXP_2_HID( _space_id );
+  herr_t herr = H5Sselect_all(space_id);
+  
+  SEXP Rval = ScalarInteger(herr);
+  return Rval;
+}
 
 /* herr_t H5Sselect_none(hid_t spaceid) */
 SEXP _H5Sselect_none( SEXP _space_id ) {
@@ -178,6 +187,16 @@ SEXP _H5Sselect_none( SEXP _space_id ) {
   herr_t herr = H5Sselect_none(space_id);
   
   SEXP Rval = ScalarInteger(herr);
+  return Rval;
+}
+
+/* htri_t H5Sselect_valid(hid_t spaceid) */
+SEXP _H5Sselect_valid( SEXP _space_id ) {
+  
+  hid_t space_id = STRSXP_2_HID( _space_id );
+  htri_t htri = H5Sselect_valid(space_id);
+  
+  SEXP Rval = ScalarInteger(htri);
   return Rval;
 }
 

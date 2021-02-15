@@ -78,6 +78,25 @@ H5Sset_extent_simple <- function( h5space, dims, maxdims) {
   invisible(res)
 }
 
+
+H5Sselect_all <- function(h5space) {
+  h5checktype(h5space, "dataspace")
+  res <- .Call("_H5Sselect_all", h5space@ID, PACKAGE='rhdf5')
+  invisible(res)
+}
+
+H5Sselect_none <- function(h5space) {
+  h5checktype(h5space, "dataspace")
+  res <- .Call("_H5Sselect_none", h5space@ID, PACKAGE='rhdf5')
+  invisible(res)
+}
+
+H5Sselect_valid <- function(h5space) {
+  h5checktype(h5space, "dataspace")
+  res <- .Call("_H5Sselect_valid", h5space@ID, PACKAGE='rhdf5')
+  invisible(res)
+}
+
 H5Sselect_hyperslab <- function( h5space, op = h5default("H5S_SELECT"), 
                                  start=NULL, stride=NULL, count=NULL, block=NULL ) {
   h5checktype(h5space, "dataspace")
