@@ -8,6 +8,9 @@
 \alias{H5Sget_simple_extent_dims}
 \alias{H5Sselect_hyperslab}
 \alias{H5Sselect_index}
+\alias{H5Sselect_all}
+\alias{H5Sselect_none}
+\alias{H5Sselect_valid}
 \alias{H5Sset_extent_simple}
 \alias{H5Sunlimited}
 %- Also NEED an '\alias' for EACH other topic documented here.
@@ -27,6 +30,9 @@ H5Sselect_hyperslab       (h5space, op = h5default("H5S_SELECT"),
                            start = NULL, stride = NULL, count = NULL,
                            block = NULL)
 H5Sselect_index           (h5space, index)
+H5Sselect_all             (h5space)
+H5Sselect_none            (h5space)
+H5Sselect_valid           (h5space)
 H5Sunlimited              ()
 }
 %- maybe also 'usage' for other objects documented here.
@@ -48,7 +54,7 @@ Interface to the HDF5 C-library libhdf5. See \url{https://portal.hdfgroup.org/di
 
 As an introduction to use hyperslabs see these tutorials: See these introductions to hyperslabs: \url{https://support.hdfgroup.org/HDF5/Tutor/selectsimple.html}, \url{https://support.hdfgroup.org/HDF5/Tutor/select.html} and \url{http://ftp.hdfgroup.org/HDF5/Tutor/phypecont.html}. Please note that in R the first dimension is the fastest changing dimension. When viewing the HDF5 datasets with any C-program (e.g. HDFView), the order of dimensions is inverted. In the R interface counting starts with 1, whereas in the C-programs (e.g. HDFView) counting starts with 0.
 
-\code{H5Sselect_index}  is not part of the standard HDF5 C interface. It performes an iterative call to H5select_points by iterating through the given index positions. This function avoids a for loop in R. If a list element is NULL, all elements of the respective dimension are considered.
+\code{H5Sselect_index}  is not part of the standard HDF5 C interface. It performs an iterative call to H5select_points by iterating through the given index positions. This function avoids a for loop in R. If a list element is NULL, all elements of the respective dimension are considered.
 }
 \value{
 \code{H5Screate}, \code{H5Screate_simple}, and \code{H5Scopy} return an object of class \code{\link{H5IdComponent}} representing a dataspace.
@@ -62,7 +68,7 @@ As an introduction to use hyperslabs see these tutorials: See these introduction
 The other functions return the standard return value from their respective C-functions.
 }
 \references{\url{https://portal.hdfgroup.org/display/HDF5}}
-\author{Bernd Fischer}
+\author{Bernd Fischer, Mike L. Smith}
 \seealso{
 \link{rhdf5}
 }

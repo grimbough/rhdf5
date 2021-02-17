@@ -2,7 +2,7 @@ on:
   push:
     branches:
       - master
-      - new_filters
+      - 1-10-7
   pull_request:
     branches:
       - master
@@ -19,10 +19,10 @@ jobs:
       fail-fast: false
       matrix:
         config:
-        - { os: windows-latest, r: '4.0'}
-        - { os: macOS-latest, r: '4.0'}
-        - { os: ubuntu-18.04, r: '4.0', rspm: "https://packagemanager.rstudio.com/all/__linux__/bionic/latest"}
-        - { os: ubuntu-20.04, r: '4.0', rspm: "https://packagemanager.rstudio.com/all/__linux__/focal/latest"}
+        - { os: windows-latest, r: 'devel'}
+        - { os: macOS-latest, r: 'devel'}
+        - { os: ubuntu-18.04, r: 'devel', rspm: "https://packagemanager.rstudio.com/all/__linux__/bionic/latest"}
+        - { os: ubuntu-20.04, r: 'devel', rspm: "https://packagemanager.rstudio.com/all/__linux__/focal/latest"}
 
     env:
       CRAN: ${{ matrix.config.rspm }}
@@ -74,6 +74,11 @@ jobs:
           toInstall <- remotes::dev_package_deps(dependencies = TRUE)[,'package']
           BiocManager::install(toInstall, ask = FALSE, update = TRUE, INSTALL_opts = '--force-biarch')
         shell: Rscript {0}
+        
+      - name: Install Rhdf5lib 1.10.7
+        run: |
+          BiocManager::install('grimbough/Rhdf5lib', ref = "1-10-7", ask = FALSE, update = FALSE, INSTALL_opts = '--force-biarch')
+        shell: Rscript {0}
 
       - name: Non-windows check
         if: ${{ matrix.config.os != 'windows-latest' }}
@@ -85,14 +90,3 @@ jobs:
         run: |
           Rscript -e "rcmdcheck::rcmdcheck(args = c('--no-manual', '--force-multiarch', '--install-args=`"--force-biarch`"'), error_on = 'warning', check_dir = 'check')"
 
-      - name: Build binary
-        if: runner.os != 'Linux'
-        run: |
-          Rscript -e "devtools::build(binary = TRUE, path = '.')"
-      - name: Upload binary
-        if: runner.os != 'Linux'
-        uses: actions/upload-artifact@master
-        with:
-          path: |
-            rhdf5*.zip
-            rhdf5*.tgz
