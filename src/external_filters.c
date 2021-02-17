@@ -36,4 +36,20 @@ SEXP _H5Pset_blosc( SEXP _plist_id, SEXP _method, SEXP _level, SEXP _shuffle, SE
     return Rval;
 }
 
+SEXP _H5Pset_lzf( SEXP _plist_id, SEXP _buffersize ) {
+  
+  herr_t herr;
+  unsigned int cd_values[3];
+  
+  hid_t plist_id = STRSXP_2_HID( _plist_id );
+  cd_values[0] = 32000; 
+  cd_values[1] = 4; 
+  cd_values[2] = INTEGER(_buffersize)[0];
+
+  herr = H5Pset_filter(plist_id, H5Z_FILTER_LZF, H5Z_FLAG_OPTIONAL, (size_t)3, cd_values);
+  SEXP Rval = ScalarInteger(herr);
+  
+  return Rval;
+}
+
 #endif

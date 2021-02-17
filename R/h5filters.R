@@ -73,3 +73,23 @@ H5Pset_blosc <- function( h5plist, h5tid, method = 1L, level = 6L, shuffle = TRU
                  PACKAGE='rhdf5')
     invisible(res)
 }
+
+H5Pset_lzf <- function( h5plist, h5tid ) {
+    
+    if(!is.loaded('_H5Pset_lzf', PACKAGE = 'rhdf5'))
+        stop('LZF filter not found.\nPlease install rhdf5filters, and then reinstall rhdf5.')
+
+    ## START: simplified reimplementation of C code from lzf_filter.c
+    ## Filter from h5py
+    ## contains a call to lzf_set_local() which determines chunk size
+    ## This requires calls to HDF5 functions and doesn't play well
+    ## with our static linking.  We move this setup code into R code below.
+    chunkdims <- H5Pget_chunk(h5plist)
+    typesize <- H5Tget_size(h5tid)
+    bufsize <- typesize * prod(chunkdims)
+    ## END
+    
+    h5checktypeAndPLC(h5plist, "H5P_DATASET_CREATE")
+    res <- .Call("_H5Pset_lzf", h5plist@ID, as.integer(bufsize), PACKAGE='rhdf5')
+    invisible(res)
+}

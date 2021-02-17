@@ -76,6 +76,11 @@ for selecting them are shown below:
         \item{\code{"BLOSC_ZSTD"}}
     }
 }
+\item{lzf}{
+    \itemize{
+        \item{\code{"LZF"}}
+    }
+}
 \item{Disable: It is possible to write chunks without and compression 
     applied.}{
     \itemize{
@@ -101,9 +106,13 @@ h5createDataset("ex_createDataset.h5", "A", c(5,8), storage.mode = "integer", ch
 h5createDataset("ex_createDataset.h5", "B", c(5,8), storage.mode = "integer")
 h5createDataset("ex_createDataset.h5", "C", c(5,8), storage.mode = "double")
 
+# create dataset with bzip2 compression
+h5createDataset("ex_createDataset.h5", "D", c(5,8), storage.mode = "integer", 
+    chunk=c(5,1), filter = "BZIP2", level=6)
+
 # create a dataset of strings & define size based on longest string
 ex_strings <- c('long', 'longer', 'longest')
-h5createDataset("ex_createDataset.h5", "D",  
+h5createDataset("ex_createDataset.h5", "E",  
     storage.mode = "character", chunk = 3, level = 6,
     dims = length(ex_strings), size = max(nchar(ex_strings)))
 
@@ -113,7 +122,7 @@ h5write(matrix(1:40,nr=5,nc=8), file="ex_createDataset.h5", name="A")
 # write second column
 h5write(matrix(1:5,nr=5,nc=1), file="ex_createDataset.h5", name="B", index=list(NULL,2))
 # write character vector
-h5write(ex_strings, file = "ex_createDataset.h5", name = "D")
+h5write(ex_strings, file = "ex_createDataset.h5", name = "E")
 
 h5dump("ex_createDataset.h5")
 }

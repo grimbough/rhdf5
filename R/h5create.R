@@ -27,7 +27,7 @@ h5createGroup <- function(file, group) {
     res <- FALSE
     if (is.character(group)) {
         if (H5Lexists(loc$H5Identifier,group)) {
-            message("Can not create group. Object with name '",group,"' already exists.")
+            message("Can not create group. Object with name '", group, "' already exists.")
         } else {
             gid <- H5Gcreate(loc$H5Identifier, group)
             if (is(gid, "H5IdComponent")) {
@@ -102,6 +102,7 @@ h5createGroup <- function(file, group) {
                       "SZIP",
                       "BZIP2",
                       "BLOSC_BLOSCLZ", "BLOSC_LZ4", "BLOSC_LZ4HC", "BLOSC_SNAPPY", "BLOSC_ZLIB", "BLOSC_ZSTD",
+                      "LZF",
                       "NONE")) {
       warning("Filter not found, using default: ZLIB")
       filter <- "ZLIB"
@@ -122,6 +123,8 @@ h5createGroup <- function(file, group) {
     } else if (grepl(pattern = "BLOSC", x = filter)) {
       method <- which(c("BLOSC_BLOSCLZ", "BLOSC_LZ4", "BLOSC_LZ4HC", "BLOSC_SNAPPY", "BLOSC_ZLIB", "BLOSC_ZSTD") == filter)
       H5Pset_blosc(dcpl, method = method, h5tid = dtype, level = level, shuffle = shuffle )
+    } else if(filter == "LZF") {
+      H5Pset_lzf( dcpl, h5tid = dtype )
     }
     
   }

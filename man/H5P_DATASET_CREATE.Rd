@@ -28,6 +28,7 @@
 \alias{H5Pset_szip}
 \alias{H5Pset_bzip2}
 \alias{H5Pset_blosc}
+\alias{H5Pset_lzf}
 \alias{H5Pset_external}
 \alias{H5Pget_external_count}
 \alias{H5Pget_external}
@@ -65,6 +66,7 @@ H5Pset_szip                ( h5plist, options_mask, pixels_per_block )
 % H5Pget_external                    ( plist, idx, name_size, *name, *offset, *size )
 H5Pset_blosc               ( h5plist, h5tid, method = 1L, level = 6L, shuffle = TRUE )
 H5Pset_bzip2               ( h5plist, level = 2L )  
+H5Pset_lzf                 ( h5plist, h5tid ) 
 }
 \arguments{
   \item{h5plist}{An object of class \code{\link{H5IdComponent}} representing a H5 property list identifier of class H5P_DATASET_CREATE. See \code{\link{H5Pcreate}} or \code{\link{H5Pcopy}} to create an object of this kind.}
