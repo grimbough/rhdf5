@@ -7,6 +7,8 @@
 \alias{H5Sis_simple}
 \alias{H5Sget_simple_extent_dims}
 \alias{H5Sselect_hyperslab}
+\alias{H5Scombine_hyperslab}
+\alias{H5Scombine_select}
 \alias{H5Sselect_index}
 \alias{H5Sselect_all}
 \alias{H5Sselect_none}
@@ -29,6 +31,10 @@ H5Sset_extent_simple      (h5space, dims, maxdims)
 H5Sselect_hyperslab       (h5space, op = h5default("H5S_SELECT"), 
                            start = NULL, stride = NULL, count = NULL,
                            block = NULL)
+H5Scombine_hyperslab      (h5space, op = h5default("H5S_SELECT"), 
+                           start = NULL, stride = NULL, count = NULL,
+                           block = NULL)
+H5Scombine_select         (h5space1, op, h5space2)
 H5Sselect_index           (h5space, index)
 H5Sselect_all             (h5space)
 H5Sselect_none            (h5space)
@@ -48,6 +54,8 @@ H5Sunlimited              ()
   \item{stride}{The stride of the hypercube. Read the introduction \url{http://ftp.hdfgroup.org/HDF5/Tutor/phypecont.html} before using this argument. R behaves like Fortran in this example.}
   \item{count}{The number of blocks to be written.}
   \item{block}{The block size of the hyperslab. Read the introduction \url{http://ftp.hdfgroup.org/HDF5/Tutor/phypecont.html} before using this argument. R behaves like Fortran in this example.}
+  \item{h5space1}{An object of class \code{\link{H5IdComponent}} representing a H5 dataspace identifier.}
+  \item{h5space2}{An object of class \code{\link{H5IdComponent}} representing a H5 dataspace identifier.}
 }
 \details{
 Interface to the HDF5 C-library libhdf5. See \url{https://portal.hdfgroup.org/display/HDF5/Dataspaces} for further details.

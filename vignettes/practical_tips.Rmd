@@ -66,7 +66,7 @@ As we can see this is massively slower than the previous example.  This is becau
 
 ## Using hyperslab selections
 
-If there is a regular pattern to the regions you want to access, then it is likely you could also apply use HDF5's hyperslab selection method ^[The parameters for defining hyperslab selection `start`, `stride`, `block`, & `count` are not particularly intuitive if you are used to R's index selection methods.  More examples discussing how to specify them can be found at [www.hdfgroup.org](https://portal.hdfgroup.org/display/HDF5/Reading+From+or+Writing+To+a+Subset+of+a+Dataset)].  The following code defines the parameters to select every other column, the same as in our previous example.
+If there is a regular pattern to the regions you want to access, then it is likely you could also apply use HDF5's hyperslab selection method ^[The parameters for defining hyperslab selection `start`, `stride`, `block`, & `count` are not particularly intuitive if you are used to R's index selection methods.  More examples discussing how to specify them can be found at [www.hdfgroup.org](https://portal.hdfgroup.org/display/HDF5/Reading+From+or+Writing+To+a+Subset+of+a+Dataset).  The following code defines the parameters to select every other column, the same as in our previous example.
 
 ```{r extract3, echo = TRUE}
 start <- c(1,1)

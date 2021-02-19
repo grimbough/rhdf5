@@ -90,6 +90,8 @@ export(H5Sselect_none)
 export(H5Sselect_valid)
 export(H5Sselect_index)
 export(H5Sselect_hyperslab)
+export(H5Scombine_hyperslab)
+export(H5Scombine_select)
 export(H5Sunlimited)
 
 export(H5Tcopy)
