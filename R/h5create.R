@@ -229,6 +229,8 @@ h5createAttribute <- function(obj, attr, dims, maxdims = dims, file, storage.mod
                                       H5Tset_size(tid, size)
                                       tid
                                   },
+                                  ascii = h5constants$H5T["H5T_CSET_ASCII"],
+                                  utf8 = h5constants$H5T["H5T_CSET_UTF8"],
                                   { stop("datatype ",storage.mode," not yet implemented. Try 'double', 'integer', or 'character'.") } )
                 } else {
                     stop("Can not create dataset. 'storage.mode' has to be a character.")
