@@ -111,6 +111,8 @@ static R_CallMethodDef libraryRCalls[] = {
   {"_H5Tget_size", (DL_FUNC) &_H5Tget_size, 1},
   {"_H5Tset_strpad", (DL_FUNC) &_H5Tset_strpad, 2},
   {"_H5Tget_strpad", (DL_FUNC) &_H5Tget_strpad, 1},
+  {"_H5Tset_cset", (DL_FUNC) &_H5Tset_cset, 2},
+  {"_H5Tget_cset", (DL_FUNC) &_H5Tget_cset, 1},
   {"_H5Pcreate", (DL_FUNC) &_H5Pcreate, 1},
   {"_H5Pget_class", (DL_FUNC) &_H5Pget_class, 1},
   {"_H5Pcopy", (DL_FUNC) &_H5Pcopy, 1},

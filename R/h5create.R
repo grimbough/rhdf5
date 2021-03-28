@@ -203,7 +203,7 @@ h5createDataset <- function(file, dataset, dims, maxdims = dims,
   res
 }
 
-h5createAttribute <- function(obj, attr, dims, maxdims = dims, file, storage.mode = "double", H5type = NULL, size=NULL, native = FALSE) {
+h5createAttribute <- function(obj, attr, dims, maxdims = dims, file, storage.mode = "double", H5type = NULL, size=NULL, cset = c("ASCII", "UTF8"), scalar = FALSE, native = FALSE) {
     
     obj = h5checktypeOrOpenObj(obj, file, native = native)
     on.exit(h5closeitObj(obj))
@@ -211,7 +211,12 @@ h5createAttribute <- function(obj, attr, dims, maxdims = dims, file, storage.mod
     res <- FALSE
 
     if (is.numeric(dims) & is.numeric(maxdims)) {
-        sid <- H5Screate_simple(dims, maxdims)
+        if (scalar && length(dims)==1L && length(maxdims)==1L && dims==1L && maxdims==1L) {
+          sid <- H5Screate()
+        } else {
+          sid <- H5Screate_simple(dims, maxdims)
+        }
+
         if (!is(sid, "H5IdComponent")) {
             message("Can not create attribute. 'dims' or 'maxdims' argument invalid.")
         } else {
@@ -223,14 +228,13 @@ h5createAttribute <- function(obj, attr, dims, maxdims = dims, file, storage.mod
                                   integer = h5constants$H5T["H5T_STD_I32LE"],
                                   character = {
                                       tid <- H5Tcopy("H5T_C_S1")
-                                      if (!is.numeric(size)) {
-                                          stop("parameter 'size' has to be defined for storage.mode character.")
+                                      H5Tset_cset(tid, match.arg(cset))
+                                      if (!is.null(size) && !is.numeric(size)) {
+                                        stop("parameter 'size' has to be defined for storage.mode character.")
                                       }
-                                      H5Tset_size(tid, size)
+                                      H5Tset_size(tid, size) # NULL = variable.
                                       tid
                                   },
-                                  ascii = h5constants$H5T["H5T_CSET_ASCII"],
-                                  utf8 = h5constants$H5T["H5T_CSET_UTF8"],
                                   { stop("datatype ",storage.mode," not yet implemented. Try 'double', 'integer', or 'character'.") } )
                 } else {
                     stop("Can not create dataset. 'storage.mode' has to be a character.")

@@ -12,7 +12,7 @@ h5writeAttribute.logical <- function(...) { h5writeAttribute.array(...) }
 h5writeAttribute.character <- function(...) { h5writeAttribute.array(...) }
 h5writeAttribute.default <- function(attr, h5obj, name, ...) { warning("No function found to write attribute of class '",class(attr),"'. Attribute '",name,"' is not written to hdf5-file.") }
 
-h5writeAttribute.array <- function(attr, h5obj, name, size=NULL) {
+h5writeAttribute.array <- function(attr, h5obj, name, size=NULL, cset=c("ASCII", "UTF8"), variableLength=FALSE, scalar=FALSE) {
   if (is.null(dim(attr))) {
     dim(attr) = length(attr)
   }
@@ -20,10 +20,10 @@ h5writeAttribute.array <- function(attr, h5obj, name, size=NULL) {
     H5Adelete(h5obj, name)
   }
   size = NULL
-  if (storage.mode(attr) == "character") {
+  if (storage.mode(attr) == "character" && !variableLength) {
     size = max(nchar(attr))+1
   }
-  h5createAttribute(h5obj, name, dims = dim(attr), storage.mode = storage.mode(attr), size=size)
+  h5createAttribute(h5obj, name, dims = dim(attr), storage.mode = storage.mode(attr), size=size, cset=match.arg(cset), scalar=scalar)
   h5attr <- H5Aopen(h5obj, name)
 
   DimMem <- dim(attr)
