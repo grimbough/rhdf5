@@ -78,10 +78,10 @@ h5writeAttribute.array      (attr, h5obj, name, cset=c("ASCII", "UTF8"),
   \item{compoundAsDataFrame}{If true, a compound datatype will be coerced to a data.frame. This is not possible, if the dataset is multi-dimensional. Otherwise the compound datatype will be returned as a list. Nested compound data types will be returned as a nested list.}
   \item{DataFrameAsCompound}{If true, a data.frame will be saved as a compound data type. Otherwise it is saved like a list. The advantage of saving a data.frame as a compound data type is that it can be read as a table from python or with a struct-type from C. The disadvantage is that the data has to be rearranged on disk and thus can slow down I/O. If fast reading is required, DataFrameAsCompound=FALSE is recommended.}
   \item{callGeneric}{If TRUE a generic function h5read.classname will be called if it exists depending on the dataset's class attribute within the HDF5 file. This function can be used to convert the standard output of h5read depending on the class attribute. Note that h5read is not a S3 generic function. Dispatching is done based on the HDF5 attribute after the standard h5read function.}
+  \item{size}{The length of string data type. Variable length strings are not yet supported for datasets, only for attributes.}
   \item{cset}{The encoding of the string data type.}
-  \item{variableLengthString}{Whether character vectors should be written as variable-length strings.}
+  \item{variableLengthString}{Whether character vectors should be written as variable-length strings into the attributes.}
   \item{asScalar}{Whether length-1 \code{attr} should be written into a scalar dataspace.}
-  \item{scalar}{Whether length-1 vectors should be written into a scalar dataspace.}
   \item{createnewfile}{If TRUE, a new file will be created if necessary.}
   \item{read.attributes}{(logical) If TRUE, the HDF5 attributes are read and attached to the respective R object.}
   \item{drop}{(logical) If TRUE, the HDF5 object is read as a vector with NULL dim attributes.}

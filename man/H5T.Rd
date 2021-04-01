@@ -1,6 +1,8 @@
 \name{HDF5 Datatype Interface}
 \alias{H5T}
 \alias{H5Tcopy}
+\alias{H5Tset_cset}
+\alias{H5Tget_cset}
 \alias{H5Tset_size}
 \alias{H5Tget_size}
 \alias{H5Tset_strpad}
@@ -12,6 +14,8 @@ These functions create and manipulate the datatype which describes elements of a
 }
 \usage{
 H5Tcopy      (dtype_id = h5default(type = "H5T"))
+H5Tset_cset  (dtype_id, cset = "ASCII")
+H5Tget_cset  (dtype_id)
 H5Tset_size  (dtype_id = h5default(type = "H5T"), size)
 H5Tget_size  (dtype_id)
 H5Tset_strpad(dtype_id, strpad = "NULLPAD")
@@ -21,6 +25,7 @@ H5Tget_strpad(dtype_id)
 \arguments{
   \item{dtype_id}{A character name of a datatype. See \code{h5const("H5T")} 
   for possible datatypes. Can also be an integer representing an HDF5 datatype.}
+  \item{cset}{Encoding to use for string types. Valid options are 'ASCII' and 'UTF8'.}
   \item{size}{The total size in bytes.}
   \item{strpad}{Character string repsenting the type of padding to be used.  
   Valid options are 'NULLTERM', 'NULLPAD', 'SPACEPAD'}
