@@ -1,6 +1,23 @@
 \name{NEWS}
 \title{News for Package 'rhdf5'}
 
+\section{Changes in version 2.36.0}{
+
+  \subsection{NEW FEATURES}{
+    \itemize{
+      \item Added Windows support for read access to files in S3 buckets.
+    }
+  }
+
+  \subsection{BUG FIXES}{
+    \itemize{
+      \item Addressed issue where messages printed when loading .Rprofile were
+      breaking detection of the rhdf5filters package.
+      (https://github.com/grimbough/rhdf5/issues/81)
+    }
+  }
+}
+
 \section{Changes in version 2.34.0}{
   \subsection{NEW FEATURES}{
     \itemize{
