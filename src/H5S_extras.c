@@ -1,8 +1,9 @@
 /* This file contains functions relating to selecting hyperslabs using
 more familiar R-style indexing.  This can be considered as additions to 
 to standard HDF5 API */
-
+#ifndef _H5S_H
 #include "H5S.h"
+#endif
 
 SEXP _H5Sselect_index( SEXP _space_id, SEXP _start, SEXP _count) {
     hid_t space_id = STRSXP_2_HID( _space_id );

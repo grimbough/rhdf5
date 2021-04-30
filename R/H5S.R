@@ -71,13 +71,18 @@ H5Sset_extent_simple <- function( h5space, dims, maxdims) {
   dims <- as.numeric(dims)
   maxdims <- as.numeric(maxdims)
   if (!h5space@native){
-    dims <- rev(dims)
-    maxdims <- rev(maxdims)
+      dims <- rev(dims)
+      maxdims <- rev(maxdims)
   }
   res <- .Call("_H5Sset_extent_simple", h5space@ID, dims, maxdims, PACKAGE='rhdf5')
   invisible(res)
 }
 
+H5Sget_select_npoints <- function( h5space ) {
+  h5checktype(h5space, "dataspace")
+  res <- .Call('_H5Sget_select_npoints', h5space@ID, PACKAGE = "rhdf5")
+  return(res)
+}
 
 H5Sselect_all <- function(h5space) {
   h5checktype(h5space, "dataspace")
@@ -95,6 +100,34 @@ H5Sselect_valid <- function(h5space) {
   h5checktype(h5space, "dataspace")
   res <- .Call("_H5Sselect_valid", h5space@ID, PACKAGE='rhdf5')
   invisible(res)
+}
+
+H5Sselect_elements <- function( h5space, op = h5default("H5S_SELECT"), index) {
+  
+  op <- h5checkConstants( "H5S_SELECT", op )
+  
+  dims <- H5Sget_simple_extent_dims( h5space )
+  
+  if(length(index) != dims$rank) {
+    stop("Index must be the same length as the rank of the dataspace.")
+  }
+  
+  if(h5space@native) {
+    coords <- expand.grid(index)
+  } else {
+    coords <- rev(expand.grid(index))
+  }
+  
+  coords <- as.integer(t(coords))
+  numElements <- as.integer(length(coords) / dims$rank)
+  
+  res <- .Call("_H5Sselect_elements", h5space@ID, op, numElements, coords, PACKAGE='rhdf5')
+  if(res < 0) { 
+    stop("Error selecting elements")
+  }
+  
+  size <- H5Sget_select_npoints(h5space)
+  return(size)
 }
 
 H5Sselect_hyperslab <- function( h5space, op = h5default("H5S_SELECT"), 
