@@ -1,7 +1,7 @@
 Package: rhdf5
 Type: Package
 Title: R Interface to HDF5
-Version: 2.35.3
+Version: 2.35.4
 Authors@R: c(person("Bernd", "Fischer", role = c("aut")), 
         person("Mike", "Smith", 
             role=c("aut", "cre"), 
@@ -23,7 +23,7 @@ URL: https://github.com/grimbough/rhdf5
 BugReports: https://github.com/grimbough/rhdf5/issues
 LazyLoad: true
 VignetteBuilder: knitr
-Imports: Rhdf5lib (>= 1.11.0),
+Imports: Rhdf5lib (>= 1.13.4),
   rhdf5filters
 Depends: R (>= 3.5.0), methods
 Suggests: bit64, BiocStyle, knitr, rmarkdown, testthat,  
