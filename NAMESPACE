@@ -98,6 +98,8 @@ export(H5Sunlimited)
 export(H5Tcopy)
 export(H5Tset_size)
 export(H5Tget_size)
+export(H5Tset_cset)
+export(H5Tget_cset)
 export(H5Tset_strpad)
 export(H5Tget_strpad)
 

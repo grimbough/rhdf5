@@ -99,6 +99,35 @@ test_that("Adding attribute to dataset", {
     expect_is(attr_back$numeric_attr[1], "numeric")
 })
 
+test_that("Checking other string options when adding attributes", {
+    h5createGroup(file = h5File, group = "blah_group")
+    fid <- H5Fopen(h5File)
+    gid <- H5Gopen(h5loc = fid, name = "blah_group")
+
+    ## variable strings
+    attr <- "blah"
+    h5writeAttribute(attr = attr, h5obj = gid, name = "char_attr", variableLengthString = TRUE)
+    
+    ## different encoding
+    attr <- "blah2"
+    h5writeAttribute(attr = attr, h5obj = gid, name = "char_attr2", cset = "UTF8")
+
+    ## as a scalar
+    attr <- "blah3"
+    h5writeAttribute(attr = attr, h5obj = gid, name = "char_attr3", cset = "UTF8", asScalar = TRUE)
+    expect_error(h5writeAttribute(attr = c(attr, attr), h5obj = gid, name = "char_attr3", cset = "UTF8", asScalar = TRUE), "cannot use")
+
+    H5Gclose(gid)
+    H5Fclose(fid)
+
+    attr_back <- h5readAttributes(h5File, name = "blah_group")
+    expect_length(attr_back, n = 3)
+
+    expected <- c("char_attr", "char_attr2", "char_attr3")
+    expect_identical(sort(expected), sort(names(attr_back)))
+    expect_identical(unname(unlist(attr_back[expected])), c("blah", "blah2", "blah3"))
+})
+
 test_that("Unable to add logical attribute", {
     fid <- H5Fopen(h5File)
     expect_error( h5writeAttribute(attr = FALSE, h5obj = fid, name = "logical_attr"))  

@@ -7,18 +7,22 @@
 \usage{
 h5createAttribute (obj, attr, dims, maxdims = dims, file, 
                    storage.mode = "double", H5type = NULL, size=NULL,
-                   native = FALSE)
+                   cset = c("ASCII", "UTF8"), native = FALSE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{obj}{The name (character) of the object the attribute will be attatched to. For advanced programmers it is possible to provide an object of class \code{\link{H5IdComponent}} representing a H5 object identifier (file, group, dataset). See \code{\link{H5Fcreate}}, \code{\link{H5Fopen}}, \code{\link{H5Gcreate}}, \code{\link{H5Gopen}}, \code{\link{H5Dcreate}}, \code{\link{H5Dopen}} to create an object of this kind.}
   \item{file}{The filename (character) of the file in which the dataset will be located. For advanced programmers it is possible to provide an object of class \code{\link{H5IdComponent}} representig an H5 location identifier. See \code{\link{H5Fcreate}}, \code{\link{H5Fopen}}, \code{\link{H5Gcreate}}, \code{\link{H5Gopen}} to create an object of this kind. The \code{file} argument is not required, if the argument \code{obj} is of type \code{H5IdComponent}.}
   \item{attr}{Name of the attribute to be created.}
-  \item{dims}{The dimension of the attribute.}
+  \item{dims}{The dimensions of the attribute as a numeric vector. If \code{NULL}, a scalar dataspace will be created instead.}
   \item{maxdims}{The maximum extension of the attribute.}
   \item{storage.mode}{The storage mode of the data to be written. Can be obtained by \code{storage.mode(mydata)}.}
   \item{H5type}{Advanced programmers can specify the datatype of the dataset within the file. See \code{h5const("H5T")} for a list of available datatypes. If \code{H5type} is specified the argument \code{storage.mode} is ignored. It is recommended to use \code{storage.mode}}
-  \item{size}{For \code{storage.mode='character'} the maximum string length has to be specified. HDF5 then stores the string as fixed length character vectors. Together with compression, this should be efficient.}
+  \item{size}{The maximum string length when \code{storage.mode='character'}. If this is specified, HDF5 stores each string of \code{attr} as fixed length character arrays. Together with compression, this should be efficient. 
+  
+  If this argument is set to \code{NULL}, HDF5 will instead store variable-length strings.
+  }
+  \item{cset}{The encoding to use when \code{storage.mode='character'}.}
   \item{native}{An object of class \code{logical}. If TRUE, array-like objects are treated as stored in HDF5 row-major rather than R column-major orientation. Using \code{native = TRUE} increases HDF5 file portability between programming languages. A file written with \code{native = TRUE} should also be read with \code{native = TRUE}}.
 }
 \details{
