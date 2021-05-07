@@ -6,6 +6,7 @@
 \alias{H5Sclose}
 \alias{H5Sis_simple}
 \alias{H5Sget_simple_extent_dims}
+\alias{H5Sget_select_npoints}
 \alias{H5Sselect_hyperslab}
 \alias{H5Scombine_hyperslab}
 \alias{H5Scombine_select}
@@ -27,6 +28,7 @@ H5Scopy                   (h5space)
 H5Sclose                  (h5space)
 H5Sis_simple              (h5space)
 H5Sget_simple_extent_dims (h5space)
+H5Sget_select_npoints     (h5space)
 H5Sset_extent_simple      (h5space, dims, maxdims)
 H5Sselect_hyperslab       (h5space, op = h5default("H5S_SELECT"), 
                            start = NULL, stride = NULL, count = NULL,
