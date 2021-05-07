@@ -203,7 +203,10 @@ h5createDataset <- function(file, dataset, dims, maxdims = dims,
   res
 }
 
-h5createAttribute <- function(obj, attr, dims, maxdims = dims, file, storage.mode = "double", H5type = NULL, size = NULL, cset = c("ASCII", "UTF8"), native = FALSE) {
+h5createAttribute <- function(obj, attr, dims, maxdims = dims, file, 
+                              storage.mode = "double", H5type = NULL, 
+                              size = NULL, cset = c("ASCII", "UTF8"), 
+                              native = FALSE) {
     
     obj = h5checktypeOrOpenObj(obj, file, native = native)
     on.exit(h5closeitObj(obj))
