@@ -217,8 +217,68 @@ test_that("Invalid storage mode arguments", {
     expect_error( h5createAttribute(file = h5File, obj = "foo", dims = c(1,1), attr = "bad_attr", storage.mode = 10) ) 
     expect_error( h5createAttribute(file = h5File, obj = "foo", dims = c(1,1), attr = "bad_attr", storage.mode = 1L) )
     expect_error( h5createAttribute(file = h5File, obj = "foo", dims = c(1,1), attr = "bad_attr", storage.mode = FALSE) )
-    ## character without size argument
-    expect_error( h5createAttribute(file = h5File, obj = "foo", dims = c(1,1), attr = "bad_attr", storage.mode = "character", size = NULL) )
+})
+
+test_that("variable string attributes are created correctly", {
+    h5createAttribute(file = h5File, obj = "foo", dims = c(1,1), attr = "var_str_attr", storage.mode = "character", size = NULL)
+    
+    fhandle <- H5Fopen(h5File)
+    dhandle <- H5Dopen(fhandle, "foo")
+    ahandle <- H5Aopen(dhandle, "var_str_attr")
+    dtype <- H5Aget_type(ahandle)
+    expect_null(H5Tget_size(dtype)) # NULL = variable length.
+    h5closeAll()
+
+    # For comparison.
+    h5createAttribute(file = h5File, obj = "foo", dims = c(1,1), attr = "var_str_attr2", storage.mode = "character", size = 10)
+
+    fhandle <- H5Fopen(h5File)
+    dhandle <- H5Dopen(fhandle, "foo")
+    ahandle <- H5Aopen(dhandle, "var_str_attr2")
+    dtype <- H5Aget_type(ahandle)
+    expect_identical(H5Tget_size(dtype), 10L) 
+    h5closeAll()
+})
+
+test_that("string encoding is handled properly", {
+    h5createAttribute(file = h5File, obj = "foo", dims = c(1,1), attr = "ascii_str_attr", storage.mode = "character", size = NULL)
+    
+    fhandle <- H5Fopen(h5File)
+    dhandle <- H5Dopen(fhandle, "foo")
+    ahandle <- H5Aopen(dhandle, "ascii_str_attr")
+    dtype <- H5Aget_type(ahandle)
+    expect_identical(H5Tget_cset(dtype), 0L) # aka ASCII
+    h5closeAll()
+
+    # Now Unicode.
+    h5createAttribute(file = h5File, obj = "foo", dims = c(1,1), attr = "utf_str_attr", storage.mode = "character", cset="UTF8", size = NULL)
+    
+    fhandle <- H5Fopen(h5File)
+    dhandle <- H5Dopen(fhandle, "foo")
+    ahandle <- H5Aopen(dhandle, "utf_str_attr")
+    dtype <- H5Aget_type(ahandle)
+    expect_identical(H5Tget_cset(dtype), 1L) # aka UTF8
+    h5closeAll()
+})
+
+test_that("scalar dataspaces are created properly", {
+    # For reference.
+    h5createAttribute(file = h5File, obj = "foo", dims = 1, attr = "simple_int_attr", storage.mode = "integer")
+    fhandle <- H5Fopen(h5File)
+    dhandle <- H5Dopen(fhandle, "foo")
+    ahandle <- H5Aopen(dhandle, "simple_int_attr")
+    space <- H5Aget_space(ahandle)
+    expect_identical(H5Sget_simple_extent_dims(space)$rank, 1L)
+    h5closeAll()
+
+    # Now, creating the scalar space.
+    h5createAttribute(file = h5File, obj = "foo", dims = NULL, attr = "scalar_int_attr", storage.mode = "integer")
+    fhandle <- H5Fopen(h5File)
+    dhandle <- H5Dopen(fhandle, "foo")
+    ahandle <- H5Aopen(dhandle, "scalar_int_attr")
+    space <- H5Aget_space(ahandle)
+    expect_identical(H5Sget_simple_extent_dims(space)$rank, 0L)
+    h5closeAll()
 })
 
 test_that("No open HDF5 objects are left", {
