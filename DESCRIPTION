@@ -25,7 +25,7 @@ LazyLoad: true
 VignetteBuilder: knitr
 Imports: Rhdf5lib (>= 1.13.4),
   rhdf5filters
-Depends: R (>= 3.5.0), methods
+Depends: R (>= 4.0.0), methods
 Suggests: bit64, BiocStyle, knitr, rmarkdown, testthat,  
   microbenchmark, dplyr, ggplot2
 LinkingTo: Rhdf5lib
