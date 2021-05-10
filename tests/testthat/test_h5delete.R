@@ -59,6 +59,24 @@ test_that("Deletion reduces filesize", {
       
 })
     
+########################
+## Attribute deletion ##
+########################
+
+h5write(obj = A, file = h5File, name = "A")
+
+test_that("Attributes can be deleted", {
+  expect_true(h5deleteAttribute(h5File, name = "A", attribute = "rhdf5-NA.OK"))
+  expect_length(h5readAttributes(h5File, name = "A"), n = 0)
+})
+
+test_that("Attribute deletion error handling works", {
+  expect_false(h5deleteAttribute(h5File, name = "B", attribute = "test")) %>%
+    expect_message(regexp = "Object 'B' not found in")
+  expect_false(h5deleteAttribute(h5File, name = "A", attribute = "test")) %>%
+    expect_message(regexp = "Attribute 'test' not found")
+})
+
 test_that("No open HDF5 objects are left", {
-    expect_equal( length(h5validObjects()), 0 )
+  expect_length( h5validObjects(), 0 )
 })

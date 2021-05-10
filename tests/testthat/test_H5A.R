@@ -1,9 +1,5 @@
 library(rhdf5)
 
-############################################################
-context("H5A functions")
-############################################################
-
 h5File <- tempfile(pattern = "ex_H5A_", fileext = ".h5")
 if(file.exists(h5File))
     file.remove(h5File)
@@ -13,7 +9,7 @@ h5write(1:15, h5File,"A")
 
 expect_null( h5errorHandling(type = "suppress") )  
 
-test_that("Writing attributes", {
+test_that("writing attributes is silent", {
     expect_silent(fid <- H5Fopen(h5File) )
     expect_silent(did <- H5Dopen(fid, "A") )
     expect_silent(sid <- H5Screate_simple(c(1,1)) )
@@ -32,7 +28,7 @@ test_that("Writing attributes", {
     expect_silent( H5Fclose(fid) )
 })
 
-test_that("Attribute existance", {
+test_that("attributes exist", {
     
     expect_silent( fid <- H5Fopen(h5File) )
     expect_silent( did <- H5Dopen(fid, "A") )
@@ -46,7 +42,7 @@ test_that("Attribute existance", {
 
 })
 
-test_that("Opening attributes", {
+test_that("attributes can be opened and closed", {
     
     expect_silent( fid <- H5Fopen(h5File) )
 
@@ -71,7 +67,7 @@ test_that("Opening attributes", {
     
 })
 
-test_that("Deleting attributes", {
+test_that("attributes can be deleted", {
     
     expect_silent( fid <- H5Fopen(h5File) )
     expect_silent( did <- H5Dopen(fid, "A") )
