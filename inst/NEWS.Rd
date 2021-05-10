@@ -9,6 +9,7 @@
       HDF5 1.10.7 (\code{H5Scombine_hyperslab}, \code{H5Scombine_select}, 
       \code{H5Sget_select_npoints}).
       \item Support for read access to files in S3 buckets now includes Windows.
+      \item Added function \code{h5deleteAttribute()}.
     }
   }
 
