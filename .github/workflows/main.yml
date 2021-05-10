@@ -68,7 +68,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          install.packages(c('BiocManager', 'rcmdcheck', 'devtools'))
+          install.packages(c('Bioconductor/BiocManager', 'rcmdcheck', 'devtools'))
           BiocManager::install(version = 'devel', ask = FALSE, update = TRUE)
           toInstall <- remotes::dev_package_deps(dependencies = TRUE)[,'package']
           BiocManager::install(toInstall, ask = FALSE, update = TRUE, INSTALL_opts = '--force-biarch')
@@ -83,4 +83,10 @@ jobs:
         if: ${{ matrix.config.os == 'windows-latest' }}
         run: |
           Rscript -e "rcmdcheck::rcmdcheck(args = c('--no-manual', '--force-multiarch', '--install-args=`"--force-biarch`"'), error_on = 'warning', check_dir = 'check')"
-
+          
+      - name: Test coverage
+        if: ${{ matrix.config.os == 'ubuntu-20.04' }}
+        run: |
+          BiocManager::install('covr', update = FALSE, ask = FALSE)
+          covr::codecov()
+        shell: Rscript {0}
