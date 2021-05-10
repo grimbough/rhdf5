@@ -2,7 +2,6 @@ on:
   push:
     branches:
       - master
-      - 1-10-7
   pull_request:
     branches:
       - master
@@ -21,8 +20,8 @@ jobs:
         config:
         - { os: windows-latest, r: 'prerelease'}
         - { os: macOS-latest, r: 'prerelease'}
-        - { os: ubuntu-18.04, r: '4.0', rspm: "https://packagemanager.rstudio.com/all/__linux__/bionic/latest"}
-        - { os: ubuntu-20.04, r: '4.0', rspm: "https://packagemanager.rstudio.com/all/__linux__/focal/latest"}
+        - { os: ubuntu-18.04, r: 'devel', rspm: "https://packagemanager.rstudio.com/all/__linux__/bionic/latest"}
+        - { os: ubuntu-20.04, r: 'devel', rspm: "https://packagemanager.rstudio.com/all/__linux__/focal/latest"}
 
     env:
       CRAN: ${{ matrix.config.rspm }}
@@ -75,11 +74,6 @@ jobs:
           BiocManager::install(toInstall, ask = FALSE, update = TRUE, INSTALL_opts = '--force-biarch')
         shell: Rscript {0}
         
-      - name: Install Rhdf5lib 1.10.7
-        run: |
-          BiocManager::install('grimbough/Rhdf5lib', ref = "1-10-7", ask = FALSE, update = FALSE, INSTALL_opts = '--force-biarch')
-        shell: Rscript {0}
-
       - name: Non-windows check
         if: ${{ matrix.config.os != 'windows-latest' }}
         run: |
