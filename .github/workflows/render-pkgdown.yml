@@ -36,8 +36,8 @@ jobs:
       uses: actions/cache@v1
       with:
         path: ${{ env.R_LIBS_USER }}
-        key: macOS-r-${{ matrix.config.r }-${{ hashFiles('.github/depends.Rds') }}
-        restore-keys: macOS-r-${{ matrix.config.r }-
+        key: macOS-r-${{ matrix.config.r }}-${{ hashFiles('.github/depends.Rds') }}
+        restore-keys: macOS-r-${{ matrix.config.r }}-
 
     - name: Install dependencies
       run: |
