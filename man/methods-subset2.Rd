@@ -1,4 +1,4 @@
-\name{[<--methods}
+\name{<--methods}
 \docType{methods}
 \alias{[<-,H5IdComponent-method}
 \title{Methods for Function \code{[<-} in Package \pkg{rhdf5}}

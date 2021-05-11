@@ -1,17 +1,24 @@
+#' HDF5 library constants.
+#' 
+#' Access to HDF5 constants.
+#' 
+#' These functions provide a list of HDF5 constants that are defined in the R
+#' package. \code{h5constType} provides a list of group names and
+#' \code{h5const} gives the constants defined within a group. \code{h5default}
+#' gives the default choice for each group.
+#' 
+#' @param type A character name of a group of constants.
+#' @return A character vector with names of HDF5 constants or groups.
+#' @author Bernd Fischer
+#' @examples
+#' 
+#' h5constType()[1]
+#' h5const(h5constType()[1])
+#' @name h5constants
+NULL
 
-H5loadConstants <- function( ) {
-  invisible(.Call("_H5constants", PACKAGE='rhdf5'))
-}
-
-h5constants = list()
-
-h5default <- function( type = "" ) {
-  if (!exists("h5constants")) {
-    h5constants <<- H5loadConstants()
-  }
-  names(h5constants[[type]])[1]
-}
-
+#' @rdname h5constants
+#' @export h5const
 h5const <- function( type = "" ) {
   if (!exists("h5constants")) {
     h5constants <<- H5loadConstants()
@@ -19,12 +26,27 @@ h5const <- function( type = "" ) {
   names(h5constants[[type]])
 }
 
+#' @rdname h5constants
+#' @export
 h5constType <- function( ) {
-  ## if (!exists("h5constants")) {
-    h5constants <- H5loadConstants()
-  ## }
+  h5constants <- H5loadConstants()
   names(h5constants)
 }
+
+#' @rdname h5constants
+#' @export
+h5default <- function( type = "" ) {
+  if (!exists("h5constants")) {
+    h5constants <<- H5loadConstants()
+  }
+  names(h5constants[[type]])[1]
+}
+
+H5loadConstants <- function( ) {
+  invisible(.Call("_H5constants", PACKAGE='rhdf5'))
+}
+
+h5constants = list()
 
 h5checkConstants <- function(group, constant) {
   if (!exists("h5constants")) {

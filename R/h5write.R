@@ -1,5 +1,3 @@
-
-
 h5writeDatasetHelper <- function (obj, h5dataset, index = NULL, start = NULL, stride = NULL, 
                                   block = NULL, count = NULL)
 {
@@ -71,7 +69,150 @@ h5writeDatasetHelper <- function (obj, h5dataset, index = NULL, start = NULL, st
     invisible(NULL)
 }
 
-
+#' Reads and write object in HDF5 files
+#' 
+#' Reads and writes objects in HDF5 files. This function can be used to read
+#' and write either full arrays/vectors or subarrays (hyperslabs) within an
+#' existing dataset.
+#' 
+#' Writes an R object to an HDF5 file. If neither of the arguments
+#' \code{start, stride, block, count} is specified, the dataset has the same
+#' dimension in the HDF5 file and in memory. If the dataset already exists in
+#' the HDF5 file, one can write subarrays, so called hyperslabs to
+#' the HDF5 file. The arguments \code{start, stride, block, count} define the
+#' subset of the dataset in the HDF5 file that is to be written. See these
+#' introductions to hyperslabs:
+#' \url{https://support.hdfgroup.org/HDF5/Tutor/selectsimple.html},
+#' \url{https://support.hdfgroup.org/HDF5/Tutor/select.html} and
+#' \url{http://ftp.hdfgroup.org/HDF5/Tutor/phypecont.html}. Please note that in
+#' R the first dimension is the fastest changing dimension.
+#' 
+#' When viewing the HDF5 datasets with any C-program (e.g. HDFView), the order
+#' of dimensions is inverted. In the R interface counting starts with 1,
+#' whereas in the C-programs (e.g. HDFView) counting starts with 0.
+#' 
+#' @param obj The R object to be written.
+#' @param attr The R object to be written as an HDF5 attribute.
+#' @param file The filename (character) of the file in which the dataset will
+#' be located. For advanced programmers it is possible to provide an object of
+#' class \code{\link{H5IdComponent}} representing a H5 location identifier
+#' (file or group). See \code{\link{H5Fcreate}}, \code{\link{H5Fopen}},
+#' \code{\link{H5Gcreate}}, \code{\link{H5Gopen}} to create an object of this
+#' kind.
+#' @param h5loc An object of class \code{\link{H5IdComponent}} representing a
+#' H5 location identifier (file or group). See \code{\link{H5Fcreate}},
+#' \code{\link{H5Fopen}}, \code{\link{H5Gcreate}}, \code{\link{H5Gopen}} to
+#' create an object of this kind.
+#' @param h5obj An object of class \code{\link{H5IdComponent}} representing a
+#' H5 object identifier (file, group, or dataset). See \code{\link{H5Fcreate}},
+#' \code{\link{H5Fopen}}, \code{\link{H5Gcreate}}, \code{\link{H5Gopen}},
+#' \code{\link{H5Dcreate}}, or \code{\link{H5Dopen}} to create an object of
+#' this kind.
+#' @param name The name of the dataset in the HDF5 file. The name of the
+#' attribute for hwriteAttribute.
+#' @param index List of indices for subsetting. The length of the list has to
+#' agree with the dimensional extension of the HDF5 array. Each list element is
+#' an integer vector of indices. A list element equal to NULL choses all
+#' indices in this dimension. Counting is R-style 1-based.
+#' @param start The start coordinate of a hyperslab (similar to subsetting in
+#' R). Counting is R-style 1-based. This argument is ignored, if index is not
+#' NULL.
+#' @param stride The stride of the hypercube. Read the introduction
+#' \url{http://ftp.hdfgroup.org/HDF5/Tutor/phypecont.html} before using this
+#' argument. R behaves like Fortran in this example. This argument is ignored,
+#' if index is not NULL.
+#' @param block The block size of the hyperslab. Read the introduction
+#' \url{http://ftp.hdfgroup.org/HDF5/Tutor/phypecont.html} before using this
+#' argument. R behaves like Fortran in this example. This argument is ignored,
+#' if index is not NULL.
+#' @param count The number of blocks to be written. This argument is ignored,
+#' if index is not NULL.
+#' @param level The compression level. An integer value between 0 (no
+#' compression) and 9 (highest and slowest compression). Only used, if the
+#' dataset does not yet exist. See \code{\link{h5createDataset}} to create an
+#' dataset.
+#' @param chunk Specifies the number of items to be include in an HDF5 chunk.
+#' When writing a \code{data.frame} this represents the number of rows to be
+#' included in a chunk.  If left unspecified the defaults is the smaller of:
+#' the total number of rows or the number of rows that fit within 4GB of
+#' memory.
+#' @param native An object of class \code{logical}. If TRUE, array-like objects
+#' are treated as stored in HDF5 row-major rather than R column-major
+#' orientation. Using \code{native = TRUE} increases HDF5 file portability
+#' between programming languages. A file written with \code{native = TRUE}
+#' should also be read with \code{native = TRUE}
+#' @param compoundAsDataFrame If true, a compound datatype will be coerced to a
+#' data.frame. This is not possible, if the dataset is multi-dimensional.
+#' Otherwise the compound datatype will be returned as a list. Nested compound
+#' data types will be returned as a nested list.
+#' @param DataFrameAsCompound If true, a data.frame will be saved as a compound
+#' data type. Otherwise it is saved like a list. The advantage of saving a
+#' data.frame as a compound data type is that it can be read as a table from
+#' python or with a struct-type from C. The disadvantage is that the data has
+#' to be rearranged on disk and thus can slow down I/O. If fast reading is
+#' required, DataFrameAsCompound=FALSE is recommended.
+#' @param callGeneric If TRUE a generic function h5read.classname will be
+#' called if it exists depending on the dataset's class attribute within the
+#' HDF5 file. This function can be used to convert the standard output of
+#' h5read depending on the class attribute. Note that h5read is not a S3
+#' generic function. Dispatching is done based on the HDF5 attribute after the
+#' standard h5read function.
+#' @param size The length of string data type. Variable length strings are not
+#' yet supported for datasets, only for attributes.
+#' @param cset The encoding of the string data type.
+#' @param variableLengthString Whether character vectors should be written as
+#' variable-length strings into the attributes.
+#' @param asScalar Whether length-1 \code{attr} should be written into a scalar
+#' dataspace.
+#' @param createnewfile If TRUE, a new file will be created if necessary.
+#' @param read.attributes (logical) If TRUE, the HDF5 attributes are read and
+#' attached to the respective R object.
+#' @param drop (logical) If TRUE, the HDF5 object is read as a vector with NULL
+#' dim attributes.
+#' @param write.attributes (logical) If TRUE, all R-attributes attached to the
+#' object \code{obj} are written to the HDF5 file.
+#' @param s3 Logical value indicating whether the file argument should be
+#' treated as a URL to an Amazon S3 bucket, rather than a local file path.
+#' @param s3credentials A list of length three, providing the credentials for
+#' accessing files in a private Amazon S3 bucket.
+#' @param \dots Further arguments passed to \code{\link{H5Dread}}.
+#' @return \code{h5read} returns an array with the data read.
+#' 
+#' \code{h5readAttributes} returns a list of all HDF5 attributes of object
+#' \code{name}.
+#' 
+#' \code{h5write} returns 0 if successful.
+#' @author Bernd Fischer
+#' @seealso \code{\link{h5ls}}, \code{\link{h5createFile}},
+#' \code{\link{h5createDataset}}, \link{rhdf5}
+#' @references \url{https://portal.hdfgroup.org/display/HDF5}
+#' @keywords programming interface IO file
+#' @examples
+#' 
+#' h5createFile("ex_hdf5file.h5")
+#' 
+#' # write a matrix
+#' B = array(seq(0.1,2.0,by=0.1),dim=c(5,2,2))
+#' attr(B, "scale") <- "liter"
+#' h5write(B, "ex_hdf5file.h5","B")
+#' 
+#' # read a matrix
+#' E = h5read("ex_hdf5file.h5","B")
+#' 
+#' # write and read submatrix
+#' h5createDataset("ex_hdf5file.h5", "S", c(5,8), storage.mode = "integer", chunk=c(5,1), level=7)
+#' h5write(matrix(1:5,nr=5,nc=1), file="ex_hdf5file.h5", name="S", index=list(NULL,1))
+#' h5read("ex_hdf5file.h5", "S")
+#' h5read("ex_hdf5file.h5", "S", index=list(NULL,2:3))
+#' 
+#' # Read a subset of an hdf5 file in a public S3 bucket
+#' \donttest{
+#' h5read('https://rhdf5-public.s3.eu-central-1.amazonaws.com/rhdf5ex_t_float_3d.h5', 
+#'       s3 = TRUE, name = "a1", index = list(NULL, 3, NULL))
+#' }
+#' 
+#' 
+#' @export h5write
 h5write <- function(obj, file, name, ...) {
     res <- UseMethod("h5write")
     invisible(res)

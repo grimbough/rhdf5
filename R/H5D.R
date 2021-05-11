@@ -87,12 +87,24 @@ H5Dclose <- function( h5dataset ) {
   invisible(.Call("_H5Dclose", h5dataset@ID, PACKAGE='rhdf5'))
 }
 
+#' Return a copy of the HDF5 datatype for a dataset
+#' 
+#' @field h5dataset Object of class [H5IdComponent] representing an open HDF5 
+#' dataset
+#' 
+#' @export
 H5Dget_type <- function( h5dataset ) {
   h5checktype(h5dataset, "dataset")
   tid <- .Call("_H5Dget_type", h5dataset@ID, PACKAGE='rhdf5')
   invisible(tid)
 }
 
+#' Return a copy of the dataset creation property list for a dataset
+#' 
+#' @field h5dataset Object of class [H5IdComponent] representing an open HDF5 
+#' dataset
+#' 
+#' @export
 H5Dget_create_plist <- function( h5dataset ) {
   h5checktype(h5dataset, "dataset")
   pid <- .Call("_H5Dget_create_plist", h5dataset@ID, PACKAGE='rhdf5')
@@ -105,6 +117,16 @@ H5Dget_create_plist <- function( h5dataset ) {
   invisible(h5plist)
 }
 
+
+#' Return a copy of the HDF5 dataspace for a dataset
+#' 
+#' @field h5dataset Object of class [H5IdComponent] representing an open HDF5 
+#' dataset
+#' 
+#' @return Returns an object of class `H5IdComponent` representing a HDF5 
+#' dataspace identifier
+#' 
+#' @export
 H5Dget_space <- function( h5dataset ) {
   h5checktype(h5dataset, "dataset")
   sid <- .Call("_H5Dget_space", h5dataset@ID, PACKAGE='rhdf5')
@@ -117,6 +139,20 @@ H5Dget_space <- function( h5dataset ) {
   invisible(h5space)
 }
 
+#' Find the amount of storage allocated for a dataset
+#' 
+#' `H5Dget_storage_size` returns the amount of storage, in bytes, allocated in 
+#' an HDF5 file to hold a given dataset.  This is the amount of space required
+#' on-disk, which not typically a good indicator of the amount of memory 
+#' that will be required to read the complete dataset.
+#' 
+#' @field h5dataset Object of class [H5IdComponent] representing an open HDF5 
+#' dataset
+#' 
+#' @return Returns an integer giving the number of bytes allocated in the file
+#' to the dataset.
+#' 
+#' @export
 H5Dget_storage_size <- function( h5dataset ) {
   h5checktype(h5dataset, "dataset")
   size <- .Call("_H5Dget_storage_size", h5dataset@ID, PACKAGE='rhdf5')
@@ -160,7 +196,7 @@ H5Dget_storage_size <- function( h5dataset ) {
 #' 
 #' `H5Dread()` reads a (partial) dataset from an HDF5 file into the R session.
 #' 
-#' Internally, R does not support 64-bit integers. All integers in R are 32-bit
+#' @details Internally, R does not support 64-bit integers. All integers in R are 32-bit
 #' integers. By setting bit64conversion='int', a coercing to 32-bit integers is
 #' enforced, with the risk of data loss, but with the insurance that numbers 
 #' are represented as integers. bit64conversion='double' coerces the 64-bit 
@@ -240,10 +276,12 @@ H5Dwrite <- function( h5dataset, buf, h5spaceMem=NULL, h5spaceFile=NULL ) {
 #' * A chunked dataset with unlimited dimensions
 #' * A chunked dataset with fixed dimensions if the new dimension sizes are 
 #' less than the maximum sizes set with maxdims
+#' #' 
+#' @field h5dataset Object of class [H5IdComponent] representing an open HDF5 
+#' dataset.
+#' @field size An integer vector with the new dimension of the dataset.
 #' 
-#' 
-#' @field h5dataset
-#' @field size
+#' @author Bernd Fischer, Mike Smith
 #' 
 #' @export
 H5Dset_extent <- function( h5dataset, size) {
@@ -253,8 +291,19 @@ H5Dset_extent <- function( h5dataset, size) {
     invisible(.Call("_H5Dset_extent", h5dataset@ID, size, PACKAGE='rhdf5'))
 }
 
+#' Return the dimensions of a dataset chunk
 #' 
-#' @field h5dataset
+#' @details This function does not map directly to the HDF5 C API but is 
+#' included as a useful addition.
+#' 
+#' @field h5dataset Object of class [H5IdComponent] representing an open HDF5 
+#' dataset.
+#' 
+#' @return If the supplied dataset is chunked returns a vector, with length
+#' equal to the rank of the dataset, containing the size of the dataset 
+#' dimensions.  Returns `NULL` if the given dataset is not chunked.
+#' 
+#' @author Mike Smith
 #' 
 #' @export
 H5Dchunk_dims <- function(h5dataset) {
