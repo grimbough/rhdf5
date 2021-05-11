@@ -1,4 +1,21 @@
-
+#' Create a new HDF5 dataset
+#' 
+#' @field h5loc An object of class [H5IdComponent] representing a H5
+#' location identifier (file or group). See [H5Fcreate()], [H5Fopen()], 
+#' [H5Gcreate()], [H5Gopen()] to create an object of this kind.
+#' @field name Name of the dataset.
+#' @field dtype_id A character name of a datatype. See `h5const("H5T")`
+#' for possible datatypes. Can also be an integer representing an HDF5 datatype.
+#' @field h5space An object of class [H5IdComponent] representing a H5 dataspace. 
+#' See [H5Dget_space()], [H5Screate_simple()], [H5Screate()] to create an object 
+#' of this kind
+#' @field lcpl An object of class [H5IdComponent] representing a H5 link creation property list.
+#' @field dcpl An object of class [H5IdComponent] representing a H5 dataset creation property list.
+#' @field dapl An object of class [H5IdComponent] representing a H5 dataset access property list.
+#' 
+#' @return An object of class `H5IdComponent` representing the opened dataset.
+#' 
+#' @export
 H5Dcreate <- function( h5loc, name, dtype_id, h5space, lcpl=NULL, dcpl=NULL, dapl=NULL ) {
   h5checktype(h5loc, "loc")
   if (length(name)!=1 || !is.character(name)) stop("'name' must be a character string of length 1")
@@ -20,6 +37,31 @@ H5Dcreate <- function( h5loc, name, dtype_id, h5space, lcpl=NULL, dcpl=NULL, dap
   invisible(h5dataset)
 }
 
+#' Open an existing HDF5 dataset
+#' 
+#' @field h5loc An object of class [H5IdComponent] representing a H5
+#' location identifier (file or group).
+#' @field name Name of the dataset to open.
+#' @field dapl An object of class [H5IdComponent] representing a H5 dataset access property list.
+#' 
+#' @return An object of class `H5IdComponent` representing the opened dataset.  
+#' To prevent memory leaks this must be closed with a call to [H5Dclose()] 
+#' when no longer needed.
+#' 
+#' @examples 
+#' h5file <- tempfile(fileext = ".h5")
+#' h5createFile( h5file )
+#' h5createDataset( h5file, dataset = "A", dims = 10)
+#' 
+#' fid <- H5Fopen( h5file )
+#' did <- H5Dopen( h5loc = fid, name = "A")
+#' did
+#' 
+#' ## rember to close open handles
+#' H5Dclose( did )
+#' H5Fclose( fid )
+#' 
+#' @export
 H5Dopen <- function( h5loc, name, dapl = NULL ) {
   h5checktype(h5loc, "loc")
   if (length(name)!=1 || !is.character(name)) stop("'filename' must be a character string of length 1")
