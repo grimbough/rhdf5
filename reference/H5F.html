@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rhdf5</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.35.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.35.5-1</span>
       </span>
     </div>
 
@@ -135,12 +135,12 @@
     <p>These functions are designed to provide file-level access to HDF5 files.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>H5Fcreate</span>           <span class='op'>(</span><span class='va'>name</span>, flags <span class='op'>=</span> <span class='fu'><a href='h5const.html'>h5default</a></span><span class='op'>(</span><span class='st'>"H5F_ACC"</span><span class='op'>)</span>, fcpl <span class='op'>=</span> <span class='cn'>NULL</span>,
+    <pre class="usage"><span class='fu'>H5Fcreate</span>           <span class='op'>(</span><span class='va'>name</span>, flags <span class='op'>=</span> <span class='fu'><a href='h5constants.html'>h5default</a></span><span class='op'>(</span><span class='st'>"H5F_ACC"</span><span class='op'>)</span>, fcpl <span class='op'>=</span> <span class='cn'>NULL</span>,
                      fapl <span class='op'>=</span> <span class='cn'>NULL</span>, native <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
-<span class='fu'>H5Fopen</span>             <span class='op'>(</span><span class='va'>name</span>, flags <span class='op'>=</span> <span class='fu'><a href='h5const.html'>h5default</a></span><span class='op'>(</span><span class='st'>"H5F_ACC_RD"</span><span class='op'>)</span>, fapl <span class='op'>=</span> <span class='cn'>NULL</span>, 
+<span class='fu'>H5Fopen</span>             <span class='op'>(</span><span class='va'>name</span>, flags <span class='op'>=</span> <span class='fu'><a href='h5constants.html'>h5default</a></span><span class='op'>(</span><span class='st'>"H5F_ACC_RD"</span><span class='op'>)</span>, fapl <span class='op'>=</span> <span class='cn'>NULL</span>, 
                      native <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
 <span class='fu'>H5Fclose</span>            <span class='op'>(</span><span class='va'>h5file</span><span class='op'>)</span>
-<span class='fu'>H5Fflush</span>            <span class='op'>(</span><span class='va'>h5file</span>, scope <span class='op'>=</span> <span class='fu'><a href='h5const.html'>h5default</a></span><span class='op'>(</span><span class='st'>"H5F_SCOPE"</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'>H5Fflush</span>            <span class='op'>(</span><span class='va'>h5file</span>, scope <span class='op'>=</span> <span class='fu'><a href='h5constants.html'>h5default</a></span><span class='op'>(</span><span class='st'>"H5F_SCOPE"</span><span class='op'>)</span><span class='op'>)</span>
 <span class='fu'>H5Fis_hdf5</span>          <span class='op'>(</span><span class='va'>name</span>, showWarnings <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 <span class='fu'>H5Fget_filesize</span>     <span class='op'>(</span><span class='va'>h5file</span><span class='op'>)</span>
 <span class='fu'>H5Fget_name</span>         <span class='op'>(</span><span class='va'>h5obj</span><span class='op'>)</span>
@@ -184,7 +184,7 @@
     </tr>
     <tr>
       <th>h5obj</th>
-      <td><p>An object of class <code><a href='H5IdComponent-class.html'>H5IdComponent</a></code> representing a H5 object identifier (file, group, or dataset). See <code>H5Fcreate</code>, <code>H5Fopen</code>, <code><a href='HDF5 Group Interface.html'>H5Gcreate</a></code>, <code><a href='HDF5 Group Interface.html'>H5Gopen</a></code>, <code><a href='HDF5 Dataset Interface.html'>H5Dcreate</a></code>, or <code><a href='HDF5 Dataset Interface.html'>H5Dopen</a></code> to create an object of this kind.</p></td>
+      <td><p>An object of class <code><a href='H5IdComponent-class.html'>H5IdComponent</a></code> representing a H5 object identifier (file, group, or dataset). See <code>H5Fcreate</code>, <code>H5Fopen</code>, <code><a href='HDF5 Group Interface.html'>H5Gcreate</a></code>, <code><a href='HDF5 Group Interface.html'>H5Gopen</a></code>, <code><a href='H5Dcreate.html'>H5Dcreate</a></code>, or <code><a href='H5Dopen.html'>H5Dopen</a></code> to create an object of this kind.</p></td>
     </tr>
     </table>
 

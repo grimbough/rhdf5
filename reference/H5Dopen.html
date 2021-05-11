@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Class "H5IdComponent" — H5IdComponent-class • rhdf5</title>
+<title>Open an existing HDF5 dataset — H5Dopen • rhdf5</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Class "H5IdComponent" — H5IdComponent-class" />
-<meta property="og:description" content="A class representing a HDF5 identifier handle. HDF5 identifiers represent open files, groups, datasets, dataspaces, attributes, and datatypes." />
+<meta property="og:title" content="Open an existing HDF5 dataset — H5Dopen" />
+<meta property="og:description" content="Open an existing HDF5 dataset" />
 
 
 
@@ -126,53 +126,59 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Class "H5IdComponent"</h1>
-    
-    <div class="hidden name"><code>H5IdComponent-class.Rd</code></div>
+    <h1>Open an existing HDF5 dataset</h1>
+    <small class="dont-index">Source: <a href='https://github.com/grimbough/rhdf5/blob/master/R/H5D.R'><code>R/H5D.R</code></a></small>
+    <div class="hidden name"><code>H5Dopen.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>A class representing a HDF5 identifier handle. HDF5 identifiers represent open files, groups, datasets, dataspaces, attributes, and datatypes.</p>
+    <p>Open an existing HDF5 dataset</p>
     </div>
 
+    <pre class="usage"><span class='fu'>H5Dopen</span><span class='op'>(</span><span class='va'>h5loc</span>, <span class='va'>name</span>, dapl <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
 
 
-    <h2 class="hasAnchor" id="objects-from-the-class"><a class="anchor" href="#objects-from-the-class"></a>Objects from the Class</h2>
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>Objects can be created by calls of <code><a href='HDF5 File Interface.html'>H5Fcreate</a></code>, <code><a href='HDF5 File Interface.html'>H5Fopen</a></code>, / <code><a href='HDF5 Group Interface.html'>H5Gcreate</a></code>, <code><a href='HDF5 Group Interface.html'>H5Gopen</a></code>, /  <code><a href='H5Dcreate.html'>H5Dcreate</a></code>, <code><a href='H5Dopen.html'>H5Dopen</a></code>, \ <code><a href='H5Dget_space.html'>H5Dget_space</a></code>, <code><a href='HDF5 Dataspace Interface.html'>H5Screate_simple</a></code>, \ <code><a href='HDF5 Attribute Interface.html'>H5Acreate</a></code>, <code><a href='HDF5 Attribute Interface.html'>H5Aopen</a></code>.</p>
-    <h2 class="hasAnchor" id="slots"><a class="anchor" href="#slots"></a>Slots</h2>
+    <p>An object of class <code>H5IdComponent</code> representing the opened dataset.
+To prevent memory leaks this must be closed with a call to <code><a href='H5Dclose.html'>H5Dclose()</a></code>
+when no longer needed.</p>
+    <h2 class="hasAnchor" id="fields"><a class="anchor" href="#fields"></a>Fields</h2>
 
-    <p></p><dl>
-    <dt><code>ID</code>:</dt><dd><p>Object of class <code>"integer"</code>. Contains the handle of C-type hid_t.</p></dd>
-  <dt>native</dt><dd><p>An object of class <code>logical</code>. If TRUE, array-like objects are treated as stored in HDF5 row-major rather than R column-major orientation. Using <code>native = TRUE</code> increases HDF5 file portability between programming languages. A file written with <code>native = TRUE</code> should also be read with <code>native = TRUE</code></p></dd>.
-  
-</dl>
-
-    <h2 class="hasAnchor" id="methods"><a class="anchor" href="#methods"></a>Methods</h2>
-
-    <p></p><dl>
-	<dt>show</dt><dd><p><code>signature(object = "H5IdComponent")</code>: Shows the filename.</p></dd>
     
+
+<dl>
+<dt><code>h5loc</code></dt><dd><p>An object of class <a href='H5IdComponent-class.html'>H5IdComponent</a> representing a H5
+location identifier (file or group).</p></dd>
+
+<dt><code>name</code></dt><dd><p>Name of the dataset to open.</p></dd>
+
+<dt><code>dapl</code></dt><dd><p>An object of class <a href='H5IdComponent-class.html'>H5IdComponent</a> representing a H5 dataset access property list.</p></dd>
+
 </dl>
-
-    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
-
-    <p><a href='https://portal.hdfgroup.org/display/HDF5'>https://portal.hdfgroup.org/display/HDF5</a></p>
-    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
-
-    <p>Bernd Fischer</p>
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <div class='dont-index'><p><a href='rhdf5.html'>rhdf5</a></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='r-in'><span class='fu'>showClass</span><span class='op'>(</span><span class='st'>"H5IdComponent"</span><span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Class "H5IdComponent" [package "rhdf5"]</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Slots:</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>                           </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Name:         ID    native</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Class: character   logical</span>
+    <pre class="examples"><span class='r-in'><span class='va'>h5file</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempfile</a></span><span class='op'>(</span>fileext <span class='op'>=</span> <span class='st'>".h5"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='h5createFile.html'>h5createFile</a></span><span class='op'>(</span> <span class='va'>h5file</span> <span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] TRUE</span>
+<span class='r-in'><span class='fu'><a href='h5createDataset.html'>h5createDataset</a></span><span class='op'>(</span> <span class='va'>h5file</span>, dataset <span class='op'>=</span> <span class='st'>"A"</span>, dims <span class='op'>=</span> <span class='fl'>10</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] TRUE</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>fid</span> <span class='op'>&lt;-</span> <span class='fu'><a href='HDF5 File Interface.html'>H5Fopen</a></span><span class='op'>(</span> <span class='va'>h5file</span> <span class='op'>)</span></span>
+<span class='r-in'><span class='va'>did</span> <span class='op'>&lt;-</span> <span class='fu'>H5Dopen</span><span class='op'>(</span> h5loc <span class='op'>=</span> <span class='va'>fid</span>, name <span class='op'>=</span> <span class='st'>"A"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>did</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> HDF5 DATASET </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>         name /A</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     filename </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>         type H5T_IEEE_F64LE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>         rank 1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>         size 10</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>      maxsize 10</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'>## rember to close open handles</span></span>
+<span class='r-in'><span class='fu'><a href='H5Dclose.html'>H5Dclose</a></span><span class='op'>(</span> <span class='va'>did</span> <span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='HDF5 File Interface.html'>H5Fclose</a></span><span class='op'>(</span> <span class='va'>fid</span> <span class='op'>)</span></span>
+<span class='r-in'></span>
 </pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

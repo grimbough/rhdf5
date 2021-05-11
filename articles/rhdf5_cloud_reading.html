@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rhdf5</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.35.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.35.5-1</span>
       </span>
     </div>
 
@@ -97,7 +97,7 @@
     
     
 <p>The <em><a href="https://bioconductor.org/packages/3.13/rhdf5">rhdf5</a></em> provides limited support for read-only access to HDF5 files stored in Amazon S3 buckets. This is implemented via the (HDF5 S3 Virtual File Driver)[<a href="https://portal.hdfgroup.org/display/HDF5/Virtual+File+Drivers+-+S3+and+HDFS" class="uri">https://portal.hdfgroup.org/display/HDF5/Virtual+File+Drivers+-+S3+and+HDFS</a>] and allows access to HDF5 files hosted in both public and private S3 buckets.</p>
-<p>Currently only the functions <code><a href="../reference/h5ls.html">h5ls()</a></code>, <code><a href="../reference/h5ls.html">h5dump()</a></code> and <code><a href="../reference/h5write.html">h5read()</a></code> are supported.</p>
+<p>Currently only the functions <code><a href="../reference/h5ls.html">h5ls()</a></code>, <code><a href="../reference/h5dump.html">h5dump()</a></code> and <code><a href="../reference/h5read.html">h5read()</a></code> are supported.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/grimbough/rhdf5">rhdf5</a></span><span class="op">)</span></code></pre></div>
 <div id="public-s3-buckets" class="section level1">
@@ -109,19 +109,19 @@
 <span class="fu"><a href="../reference/h5ls.html">h5ls</a></span><span class="op">(</span>file <span class="op">=</span> <span class="va">public_S3_url</span>,
      s3 <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
 <pre><code>## Error in H5Pset_fapl_ros3(fapl, s3credentials): Rhdf5lib was not compiled with support for the S3 VFD</code></pre>
-<p>The same arguments are also valid for using <code><a href="../reference/h5ls.html">h5dump()</a></code> to retrieve the contents of a file.</p>
+<p>The same arguments are also valid for using <code><a href="../reference/h5dump.html">h5dump()</a></code> to retrieve the contents of a file.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">public_S3_url</span> <span class="op">&lt;-</span> <span class="st">"https://rhdf5-public.s3.eu-central-1.amazonaws.com/h5ex_t_cmpd.h5"</span>
-<span class="fu"><a href="../reference/h5ls.html">h5dump</a></span><span class="op">(</span>file <span class="op">=</span> <span class="va">public_S3_url</span>,
+<span class="fu"><a href="../reference/h5dump.html">h5dump</a></span><span class="op">(</span>file <span class="op">=</span> <span class="va">public_S3_url</span>,
      s3 <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
 <pre><code>## Error in H5Pset_fapl_ros3(fapl, s3credentials): Rhdf5lib was not compiled with support for the S3 VFD</code></pre>
-<p>In addition to examining and reading whole files, we can also extract just a subset, without needed to read or download the entire file. In the example below we use <code><a href="../reference/h5ls.html">h5ls()</a></code> to examine a file in an S3 bucket and identify the name of a dataset within it (<code>a1</code>) and the number of dimensions for that dataset (3). We can then use <code><a href="../reference/h5write.html">h5read()</a></code> along with the <code>name</code> and <code>index</code> arguments to read only a subset of the dataset into our R session.</p>
+<p>In addition to examining and reading whole files, we can also extract just a subset, without needed to read or download the entire file. In the example below we use <code><a href="../reference/h5ls.html">h5ls()</a></code> to examine a file in an S3 bucket and identify the name of a dataset within it (<code>a1</code>) and the number of dimensions for that dataset (3). We can then use <code><a href="../reference/h5read.html">h5read()</a></code> along with the <code>name</code> and <code>index</code> arguments to read only a subset of the dataset into our R session.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">public_S3_url</span> <span class="op">&lt;-</span> <span class="st">'https://rhdf5-public.s3.eu-central-1.amazonaws.com/rhdf5ex_t_float_3d.h5'</span>
 <span class="fu"><a href="../reference/h5ls.html">h5ls</a></span><span class="op">(</span>file <span class="op">=</span> <span class="va">public_S3_url</span>, s3 <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
 <pre><code>## Error in H5Pset_fapl_ros3(fapl, s3credentials): Rhdf5lib was not compiled with support for the S3 VFD</code></pre>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/h5write.html">h5read</a></span><span class="op">(</span><span class="va">public_S3_url</span>, 
+<code class="sourceCode R"><span class="fu"><a href="../reference/h5read.html">h5read</a></span><span class="op">(</span><span class="va">public_S3_url</span>, 
        name <span class="op">=</span> <span class="st">"a1"</span>, 
        index <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span>, <span class="fl">3</span>, <span class="cn">NULL</span><span class="op">)</span>,
        s3 <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
@@ -145,7 +145,7 @@
 <span class="fu"><a href="../reference/h5ls.html">h5ls</a></span><span class="op">(</span>file <span class="op">=</span> <span class="va">public_S3_url</span>,
      s3 <span class="op">=</span> <span class="cn">TRUE</span>,
      s3credentials <span class="op">=</span> <span class="va">s3_cred</span><span class="op">)</span></code></pre></div>
-<p>The <code>s3credentials</code> arguments is used in exactly the same way for <code><a href="../reference/h5ls.html">h5dump()</a></code> and <code><a href="../reference/h5write.html">h5read()</a></code>.</p>
+<p>The <code>s3credentials</code> arguments is used in exactly the same way for <code><a href="../reference/h5dump.html">h5dump()</a></code> and <code><a href="../reference/h5read.html">h5read()</a></code>.</p>
 </div>
 <div id="session-info" class="section level1">
 <h1 class="hasAnchor">
@@ -167,7 +167,7 @@
 ## [1] stats     graphics  grDevices utils     datasets  methods   base     
 ## 
 ## other attached packages:
-## [1] rhdf5_2.35.5     BiocStyle_2.19.2
+## [1] rhdf5_2.35.5-1   BiocStyle_2.19.2
 ## 
 ## loaded via a namespace (and not attached):
 ##  [1] knitr_1.33          magrittr_2.0.1      R6_2.5.0           

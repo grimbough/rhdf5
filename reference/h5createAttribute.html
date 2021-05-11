@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rhdf5</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.35.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.35.5-1</span>
       </span>
     </div>
 
@@ -127,7 +127,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Create HDF5 attribute</h1>
-    
+    <small class="dont-index">Source: <a href='https://github.com/grimbough/rhdf5/blob/master/R/h5create.R'><code>R/h5create.R</code></a></small>
     <div class="hidden name"><code>h5createAttribute.Rd</code></div>
     </div>
 
@@ -135,20 +135,30 @@
     <p>R function to create an HDF5 attribute and defining its dimensionality.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>h5createAttribute</span> <span class='op'>(</span><span class='va'>obj</span>, <span class='va'>attr</span>, <span class='va'>dims</span>, maxdims <span class='op'>=</span> <span class='va'>dims</span>, <span class='va'>file</span>, 
-                   storage.mode <span class='op'>=</span> <span class='st'>"double"</span>, H5type <span class='op'>=</span> <span class='cn'>NULL</span>, size<span class='op'>=</span><span class='cn'>NULL</span>,
-                   cset <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"ASCII"</span>, <span class='st'>"UTF8"</span><span class='op'>)</span>, native <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>h5createAttribute</span><span class='op'>(</span>
+  <span class='va'>obj</span>,
+  <span class='va'>attr</span>,
+  <span class='va'>dims</span>,
+  maxdims <span class='op'>=</span> <span class='va'>dims</span>,
+  <span class='va'>file</span>,
+  storage.mode <span class='op'>=</span> <span class='st'>"double"</span>,
+  H5type <span class='op'>=</span> <span class='cn'>NULL</span>,
+  size <span class='op'>=</span> <span class='cn'>NULL</span>,
+  cset <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"ASCII"</span>, <span class='st'>"UTF8"</span><span class='op'>)</span>,
+  native <span class='op'>=</span> <span class='cn'>FALSE</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>obj</th>
-      <td><p>The name (character) of the object the attribute will be attatched to. For advanced programmers it is possible to provide an object of class <code><a href='H5IdComponent-class.html'>H5IdComponent</a></code> representing a H5 object identifier (file, group, dataset). See <code><a href='HDF5 File Interface.html'>H5Fcreate</a></code>, <code><a href='HDF5 File Interface.html'>H5Fopen</a></code>, <code><a href='HDF5 Group Interface.html'>H5Gcreate</a></code>, <code><a href='HDF5 Group Interface.html'>H5Gopen</a></code>, <code><a href='HDF5 Dataset Interface.html'>H5Dcreate</a></code>, <code><a href='HDF5 Dataset Interface.html'>H5Dopen</a></code> to create an object of this kind.</p></td>
-    </tr>
-    <tr>
-      <th>file</th>
-      <td><p>The filename (character) of the file in which the dataset will be located. For advanced programmers it is possible to provide an object of class <code><a href='H5IdComponent-class.html'>H5IdComponent</a></code> representig an H5 location identifier. See <code><a href='HDF5 File Interface.html'>H5Fcreate</a></code>, <code><a href='HDF5 File Interface.html'>H5Fopen</a></code>, <code><a href='HDF5 Group Interface.html'>H5Gcreate</a></code>, <code><a href='HDF5 Group Interface.html'>H5Gopen</a></code> to create an object of this kind. The <code>file</code> argument is not required, if the argument <code>obj</code> is of type <code>H5IdComponent</code>.</p></td>
+      <td><p>The name (character) of the object the attribute will be
+attatched to. For advanced programmers it is possible to provide an object
+of class <code><a href='H5IdComponent-class.html'>H5IdComponent()</a></code> representing a H5 object identifier
+(file, group, dataset). See <code><a href='HDF5 File Interface.html'>H5Fcreate()</a></code>, <code><a href='HDF5 File Interface.html'>H5Fopen()</a></code>,
+<code><a href='HDF5 Group Interface.html'>H5Gcreate()</a></code>, <code><a href='HDF5 Group Interface.html'>H5Gopen()</a></code>, <code><a href='H5Dcreate.html'>H5Dcreate()</a></code>,
+<code><a href='H5Dopen.html'>H5Dopen()</a></code> to create an object of this kind.</p></td>
     </tr>
     <tr>
       <th>attr</th>
@@ -156,24 +166,42 @@
     </tr>
     <tr>
       <th>dims</th>
-      <td><p>The dimensions of the attribute as a numeric vector. If <code>NULL</code>, a scalar dataspace will be created instead.</p></td>
+      <td><p>The dimensions of the attribute as a numeric vector. If
+<code>NULL</code>, a scalar dataspace will be created instead.</p></td>
     </tr>
     <tr>
       <th>maxdims</th>
       <td><p>The maximum extension of the attribute.</p></td>
     </tr>
     <tr>
+      <th>file</th>
+      <td><p>The filename (character) of the file in which the dataset will
+be located. For advanced programmers it is possible to provide an object of
+class <code><a href='H5IdComponent-class.html'>H5IdComponent()</a></code> representig an H5 location identifier. See
+<code><a href='HDF5 File Interface.html'>H5Fcreate()</a></code>, <code><a href='HDF5 File Interface.html'>H5Fopen()</a></code>, <code><a href='HDF5 Group Interface.html'>H5Gcreate()</a></code>,
+<code><a href='HDF5 Group Interface.html'>H5Gopen()</a></code> to create an object of this kind. The <code>file</code>
+argument is not required, if the argument <code>obj</code> is of type
+<code>H5IdComponent</code>.</p></td>
+    </tr>
+    <tr>
       <th>storage.mode</th>
-      <td><p>The storage mode of the data to be written. Can be obtained by <code>storage.mode(mydata)</code>.</p></td>
+      <td><p>The storage mode of the data to be written. Can be
+obtained by <code>storage.mode(mydata)</code>.</p></td>
     </tr>
     <tr>
       <th>H5type</th>
-      <td><p>Advanced programmers can specify the datatype of the dataset within the file. See <code>h5const("H5T")</code> for a list of available datatypes. If <code>H5type</code> is specified the argument <code>storage.mode</code> is ignored. It is recommended to use <code>storage.mode</code></p></td>
+      <td><p>Advanced programmers can specify the datatype of the dataset
+within the file. See <code>h5const("H5T")</code> for a list of available
+datatypes. If <code>H5type</code> is specified the argument <code>storage.mode</code> is
+ignored. It is recommended to use <code>storage.mode</code></p></td>
     </tr>
     <tr>
       <th>size</th>
-      <td><p>The maximum string length when <code>storage.mode='character'</code>. If this is specified, HDF5 stores each string of <code>attr</code> as fixed length character arrays. Together with compression, this should be efficient.</p>  
-<p>If this argument is set to <code>NULL</code>, HDF5 will instead store variable-length strings.</p></td>
+      <td><p>The maximum string length when <code>storage.mode='character'</code>.
+If this is specified, HDF5 stores each string of <code>attr</code> as fixed length
+character arrays. Together with compression, this should be efficient.</p>
+<p>If this argument is set to <code>NULL</code>, HDF5 will instead store
+variable-length strings.</p></td>
     </tr>
     <tr>
       <th>cset</th>
@@ -181,37 +209,51 @@
     </tr>
     <tr>
       <th>native</th>
-      <td><p>An object of class <code>logical</code>. If TRUE, array-like objects are treated as stored in HDF5 row-major rather than R column-major orientation. Using <code>native = TRUE</code> increases HDF5 file portability between programming languages. A file written with <code>native = TRUE</code> should also be read with <code>native = TRUE</code></p></td>
+      <td><p>An object of class <code>logical</code>. If TRUE, array-like objects
+are treated as stored in HDF5 row-major rather than R column-major
+orientation. Using <code>native = TRUE</code> increases HDF5 file portability
+between programming languages. A file written with <code>native = TRUE</code>
+should also be read with <code>native = TRUE</code></p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>Creates a new attribute and attaches it to an existing HDF5 object. The function will fail, if the file doesn't exist or if there exists already another attribute with the same name for this object.</p>
-<p>You can use <code><a href='h5write.html'>h5writeAttribute</a></code> immediately. It will create the attribute for you.</p>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>Returns TRUE is attribute was created successfully and FALSE otherwise.</p>
+    <p>Returns TRUE is attribute was created successfully and FALSE
+otherwise.</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>Creates a new attribute and attaches it to an existing HDF5 object. The
+function will fail, if the file doesn't exist or if there exists already
+another attribute with the same name for this object.</p>
+<p>You can use <code>h5writeAttribute()</code> immediately. It will create the
+attribute for you.</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p><a href='https://portal.hdfgroup.org/display/HDF5'>https://portal.hdfgroup.org/display/HDF5</a></p>
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p><code><a href='h5createFile.html'>h5createFile()</a></code>, <code><a href='h5createGroup.html'>h5createGroup()</a></code>,
+<code><a href='h5createDataset.html'>h5createDataset()</a></code>, <code><a href='h5read.html'>h5read()</a></code>, <code><a href='h5write.html'>h5write()</a></code>,
+<a href='rhdf5.html'>rhdf5</a></p></div>
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
     <p>Bernd Fischer</p>
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <div class='dont-index'><p><code><a href='h5createFile.html'>h5createFile</a></code>, <code><a href='h5createGroup.html'>h5createGroup</a></code>, <code><a href='h5createDataset.html'>h5createDataset</a></code>, <code><a href='h5write.html'>h5read</a></code>, <code><a href='h5write.html'>h5write</a></code>, <a href='rhdf5.html'>rhdf5</a></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='r-in'><span class='fu'><a href='h5createFile.html'>h5createFile</a></span><span class='op'>(</span><span class='st'>"ex_createAttribute.h5"</span><span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] TRUE</span>
+    <pre class="examples"><span class='r-in'></span>
+<span class='r-in'><span class='fu'><a href='h5createFile.html'>h5createFile</a></span><span class='op'>(</span><span class='st'>"ex_createAttribute.h5"</span><span class='op'>)</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> file '/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmprclfRx/filec392f98677d/reference/ex_createAttribute.h5' already exists.</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] FALSE</span>
 <span class='r-in'><span class='fu'><a href='h5write.html'>h5write</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>1</span>, <span class='st'>"ex_createAttribute.h5"</span>,<span class='st'>"A"</span><span class='op'>)</span></span>
 <span class='r-in'><span class='va'>fid</span> <span class='op'>&lt;-</span> <span class='fu'><a href='HDF5 File Interface.html'>H5Fopen</a></span><span class='op'>(</span><span class='st'>"ex_createAttribute.h5"</span><span class='op'>)</span></span>
-<span class='r-in'><span class='va'>did</span> <span class='op'>&lt;-</span> <span class='fu'><a href='HDF5 Dataset Interface.html'>H5Dopen</a></span><span class='op'>(</span><span class='va'>fid</span>, <span class='st'>"A"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>did</span> <span class='op'>&lt;-</span> <span class='fu'><a href='H5Dopen.html'>H5Dopen</a></span><span class='op'>(</span><span class='va'>fid</span>, <span class='st'>"A"</span><span class='op'>)</span></span>
 <span class='r-in'><span class='fu'>h5createAttribute</span> <span class='op'>(</span><span class='va'>did</span>, <span class='st'>"time"</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>,<span class='fl'>10</span><span class='op'>)</span><span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] TRUE</span>
-<span class='r-in'><span class='fu'><a href='HDF5 Dataset Interface.html'>H5Dclose</a></span><span class='op'>(</span><span class='va'>did</span><span class='op'>)</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> Can not create attribute. Attribute with name 'time' already exists.</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] FALSE</span>
+<span class='r-in'><span class='fu'><a href='H5Dclose.html'>H5Dclose</a></span><span class='op'>(</span><span class='va'>did</span><span class='op'>)</span></span>
 <span class='r-in'><span class='fu'><a href='HDF5 File Interface.html'>H5Fclose</a></span><span class='op'>(</span><span class='va'>fid</span><span class='op'>)</span></span>
+<span class='r-in'></span>
 </pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

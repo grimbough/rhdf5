@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rhdf5</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.35.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.35.5-1</span>
       </span>
     </div>
 
@@ -135,10 +135,10 @@
     <p>These functions create and manipulate the datatype which describes elements of a dataset.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>H5Tcopy</span>      <span class='op'>(</span>dtype_id <span class='op'>=</span> <span class='fu'><a href='h5const.html'>h5default</a></span><span class='op'>(</span>type <span class='op'>=</span> <span class='st'>"H5T"</span><span class='op'>)</span><span class='op'>)</span>
+    <pre class="usage"><span class='fu'>H5Tcopy</span>      <span class='op'>(</span>dtype_id <span class='op'>=</span> <span class='fu'><a href='h5constants.html'>h5default</a></span><span class='op'>(</span>type <span class='op'>=</span> <span class='st'>"H5T"</span><span class='op'>)</span><span class='op'>)</span>
 <span class='fu'>H5Tset_cset</span>  <span class='op'>(</span><span class='va'>dtype_id</span>, cset <span class='op'>=</span> <span class='st'>"ASCII"</span><span class='op'>)</span>
 <span class='fu'>H5Tget_cset</span>  <span class='op'>(</span><span class='va'>dtype_id</span><span class='op'>)</span>
-<span class='fu'>H5Tset_size</span>  <span class='op'>(</span>dtype_id <span class='op'>=</span> <span class='fu'><a href='h5const.html'>h5default</a></span><span class='op'>(</span>type <span class='op'>=</span> <span class='st'>"H5T"</span><span class='op'>)</span>, <span class='va'>size</span><span class='op'>)</span>
+<span class='fu'>H5Tset_size</span>  <span class='op'>(</span>dtype_id <span class='op'>=</span> <span class='fu'><a href='h5constants.html'>h5default</a></span><span class='op'>(</span>type <span class='op'>=</span> <span class='st'>"H5T"</span><span class='op'>)</span>, <span class='va'>size</span><span class='op'>)</span>
 <span class='fu'>H5Tget_size</span>  <span class='op'>(</span><span class='va'>dtype_id</span><span class='op'>)</span>
 <span class='fu'>H5Tset_strpad</span><span class='op'>(</span><span class='va'>dtype_id</span>, strpad <span class='op'>=</span> <span class='st'>"NULLPAD"</span><span class='op'>)</span>
 <span class='fu'>H5Tget_strpad</span><span class='op'>(</span><span class='va'>dtype_id</span><span class='op'>)</span></pre>
@@ -188,7 +188,7 @@
 <span class='r-in'><span class='fu'>H5Tset_size</span><span class='op'>(</span><span class='va'>tid</span>, <span class='fl'>10L</span><span class='op'>)</span></span>
 <span class='r-in'></span>
 <span class='r-in'><span class='co'># List all predefined types implemented in the R-interface</span></span>
-<span class='r-in'><span class='fu'><a href='h5const.html'>h5const</a></span><span class='op'>(</span><span class='st'>"H5T"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='h5constants.html'>h5const</a></span><span class='op'>(</span><span class='st'>"H5T"</span><span class='op'>)</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span>  [1] "H5T_IEEE_F32BE"          "H5T_IEEE_F32LE"         </span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span>  [3] "H5T_IEEE_F64BE"          "H5T_IEEE_F64LE"         </span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span>  [5] "H5T_STD_I8BE"            "H5T_STD_I8LE"           </span>
@@ -231,7 +231,7 @@
 <span class='r-out co'><span class='r-pr'>#&gt;</span> [79] "H5T_FORTRAN_S1"         </span>
 <span class='r-in'></span>
 <span class='r-in'><span class='co'># List all available type classes (not all of them are implemented)</span></span>
-<span class='r-in'><span class='fu'><a href='h5const.html'>h5const</a></span><span class='op'>(</span><span class='st'>"H5T_CLASS"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='h5constants.html'>h5const</a></span><span class='op'>(</span><span class='st'>"H5T_CLASS"</span><span class='op'>)</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span>  [1] "H5T_INTEGER"   "H5T_FLOAT"     "H5T_TIME"      "H5T_STRING"   </span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span>  [5] "H5T_BITFIELD"  "H5T_OPAQUE"    "H5T_COMPOUND"  "H5T_REFERENCE"</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span>  [9] "H5T_ENUM"      "H5T_VLEN"      "H5T_ARRAY"    </span>

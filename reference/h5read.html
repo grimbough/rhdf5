@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Reads and write object in HDF5 files — h5write • rhdf5</title>
+<title>Reads and write object in HDF5 files — h5read • rhdf5</title>
 
 
 <!-- jquery -->
@@ -39,9 +39,9 @@
 
 
 
-<meta property="og:title" content="Reads and write object in HDF5 files — h5write" />
-<meta property="og:description" content="Reads and writes objects in HDF5 files. This function can be used to read
-and write either full arrays/vectors or subarrays (hyperslabs) within an
+<meta property="og:title" content="Reads and write object in HDF5 files — h5read" />
+<meta property="og:description" content="Reads objects in HDF5 files. This function can be used to read
+either full arrays/vectors or subarrays (hyperslabs) from an
 existing dataset." />
 
 
@@ -129,29 +129,41 @@ existing dataset." />
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Reads and write object in HDF5 files</h1>
-    <small class="dont-index">Source: <a href='https://github.com/grimbough/rhdf5/blob/master/R/h5write.R'><code>R/h5write.R</code></a></small>
-    <div class="hidden name"><code>h5write.Rd</code></div>
+    <small class="dont-index">Source: <a href='https://github.com/grimbough/rhdf5/blob/master/R/h5read.R'><code>R/h5read.R</code></a></small>
+    <div class="hidden name"><code>h5read.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Reads and writes objects in HDF5 files. This function can be used to read
-and write either full arrays/vectors or subarrays (hyperslabs) within an
+    <p>Reads objects in HDF5 files. This function can be used to read
+either full arrays/vectors or subarrays (hyperslabs) from an
 existing dataset.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>h5write</span><span class='op'>(</span><span class='va'>obj</span>, <span class='va'>file</span>, <span class='va'>name</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>h5read</span><span class='op'>(</span>
+  <span class='va'>file</span>,
+  <span class='va'>name</span>,
+  index <span class='op'>=</span> <span class='cn'>NULL</span>,
+  start <span class='op'>=</span> <span class='cn'>NULL</span>,
+  stride <span class='op'>=</span> <span class='cn'>NULL</span>,
+  block <span class='op'>=</span> <span class='cn'>NULL</span>,
+  count <span class='op'>=</span> <span class='cn'>NULL</span>,
+  compoundAsDataFrame <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  callGeneric <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  read.attributes <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  drop <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  <span class='va'>...</span>,
+  native <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  s3 <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  s3credentials <span class='op'>=</span> <span class='cn'>NULL</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>obj</th>
-      <td><p>The R object to be written.</p></td>
-    </tr>
-    <tr>
       <th>file</th>
-      <td><p>The filename (character) of the file in which the dataset will
-be located. For advanced programmers it is possible to provide an object of
+      <td><p>The filename (character) of the file in which the dataset is
+be located. It is possible to provide an object of
 class <code><a href='H5IdComponent-class.html'>H5IdComponent</a></code> representing a H5 location identifier
 (file or group). See <code><a href='HDF5 File Interface.html'>H5Fcreate</a></code>, <code><a href='HDF5 File Interface.html'>H5Fopen</a></code>,
 <code><a href='HDF5 Group Interface.html'>H5Gcreate</a></code>, <code><a href='HDF5 Group Interface.html'>H5Gopen</a></code> to create an object of this
@@ -159,31 +171,7 @@ kind.</p></td>
     </tr>
     <tr>
       <th>name</th>
-      <td><p>The name of the dataset in the HDF5 file. The name of the
-attribute for hwriteAttribute.</p></td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td><p>Further arguments passed to <code><a href='H5Dread.html'>H5Dread</a></code>.</p></td>
-    </tr>
-    <tr>
-      <th>attr</th>
-      <td><p>The R object to be written as an HDF5 attribute.</p></td>
-    </tr>
-    <tr>
-      <th>h5loc</th>
-      <td><p>An object of class <code><a href='H5IdComponent-class.html'>H5IdComponent</a></code> representing a
-H5 location identifier (file or group). See <code><a href='HDF5 File Interface.html'>H5Fcreate</a></code>,
-<code><a href='HDF5 File Interface.html'>H5Fopen</a></code>, <code><a href='HDF5 Group Interface.html'>H5Gcreate</a></code>, <code><a href='HDF5 Group Interface.html'>H5Gopen</a></code> to
-create an object of this kind.</p></td>
-    </tr>
-    <tr>
-      <th>h5obj</th>
-      <td><p>An object of class <code><a href='H5IdComponent-class.html'>H5IdComponent</a></code> representing a
-H5 object identifier (file, group, or dataset). See <code><a href='HDF5 File Interface.html'>H5Fcreate</a></code>,
-<code><a href='HDF5 File Interface.html'>H5Fopen</a></code>, <code><a href='HDF5 Group Interface.html'>H5Gcreate</a></code>, <code><a href='HDF5 Group Interface.html'>H5Gopen</a></code>,
-<code><a href='H5Dcreate.html'>H5Dcreate</a></code>, or <code><a href='H5Dopen.html'>H5Dopen</a></code> to create an object of
-this kind.</p></td>
+      <td><p>The name of the dataset in the HDF5 file.</p></td>
     </tr>
     <tr>
       <th>index</th>
@@ -214,31 +202,8 @@ if index is not NULL.</p></td>
     </tr>
     <tr>
       <th>count</th>
-      <td><p>The number of blocks to be written. This argument is ignored,
+      <td><p>The number of blocks to be read. This argument is ignored,
 if index is not NULL.</p></td>
-    </tr>
-    <tr>
-      <th>level</th>
-      <td><p>The compression level. An integer value between 0 (no
-compression) and 9 (highest and slowest compression). Only used, if the
-dataset does not yet exist. See <code><a href='h5createDataset.html'>h5createDataset</a></code> to create an
-dataset.</p></td>
-    </tr>
-    <tr>
-      <th>chunk</th>
-      <td><p>Specifies the number of items to be include in an HDF5 chunk.
-When writing a <code>data.frame</code> this represents the number of rows to be
-included in a chunk.  If left unspecified the defaults is the smaller of:
-the total number of rows or the number of rows that fit within 4GB of
-memory.</p></td>
-    </tr>
-    <tr>
-      <th>native</th>
-      <td><p>An object of class <code>logical</code>. If TRUE, array-like objects
-are treated as stored in HDF5 row-major rather than R column-major
-orientation. Using <code>native = TRUE</code> increases HDF5 file portability
-between programming languages. A file written with <code>native = TRUE</code>
-should also be read with <code>native = TRUE</code></p></td>
     </tr>
     <tr>
       <th>compoundAsDataFrame</th>
@@ -246,15 +211,6 @@ should also be read with <code>native = TRUE</code></p></td>
 data.frame. This is not possible, if the dataset is multi-dimensional.
 Otherwise the compound datatype will be returned as a list. Nested compound
 data types will be returned as a nested list.</p></td>
-    </tr>
-    <tr>
-      <th>DataFrameAsCompound</th>
-      <td><p>If true, a data.frame will be saved as a compound
-data type. Otherwise it is saved like a list. The advantage of saving a
-data.frame as a compound data type is that it can be read as a table from
-python or with a struct-type from C. The disadvantage is that the data has
-to be rearranged on disk and thus can slow down I/O. If fast reading is
-required, DataFrameAsCompound=FALSE is recommended.</p></td>
     </tr>
     <tr>
       <th>callGeneric</th>
@@ -266,42 +222,26 @@ generic function. Dispatching is done based on the HDF5 attribute after the
 standard h5read function.</p></td>
     </tr>
     <tr>
-      <th>size</th>
-      <td><p>The length of string data type. Variable length strings are not
-yet supported for datasets, only for attributes.</p></td>
-    </tr>
-    <tr>
-      <th>cset</th>
-      <td><p>The encoding of the string data type.</p></td>
-    </tr>
-    <tr>
-      <th>variableLengthString</th>
-      <td><p>Whether character vectors should be written as
-variable-length strings into the attributes.</p></td>
-    </tr>
-    <tr>
-      <th>asScalar</th>
-      <td><p>Whether length-1 <code>attr</code> should be written into a scalar
-dataspace.</p></td>
-    </tr>
-    <tr>
-      <th>createnewfile</th>
-      <td><p>If TRUE, a new file will be created if necessary.</p></td>
-    </tr>
-    <tr>
       <th>read.attributes</th>
-      <td><p>(logical) If TRUE, the HDF5 attributes are read and
+      <td><p>(logical) If <code>TRUE</code>, the HDF5 attributes are read and
 attached to the respective R object.</p></td>
     </tr>
     <tr>
       <th>drop</th>
-      <td><p>(logical) If TRUE, the HDF5 object is read as a vector with NULL
+      <td><p>(logical) If TRUE, the HDF5 object is read as a vector with <code>NULL</code>
 dim attributes.</p></td>
     </tr>
     <tr>
-      <th>write.attributes</th>
-      <td><p>(logical) If TRUE, all R-attributes attached to the
-object <code>obj</code> are written to the HDF5 file.</p></td>
+      <th>...</th>
+      <td><p>Further arguments passed to <code><a href='H5Dread.html'>H5Dread</a></code>.</p></td>
+    </tr>
+    <tr>
+      <th>native</th>
+      <td><p>An object of class <code>logical</code>. If TRUE, array-like objects
+are treated as stored in HDF5 row-major rather than R column-major
+orientation. Using <code>native = TRUE</code> increases HDF5 file portability
+between programming languages. A file written with <code>native = TRUE</code>
+should also be read with <code>native = TRUE</code></p></td>
     </tr>
     <tr>
       <th>s3</th>
@@ -313,22 +253,42 @@ treated as a URL to an Amazon S3 bucket, rather than a local file path.</p></td>
       <td><p>A list of length three, providing the credentials for
 accessing files in a private Amazon S3 bucket.</p></td>
     </tr>
+    <tr>
+      <th>h5loc</th>
+      <td><p>An object of class <code><a href='H5IdComponent-class.html'>H5IdComponent</a></code> representing a
+H5 location identifier (file or group). See <code><a href='HDF5 File Interface.html'>H5Fcreate</a></code>,
+<code><a href='HDF5 File Interface.html'>H5Fopen</a></code>, <code><a href='HDF5 Group Interface.html'>H5Gcreate</a></code>, <code><a href='HDF5 Group Interface.html'>H5Gopen</a></code> to
+create an object of this kind.</p></td>
+    </tr>
+    <tr>
+      <th>h5obj</th>
+      <td><p>An object of class <code><a href='H5IdComponent-class.html'>H5IdComponent</a></code> representing a
+H5 object identifier (file, group, or dataset). See <code><a href='HDF5 File Interface.html'>H5Fcreate</a></code>,
+<code><a href='HDF5 File Interface.html'>H5Fopen</a></code>, <code><a href='HDF5 Group Interface.html'>H5Gcreate</a></code>, <code><a href='HDF5 Group Interface.html'>H5Gopen</a></code>,
+<code><a href='H5Dcreate.html'>H5Dcreate</a></code>, or <code><a href='H5Dopen.html'>H5Dopen</a></code> to create an object of
+this kind.</p></td>
+    </tr>
+    <tr>
+      <th>chunk</th>
+      <td><p>Specifies the number of items to be include in an HDF5 chunk.
+When writing a <code>data.frame</code> this represents the number of rows to be
+included in a chunk.  If left unspecified the defaults is the smaller of:
+the total number of rows or the number of rows that fit within 4GB of
+memory.</p></td>
+    </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p><code>h5read</code> returns an array with the data read.</p>
-<p><code>h5readAttributes</code> returns a list of all HDF5 attributes of object
-<code>name</code>.</p>
-<p><code>h5write</code> returns 0 if successful.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Writes an R object to an HDF5 file. If neither of the arguments
-<code>start, stride, block, count</code> is specified, the dataset has the same
+    <p>Read an R object from an HDF5 file. If none of the arguments
+<code>start, stride, block, count</code> are specified, the dataset has the same
 dimension in the HDF5 file and in memory. If the dataset already exists in
-the HDF5 file, one can write subarrays, so called hyperslabs to
+the HDF5 file, one can read subarrays, so called hyperslabs from
 the HDF5 file. The arguments <code>start, stride, block, count</code> define the
-subset of the dataset in the HDF5 file that is to be written. See these
+subset of the dataset in the HDF5 file that is to be read/written. See these
 introductions to hyperslabs:
 <a href='https://support.hdfgroup.org/HDF5/Tutor/selectsimple.html'>https://support.hdfgroup.org/HDF5/Tutor/selectsimple.html</a>,
 <a href='https://support.hdfgroup.org/HDF5/Tutor/select.html'>https://support.hdfgroup.org/HDF5/Tutor/select.html</a> and
@@ -337,16 +297,12 @@ R the first dimension is the fastest changing dimension.</p>
 <p>When viewing the HDF5 datasets with any C-program (e.g. HDFView), the order
 of dimensions is inverted. In the R interface counting starts with 1,
 whereas in the C-programs (e.g. HDFView) counting starts with 0.</p>
-    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
-
-    <p><a href='https://portal.hdfgroup.org/display/HDF5'>https://portal.hdfgroup.org/display/HDF5</a></p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='h5ls.html'>h5ls</a></code>, <code><a href='h5createFile.html'>h5createFile</a></code>,
-<code><a href='h5createDataset.html'>h5createDataset</a></code>, <a href='rhdf5.html'>rhdf5</a></p></div>
+    <div class='dont-index'><p><code><a href='h5ls.html'>h5ls</a></code></p></div>
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
-    <p>Bernd Fischer</p>
+    <p>Bernd Fischer, Mike Smith</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><span class='r-in'></span>
@@ -356,25 +312,24 @@ whereas in the C-programs (e.g. HDFView) counting starts with 0.</p>
 <span class='r-in'></span>
 <span class='r-in'><span class='co'># write a matrix</span></span>
 <span class='r-in'><span class='va'>B</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/array.html'>array</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fl'>0.1</span>,<span class='fl'>2.0</span>,by<span class='op'>=</span><span class='fl'>0.1</span><span class='op'>)</span>,dim<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>5</span>,<span class='fl'>2</span>,<span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span></span>
-<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/attr.html'>attr</a></span><span class='op'>(</span><span class='va'>B</span>, <span class='st'>"scale"</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='st'>"liter"</span></span>
-<span class='r-in'><span class='fu'>h5write</span><span class='op'>(</span><span class='va'>B</span>, <span class='st'>"ex_hdf5file.h5"</span>,<span class='st'>"B"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='h5write.html'>h5write</a></span><span class='op'>(</span><span class='va'>B</span>, <span class='st'>"ex_hdf5file.h5"</span>,<span class='st'>"B"</span><span class='op'>)</span></span>
 <span class='r-in'></span>
 <span class='r-in'><span class='co'># read a matrix</span></span>
-<span class='r-in'><span class='va'>E</span> <span class='op'>=</span> <span class='fu'><a href='h5read.html'>h5read</a></span><span class='op'>(</span><span class='st'>"ex_hdf5file.h5"</span>,<span class='st'>"B"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>E</span> <span class='op'>=</span> <span class='fu'>h5read</span><span class='op'>(</span><span class='st'>"ex_hdf5file.h5"</span>,<span class='st'>"B"</span><span class='op'>)</span></span>
 <span class='r-in'></span>
 <span class='r-in'><span class='co'># write and read submatrix</span></span>
 <span class='r-in'><span class='fu'><a href='h5createDataset.html'>h5createDataset</a></span><span class='op'>(</span><span class='st'>"ex_hdf5file.h5"</span>, <span class='st'>"S"</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>5</span>,<span class='fl'>8</span><span class='op'>)</span>, storage.mode <span class='op'>=</span> <span class='st'>"integer"</span>, chunk<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>5</span>,<span class='fl'>1</span><span class='op'>)</span>, level<span class='op'>=</span><span class='fl'>7</span><span class='op'>)</span></span>
 <span class='r-msg co'><span class='r-pr'>#&gt;</span> Can not create dataset. Object with name 'S' already exists.</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> [1] FALSE</span>
-<span class='r-in'><span class='fu'>h5write</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>5</span>,nr<span class='op'>=</span><span class='fl'>5</span>,nc<span class='op'>=</span><span class='fl'>1</span><span class='op'>)</span>, file<span class='op'>=</span><span class='st'>"ex_hdf5file.h5"</span>, name<span class='op'>=</span><span class='st'>"S"</span>, index<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='cn'>NULL</span>,<span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span></span>
-<span class='r-in'><span class='fu'><a href='h5read.html'>h5read</a></span><span class='op'>(</span><span class='st'>"ex_hdf5file.h5"</span>, <span class='st'>"S"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='h5write.html'>h5write</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>5</span>,nr<span class='op'>=</span><span class='fl'>5</span>,nc<span class='op'>=</span><span class='fl'>1</span><span class='op'>)</span>, file<span class='op'>=</span><span class='st'>"ex_hdf5file.h5"</span>, name<span class='op'>=</span><span class='st'>"S"</span>, index<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='cn'>NULL</span>,<span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'>h5read</span><span class='op'>(</span><span class='st'>"ex_hdf5file.h5"</span>, <span class='st'>"S"</span><span class='op'>)</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span>      [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8]</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> [1,]    1    0    0    0    0    0    0    0</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> [2,]    2    0    0    0    0    0    0    0</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> [3,]    3    0    0    0    0    0    0    0</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> [4,]    4    0    0    0    0    0    0    0</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> [5,]    5    0    0    0    0    0    0    0</span>
-<span class='r-in'><span class='fu'><a href='h5read.html'>h5read</a></span><span class='op'>(</span><span class='st'>"ex_hdf5file.h5"</span>, <span class='st'>"S"</span>, index<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='cn'>NULL</span>,<span class='fl'>2</span><span class='op'>:</span><span class='fl'>3</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'>h5read</span><span class='op'>(</span><span class='st'>"ex_hdf5file.h5"</span>, <span class='st'>"S"</span>, index<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='cn'>NULL</span>,<span class='fl'>2</span><span class='op'>:</span><span class='fl'>3</span><span class='op'>)</span><span class='op'>)</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span>      [,1] [,2]</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> [1,]    0    0</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> [2,]    0    0</span>
@@ -384,7 +339,7 @@ whereas in the C-programs (e.g. HDFView) counting starts with 0.</p>
 <span class='r-in'></span>
 <span class='r-in'><span class='co'># Read a subset of an hdf5 file in a public S3 bucket</span></span>
 <span class='r-in'><span class='co'># \donttest{</span></span>
-<span class='r-in'><span class='fu'><a href='h5read.html'>h5read</a></span><span class='op'>(</span><span class='st'>'https://rhdf5-public.s3.eu-central-1.amazonaws.com/rhdf5ex_t_float_3d.h5'</span>, </span>
+<span class='r-in'><span class='fu'>h5read</span><span class='op'>(</span><span class='st'>'https://rhdf5-public.s3.eu-central-1.amazonaws.com/rhdf5ex_t_float_3d.h5'</span>, </span>
 <span class='r-in'>      s3 <span class='op'>=</span> <span class='cn'>TRUE</span>, name <span class='op'>=</span> <span class='st'>"a1"</span>, index <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='cn'>NULL</span>, <span class='fl'>3</span>, <span class='cn'>NULL</span><span class='op'>)</span><span class='op'>)</span></span>
 <span class='r-err co'><span class='r-pr'>#&gt;</span> <span class='error'>Error in H5Pset_fapl_ros3(fapl, s3credentials)</span> Rhdf5lib was not compiled with support for the S3 VFD</span>
 <span class='r-in'><span class='co'># }</span></span>

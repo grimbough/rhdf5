@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>List the content of an HDF5 file. — h5ls • rhdf5</title>
+<title>Dump the content of an HDF5 file. — h5dump • rhdf5</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="List the content of an HDF5 file. — h5ls" />
-<meta property="og:description" content="List the content of an HDF5 file." />
+<meta property="og:title" content="Dump the content of an HDF5 file. — h5dump" />
+<meta property="og:description" content="Dump the content of an HDF5 file." />
 
 
 
@@ -126,24 +126,25 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>List the content of an HDF5 file.</h1>
-    <small class="dont-index">Source: <a href='https://github.com/grimbough/rhdf5/blob/master/R/h5ls.R'><code>R/h5ls.R</code></a></small>
-    <div class="hidden name"><code>h5ls.Rd</code></div>
+    <h1>Dump the content of an HDF5 file.</h1>
+    <small class="dont-index">Source: <a href='https://github.com/grimbough/rhdf5/blob/master/R/h5dump.R'><code>R/h5dump.R</code></a></small>
+    <div class="hidden name"><code>h5dump.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>List the content of an HDF5 file.</p>
+    <p>Dump the content of an HDF5 file.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>h5ls</span><span class='op'>(</span>
+    <pre class="usage"><span class='fu'>h5dump</span><span class='op'>(</span>
   <span class='va'>file</span>,
   recursive <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  load <span class='op'>=</span> <span class='cn'>TRUE</span>,
   all <span class='op'>=</span> <span class='cn'>FALSE</span>,
-  datasetinfo <span class='op'>=</span> <span class='cn'>TRUE</span>,
   index_type <span class='op'>=</span> <span class='fu'><a href='h5constants.html'>h5default</a></span><span class='op'>(</span><span class='st'>"H5_INDEX"</span><span class='op'>)</span>,
   order <span class='op'>=</span> <span class='fu'><a href='h5constants.html'>h5default</a></span><span class='op'>(</span><span class='st'>"H5_ITER"</span><span class='op'>)</span>,
   s3 <span class='op'>=</span> <span class='cn'>FALSE</span>,
   s3credentials <span class='op'>=</span> <span class='cn'>NULL</span>,
+  <span class='va'>...</span>,
   native <span class='op'>=</span> <span class='cn'>FALSE</span>
 <span class='op'>)</span></pre>
 
@@ -165,13 +166,14 @@ integer is provided this indicates the maximum level of the hierarchy that
 is shown.</p></td>
     </tr>
     <tr>
-      <th>all</th>
-      <td><p>If <code>TRUE</code>, a longer list of information on each entry is provided.</p></td>
+      <th>load</th>
+      <td><p>If <code>TRUE</code> the datasets are read in, not only the header
+information. Note, that this can cause memory problems for very large files.
+In this case choose <code>load=FALSE</code> and load the datasets successively.</p></td>
     </tr>
     <tr>
-      <th>datasetinfo</th>
-      <td><p>If <code>FALSE</code>, datatype and dimensionality information is not
-provided. This can speed up the content listing for large files.</p></td>
+      <th>all</th>
+      <td><p>If <code>TRUE</code>, a longer list of information on each entry is provided.</p></td>
     </tr>
     <tr>
       <th>index_type</th>
@@ -192,6 +194,10 @@ treated as a URL to an Amazon S3 bucket, rather than a local file path.</p></td>
 accessing files in a private Amazon S3 bucket.</p></td>
     </tr>
     <tr>
+      <th>...</th>
+      <td><p>Arguments passed to <code><a href='h5read.html'>h5read()</a></code></p></td>
+    </tr>
+    <tr>
       <th>native</th>
       <td><p>An object of class <code>logical</code>. If TRUE, array-like objects
 are treated as stored in HDF5 row-major rather than R column-major
@@ -200,26 +206,21 @@ between programming languages. A file written with <code>native = TRUE</code>
 should also be read with <code>native = TRUE</code></p></td>
     </tr>
     <tr>
-      <th>load</th>
-      <td><p>If <code>TRUE</code> the datasets are read in, not only the header
-information. Note, that this can cause memory problems for very large files.
-In this case choose <code>load=FALSE</code> and load the datasets successively.</p></td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td><p>Arguments passed to <code><a href='h5read.html'>h5read()</a></code></p></td>
+      <th>datasetinfo</th>
+      <td><p>If <code>FALSE</code>, datatype and dimensionality information is not
+provided. This can speed up the content listing for large files.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p><code>h5ls</code> returns a <code>data.frame</code> with the file content.</p>
-    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
-
-    <p><a href='https://portal.hdfgroup.org/display/HDF5'>https://portal.hdfgroup.org/display/HDF5</a></p>
+    <p>Returns a hierarchical list structure representing the HDF5
+group hierarchy. It either returns the datasets within the list structure
+(<code>load=TRUE</code>) or it returns a <code>data.frame</code> for each dataset with the
+dataset header information (<code>load=FALSE</code>).</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='h5dump.html'>h5dump()</a></code></p></div>
+    <div class='dont-index'><p><code><a href='h5ls.html'>h5ls()</a></code></p></div>
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
     <p>Bernd Fischer, Mike L. Smith</p>
@@ -244,16 +245,7 @@ In this case choose <code>load=FALSE</code> and load the datasets successively.<
 <span class='r-in'><span class='fu'><a href='h5write.html'>h5write</a></span><span class='op'>(</span><span class='va'>B</span>, <span class='st'>"ex_ls_dump.h5"</span>,<span class='st'>"foo/B"</span><span class='op'>)</span></span>
 <span class='r-in'></span>
 <span class='r-in'><span class='co'># list content of hdf5 file</span></span>
-<span class='r-in'><span class='fu'>h5ls</span><span class='op'>(</span><span class='st'>"ex_ls_dump.h5"</span>,all<span class='op'>=</span><span class='cn'>TRUE</span><span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>   group   name         ltype cset       otype num_attrs dclass          dtype</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 0     /    foo H5L_TYPE_HARD    0   H5I_GROUP         0                      </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 1  /foo      B H5L_TYPE_HARD    0 H5I_DATASET         1  FLOAT H5T_IEEE_F64LE</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 2  /foo foobaa H5L_TYPE_HARD    0   H5I_GROUP         0                      </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>    stype rank       dim    maxdim</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 0           0                    </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 1 SIMPLE    3 5 x 2 x 2 5 x 2 x 2</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 2           0                    </span>
-<span class='r-in'><span class='fu'><a href='h5dump.html'>h5dump</a></span><span class='op'>(</span><span class='st'>"ex_ls_dump.h5"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'>h5dump</span><span class='op'>(</span><span class='st'>"ex_ls_dump.h5"</span><span class='op'>)</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> $foo</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> $foo$B</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> , , 1</span>
@@ -282,7 +274,7 @@ In this case choose <code>load=FALSE</code> and load the datasets successively.<
 <span class='r-in'></span>
 <span class='r-in'><span class='co'># list content of an hdf5 file in a public S3 bucket</span></span>
 <span class='r-in'><span class='co'># \donttest{</span></span>
-<span class='r-in'><span class='fu'>h5ls</span><span class='op'>(</span>file <span class='op'>=</span> <span class='st'>"https://rhdf5-public.s3.eu-central-1.amazonaws.com/h5ex_t_array.h5"</span>, s3 <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'>h5dump</span><span class='op'>(</span>file <span class='op'>=</span> <span class='st'>"https://rhdf5-public.s3.eu-central-1.amazonaws.com/h5ex_t_array.h5"</span>, s3 <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></span>
 <span class='r-err co'><span class='r-pr'>#&gt;</span> <span class='error'>Error in H5Pset_fapl_ros3(fapl, s3credentials)</span> Rhdf5lib was not compiled with support for the S3 VFD</span>
 <span class='r-in'><span class='co'># }</span></span>
 <span class='r-in'></span>

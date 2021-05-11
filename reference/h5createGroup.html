@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rhdf5</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.35.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.35.5-1</span>
       </span>
     </div>
 
@@ -127,7 +127,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Create HDF5 group</h1>
-    
+    <small class="dont-index">Source: <a href='https://github.com/grimbough/rhdf5/blob/master/R/h5create.R'><code>R/h5create.R</code></a></small>
     <div class="hidden name"><code>h5createGroup.Rd</code></div>
     </div>
 
@@ -135,51 +135,64 @@
     <p>Creates a group within an HDF5 file.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>h5createGroup</span> <span class='op'>(</span><span class='va'>file</span>, <span class='va'>group</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>h5createGroup</span><span class='op'>(</span><span class='va'>file</span>, <span class='va'>group</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>file</th>
-      <td><p>The filename (character) of the file in which the dataset will be located. For advanced programmers it is possible to provide an object of class <code><a href='H5IdComponent-class.html'>H5IdComponent</a></code> representing a H5 location identifier (file or group). See <code><a href='HDF5 File Interface.html'>H5Fcreate</a></code>, <code><a href='HDF5 File Interface.html'>H5Fopen</a></code>, <code><a href='HDF5 Group Interface.html'>H5Gcreate</a></code>, <code><a href='HDF5 Group Interface.html'>H5Gopen</a></code> to create an object of this kind.</p></td>
+      <td><p>The filename (character) of the file in which the dataset will
+be located. For advanced programmers it is possible to provide an object of
+class <code><a href='H5IdComponent-class.html'>H5IdComponent()</a></code> representing a H5 location identifier
+(file or group). See <code><a href='HDF5 File Interface.html'>H5Fcreate()</a></code>, <code><a href='HDF5 File Interface.html'>H5Fopen()</a></code>,
+<code><a href='HDF5 Group Interface.html'>H5Gcreate()</a></code>, <code><a href='HDF5 Group Interface.html'>H5Gopen()</a></code> to create an object of this
+kind.</p></td>
     </tr>
     <tr>
       <th>group</th>
-      <td><p>The name of the new group. The name can contain a hierarchy of groupnames, e.g. 'group1/group2/newgroup', but the function will fail if the top level group do not exists.</p></td>
+      <td><p>The name of the new group. The name can contain a hierarchy of
+groupnames, e.g. 'group1/group2/newgroup', but the function will fail if the
+top level group do not exists.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>Creates a new group within an HDF5 file.</p>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>Returns TRUE is group was created successfully and FALSE otherwise.</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>Creates a new group within an HDF5 file.</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p><a href='https://portal.hdfgroup.org/display/HDF5'>https://portal.hdfgroup.org/display/HDF5</a></p>
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p><code><a href='h5createFile.html'>h5createFile()</a></code>, <code><a href='h5createDataset.html'>h5createDataset()</a></code>,
+<code><a href='h5read.html'>h5read()</a></code>, <code><a href='h5write.html'>h5write()</a></code>, <a href='rhdf5.html'>rhdf5</a></p></div>
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
     <p>Bernd Fischer</p>
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <div class='dont-index'><p><code><a href='h5createFile.html'>h5createFile</a></code>, <code><a href='h5createDataset.html'>h5createDataset</a></code>, <code><a href='h5write.html'>h5read</a></code>, <code><a href='h5write.html'>h5write</a></code>, <a href='rhdf5.html'>rhdf5</a></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='r-in'><span class='fu'><a href='h5createFile.html'>h5createFile</a></span><span class='op'>(</span><span class='st'>"ex_createGroup.h5"</span><span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] TRUE</span>
+    <pre class="examples"><span class='r-in'></span>
+<span class='r-in'><span class='fu'><a href='h5createFile.html'>h5createFile</a></span><span class='op'>(</span><span class='st'>"ex_createGroup.h5"</span><span class='op'>)</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> file '/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmprclfRx/filec392f98677d/reference/ex_createGroup.h5' already exists.</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] FALSE</span>
 <span class='r-in'></span>
 <span class='r-in'><span class='co'># create groups</span></span>
 <span class='r-in'><span class='fu'>h5createGroup</span><span class='op'>(</span><span class='st'>"ex_createGroup.h5"</span>,<span class='st'>"foo"</span><span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] TRUE</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> Can not create group. Object with name 'foo' already exists.</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] FALSE</span>
 <span class='r-in'><span class='fu'>h5createGroup</span><span class='op'>(</span><span class='st'>"ex_createGroup.h5"</span>,<span class='st'>"foo/foobaa"</span><span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] TRUE</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> Can not create group. Object with name 'foo/foobaa' already exists.</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] FALSE</span>
 <span class='r-in'></span>
 <span class='r-in'><span class='fu'><a href='h5ls.html'>h5ls</a></span><span class='op'>(</span><span class='st'>"ex_createGroup.h5"</span><span class='op'>)</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span>   group   name     otype dclass dim</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> 0     /    foo H5I_GROUP           </span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> 1  /foo foobaa H5I_GROUP           </span>
+<span class='r-in'></span>
 </pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

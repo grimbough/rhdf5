@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rhdf5</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.35.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.35.5-1</span>
       </span>
     </div>
 
@@ -143,8 +143,8 @@
 <span class='fu'>H5Aget_space</span>    <span class='op'>(</span><span class='va'>h5attribute</span><span class='op'>)</span>
 <span class='fu'>H5Aget_type</span>     <span class='op'>(</span><span class='va'>h5attribute</span><span class='op'>)</span>
 <span class='fu'>H5Aopen</span>         <span class='op'>(</span><span class='va'>h5obj</span>, <span class='va'>name</span><span class='op'>)</span>
-<span class='fu'>H5Aopen_by_idx</span>  <span class='op'>(</span><span class='va'>h5obj</span>, <span class='va'>n</span>, objname <span class='op'>=</span> <span class='st'>"."</span>, index_type <span class='op'>=</span> <span class='fu'><a href='h5const.html'>h5default</a></span><span class='op'>(</span><span class='st'>"H5_INDEX"</span><span class='op'>)</span>, 
-                 order <span class='op'>=</span> <span class='fu'><a href='h5const.html'>h5default</a></span><span class='op'>(</span><span class='st'>"H5_ITER"</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'>H5Aopen_by_idx</span>  <span class='op'>(</span><span class='va'>h5obj</span>, <span class='va'>n</span>, objname <span class='op'>=</span> <span class='st'>"."</span>, index_type <span class='op'>=</span> <span class='fu'><a href='h5constants.html'>h5default</a></span><span class='op'>(</span><span class='st'>"H5_INDEX"</span><span class='op'>)</span>, 
+                 order <span class='op'>=</span> <span class='fu'><a href='h5constants.html'>h5default</a></span><span class='op'>(</span><span class='st'>"H5_ITER"</span><span class='op'>)</span><span class='op'>)</span>
 <span class='fu'>H5Aopen_by_name</span> <span class='op'>(</span><span class='va'>h5obj</span>, objname <span class='op'>=</span> <span class='st'>"."</span>, <span class='va'>name</span><span class='op'>)</span>
 <span class='fu'>H5Aread</span>         <span class='op'>(</span><span class='va'>h5attribute</span>, buf <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span>
 <span class='fu'>H5Awrite</span>        <span class='op'>(</span><span class='va'>h5attribute</span>, <span class='va'>buf</span><span class='op'>)</span></pre>
@@ -154,7 +154,7 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>h5obj</th>
-      <td><p>An object of class <code><a href='H5IdComponent-class.html'>H5IdComponent</a></code> representing a H5 object identifier (file, group, or dataset). See <code><a href='HDF5 File Interface.html'>H5Fcreate</a></code>, <code><a href='HDF5 File Interface.html'>H5Fopen</a></code>, <code><a href='HDF5 Group Interface.html'>H5Gcreate</a></code>, <code><a href='HDF5 Group Interface.html'>H5Gopen</a></code>, <code><a href='HDF5 Dataset Interface.html'>H5Dcreate</a></code>, or <code><a href='HDF5 Dataset Interface.html'>H5Dopen</a></code> to create an object of this kind.</p></td>
+      <td><p>An object of class <code><a href='H5IdComponent-class.html'>H5IdComponent</a></code> representing a H5 object identifier (file, group, or dataset). See <code><a href='HDF5 File Interface.html'>H5Fcreate</a></code>, <code><a href='HDF5 File Interface.html'>H5Fopen</a></code>, <code><a href='HDF5 Group Interface.html'>H5Gcreate</a></code>, <code><a href='HDF5 Group Interface.html'>H5Gopen</a></code>, <code><a href='H5Dcreate.html'>H5Dcreate</a></code>, or <code><a href='H5Dopen.html'>H5Dopen</a></code> to create an object of this kind.</p></td>
     </tr>
     <tr>
       <th>name</th>
@@ -166,7 +166,7 @@
     </tr>
     <tr>
       <th>h5space</th>
-      <td><p>An object of class <code><a href='H5IdComponent-class.html'>H5IdComponent</a></code> representing a H5 dataspace. See <code><a href='HDF5 Dataset Interface.html'>H5Dget_space</a></code>, <code><a href='HDF5 Dataspace Interface.html'>H5Screate_simple</a></code>, <code><a href='HDF5 Dataspace Interface.html'>H5Screate</a></code> to create an object of this kind.</p></td>
+      <td><p>An object of class <code><a href='H5IdComponent-class.html'>H5IdComponent</a></code> representing a H5 dataspace. See <code><a href='H5Dget_space.html'>H5Dget_space</a></code>, <code><a href='HDF5 Dataspace Interface.html'>H5Screate_simple</a></code>, <code><a href='HDF5 Dataspace Interface.html'>H5Screate</a></code> to create an object of this kind.</p></td>
     </tr>
     <tr>
       <th>h5attribute</th>
@@ -216,34 +216,31 @@
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><span class='r-in'><span class='co'># create a file and write something</span></span>
 <span class='r-in'><span class='fu'><a href='h5createFile.html'>h5createFile</a></span><span class='op'>(</span><span class='st'>"ex_H5A.h5"</span><span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] TRUE</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> file '/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmprclfRx/filec392f98677d/reference/ex_H5A.h5' already exists.</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] FALSE</span>
 <span class='r-in'><span class='fu'><a href='h5write.html'>h5write</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>15</span>, <span class='st'>"ex_H5A.h5"</span>,<span class='st'>"A"</span><span class='op'>)</span></span>
 <span class='r-in'></span>
 <span class='r-in'><span class='co'># write an attribute 'unit' to 'A'</span></span>
 <span class='r-in'><span class='va'>fid</span> <span class='op'>&lt;-</span> <span class='fu'><a href='HDF5 File Interface.html'>H5Fopen</a></span><span class='op'>(</span><span class='st'>"ex_H5A.h5"</span><span class='op'>)</span></span>
-<span class='r-in'><span class='va'>did</span> <span class='op'>&lt;-</span> <span class='fu'><a href='HDF5 Dataset Interface.html'>H5Dopen</a></span><span class='op'>(</span><span class='va'>fid</span>, <span class='st'>"A"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>did</span> <span class='op'>&lt;-</span> <span class='fu'><a href='H5Dopen.html'>H5Dopen</a></span><span class='op'>(</span><span class='va'>fid</span>, <span class='st'>"A"</span><span class='op'>)</span></span>
 <span class='r-in'><span class='va'>sid</span> <span class='op'>&lt;-</span> <span class='fu'><a href='HDF5 Dataspace Interface.html'>H5Screate_simple</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>,<span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span></span>
 <span class='r-in'><span class='va'>tid</span> <span class='op'>&lt;-</span> <span class='fu'><a href='HDF5 Datatype Interface.html'>H5Tcopy</a></span><span class='op'>(</span><span class='st'>"H5T_C_S1"</span><span class='op'>)</span></span>
 <span class='r-in'></span>
 <span class='r-in'><span class='fu'><a href='HDF5 Datatype Interface.html'>H5Tset_size</a></span><span class='op'>(</span><span class='va'>tid</span>, <span class='fl'>10L</span><span class='op'>)</span></span>
 <span class='r-in'><span class='va'>aid</span> <span class='op'>&lt;-</span> <span class='fu'>H5Acreate</span><span class='op'>(</span><span class='va'>did</span>, <span class='st'>"unit"</span>, <span class='va'>tid</span>, <span class='va'>sid</span><span class='op'>)</span></span>
+<span class='r-err co'><span class='r-pr'>#&gt;</span> <span class='error'>Error in H5Acreate(did, "unit", tid, sid)</span> HDF5. Attribute. Unable to initialize object.</span>
 <span class='r-in'><span class='va'>aid</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> HDF5 ATTR </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>      objName /A</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>     filename </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>     attrName unit</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>         type H5T_STRING</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>         rank 2</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>         size 1 x 1</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>      maxsize 1 x 1</span>
+<span class='r-err co'><span class='r-pr'>#&gt;</span> <span class='error'>Error in eval(expr, envir, enclos)</span> object 'aid' not found</span>
 <span class='r-in'><span class='fu'>H5Awrite</span><span class='op'>(</span><span class='va'>aid</span>, <span class='st'>"liter"</span><span class='op'>)</span></span>
+<span class='r-err co'><span class='r-pr'>#&gt;</span> <span class='error'>Error in is(h5id, "H5IdComponent")</span> object 'aid' not found</span>
 <span class='r-in'><span class='fu'>H5Aclose</span><span class='op'>(</span><span class='va'>aid</span><span class='op'>)</span></span>
+<span class='r-err co'><span class='r-pr'>#&gt;</span> <span class='error'>Error in is(h5id, "H5IdComponent")</span> object 'aid' not found</span>
 <span class='r-in'><span class='fu'><a href='HDF5 Dataspace Interface.html'>H5Sclose</a></span><span class='op'>(</span><span class='va'>sid</span><span class='op'>)</span></span>
 <span class='r-in'><span class='fu'>H5Aexists</span><span class='op'>(</span><span class='va'>did</span>, <span class='st'>"unit"</span><span class='op'>)</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> [1] TRUE</span>
-<span class='r-in'><span class='fu'><a href='HDF5 Dataset Interface.html'>H5Dclose</a></span><span class='op'>(</span><span class='va'>did</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='H5Dclose.html'>H5Dclose</a></span><span class='op'>(</span><span class='va'>did</span><span class='op'>)</span></span>
 <span class='r-in'><span class='fu'><a href='HDF5 File Interface.html'>H5Fclose</a></span><span class='op'>(</span><span class='va'>fid</span><span class='op'>)</span></span>
-<span class='r-in'><span class='fu'><a href='h5ls.html'>h5dump</a></span><span class='op'>(</span><span class='st'>"ex_H5A.h5"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='h5dump.html'>h5dump</a></span><span class='op'>(</span><span class='st'>"ex_H5A.h5"</span><span class='op'>)</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> $A</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span>  [1]  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> </span>

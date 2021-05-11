@@ -40,7 +40,7 @@
 
 
 <meta property="og:title" content="Delete objects within a HDF5 file — h5delete" />
-<meta property="og:description" content="Deletes the specfied group, dataset or attribute from within an HDF5 file." />
+<meta property="og:description" content="Deletes the specified group or dataset from within an HDF5 file." />
 
 
 
@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rhdf5</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.35.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.35.5-1</span>
       </span>
     </div>
 
@@ -127,32 +127,29 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Delete objects within a HDF5 file</h1>
-    
+    <small class="dont-index">Source: <a href='https://github.com/grimbough/rhdf5/blob/master/R/h5delete.R'><code>R/h5delete.R</code></a></small>
     <div class="hidden name"><code>h5delete.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Deletes the specfied group, dataset or attribute from within an HDF5 file.</p>
+    <p>Deletes the specified group or dataset from within an HDF5 file.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>h5delete</span><span class='op'>(</span> <span class='va'>file</span>, <span class='va'>name</span> <span class='op'>)</span>
-    <span class='fu'>h5deleteAttribute</span><span class='op'>(</span> <span class='va'>file</span>, <span class='va'>name</span>, <span class='va'>attribute</span> <span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>h5delete</span><span class='op'>(</span><span class='va'>file</span>, <span class='va'>name</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>file</th>
-      <td><p>The filename (character) of the file in which the object is located.</p></td>
+      <td><p>The filename (character) of the file in which the object is
+located.</p></td>
     </tr>
     <tr>
       <th>name</th>
-      <td><p>For <code>h5delete</code> the name of the object to be deleted.
-For <code>h5deleteAttribute</code> the name of the object to which the attribute belongs.</p></td>
-    </tr>
-    <tr>
-      <th>attribute</th>
-      <td><p>Name of the attribute to be deleted.</p></td>
+      <td><p>For <code>h5delete</code> the name of the object to be deleted. For
+<code>h5deleteAttribute</code> the name of the object to which the attribute
+belongs.</p></td>
     </tr>
     </table>
 

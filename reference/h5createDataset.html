@@ -40,7 +40,8 @@
 
 
 <meta property="og:title" content="Create HDF5 dataset — h5createDataset" />
-<meta property="og:description" content="R function to create an HDF5 dataset and defining its dimensionality and compression behaviour." />
+<meta property="og:description" content="R function to create an HDF5 dataset and defining its dimensionality and
+compression behaviour." />
 
 
 
@@ -72,7 +73,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rhdf5</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.35.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.35.5-1</span>
       </span>
     </div>
 
@@ -127,165 +128,222 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Create HDF5 dataset</h1>
-    
+    <small class="dont-index">Source: <a href='https://github.com/grimbough/rhdf5/blob/master/R/h5create.R'><code>R/h5create.R</code></a></small>
     <div class="hidden name"><code>h5createDataset.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>R function to create an HDF5 dataset and defining its dimensionality and compression behaviour.</p>
+    <p>R function to create an HDF5 dataset and defining its dimensionality and
+compression behaviour.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>h5createDataset</span> <span class='op'>(</span><span class='va'>file</span>, <span class='va'>dataset</span>, 
-    <span class='va'>dims</span>, maxdims <span class='op'>=</span> <span class='va'>dims</span>, 
-    storage.mode <span class='op'>=</span> <span class='st'>"double"</span>, H5type <span class='op'>=</span> <span class='cn'>NULL</span>, 
-    size <span class='op'>=</span> <span class='cn'>NULL</span>, chunk <span class='op'>=</span> <span class='va'>dims</span>, <span class='va'>fillValue</span>, 
-    level <span class='op'>=</span> <span class='fl'>6</span>, filter <span class='op'>=</span> <span class='st'>"gzip"</span>, shuffle <span class='op'>=</span> <span class='cn'>TRUE</span>,
-        native <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>h5createDataset</span><span class='op'>(</span>
+  <span class='va'>file</span>,
+  <span class='va'>dataset</span>,
+  <span class='va'>dims</span>,
+  maxdims <span class='op'>=</span> <span class='va'>dims</span>,
+  storage.mode <span class='op'>=</span> <span class='st'>"double"</span>,
+  H5type <span class='op'>=</span> <span class='cn'>NULL</span>,
+  size <span class='op'>=</span> <span class='cn'>NULL</span>,
+  chunk <span class='op'>=</span> <span class='va'>dims</span>,
+  <span class='va'>fillValue</span>,
+  level <span class='op'>=</span> <span class='fl'>6</span>,
+  filter <span class='op'>=</span> <span class='st'>"gzip"</span>,
+  shuffle <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  native <span class='op'>=</span> <span class='cn'>FALSE</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>file</th>
-      <td><p>The filename (character) of the file in which the dataset will be located. For advanced programmers it is possible to provide an object of class <code><a href='H5IdComponent-class.html'>H5IdComponent</a></code> representing a H5 location identifier (file or group). See <code><a href='HDF5 File Interface.html'>H5Fcreate</a></code>, <code><a href='HDF5 File Interface.html'>H5Fopen</a></code>, <code><a href='HDF5 Group Interface.html'>H5Gcreate</a></code>, <code><a href='HDF5 Group Interface.html'>H5Gopen</a></code> to create an object of this kind.</p></td>
+      <td><p>The filename (character) of the file in which the dataset will
+be located. For advanced programmers it is possible to provide an object of
+class <code><a href='H5IdComponent-class.html'>H5IdComponent()</a></code> representing a H5 location identifier
+(file or group). See <code><a href='HDF5 File Interface.html'>H5Fcreate()</a></code>, <code><a href='HDF5 File Interface.html'>H5Fopen()</a></code>,
+<code><a href='HDF5 Group Interface.html'>H5Gcreate()</a></code>, <code><a href='HDF5 Group Interface.html'>H5Gopen()</a></code> to create an object of this
+kind.</p></td>
     </tr>
     <tr>
       <th>dataset</th>
-      <td><p>Name of the dataset to be created. The name can contain group names, e.g. 'group/dataset', but the function will fail, if the group does not yet exist.</p></td>
+      <td><p>Name of the dataset to be created. The name can contain group
+names, e.g. 'group/dataset', but the function will fail, if the group does
+not yet exist.</p></td>
     </tr>
     <tr>
       <th>dims</th>
-      <td><p>The dimensions of the array as they will appear in the file. Note, the dimensions will appear in inverted order when viewing the file with a C-programm (e.g. HDFView), because the fastest changing dimension in R is the first one, whereas the fastest changing dimension in C is the last one.</p></td>
+      <td><p>The dimensions of the array as they will appear in the file.
+Note, the dimensions will appear in inverted order when viewing the file
+with a C-programm (e.g. HDFView), because the fastest changing dimension in
+R is the first one, whereas the fastest changing dimension in C is the last
+one.</p></td>
     </tr>
     <tr>
       <th>maxdims</th>
-      <td><p>The maximum extension of the array. Use <code><a href='HDF5 Dataspace Interface.html'>H5Sunlimited()</a></code> to indicate an extensible dimension.</p></td>
+      <td><p>The maximum extension of the array. Use <code><a href='HDF5 Dataspace Interface.html'>H5Sunlimited()</a></code>
+to indicate an extensible dimension.</p></td>
     </tr>
     <tr>
       <th>storage.mode</th>
-      <td><p>The storage mode of the data to be written. Can be obtained by <code>storage.mode(mydata)</code>.</p></td>
+      <td><p>The storage mode of the data to be written. Can be
+obtained by <code>storage.mode(mydata)</code>.</p></td>
     </tr>
     <tr>
       <th>H5type</th>
-      <td><p>Advanced programmers can specify the datatype of the dataset within the file. See <code>h5const("H5T")</code> for a list of available datatypes. If <code>H5type</code> is specified the argument <code>storage.mode</code> is ignored. It is recommended to use <code>storage.mode</code></p></td>
+      <td><p>Advanced programmers can specify the datatype of the dataset
+within the file. See <code>h5const("H5T")</code> for a list of available
+datatypes. If <code>H5type</code> is specified the argument <code>storage.mode</code> is
+ignored. It is recommended to use <code>storage.mode</code></p></td>
     </tr>
     <tr>
       <th>size</th>
-      <td><p>For <code>storage.mode='character'</code> the maximum string length has
-  to be specified. rhdf5 writes null padded strings by dafault, thus the value
-  provided here should be the length of the longest string.  HDF5 then stores
-  the string as fixed length character vectors. Together with compression, this
-  should be efficient.</p></td>
+      <td><p>For <code>storage.mode='character'</code> the maximum string length
+has to be specified. rhdf5 writes null padded strings by dafault, thus the
+value provided here should be the length of the longest string.  HDF5 then
+stores the string as fixed length character vectors. Together with
+compression, this should be efficient.</p></td>
     </tr>
     <tr>
       <th>chunk</th>
-      <td><p>The chunk size used to store the dataset. It is an integer vector of the same length as <code>dims</code>. This argument is usually set together with a compression property (argument <code>level</code>).</p></td>
+      <td><p>The chunk size used to store the dataset. It is an integer
+vector of the same length as <code>dims</code>. This argument is usually set
+together with a compression property (argument <code>level</code>).</p></td>
     </tr>
     <tr>
       <th>fillValue</th>
-      <td><p>Standard value for filling the dataset. The storage.mode of value has to be convertable to the dataset type by HDF5.</p></td>
+      <td><p>Standard value for filling the dataset. The storage.mode of
+value has to be convertable to the dataset type by HDF5.</p></td>
     </tr>
     <tr>
       <th>level</th>
-      <td><p>The compression level used. An integer value between 0 (no compression) and 9 (highest and slowest compression).</p></td>
+      <td><p>The compression level used. An integer value between 0 (no
+compression) and 9 (highest and slowest compression).</p></td>
     </tr>
     <tr>
       <th>filter</th>
-      <td><p>Character defining which compression filter should be applied 
-  to the chunks of the dataset.  See the Details section for more information
-  on the options that can be provided here.</p></td>
+      <td><p>Character defining which compression filter should be applied
+to the chunks of the dataset.  See the Details section for more information
+on the options that can be provided here.</p></td>
     </tr>
     <tr>
       <th>shuffle</th>
-      <td><p>Logical defining whether the byte-shuffle algorithm should be 
-  applied to data prior to compression.</p></td>
+      <td><p>Logical defining whether the byte-shuffle algorithm should be
+applied to data prior to compression.</p></td>
     </tr>
     <tr>
       <th>native</th>
-      <td><p>An object of class <code>logical</code>. If TRUE, array-like objects are treated as stored in HDF5 row-major rather than R column-major orientation. Using <code>native = TRUE</code> increases HDF5 file portability between programming languages. A file written with <code>native = TRUE</code> should also be read with <code>native = TRUE</code></p></td>
+      <td><p>An object of class <code>logical</code>. If TRUE, array-like objects
+are treated as stored in HDF5 row-major rather than R column-major
+orientation. Using <code>native = TRUE</code> increases HDF5 file portability
+between programming languages. A file written with <code>native = TRUE</code>
+should also be read with <code>native = TRUE</code></p></td>
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>Returns TRUE is dataset was created successfully and FALSE
+otherwise.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Creates a new dataset in an existing HDF5 file. The function will fail if the 
-file doesn't exist or if there exists already another dataset with the same 
-name within the specified file.</p>
+    <p>Creates a new dataset in an existing HDF5 file. The function will fail if
+the file doesn't exist or if there exists already another dataset with the
+same name within the specified file.</p>
 <p>The <code>filter</code> argument can take several options matching to compression
-filters distributed in either with the HDF5 library in <span class="pkg">Rhdf5lib</span> or via the 
-<span class="pkg">rhdf5filters</span> package.  The plugins available and the corresponding values 
-for selecting them are shown below:</p>
+filters distributed in either with the HDF5 library in <span class="pkg">Rhdf5lib</span> or via
+the <span class="pkg">rhdf5filters</span> package.  The plugins available and the corresponding
+values for selecting them are shown below:</p>
 <dl>
-<dt>zlib:  Ubiquitous deflate compression algrithm used in GZIP or ZIP files.  
-    All three options below achieve the same result.</dt><dd><p><ul>
+<dt>zlib: Ubiquitous deflate compression algrithm used in GZIP
+or ZIP files.  </dt><dd><p><ul>
 <li><p><code>"GZIP"</code>,</p></li>
 <li><p><code>"ZLIB"</code>,</p></li>
 <li><p><code>"DEFLATE"</code></p></li>
-</ul></p></dd>
-<dt>szip: Compression algorithm maintained by the HDF5 group.</dt><dd><p><ul>
+</ul></p></dd><dt> All three options below achieve the same
+result.</dt><dd><p><ul>
+<li><p><code>"GZIP"</code>,</p></li>
+<li><p><code>"ZLIB"</code>,</p></li>
+<li><p><code>"DEFLATE"</code></p></li>
+</ul></p></dd> <dt>szip: Compression algorithm maintained by
+the HDF5 group.</dt><dd><p><ul>
 <li><p><code>"SZIP"</code></p></li>
-</ul></p></dd>
-<dt>bzip2</dt><dd><p><ul>
+</ul></p></dd> <dt>bzip2</dt><dd><p><ul>
 <li><p><code>"BZIP2"</code></p></li>
-</ul></p></dd>
-<dt>BLOSC meta compressor: As a meta-compressor BLOSC wraps several different
-    compression algorithms.  Each of the options below will active a different 
-    compression filter. </dt><dd><p><ul>
+</ul></p></dd> <dt>BLOSC meta compressor: As a meta-compressor
+BLOSC wraps several different </dt><dd><p><ul>
 <li><p><code>"BLOSC_BLOSCLZ"</code></p></li>
 <li><p><code>"BLOSC_LZ4"</code></p></li>
 <li><p><code>"BLOSC_LZ4HC"</code></p></li>
 <li><p><code>"BLOSC_SNAPPY"</code></p></li>
 <li><p><code>"BLOSC_ZLIB"</code></p></li>
 <li><p><code>"BLOSC_ZSTD"</code></p></li>
-</ul></p></dd>
-<dt>lzf</dt><dd><p><ul>
+</ul></p></dd><dt> compression
+algorithms.  Each of the options below will active a different </dt><dd><p><ul>
+<li><p><code>"BLOSC_BLOSCLZ"</code></p></li>
+<li><p><code>"BLOSC_LZ4"</code></p></li>
+<li><p><code>"BLOSC_LZ4HC"</code></p></li>
+<li><p><code>"BLOSC_SNAPPY"</code></p></li>
+<li><p><code>"BLOSC_ZLIB"</code></p></li>
+<li><p><code>"BLOSC_ZSTD"</code></p></li>
+</ul></p></dd><dt> compression
+filter. </dt><dd><p><ul>
+<li><p><code>"BLOSC_BLOSCLZ"</code></p></li>
+<li><p><code>"BLOSC_LZ4"</code></p></li>
+<li><p><code>"BLOSC_LZ4HC"</code></p></li>
+<li><p><code>"BLOSC_SNAPPY"</code></p></li>
+<li><p><code>"BLOSC_ZLIB"</code></p></li>
+<li><p><code>"BLOSC_ZSTD"</code></p></li>
+</ul></p></dd> <dt>lzf</dt><dd><p><ul>
 <li><p><code>"LZF"</code></p></li>
-</ul></p></dd>
-<dt>Disable: It is possible to write chunks without and compression 
-    applied.</dt><dd><p><ul>
+</ul></p></dd> <dt>Disable: It is possible to write chunks without
+and compression </dt><dd><p><ul>
 <li><p><code>"NONE"</code></p></li>
-</ul></p></dd>
-
+</ul></p></dd><dt> applied.</dt><dd><p><ul>
+<li><p><code>"NONE"</code></p></li>
+</ul></p></dd> 
 </dl>
 
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <p>Returns TRUE is dataset was created successfully and FALSE otherwise.</p>
-    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
-
-    <p><a href='https://portal.hdfgroup.org/display/HDF5'>https://portal.hdfgroup.org/display/HDF5</a></p>
+    <div class='dont-index'><p><code><a href='h5createFile.html'>h5createFile()</a></code>, <code><a href='h5createGroup.html'>h5createGroup()</a></code>,
+<code><a href='h5read.html'>h5read()</a></code>, <code><a href='h5write.html'>h5write()</a></code></p></div>
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
     <p>Bernd Fischer, Mike L. Smith</p>
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <div class='dont-index'><p><code><a href='h5createFile.html'>h5createFile</a></code>, <code><a href='h5createGroup.html'>h5createGroup</a></code>, <code><a href='h5write.html'>h5read</a></code>, <code><a href='h5write.html'>h5write</a></code>, <a href='rhdf5.html'>rhdf5</a></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='r-in'><span class='fu'><a href='h5createFile.html'>h5createFile</a></span><span class='op'>(</span><span class='st'>"ex_createDataset.h5"</span><span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] TRUE</span>
+    <pre class="examples"><span class='r-in'></span>
+<span class='r-in'><span class='fu'><a href='h5createFile.html'>h5createFile</a></span><span class='op'>(</span><span class='st'>"ex_createDataset.h5"</span><span class='op'>)</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> file '/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmprclfRx/filec392f98677d/reference/ex_createDataset.h5' already exists.</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] FALSE</span>
 <span class='r-in'></span>
 <span class='r-in'><span class='co'># create dataset with compression</span></span>
 <span class='r-in'><span class='fu'>h5createDataset</span><span class='op'>(</span><span class='st'>"ex_createDataset.h5"</span>, <span class='st'>"A"</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>5</span>,<span class='fl'>8</span><span class='op'>)</span>, storage.mode <span class='op'>=</span> <span class='st'>"integer"</span>, chunk<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>5</span>,<span class='fl'>1</span><span class='op'>)</span>, level<span class='op'>=</span><span class='fl'>6</span><span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] TRUE</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> Can not create dataset. Object with name 'A' already exists.</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] FALSE</span>
 <span class='r-in'></span>
 <span class='r-in'><span class='co'># create dataset without compression</span></span>
 <span class='r-in'><span class='fu'>h5createDataset</span><span class='op'>(</span><span class='st'>"ex_createDataset.h5"</span>, <span class='st'>"B"</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>5</span>,<span class='fl'>8</span><span class='op'>)</span>, storage.mode <span class='op'>=</span> <span class='st'>"integer"</span><span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] TRUE</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> Can not create dataset. Object with name 'B' already exists.</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] FALSE</span>
 <span class='r-in'><span class='fu'>h5createDataset</span><span class='op'>(</span><span class='st'>"ex_createDataset.h5"</span>, <span class='st'>"C"</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>5</span>,<span class='fl'>8</span><span class='op'>)</span>, storage.mode <span class='op'>=</span> <span class='st'>"double"</span><span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] TRUE</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> Can not create dataset. Object with name 'C' already exists.</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] FALSE</span>
 <span class='r-in'></span>
 <span class='r-in'><span class='co'># create dataset with bzip2 compression</span></span>
 <span class='r-in'><span class='fu'>h5createDataset</span><span class='op'>(</span><span class='st'>"ex_createDataset.h5"</span>, <span class='st'>"D"</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>5</span>,<span class='fl'>8</span><span class='op'>)</span>, storage.mode <span class='op'>=</span> <span class='st'>"integer"</span>, </span>
 <span class='r-in'>    chunk<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>5</span>,<span class='fl'>1</span><span class='op'>)</span>, filter <span class='op'>=</span> <span class='st'>"BZIP2"</span>, level<span class='op'>=</span><span class='fl'>6</span><span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] TRUE</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> Can not create dataset. Object with name 'D' already exists.</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] FALSE</span>
 <span class='r-in'></span>
 <span class='r-in'><span class='co'># create a dataset of strings &amp; define size based on longest string</span></span>
 <span class='r-in'><span class='va'>ex_strings</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'long'</span>, <span class='st'>'longer'</span>, <span class='st'>'longest'</span><span class='op'>)</span></span>
 <span class='r-in'><span class='fu'>h5createDataset</span><span class='op'>(</span><span class='st'>"ex_createDataset.h5"</span>, <span class='st'>"E"</span>,  </span>
 <span class='r-in'>    storage.mode <span class='op'>=</span> <span class='st'>"character"</span>, chunk <span class='op'>=</span> <span class='fl'>3</span>, level <span class='op'>=</span> <span class='fl'>6</span>,</span>
 <span class='r-in'>    dims <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>ex_strings</span><span class='op'>)</span>, size <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Extremes.html'>max</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/nchar.html'>nchar</a></span><span class='op'>(</span><span class='va'>ex_strings</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] TRUE</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> Can not create dataset. Object with name 'E' already exists.</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] FALSE</span>
 <span class='r-in'></span>
 <span class='r-in'></span>
 <span class='r-in'><span class='co'># write data to dataset</span></span>
@@ -295,7 +353,7 @@ for selecting them are shown below:</p>
 <span class='r-in'><span class='co'># write character vector</span></span>
 <span class='r-in'><span class='fu'><a href='h5write.html'>h5write</a></span><span class='op'>(</span><span class='va'>ex_strings</span>, file <span class='op'>=</span> <span class='st'>"ex_createDataset.h5"</span>, name <span class='op'>=</span> <span class='st'>"E"</span><span class='op'>)</span></span>
 <span class='r-in'></span>
-<span class='r-in'><span class='fu'><a href='h5ls.html'>h5dump</a></span><span class='op'>(</span><span class='st'>"ex_createDataset.h5"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='h5dump.html'>h5dump</a></span><span class='op'>(</span><span class='st'>"ex_createDataset.h5"</span><span class='op'>)</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> $A</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span>      [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8]</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> [1,]    1    6   11   16   21   26   31   36</span>
@@ -331,6 +389,7 @@ for selecting them are shown below:</p>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> $E</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "long"    "longer"  "longest"</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-in'></span>
 </pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
