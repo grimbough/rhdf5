@@ -3,7 +3,7 @@ name: render pkgdown
 on:
   push:
     branches: 
-      - rd2roxyen
+      - rd2roxygen
 
 jobs:
   render:
