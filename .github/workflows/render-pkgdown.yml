@@ -25,6 +25,11 @@ jobs:
         r-version: ${{ matrix.config.r }}
         
     - uses: r-lib/actions/setup-pandoc@master
+    
+    - name: Set R options
+      run: |
+        echo "options(Ncpus = 2)" >> $HOME/.Rprofile
+        echo 'options(install.packages.check.source = "no")' >> $HOME/.Rprofile
 
     - name: Query dependencies
       run: |

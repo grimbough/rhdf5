@@ -233,6 +233,19 @@ H5Dwrite <- function( h5dataset, buf, h5spaceMem=NULL, h5spaceFile=NULL ) {
   invisible(.Call("_H5Dwrite", h5dataset@ID, buf, sidFile, sidMem, h5dataset@native, PACKAGE='rhdf5'))
 }
 
+#' Change the dimensions of an HDF5 dataset
+#' 
+#' @details This function can only be applied to datasets that meet the 
+#' following criteria:
+#' * A chunked dataset with unlimited dimensions
+#' * A chunked dataset with fixed dimensions if the new dimension sizes are 
+#' less than the maximum sizes set with maxdims
+#' 
+#' 
+#' @field h5dataset
+#' @field size
+#' 
+#' @export
 H5Dset_extent <- function( h5dataset, size) {
     h5checktype(h5dataset, "dataset")
     size <- as.numeric(size)
@@ -240,6 +253,10 @@ H5Dset_extent <- function( h5dataset, size) {
     invisible(.Call("_H5Dset_extent", h5dataset@ID, size, PACKAGE='rhdf5'))
 }
 
+#' 
+#' @field h5dataset
+#' 
+#' @export
 H5Dchunk_dims <- function(h5dataset) {
     h5checktype(h5dataset, "dataset")
     
