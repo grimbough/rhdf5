@@ -46,7 +46,7 @@ jobs:
 
     - name: Install dependencies
       run: |
-        install.packages("BiocManager")
+        install.packages("BiocManager", type = "source")
         BiocManager::install(version = 'devel', ask = FALSE, update = TRUE)
         toInstall <- remotes::dev_package_deps(dependencies = TRUE)[,'package']
         BiocManager::install(toInstall, ask = FALSE, update = TRUE, INSTALL_opts = '--force-biarch')
