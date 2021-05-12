@@ -1,4 +1,20 @@
-
+#' Create an attribute for an HDF5 object
+#' 
+#' Creates an attribute, `name`, which is attached to the object specified 
+#' by the identifier `h5obj`. The attribute name must be unique for the object.
+#' 
+#' @param h5obj An object of class [H5IdComponent-class] representing a H5 object 
+#' identifier (file, group, or dataset). See [H5Fcreate()], [H5Fopen()], 
+#' [H5Gcreate()], [H5Gopen()], [H5Dcreate()], or [H5Dopen()] to create an object of this kind.
+#' @param name The name of the attribute (character).
+#' @param dtype_id A character name of a datatype. See \code{h5const("H5T")} for 
+#' possible datatypes. Can also be an integer representing an HDF5 datatype. 
+#' Only simple datatypes are allowed for atttributes.
+#' @param h5space An object of class [H5IdComponent()] representing a H5 
+#' dataspace. See [H5Dget_space()], [H5Screate_simple()], [H5Screate()] to create an object 
+#' of this kind.
+#' 
+#' @export
 H5Acreate <- function( h5obj, name, dtype_id, h5space ) {
   h5checktype(h5obj, "object")
   if (length(name)!=1 || !is.character(name)) stop("'name' must be a character string of length 1")
@@ -18,6 +34,7 @@ H5Acreate <- function( h5obj, name, dtype_id, h5space ) {
   invisible(h5attribute)
 }
 
+#' @export
 H5Aopen <- function( h5obj, name ) {
   h5checktype(h5obj, "object")
   if (length(name)!=1 || !is.character(name)) stop("'name' must be a character string of length 1")
@@ -31,6 +48,7 @@ H5Aopen <- function( h5obj, name ) {
   invisible(h5attribute)
 }
 
+#' @export
 H5Aopen_by_name <- function( h5obj, objname = ".", name ) {
   h5checktype(h5obj, "object")
   if (length(objname)!=1 || !is.character(objname)) stop("'objname' must be a character string of length 1")
@@ -45,6 +63,7 @@ H5Aopen_by_name <- function( h5obj, objname = ".", name ) {
   invisible(h5attribute)
 }
 
+#' @export
 H5Aopen_by_idx <- function( h5obj, n, objname=".", index_type = h5default("H5_INDEX"), order = h5default("H5_ITER")) {
   h5checktype(h5obj, "object")
   if ((length(objname)!=1) || !is.character(objname)) stop("'objname' must be a character string of length 1")
@@ -62,6 +81,7 @@ H5Aopen_by_idx <- function( h5obj, n, objname=".", index_type = h5default("H5_IN
   invisible(h5attribute)
 }
 
+#' @export
 H5Aexists <- function( h5obj, name ) {
   h5checktype(h5obj, "object")
   if (length(name)!=1 || !is.character(name)) stop("'name' must be a character string of length 1")
@@ -70,11 +90,13 @@ H5Aexists <- function( h5obj, name ) {
   res
 }
 
+#' @export
 H5Aclose <- function( h5attribute ) {
   h5checktype(h5attribute, "attribute")
   invisible(.Call("_H5Aclose", h5attribute@ID, PACKAGE='rhdf5'))
 }
 
+#' @export
 H5Adelete <- function( h5obj, name ) {
   h5checktype(h5obj, "object")
   if (length(name)!=1 || !is.character(name)) stop("'name' must be a character string of length 1")
@@ -82,12 +104,14 @@ H5Adelete <- function( h5obj, name ) {
   res
 }
 
+#' @export
 H5Aget_name <- function( h5attribute ) {
   h5checktype(h5attribute, "attribute")
   name <- .Call("_H5Aget_name", h5attribute@ID, PACKAGE='rhdf5')
   name
 }
 
+#' @export
 H5Aget_space <- function( h5attribute ) {
   h5checktype(h5attribute, "attribute")
   sid <- .Call("_H5Aget_space", h5attribute@ID, PACKAGE='rhdf5')
@@ -100,17 +124,20 @@ H5Aget_space <- function( h5attribute ) {
   invisible(h5space)
 }
 
+#' @export
 H5Aget_type <- function( h5attribute ) {
   h5checktype(h5attribute, "attribute")
   tid <- .Call("_H5Aget_type", h5attribute@ID, PACKAGE='rhdf5')
   invisible(tid)
 }
 
+#' @export
 H5Aread <- function(h5attribute, buf = NULL) {
   h5checktype(h5attribute, "attribute")
   invisible(.Call("_H5Aread", h5attribute@ID, buf, PACKAGE='rhdf5'))
 }
 
+#' @export
 H5Awrite <- function(h5attribute, buf) {
   h5checktype(h5attribute, "attribute")
   invisible(.Call("_H5Awrite", h5attribute@ID, buf, PACKAGE='rhdf5'))

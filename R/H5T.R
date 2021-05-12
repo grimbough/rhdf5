@@ -1,4 +1,4 @@
-
+#' @export
 H5Tcopy <- function( dtype_id = h5default(type="H5T")) {
   if (is.numeric(dtype_id)) {
     dtype_id <- as.integer(dtype_id)
@@ -8,6 +8,7 @@ H5Tcopy <- function( dtype_id = h5default(type="H5T")) {
   invisible(.Call("_H5Tcopy", dtype_id, PACKAGE='rhdf5'))
 }
 
+#' @export
 H5Tset_size <- function( dtype_id = h5default(type="H5T"), size) {
   # string constant type_id do not make sense, because they are not allowed to be changed
   if (!grepl(pattern = "^[[:digit:]]+$", dtype_id))
@@ -16,6 +17,7 @@ H5Tset_size <- function( dtype_id = h5default(type="H5T"), size) {
   invisible(.Call("_H5Tset_size", dtype_id, size, PACKAGE='rhdf5'))
 }
 
+#' @export
 H5Tget_size <- function( dtype_id ) {
   
   if(missing(dtype_id)) {
@@ -25,7 +27,7 @@ H5Tget_size <- function( dtype_id ) {
   .Call("_H5Tget_size", dtype_id, PACKAGE='rhdf5')
 }
 
-
+#' @export
 H5Tset_strpad <- function( dtype_id, strpad = "NULLPAD") {
   
   strpad_int <- switch(strpad, 
@@ -38,7 +40,7 @@ H5Tset_strpad <- function( dtype_id, strpad = "NULLPAD") {
   .Call("_H5Tset_strpad", dtype_id, strpad_int, PACKAGE = "rhdf5")
 }
   
- 
+#' @export 
 H5Tget_strpad <- function( dtype_id ) {
   
   if(missing(dtype_id)) {
@@ -48,6 +50,7 @@ H5Tget_strpad <- function( dtype_id ) {
   .Call("_H5Tget_strpad", dtype_id, PACKAGE = "rhdf5")
 }
 
+#' @export
 H5Tset_cset <- function( dtype_id, cset = "ASCII") {
   
   cset_int <- switch(cset, 
@@ -59,7 +62,7 @@ H5Tset_cset <- function( dtype_id, cset = "ASCII") {
   .Call("_H5Tset_cset", dtype_id, cset_int, PACKAGE = "rhdf5")
 }
   
- 
+#' @export
 H5Tget_cset <- function( dtype_id ) {
   
   if(missing(dtype_id)) {

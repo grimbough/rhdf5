@@ -9,3 +9,8 @@ reference:
     Functions for working with HDF5 Datasets
 - contents: 
   - starts_with("H5D")
+- title: "HDF5 Attributes"
+  desc: >
+    Functions for working with HDF5 Attributes
+- contents: 
+  - starts_with("H5A")

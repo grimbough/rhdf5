@@ -1,10 +1,8 @@
-#' list all valid H5 identifier.
+#' List all open HDF5 objects.
 #' 
-#' A list of all valid H5 identifier. H5 objects should be closed after usage
+#' A list of all valid HDF5 identifiers. H5 objects should be closed after usage
 #' to release resources.
 #' 
-#' 
-#' @aliases h5listIdentifier h5validObjects
 #' @param native An object of class \code{logical}. If TRUE, array-like objects
 #' are treated as stored in HDF5 row-major rather than R column-major
 #' orientation. Using \code{native = TRUE} increases HDF5 file portability
@@ -13,10 +11,7 @@
 #' @return \code{h5validObjects} returns a list of \code{\link{H5IdComponent}}
 #' objects. \code{h5listIdentifier} prints the valid identifiers on screen and
 #' returns NULL.
-#' @author Bernd Fischer
-#' @seealso \link{rhdf5}
-#' @references \url{https://portal.hdfgroup.org/display/HDF5}
-#' @keywords programming interface IO file
+#' @author Bernd Fischer, Mike Smith
 #' @examples
 #' 
 #' h5createFile("ex_list_identifier.h5")
@@ -27,6 +22,10 @@
 #' h5listIdentifier()
 #' h5validObjects()
 #' 
+#' @name h5listObjects
+NULL
+
+#' @rdname h5listObjects
 #' @export h5listIdentifier
 h5listIdentifier <- function() {
   res <- .Call("_h5listIdentifier", PACKAGE='rhdf5')
@@ -35,6 +34,8 @@ h5listIdentifier <- function() {
   res
 }
 
+#' @rdname h5listObjects
+#' @export h5validObjects
 h5validObjects <- function(native = FALSE) {
   ids <- .Call("_h5validObjects", PACKAGE='rhdf5')
   res <- list()
@@ -56,12 +57,6 @@ getDatatypeName <- function(type) {
 getDatatypeClass <- function(type) {
   .Call("_getDatatypeClass", type, PACKAGE='rhdf5')
 }
-
-
-
-
-
-
 
 #' Print the rhdf5 and libhdf5 version numbers
 #' 
