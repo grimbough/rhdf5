@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Saves a series of objects to an HDF5 file. — h5save • rhdf5</title>
+<title>Saves a one or more objects to an HDF5 file. — h5save • rhdf5</title>
 
 
 <!-- jquery -->
@@ -39,7 +39,7 @@
 
 
 
-<meta property="og:title" content="Saves a series of objects to an HDF5 file. — h5save" />
+<meta property="og:title" content="Saves a one or more objects to an HDF5 file. — h5save" />
 <meta property="og:description" content="Saves a number of R objects to an HDF5 file." />
 
 
@@ -126,8 +126,8 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Saves a series of objects to an HDF5 file.</h1>
-    
+    <h1>Saves a one or more objects to an HDF5 file.</h1>
+    <small class="dont-index">Source: <a href='https://github.com/grimbough/rhdf5/blob/master/R/h5save.R'><code>R/h5save.R</code></a></small>
     <div class="hidden name"><code>h5save.Rd</code></div>
     </div>
 
@@ -146,40 +146,50 @@
     </tr>
     <tr>
       <th>file</th>
-      <td><p>The filename (character) of the file in which the dataset will be located. For advanced programmers it is possible to provide an object of class <code><a href='H5IdComponent-class.html'>H5IdComponent</a></code> representing a H5 location identifier (file or group). See <code><a href='HDF5 File Interface.html'>H5Fcreate</a></code>, <code><a href='HDF5 File Interface.html'>H5Fopen</a></code>, <code><a href='HDF5 Group Interface.html'>H5Gcreate</a></code>, <code><a href='HDF5 Group Interface.html'>H5Gopen</a></code> to create an object of this kind.</p></td>
+      <td><p>The filename (character) of the file in which the dataset will
+be located. It is also possible to provide an object of
+class <a href='H5IdComponent-class.html'>H5IdComponent</a> representing a H5 location identifier
+(file or group). See <code><a href='HDF5 File Interface.html'>H5Fcreate()</a></code>, <code><a href='HDF5 File Interface.html'>H5Fopen()</a></code>,
+<code><a href='HDF5 Group Interface.html'>H5Gcreate()</a></code>, <code><a href='HDF5 Group Interface.html'>H5Gopen()</a></code> to create an object of this
+kind.</p></td>
     </tr>
     <tr>
       <th>name</th>
-      <td><p>A character vector of names for the datasets. The length of the name vector should match the number of objects.</p></td>
+      <td><p>A character vector of names for the datasets. The length of the
+name vector should match the number of objects.</p></td>
     </tr>
     <tr>
       <th>createnewfile</th>
-      <td><p>If TRUE, a new file will be created if necessary.</p></td>
+      <td><p>If <code>TRUE</code>, a new file will be created if necessary.</p></td>
     </tr>
     <tr>
       <th>native</th>
-      <td><p>An object of class <code>logical</code>. If TRUE, array-like objects are treated as stored in HDF5 row-major rather than R column-major orientation. Using <code>native = TRUE</code> increases HDF5 file portability between programming languages. A file written with <code>native = TRUE</code> should also be read with <code>native = TRUE</code></p></td>
+      <td><p>An object of class <code>logical</code>. If TRUE, array-like objects
+are treated as stored in HDF5 row-major rather than R column-major
+orientation. Using <code>native = TRUE</code> increases HDF5 file portability
+between programming languages. A file written with <code>native = TRUE</code>
+should also be read with <code>native = TRUE</code></p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>The objects will be saved to the HDF5 file. If the file does not exists it will be created. The data can be read again by either <code><a href='h5dump.html'>h5dump</a></code> or individually for each dataset by <code><a href='h5read.html'>h5read</a></code>.</p>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>Nothing returned.</p>
-    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p><a href='https://portal.hdfgroup.org/display/HDF5'>https://portal.hdfgroup.org/display/HDF5</a></p>
+    <p>The objects will be saved to the HDF5 file. If the file does not exists it
+will be created. The data can be read again by either <code><a href='h5dump.html'>h5dump()</a></code>
+or individually for each dataset by <code><a href='h5read.html'>h5read()</a></code>.</p>
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p><code><a href='h5ls.html'>h5ls()</a></code>, <code><a href='h5write.html'>h5write()</a></code></p></div>
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
     <p>Bernd Fischer</p>
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <div class='dont-index'><p><code><a href='h5ls.html'>h5ls</a></code>, <code><a href='h5write.html'>h5write</a></code>, <a href='rhdf5.html'>rhdf5</a></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='r-in'><span class='va'>A</span> <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>7</span>;  <span class='va'>B</span> <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>18</span>; <span class='va'>D</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fl'>0</span>,<span class='fl'>1</span>,by<span class='op'>=</span><span class='fl'>0.1</span><span class='op'>)</span></span>
+    <pre class="examples"><span class='r-in'></span>
+<span class='r-in'><span class='va'>A</span> <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>7</span>;  <span class='va'>B</span> <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>18</span>; <span class='va'>D</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fl'>0</span>,<span class='fl'>1</span>,by<span class='op'>=</span><span class='fl'>0.1</span><span class='op'>)</span></span>
 <span class='r-in'><span class='fu'>h5save</span><span class='op'>(</span><span class='va'>A</span>, <span class='va'>B</span>, <span class='va'>D</span>, file<span class='op'>=</span><span class='st'>"ex_save.h5"</span><span class='op'>)</span></span>
 <span class='r-in'><span class='fu'><a href='h5dump.html'>h5dump</a></span><span class='op'>(</span><span class='st'>"ex_save.h5"</span><span class='op'>)</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> $A</span>
@@ -191,6 +201,7 @@
 <span class='r-out co'><span class='r-pr'>#&gt;</span> $D</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span>  [1] 0.0 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1.0</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-in'></span>
 </pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
