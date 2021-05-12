@@ -12,6 +12,7 @@
 #' 
 #' h5errorHandling("normal")
 #' 
+#' @name h5_errorHandling
 #' @export h5errorHandling
 h5errorHandling <- function(type = "normal") {
 

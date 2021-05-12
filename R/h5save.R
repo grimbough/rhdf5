@@ -30,6 +30,7 @@
 #' h5save(A, B, D, file="ex_save.h5")
 #' h5dump("ex_save.h5")
 #' 
+#' @name h5_save
 #' @export h5save
 h5save <- function(..., file, name = NULL, createnewfile=TRUE, native = FALSE) {
   N <- length(list(...))

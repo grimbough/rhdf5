@@ -6,6 +6,12 @@
 \usage{
 H5Dset_extent(h5dataset, size)
 }
+\arguments{
+\item{h5dataset}{Object of class \link{H5IdComponent} representing an open HDF5
+dataset.}
+
+\item{size}{An integer vector with the new dimension of the dataset.}
+}
 \description{
 Change the dimensions of an HDF5 dataset
 }
@@ -19,15 +25,6 @@ less than the maximum sizes set with maxdims
 #'
 }
 }
-\section{Fields}{
-
-\describe{
-\item{\code{h5dataset}}{Object of class \link{H5IdComponent} representing an open HDF5
-dataset.}
-
-\item{\code{size}}{An integer vector with the new dimension of the dataset.}
-}}
-
 \author{
 Bernd Fischer, Mike Smith
 }

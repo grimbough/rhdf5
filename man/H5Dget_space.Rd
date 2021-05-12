@@ -6,6 +6,10 @@
 \usage{
 H5Dget_space(h5dataset)
 }
+\arguments{
+\item{h5dataset}{Object of class \link{H5IdComponent} representing an open HDF5
+dataset}
+}
 \value{
 Returns an object of class \code{H5IdComponent} representing a HDF5
 dataspace identifier
@@ -13,10 +17,3 @@ dataspace identifier
 \description{
 Return a copy of the HDF5 dataspace for a dataset
 }
-\section{Fields}{
-
-\describe{
-\item{\code{h5dataset}}{Object of class \link{H5IdComponent} representing an open HDF5
-dataset}
-}}
-

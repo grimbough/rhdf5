@@ -6,13 +6,10 @@
 \usage{
 H5Dclose(h5dataset)
 }
+\arguments{
+\item{h5dataset}{Object of class \link{H5IdComponent} representing an open HDF5
+dataset}
+}
 \description{
 Close an open HDF5 dataset
 }
-\section{Fields}{
-
-\describe{
-\item{\code{h5dataset}}{Object of class \link{H5IdComponent} representing an open HDF5
-dataset}
-}}
-

@@ -47,12 +47,6 @@ are treated as stored in HDF5 row-major rather than R column-major
 orientation. Using \code{native = TRUE} increases HDF5 file portability
 between programming languages. A file written with \code{native = TRUE}
 should also be read with \code{native = TRUE}}
-
-\item{load}{If \code{TRUE} the datasets are read in, not only the header
-information. Note, that this can cause memory problems for very large files.
-In this case choose \code{load=FALSE} and load the datasets successively.}
-
-\item{\dots}{Arguments passed to \code{\link[=h5read]{h5read()}}}
 }
 \value{
 \code{h5ls} returns a \code{data.frame} with the file content.

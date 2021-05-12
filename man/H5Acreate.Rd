@@ -21,6 +21,9 @@ Only simple datatypes are allowed for atttributes.}
 dataspace. See \code{\link[=H5Dget_space]{H5Dget_space()}}, \code{\link[=H5Screate_simple]{H5Screate_simple()}}, \code{\link[=H5Screate]{H5Screate()}} to create an object
 of this kind.}
 }
+\value{
+An object of class \linkS4class{H5IdComponent} representing a H5 attribute identifier.
+}
 \description{
 Creates an attribute, \code{name}, which is attached to the object specified
 by the identifier \code{h5obj}. The attribute name must be unique for the object.

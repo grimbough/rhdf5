@@ -14,6 +14,8 @@
 #' dataspace. See [H5Dget_space()], [H5Screate_simple()], [H5Screate()] to create an object 
 #' of this kind.
 #' 
+#' @return An object of class [H5IdComponent-class] representing a H5 attribute identifier.
+#' 
 #' @export
 H5Acreate <- function( h5obj, name, dtype_id, h5space ) {
   h5checktype(h5obj, "object")
@@ -40,10 +42,13 @@ H5Acreate <- function( h5obj, name, dtype_id, h5space ) {
 #' identifier (file, group, or dataset). See [H5Fcreate()], [H5Fopen()], 
 #' [H5Gcreate()], [H5Gopen()], [H5Dcreate()], or [H5Dopen()] to create an object of this kind.
 #' @param name The name of the attribute (character).
-#' @param objname 
-#' @param n
-#' @param index_type
-#' @param order
+#' @param objname The name of the object the attribute belongs to.
+#' @param n Opens attribute number `n` in the given order and index. Indexing is C-style, base-0, 
+#' so the first attribute is opened with `n=0`.
+#' @param index_type See \code{h5const("H5_INDEX")} for possible arguments.
+#' @param order See \code{h5const("H5_ITER")} for possible arguments.
+#' 
+#' @return An object of class [H5IdComponent-class] representing a H5 attribute identifier.
 #' 
 #' @name H5Aopen
 NULL
@@ -142,6 +147,15 @@ H5Adelete <- function( h5obj, name ) {
   res
 }
 
+#' Get the name of an HDF5 attribute object
+#' 
+#' Retrieves the name of the attribute specified by an HDF5 attribute object.
+#' 
+#' @param h5attribute An object of class [H5IdComponent-class] representing an
+#' attribute.  Normally created by [H5Aopen()] or similar.
+#' 
+#' @return A character vector of length 1 containing the name of the attribute.
+#' 
 #' @export
 H5Aget_name <- function( h5attribute ) {
   h5checktype(h5attribute, "attribute")
@@ -149,6 +163,14 @@ H5Aget_name <- function( h5attribute ) {
   name
 }
 
+#' Get a copy of the attribute dataspace
+#' 
+#' @param h5attribute An object of class [H5IdComponent-class] representing an
+#' attribute.  Normally created by [H5Aopen()] or similar.
+#' 
+#' @return Returns an object of class [H5IdComponent-class] representing a H5 
+#' dataspace identifier
+#' 
 #' @export
 H5Aget_space <- function( h5attribute ) {
   h5checktype(h5attribute, "attribute")
@@ -162,6 +184,11 @@ H5Aget_space <- function( h5attribute ) {
   invisible(h5space)
 }
 
+#' Get a copy of the attribute datatype
+#' 
+#' @param h5attribute An object of class [H5IdComponent-class] representing an
+#' attribute.  Normally created by [H5Aopen()] or similar.
+#' 
 #' @export
 H5Aget_type <- function( h5attribute ) {
   h5checktype(h5attribute, "attribute")
@@ -169,12 +196,30 @@ H5Aget_type <- function( h5attribute ) {
   invisible(tid)
 }
 
+#' Read data from an HDF5 attribute
+#' 
+#' @param h5attribute An object of class [H5IdComponent-class] representing an
+#' attribute.  Normally created by [H5Aopen()] or similar.
+#' @param buf Optional buffer to store retrieved values. The buffer size has to
+#' fit the size of the memory space \code{h5spaceMem}. No extra memory will be 
+#' allocated for the data. Default is `NULL` which means the function will 
+#' return the attribute data.
+#' 
+#' @return If `buf=NULL` returns the contents of the attribute.  Otherwise 
+#' return 0 if attribute is read successfully.
+#' 
 #' @export
 H5Aread <- function(h5attribute, buf = NULL) {
   h5checktype(h5attribute, "attribute")
   invisible(.Call("_H5Aread", h5attribute@ID, buf, PACKAGE='rhdf5'))
 }
 
+#' Write data to an HDF5 attribute
+#' 
+#' @param h5attribute An object of class [H5IdComponent-class] representing an
+#' attribute.  Normally created by [H5Aopen()] or similar.
+#' @param buf The data to be written.
+#' 
 #' @export
 H5Awrite <- function(h5attribute, buf) {
   h5checktype(h5attribute, "attribute")

@@ -28,9 +28,6 @@ h5lsConvertToDataframe <- function(L, all=FALSE, native) {
 #' provided. This can speed up the content listing for large files.
 #' @param index_type See `h5const("H5_INDEX")` for possible arguments.
 #' @param order See `h5const("H5_ITER")` for possible arguments.
-#' @param load If `TRUE` the datasets are read in, not only the header
-#' information. Note, that this can cause memory problems for very large files.
-#' In this case choose `load=FALSE` and load the datasets successively.
 #' @param s3 Logical value indicating whether the file argument should be
 #' treated as a URL to an Amazon S3 bucket, rather than a local file path.
 #' @param s3credentials A list of length three, providing the credentials for
@@ -40,7 +37,6 @@ h5lsConvertToDataframe <- function(L, all=FALSE, native) {
 #' orientation. Using `native = TRUE` increases HDF5 file portability
 #' between programming languages. A file written with `native = TRUE`
 #' should also be read with `native = TRUE`
-#' @param \dots Arguments passed to [h5read()]
 #' 
 #' @return \code{h5ls} returns a `data.frame` with the file content.
 #' 

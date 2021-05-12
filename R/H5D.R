@@ -1,17 +1,17 @@
 #' Create a new HDF5 dataset
 #' 
-#' @field h5loc An object of class [H5IdComponent] representing a H5
+#' @param h5loc An object of class [H5IdComponent-class] representing a H5
 #' location identifier (file or group). See [H5Fcreate()], [H5Fopen()], 
 #' [H5Gcreate()], [H5Gopen()] to create an object of this kind.
-#' @field name Name of the dataset.
-#' @field dtype_id A character name of a datatype. See `h5const("H5T")`
+#' @param name Name of the dataset.
+#' @param dtype_id A character name of a datatype. See `h5const("H5T")`
 #' for possible datatypes. Can also be an integer representing an HDF5 datatype.
-#' @field h5space An object of class [H5IdComponent] representing a H5 dataspace. 
+#' @param h5space An object of class [H5IdComponent] representing a H5 dataspace. 
 #' See [H5Dget_space()], [H5Screate_simple()], [H5Screate()] to create an object 
 #' of this kind
-#' @field lcpl An object of class [H5IdComponent] representing a H5 link creation property list.
-#' @field dcpl An object of class [H5IdComponent] representing a H5 dataset creation property list.
-#' @field dapl An object of class [H5IdComponent] representing a H5 dataset access property list.
+#' @param lcpl,dcpl,dapl An objects of class [H5IdComponent-class] representing 
+#' HDF5 property lists.  Specially these should respectively be: a link creation 
+#' property list, a dataset creation property list, a dataset access property list
 #' 
 #' @return An object of class `H5IdComponent` representing the opened dataset.
 #' 
@@ -39,10 +39,10 @@ H5Dcreate <- function( h5loc, name, dtype_id, h5space, lcpl=NULL, dcpl=NULL, dap
 
 #' Open an existing HDF5 dataset
 #' 
-#' @field h5loc An object of class [H5IdComponent] representing a H5
+#' @param h5loc An object of class [H5IdComponent] representing a H5
 #' location identifier (file or group).
-#' @field name Name of the dataset to open.
-#' @field dapl An object of class [H5IdComponent] representing a H5 dataset access property list.
+#' @param name Name of the dataset to open.
+#' @param dapl An object of class [H5IdComponent] representing a H5 dataset access property list.
 #' 
 #' @return An object of class `H5IdComponent` representing the opened dataset.  
 #' To prevent memory leaks this must be closed with a call to [H5Dclose()] 
@@ -78,7 +78,7 @@ H5Dopen <- function( h5loc, name, dapl = NULL ) {
 
 #' Close an open HDF5 dataset
 #' 
-#' @field h5dataset Object of class [H5IdComponent] representing an open HDF5 
+#' @param h5dataset Object of class [H5IdComponent] representing an open HDF5 
 #' dataset
 #' 
 #' @export
@@ -89,7 +89,7 @@ H5Dclose <- function( h5dataset ) {
 
 #' Return a copy of the HDF5 datatype for a dataset
 #' 
-#' @field h5dataset Object of class [H5IdComponent] representing an open HDF5 
+#' @param h5dataset Object of class [H5IdComponent] representing an open HDF5 
 #' dataset
 #' 
 #' @export
@@ -101,7 +101,7 @@ H5Dget_type <- function( h5dataset ) {
 
 #' Return a copy of the dataset creation property list for a dataset
 #' 
-#' @field h5dataset Object of class [H5IdComponent] representing an open HDF5 
+#' @param h5dataset Object of class [H5IdComponent] representing an open HDF5 
 #' dataset
 #' 
 #' @export
@@ -120,7 +120,7 @@ H5Dget_create_plist <- function( h5dataset ) {
 
 #' Return a copy of the HDF5 dataspace for a dataset
 #' 
-#' @field h5dataset Object of class [H5IdComponent] representing an open HDF5 
+#' @param h5dataset Object of class [H5IdComponent] representing an open HDF5 
 #' dataset
 #' 
 #' @return Returns an object of class `H5IdComponent` representing a HDF5 
@@ -146,7 +146,7 @@ H5Dget_space <- function( h5dataset ) {
 #' on-disk, which not typically a good indicator of the amount of memory 
 #' that will be required to read the complete dataset.
 #' 
-#' @field h5dataset Object of class [H5IdComponent] representing an open HDF5 
+#' @param h5dataset Object of class [H5IdComponent] representing an open HDF5 
 #' dataset
 #' 
 #' @return Returns an integer giving the number of bytes allocated in the file
@@ -209,29 +209,29 @@ H5Dget_storage_size <- function( h5dataset ) {
 #' defined in an external package. This can produce unexpected behaviour when 
 #' working with the data.
 #' 
-#' @field h5dataset Object of class [H5IdComponent] representing an open HDF5 
+#' @param h5dataset Object of class [H5IdComponent] representing an open HDF5 
 #' dataset.
-#' @field h5spaceFile An object of class `H5IdComponent` representing a HDF5 
+#' @param h5spaceFile An object of class `H5IdComponent` representing a HDF5 
 #' dataspace. See [H5Dget_space()], [H5Screate_simple()], [H5Screate()] to 
 #' create an object of this kind.
-#' @field h5spaceMem An object of class `H5IdComponent` representing a HDF5 
+#' @param h5spaceMem An object of class `H5IdComponent` representing a HDF5 
 #' dataspace. See [H5Dget_space()], [H5Screate_simple()], [H5Screate()] to 
 #' create an object of this kind. The dimensions of the dataset in the file and
 #' in memory. The dimensions in file and in memory are interpreted in an R-like
 #' manner. The first dimension is the fastest changing dimension. When reading 
 #' the file with a C-program (e.g. HDFView) the order of dimensions will invert, 
 #' because in C the fastest changing dimension is the last one.
-#' @field buf Buffer to hold the read data.  The buffer size has to fit the 
+#' @param buf Buffer to hold the read data.  The buffer size has to fit the 
 #' size of the memory space `h5spaceMem`. No extra memory will be allocated for
 #' the data. A pointer to the same data is returned.
-#' @field compoundAsDataFrame Logical vector of length 1. If `TRUE`, a compound 
+#' @param compoundAsDataFrame Logical vector of length 1. If `TRUE`, a compound 
 #' datatype will be coerced to a `data.frame`. This is not possible, if the 
 #' dataset is multi-dimensional. Otherwise the compound datatype will be 
 #' returned as a `list`. Nested compound data types will be returned as a 
 #' nested `list`.
-#' @field bit64conversion Defines how 64-bit integers are converted. (See
+#' @param bit64conversion Defines how 64-bit integers are converted. (See
 #' the details section for more information on these options.)
-#' @field drop Logical vector of length 1.  If `TRUE`, the HDF5 object is read 
+#' @param drop Logical vector of length 1.  If `TRUE`, the HDF5 object is read 
 #' as a vector with NULL dim attributes. Default is `FALSE`.
 #' 
 #' @export
@@ -277,9 +277,9 @@ H5Dwrite <- function( h5dataset, buf, h5spaceMem=NULL, h5spaceFile=NULL ) {
 #' * A chunked dataset with fixed dimensions if the new dimension sizes are 
 #' less than the maximum sizes set with maxdims
 #' #' 
-#' @field h5dataset Object of class [H5IdComponent] representing an open HDF5 
+#' @param h5dataset Object of class [H5IdComponent] representing an open HDF5 
 #' dataset.
-#' @field size An integer vector with the new dimension of the dataset.
+#' @param size An integer vector with the new dimension of the dataset.
 #' 
 #' @author Bernd Fischer, Mike Smith
 #' 
@@ -296,7 +296,7 @@ H5Dset_extent <- function( h5dataset, size) {
 #' @details This function does not map directly to the HDF5 C API but is 
 #' included as a useful addition.
 #' 
-#' @field h5dataset Object of class [H5IdComponent] representing an open HDF5 
+#' @param h5dataset Object of class [H5IdComponent] representing an open HDF5 
 #' dataset.
 #' 
 #' @return If the supplied dataset is chunked returns a vector, with length

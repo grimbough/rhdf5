@@ -6,13 +6,10 @@
 \usage{
 H5Dget_create_plist(h5dataset)
 }
+\arguments{
+\item{h5dataset}{Object of class \link{H5IdComponent} representing an open HDF5
+dataset}
+}
 \description{
 Return a copy of the dataset creation property list for a dataset
 }
-\section{Fields}{
-
-\describe{
-\item{\code{h5dataset}}{Object of class \link{H5IdComponent} representing an open HDF5
-dataset}
-}}
-

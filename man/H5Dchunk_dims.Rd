@@ -6,6 +6,10 @@
 \usage{
 H5Dchunk_dims(h5dataset)
 }
+\arguments{
+\item{h5dataset}{Object of class \link{H5IdComponent} representing an open HDF5
+dataset.}
+}
 \value{
 If the supplied dataset is chunked returns a vector, with length
 equal to the rank of the dataset, containing the size of the dataset
@@ -18,13 +22,6 @@ Return the dimensions of a dataset chunk
 This function does not map directly to the HDF5 C API but is
 included as a useful addition.
 }
-\section{Fields}{
-
-\describe{
-\item{\code{h5dataset}}{Object of class \link{H5IdComponent} representing an open HDF5
-dataset.}
-}}
-
 \author{
 Mike Smith
 }

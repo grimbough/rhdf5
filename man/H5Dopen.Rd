@@ -6,6 +6,14 @@
 \usage{
 H5Dopen(h5loc, name, dapl = NULL)
 }
+\arguments{
+\item{h5loc}{An object of class \link{H5IdComponent} representing a H5
+location identifier (file or group).}
+
+\item{name}{Name of the dataset to open.}
+
+\item{dapl}{An object of class \link{H5IdComponent} representing a H5 dataset access property list.}
+}
 \value{
 An object of class \code{H5IdComponent} representing the opened dataset.
 To prevent memory leaks this must be closed with a call to \code{\link[=H5Dclose]{H5Dclose()}}
@@ -14,17 +22,6 @@ when no longer needed.
 \description{
 Open an existing HDF5 dataset
 }
-\section{Fields}{
-
-\describe{
-\item{\code{h5loc}}{An object of class \link{H5IdComponent} representing a H5
-location identifier (file or group).}
-
-\item{\code{name}}{Name of the dataset to open.}
-
-\item{\code{dapl}}{An object of class \link{H5IdComponent} representing a H5 dataset access property list.}
-}}
-
 \examples{
 h5file <- tempfile(fileext = ".h5")
 h5createFile( h5file )

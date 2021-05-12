@@ -25,9 +25,17 @@ identifier (file, group, or dataset). See \code{\link[=H5Fcreate]{H5Fcreate()}},
 
 \item{name}{The name of the attribute (character).}
 
-\item{objname}{}
+\item{objname}{The name of the object the attribute belongs to.}
 
-\item{order}{}
+\item{n}{Opens attribute number \code{n} in the given order and index. Indexing is C-style, base-0,
+so the first attribute is opened with \code{n=0}.}
+
+\item{index_type}{See \code{h5const("H5_INDEX")} for possible arguments.}
+
+\item{order}{See \code{h5const("H5_ITER")} for possible arguments.}
+}
+\value{
+An object of class \linkS4class{H5IdComponent} representing a H5 attribute identifier.
 }
 \description{
 Open an attribute for an HDF5 object

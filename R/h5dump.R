@@ -41,8 +41,6 @@ h5loadData <- function(h5loc, L, all=FALSE, ..., native) {
 #' integer is provided this indicates the maximum level of the hierarchy that
 #' is shown.
 #' @param all If `TRUE`, a longer list of information on each entry is provided.
-#' @param datasetinfo If `FALSE`, datatype and dimensionality information is not
-#' provided. This can speed up the content listing for large files.
 #' @param index_type See `h5const("H5_INDEX")` for possible arguments.
 #' @param order See `h5const("H5_ITER")` for possible arguments.
 #' @param load If `TRUE` the datasets are read in, not only the header
@@ -89,6 +87,7 @@ h5loadData <- function(h5loc, L, all=FALSE, ..., native) {
 #' h5dump(file = "https://rhdf5-public.s3.eu-central-1.amazonaws.com/h5ex_t_array.h5", s3 = TRUE)
 #' }
 #' 
+#' @name h5_dump
 #' @export
 h5dump <- function( file, recursive = TRUE, load=TRUE, all=FALSE, 
                     index_type = h5default("H5_INDEX"), order = h5default("H5_ITER"), 
