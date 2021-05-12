@@ -1,15 +1,15 @@
 \name{HDF5 Attribute Interface}
 \alias{H5A}
-\alias{H5Acreate}
-\alias{H5Aclose}
-\alias{H5Adelete}
-\alias{H5Aexists}
+%\alias{H5Acreate}
+%\alias{H5Aclose}
+%\alias{H5Adelete}
+%\alias{H5Aexists}
 \alias{H5Aget_name}
 \alias{H5Aget_space}
 \alias{H5Aget_type}
-\alias{H5Aopen}
-\alias{H5Aopen_by_idx}
-\alias{H5Aopen_by_name}
+%\alias{H5Aopen}
+%\alias{H5Aopen_by_idx}
+%\alias{H5Aopen_by_name}
 \alias{H5Aread}
 \alias{H5Awrite}
 \title{HDF5 Attribute Interface}

@@ -34,6 +34,21 @@ H5Acreate <- function( h5obj, name, dtype_id, h5space ) {
   invisible(h5attribute)
 }
 
+#' Open an attribute for an HDF5 object
+#' 
+#' @param h5obj An object of class [H5IdComponent-class] representing a H5 object 
+#' identifier (file, group, or dataset). See [H5Fcreate()], [H5Fopen()], 
+#' [H5Gcreate()], [H5Gopen()], [H5Dcreate()], or [H5Dopen()] to create an object of this kind.
+#' @param name The name of the attribute (character).
+#' @param objname 
+#' @param n
+#' @param index_type
+#' @param order
+#' 
+#' @name H5Aopen
+NULL
+
+#' @rdname H5Aopen
 #' @export
 H5Aopen <- function( h5obj, name ) {
   h5checktype(h5obj, "object")
@@ -48,6 +63,7 @@ H5Aopen <- function( h5obj, name ) {
   invisible(h5attribute)
 }
 
+#' @rdname H5Aopen
 #' @export
 H5Aopen_by_name <- function( h5obj, objname = ".", name ) {
   h5checktype(h5obj, "object")
@@ -63,6 +79,7 @@ H5Aopen_by_name <- function( h5obj, objname = ".", name ) {
   invisible(h5attribute)
 }
 
+#' @rdname H5Aopen
 #' @export
 H5Aopen_by_idx <- function( h5obj, n, objname=".", index_type = h5default("H5_INDEX"), order = h5default("H5_ITER")) {
   h5checktype(h5obj, "object")
@@ -81,6 +98,13 @@ H5Aopen_by_idx <- function( h5obj, n, objname=".", index_type = h5default("H5_IN
   invisible(h5attribute)
 }
 
+#' Check whether an specific attribute exists for an HDF5 object
+#' 
+#' @param h5obj An object of class [H5IdComponent-class] representing a H5 object 
+#' identifier (file, group, or dataset). See [H5Fcreate()], [H5Fopen()], 
+#' [H5Gcreate()], [H5Gopen()], [H5Dcreate()], or [H5Dopen()] to create an object of this kind.
+#' @param name The name of the attribute (character).
+#' 
 #' @export
 H5Aexists <- function( h5obj, name ) {
   h5checktype(h5obj, "object")
@@ -90,12 +114,26 @@ H5Aexists <- function( h5obj, name ) {
   res
 }
 
+
+#' Close an HDF5 attribute
+#' 
+#' @param h5attribute An object of class [H5IdComponent-class] representing a 
+#' the attribute to be closed.  Normally created by [H5Aopen()] or similar.
+#' 
+#' @seealso [H5Aopen()] 
 #' @export
 H5Aclose <- function( h5attribute ) {
   h5checktype(h5attribute, "attribute")
   invisible(.Call("_H5Aclose", h5attribute@ID, PACKAGE='rhdf5'))
 }
 
+#' Delete an specified attribute of an HDF5 object
+#' 
+#' @param h5obj An object of class [H5IdComponent-class] representing a H5 object 
+#' identifier (file, group, or dataset). See [H5Fcreate()], [H5Fopen()], 
+#' [H5Gcreate()], [H5Gopen()], [H5Dcreate()], or [H5Dopen()] to create an object of this kind.
+#' @param name The name of the attribute (character).
+#' 
 #' @export
 H5Adelete <- function( h5obj, name ) {
   h5checktype(h5obj, "object")
