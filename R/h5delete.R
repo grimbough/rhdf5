@@ -8,6 +8,7 @@
 #' \code{h5deleteAttribute} the name of the object to which the attribute
 #' belongs.
 #' @author Mike Smith
+#' @name h5_delete
 #' @export h5delete
 h5delete <- function(file, name) {
     
@@ -28,6 +29,7 @@ h5delete <- function(file, name) {
 #' @param attribute Name of the attribute to be deleted.
 #' 
 #' @author Mike Smith
+#' @name h5_deleteAttribute
 #' @export h5deleteAttribute
 h5deleteAttribute <- function(file, name, attribute) {
     

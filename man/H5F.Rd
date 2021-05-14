@@ -1,14 +1,14 @@
 \name{HDF5 File Interface}
 \alias{H5F}
-\alias{H5Fcreate}
+%\alias{H5Fcreate}
 \alias{H5Fopen}
 \alias{H5Fclose}
 \alias{H5Fflush}
-\alias{H5Fis_hdf5}
+%\alias{H5Fis_hdf5}
 \alias{H5Fget_filesize}
-\alias{H5Fget_name}
-\alias{H5Fget_create_plist}
-\alias{H5Fget_access_plist}
+%\alias{H5Fget_name}
+%\alias{H5Fget_create_plist}
+%\alias{H5Fget_access_plist}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{HDF5 File Interface}
 \description{

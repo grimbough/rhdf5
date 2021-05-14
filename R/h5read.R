@@ -190,7 +190,7 @@ h5readDataset <- function (h5dataset, index = NULL, start = NULL, stride = NULL,
 #'       s3 = TRUE, name = "a1", index = list(NULL, 3, NULL))
 #' }
 #' 
-#' 
+#' @name h5_read
 #' @export h5read
 h5read <- function(file, name, index=NULL, start=NULL, stride=NULL, block=NULL,
                    count = NULL, compoundAsDataFrame = TRUE, callGeneric = TRUE,
