@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Return a copy of the dataset creation property list for a dataset — H5Dget_create_plist • rhdf5</title>
+<title>Write data to an HDF5 attribute — H5Awrite • rhdf5</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Return a copy of the dataset creation property list for a dataset — H5Dget_create_plist" />
-<meta property="og:description" content="Return a copy of the dataset creation property list for a dataset" />
+<meta property="og:title" content="Write data to an HDF5 attribute — H5Awrite" />
+<meta property="og:description" content="Write data to an HDF5 attribute" />
 
 
 
@@ -126,24 +126,28 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Return a copy of the dataset creation property list for a dataset</h1>
-    <small class="dont-index">Source: <a href='https://github.com/grimbough/rhdf5/blob/master/R/H5D.R'><code>R/H5D.R</code></a></small>
-    <div class="hidden name"><code>H5Dget_create_plist.Rd</code></div>
+    <h1>Write data to an HDF5 attribute</h1>
+    <small class="dont-index">Source: <a href='https://github.com/grimbough/rhdf5/blob/master/R/H5A.R'><code>R/H5A.R</code></a></small>
+    <div class="hidden name"><code>H5Awrite.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Return a copy of the dataset creation property list for a dataset</p>
+    <p>Write data to an HDF5 attribute</p>
     </div>
 
-    <pre class="usage"><span class='fu'>H5Dget_create_plist</span><span class='op'>(</span><span class='va'>h5dataset</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>H5Awrite</span><span class='op'>(</span><span class='va'>h5attribute</span>, <span class='va'>buf</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>h5dataset</th>
-      <td><p>Object of class <a href='H5IdComponent-class.html'>H5IdComponent</a> representing an open HDF5
-dataset</p></td>
+      <th>h5attribute</th>
+      <td><p>An object of class <a href='H5IdComponent-class.html'>H5IdComponent</a> representing an
+attribute.  Normally created by <code><a href='H5Aopen.html'>H5Aopen()</a></code> or similar.</p></td>
+    </tr>
+    <tr>
+      <th>buf</th>
+      <td><p>The data to be written.</p></td>
     </tr>
     </table>
 

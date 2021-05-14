@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Return a copy of the dataset creation property list for a dataset — H5Dget_create_plist • rhdf5</title>
+<title>Open a specified group — H5Gopen • rhdf5</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Return a copy of the dataset creation property list for a dataset — H5Dget_create_plist" />
-<meta property="og:description" content="Return a copy of the dataset creation property list for a dataset" />
+<meta property="og:title" content="Open a specified group — H5Gopen" />
+<meta property="og:description" content="Open a specified group" />
 
 
 
@@ -126,27 +126,39 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Return a copy of the dataset creation property list for a dataset</h1>
-    <small class="dont-index">Source: <a href='https://github.com/grimbough/rhdf5/blob/master/R/H5D.R'><code>R/H5D.R</code></a></small>
-    <div class="hidden name"><code>H5Dget_create_plist.Rd</code></div>
+    <h1>Open a specified group</h1>
+    <small class="dont-index">Source: <a href='https://github.com/grimbough/rhdf5/blob/master/R/H5G.R'><code>R/H5G.R</code></a></small>
+    <div class="hidden name"><code>H5Gopen.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Return a copy of the dataset creation property list for a dataset</p>
+    <p>Open a specified group</p>
     </div>
 
-    <pre class="usage"><span class='fu'>H5Dget_create_plist</span><span class='op'>(</span><span class='va'>h5dataset</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>H5Gopen</span><span class='op'>(</span><span class='va'>h5loc</span>, <span class='va'>name</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>h5dataset</th>
-      <td><p>Object of class <a href='H5IdComponent-class.html'>H5IdComponent</a> representing an open HDF5
-dataset</p></td>
+      <th>h5loc</th>
+      <td><p>An object of class <a href='H5IdComponent-class.html'>H5IdComponent</a> representing a H5
+file or group that contains the group to be opened.</p></td>
+    </tr>
+    <tr>
+      <th>name</th>
+      <td><p>Name of the group to open.</p></td>
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>An object of class <a href='H5IdComponent-class.html'>H5IdComponent</a> representing the opened
+group.  When access to the group is no longer needed this should be released
+with <code><a href='H5Gclose.html'>H5Gclose()</a></code> to prevent resource leakage.</p>
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p><code><a href='H5Gclose.html'>H5Gclose()</a></code></p></div>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

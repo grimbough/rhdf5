@@ -151,11 +151,45 @@
       <tr>
         
         <td>
-          <p><code><a href="h5checkFilters.html">h5checkFilters()</a></code> </p>
+          <p><code><a href="h5_delete.html">h5delete()</a></code> </p>
         </td>
-        <td><p>Identifies the filters required to read a dataset
-If filters aren't available it will try to identify them
-and print the names to the user.</p></td>
+        <td><p>Delete objects within a HDF5 file</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="h5_deleteAttribute.html">h5deleteAttribute()</a></code> </p>
+        </td>
+        <td><p>Delete attribute</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="h5_dump.html">h5dump()</a></code> </p>
+        </td>
+        <td><p>Dump the content of an HDF5 file.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="h5_errorHandling.html">h5errorHandling()</a></code> </p>
+        </td>
+        <td><p>Set how HDF5 error messages are displayed</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="h5_read.html">h5read()</a></code> </p>
+        </td>
+        <td><p>Reads and write object in HDF5 files</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="h5_save.html">h5save()</a></code> </p>
+        </td>
+        <td><p>Saves a one or more objects to an HDF5 file.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="h5_set_extent.html">h5set_extent()</a></code> </p>
+        </td>
+        <td><p>Set a new dataset extension</p></td>
       </tr><tr>
         
         <td>
@@ -195,30 +229,6 @@ and print the names to the user.</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="h5delete.html">h5delete()</a></code> </p>
-        </td>
-        <td><p>Delete objects within a HDF5 file</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="h5deleteAttribute.html">h5deleteAttribute()</a></code> </p>
-        </td>
-        <td><p>Delete attribute</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="h5dump.html">h5dump()</a></code> </p>
-        </td>
-        <td><p>Dump the content of an HDF5 file.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="h5errorHandling.html">h5errorHandling()</a></code> </p>
-        </td>
-        <td><p>Set how HDF5 error messages are displayed</p></td>
-      </tr><tr>
-        
-        <td>
           <p><code><a href="h5fileLocking.html">h5testFileLocking()</a></code> <code><a href="h5fileLocking.html">h5disableFileLocking()</a></code> <code><a href="h5fileLocking.html">h5enableFileLocking()</a></code> </p>
         </td>
         <td><p>Test and set file locking for HDF5</p></td>
@@ -237,24 +247,6 @@ and print the names to the user.</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="h5read.html">h5read()</a></code> </p>
-        </td>
-        <td><p>Reads and write object in HDF5 files</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="h5save.html">h5save()</a></code> </p>
-        </td>
-        <td><p>Saves a one or more objects to an HDF5 file.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="h5set_extent.html">h5set_extent()</a></code> </p>
-        </td>
-        <td><p>Set a new dataset extension</p></td>
-      </tr><tr>
-        
-        <td>
           <p><code><a href="h5testFileLocking.html">h5testFileLocking()</a></code> </p>
         </td>
         <td><p>Test and set file locking for HDF5</p></td>
@@ -270,6 +262,92 @@ and print the names to the user.</p></td>
           <p><code><a href="h5write.html">h5write()</a></code> </p>
         </td>
         <td><p>Reads and write object in HDF5 files</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-hdf-files" class="hasAnchor"><a href="#section-hdf-files" class="anchor"></a>HDF5 Files</h2>
+          <p class="section-desc"><p>Functions for working with HDF5 Datasets</p></p>
+        </th>
+      </tr>
+      
+      
+    </tbody><tbody>
+      
+      
+      <tr>
+        
+        <td>
+          <p><code><a href="H5F.html">H5Fcreate()</a></code> <code><a href="H5F.html">H5Fopen()</a></code> <code><a href="H5F.html">H5Fclose()</a></code> <code><a href="H5F.html">H5Fflush()</a></code> <code><a href="H5F.html">H5Fis_hdf5()</a></code> <code><a href="H5F.html">H5Fget_filesize()</a></code> <code><a href="H5F.html">H5Fget_name()</a></code> <code><a href="H5F.html">H5Fget_create_plist()</a></code> <code><a href="H5F.html">H5Fget_access_plist()</a></code> </p>
+        </td>
+        <td><p>HDF5 File Interface</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="H5Fcreate.html">H5Fcreate()</a></code> </p>
+        </td>
+        <td><p>Create an HDF5 file</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="H5Fget_name.html">H5Fget_name()</a></code> </p>
+        </td>
+        <td><p>Retrieve the name of the file to which an object belongs</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="H5Fget_plist.html">H5Fget_create_plist()</a></code> <code><a href="H5Fget_plist.html">H5Fget_access_plist()</a></code> </p>
+        </td>
+        <td><p>Get property lists associated with an HDF5 file</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="H5Fis_hdf5.html">H5Fis_hdf5()</a></code> </p>
+        </td>
+        <td><p>Determine whether a file is in the HDF5 format</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-hdf-groups" class="hasAnchor"><a href="#section-hdf-groups" class="anchor"></a>HDF5 Groups</h2>
+          <p class="section-desc"><p>Functions for working with HDF5 Datasets</p></p>
+        </th>
+      </tr>
+      
+      
+    </tbody><tbody>
+      
+      
+      <tr>
+        
+        <td>
+          <p><code><a href="H5Gclose.html">H5Gclose()</a></code> </p>
+        </td>
+        <td><p>Close a specified group</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="H5Gcreate.html">H5Gcreate()</a></code> </p>
+        </td>
+        <td><p>Create a new HDF5 group and link it to a location in a file</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="H5Gcreate_anon.html">H5Gcreate_anon()</a></code> </p>
+        </td>
+        <td><p>Create a new HDF5 group without linking it into a file</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="H5Gget_info.html">H5Gget_info()</a></code> <code><a href="H5Gget_info.html">H5Gget_info_by_name()</a></code> <code><a href="H5Gget_info.html">H5Gget_info_by_idx()</a></code> </p>
+        </td>
+        <td><p>Retrieve information about a group</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="H5Gopen.html">H5Gopen()</a></code> </p>
+        </td>
+        <td><p>Open a specified group</p></td>
       </tr>
     </tbody><tbody>
       <tr>
@@ -359,12 +437,6 @@ and print the names to the user.</p></td>
       <tr>
         
         <td>
-          <p><code><a href="H5A.html">H5Acreate()</a></code> <code><a href="H5A.html">H5Aclose()</a></code> <code><a href="H5A.html">H5Adelete()</a></code> <code><a href="H5A.html">H5Aexists()</a></code> <code><a href="H5A.html">H5Aget_name()</a></code> <code><a href="H5A.html">H5Aget_space()</a></code> <code><a href="H5A.html">H5Aget_type()</a></code> <code><a href="H5A.html">H5Aopen()</a></code> <code><a href="H5A.html">H5Aopen_by_idx()</a></code> <code><a href="H5A.html">H5Aopen_by_name()</a></code> <code><a href="H5A.html">H5Aread()</a></code> <code><a href="H5A.html">H5Awrite()</a></code> </p>
-        </td>
-        <td><p>HDF5 Attribute Interface</p></td>
-      </tr><tr>
-        
-        <td>
           <p><code><a href="H5Aclose.html">H5Aclose()</a></code> </p>
         </td>
         <td><p>Close an HDF5 attribute</p></td>
@@ -389,9 +461,107 @@ and print the names to the user.</p></td>
       </tr><tr>
         
         <td>
+          <p><code><a href="H5Aget_name.html">H5Aget_name()</a></code> </p>
+        </td>
+        <td><p>Get the name of an HDF5 attribute object</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="H5Aget_space.html">H5Aget_space()</a></code> </p>
+        </td>
+        <td><p>Get a copy of the attribute dataspace</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="H5Aget_type.html">H5Aget_type()</a></code> </p>
+        </td>
+        <td><p>Get a copy of the attribute datatype</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="H5Aopen.html">H5Aopen()</a></code> <code><a href="H5Aopen.html">H5Aopen_by_name()</a></code> <code><a href="H5Aopen.html">H5Aopen_by_idx()</a></code> </p>
         </td>
         <td><p>Open an attribute for an HDF5 object</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="H5Aread.html">H5Aread()</a></code> </p>
+        </td>
+        <td><p>Read data from an HDF5 attribute</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="H5Awrite.html">H5Awrite()</a></code> </p>
+        </td>
+        <td><p>Write data to an HDF5 attribute</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-hdf-objects" class="hasAnchor"><a href="#section-hdf-objects" class="anchor"></a>HDF5 Objects</h2>
+          <p class="section-desc"><p>Functions for working with HDF5 Objects</p></p>
+        </th>
+      </tr>
+      
+      
+    </tbody><tbody>
+      
+      
+      <tr>
+        
+        <td>
+          <p><code><a href="H5Oclose.html">H5Oclose()</a></code> </p>
+        </td>
+        <td><p>Close an HDF5 object</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="H5Oget_num_attrs.html">H5Oget_num_attrs()</a></code> <code><a href="H5Oget_num_attrs.html">H5Oget_num_attrs_by_name()</a></code> </p>
+        </td>
+        <td><p>Find the number of attributes associated with an HDF5 object</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="H5Oopen.html">H5Oopen()</a></code> </p>
+        </td>
+        <td><p>Open an object in an HDF5 file</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-hdf-objects" class="hasAnchor"><a href="#section-hdf-objects" class="anchor"></a>HDF5 Objects</h2>
+          <p class="section-desc"><p>Functions for working with HDF5 Identifiers</p></p>
+        </th>
+      </tr>
+      
+      
+    </tbody><tbody>
+      
+      
+      <tr>
+        
+        <td>
+          <p><code><a href="H5IdComponent-class.html">H5IdComponent-class</a></code> </p>
+        </td>
+        <td><p>Class "H5IdComponent"</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="H5Iget_name.html">H5Iget_name()</a></code> </p>
+        </td>
+        <td><p>Retrieve the name of an object from a given identifier</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="H5Iget_type.html">H5Iget_type()</a></code> </p>
+        </td>
+        <td><p>Find the type of an object</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="H5Iis_valid.html">H5Iis_valid()</a></code> </p>
+        </td>
+        <td><p>Determine whether an identifier is valid</p></td>
       </tr>
     </tbody>
     </table>

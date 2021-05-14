@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Return a copy of the dataset creation property list for a dataset — H5Dget_create_plist • rhdf5</title>
+<title>Close a specified group — H5Gclose • rhdf5</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Return a copy of the dataset creation property list for a dataset — H5Dget_create_plist" />
-<meta property="og:description" content="Return a copy of the dataset creation property list for a dataset" />
+<meta property="og:title" content="Close a specified group — H5Gclose" />
+<meta property="og:description" content="Close a specified group" />
 
 
 
@@ -126,24 +126,24 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Return a copy of the dataset creation property list for a dataset</h1>
-    <small class="dont-index">Source: <a href='https://github.com/grimbough/rhdf5/blob/master/R/H5D.R'><code>R/H5D.R</code></a></small>
-    <div class="hidden name"><code>H5Dget_create_plist.Rd</code></div>
+    <h1>Close a specified group</h1>
+    <small class="dont-index">Source: <a href='https://github.com/grimbough/rhdf5/blob/master/R/H5G.R'><code>R/H5G.R</code></a></small>
+    <div class="hidden name"><code>H5Gclose.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Return a copy of the dataset creation property list for a dataset</p>
+    <p>Close a specified group</p>
     </div>
 
-    <pre class="usage"><span class='fu'>H5Dget_create_plist</span><span class='op'>(</span><span class='va'>h5dataset</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>H5Gclose</span><span class='op'>(</span><span class='va'>h5group</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>h5dataset</th>
-      <td><p>Object of class <a href='H5IdComponent-class.html'>H5IdComponent</a> representing an open HDF5
-dataset</p></td>
+      <th>h5group</th>
+      <td><p>An object of class <a href='H5IdComponent-class.html'>H5IdComponent</a> representing a H5
+group.  Typically created via <code><a href='H5Gopen.html'>H5Gopen()</a></code> or <code><a href='H5Gcreate.html'>H5Gcreate()</a></code>.</p></td>
     </tr>
     </table>
 

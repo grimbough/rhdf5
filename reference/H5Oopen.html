@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Return a copy of the dataset creation property list for a dataset — H5Dget_create_plist • rhdf5</title>
+<title>Open an object in an HDF5 file — H5Oopen • rhdf5</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Return a copy of the dataset creation property list for a dataset — H5Dget_create_plist" />
-<meta property="og:description" content="Return a copy of the dataset creation property list for a dataset" />
+<meta property="og:title" content="Open an object in an HDF5 file — H5Oopen" />
+<meta property="og:description" content="Open an object in an HDF5 file" />
 
 
 
@@ -126,28 +126,60 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Return a copy of the dataset creation property list for a dataset</h1>
-    <small class="dont-index">Source: <a href='https://github.com/grimbough/rhdf5/blob/master/R/H5D.R'><code>R/H5D.R</code></a></small>
-    <div class="hidden name"><code>H5Dget_create_plist.Rd</code></div>
+    <h1>Open an object in an HDF5 file</h1>
+    <small class="dont-index">Source: <a href='https://github.com/grimbough/rhdf5/blob/master/R/H5O.R'><code>R/H5O.R</code></a></small>
+    <div class="hidden name"><code>H5Oopen.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Return a copy of the dataset creation property list for a dataset</p>
+    <p>Open an object in an HDF5 file</p>
     </div>
 
-    <pre class="usage"><span class='fu'>H5Dget_create_plist</span><span class='op'>(</span><span class='va'>h5dataset</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>H5Oopen</span><span class='op'>(</span><span class='va'>h5loc</span>, <span class='va'>name</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>h5dataset</th>
-      <td><p>Object of class <a href='H5IdComponent-class.html'>H5IdComponent</a> representing an open HDF5
-dataset</p></td>
+      <th>h5loc</th>
+      <td><p>An object of class <a href='H5IdComponent-class.html'>H5IdComponent</a></p></td>
+    </tr>
+    <tr>
+      <th>name</th>
+      <td><p>Path to the object to be opened.  This should be relative to
+<code>h5loc</code> rather than the file.</p></td>
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
+    <p>An object of class <a href='H5IdComponent-class.html'>H5IdComponent</a> if the open operation was
+successful. <code>FALSE</code> otherwise.</p>
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p><code><a href='H5Oclose.html'>H5Oclose()</a></code></p></div>
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><span class='r-in'></span>
+<span class='r-in'><span class='co'># create an hdf5 file and write something</span></span>
+<span class='r-in'><span class='fu'><a href='h5createFile.html'>h5createFile</a></span><span class='op'>(</span><span class='st'>"ex_H5O.h5"</span><span class='op'>)</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> file '/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/Rtmp5NikkM/filebdf1d9a1c84/reference/ex_H5O.h5' already exists.</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] FALSE</span>
+<span class='r-in'><span class='fu'><a href='h5createGroup.html'>h5createGroup</a></span><span class='op'>(</span><span class='st'>"ex_H5O.h5"</span>,<span class='st'>"foo"</span><span class='op'>)</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> Can not create group. Object with name 'foo' already exists.</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] FALSE</span>
+<span class='r-in'><span class='va'>B</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/array.html'>array</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fl'>0.1</span>,<span class='fl'>2.0</span>,by<span class='op'>=</span><span class='fl'>0.1</span><span class='op'>)</span>,dim<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>5</span>,<span class='fl'>2</span>,<span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='h5write.html'>h5write</a></span><span class='op'>(</span><span class='va'>B</span>, <span class='st'>"ex_H5O.h5"</span>,<span class='st'>"foo/B"</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># reopen file and dataset and get object info</span></span>
+<span class='r-in'><span class='va'>fid</span> <span class='op'>&lt;-</span> <span class='fu'><a href='HDF5 File Interface.html'>H5Fopen</a></span><span class='op'>(</span><span class='st'>"ex_H5O.h5"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>oid</span> <span class='op'>=</span> <span class='fu'>H5Oopen</span><span class='op'>(</span><span class='va'>fid</span>, <span class='st'>"foo"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='H5Oget_num_attrs.html'>H5Oget_num_attrs</a></span><span class='op'>(</span><span class='va'>oid</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 0</span>
+<span class='r-in'><span class='fu'><a href='H5Oclose.html'>H5Oclose</a></span><span class='op'>(</span><span class='va'>oid</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='HDF5 File Interface.html'>H5Fclose</a></span><span class='op'>(</span><span class='va'>fid</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

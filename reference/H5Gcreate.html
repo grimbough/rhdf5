@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Return a copy of the dataset creation property list for a dataset — H5Dget_create_plist • rhdf5</title>
+<title>Create a new HDF5 group and link it to a location in a file — H5Gcreate • rhdf5</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Return a copy of the dataset creation property list for a dataset — H5Dget_create_plist" />
-<meta property="og:description" content="Return a copy of the dataset creation property list for a dataset" />
+<meta property="og:title" content="Create a new HDF5 group and link it to a location in a file — H5Gcreate" />
+<meta property="og:description" content="H5Gcreate is used to a new group and link it into a file." />
 
 
 
@@ -126,24 +126,27 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Return a copy of the dataset creation property list for a dataset</h1>
-    <small class="dont-index">Source: <a href='https://github.com/grimbough/rhdf5/blob/master/R/H5D.R'><code>R/H5D.R</code></a></small>
-    <div class="hidden name"><code>H5Dget_create_plist.Rd</code></div>
+    <h1>Create a new HDF5 group and link it to a location in a file</h1>
+    <small class="dont-index">Source: <a href='https://github.com/grimbough/rhdf5/blob/master/R/H5G.R'><code>R/H5G.R</code></a></small>
+    <div class="hidden name"><code>H5Gcreate.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Return a copy of the dataset creation property list for a dataset</p>
+    <p><code>H5Gcreate</code> is used to a new group and link it into a file.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>H5Dget_create_plist</span><span class='op'>(</span><span class='va'>h5dataset</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>H5Gcreate</span><span class='op'>(</span><span class='va'>h5loc</span>, <span class='va'>name</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>h5dataset</th>
-      <td><p>Object of class <a href='H5IdComponent-class.html'>H5IdComponent</a> representing an open HDF5
-dataset</p></td>
+      <th>h5loc</th>
+      <td><p>An object of class <a href='H5IdComponent-class.html'>H5IdComponent</a></p></td>
+    </tr>
+    <tr>
+      <th>name</th>
+      <td><p>Name of the new group to be created.</p></td>
     </tr>
     </table>
 

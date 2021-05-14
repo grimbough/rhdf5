@@ -153,8 +153,8 @@
     <tr>
       <th>h5obj</th>
       <td><p>An object of class <a href='H5IdComponent-class.html'>H5IdComponent</a> representing a H5 object
-identifier (file, group, or dataset). See <code><a href='HDF5 File Interface.html'>H5Fcreate()</a></code>, <code><a href='HDF5 File Interface.html'>H5Fopen()</a></code>,
-<code><a href='HDF5 Group Interface.html'>H5Gcreate()</a></code>, <code><a href='HDF5 Group Interface.html'>H5Gopen()</a></code>, <code><a href='H5Dcreate.html'>H5Dcreate()</a></code>, or <code><a href='H5Dopen.html'>H5Dopen()</a></code> to create an object of this kind.</p></td>
+identifier (file, group, or dataset). See <code><a href='H5Fcreate.html'>H5Fcreate()</a></code>, <code><a href='HDF5 File Interface.html'>H5Fopen()</a></code>,
+<code><a href='H5Gcreate.html'>H5Gcreate()</a></code>, <code><a href='H5Gopen.html'>H5Gopen()</a></code>, <code><a href='H5Dcreate.html'>H5Dcreate()</a></code>, or <code><a href='H5Dopen.html'>H5Dopen()</a></code> to create an object of this kind.</p></td>
     </tr>
     <tr>
       <th>name</th>
@@ -162,14 +162,26 @@ identifier (file, group, or dataset). See <code><a href='HDF5 File Interface.htm
     </tr>
     <tr>
       <th>objname</th>
-      <td></td>
+      <td><p>The name of the object the attribute belongs to.</p></td>
+    </tr>
+    <tr>
+      <th>n</th>
+      <td><p>Opens attribute number <code>n</code> in the given order and index. Indexing is C-style, base-0,
+so the first attribute is opened with <code>n=0</code>.</p></td>
+    </tr>
+    <tr>
+      <th>index_type</th>
+      <td><p>See <code>h5const("H5_INDEX")</code> for possible arguments.</p></td>
     </tr>
     <tr>
       <th>order</th>
-      <td></td>
+      <td><p>See <code>h5const("H5_ITER")</code> for possible arguments.</p></td>
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>An object of class <a href='H5IdComponent-class.html'>H5IdComponent</a> representing a H5 attribute identifier.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

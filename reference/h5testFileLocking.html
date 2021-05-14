@@ -171,7 +171,7 @@ for the side effect of setting or unsetting the environment variable
 apply a file lock using the appropriate function within the HDF5 library.
 The success or failure of the locking is then recorded and the temporary
 file removed.  Even relatively low level functions such as
-<code><a href='HDF5 File Interface.html'>H5Fcreate</a></code> will fail inelegantly if file locking fails.</p>
+<code><a href='H5Fcreate.html'>H5Fcreate</a></code> will fail inelegantly if file locking fails.</p>
 <p><code>h5disableFileLocking</code> will set the environment variable
 <code>RHDF5_USE_FILE_LOCKING=FALSE</code>, which is the recommended was to disable
 this behaviour if file locking is not supported.  This will only persist

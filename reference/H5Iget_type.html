@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Return a copy of the dataset creation property list for a dataset — H5Dget_create_plist • rhdf5</title>
+<title>Find the type of an object — H5Iget_type • rhdf5</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,16 @@
 
 
 
-<meta property="og:title" content="Return a copy of the dataset creation property list for a dataset — H5Dget_create_plist" />
-<meta property="og:description" content="Return a copy of the dataset creation property list for a dataset" />
+<meta property="og:title" content="Find the type of an object — H5Iget_type" />
+<meta property="og:description" content="Possible types returned by the function are:
+H5I_FILE
+H5I_GROUP
+H5I_DATATYPE
+H5I_DATASPACE
+H5I_DATASET
+H5I_ATTR
+
+" />
 
 
 
@@ -126,28 +134,55 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Return a copy of the dataset creation property list for a dataset</h1>
-    <small class="dont-index">Source: <a href='https://github.com/grimbough/rhdf5/blob/master/R/H5D.R'><code>R/H5D.R</code></a></small>
-    <div class="hidden name"><code>H5Dget_create_plist.Rd</code></div>
+    <h1>Find the type of an object</h1>
+    <small class="dont-index">Source: <a href='https://github.com/grimbough/rhdf5/blob/master/R/H5I.R'><code>R/H5I.R</code></a></small>
+    <div class="hidden name"><code>H5Iget_type.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Return a copy of the dataset creation property list for a dataset</p>
+    <p>Possible types returned by the function are:</p><ul>
+<li><p><code>H5I_FILE</code></p></li>
+<li><p><code>H5I_GROUP</code></p></li>
+<li><p><code>H5I_DATATYPE</code></p></li>
+<li><p><code>H5I_DATASPACE</code></p></li>
+<li><p><code>H5I_DATASET</code></p></li>
+<li><p><code>H5I_ATTR</code></p></li>
+</ul>
+
     </div>
 
-    <pre class="usage"><span class='fu'>H5Dget_create_plist</span><span class='op'>(</span><span class='va'>h5dataset</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>H5Iget_type</span><span class='op'>(</span><span class='va'>h5identifier</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>h5dataset</th>
-      <td><p>Object of class <a href='H5IdComponent-class.html'>H5IdComponent</a> representing an open HDF5
-dataset</p></td>
+      <th>h5identifier</th>
+      <td><p>Object of class <a href='H5IdComponent-class.html'>H5IdComponent</a>.</p></td>
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
+    <p>Returns a character vector of length 1 containing the HDF5 type
+for the supplied identifier.</p>
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><span class='r-in'><span class='va'>h5file</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='st'>"testfiles"</span>, <span class='st'>"h5ex_t_array.h5"</span>, package<span class='op'>=</span><span class='st'>"rhdf5"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>fid</span> <span class='op'>&lt;-</span> <span class='fu'><a href='HDF5 File Interface.html'>H5Fopen</a></span><span class='op'>(</span><span class='va'>h5file</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>gid</span> <span class='op'>&lt;-</span> <span class='fu'><a href='H5Gopen.html'>H5Gopen</a></span><span class='op'>(</span><span class='va'>fid</span>, <span class='st'>"/"</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'>## identify the HDF5 types for these identifiers</span></span>
+<span class='r-in'><span class='fu'>H5Iget_type</span><span class='op'>(</span><span class='va'>fid</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "H5I_FILE"</span>
+<span class='r-in'><span class='fu'>H5Iget_type</span><span class='op'>(</span><span class='va'>gid</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "H5I_GROUP"</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'>## tidy up</span></span>
+<span class='r-in'><span class='fu'><a href='H5Gclose.html'>H5Gclose</a></span><span class='op'>(</span><span class='va'>gid</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='HDF5 File Interface.html'>H5Fclose</a></span><span class='op'>(</span><span class='va'>fid</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
