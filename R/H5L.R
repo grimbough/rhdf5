@@ -1,4 +1,4 @@
-
+#' @export
 H5Lcreate_external <- function( target_file_name, target_obj_name, link_loc, link_name) {
   if (length(target_file_name)!=1 || !is.character(target_file_name)) stop("'target_file_name' must be a character string of length 1")
   target_file_name = normalizePath(target_file_name,mustWork = FALSE)
@@ -9,6 +9,7 @@ H5Lcreate_external <- function( target_file_name, target_obj_name, link_loc, lin
   invisible(.Call("_H5Lcreate_external", target_file_name, target_obj_name, link_loc@ID, link_name, PACKAGE='rhdf5'))
 }
 
+#' @export
 H5Lexists <- function( h5loc, name ) {
   h5checktype(h5loc, "loc")
   if (length(name)!=1 || !is.character(name)) stop("'name' must be a character string of length 1")
@@ -25,6 +26,7 @@ H5Lexists <- function( h5loc, name ) {
   Lexists
 }
 
+#' @export
 H5Lget_info <- function( h5loc, name ) {
   h5checktype(h5loc, "loc")
   if (length(name)!=1 || !is.character(name)) stop("'name' must be a character string of length 1")
@@ -34,6 +36,7 @@ H5Lget_info <- function( h5loc, name ) {
   res
 }
 
+#' @export
 H5Ldelete <- function( h5loc, name ) {
     
     h5checktype(h5loc, "loc")
@@ -54,6 +57,7 @@ H5Ldelete <- function( h5loc, name ) {
     }
 }
 
+#' @export
 H5Lmove <- function( h5loc, name, h5loc_dest, name_dest, lcpl = NULL, lapl = NULL ) {
     
     h5checktype(h5loc, "loc")
@@ -85,7 +89,16 @@ H5Lmove <- function( h5loc, name, h5loc_dest, name_dest, lcpl = NULL, lapl = NUL
   
 }
 
-
+#' @param h5loc An object of class [H5IdComponent-class] representing a H5 
+#' location identifier (file or group) where the new link is placed.
+#' @param name The name of the link to be copied.
+#' @param h5loc_dest An object of class [H5IdComponent-class] representing
+#' the destination file or group where a copied or moved link should be created.
+#' @param name_dest The name of the link to be created when copying or moving.
+#' @param lcpl,lapl Link creation and link access property lists.  If left as
+#' `NULL` the HDF5 defaults will be used.
+#' 
+#' @export
 H5Lcopy <- function( h5loc, name, h5loc_dest, name_dest, lcpl = NULL, lapl = NULL ) {
     
     h5checktype(h5loc, "loc")
