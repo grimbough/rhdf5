@@ -7,13 +7,13 @@ reference:
   
 - title: "HDF5 Files"
   desc: >
-    Functions for working with HDF5 Datasets
+    Functions for working with HDF5 Files
 - contents: 
   - starts_with("H5F")
   
 - title: "HDF5 Groups"
   desc: >
-    Functions for working with HDF5 Datasets
+    Functions for working with HDF5 Groups
 - contents: 
   - starts_with("H5G")
   
@@ -22,6 +22,12 @@ reference:
     Functions for working with HDF5 Datasets
 - contents: 
   - starts_with("H5D")
+  
+- title: "HDF5 Dataspaces"
+  desc: >
+    Functions for working with HDF5 Dataspaces
+- contents: 
+  - starts_with("H5S")
   
 - title: "HDF5 Attributes"
   desc: >
@@ -35,8 +41,18 @@ reference:
 - contents: 
   - starts_with("H5O")
   
-- title: "HDF5 Objects"
+- title: "HDF5 Identifiers"
   desc: >
     Functions for working with HDF5 Identifiers
 - contents: 
   - starts_with("H5I")
+  
+- title: "HDF5 Datatypes"
+  desc: >
+    Functions for working with HDF5 Datatypes
+- contents: 
+  - starts_with("H5T")
+  
+- title: "HDF5 Object Creation Properties"
+- contents:
+  - H5Pobject_track_times

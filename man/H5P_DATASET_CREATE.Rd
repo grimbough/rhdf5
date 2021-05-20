@@ -26,9 +26,9 @@
 \alias{H5Pset_scaleoffset}
 \alias{H5Pset_shuffle}
 \alias{H5Pset_szip}
-\alias{H5Pset_bzip2}
-\alias{H5Pset_blosc}
-\alias{H5Pset_lzf}
+%\alias{H5Pset_bzip2}
+%\alias{H5Pset_blosc}
+%\alias{H5Pset_lzf}
 \alias{H5Pset_external}
 \alias{H5Pget_external_count}
 \alias{H5Pget_external}

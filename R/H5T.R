@@ -1,3 +1,4 @@
+#' @param dtype_id ID of HDF5 datatype to copy.
 #' @export
 H5Tcopy <- function( dtype_id = h5default(type="H5T")) {
   if (is.numeric(dtype_id)) {
@@ -8,6 +9,16 @@ H5Tcopy <- function( dtype_id = h5default(type="H5T")) {
   invisible(.Call("_H5Tcopy", dtype_id, PACKAGE='rhdf5'))
 }
 
+#' Retrieve or set the type of padding used by string datatype
+#' 
+#' @param dtype_id ID of HDF5 datatype to query or modify.
+#' @param size The new datatype size in bytes.
+#' 
+#' @name H5T_size
+#' @export
+NULL
+
+#' @rdname H5T_size
 #' @export
 H5Tset_size <- function( dtype_id = h5default(type="H5T"), size) {
   # string constant type_id do not make sense, because they are not allowed to be changed
@@ -17,6 +28,7 @@ H5Tset_size <- function( dtype_id = h5default(type="H5T"), size) {
   invisible(.Call("_H5Tset_size", dtype_id, size, PACKAGE='rhdf5'))
 }
 
+#' @rdname H5T_size
 #' @export
 H5Tget_size <- function( dtype_id ) {
   
@@ -27,7 +39,18 @@ H5Tget_size <- function( dtype_id ) {
   .Call("_H5Tget_size", dtype_id, PACKAGE='rhdf5')
 }
 
+#' Retrieve or set the type of padding used by string datatype
+#' 
+#' @param dtype_id ID of HDF5 datatype to query or modify.
+#' @param strpad Character vector of length 1 specifying the type of padding
+#' to use.  Valid options are `NULLTERM`, `NULLPAD` and `SPACEPAD`.
+#' 
+#' @name H5T_strpad
 #' @export
+NULL
+
+#' @rdname H5T_strpad
+#' @export 
 H5Tset_strpad <- function( dtype_id, strpad = "NULLPAD") {
   
   strpad_int <- switch(strpad, 
@@ -40,6 +63,7 @@ H5Tset_strpad <- function( dtype_id, strpad = "NULLPAD") {
   .Call("_H5Tset_strpad", dtype_id, strpad_int, PACKAGE = "rhdf5")
 }
   
+#' @rdname H5T_strpad
 #' @export 
 H5Tget_strpad <- function( dtype_id ) {
   
@@ -50,6 +74,16 @@ H5Tget_strpad <- function( dtype_id ) {
   .Call("_H5Tget_strpad", dtype_id, PACKAGE = "rhdf5")
 }
 
+#' Retrieve or set the character set to be used in a string datatype.
+#' 
+#' @param dtype_id ID of HDF5 datatype to query or modify.
+#' @param cset Encoding to use for string types. Valid options are 'ASCII' and 
+#' 'UTF8'.
+#' 
+#' @name H5T_cset
+NULL
+
+#' @rdname H5T_cset
 #' @export
 H5Tset_cset <- function( dtype_id, cset = "ASCII") {
   
@@ -62,6 +96,7 @@ H5Tset_cset <- function( dtype_id, cset = "ASCII") {
   .Call("_H5Tset_cset", dtype_id, cset_int, PACKAGE = "rhdf5")
 }
   
+#' @rdname H5T_cset
 #' @export
 H5Tget_cset <- function( dtype_id ) {
   

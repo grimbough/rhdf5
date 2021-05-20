@@ -35,6 +35,13 @@ h5checkFilters <- function(h5id) {
     }
 }
 
+#' Add the BZIP2 filter to the chunk processing pipeline.
+#' 
+#' @param h5plist Object of class [H5IdComponent-class] representing a dataset
+#' creation property list.
+#' @param level Compression level to be used by the selected algorithm.
+#' 
+#' @export
 H5Pset_bzip2 <- function( h5plist, level = 2L ) {
     
     if(!is.loaded('_H5Pset_bzip2', PACKAGE = 'rhdf5'))
@@ -45,6 +52,20 @@ H5Pset_bzip2 <- function( h5plist, level = 2L ) {
     invisible(res)
 }
 
+#' Add the BLOSC filter to the chunk processing pipeline.
+#' 
+#' @param h5plist Object of class [H5IdComponent-class] representing a dataset
+#' creation property list.
+#' @param h5tid HDF5 data type id
+#' @param method Integer defining which of the compression algorithms provided
+#' by BLOSC should be used. (See the details section for the mapping between 
+#' integers and algorithms).
+#' @param level Compression level to be used by the selected algorithm.
+#' @param shuffle Logical defining whether the bit-shuffle algorithm should 
+#' be used prior to compression.  This makes use of the shuffle implementation
+#' provide by BLOSC, rather than the HDF5 version.
+#' 
+#' @export
 H5Pset_blosc <- function( h5plist, h5tid, method = 1L, level = 6L, shuffle = TRUE ) {
     
     if(!is.loaded('_H5Pset_blosc', PACKAGE = 'rhdf5'))
@@ -75,6 +96,13 @@ H5Pset_blosc <- function( h5plist, h5tid, method = 1L, level = 6L, shuffle = TRU
     invisible(res)
 }
 
+#' Add the LZF filter to the chunk processing pipeline.
+#' 
+#' @param h5plist Object of class [H5IdComponent-class] representing a dataset
+#' creation property list.
+#' @param h5tid HDF5 data type id
+#' 
+#' @export
 H5Pset_lzf <- function( h5plist, h5tid ) {
     
     if(!is.loaded('_H5Pset_lzf', PACKAGE = 'rhdf5'))

@@ -205,13 +205,7 @@ h5writeDatasetHelper <- function (obj, h5dataset, index = NULL, start = NULL, st
 #' h5read("ex_hdf5file.h5", "S")
 #' h5read("ex_hdf5file.h5", "S", index=list(NULL,2:3))
 #' 
-#' # Read a subset of an hdf5 file in a public S3 bucket
-#' \donttest{
-#' h5read('https://rhdf5-public.s3.eu-central-1.amazonaws.com/rhdf5ex_t_float_3d.h5', 
-#'       s3 = TRUE, name = "a1", index = list(NULL, 3, NULL))
-#' }
-#' 
-#' 
+#' @name h5_write
 #' @export h5write
 h5write <- function(obj, file, name, ...) {
     res <- UseMethod("h5write")

@@ -4,10 +4,13 @@
 \alias{H5Scombine_select}
 \title{Combine two selections}
 \usage{
-H5Scombine_select(h5space1, op, h5space2)
+H5Scombine_select(h5space1, op = h5default("H5S_SELECT"), h5space2)
 }
 \arguments{
-\item{h5space2}{}
+\item{h5space1, h5space2}{\linkS4class{H5IdComponent} objects representing a dataspaces.}
+
+\item{op}{Character string defined the operation used to join the two
+dataspaces.  See \code{h5const("H5S_SELECT")} for the list of available options.}
 }
 \value{
 Returns an \linkS4class{H5IdComponent} object representing a new dataspace.

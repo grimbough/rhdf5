@@ -8,8 +8,8 @@
 \alias{H5Pequal}
 \alias{H5Pset_libver_bounds}
 \alias{H5Pget_libver_bounds}
-\alias{H5Pset_obj_track_times}
-\alias{H5Pget_obj_track_times}
+%\alias{H5Pset_obj_track_times}
+%\alias{H5Pget_obj_track_times}
 \title{HDF5 Property List Interface}
 \description{The functions, macros, and subroutines listed here are used to manipulate property list objects in various ways, including to reset property values. With the use of property lists, HDF5 functions have been implemented and can be used in applications with many fewer parameters than would be required without property lists.}
 \usage{
