@@ -53,7 +53,7 @@
 #'   h5disableFileLocking()
 #' }
 #' 
-#' 
+#' @name h5_testFileLocking
 #' @export h5testFileLocking
 h5testFileLocking <- function(location) {
   

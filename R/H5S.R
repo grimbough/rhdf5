@@ -1,16 +1,18 @@
-#' 
-#' 
-#' @param type See `h5const("H5S")` for possible types.
-#' @param native An object of class \code{logical}. If `TRUE`, array-like 
-#' objects are treated as stored in HDF5 row-major rather than R 
-#' column-major orientation. Using `native = TRUE` increases HDF5 file 
-#' portability between programming languages. A file written with 
-#' `native = TRUE` should also be read with `native = TRUE`.
-#' 
-#' @return Returns an object of class [H5IdComponent-class] representing a dataspace.
-#' 
+#' Create a new dataspace of a specified type
+#'
+#' @param type The type of dataspace to create. See `h5const("H5S")` for
+#'   possible types.
+#' @param native An object of class `logical`. If `TRUE`, array-like
+#'   objects are treated as stored in HDF5 row-major rather than R column-major
+#'   orientation. Using `native = TRUE` increases HDF5 file portability between
+#'   programming languages. A file written with `native = TRUE` should also be
+#'   read with `native = TRUE`.
+#'
+#' @return Returns an object of class [H5IdComponent-class] representing a
+#'   dataspace.
+#'
 #' @seealso [H5Screate_simple]
-#' 
+#'
 #' @export
 H5Screate <- function( type = h5default("H5S"), native = FALSE ) {
   type <- h5checkConstants( "H5S", type )

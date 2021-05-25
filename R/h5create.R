@@ -75,6 +75,7 @@ h5createFile <- function(file) {
 #' 
 #' h5ls("ex_createGroup.h5")
 #' 
+#' @name h5_createGroup
 #' @export h5createGroup
 h5createGroup <- function(file, group) {
     loc = h5checktypeOrOpenLoc(file, native = FALSE)
@@ -310,6 +311,7 @@ h5createGroup <- function(file, group) {
 #' 
 #' h5dump("ex_createDataset.h5")
 #' 
+#' @name h5_createDataset
 #' @export h5createDataset
 h5createDataset <- function(file, dataset, dims, maxdims = dims, 
                             storage.mode = "double", H5type = NULL, size = NULL,

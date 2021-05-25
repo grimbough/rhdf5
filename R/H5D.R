@@ -260,6 +260,16 @@ H5Dread <- function( h5dataset, h5spaceFile=NULL, h5spaceMem=NULL, buf = NULL, c
   res
 }
 
+#' Write data to dataset
+#' 
+#' @param h5dataset Object of class [H5IdComponent-class] representing an open HDF5 
+#' dataset.
+#' @param buf The R object containing the data to be written to the dataset.
+#' @param h5spaceMem,h5spaceFile [H5IdComponent-class] objects representing the 
+#' memory and file dataspaces respectively.  If these are left `NULL` dataspaces 
+#' that match the size and shape of `h5dataset` will be used.
+#' 
+#' @export
 H5Dwrite <- function( h5dataset, buf, h5spaceMem=NULL, h5spaceFile=NULL ) {
   h5checktype(h5dataset, "dataset")
   h5checktypeOrNULL(h5spaceFile, "dataspace")
@@ -277,7 +287,7 @@ H5Dwrite <- function( h5dataset, buf, h5spaceMem=NULL, h5spaceFile=NULL ) {
 #' * A chunked dataset with fixed dimensions if the new dimension sizes are 
 #' less than the maximum sizes set with maxdims
 #' #' 
-#' @param h5dataset Object of class [H5IdComponent] representing an open HDF5 
+#' @param h5dataset Object of class [H5IdComponent-class] representing an open HDF5 
 #' dataset.
 #' @param size An integer vector with the new dimension of the dataset.
 #' 
@@ -291,30 +301,4 @@ H5Dset_extent <- function( h5dataset, size) {
     invisible(.Call("_H5Dset_extent", h5dataset@ID, size, PACKAGE='rhdf5'))
 }
 
-#' Return the dimensions of a dataset chunk
-#' 
-#' @details This function does not map directly to the HDF5 C API but is 
-#' included as a useful addition.
-#' 
-#' @param h5dataset Object of class [H5IdComponent] representing an open HDF5 
-#' dataset.
-#' 
-#' @return If the supplied dataset is chunked returns a vector, with length
-#' equal to the rank of the dataset, containing the size of the dataset 
-#' dimensions.  Returns `NULL` if the given dataset is not chunked.
-#' 
-#' @author Mike Smith
-#' 
-#' @export
-H5Dchunk_dims <- function(h5dataset) {
-    h5checktype(h5dataset, "dataset")
-    
-    pid <- H5Dget_create_plist(h5dataset)
-    on.exit(H5Pclose(pid), add=TRUE)
-    
-    if (H5Pget_layout(pid) != "H5D_CHUNKED")
-        return(NULL)
-    else 
-        return(rev(H5Pget_chunk(pid)))
-}
     

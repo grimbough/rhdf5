@@ -41,6 +41,12 @@ reference:
 - contents: 
   - starts_with("H5O")
   
+- title: "HDF5 Links"
+  desc: >
+    Functions for working with HDF5 Links
+- contents: 
+  - starts_with("H5L")
+  
 - title: "HDF5 Identifiers"
   desc: >
     Functions for working with HDF5 Identifiers
@@ -56,3 +62,12 @@ reference:
 - title: "HDF5 Object Creation Properties"
 - contents:
   - H5Pobject_track_times
+  
+- title: "HDF5 Dataset Creation Properties"
+- contents:
+  - H5Pset_shuffle
+  - H5Pset_deflate
+  - H5Pset_szip
+  - H5Pset_bzip2
+  - H5Pset_blosc
+  - H5Pset_lzf

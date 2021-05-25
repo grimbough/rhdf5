@@ -1,4 +1,9 @@
-#' @param dtype_id ID of HDF5 datatype to copy.
+#' Copy an existing datatype
+#' 
+#' @param dtype_id Datatype to copy.  Can either be a character
+#' specifying a predefined HDF5 datatype (see `h5const("H5T")` for valid 
+#' options) or the ID of an already created datatype.
+#' 
 #' @export
 H5Tcopy <- function( dtype_id = h5default(type="H5T")) {
   if (is.numeric(dtype_id)) {

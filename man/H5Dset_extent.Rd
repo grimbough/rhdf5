@@ -7,7 +7,7 @@
 H5Dset_extent(h5dataset, size)
 }
 \arguments{
-\item{h5dataset}{Object of class \link{H5IdComponent} representing an open HDF5
+\item{h5dataset}{Object of class \linkS4class{H5IdComponent} representing an open HDF5
 dataset.}
 
 \item{size}{An integer vector with the new dimension of the dataset.}

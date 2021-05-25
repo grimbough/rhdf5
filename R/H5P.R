@@ -80,11 +80,29 @@ H5Pclose <- function( h5plist ) {
 ####################################################
 
 #' Set the read-only S3 virtual file driver
-#' 
+#'
 #' The read-only S3 virtual file driver can be used to read files hosted
 #' remotely on Amazon's S3 storage.
-#' 
-#' @keywords Internal
+#'
+#' @details To access files in a private Amazon S3 bucket you will need to
+#'   provide three additional details: The AWS region where the files are
+#'   hosted, your AWS access key ID, and your AWS secret access key.  More
+#'   information on how to obtain AWS access keys can be found at
+#'   \url{https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys}.
+#'   These are provided as a list to the `s3credentials` argument.  If you
+#'   are accessing public data this argument should be `NULL`.
+#'   
+#' @param h5plist [H5IdComponent-class] object representing a file access 
+#' property list.
+#' @param s3credentials Either \code{NULL} or a list of length 3 specifying the AWS access credentials (see details).
+#'
+#' @examples
+#'
+#' pid <- H5Pcreate("H5P_FILE_ACCESS")
+#' H5Pset_fapl_ros3( pid )
+#' H5Pclose(pid)
+#'
+#' @export
 H5Pset_fapl_ros3 <- function( h5plist, s3credentials = NULL ) {
   
     ## this should really check it's a fapl, not just a plist.
@@ -175,6 +193,24 @@ H5Pget_create_intermediate_group <- function( h5plist ) {
 ## Dataset Creation Properties
 ####################################################
 
+#' Get and set the type of storage used to store the raw data for a dataset
+#' 
+#' Possible options for the `layout` argument are:
+#' * `H5D_COMPACT`
+#' * `H5D_CONTIGUOUS`
+#' * `H5D_CHUNKED`
+#' * `H5D_VIRTUAL`
+#' 
+#' The names of the layout types can also be obtained via `h5const("H5D")`.
+#' 
+#' @param h5plist An object of class [H5IdComponent-class] representing a dataset creation property list.
+#' @param layout A character giving the name of a dataset layout type. 
+#' 
+#' @name H5P_layout
+NULL
+
+#' @rdname H5P_layout
+#' @export
 H5Pset_layout <- function( h5plist, layout = h5default("H5D") ) {
   h5checktypeAndPLC(h5plist, "H5P_DATASET_CREATE")
   layout <- h5checkConstants( "H5D", layout )
@@ -182,6 +218,8 @@ H5Pset_layout <- function( h5plist, layout = h5default("H5D") ) {
   invisible(res)
 }
 
+#' @rdname H5P_layout
+#' @export
 H5Pget_layout <- function( h5plist ) {
   h5checktypeAndPLC(h5plist, "H5P_DATASET_CREATE")
   res <- .Call("_H5Pget_layout", h5plist@ID, PACKAGE='rhdf5')
@@ -189,6 +227,22 @@ H5Pget_layout <- function( h5plist ) {
   res
 }
 
+#' Get and set the size of the chunks used to store a chunked layout dataset
+#' 
+#' @details Note that a necessary side effect of running this function is that the 
+#' layout of the dataset will be changes to `H5D_CHUNKED` if it is not already set to this.
+#' 
+#' @param h5plist An object of class [H5IdComponent-class] representing a dataset creation property list.
+#' @param dim The chunk size used to store the dataset. This argument should be an integer vector of the same length as 
+#' the number of dimensions of the dataset the dataset creation property list will be applied to.
+#' 
+#' @seealso [H5Pset_layout()]
+#' 
+#' @name H5P_chunk
+NULL
+
+#' @rdname H5P_chunk
+#' @export
 H5Pset_chunk <- function( h5plist, dim ) {
   h5checktypeAndPLC(h5plist, "H5P_DATASET_CREATE")
   if (!is.null(dim) && !h5plist@native) { dim = rev(as.integer(dim)) }
@@ -196,15 +250,31 @@ H5Pset_chunk <- function( h5plist, dim ) {
   invisible(res)
 }
 
+#' @rdname H5P_chunk
+#' @export
 H5Pget_chunk <- function( h5plist ) {
   h5checktypeAndPLC(h5plist, "H5P_DATASET_CREATE")
   res <- .Call("_H5Pget_chunk", h5plist@ID, PACKAGE='rhdf5')
   res
 }
 
+#' Add the deflate compression filter to the chunk processing pipeline.
+#'
+#' Valid values for the compression level range from 0 (no compression) to 9
+#' (best compression, slowest speed). Note that applying this function with
+#' `level = 0` does not mean the filter is removed.  It is still part of the
+#' filter pipeline, but no compression is performed.  The filter will still need
+#' to be available on any system that reads a file created with this setting
+#'
+#' @param h5plist Object of class [H5IdComponent-class] representing a dataset
+#'   creation property list.
+#' @param level Integer giving the compression level to use.  Valid values are
+#'   from 0 to 9.
+#'
+#' @export
 H5Pset_deflate <- function( h5plist, level ) {
   h5checktypeAndPLC(h5plist, "H5P_DATASET_CREATE")
-  level = as.integer(level)
+  level <- as.integer(level)
   res <- .Call("_H5Pset_deflate", h5plist@ID, level, PACKAGE='rhdf5')
   invisible(res)
 }
@@ -280,12 +350,28 @@ H5Pget_filter <- function( h5plist, idx ) {
     return(res)
 }
 
+#' Add the shuffle filter to the chunk processing pipeline.
+#' 
+#' @param h5plist Object of class [H5IdComponent-class] representing a dataset
+#' creation property list.
+#' 
+#' @export
 H5Pset_shuffle <- function( h5plist ) {
   h5checktypeAndPLC(h5plist, "H5P_DATASET_CREATE")
   res <- .Call("_H5Pset_shuffle", h5plist@ID, PACKAGE='rhdf5')
   invisible(res)
 }
 
+#' Add the SZIP compression filter to the chunk processing pipeline.
+#' 
+#' @param h5plist Object of class [H5IdComponent-class] representing a dataset
+#' creation property list.
+#' @param options_mask,pixels_per_block Integer vectors of length 1, setting parameters 
+#' of the SZIP algorithm. See \url{https://portal.hdfgroup.org/display/HDF5/H5P_SET_SZIP} for more details.
+#' 
+#' @references \url{https://portal.hdfgroup.org/display/HDF5/Szip+Compression+in+HDF+Products}
+#' 
+#' @export
 H5Pset_szip <- function( h5plist, options_mask, pixels_per_block ) {
   h5checktypeAndPLC(h5plist, "H5P_DATASET_CREATE")
   options_mask = as.integer(options_mask)
@@ -299,6 +385,24 @@ H5Pset_szip <- function( h5plist, options_mask, pixels_per_block ) {
 ## Dataset Access Properties
 ####################################################
 
+#' Set parameters for the raw data chunk cache
+#'
+#' @param h5plist Object of class [H5IdComponent-class] representing a dataset
+#'   access property list.
+#' @param rdcc_nslots Integer defining the number of chunk slots in the raw data
+#'   chunk cache for this dataset.
+#' @param rdcc_nbytes Integer setting the total size of the raw data chunk cache
+#'   for this dataset in bytes. In most cases increasing this number will
+#'   improve performance, as long as you have enough free memory. The default
+#'   size is 1 MB
+#' @param rdcc_w0 Numeric value defining the chunk preemption policy.  Must be between
+#'   `0` and `1` inclusive.
+#'
+#' @name H5P_chunk_cache
+NULL
+
+#' @rdname H5P_chunk_cache
+#' @export
 H5Pset_chunk_cache <- function( h5plist, rdcc_nslots, rdcc_nbytes, rdcc_w0 ) {
   h5checktypeAndPLC(h5plist, "H5P_DATASET_ACCESS")
   rdcc_nslots = as.integer(rdcc_nslots)
@@ -336,8 +440,8 @@ H5Pset_obj_track_times <- function( h5plist, track_times = TRUE ) {
     stop("Argument 'track_times' must be either TRUE or FALSE")
   }
 
-   res <- .Call("_H5Pset_obj_track_times", h5plist@ID, as.integer(track_times), PACKAGE='rhdf5')
-   invisible(res)
+  res <- .Call("_H5Pset_obj_track_times", h5plist@ID, as.integer(track_times), PACKAGE='rhdf5')
+  invisible(res)
 }
 
 #' @rdname H5Pobject_track_times
