@@ -86,23 +86,6 @@ treated as a URL to an Amazon S3 bucket, rather than a local file path.}
 
 \item{s3credentials}{A list of length three, providing the credentials for
 accessing files in a private Amazon S3 bucket.}
-
-\item{h5loc}{An object of class \code{\link{H5IdComponent}} representing a
-H5 location identifier (file or group). See \code{\link{H5Fcreate}},
-\code{\link{H5Fopen}}, \code{\link{H5Gcreate}}, \code{\link{H5Gopen}} to
-create an object of this kind.}
-
-\item{h5obj}{An object of class \code{\link{H5IdComponent}} representing a
-H5 object identifier (file, group, or dataset). See \code{\link{H5Fcreate}},
-\code{\link{H5Fopen}}, \code{\link{H5Gcreate}}, \code{\link{H5Gopen}},
-\code{\link{H5Dcreate}}, or \code{\link{H5Dopen}} to create an object of
-this kind.}
-
-\item{chunk}{Specifies the number of items to be include in an HDF5 chunk.
-When writing a \code{data.frame} this represents the number of rows to be
-included in a chunk.  If left unspecified the defaults is the smaller of:
-the total number of rows or the number of rows that fit within 4GB of
-memory.}
 }
 \value{
 \code{h5read} returns an array with the data read.

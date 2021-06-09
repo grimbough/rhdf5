@@ -54,6 +54,7 @@
 #' }
 #' 
 #' @name h5_testFileLocking
+#' @importFrom utils file_test
 #' @export h5testFileLocking
 h5testFileLocking <- function(location) {
   

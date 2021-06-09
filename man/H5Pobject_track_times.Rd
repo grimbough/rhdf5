@@ -14,15 +14,16 @@ H5Pget_obj_track_times(h5plist)
 \item{h5plist}{An \linkS4class{H5IdComponent} object representing an object
 creation property list.}
 
-\item{`logical`}{specifying whether times associated with an object should recorded.}
+\item{track_times}{\code{logical} specifying whether times associated with an
+object should recorded.}
 }
 \description{
 Set whether to record timestamps for operations performed on an HDF5 object.
 }
 \details{
-Objects created using high-level
-\strong{rhdf5} functions like \code{\link[=h5createDataset]{h5createDataset()}} will have this setting turned off.
-This was done to ensure otherwise identical files returned the same md5 hash.
-This differs from the default setting in HDF5, which is for objects to record
-the times operations were performed on them.
+Objects created using high-level \strong{rhdf5} functions like
+\code{\link[=h5createDataset]{h5createDataset()}} will have this setting turned off. This was done to
+ensure otherwise identical files returned the same md5 hash. This differs
+from the default setting in HDF5, which is for objects to record the times
+operations were performed on them.
 }

@@ -8,6 +8,7 @@
 #' 
 #' @param type A character name of a property list type. See `h5const("H5P")`
 #' for possible property list types.
+#' @param native Defunct! Doesn't achieve anything for property lists.
 #' 
 #' @export
 H5Pcreate <- function( type = h5default("H5P"), native = FALSE ) {
@@ -418,17 +419,18 @@ H5Pset_chunk_cache <- function( h5plist, rdcc_nslots, rdcc_nbytes, rdcc_w0 ) {
 ####################################################
 
 #' Set whether to record timestamps for operations performed on an HDF5 object.
-#' 
-#' @details Objects created using high-level
-#' **rhdf5** functions like [h5createDataset()] will have this setting turned off.
-#' This was done to ensure otherwise identical files returned the same md5 hash. 
-#' This differs from the default setting in HDF5, which is for objects to record 
-#' the times operations were performed on them.
-#' 
-#' @param h5plist An [H5IdComponent-class] object representing an object 
-#' creation property list.
-#' @param `logical` specifying whether times associated with an object should recorded.
-#' 
+#'
+#' @details Objects created using high-level **rhdf5** functions like
+#'   [h5createDataset()] will have this setting turned off. This was done to
+#'   ensure otherwise identical files returned the same md5 hash. This differs
+#'   from the default setting in HDF5, which is for objects to record the times
+#'   operations were performed on them.
+#'
+#' @param h5plist An [H5IdComponent-class] object representing an object
+#'   creation property list.
+#' @param track_times `logical` specifying whether times associated with an
+#'   object should recorded.
+#'
 #' @name H5Pobject_track_times
 NULL
 
@@ -436,7 +438,7 @@ NULL
 #' @export
 H5Pset_obj_track_times <- function( h5plist, track_times = TRUE ) {
   
-  if(!is.logical(track_times) | is.na(track_times)) {
+  if(!is.logical(track_times) || is.na(track_times)) {
     stop("Argument 'track_times' must be either TRUE or FALSE")
   }
 

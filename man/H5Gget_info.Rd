@@ -47,7 +47,7 @@ H5Gget_info(gid)
 H5Gclose(gid)
 
 ## the "get_info_by" functions take the H5 object that contains the
-group(s) of interest.  We can retrieve information by index or by name
+## group(s) of interest.  We can retrieve information by index or by name
 H5Gget_info_by_idx(fid, 3)
 H5Gget_info_by_name(fid,"/foo")
 

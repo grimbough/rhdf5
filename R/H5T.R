@@ -20,7 +20,6 @@ H5Tcopy <- function( dtype_id = h5default(type="H5T")) {
 #' @param size The new datatype size in bytes.
 #' 
 #' @name H5T_size
-#' @export
 NULL
 
 #' @rdname H5T_size
@@ -51,7 +50,6 @@ H5Tget_size <- function( dtype_id ) {
 #' to use.  Valid options are `NULLTERM`, `NULLPAD` and `SPACEPAD`.
 #' 
 #' @name H5T_strpad
-#' @export
 NULL
 
 #' @rdname H5T_strpad

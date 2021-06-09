@@ -43,6 +43,22 @@ H5Fcreate <- function( name, flags = h5default("H5F_ACC"), fcpl = NULL, fapl = N
     invisible(h5file)
 }
 
+#' Open an existing HDF5 file
+#' 
+#' @details Possible values for the `flags` argument are `H5F_ACC_RDWR` and `H5F_ACC_RDONLY`.  
+#' Note that HDF5's "Single Write Multiple Reader (SWMR) mode is not currently supported via
+#' **rhdf5**.
+#' 
+#' @param name The name (or path) of the HDF5 file to be opened.
+#' @param flags Character string defining the access mode for opening the file.
+#' @param fapl [H5IdComponent-class] object representing a file access property list.
+#' Leaving this argument as `NULL` will use the default HDF5 properties.
+#' @param native An object of class \code{logical}. If `TRUE`, array-like 
+#' objects are treated as stored in HDF5 row-major rather than R column-major 
+#' orientation. Using `native = TRUE` increases HDF5 file portability 
+#' between programming languages. A file written with `native = TRUE`
+#' should also be opened for reading with `native = TRUE`.
+#' 
 #' @export
 H5Fopen <- function( name, flags = h5default("H5F_ACC_RD"), fapl = NULL, native = FALSE ) {
   
@@ -72,12 +88,25 @@ H5Fopen <- function( name, flags = h5default("H5F_ACC_RD"), fapl = NULL, native 
   invisible(h5file)
 }
 
+#' Close access to an HDF5 file
+#' 
+#' @param h5file [H5IdComponent-class] representing an HDF5 file ID.  Typically
+#' created via [H5Fcreate()] or [H5Fopen()].
+#' 
 #' @export
 H5Fclose <- function( h5file ) {
   h5checktype(h5file, "file")
   invisible(.Call("_H5Fclose", h5file@ID, PACKAGE='rhdf5'))
 }
 
+#' Flush all buffers associated with a file to disk
+#'
+#' @param h5file [H5IdComponent-class] representing any object associated with
+#'   the file to be flushed.
+#' @param scope Specifies whether the scope of the flushing action is global
+#'   (flushes the entire virtual file) or local (flushes only the specified
+#'   file). Valid values are `H5F_SCOPE_GLOBAL` and `H5F_SCOPE_LOCAL`.
+#'
 #' @export
 H5Fflush <- function( h5file, scope = h5default("H5F_SCOPE") ) {
   h5checktype(h5file, "file")
@@ -114,6 +143,14 @@ H5Fis_hdf5 <- function( name, showWarnings=TRUE ) {
     res
 }
 
+#' Find the size of an open HDF5 file
+#' 
+#' `H5Fget_filesize()` returns the size in bytes of the HDF5 file specified by
+#' `h5file`.
+#' 
+#' @param h5file [H5IdComponent-class] representing an HDF5 file ID.  Typically
+#' created via [H5Fcreate()] or [H5Fopen()].
+#' 
 #' @export
 H5Fget_filesize <- function( h5file ) {
   h5checktype(h5file, "file")

@@ -106,15 +106,6 @@ h5readDataset <- function (h5dataset, index = NULL, start = NULL, stride = NULL,
 #' (file or group). See \code{\link{H5Fcreate}}, \code{\link{H5Fopen}},
 #' \code{\link{H5Gcreate}}, \code{\link{H5Gopen}} to create an object of this
 #' kind.
-#' @param h5loc An object of class \code{\link{H5IdComponent}} representing a
-#' H5 location identifier (file or group). See \code{\link{H5Fcreate}},
-#' \code{\link{H5Fopen}}, \code{\link{H5Gcreate}}, \code{\link{H5Gopen}} to
-#' create an object of this kind.
-#' @param h5obj An object of class \code{\link{H5IdComponent}} representing a
-#' H5 object identifier (file, group, or dataset). See \code{\link{H5Fcreate}},
-#' \code{\link{H5Fopen}}, \code{\link{H5Gcreate}}, \code{\link{H5Gopen}},
-#' \code{\link{H5Dcreate}}, or \code{\link{H5Dopen}} to create an object of
-#' this kind.
 #' @param name The name of the dataset in the HDF5 file.
 #' @param index List of indices for subsetting. The length of the list has to
 #' agree with the dimensional extension of the HDF5 array. Each list element is
@@ -133,11 +124,6 @@ h5readDataset <- function (h5dataset, index = NULL, start = NULL, stride = NULL,
 #' if index is not NULL.
 #' @param count The number of blocks to be read. This argument is ignored,
 #' if index is not NULL.
-#' @param chunk Specifies the number of items to be include in an HDF5 chunk.
-#' When writing a \code{data.frame} this represents the number of rows to be
-#' included in a chunk.  If left unspecified the defaults is the smaller of:
-#' the total number of rows or the number of rows that fit within 4GB of
-#' memory.
 #' @param native An object of class \code{logical}. If TRUE, array-like objects
 #' are treated as stored in HDF5 row-major rather than R column-major
 #' orientation. Using \code{native = TRUE} increases HDF5 file portability
