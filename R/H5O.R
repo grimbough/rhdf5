@@ -51,4 +51,53 @@ H5Oclose <- function( h5obj ) {
   invisible(.Call("_H5Oclose", h5obj@ID, PACKAGE='rhdf5'))
 }
 
+#' Create a hard link to an object in an HDF5 file
+#' 
+#' @param h5obj An object of class [H5IdComponent-class] representing the object to be linked to.
+#' @param h5loc An object of class [H5IdComponent-class] representing the location at which the 
+#' object is to be linked.  Can represent a file, group, dataset, datatype or attribute.
+#' @param newLinkName Character string giving the name of the new link.  This should be relative to
+#' `h5loc`.
+#' @param lcpl,lapl [H5IdComponent-class] objects representing link creation and link access property lists
+#' respectively.  If left as `NULL` the default values for these will be used.
+#' 
+#' @seealso [H5Gcreate_anon]
+#' 
+#' @examples 
+#' ## Create a temporary copy of an example file, and open it
+#' example_file <- system.file("testfiles", "h5ex_t_array.h5", package="rhdf5")
+#' file.copy(example_file, tempdir())
+#' h5_file <- file.path(tempdir(), "h5ex_t_array.h5")
+#' fid <- H5Fopen( h5_file )
+#' 
+#' ## create a new group without a location in the file
+#' gid <- H5Gcreate_anon(fid)
+#' 
+#' ## create link to newly create group
+#' ## relative to the file identifier
+#' H5Olink(h5obj = gid, h5loc = fid, newLinkName = "foo")
+#' 
+#' ## tidy up
+#' H5Gclose(gid)
+#' H5Fclose(fid)
+#' 
+#' ## Check we now have a "/foo" group
+#' h5ls( h5_file )
+#' 
+#' @export
+H5Olink <- function( h5obj, h5loc, newLinkName, lcpl = NULL, lapl = NULL ) {
+  h5checktype(h5obj, "object")
+  h5checktype(h5loc, "loc")
+  
+  lcpl <- h5checktypeAndPLC(lcpl, "H5P_LINK_CREATE", allowNULL = TRUE)
+  lapl <- h5checktypeAndPLC(lapl, "H5P_LINK_ACCESS", allowNULL = TRUE)
+  
+  res <- .Call("_H5Olink", h5obj@ID, h5loc@ID, newLinkName, lcpl, lapl, PACKAGE='rhdf5')
+  
+  if(res < 0) {
+    stop("Link creation failed")
+  } else {
+    return(invisible(TRUE))
+  }
+}
 
