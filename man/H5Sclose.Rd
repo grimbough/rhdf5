@@ -7,7 +7,8 @@
 H5Sclose(h5space)
 }
 \arguments{
-\item{h5space}{}
+\item{h5space}{Object of class \linkS4class{H5IdComponent} representing the
+dataspace to be closed.}
 }
 \description{
 Close and release a dataspace

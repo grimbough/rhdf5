@@ -26,9 +26,50 @@ H5Screate <- function( type = h5default("H5S"), native = FALSE ) {
   invisible(h5space)
 }
 
+
+#' Create a simple dataspace
+#'
+#' @param dims An integer vector defining the initial dimensions of the dataspace.
+#' The length of `dims` determines the rank of the dataspace.
+#' @param maxdims An integer vector with the same length length as `dims`.  Specifies the 
+#' upper limit on the size of the dataspace dimensions.  Only needs to be specified
+#' if this is different from the values given to `dims`.
+#' @param native An object of class `logical`. If `TRUE`, array-like
+#'   objects are treated as stored in HDF5 row-major rather than R column-major
+#'   orientation. Using `native = TRUE` increases HDF5 file portability between
+#'   programming languages. A file written with `native = TRUE` should also be
+#'   read with `native = TRUE`.
+#'
+#' @return Returns an object of class [H5IdComponent-class] representing a
+#'   dataspace.
+#'
+#' @seealso [H5Screate]
+#'
+#' @export
+H5Screate_simple <- function( dims, maxdims, native = FALSE ) {
+  if (missing(maxdims)) {
+    maxdims = dims
+  }
+  dims <- as.numeric(dims)
+  maxdims <- as.numeric(maxdims)
+  if (!native) {
+    dims <- rev(dims)
+    maxdims <- rev(maxdims)
+  }
+  sid <- .Call("_H5Screate_simple", dims, maxdims, PACKAGE='rhdf5')
+  if (sid > 0) {
+    h5space = new("H5IdComponent", ID = sid, native = native)
+  } else {
+    message("HDF5: unable to create simple data space")
+    h5space = FALSE
+  }
+  invisible(h5space)
+}
+
 #' Close and release a dataspace
 #' 
-#' @param h5space
+#' @param h5space Object of class [H5IdComponent-class] representing the 
+#' dataspace to be closed.
 #' 
 #' @seealso [H5Screate()]
 #' 
@@ -62,27 +103,7 @@ H5Scopy <- function( h5space ) {
   invisible(h5spacenew)
 }
 
-#' 
-#' @export
-H5Screate_simple <- function( dims, maxdims, native = FALSE ) {
-  if (missing(maxdims)) {
-    maxdims = dims
-  }
-  dims <- as.numeric(dims)
-  maxdims <- as.numeric(maxdims)
-  if (!native) {
-    dims <- rev(dims)
-    maxdims <- rev(maxdims)
-  }
-  sid <- .Call("_H5Screate_simple", dims, maxdims, PACKAGE='rhdf5')
-  if (sid > 0) {
-    h5space = new("H5IdComponent", ID = sid, native = native)
-  } else {
-    message("HDF5: unable to create simple data space")
-    h5space = FALSE
-  }
-  invisible(h5space)
-}
+
 
 #' Determine whether a dataspace is a simple dataspace
 #' 
@@ -356,7 +377,7 @@ H5Sselect_hyperslab <- function( h5space, op = h5default("H5S_SELECT"),
 #' H5Sclose(sid_1)
 #' H5Sclose(sid_2)
 #' 
-#' @seealso [H5Scombine_selection()], [H5Sselect_hyperslab()]
+#' @seealso [H5Scombine_select()], [H5Sselect_hyperslab()]
 #' 
 #' @export
 H5Scombine_hyperslab <- function( h5space, op = h5default("H5S_SELECT"), 
@@ -486,6 +507,12 @@ H5Scombine_select <- function( h5space1, op = h5default("H5S_SELECT"), h5space2 
   
 }
 
+#' Retrieve value for `H5S_UNLIMITED` constant
+#' 
+#' The value for `H5S_UNLIMITED` can be provided to the `maxdims` argument of [H5Screate_simple] 
+#' to indicate that the maximum size of the corresponding dimension is unlimited.
+#' 
+#' @seealso [H5Screate_simple]
 #' 
 #' @export
 H5Sunlimited <- function()  {

@@ -48,8 +48,7 @@ class \code{\link{H5IdComponent}} representing a H5 location identifier
 \code{\link{H5Gcreate}}, \code{\link{H5Gopen}} to create an object of this
 kind.}
 
-\item{name}{The name of the dataset in the HDF5 file. The name of the
-attribute for hwriteAttribute.}
+\item{name}{The name of the dataset in the HDF5 file.}
 
 \item{\dots}{Further arguments passed to \code{\link{H5Dwrite}}.}
 
@@ -110,29 +109,6 @@ index is not NULL.}
 
 \item{size}{The length of string data type. Variable length strings are not
 yet supported for datasets, only for attributes.}
-
-\item{attr}{The R object to be written as an HDF5 attribute.}
-
-\item{h5obj}{An object of class \code{\link{H5IdComponent}} representing a H5
-object identifier (file, group, or dataset). See \code{\link{H5Fcreate}},
-\code{\link{H5Fopen}}, \code{\link{H5Gcreate}}, \code{\link{H5Gopen}},
-\code{\link{H5Dcreate}}, or \code{\link{H5Dopen}} to create an object of
-this kind.}
-
-\item{callGeneric}{If \code{TRUE} a generic function h5read.classname will be
-called if it exists depending on the dataset's class attribute within the
-HDF5 file. This function can be used to convert the standard output of
-h5read depending on the class attribute. Note that h5read is not a S3
-generic function. Dispatching is done based on the HDF5 attribute after the
-standard h5read function.}
-
-\item{cset}{The encoding of the string data type.}
-
-\item{variableLengthString}{Whether character vectors should be written as
-variable-length strings into the attributes.}
-
-\item{asScalar}{Whether length-1 \code{attr} should be written into a scalar
-dataspace.}
 }
 \value{
 \code{h5write} returns 0 if successful.

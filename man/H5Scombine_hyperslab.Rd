@@ -61,5 +61,5 @@ H5Sclose(sid_2)
 
 }
 \seealso{
-\code{\link[=H5Scombine_selection]{H5Scombine_selection()}}, \code{\link[=H5Sselect_hyperslab]{H5Sselect_hyperslab()}}
+\code{\link[=H5Scombine_select]{H5Scombine_select()}}, \code{\link[=H5Sselect_hyperslab]{H5Sselect_hyperslab()}}
 }

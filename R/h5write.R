@@ -90,7 +90,6 @@ h5writeDatasetHelper <- function (obj, h5dataset, index = NULL, start = NULL, st
 #' in the C-programs (e.g. HDFView) counting starts with 0.
 #'
 #' @param obj The R object to be written.
-#' @param attr The R object to be written as an HDF5 attribute.
 #' @param file The filename (character) of the file in which the dataset will be
 #'   located. For advanced programmers it is possible to provide an object of
 #'   class \code{\link{H5IdComponent}} representing a H5 location identifier
@@ -101,13 +100,7 @@ h5writeDatasetHelper <- function (obj, h5dataset, index = NULL, start = NULL, st
 #'   location identifier (file or group). See \code{\link{H5Fcreate}},
 #'   \code{\link{H5Fopen}}, \code{\link{H5Gcreate}}, \code{\link{H5Gopen}} to
 #'   create an object of this kind.
-#' @param h5obj An object of class \code{\link{H5IdComponent}} representing a H5
-#'   object identifier (file, group, or dataset). See \code{\link{H5Fcreate}},
-#'   \code{\link{H5Fopen}}, \code{\link{H5Gcreate}}, \code{\link{H5Gopen}},
-#'   \code{\link{H5Dcreate}}, or \code{\link{H5Dopen}} to create an object of
-#'   this kind.
-#' @param name The name of the dataset in the HDF5 file. The name of the
-#'   attribute for hwriteAttribute.
+#' @param name The name of the dataset in the HDF5 file. 
 #' @param index List of indices for subsetting. The length of the list has to
 #'   agree with the dimensional extension of the HDF5 array. Each list element
 #'   is an integer vector of indices. A list element equal to `NULL` chooses all
@@ -144,19 +137,8 @@ h5writeDatasetHelper <- function (obj, h5dataset, index = NULL, start = NULL, st
 #'   table from python or with a struct-type from C. The disadvantage is that
 #'   the data has to be rearranged on disk and thus can slow down I/O. If fast
 #'   reading is required, `DataFrameAsCompound=FALSE` is recommended.
-#' @param callGeneric If `TRUE` a generic function h5read.classname will be
-#'   called if it exists depending on the dataset's class attribute within the
-#'   HDF5 file. This function can be used to convert the standard output of
-#'   h5read depending on the class attribute. Note that h5read is not a S3
-#'   generic function. Dispatching is done based on the HDF5 attribute after the
-#'   standard h5read function.
 #' @param size The length of string data type. Variable length strings are not
 #'   yet supported for datasets, only for attributes.
-#' @param cset The encoding of the string data type.
-#' @param variableLengthString Whether character vectors should be written as
-#'   variable-length strings into the attributes.
-#' @param asScalar Whether length-1 \code{attr} should be written into a scalar
-#'   dataspace.
 #' @param createnewfile If `TRUE`, a new file will be created if necessary.
 #' @param write.attributes (logical) If TRUE, all R-attributes attached to the
 #'   object \code{obj} are written to the HDF5 file.

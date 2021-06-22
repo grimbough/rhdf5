@@ -1,4 +1,6 @@
 
+#' @describeIn H5IdComponent 
+#' @export
 setMethod("show",signature="H5IdComponent", function(object) {
   res <- .Call("_handleInfo", object@ID, PACKAGE='rhdf5')
   res$type = h5const2String("H5I_TYPE",res$type)
