@@ -128,7 +128,7 @@
                  index <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="cn">NULL</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">10000</span><span class="op">)</span><span class="op">)</span>
 <span class="op">)</span></code></pre></div>
 <pre><code>##    user  system elapsed 
-##   0.030   0.011   0.042</code></pre>
+##   0.031   0.007   0.038</code></pre>
 <p>Next, instead of selecting 10,000 consecutive columns we’ll ask for every other column. This should still return the same amount of data and since our dataset is not chunked involves reading the same volume from disk.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">index</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="cn">NULL</span>, <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span>from <span class="op">=</span> <span class="fl">1</span>, to <span class="op">=</span> <span class="fl">20000</span>, by <span class="op">=</span> <span class="fl">2</span><span class="op">)</span><span class="op">)</span>
@@ -137,7 +137,7 @@
                  index <span class="op">=</span> <span class="va">index</span><span class="op">)</span>
 <span class="op">)</span></code></pre></div>
 <pre><code>##    user  system elapsed 
-##   0.127   0.016   0.143</code></pre>
+##   0.127   0.009   0.136</code></pre>
 <p>As we can see this is massively slower than the previous example. This is because creating unions of hyperslabs is currently very slow in HDF5 (see <a href="https://forum.hdfgroup.org/t/union-of-non-consecutive-hyperslabs-is-very-slow/5062">Union of non-consecutive hyperslabs is very slow</a> for another report of this behaviour), with the performance penalty increasing exponentially relative to the number of unions. When we use the <code>index</code> argument <em>rhdf5</em> creates a hyperslab for each disjoint set of values we want to extract and then merges them. In our first example this only require the creation of a single 100 <span class="math inline">\(\times\)</span> 10,000 hyperslab, where as in the second case we require 10,000 hyperslabs of dimension 100 <span class="math inline">\(\times\)</span> 1 and 9,999 merge operations.</p>
 </div>
 <div id="using-hyperslab-selections" class="section level2">
@@ -154,7 +154,7 @@
                  stride <span class="op">=</span> <span class="va">stride</span>, block <span class="op">=</span> <span class="va">block</span>, count <span class="op">=</span> <span class="va">count</span><span class="op">)</span>
 <span class="op">)</span></code></pre></div>
 <pre><code>##    user  system elapsed 
-##   0.117   0.007   0.124</code></pre>
+##   0.120   0.006   0.126</code></pre>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/identical.html">identical</a></span><span class="op">(</span><span class="va">res2</span>, <span class="va">res3</span><span class="op">)</span></code></pre></div>
 <pre><code>## [1] TRUE</code></pre>
@@ -179,8 +179,8 @@
                            FUN.VALUE <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html">integer</a></span><span class="op">(</span>length <span class="op">=</span> <span class="fl">100</span><span class="op">)</span>, 
                            name <span class="op">=</span> <span class="st">'counts'</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <pre><code>##    user  system elapsed 
-## 215.857  47.518 264.172</code></pre>
-<p>This is clearly a terrible idea, it takes ages! For reference, using the <code>index</code> argument with this set of columns takes 2.039 seconds. This poor performance is driven by two things:</p>
+## 212.552  48.724 262.215</code></pre>
+<p>This is clearly a terrible idea, it takes ages! For reference, using the <code>index</code> argument with this set of columns takes 2.059 seconds. This poor performance is driven by two things:</p>
 <ol style="list-style-type: decimal">
 <li>Our dataset had no chunking applied to it when it was created. This means for each access the entire dataset is read from disk, which we end up doing 10,000 times.</li>
 <li>
@@ -198,7 +198,7 @@
                            FUN.VALUE <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html">integer</a></span><span class="op">(</span>length <span class="op">=</span> <span class="fl">100</span><span class="op">)</span>, 
                            name <span class="op">=</span> <span class="st">'counts_chunked'</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <pre><code>##    user  system elapsed 
-##  41.842   3.228  45.150</code></pre>
+##  41.256   3.161  44.457</code></pre>
 <p>This is still quite slow, and the remaining time is being spent on the overheads associated with multiple calls to <code><a href="../reference/h5_read.html">h5read()</a></code>. To reduce these the function <code>f2()</code><a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a> defined below splits the list of columns we want to return into sets grouped by the parameter <code>block_size</code>. In the default case this means any columns between 1 &amp; 100 will be placed together, then any between 101 &amp; 200, etc. We then <code>lapply</code> our previous <code>f1()</code> function over these groups. The effect here is to reduce the number of calls to <code><a href="../reference/h5_read.html">h5read()</a></code>, while keeping the number of hyperslab unions down by not having too many columns in any one call.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">f2</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">block_size</span> <span class="op">=</span> <span class="fl">100</span><span class="op">)</span> <span class="op">{</span>
@@ -208,8 +208,8 @@
 <span class="op">}</span>
 <span class="fu"><a href="https://rdrr.io/r/base/system.time.html">system.time</a></span><span class="op">(</span><span class="fu">f2</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <pre><code>##    user  system elapsed 
-##   1.875   0.070   1.950</code></pre>
-<p>We can see this has a significant effect, although it’s still an order of magnitude slower than when we were dealing with regularly spaced subsets. The efficiency here will vary based on a number of factors including the size of the dataset chunks and the sparsity of the column index, and you varying the <code>block_size</code> argument will produce differing performances. The plot below shows the timings achived by providing a selection of values to <code>block_size</code>. It suggests the optimal parameter in this case is probably a block size of 1000, which took 1.12 seconds - noticeably faster than when passing all columns to the <code>index</code> argument in a single call.</p>
+##   1.896   0.076   1.973</code></pre>
+<p>We can see this has a significant effect, although it’s still an order of magnitude slower than when we were dealing with regularly spaced subsets. The efficiency here will vary based on a number of factors including the size of the dataset chunks and the sparsity of the column index, and you varying the <code>block_size</code> argument will produce differing performances. The plot below shows the timings achived by providing a selection of values to <code>block_size</code>. It suggests the optimal parameter in this case is probably a block size of 1000, which took 1.1 seconds - noticeably faster than when passing all columns to the <code>index</code> argument in a single call.</p>
 <p><img src="practical_tips_files/figure-html/unnamed-chunk-3-1.png" width="576"></p>
 </div>
 <div id="summary" class="section level2">
