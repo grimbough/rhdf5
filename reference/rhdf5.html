@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Package overview — rhdf5 • rhdf5</title>
+<title>rhdf5: An interface between HDF5 and R — rhdf5 • rhdf5</title>
 
 
 <!-- jquery -->
@@ -39,9 +39,12 @@
 
 
 
-<meta property="og:title" content="Package overview — rhdf5" />
-<meta property="og:description" content="rhdf5 is an interface to the HDF5 library. The R-package contains the complete HDF5 library, thus no further installation of external packages is necessary.
-There are a number of high level R functions that provide a convinient way of accessing HDF5 file as well as R interfaces to a number of functions in the C-library." />
+<meta property="og:title" content="rhdf5: An interface between HDF5 and R — rhdf5" />
+<meta property="og:description" content="The rhdf5 package provides two categories of functions:
+h5 functions are high-level R functions that provide a convenient way of accessing HDF5 files
+H5 functions mirror much of the the HDF5 C API
+
+" />
 
 
 
@@ -73,7 +76,7 @@ There are a number of high level R functions that provide a convinient way of ac
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rhdf5</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.35.5-1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.35.6</span>
       </span>
     </div>
 
@@ -127,117 +130,22 @@ There are a number of high level R functions that provide a convinient way of ac
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Package overview</h1>
-    
+    <h1>rhdf5: An interface between HDF5 and R</h1>
+    <small class="dont-index">Source: <a href='https://github.com/grimbough/rhdf5/blob/master/R/Rhdf5.R'><code>R/Rhdf5.R</code></a></small>
     <div class="hidden name"><code>rhdf5.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p><code>rhdf5</code> is an interface to the HDF5 library. The R-package contains the complete HDF5 library, thus no further installation of external packages is necessary.</p>
-<p>There are a number of high level R functions that provide a convinient way of accessing HDF5 file as well as R interfaces to a number of functions in the C-library.</p>
+    <p>The rhdf5 package provides two categories of functions:</p><ul>
+<li><p><code>h5</code> functions are high-level R functions that provide a convenient way of accessing HDF5 files</p></li>
+<li><p><code>H5</code> functions mirror much of the the HDF5 C API</p></li>
+</ul>
+
     </div>
 
 
 
-    <h2 class="hasAnchor" id="package-content"><a class="anchor" href="#package-content"></a>Package content</h2>
 
-    
-
-<p>HDF5 file, group, dataset creation</p><ul>
-<li><p><code><a href='h5createFile.html'>h5createFile</a></code></p></li>
-<li><p><code><a href='h5createGroup.html'>h5createGroup</a></code></p></li>
-<li><p><code><a href='h5createDataset.html'>h5createDataset</a></code></p></li>
-</ul>
-  
-<p>HDF5 file content listing</p><ul>
-<li><p><code><a href='h5ls.html'>h5ls</a></code></p></li>
-<li><p><code><a href='h5dump.html'>h5dump</a></code></p></li>
-</ul>
-  
-<p>Reading and writing data</p><ul>
-<li><p><code><a href='h5read.html'>h5read</a></code>, <code><a href='h5write.html'>h5write</a></code></p></li>
-<li><p><code><a href='h5dump.html'>h5dump</a></code>, <code><a href='h5save.html'>h5save</a></code></p></li>
-</ul>
-  
-<p>HDF5 constants</p><ul>
-<li><p><code><a href='h5constants.html'>h5const</a></code>, <code><a href='h5constants.html'>h5default</a></code>, <code><a href='h5constants.html'>h5constType</a></code></p></li>
-</ul>
-
-<p>HDF5 version number</p><ul>
-<li><p><code><a href='h5version.html'>h5version</a></code></p></li>
-</ul>
-
-
-<p>Low level interface to HDF5 C-library (for expert users only!):</p><ul>
-<li><p>general HDF5 functions (<code><a href='H5functions.html'>H5open</a></code> / <code><a href='H5functions.html'>H5close</a></code> / <code><a href='H5functions.html'>H5garbage_collect</a></code> / <code><a href='H5functions.html'>H5get_libversion</a></code>)</p></li>
-<li><p>HDF5 File Interface (<code><a href='HDF5 File Interface.html'>H5Fcreate</a></code>, <code><a href='HDF5 File Interface.html'>H5Fopen</a></code> / <code><a href='HDF5 File Interface.html'>H5Fclose</a></code> / <code><a href='HDF5 File Interface.html'>H5Fflush</a></code>)</p></li>
-<li><p>HDF5 Group Interface (<code><a href='HDF5 Group Interface.html'>H5Gcreate</a></code>, <code><a href='HDF5 Group Interface.html'>H5Gcreate_anon</a></code>, <code><a href='HDF5 Group Interface.html'>H5Gopen</a></code> / <code><a href='HDF5 Group Interface.html'>H5Gclose</a></code> / <code><a href='HDF5 Group Interface.html'>H5Gget_info</a></code>, <code><a href='HDF5 Group Interface.html'>H5Gget_info_by_idx</a></code>, <code><a href='HDF5 Group Interface.html'>H5Gget_info_by_name</a></code>)</p></li>
-<li><p>HDF5 Link Interface (<code><a href='HDF5 Link Interface.html'>H5Lexists</a></code>, <code><a href='HDF5 Link Interface.html'>H5Lget_info</a></code>)</p></li>
-<li><p>HDF5 Object Interface (<code><a href='HDF5 Object Interface.html'>H5Oopen</a></code>, <code><a href='HDF5 Object Interface.html'>H5Oclose</a></code>, <code><a href='HDF5 Object Interface.html'>H5Oget_num_attrs</a></code>, <code><a href='HDF5 Object Interface.html'>H5Oget_num_attrs_by_name</a></code>)</p></li>
-<li><p>HDF5 Identifier Interface (<code><a href='HDF5 Identifier Interface.html'>H5Iget_type</a></code>, <code><a href='HDF5 Identifier Interface.html'>H5Iget_name</a></code>, <code><a href='HDF5 Identifier Interface.html'>H5Iis_valid</a></code>)</p></li>
-<li><p>HDF5 Dataset Interface (<code><a href='H5Dcreate.html'>H5Dcreate</a></code>, <code><a href='H5Dopen.html'>H5Dopen</a></code> / <code><a href='H5Dclose.html'>H5Dclose</a></code> / <code><a href='H5Dget_space.html'>H5Dget_space</a></code> / <code><a href='H5Dread.html'>H5Dread</a></code>, <code>H5Dwrite</code>)</p></li>
-<li><p>HDF5 Attribute Interface (<code><a href='HDF5 Attribute Interface.html'>H5Acreate</a></code>, <code><a href='HDF5 Attribute Interface.html'>H5Aopen</a></code>, <code><a href='HDF5 Attribute Interface.html'>H5Aopen_by_idx</a></code>, <code><a href='HDF5 Attribute Interface.html'>H5Aopen_by_name</a></code> / <code><a href='HDF5 Attribute Interface.html'>H5Aclose</a></code>, <code><a href='HDF5 Attribute Interface.html'>H5Adelete</a></code> / <code><a href='HDF5 Attribute Interface.html'>H5Aexists</a></code> / <code><a href='HDF5 Attribute Interface.html'>H5Aget_name</a></code>, <code><a href='HDF5 Attribute Interface.html'>H5Aget_space</a></code>, <code><a href='HDF5 Attribute Interface.html'>H5Aget_type</a></code> / <code><a href='HDF5 Attribute Interface.html'>H5Aread</a></code>, <code><a href='HDF5 Attribute Interface.html'>H5Awrite</a></code>)</p></li>
-<li><p>HDF5 Dataspace Interface (<code><a href='HDF5 Dataspace Interface.html'>H5Screate</a></code>, <code><a href='HDF5 Dataspace Interface.html'>H5Screate_simple</a></code>, <code><a href='HDF5 Dataspace Interface.html'>H5Scopy</a></code> / <code><a href='HDF5 Dataspace Interface.html'>H5Sclose</a></code> / <code><a href='HDF5 Dataspace Interface.html'>H5Sis_simple</a></code>, <code><a href='HDF5 Dataspace Interface.html'>H5Sget_simple_extent_dims</a></code> / <code><a href='HDF5 Dataspace Interface.html'>H5Sselect_hyperslab</a></code>)</p></li>
-<li><p>HDF5 Datatype Interface (<code><a href='HDF5 Datatype Interface.html'>H5Tcopy</a></code>, <code><a href='HDF5 Datatype Interface.html'>H5Tset_size</a></code>)</p></li>
-</ul>
-
-    <h2 class="hasAnchor" id="authors"><a class="anchor" href="#authors"></a>Authors</h2>
-
-    <p>R-interface by</p>
-<p>Bernd Fischer, <a href='mailto:bernd.fischer@embl.de'>bernd.fischer@embl.de</a>
-  EMBL - European Molecular Biology Laboratory
-  Heidelberg
-  Germany</p>
-<p>The package contains the HDF5 library (<a href='https://portal.hdfgroup.org/display/HDF5'>https://portal.hdfgroup.org/display/HDF5</a>).</p>
-
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='r-in'><span class='fu'><a href='h5createFile.html'>h5createFile</a></span><span class='op'>(</span><span class='st'>"ex_hdf5file.h5"</span><span class='op'>)</span></span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span> file '/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmprclfRx/filec392f98677d/reference/ex_hdf5file.h5' already exists.</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] FALSE</span>
-<span class='r-in'></span>
-<span class='r-in'><span class='co'># create groups</span></span>
-<span class='r-in'><span class='fu'><a href='h5createGroup.html'>h5createGroup</a></span><span class='op'>(</span><span class='st'>"ex_hdf5file.h5"</span>,<span class='st'>"foo"</span><span class='op'>)</span></span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span> Can not create group. Object with name 'foo' already exists.</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] FALSE</span>
-<span class='r-in'><span class='fu'><a href='h5createGroup.html'>h5createGroup</a></span><span class='op'>(</span><span class='st'>"ex_hdf5file.h5"</span>,<span class='st'>"foo/foobaa"</span><span class='op'>)</span></span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span> Can not create group. Object with name 'foo/foobaa' already exists.</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] FALSE</span>
-<span class='r-in'></span>
-<span class='r-in'><span class='co'># write a matrix</span></span>
-<span class='r-in'><span class='va'>B</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/array.html'>array</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fl'>0.1</span>,<span class='fl'>2.0</span>,by<span class='op'>=</span><span class='fl'>0.1</span><span class='op'>)</span>,dim<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>5</span>,<span class='fl'>2</span>,<span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span></span>
-<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/attr.html'>attr</a></span><span class='op'>(</span><span class='va'>B</span>, <span class='st'>"scale"</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='st'>"liter"</span></span>
-<span class='r-in'><span class='fu'><a href='h5write.html'>h5write</a></span><span class='op'>(</span><span class='va'>B</span>, <span class='st'>"ex_hdf5file.h5"</span>,<span class='st'>"foo/B"</span><span class='op'>)</span></span>
-<span class='r-in'></span>
-<span class='r-in'><span class='co'># read a matrix</span></span>
-<span class='r-in'><span class='va'>E</span> <span class='op'>=</span> <span class='fu'><a href='h5read.html'>h5read</a></span><span class='op'>(</span><span class='st'>"ex_hdf5file.h5"</span>,<span class='st'>"foo/B"</span><span class='op'>)</span></span>
-<span class='r-in'></span>
-<span class='r-in'><span class='co'># list content of hdf5 file</span></span>
-<span class='r-in'><span class='fu'><a href='h5ls.html'>h5ls</a></span><span class='op'>(</span><span class='st'>"ex_hdf5file.h5"</span><span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>   group   name       otype  dclass       dim</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 0     /      B H5I_DATASET   FLOAT 5 x 2 x 2</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 1     /      S H5I_DATASET INTEGER     5 x 8</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 2     /    foo   H5I_GROUP                  </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 3  /foo      B H5I_DATASET   FLOAT 5 x 2 x 2</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 4  /foo      S H5I_DATASET INTEGER     5 x 8</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 5  /foo foobaa   H5I_GROUP                  </span>
-<span class='r-in'></span>
-<span class='r-in'><span class='co'># write and read submatrix</span></span>
-<span class='r-in'><span class='fu'><a href='h5createDataset.html'>h5createDataset</a></span><span class='op'>(</span><span class='st'>"ex_hdf5file.h5"</span>, <span class='st'>"foo/S"</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>5</span>,<span class='fl'>8</span><span class='op'>)</span>, storage.mode <span class='op'>=</span> <span class='st'>"integer"</span>, chunk<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>5</span>,<span class='fl'>1</span><span class='op'>)</span>, level<span class='op'>=</span><span class='fl'>7</span><span class='op'>)</span></span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span> Can not create dataset. Object with name 'foo/S' already exists.</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] FALSE</span>
-<span class='r-in'><span class='fu'><a href='h5write.html'>h5write</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>5</span>,nr<span class='op'>=</span><span class='fl'>5</span>,nc<span class='op'>=</span><span class='fl'>1</span><span class='op'>)</span>, file<span class='op'>=</span><span class='st'>"ex_hdf5file.h5"</span>, name<span class='op'>=</span><span class='st'>"foo/S"</span>, index<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='cn'>NULL</span>,<span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span></span>
-<span class='r-in'><span class='fu'><a href='h5read.html'>h5read</a></span><span class='op'>(</span><span class='st'>"ex_hdf5file.h5"</span>, <span class='st'>"foo/S"</span><span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>      [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8]</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> [1,]    1    0    0    0    0    0    0    0</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> [2,]    2    0    0    0    0    0    0    0</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> [3,]    3    0    0    0    0    0    0    0</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> [4,]    4    0    0    0    0    0    0    0</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> [5,]    5    0    0    0    0    0    0    0</span>
-<span class='r-in'><span class='fu'><a href='h5read.html'>h5read</a></span><span class='op'>(</span><span class='st'>"ex_hdf5file.h5"</span>, <span class='st'>"foo/S"</span>, index<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='fl'>2</span><span class='op'>:</span><span class='fl'>3</span>,<span class='fl'>2</span><span class='op'>:</span><span class='fl'>3</span><span class='op'>)</span><span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>      [,1] [,2]</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> [1,]    0    0</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> [2,]    0    0</span>
-</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

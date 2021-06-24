@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rhdf5</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.35.5-1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.35.6</span>
       </span>
     </div>
 
@@ -127,7 +127,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Find the number of attributes associated with an HDF5 object</h1>
-    <small class="dont-index">Source: <a href='https://github.com/grimbough/rhdf5/blob/master/R/H5O.R'><code>R/H5O.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/grimbough/rhdf5/blob/master/R/H5O_extras.R'><code>R/H5O_extras.R</code></a></small>
     <div class="hidden name"><code>H5Oget_num_attrs.Rd</code></div>
     </div>
 
@@ -139,6 +139,22 @@
 
 <span class='fu'>H5Oget_num_attrs_by_name</span><span class='op'>(</span><span class='va'>h5loc</span>, <span class='va'>name</span><span class='op'>)</span></pre>
 
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>h5obj</th>
+      <td><p>An object of class <a href='H5IdComponent-class.html'>H5IdComponent</a> representing a H5 object identifier (file, group, or dataset).</p></td>
+    </tr>
+    <tr>
+      <th>h5loc</th>
+      <td><p>An object of class <a href='H5IdComponent-class.html'>H5IdComponent</a> representing a H5 location identifier (file or group).</p></td>
+    </tr>
+    <tr>
+      <th>name</th>
+      <td><p>The name of the object to be checked.</p></td>
+    </tr>
+    </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 

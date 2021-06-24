@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rhdf5</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.35.5-1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.35.6</span>
       </span>
     </div>
 
@@ -162,22 +162,21 @@ successful. <code>FALSE</code> otherwise.</p>
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><span class='r-in'></span>
 <span class='r-in'><span class='co'># create an hdf5 file and write something</span></span>
-<span class='r-in'><span class='fu'><a href='h5createFile.html'>h5createFile</a></span><span class='op'>(</span><span class='st'>"ex_H5O.h5"</span><span class='op'>)</span></span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span> file '/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/Rtmp5NikkM/filebdf1d9a1c84/reference/ex_H5O.h5' already exists.</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] FALSE</span>
-<span class='r-in'><span class='fu'><a href='h5createGroup.html'>h5createGroup</a></span><span class='op'>(</span><span class='st'>"ex_H5O.h5"</span>,<span class='st'>"foo"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='h5_createFile.html'>h5createFile</a></span><span class='op'>(</span><span class='st'>"ex_H5O.h5"</span><span class='op'>)</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> file '/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpTZxdvV/fileb844e4d77f5/reference/ex_H5O.h5' already exists.</span>
+<span class='r-in'><span class='fu'><a href='h5_createGroup.html'>h5createGroup</a></span><span class='op'>(</span><span class='st'>"ex_H5O.h5"</span>,<span class='st'>"foo"</span><span class='op'>)</span></span>
 <span class='r-msg co'><span class='r-pr'>#&gt;</span> Can not create group. Object with name 'foo' already exists.</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> [1] FALSE</span>
 <span class='r-in'><span class='va'>B</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/array.html'>array</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fl'>0.1</span>,<span class='fl'>2.0</span>,by<span class='op'>=</span><span class='fl'>0.1</span><span class='op'>)</span>,dim<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>5</span>,<span class='fl'>2</span>,<span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span></span>
-<span class='r-in'><span class='fu'><a href='h5write.html'>h5write</a></span><span class='op'>(</span><span class='va'>B</span>, <span class='st'>"ex_H5O.h5"</span>,<span class='st'>"foo/B"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='h5_write.html'>h5write</a></span><span class='op'>(</span><span class='va'>B</span>, <span class='st'>"ex_H5O.h5"</span>,<span class='st'>"foo/B"</span><span class='op'>)</span></span>
 <span class='r-in'></span>
 <span class='r-in'><span class='co'># reopen file and dataset and get object info</span></span>
-<span class='r-in'><span class='va'>fid</span> <span class='op'>&lt;-</span> <span class='fu'><a href='HDF5 File Interface.html'>H5Fopen</a></span><span class='op'>(</span><span class='st'>"ex_H5O.h5"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>fid</span> <span class='op'>&lt;-</span> <span class='fu'><a href='H5Fopen.html'>H5Fopen</a></span><span class='op'>(</span><span class='st'>"ex_H5O.h5"</span><span class='op'>)</span></span>
 <span class='r-in'><span class='va'>oid</span> <span class='op'>=</span> <span class='fu'>H5Oopen</span><span class='op'>(</span><span class='va'>fid</span>, <span class='st'>"foo"</span><span class='op'>)</span></span>
 <span class='r-in'><span class='fu'><a href='H5Oget_num_attrs.html'>H5Oget_num_attrs</a></span><span class='op'>(</span><span class='va'>oid</span><span class='op'>)</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 0</span>
 <span class='r-in'><span class='fu'><a href='H5Oclose.html'>H5Oclose</a></span><span class='op'>(</span><span class='va'>oid</span><span class='op'>)</span></span>
-<span class='r-in'><span class='fu'><a href='HDF5 File Interface.html'>H5Fclose</a></span><span class='op'>(</span><span class='va'>fid</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='H5Fclose.html'>H5Fclose</a></span><span class='op'>(</span><span class='va'>fid</span><span class='op'>)</span></span>
 <span class='r-in'></span>
 </pre>
   </div>

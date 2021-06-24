@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rhdf5</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.35.5-1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.35.6</span>
       </span>
     </div>
 
@@ -163,12 +163,11 @@ when no longer needed.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><span class='r-in'><span class='va'>h5file</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempfile</a></span><span class='op'>(</span>fileext <span class='op'>=</span> <span class='st'>".h5"</span><span class='op'>)</span></span>
-<span class='r-in'><span class='fu'><a href='h5createFile.html'>h5createFile</a></span><span class='op'>(</span> <span class='va'>h5file</span> <span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] TRUE</span>
-<span class='r-in'><span class='fu'><a href='h5createDataset.html'>h5createDataset</a></span><span class='op'>(</span> <span class='va'>h5file</span>, dataset <span class='op'>=</span> <span class='st'>"A"</span>, dims <span class='op'>=</span> <span class='fl'>10</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='h5_createFile.html'>h5createFile</a></span><span class='op'>(</span> <span class='va'>h5file</span> <span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='h5_createDataset.html'>h5createDataset</a></span><span class='op'>(</span> <span class='va'>h5file</span>, dataset <span class='op'>=</span> <span class='st'>"A"</span>, dims <span class='op'>=</span> <span class='fl'>10</span><span class='op'>)</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> [1] TRUE</span>
 <span class='r-in'></span>
-<span class='r-in'><span class='va'>fid</span> <span class='op'>&lt;-</span> <span class='fu'><a href='HDF5 File Interface.html'>H5Fopen</a></span><span class='op'>(</span> <span class='va'>h5file</span> <span class='op'>)</span></span>
+<span class='r-in'><span class='va'>fid</span> <span class='op'>&lt;-</span> <span class='fu'><a href='H5Fopen.html'>H5Fopen</a></span><span class='op'>(</span> <span class='va'>h5file</span> <span class='op'>)</span></span>
 <span class='r-in'><span class='va'>did</span> <span class='op'>&lt;-</span> <span class='fu'>H5Dopen</span><span class='op'>(</span> h5loc <span class='op'>=</span> <span class='va'>fid</span>, name <span class='op'>=</span> <span class='st'>"A"</span><span class='op'>)</span></span>
 <span class='r-in'><span class='va'>did</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> HDF5 DATASET </span>
@@ -181,7 +180,7 @@ when no longer needed.</p>
 <span class='r-in'></span>
 <span class='r-in'><span class='co'>## rember to close open handles</span></span>
 <span class='r-in'><span class='fu'><a href='H5Dclose.html'>H5Dclose</a></span><span class='op'>(</span> <span class='va'>did</span> <span class='op'>)</span></span>
-<span class='r-in'><span class='fu'><a href='HDF5 File Interface.html'>H5Fclose</a></span><span class='op'>(</span> <span class='va'>fid</span> <span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='H5Fclose.html'>H5Fclose</a></span><span class='op'>(</span> <span class='va'>fid</span> <span class='op'>)</span></span>
 <span class='r-in'></span>
 </pre>
   </div>

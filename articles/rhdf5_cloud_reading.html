@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rhdf5</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.35.5-1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.35.6</span>
       </span>
     </div>
 
@@ -96,7 +96,7 @@
 
     
     
-<p>The <em><a href="https://bioconductor.org/packages/3.13/rhdf5">rhdf5</a></em> provides limited support for read-only access to HDF5 files stored in Amazon S3 buckets. This is implemented via the (HDF5 S3 Virtual File Driver)[<a href="https://portal.hdfgroup.org/display/HDF5/Virtual+File+Drivers+-+S3+and+HDFS" class="uri">https://portal.hdfgroup.org/display/HDF5/Virtual+File+Drivers+-+S3+and+HDFS</a>] and allows access to HDF5 files hosted in both public and private S3 buckets.</p>
+<p>The <em><a href="https://bioconductor.org/packages/3.14/rhdf5">rhdf5</a></em> provides limited support for read-only access to HDF5 files stored in Amazon S3 buckets. This is implemented via the <a href="https://portal.hdfgroup.org/display/HDF5/Virtual+File+Drivers+-+S3+and+HDFS">HDF5 S3 Virtual File Driver</a> and allows access to HDF5 files hosted in both public and private S3 buckets.</p>
 <p>Currently only the functions <code><a href="../reference/h5ls.html">h5ls()</a></code>, <code><a href="../reference/h5_dump.html">h5dump()</a></code> and <code><a href="../reference/h5_read.html">h5read()</a></code> are supported.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/grimbough/rhdf5">rhdf5</a></span><span class="op">)</span></code></pre></div>
@@ -152,12 +152,12 @@
 <a href="#session-info" class="anchor"></a>Session Info</h1>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<pre><code>## R version 4.1.0 RC (2021-05-10 r80294)
+<pre><code>## R version 4.1.0 Patched (2021-06-23 r80548)
 ## Platform: x86_64-apple-darwin17.0 (64-bit)
 ## Running under: macOS Catalina 10.15.7
 ## 
 ## Matrix products: default
-## BLAS:   /Library/Frameworks/R.framework/Versions/4.1/Resources/lib/libRblas.dylib
+## BLAS:   /Library/Frameworks/R.framework/Versions/4.1/Resources/lib/libRblas.0.dylib
 ## LAPACK: /Library/Frameworks/R.framework/Versions/4.1/Resources/lib/libRlapack.dylib
 ## 
 ## locale:
@@ -167,20 +167,20 @@
 ## [1] stats     graphics  grDevices utils     datasets  methods   base     
 ## 
 ## other attached packages:
-## [1] rhdf5_2.35.5-1   BiocStyle_2.19.2
+## [1] rhdf5_2.35.6     BiocStyle_2.21.3
 ## 
 ## loaded via a namespace (and not attached):
 ##  [1] knitr_1.33          magrittr_2.0.1      R6_2.5.0           
-##  [4] ragg_1.1.2          rlang_0.4.11        fastmap_1.1.0      
-##  [7] stringr_1.4.0       tools_4.1.0         xfun_0.22          
+##  [4] ragg_1.1.3          rlang_0.4.11        fastmap_1.1.0      
+##  [7] stringr_1.4.0       tools_4.1.0         xfun_0.24          
 ## [10] jquerylib_0.1.4     htmltools_0.5.1.1   systemfonts_1.0.2  
 ## [13] yaml_2.2.1          digest_0.6.27       rprojroot_2.0.2    
 ## [16] pkgdown_1.6.1       crayon_1.4.1        bookdown_0.22      
-## [19] textshaping_0.3.4   Rhdf5lib_1.13.7     BiocManager_1.30.15
-## [22] rhdf5filters_1.3.5  sass_0.3.1          fs_1.5.0           
-## [25] memoise_2.0.0       cachem_1.0.4        evaluate_0.14      
-## [28] rmarkdown_2.8       stringi_1.6.1       compiler_4.1.0     
-## [31] bslib_0.2.4         desc_1.3.0          jsonlite_1.7.2</code></pre>
+## [19] textshaping_0.3.5   Rhdf5lib_1.15.1     BiocManager_1.30.16
+## [22] rhdf5filters_1.5.0  sass_0.4.0          fs_1.5.0           
+## [25] memoise_2.0.0       cachem_1.0.5        evaluate_0.14      
+## [28] rmarkdown_2.9       stringi_1.6.2       compiler_4.1.0     
+## [31] bslib_0.2.5.1       desc_1.3.0          jsonlite_1.7.2</code></pre>
 </div>
   </div>
 

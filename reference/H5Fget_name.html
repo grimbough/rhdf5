@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rhdf5</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.35.5-1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.35.6</span>
       </span>
     </div>
 
@@ -157,7 +157,7 @@ attribute datatypes.</p></td>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "/Users/runner/work/_temp/Library/rhdf5/testfiles/h5ex_t_array.h5"</span>
 <span class='r-in'></span>
 <span class='r-in'><span class='co'>## open a file handle and confirm we can identify the file it points to</span></span>
-<span class='r-in'><span class='va'>fid</span> <span class='op'>&lt;-</span> <span class='fu'><a href='HDF5 File Interface.html'>H5Fopen</a></span><span class='op'>(</span><span class='va'>h5file</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>fid</span> <span class='op'>&lt;-</span> <span class='fu'><a href='H5Fopen.html'>H5Fopen</a></span><span class='op'>(</span><span class='va'>h5file</span><span class='op'>)</span></span>
 <span class='r-in'><span class='fu'>H5Fget_name</span><span class='op'>(</span><span class='va'>fid</span><span class='op'>)</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "/Users/runner/work/_temp/Library/rhdf5/testfiles/h5ex_t_array.h5"</span>
 <span class='r-in'></span>
@@ -172,7 +172,7 @@ attribute datatypes.</p></td>
 <span class='r-in'><span class='co'>## tidy up</span></span>
 <span class='r-in'><span class='fu'><a href='H5Dclose.html'>H5Dclose</a></span><span class='op'>(</span><span class='va'>did</span><span class='op'>)</span></span>
 <span class='r-in'><span class='fu'><a href='H5Gclose.html'>H5Gclose</a></span><span class='op'>(</span><span class='va'>gid</span><span class='op'>)</span></span>
-<span class='r-in'><span class='fu'><a href='HDF5 File Interface.html'>H5Fclose</a></span><span class='op'>(</span><span class='va'>fid</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='H5Fclose.html'>H5Fclose</a></span><span class='op'>(</span><span class='va'>fid</span><span class='op'>)</span></span>
 <span class='r-in'></span>
 </pre>
   </div>
