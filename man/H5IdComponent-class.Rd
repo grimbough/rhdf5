@@ -17,7 +17,7 @@ open files, groups, datasets, dataspaces, attributes, and datatypes.
 }
 \section{Methods (by generic)}{
 \itemize{
-\item \code{show}: 
+\item \code{show}: Print details of the object to screen.
 }}
 
 \section{Slots}{

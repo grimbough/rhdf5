@@ -1,5 +1,5 @@
 
-#' @describeIn H5IdComponent 
+#' @describeIn H5IdComponent Print details of the object to screen.
 #' 
 #' @export
 setMethod("show",signature="H5IdComponent", function(object) {
