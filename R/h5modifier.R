@@ -4,12 +4,12 @@
 #' #' 
 #' @param file The filename (character) of the file in which the dataset will
 #' be located. For advanced programmers it is possible to provide an object of
-#' class \code{\link{H5IdComponent}} representing a H5 location identifier
+#' class [H5IdComponent-class] representing a H5 location identifier
 #' (file or group). See \code{\link{H5Fcreate}}, \code{\link{H5Fopen}},
 #' \code{\link{H5Gcreate}}, \code{\link{H5Gopen}} to create an object of this
 #' kind.
 #' @param dataset The name of the dataset in the HDF5 file, or an object of
-#' class \code{\link{H5IdComponent}} representing a H5 dataset identifier. See
+#' class [H5IdComponent-class] representing a H5 dataset identifier. See
 #' \code{\link{H5Dcreate}}, or \code{\link{H5Dopen}} to create an object of
 #' this kind.
 #' @param dims The dimensions of the array as they will appear in the file.

@@ -92,11 +92,11 @@ h5writeDatasetHelper <- function (obj, h5dataset, index = NULL, start = NULL, st
 #' @param obj The R object to be written.
 #' @param file The filename (character) of the file in which the dataset will be
 #'   located. For advanced programmers it is possible to provide an object of
-#'   class \code{\link{H5IdComponent}} representing a H5 location identifier
+#'   class [H5IdComponent-class] representing a H5 location identifier
 #'   (file or group). See \code{\link{H5Fcreate}}, \code{\link{H5Fopen}},
 #'   \code{\link{H5Gcreate}}, \code{\link{H5Gopen}} to create an object of this
 #'   kind.
-#' @param h5loc An object of class \code{\link{H5IdComponent}} representing a H5
+#' @param h5loc An object of class [H5IdComponent-class] representing a H5
 #'   location identifier (file or group). See \code{\link{H5Fcreate}},
 #'   \code{\link{H5Fopen}}, \code{\link{H5Gcreate}}, \code{\link{H5Gopen}} to
 #'   create an object of this kind.

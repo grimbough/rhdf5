@@ -10,7 +10,7 @@
 #' @param dtype_id A character name of a datatype. See \code{h5const("H5T")} for 
 #' possible datatypes. Can also be an integer representing an HDF5 datatype. 
 #' Only simple datatypes are allowed for atttributes.
-#' @param h5space An object of class [H5IdComponent()] representing a H5 
+#' @param h5space An object of class [H5IdComponent-class] representing a H5 
 #' dataspace. See [H5Dget_space()], [H5Screate_simple()], [H5Screate()] to create an object 
 #' of this kind.
 #' 

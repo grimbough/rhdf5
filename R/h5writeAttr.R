@@ -1,7 +1,7 @@
 #' Write an R object as an HDF5 attribute 
 #' 
 #' @param attr The R object to be written as an HDF5 attribute.
-#' @param h5obj An object of class \code{\link{H5IdComponent}} representing a H5
+#' @param h5obj An object of class [H5IdComponent-class] representing a H5
 #'   object identifier (file, group, or dataset). See \code{\link{H5Fcreate}},
 #'   \code{\link{H5Fopen}}, \code{\link{H5Gcreate}}, \code{\link{H5Gopen}},
 #'   \code{\link{H5Dcreate}}, or \code{\link{H5Dopen}} to create an object of

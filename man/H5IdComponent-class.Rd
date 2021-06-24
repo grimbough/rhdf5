@@ -8,6 +8,9 @@
 \usage{
 \S4method{show}{H5IdComponent}(object)
 }
+\arguments{
+\item{object}{Object of class \code{H5IdComponent}}
+}
 \description{
 A class representing a HDF5 identifier handle. HDF5 identifiers represent
 open files, groups, datasets, dataspaces, attributes, and datatypes.
@@ -20,7 +23,7 @@ open files, groups, datasets, dataspaces, attributes, and datatypes.
 \section{Slots}{
 
 \describe{
-\item{\code{ID}}{\code{Integer} of length 1. Contains the handle of C-type \code{hid_t}.}
+\item{\code{ID}}{\code{integer} of length 1. Contains the handle of C-type \code{hid_t}.}
 
 \item{\code{native}}{An object of class \code{logical}. If TRUE, array-like objects
 are treated as stored in HDF5 row-major rather than R column-major

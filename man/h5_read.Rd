@@ -26,7 +26,7 @@ h5read(
 \arguments{
 \item{file}{The filename (character) of the file in which the dataset is
 be located. It is possible to provide an object of
-class \code{\link{H5IdComponent}} representing a H5 location identifier
+class \linkS4class{H5IdComponent} representing a H5 location identifier
 (file or group). See \code{\link{H5Fcreate}}, \code{\link{H5Fopen}},
 \code{\link{H5Gcreate}}, \code{\link{H5Gopen}} to create an object of this
 kind.}

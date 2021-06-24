@@ -7,12 +7,12 @@
 H5Dopen(h5loc, name, dapl = NULL)
 }
 \arguments{
-\item{h5loc}{An object of class \link{H5IdComponent} representing a H5
+\item{h5loc}{An object of class \linkS4class{H5IdComponent} representing a H5
 location identifier (file or group).}
 
 \item{name}{Name of the dataset to open.}
 
-\item{dapl}{An object of class \link{H5IdComponent} representing a H5 dataset access property list.}
+\item{dapl}{An object of class \linkS4class{H5IdComponent} representing a H5 dataset access property list.}
 }
 \value{
 An object of class \code{H5IdComponent} representing the opened dataset.

@@ -4,7 +4,7 @@
 #' @details This function does not map directly to the HDF5 C API but is 
 #' included as a useful addition.
 #' 
-#' @param h5dataset Object of class [H5IdComponent] representing an open HDF5 
+#' @param h5dataset Object of class [H5IdComponent-class] representing an open HDF5 
 #' dataset.
 #' 
 #' @return If the supplied dataset is chunked returns a vector, with length

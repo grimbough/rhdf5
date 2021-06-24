@@ -24,7 +24,7 @@ NULL
 #' orientation. Using \code{native = TRUE} increases HDF5 file portability
 #' between programming languages. A file written with \code{native = TRUE}
 #' should also be read with \code{native = TRUE}
-#' @return \code{h5validObjects} returns a list of \code{\link{H5IdComponent}}
+#' @return \code{h5validObjects} returns a list of [H5IdComponent-class]
 #' objects. \code{h5listIdentifier} prints the valid identifiers on screen and
 #' returns NULL.
 #' @author Bernd Fischer, Mike Smith

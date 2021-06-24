@@ -18,7 +18,7 @@ between programming languages. A file written with \code{native = TRUE}
 should also be read with \code{native = TRUE}}
 }
 \value{
-\code{h5validObjects} returns a list of \code{\link{H5IdComponent}}
+\code{h5validObjects} returns a list of \linkS4class{H5IdComponent}
 objects. \code{h5listIdentifier} prints the valid identifiers on screen and
 returns NULL.
 }

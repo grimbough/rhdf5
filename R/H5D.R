@@ -6,7 +6,7 @@
 #' @param name Name of the dataset.
 #' @param dtype_id A character name of a datatype. See `h5const("H5T")`
 #' for possible datatypes. Can also be an integer representing an HDF5 datatype.
-#' @param h5space An object of class [H5IdComponent] representing a H5 dataspace. 
+#' @param h5space An object of class [H5IdComponent-class] representing a H5 dataspace. 
 #' See [H5Dget_space()], [H5Screate_simple()], [H5Screate()] to create an object 
 #' of this kind
 #' @param lcpl,dcpl,dapl An objects of class [H5IdComponent-class] representing 
@@ -39,10 +39,10 @@ H5Dcreate <- function( h5loc, name, dtype_id, h5space, lcpl=NULL, dcpl=NULL, dap
 
 #' Open an existing HDF5 dataset
 #' 
-#' @param h5loc An object of class [H5IdComponent] representing a H5
+#' @param h5loc An object of class [H5IdComponent-class] representing a H5
 #' location identifier (file or group).
 #' @param name Name of the dataset to open.
-#' @param dapl An object of class [H5IdComponent] representing a H5 dataset access property list.
+#' @param dapl An object of class [H5IdComponent-class] representing a H5 dataset access property list.
 #' 
 #' @return An object of class `H5IdComponent` representing the opened dataset.  
 #' To prevent memory leaks this must be closed with a call to [H5Dclose()] 
@@ -78,7 +78,7 @@ H5Dopen <- function( h5loc, name, dapl = NULL ) {
 
 #' Close an open HDF5 dataset
 #' 
-#' @param h5dataset Object of class [H5IdComponent] representing an open HDF5 
+#' @param h5dataset Object of class [H5IdComponent-class] representing an open HDF5 
 #' dataset
 #' 
 #' @export
@@ -89,7 +89,7 @@ H5Dclose <- function( h5dataset ) {
 
 #' Return a copy of the HDF5 datatype for a dataset
 #' 
-#' @param h5dataset Object of class [H5IdComponent] representing an open HDF5 
+#' @param h5dataset Object of class [H5IdComponent-class] representing an open HDF5 
 #' dataset
 #' 
 #' @export
@@ -101,7 +101,7 @@ H5Dget_type <- function( h5dataset ) {
 
 #' Return a copy of the dataset creation property list for a dataset
 #' 
-#' @param h5dataset Object of class [H5IdComponent] representing an open HDF5 
+#' @param h5dataset Object of class [H5IdComponent-class] representing an open HDF5 
 #' dataset
 #' 
 #' @export
@@ -120,7 +120,7 @@ H5Dget_create_plist <- function( h5dataset ) {
 
 #' Return a copy of the HDF5 dataspace for a dataset
 #' 
-#' @param h5dataset Object of class [H5IdComponent] representing an open HDF5 
+#' @param h5dataset Object of class [H5IdComponent-class] representing an open HDF5 
 #' dataset
 #' 
 #' @return Returns an object of class `H5IdComponent` representing a HDF5 
@@ -146,7 +146,7 @@ H5Dget_space <- function( h5dataset ) {
 #' on-disk, which not typically a good indicator of the amount of memory 
 #' that will be required to read the complete dataset.
 #' 
-#' @param h5dataset Object of class [H5IdComponent] representing an open HDF5 
+#' @param h5dataset Object of class [H5IdComponent-class] representing an open HDF5 
 #' dataset
 #' 
 #' @return Returns an integer giving the number of bytes allocated in the file
@@ -209,7 +209,7 @@ H5Dget_storage_size <- function( h5dataset ) {
 #' defined in an external package. This can produce unexpected behaviour when 
 #' working with the data.
 #' 
-#' @param h5dataset Object of class [H5IdComponent] representing an open HDF5 
+#' @param h5dataset Object of class [H5IdComponent-class] representing an open HDF5 
 #' dataset.
 #' @param h5spaceFile An object of class `H5IdComponent` representing a HDF5 
 #' dataspace. See [H5Dget_space()], [H5Screate_simple()], [H5Screate()] to 

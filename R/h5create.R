@@ -5,12 +5,12 @@
 #' Creates an empty HDF5 file.
 #' 
 #' @param file The filename of the HDF5 file.
-#' @return Returns TRUE is file was created successfully and FALSE otherwise.
+#' 
+#' @return Returns (invisibly) `TRUE` is file was created successfully and `FALSE` otherwise.
+#' 
 #' @author Bernd Fischer
 #' @seealso [h5createGroup()], [h5createDataset()],
 #' [h5read()], [h5write()], \link{rhdf5}
-#' @references \url{https://portal.hdfgroup.org/display/HDF5}
-#' @keywords programming interface IO file
 #' @examples
 #' 
 #' h5createFile("ex_createFile.h5")
@@ -21,6 +21,7 @@
 #' 
 #' h5ls("ex_createFile.h5")
 #' 
+#' @name h5_createFile
 #' @export h5createFile
 h5createFile <- function(file) {
 
@@ -40,7 +41,7 @@ h5createFile <- function(file) {
         stop("file has to be a valid filename.")
     }
     
-    res
+    invisible(res)
 }
 
 
@@ -52,19 +53,18 @@ h5createFile <- function(file) {
 #' 
 #' @param file The filename (character) of the file in which the dataset will
 #' be located. For advanced programmers it is possible to provide an object of
-#' class [H5IdComponent()] representing a H5 location identifier
+#' class [H5IdComponent-class] representing a H5 location identifier
 #' (file or group). See [H5Fcreate()], [H5Fopen()],
 #' [H5Gcreate()], [H5Gopen()] to create an object of this
 #' kind.
 #' @param group The name of the new group. The name can contain a hierarchy of
-#' groupnames, e.g. 'group1/group2/newgroup', but the function will fail if the
-#' top level group do not exists.
+#' groupnames, e.g. `"/group1/group2/newgroup"`, but the function will fail if the
+#' top level groups do not exists.
+#' 
 #' @return Returns TRUE is group was created successfully and FALSE otherwise.
 #' @author Bernd Fischer
 #' @seealso [h5createFile()], [h5createDataset()],
-#' [h5read()], [h5write()], \link{rhdf5}
-#' @references \url{https://portal.hdfgroup.org/display/HDF5}
-#' @keywords programming interface IO file
+#' [h5read()], [h5write()]
 #' @examples
 #' 
 #' h5createFile("ex_createGroup.h5")
@@ -233,7 +233,7 @@ h5createGroup <- function(file, group) {
 #' 
 #' @param file The filename (character) of the file in which the dataset will
 #' be located. For advanced programmers it is possible to provide an object of
-#' class [H5IdComponent()] representing a H5 location identifier
+#' class [H5IdComponent-class] representing a H5 location identifier
 #' (file or group). See [H5Fcreate()], [H5Fopen()],
 #' [H5Gcreate()], [H5Gopen()] to create an object of this
 #' kind.
@@ -390,13 +390,13 @@ h5createDataset <- function(file, dataset, dims, maxdims = dims,
 #' 
 #' @param obj The name (character) of the object the attribute will be
 #' attatched to. For advanced programmers it is possible to provide an object
-#' of class [H5IdComponent()] representing a H5 object identifier
+#' of class [H5IdComponent-class] representing a H5 object identifier
 #' (file, group, dataset). See [H5Fcreate()], [H5Fopen()],
 #' [H5Gcreate()], [H5Gopen()], [H5Dcreate()],
 #' [H5Dopen()] to create an object of this kind.
 #' @param file The filename (character) of the file in which the dataset will
 #' be located. For advanced programmers it is possible to provide an object of
-#' class [H5IdComponent()] representig an H5 location identifier. See
+#' class [H5IdComponent-class] representing an H5 location identifier. See
 #' [H5Fcreate()], [H5Fopen()], [H5Gcreate()],
 #' [H5Gopen()] to create an object of this kind. The \code{file}
 #' argument is not required, if the argument \code{obj} is of type
@@ -441,6 +441,7 @@ h5createDataset <- function(file, dataset, dims, maxdims = dims,
 #' H5Dclose(did)
 #' H5Fclose(fid)
 #' 
+#' @name h5_createAttribute
 #' @export h5createAttribute
 h5createAttribute <- function(obj, attr, dims, maxdims = dims, file, 
                               storage.mode = "double", H5type = NULL, 

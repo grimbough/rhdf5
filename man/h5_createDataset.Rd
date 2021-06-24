@@ -24,7 +24,7 @@ h5createDataset(
 \arguments{
 \item{file}{The filename (character) of the file in which the dataset will
 be located. For advanced programmers it is possible to provide an object of
-class \code{\link[=H5IdComponent]{H5IdComponent()}} representing a H5 location identifier
+class \linkS4class{H5IdComponent} representing a H5 location identifier
 (file or group). See \code{\link[=H5Fcreate]{H5Fcreate()}}, \code{\link[=H5Fopen]{H5Fopen()}},
 \code{\link[=H5Gcreate]{H5Gcreate()}}, \code{\link[=H5Gopen]{H5Gopen()}} to create an object of this
 kind.}

@@ -7,7 +7,7 @@
 H5Dclose(h5dataset)
 }
 \arguments{
-\item{h5dataset}{Object of class \link{H5IdComponent} representing an open HDF5
+\item{h5dataset}{Object of class \linkS4class{H5IdComponent} representing an open HDF5
 dataset}
 }
 \description{

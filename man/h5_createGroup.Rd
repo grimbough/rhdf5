@@ -10,14 +10,14 @@ h5createGroup(file, group)
 \arguments{
 \item{file}{The filename (character) of the file in which the dataset will
 be located. For advanced programmers it is possible to provide an object of
-class \code{\link[=H5IdComponent]{H5IdComponent()}} representing a H5 location identifier
+class \linkS4class{H5IdComponent} representing a H5 location identifier
 (file or group). See \code{\link[=H5Fcreate]{H5Fcreate()}}, \code{\link[=H5Fopen]{H5Fopen()}},
 \code{\link[=H5Gcreate]{H5Gcreate()}}, \code{\link[=H5Gopen]{H5Gopen()}} to create an object of this
 kind.}
 
 \item{group}{The name of the new group. The name can contain a hierarchy of
-groupnames, e.g. 'group1/group2/newgroup', but the function will fail if the
-top level group do not exists.}
+groupnames, e.g. \code{"/group1/group2/newgroup"}, but the function will fail if the
+top level groups do not exists.}
 }
 \value{
 Returns TRUE is group was created successfully and FALSE otherwise.
@@ -39,17 +39,10 @@ h5createGroup("ex_createGroup.h5","foo/foobaa")
 h5ls("ex_createGroup.h5")
 
 }
-\references{
-\url{https://portal.hdfgroup.org/display/HDF5}
-}
 \seealso{
 \code{\link[=h5createFile]{h5createFile()}}, \code{\link[=h5createDataset]{h5createDataset()}},
-\code{\link[=h5read]{h5read()}}, \code{\link[=h5write]{h5write()}}, \link{rhdf5}
+\code{\link[=h5read]{h5read()}}, \code{\link[=h5write]{h5write()}}
 }
 \author{
 Bernd Fischer
 }
-\keyword{IO}
-\keyword{file}
-\keyword{interface}
-\keyword{programming}

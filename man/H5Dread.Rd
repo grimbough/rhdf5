@@ -15,7 +15,7 @@ H5Dread(
 )
 }
 \arguments{
-\item{h5dataset}{Object of class \link{H5IdComponent} representing an open HDF5
+\item{h5dataset}{Object of class \linkS4class{H5IdComponent} representing an open HDF5
 dataset.}
 
 \item{h5spaceFile}{An object of class \code{H5IdComponent} representing a HDF5

@@ -33,7 +33,7 @@ h5loadData <- function(h5loc, L, all=FALSE, ..., native) {
 #' Dump the content of an HDF5 file.
 #' 
 #' @param file The filename (character) of the file in which the dataset will
-#' be located. You can also provide an object of class [H5IdComponent()] 
+#' be located. You can also provide an object of class [H5IdComponent-class] 
 #' representing a H5 location identifier (file or group). See [H5Fcreate()], 
 #' [H5Fopen()], [H5Gcreate()], [H5Gopen()] to create an object of this kind.
 #' @param recursive If `TRUE`, the content of the whole group hierarchy is
