@@ -71,3 +71,11 @@ reference:
   - H5Pset_bzip2
   - H5Pset_blosc
   - H5Pset_lzf
+  - H5P_chunk
+  - H5P_chunk_cache
+  - H5P_layout
+  - H5Pclose
+  - H5Pcopy
+  - H5Pcreate
+  - H5Pget_class
+  - H5Pset_fapl_ros3
