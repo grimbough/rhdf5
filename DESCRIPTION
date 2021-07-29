@@ -1,7 +1,7 @@
 Package: rhdf5
 Type: Package
 Title: R Interface to HDF5
-Version: 2.37.0
+Version: 2.37.1
 Authors@R: c(person("Bernd", "Fischer", role = c("aut")), 
         person("Mike", "Smith", 
             role=c("aut", "cre"), 
@@ -32,4 +32,5 @@ LinkingTo: Rhdf5lib
 SystemRequirements: GNU make
 biocViews: Infrastructure, DataImport
 Encoding: UTF-8
-RoxygenNote: 6.1.1
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.1

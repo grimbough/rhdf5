@@ -1,0 +1,81 @@
+reference:
+- title: "High level functions"
+  desc: >
+    Wrappers around several low-level functions
+- contents: 
+  - starts_with("h5")
+  
+- title: "HDF5 Files"
+  desc: >
+    Functions for working with HDF5 Files
+- contents: 
+  - starts_with("H5F")
+  
+- title: "HDF5 Groups"
+  desc: >
+    Functions for working with HDF5 Groups
+- contents: 
+  - starts_with("H5G")
+  
+- title: "HDF5 Datasets"
+  desc: >
+    Functions for working with HDF5 Datasets
+- contents: 
+  - starts_with("H5D")
+  
+- title: "HDF5 Dataspaces"
+  desc: >
+    Functions for working with HDF5 Dataspaces
+- contents: 
+  - starts_with("H5S")
+  
+- title: "HDF5 Attributes"
+  desc: >
+    Functions for working with HDF5 Attributes
+- contents: 
+  - starts_with("H5A")
+
+- title: "HDF5 Objects"
+  desc: >
+    Functions for working with HDF5 Objects
+- contents: 
+  - starts_with("H5O")
+  
+- title: "HDF5 Links"
+  desc: >
+    Functions for working with HDF5 Links
+- contents: 
+  - starts_with("H5L")
+  
+- title: "HDF5 Identifiers"
+  desc: >
+    Functions for working with HDF5 Identifiers
+- contents: 
+  - starts_with("H5I")
+  
+- title: "HDF5 Datatypes"
+  desc: >
+    Functions for working with HDF5 Datatypes
+- contents: 
+  - starts_with("H5T")
+  
+- title: "HDF5 Object Creation Properties"
+- contents:
+  - H5Pobject_track_times
+  
+- title: "HDF5 Dataset Creation Properties"
+- contents:
+  - H5Pset_shuffle
+  - H5Pset_deflate
+  - H5Pset_szip
+  - H5Pset_bzip2
+  - H5Pset_blosc
+  - H5Pset_lzf
+  - H5P_chunk
+  - H5P_chunk_cache
+  - H5P_layout
+  - H5Pclose
+  - H5Pcopy
+  - H5Pcreate
+  - H5Pget_class
+  - H5Pset_fapl_ros3

@@ -1,4 +1,3 @@
-
 h5lsConvertToDataframe <- function(L, all=FALSE, native) {
   if (is.data.frame(L)) {
     L$ltype <- h5const2String("H5L_TYPE", L$ltype)
@@ -14,6 +13,60 @@ h5lsConvertToDataframe <- function(L, all=FALSE, native) {
   L
 }
 
+#' List the content of an HDF5 file.
+#' 
+#' @param file The filename (character) of the file in which the dataset will
+#' be located. You can also provide an object of class [H5IdComponent-class] 
+#' representing a H5 location identifier (file or group). See [H5Fcreate()], 
+#' [H5Fopen()], [H5Gcreate()], [H5Gopen()] to create an object of this kind.
+#' @param recursive If `TRUE`, the content of the whole group hierarchy is
+#' listed. If `FALSE`, Only the content of the main group is shown. If a positive
+#' integer is provided this indicates the maximum level of the hierarchy that
+#' is shown.
+#' @param all If `TRUE`, a longer list of information on each entry is provided.
+#' @param datasetinfo If `FALSE`, datatype and dimensionality information is not
+#' provided. This can speed up the content listing for large files.
+#' @param index_type See `h5const("H5_INDEX")` for possible arguments.
+#' @param order See `h5const("H5_ITER")` for possible arguments.
+#' @param s3 Logical value indicating whether the file argument should be
+#' treated as a URL to an Amazon S3 bucket, rather than a local file path.
+#' @param s3credentials A list of length three, providing the credentials for
+#' accessing files in a private Amazon S3 bucket.
+#' @param native An object of class `logical`. If TRUE, array-like objects
+#' are treated as stored in HDF5 row-major rather than R column-major
+#' orientation. Using `native = TRUE` increases HDF5 file portability
+#' between programming languages. A file written with `native = TRUE`
+#' should also be read with `native = TRUE`
+#' 
+#' @return \code{h5ls} returns a `data.frame` with the file content.
+#' 
+#' @author Bernd Fischer, Mike L. Smith
+#' @seealso [h5dump()]
+#' @references \url{https://portal.hdfgroup.org/display/HDF5}
+#' @keywords programming interface IO file
+#' @examples
+#' 
+#' h5createFile("ex_ls_dump.h5")
+#' 
+#' # create groups
+#' h5createGroup("ex_ls_dump.h5","foo")
+#' h5createGroup("ex_ls_dump.h5","foo/foobaa")
+#' 
+#' # write a matrix
+#' B = array(seq(0.1,2.0,by=0.1),dim=c(5,2,2))
+#' attr(B, "scale") <- "liter"
+#' h5write(B, "ex_ls_dump.h5","foo/B")
+#' 
+#' # list content of hdf5 file
+#' h5ls("ex_ls_dump.h5",all=TRUE)
+#' h5dump("ex_ls_dump.h5")
+#' 
+#' # list content of an hdf5 file in a public S3 bucket
+#' \donttest{
+#' h5ls(file = "https://rhdf5-public.s3.eu-central-1.amazonaws.com/h5ex_t_array.h5", s3 = TRUE)
+#' }
+#' 
+#' @export
 h5ls <- function( file, recursive = TRUE, all=FALSE, datasetinfo=TRUE, 
                   index_type = h5default("H5_INDEX"), order = h5default("H5_ITER"), 
                   s3 = FALSE, s3credentials = NULL, native = FALSE) {
