@@ -12,19 +12,19 @@ setMethod("show",signature="H5IdComponent", function(object) {
   if (res$type == "DATASPACE") {
     res2 <- H5Sget_simple_extent_dims(object)
     res$info = c(res$info,
-      rank = res2$rank,
-      size = paste(res2$size, collapse=" x "),
-      maxsize = paste(res2$maxsize, collapse=" x "))
+                 rank = res2$rank,
+                 size = paste(res2$size, collapse=" x "),
+                 maxsize = paste(res2$maxsize, collapse=" x "))
   }
   if (res$type == "DATASET") {
     s = H5Dget_space(object)
     on.exit(H5Sclose(s))
     res2 <- H5Sget_simple_extent_dims(s)
     res$info = c(res$info,
-      type =  .Call("_getDatatypeName", H5Dget_type(object), PACKAGE='rhdf5'),
-      rank = res2$rank,
-      size = paste(res2$size, collapse=" x "),
-      maxsize = paste(res2$maxsize, collapse=" x "))
+                 type =  .Call("_getDatatypeName", H5Dget_type(object), PACKAGE='rhdf5'),
+                 rank = res2$rank,
+                 size = paste(res2$size, collapse=" x "),
+                 maxsize = paste(res2$maxsize, collapse=" x "))
   }
   if (res$type == "ATTR") {
     s = H5Aget_space(object)
@@ -32,15 +32,15 @@ setMethod("show",signature="H5IdComponent", function(object) {
     res2 <- H5Sget_simple_extent_dims(s)
     names(res$info)[names(res$info) == "name"] = "objName"
     res$info = c(res$info,
-      attrName = H5Aget_name(object),
-      type = .Call("_getDatatypeName", H5Aget_type(object), PACKAGE='rhdf5'),
-      rank = res2$rank,
-      size = paste(res2$size, collapse=" x "),
-      maxsize = paste(res2$maxsize, collapse=" x "))
+                 attrName = H5Aget_name(object),
+                 type = .Call("_getDatatypeName", H5Aget_type(object), PACKAGE='rhdf5'),
+                 rank = res2$rank,
+                 size = paste(res2$size, collapse=" x "),
+                 maxsize = paste(res2$maxsize, collapse=" x "))
   }
   if (res$type == "DATATYPE") {
     res$info = c(res$info,
-      type = .Call("_getDatatypeName", object@ID, PACKAGE='rhdf5'))
+                 type = .Call("_getDatatypeName", object@ID, PACKAGE='rhdf5'))
   }
   if (!is.null(res$info)) {
     cat(paste(sprintf("%12s %s\n",names(res$info),res$info),collapse=""))
@@ -57,6 +57,29 @@ setMethod("show",signature="H5IdComponent", function(object) {
   }
 })
 
+
+#' @describeIn H5IdComponent Returns a group handle or dataset handle for the
+#'   group or dataset `name` in the HDF5 location `h5loc`. `h5loc` can either be a file handle
+#'   as returned by [H5Fopen] or a group handle as e.g. returned by `h5f$g1` or
+#'   `h5f$'/g1/g2'`.
+#'   
+#' @param e1 An `H5IdComponent` object representing an H5 file or group.
+#' @param e2 Character giving the path to an HDF5 group or dataset relative to `e1`.
+#' 
+#' @export
+setMethod(`&`, signature = c("H5IdComponent", "character"), 
+          function(e1, e2) {
+            H5Oopen(e1, e2)
+          } )
+
+#' @describeIn H5IdComponent Reads the HDF5 object `name` in the HDF5 location `x`. `x` can either be
+#'   a file handle as returned by [H5Fopen] or a group handle as e.g. returned by
+#'   `h5f$g1` or `h5f$'/g1/g2'`.
+#'   
+#' @param x An `H5IdComponent` object representing an H5 file or group.
+#' @param name Character giving the path to an HDF5 group or dataset relative to `x`.
+#'
+#' @export
 setMethod( `$`, signature = c('H5IdComponent'),
            function(x, name) {
              h5id = x
@@ -88,13 +111,49 @@ setMethod( `$`, signature = c('H5IdComponent'),
              res
            } )
 
-setMethod(`&`, signature = c("H5IdComponent"), 
-          function(e1, e2) {
-            h5id = e1
-            name = e2
-            H5Oopen(h5id, name)
+#' @describeIn H5IdComponent Writes the assigned object to to the HDF5 file at
+#'   location e1. e1 can either be a file handle as returned by [H5Fopen] or a
+#'   group handle as e.g. returned by h5f$g1 or h5f$'/g1/g2's. The storage.mode
+#'   of the assigned object has to be compatible to the datatype of the HDF5
+#'   dataset. The dimension of the assigned object have to be identical the
+#'   dimensions of the HDF5 dataset. To create a new HDF5 dataset with specific
+#'   properties (e.g. compression level or chunk size), please use the function
+#'   [h5createDataset] first.
+#'   
+#' @export
+setMethod(`$<-`, signature = c("H5IdComponent"),
+          function(x, name, value) {
+            h5id = x
+            isvalid = H5Iis_valid(h5id)
+            if (!isvalid) {
+              stop("Bad HDF5 ID. File, group, or dataset closed?", call. = FALSE)
+            }
+            truetype = H5Iget_type(h5id)
+            if (truetype %in% c("H5I_FILE", "H5I_GROUP")) {
+              res = h5write(value, file = h5id, name = name)
+            } else {
+              stop("The provided H5Identifier is not a location identifier.", 
+                   call. = FALSE)
+            }
+            h5id
           } )
 
+
+#' @describeIn H5IdComponent Subsetting of an HDF5 dataset. The function reads a
+#'   subset of an HDF5 dataset. The given dimensions have to fit the dimensions
+#'   of the HDF5 dataset.
+#'
+#' @param x Object of class `H5IdComponent` representing the HDF5 dataset from
+#'   which to extract element(s) or in which to replace element(s).
+#' @param i,j,\dots Indices specifying elements to extract or replace. Indices
+#'   are \code{numeric} vectors or empty (missing) or \code{NULL}.  Numeric
+#'   values are coerced to integer as by \code{\link[base]{as.integer}} (and
+#'   hence truncated towards zero).
+#' @param drop If `TRUE` the result is coerced to the lowest possible dimension
+#'   (see the examples).  This only works for extracting elements, not for the
+#'   replacement.  See \code{\link[base]{drop}} for further details.
+#'
+#' @export
 setMethod(`[`, signature = c("H5IdComponent", "ANY", "ANY", "ANY"),
           function(x, i, j, ..., drop = TRUE) {
             h5id = x
@@ -126,7 +185,15 @@ setMethod(`[`, signature = c("H5IdComponent", "ANY", "ANY", "ANY"),
             res
           } )
 
-
+#' @describeIn H5IdComponent Subsetting of an HDF5 dataset. The function writes
+#'   an R data object to a subset of an HDF5 dataset. The given dimensions have
+#'   to fit the dimensions of the HDF5 dataset. The HDF5 dataset has to be
+#'   created beforehand, e.g. by [h5createDataset].
+#'   
+#' @param value Array-like \R object containing value to be inserted into
+#' the HDF5 dataset.
+#'
+#' @export
 setMethod(`[<-`, signature = c("H5IdComponent", "ANY","ANY","ANY"),
           function(x, i, j, ..., value) {
             h5id = x
@@ -156,20 +223,5 @@ setMethod(`[<-`, signature = c("H5IdComponent", "ANY","ANY","ANY"),
             h5id
           } )
 
-setMethod(`$<-`, signature = c("H5IdComponent"),
-          function(x, name, value) {
-            h5id = x
-            isvalid = H5Iis_valid(h5id)
-            if (!isvalid) {
-              stop("Bad HDF5 ID. File, group, or dataset closed?", call. = FALSE)
-            }
-            truetype = H5Iget_type(h5id)
-            if (truetype %in% c("H5I_FILE", "H5I_GROUP")) {
-              res = h5write(value, file = h5id, name = name)
-            } else {
-              stop("The provided H5Identifier is not a location identifier.", 
-                   call. = FALSE)
-            }
-            h5id
-          } )
+
 

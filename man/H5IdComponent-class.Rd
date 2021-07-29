@@ -4,12 +4,48 @@
 \name{H5IdComponent-class}
 \alias{H5IdComponent-class}
 \alias{show,H5IdComponent-method}
+\alias{&,H5IdComponent,character-method}
+\alias{$,H5IdComponent-method}
+\alias{$<-,H5IdComponent-method}
+\alias{[,H5IdComponent-method}
+\alias{[<-,H5IdComponent-method}
 \title{An S4 class representing H5 object}
 \usage{
 \S4method{show}{H5IdComponent}(object)
+
+\S4method{&}{H5IdComponent,character}(e1, e2)
+
+\S4method{$}{H5IdComponent}(x, name)
+
+\S4method{$}{H5IdComponent}(x, name) <- value
+
+\S4method{[}{H5IdComponent}(x, i, j, ..., drop = TRUE)
+
+\S4method{[}{H5IdComponent}(x, i, j, ...) <- value
 }
 \arguments{
 \item{object}{Object of class \code{H5IdComponent}}
+
+\item{e1}{An \code{H5IdComponent} object representing an H5 file or group.}
+
+\item{e2}{Character giving the path to an HDF5 group or dataset relative to \code{e1}.}
+
+\item{x}{Object of class \code{H5IdComponent} representing the HDF5 dataset from
+which to extract element(s) or in which to replace element(s).}
+
+\item{name}{Character giving the path to an HDF5 group or dataset relative to \code{x}.}
+
+\item{value}{Array-like \R object containing value to be inserted into
+the HDF5 dataset.}
+
+\item{i, j, \dots}{Indices specifying elements to extract or replace. Indices
+are \code{numeric} vectors or empty (missing) or \code{NULL}.  Numeric
+values are coerced to integer as by \code{\link[base]{as.integer}} (and
+hence truncated towards zero).}
+
+\item{drop}{If \code{TRUE} the result is coerced to the lowest possible dimension
+(see the examples).  This only works for extracting elements, not for the
+replacement.  See \code{\link[base]{drop}} for further details.}
 }
 \description{
 A class representing a HDF5 identifier handle. HDF5 identifiers represent
@@ -18,6 +54,33 @@ open files, groups, datasets, dataspaces, attributes, and datatypes.
 \section{Methods (by generic)}{
 \itemize{
 \item \code{show}: Print details of the object to screen.
+
+\item \code{&}: Returns a group handle or dataset handle for the
+group or dataset \code{name} in the HDF5 location \code{h5loc}. \code{h5loc} can either be a file handle
+as returned by \link{H5Fopen} or a group handle as e.g. returned by \code{h5f$g1} or
+\code{h5f$'/g1/g2'}.
+
+\item \code{$}: Reads the HDF5 object \code{name} in the HDF5 location \code{x}. \code{x} can either be
+a file handle as returned by \link{H5Fopen} or a group handle as e.g. returned by
+\code{h5f$g1} or \code{h5f$'/g1/g2'}.
+
+\item \code{$<-}: Writes the assigned object to to the HDF5 file at
+location e1. e1 can either be a file handle as returned by \link{H5Fopen} or a
+group handle as e.g. returned by h5f$g1 or h5f$'/g1/g2's. The storage.mode
+of the assigned object has to be compatible to the datatype of the HDF5
+dataset. The dimension of the assigned object have to be identical the
+dimensions of the HDF5 dataset. To create a new HDF5 dataset with specific
+properties (e.g. compression level or chunk size), please use the function
+\link{h5createDataset} first.
+
+\item \code{[}: Subsetting of an HDF5 dataset. The function reads a
+subset of an HDF5 dataset. The given dimensions have to fit the dimensions
+of the HDF5 dataset.
+
+\item \code{[<-}: Subsetting of an HDF5 dataset. The function writes
+an R data object to a subset of an HDF5 dataset. The given dimensions have
+to fit the dimensions of the HDF5 dataset. The HDF5 dataset has to be
+created beforehand, e.g. by \link{h5createDataset}.
 }}
 
 \section{Slots}{
