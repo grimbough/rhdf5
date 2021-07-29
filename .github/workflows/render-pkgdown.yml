@@ -1,0 +1,83 @@
+name: render pkgdown
+
+on:
+  push:
+    branches: 
+      - rd2roxygen
+
+jobs:
+  render:
+  
+    strategy:
+      matrix:
+        config:
+        - { os: macOS-latest, r: 'prerelease'}
+        
+    # The type of runner that the job will run on
+    runs-on: macOS-latest
+
+    steps:
+    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+    - uses: actions/checkout@master
+    
+    - uses: grimbough/actions-1/setup-r@master
+      with:
+        r-version: ${{ matrix.config.r }}
+        
+    - uses: r-lib/actions/setup-pandoc@master
+    
+    - name: Set R options
+      run: |
+        echo "options(Ncpus = 2)" >> $HOME/.Rprofile
+        echo 'options(pkgType = "mac.binary")' >> $HOME/.Rprofile
+
+    - name: Query dependencies
+      run: |
+        install.packages(c('remotes', 'devtools'), type = "binary")
+        saveRDS(remotes::dev_package_deps(dependencies = TRUE), ".github/depends.Rds", version = 2)
+      shell: Rscript {0}
+
+    - name: Cache R packages
+      uses: actions/cache@v1
+      with:
+        path: ${{ env.R_LIBS_USER }}
+        key: macOS-r-${{ matrix.config.r }}-${{ hashFiles('.github/depends.Rds') }}
+        restore-keys: macOS-r-${{ matrix.config.r }}-
+
+    - name: Install dependencies
+      run: |
+        install.packages("BiocManager", type = "source")
+        BiocManager::install(version = 'devel', ask = FALSE, update = TRUE)
+        toInstall <- remotes::dev_package_deps(dependencies = TRUE)[,'package']
+        BiocManager::install(toInstall, ask = FALSE, update = TRUE, INSTALL_opts = '--force-biarch')
+        remotes::install_dev("pkgdown")
+      shell: Rscript {0}
+
+    #- name: commit newly made helpfiles
+    #  run: |
+    #    git add man/* || echo "No changes to commit"
+    #    git commit -m "Re-build docs" || echo "No changes to commit"
+    #    git push origin master || echo "No changes to commit"
+
+    - name: Install package
+      run: R CMD INSTALL .
+
+    # install packages needed
+    - name: install required packages
+      run: Rscript -e 'install.packages(c("rmarkdown", "knitr", "badger", "pkgdown"))'
+
+    # Render README.md using rmarkdown
+    #- name: render README
+    #  run: Rscript -e 'rmarkdown::render("README.Rmd", output_format = "md_document")'
+
+    #- name: commit rendered README
+    #  run: |
+    #    git config --global user.email "render-action@github.com"
+    #    git config --global user.name "Render action"
+    #    git add README.md
+    #    git commit -m "Re-build README.md" || echo "No changes to commit"
+    #    git push origin master || echo "No changes to commit"
+
+    - name: Deploy package
+      run: pkgdown::deploy_to_branch(new_process = FALSE)
+      shell: Rscript {0}

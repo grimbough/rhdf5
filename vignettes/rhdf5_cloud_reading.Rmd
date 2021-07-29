@@ -16,7 +16,7 @@ vignette: |
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-The `r Biocpkg("rhdf5")` provides limited support for read-only access to HDF5 files stored in Amazon S3 buckets.  This is implemented via the (HDF5 S3 Virtual File Driver)[https://portal.hdfgroup.org/display/HDF5/Virtual+File+Drivers+-+S3+and+HDFS] and allows access to HDF5 files hosted in both public and private S3 buckets.  
+The `r Biocpkg("rhdf5")` provides limited support for read-only access to HDF5 files stored in Amazon S3 buckets.  This is implemented via the [HDF5 S3 Virtual File Driver](https://portal.hdfgroup.org/display/HDF5/Virtual+File+Drivers+-+S3+and+HDFS) and allows access to HDF5 files hosted in both public and private S3 buckets.  
 
 Currently only the functions `h5ls()`, `h5dump()` and `h5read()` are supported.
 
