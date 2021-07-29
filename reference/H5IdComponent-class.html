@@ -8,6 +8,13 @@
 
 <title>An S4 class representing H5 object — H5IdComponent-class • rhdf5</title>
 
+<!-- favicons -->
+<link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
+<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
@@ -42,6 +49,7 @@
 <meta property="og:title" content="An S4 class representing H5 object — H5IdComponent-class" />
 <meta property="og:description" content="A class representing a HDF5 identifier handle. HDF5 identifiers represent
 open files, groups, datasets, dataspaces, attributes, and datatypes." />
+<meta property="og:image" content="/logo.png" />
 
 
 
@@ -73,7 +81,7 @@ open files, groups, datasets, dataspaces, attributes, and datatypes." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rhdf5</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.35.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.37.1</span>
       </span>
     </div>
 
@@ -137,8 +145,23 @@ open files, groups, datasets, dataspaces, attributes, and datatypes." />
 open files, groups, datasets, dataspaces, attributes, and datatypes.</p>
     </div>
 
-    <pre class="usage"><span class='co'># S4 method for H5IdComponent</span>
-<span class='fu'>show</span><span class='op'>(</span><span class='va'>object</span><span class='op'>)</span></pre>
+    <pre class="usage"># S4 method for H5IdComponent
+show(object)
+
+# S4 method for H5IdComponent,character
+&amp;amp;(e1, e2)
+
+# S4 method for H5IdComponent
+$(x, name)
+
+# S4 method for H5IdComponent
+$(x, name) &lt;- value
+
+# S4 method for H5IdComponent
+[(x, i, j, ..., drop = TRUE)
+
+# S4 method for H5IdComponent
+[(x, i, j, ...) &lt;- value</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -147,6 +170,41 @@ open files, groups, datasets, dataspaces, attributes, and datatypes.</p>
       <th>object</th>
       <td><p>Object of class <code>H5IdComponent</code></p></td>
     </tr>
+    <tr>
+      <th>e1</th>
+      <td><p>An <code>H5IdComponent</code> object representing an H5 file or group.</p></td>
+    </tr>
+    <tr>
+      <th>e2</th>
+      <td><p>Character giving the path to an HDF5 group or dataset relative to <code>e1</code>.</p></td>
+    </tr>
+    <tr>
+      <th>x</th>
+      <td><p>Object of class <code>H5IdComponent</code> representing the HDF5 dataset from
+which to extract element(s) or in which to replace element(s).</p></td>
+    </tr>
+    <tr>
+      <th>name</th>
+      <td><p>Character giving the path to an HDF5 group or dataset relative to <code>x</code>.</p></td>
+    </tr>
+    <tr>
+      <th>value</th>
+      <td><p>Array-like <span style="R">R</span> object containing value to be inserted into
+the HDF5 dataset.</p></td>
+    </tr>
+    <tr>
+      <th>i, j, ...</th>
+      <td><p>Indices specifying elements to extract or replace. Indices
+are <code>numeric</code> vectors or empty (missing) or <code>NULL</code>.  Numeric
+values are coerced to integer as by <code><a href='https://rdrr.io/r/base/integer.html'>as.integer</a></code> (and
+hence truncated towards zero).</p></td>
+    </tr>
+    <tr>
+      <th>drop</th>
+      <td><p>If <code>TRUE</code> the result is coerced to the lowest possible dimension
+(see the examples).  This only works for extracting elements, not for the
+replacement.  See <code><a href='https://rdrr.io/r/base/drop.html'>drop</a></code> for further details.</p></td>
+    </tr>
     </table>
 
     <h2 class="hasAnchor" id="methods-by-generic-"><a class="anchor" href="#methods-by-generic-"></a>Methods (by generic)</h2>
@@ -154,6 +212,28 @@ open files, groups, datasets, dataspaces, attributes, and datatypes.</p>
     
 <ul>
 <li><p><code>show</code>: Print details of the object to screen.</p></li>
+<li><p><code>&amp;</code>: Returns a group handle or dataset handle for the
+group or dataset <code>name</code> in the HDF5 location <code>h5loc</code>. <code>h5loc</code> can either be a file handle
+as returned by <a href='H5Fopen.html'>H5Fopen</a> or a group handle as e.g. returned by <code>h5f$g1</code> or
+<code>h5f$'/g1/g2'</code>.</p></li>
+<li><p><code>$</code>: Reads the HDF5 object <code>name</code> in the HDF5 location <code>x</code>. <code>x</code> can either be
+a file handle as returned by <a href='H5Fopen.html'>H5Fopen</a> or a group handle as e.g. returned by
+<code>h5f$g1</code> or <code>h5f$'/g1/g2'</code>.</p></li>
+<li><p><code>$&lt;-</code>: Writes the assigned object to to the HDF5 file at
+location e1. e1 can either be a file handle as returned by <a href='H5Fopen.html'>H5Fopen</a> or a
+group handle as e.g. returned by h5f$g1 or h5f$'/g1/g2's. The storage.mode
+of the assigned object has to be compatible to the datatype of the HDF5
+dataset. The dimension of the assigned object have to be identical the
+dimensions of the HDF5 dataset. To create a new HDF5 dataset with specific
+properties (e.g. compression level or chunk size), please use the function
+<a href='h5_createDataset.html'>h5createDataset</a> first.</p></li>
+<li><p><code>[</code>: Subsetting of an HDF5 dataset. The function reads a
+subset of an HDF5 dataset. The given dimensions have to fit the dimensions
+of the HDF5 dataset.</p></li>
+<li><p><code>[&lt;-</code>: Subsetting of an HDF5 dataset. The function writes
+an R data object to a subset of an HDF5 dataset. The given dimensions have
+to fit the dimensions of the HDF5 dataset. The HDF5 dataset has to be
+created beforehand, e.g. by <a href='h5_createDataset.html'>h5createDataset</a>.</p></li>
 </ul>
     <h2 class="hasAnchor" id="slots"><a class="anchor" href="#slots"></a>Slots</h2>
 
