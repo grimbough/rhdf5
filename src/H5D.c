@@ -269,39 +269,9 @@ SEXP H5Dread_helper_INTEGER(hid_t dataset_id, hid_t file_space_id, hid_t mem_spa
             }
             long long i;
             if ((b == 4) & (sgn == H5T_SGN_NONE)) {
-                for (i=0; i<n; i++) {
-                    ((int *)buf)[i] = ((unsigned int *)intbuf)[i];
-                }
-                for (i=0; i<n; i++) {
-                    if (((unsigned int *)intbuf)[i] > INT_MAX) {
-                        ((int *)buf)[i] = INT_MIN;
-                        warn = 1;
-                    }
-                }
-            } else if ((b == 8) & (sgn == H5T_SGN_2)) {
-                for (i=0; i<n; i++) {
-                    ((int *)buf)[i] = ((long long *)intbuf)[i];
-                }
-                for (i=0; i<n; i++) {
-                    if (((long long *)intbuf)[i] > INT_MAX) {
-                        ((int *)buf)[i] = INT_MIN;
-                        warn = 1;
-                    }
-                    if (((long long *)intbuf)[i] < INT_MIN) {
-                        ((int *)buf)[i] = INT_MIN;
-                        warn = 1;
-                    }
-                }
-            } else if ((b == 8) & (sgn == H5T_SGN_NONE)) {
-                for (i=0; i<n; i++) {
-                    ((int *)buf)[i] = ((unsigned long long *)intbuf)[i];
-                }
-                for (i=0; i<n; i++) {
-                    if (((unsigned long long *)intbuf)[i] > INT_MAX) {
-                        ((int *)buf)[i] = INT_MIN;
-                        warn = 1;
-                    }
-                }
+                uint32_to_int32(intbuf, n, buf);
+            } else if (b == 8) { 
+                int64_to_int32(intbuf, n, buf, sgn);
             }
         } else {
             void * buf;
@@ -319,30 +289,9 @@ SEXP H5Dread_helper_INTEGER(hid_t dataset_id, hid_t file_space_id, hid_t mem_spa
                         ((double *)buf)[i] = ((int *)intbuf)[i];
                     }
                 } else if ((b == 4) & (sgn == H5T_SGN_NONE)) {
-                    for (i=0; i<n; i++){
-                        ((double *)buf)[i] = ((unsigned int *)intbuf)[i];
-                    }
-                } else if ((b == 8) & (sgn == H5T_SGN_2)) {
-                    for (i=0; i<n; i++){
-                        ((double *)buf)[i] = ((long long *)intbuf)[i];
-                    }
-                    for (i=0; i<n; i++) {
-                        if (((long long *)intbuf)[i] > 0x001fffffffffffffL) {
-                            warn_double = 1;
-                        }
-                        if (((long long *)intbuf)[i] < (long long) 0xffe0000000000000L) {
-                            warn_double = 1;
-                        }
-                    }
-                } else if ((b == 8) & (sgn == H5T_SGN_NONE)) {
-                    for (i=0; i<n; i++){
-                        ((double *)buf)[i] = ((unsigned long long *)intbuf)[i];
-                    }
-                    for (i=0; i<n; i++) {
-                        if (((unsigned long long *)intbuf)[i] > 0x001fffffffffffffUL) {
-                            warn_double = 1;
-                        }
-                    }
+                    uint32_to_double(intbuf, n, buf);
+                } else if (b == 8) {
+                    int64_to_double(intbuf, n, buf, sgn);
                 }
             } else { // convert to integer64 class
                 long long i;
@@ -351,23 +300,9 @@ SEXP H5Dread_helper_INTEGER(hid_t dataset_id, hid_t file_space_id, hid_t mem_spa
                         ((long long *)buf)[i] = ((int *)intbuf)[i];
                     }
                 } else if ((b == 4) & (sgn == H5T_SGN_NONE)) {
-                    for (i=0; i<n; i++){
-                        ((long long *)buf)[i] = ((unsigned int *)intbuf)[i];
-                    }
-                } else if ((b == 8) & (sgn == H5T_SGN_2)) {
-                    for (i=0; i<n; i++){
-                        ((long long *)buf)[i] = ((long long *)intbuf)[i];
-                    }
-                } else if ((b == 8) & (sgn == H5T_SGN_NONE)) {
-                    for (i=0; i<n; i++){
-                        ((long long *)buf)[i] = ((unsigned long long *)intbuf)[i];
-                    }
-                    for (i=0; i<n; i++) {
-                        if (((unsigned long long *)intbuf)[i] > LLONG_MAX) {
-                            ((long long *)buf)[i] = LLONG_MIN;
-                            warn_overflow_64bit = 1;
-                        }
-                    }
+                    uint32_to_integer64(intbuf, n, buf);
+                } else if (b == 8) {
+                    int64_to_integer64(intbuf, n, buf, sgn);
                 }
                 if (native)
                     PERMUTE(Rval, INTEGER, mem_space_id);
