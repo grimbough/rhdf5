@@ -97,7 +97,7 @@ h5createGroup <- function(file, group) {
     res
 }
 
-.setDataType <- function(H5type, storage.mode, size) {
+.setDataType <- function(H5type, storage.mode, size, encoding) {
   
   if (is.null(H5type)) {
     if (is.character(storage.mode)) {
@@ -110,10 +110,8 @@ h5createGroup <- function(file, group) {
                     character = {
                       tid <- H5Tcopy("H5T_C_S1")
                       H5Tset_strpad(tid, strpad = "NULLPAD")
-                      if (!is.numeric(size)) {
-                        stop("parameter 'size' has to be defined for storage.mode character.")
-                      }
                       H5Tset_size(tid, size)
+                      H5Tset_cset(tid, encoding)
                       tid
                     },
                     { stop("datatype ",storage.mode, " not yet implemented.\n", 
@@ -134,16 +132,18 @@ h5createGroup <- function(file, group) {
   
   dcpl <- H5Pcreate("H5P_DATASET_CREATE"); 
   if (length(chunk) > 0) {
-    
-    chunk_size <- H5Tget_size(dtype) * prod(chunk)
-    if(chunk_size > 2^32-1) {
-      root_dim <- floor(((2^32-1) / H5Tget_size(dtype))^(1/length(chunk)))
-      chunk[ chunk > root_dim ] = root_dim
-      message("Current chunk settings will exceed HDF5's 4GB limit.\n", 
-              "Automatically adjusting them to: ", paste(chunk, collapse = " x "),
-              "\nYou may wish to set these to more appropriate values using the 'chunk' argument.")
+
+    if (!is.null(H5Tget_size(dtype))) { 
+        chunk_size <- H5Tget_size(dtype) * prod(chunk)
+        if(chunk_size > 2^32-1) {
+          root_dim <- floor(((2^32-1) / H5Tget_size(dtype))^(1/length(chunk)))
+          chunk[ chunk > root_dim ] = root_dim
+          message("Current chunk settings will exceed HDF5's 4GB limit.\n", 
+                  "Automatically adjusting them to: ", paste(chunk, collapse = " x "),
+                  "\nYou may wish to set these to more appropriate values using the 'chunk' argument.")
+        }
     }
-    
+
     if ((prod(dims) > 1000000L) & (all(dims == chunk))) {
       message("You created a large dataset with compression and chunking.\n",
               "The chunk size is equal to the dataset dimensions.\n", 
@@ -314,7 +314,8 @@ h5createGroup <- function(file, group) {
 #' @name h5_createDataset
 #' @export h5createDataset
 h5createDataset <- function(file, dataset, dims, maxdims = dims, 
-                            storage.mode = "double", H5type = NULL, size = NULL,
+                            storage.mode = "double", H5type = NULL, 
+                            size = NULL, encoding = c("ASCII", "UTF-8"),
                             chunk = dims, fillValue, 
                             level = 6, filter = "gzip", shuffle = TRUE,
                             native = FALSE) {
@@ -353,7 +354,7 @@ h5createDataset <- function(file, dataset, dims, maxdims = dims,
         }
         
         ## determine data type
-        tid <- .setDataType(H5type, storage.mode, size)
+        tid <- .setDataType(H5type, storage.mode, size, encoding)
         
         dcpl <- .createDCPL(chunk, dims, level, fillValue, dtype = tid, filter = filter, shuffle = shuffle)
         on.exit(H5Pclose(dcpl), add = TRUE)
