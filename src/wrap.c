@@ -41,7 +41,7 @@ static R_CallMethodDef libraryRCalls[] = {
   {"_H5Aopen_by_name", (DL_FUNC) &_H5Aopen_by_name, 3},
   {"_H5Aopen_by_idx", (DL_FUNC) &_H5Aopen_by_idx, 5},
   {"_H5Aexists", (DL_FUNC) &_H5Aexists, 2},
-  {"_H5Aread", (DL_FUNC) &_H5Aread, 2},
+  {"_H5Aread", (DL_FUNC) &_H5Aread, 3},
   {"_H5Awrite", (DL_FUNC) &_H5Awrite, 2},
   {"_H5Aclose", (DL_FUNC) &_H5Aclose, 1},
   {"_H5Adelete", (DL_FUNC) &_H5Adelete, 2},

@@ -12,9 +12,10 @@ expect_null( h5errorHandling(type = "suppress") )
 test_that("writing attributes is silent", {
     expect_silent(fid <- H5Fopen(h5File) )
     expect_silent(did <- H5Dopen(fid, "A") )
-    expect_silent(sid <- H5Screate_simple(c(1,1)) )
+    expect_silent(sid <- H5Screate_simple(1) )
     expect_silent( tid <- H5Tcopy("H5T_C_S1") )
     
+    ## fixed length strings
     expect_silent( H5Tset_size(tid, 10L) )
     expect_silent( aid <- H5Acreate(did, "volume", tid, sid) )
     expect_silent( H5Awrite(aid, "liter") )
@@ -23,10 +24,16 @@ test_that("writing attributes is silent", {
     expect_silent( H5Awrite(aid, "seconds") )
     expect_silent( H5Aclose(aid) )
     
+    ## 64-bit integers
+    expect_silent( aid <- H5Acreate(did, "int64", "H5T_NATIVE_INT64", sid) )
+    expect_silent( H5Awrite(aid, 2^32) )
+    expect_silent( H5Aclose(aid) )
+    
     expect_silent( H5Sclose(sid) )
     expect_silent( H5Dclose(did) )
     expect_silent( H5Fclose(fid) )
 })
+
 
 test_that("attributes exist", {
     
@@ -64,6 +71,28 @@ test_that("attributes can be opened and closed", {
     
     ## doesn't cope well when a missing attribute is named
     ## H5Aopen_by_name(fid, objname = "A", name = "foobaa")
+    
+})
+
+test_that("64-bit integer attributes are read correctly", {
+    
+    fid <- H5Fopen(h5File)
+    did <- H5Dopen(fid, name = "A")
+    aid <- H5Aopen(did, name = "int64")
+    
+    expect_warning(H5Aread(aid, bit64conversion = "int")) %>%
+        is.na() %>%
+        expect_true()
+    
+    expect_silent(H5Aread(aid, bit64conversion = "double")) %>%
+        expect_equivalent(2^32)
+    
+    expect_silent(H5Aread(aid, bit64conversion = "bit64")) %>%
+        expect_equivalent(bit64::as.integer64(2^32))
+    
+    H5Dclose(aid)
+    H5Dclose(did)
+    H5Fclose(fid)
     
 })
 

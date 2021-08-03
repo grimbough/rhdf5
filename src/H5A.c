@@ -41,7 +41,6 @@ SEXP _H5Aopen( SEXP _obj_id, SEXP _attr_name ) {
 
 /* hid_t H5Aopen_by_name( hid_t loc_id, const char *obj_name, const char *attr_name, hid_t aapl_id, hid_t lapl_id ) */
 SEXP _H5Aopen_by_name( SEXP _obj_id, SEXP _obj_name, SEXP _attr_name ) {
-  //hid_t obj_id = INTEGER(_obj_id)[0];
   hid_t obj_id = STRSXP_2_HID( _obj_id );
   const char *obj_name = CHAR(STRING_ELT(_obj_name, 0));
   const char *attr_name = CHAR(STRING_ELT(_attr_name, 0));
@@ -49,8 +48,6 @@ SEXP _H5Aopen_by_name( SEXP _obj_id, SEXP _obj_name, SEXP _attr_name ) {
   addHandle( hid );
 
   SEXP Rval;
-  //PROTECT(Rval = allocVector(INTSXP, 1));
-  //INTEGER(Rval)[0] = hid;
   PROTECT(Rval = HID_2_STRSXP(hid));
   UNPROTECT(1);
   return Rval;
@@ -58,7 +55,6 @@ SEXP _H5Aopen_by_name( SEXP _obj_id, SEXP _obj_name, SEXP _attr_name ) {
 
 /* hid_t H5Aopen_by_idx( hid_t loc_id, const char *obj_name, H5_index_t idx_type, H5_iter_order_t order, hsize_t n, hid_t aapl_id, hid_t lapl_id ) */
 SEXP _H5Aopen_by_idx( SEXP _obj_id, SEXP _obj_name, SEXP _idx_type, SEXP _order, SEXP _n ) {
-  //hid_t obj_id = INTEGER(_obj_id)[0];
   hid_t obj_id = STRSXP_2_HID( _obj_id );
   const char *obj_name = CHAR(STRING_ELT(_obj_name, 0));
   H5_index_t idx_type = INTEGER(_idx_type)[0];
@@ -101,7 +97,6 @@ SEXP _H5Aclose( SEXP _attr_id ) {
 
 /* herr_t H5Adelete( hid_t loc_id, const char *attr_name ) */
 SEXP _H5Adelete( SEXP _obj_id, SEXP _attr_name ) {
-  //hid_t obj_id = INTEGER(_obj_id)[0];
   hid_t obj_id = STRSXP_2_HID( _obj_id );
   const char *attr_name = CHAR(STRING_ELT(_attr_name, 0));
   herr_t herr = H5Adelete( obj_id, attr_name );
@@ -137,8 +132,6 @@ SEXP H5Aread_helper_INTEGER(hid_t attr_id, hsize_t n, SEXP Rdim, SEXP _buf, hid_
         UNPROTECT(1);
       }
   } else if (b == 8) { // 64-bit integer
-      
-      Rprintf("entering conversion\n");
       
       void* intbuf;
       void* buf;
@@ -192,6 +185,15 @@ SEXP H5Aread_helper_INTEGER(hid_t attr_id, hsize_t n, SEXP Rdim, SEXP _buf, hid_
               } else if (b == 8) {
                   int64_to_double(intbuf, n, buf, sgn);
               }
+          } else { // convert to integer64
+              if((b == 4) & (sgn == H5T_SGN_NONE)) {
+                  uint32_to_integer64(intbuf, n, buf);
+              } else if (b == 8) {
+                  int64_to_integer64(intbuf, n, buf, sgn);
+              }
+              SEXP la = PROTECT(mkString("integer64"));
+              setAttrib(Rval, R_ClassSymbol, la);
+              UNPROTECT(1);
           }
       }
       
@@ -343,16 +345,16 @@ SEXP H5Aread_helper_STRING(hid_t attr_id, hsize_t n, SEXP Rdim, SEXP _buf, hid_t
 /*   return(Rval); */
 /* } */
 
-SEXP H5Aread_helper(hid_t attr_id, hsize_t n, SEXP Rdim, SEXP _buf ) {
-
-  hid_t dtype_id;
-  dtype_id = H5Aget_type(attr_id);
-  hid_t dtypeclass_id = H5Tget_class(dtype_id);
+SEXP H5Aread_helper(hid_t attr_id, hsize_t n, SEXP Rdim, SEXP _buf, int bit64conversion ) {
+    
+    hid_t dtype_id;
+    dtype_id = H5Aget_type(attr_id);
+    hid_t dtypeclass_id = H5Tget_class(dtype_id);
 
   SEXP Rval;
   switch(dtypeclass_id) {
   case H5T_INTEGER: {
-    Rval = H5Aread_helper_INTEGER(attr_id, n, Rdim, _buf, dtype_id, 1);
+    Rval = H5Aread_helper_INTEGER(attr_id, n, Rdim, _buf, dtype_id, bit64conversion);
   } break;
   case H5T_FLOAT: {
     Rval = H5Aread_helper_FLOAT(attr_id, n, Rdim, _buf, dtype_id);
@@ -387,12 +389,13 @@ SEXP H5Aread_helper(hid_t attr_id, hsize_t n, SEXP Rdim, SEXP _buf ) {
 }
 
 /* herr_t H5Aread(hid_t attr_id, hid_t mem_type_id, void *buf ) */
-SEXP _H5Aread( SEXP _attr_id, SEXP _buf ) {
+SEXP _H5Aread( SEXP _attr_id, SEXP _buf, SEXP _bit64conversion ) {
+    
+  int bit64conversion = INTEGER(_bit64conversion)[0];
 
   /***********************************************************************/
   /* attr_id                                                          */
   /***********************************************************************/
-  //hid_t attr_id = INTEGER(_attr_id)[0];
   hid_t attr_id = STRSXP_2_HID( _attr_id );
   /***********************************************************************/
   /* file_space_id and get dimensionality of output file_space and buf   */
@@ -430,7 +433,7 @@ SEXP _H5Aread( SEXP _attr_id, SEXP _buf ) {
   /* read file space data type                                           */
   /***********************************************************************/
 
-  SEXP Rval = H5Aread_helper(attr_id, n, Rdim, _buf);
+  SEXP Rval = H5Aread_helper(attr_id, n, Rdim, _buf, bit64conversion);
 
   // close mem space
   H5Sclose(mem_space_id);
@@ -445,7 +448,6 @@ SEXP _H5Aread( SEXP _attr_id, SEXP _buf ) {
 
 /* herr_t H5Awrite(hid_t attr_id, hid_t mem_type_id, const void *buf ) */
 SEXP _H5Awrite( SEXP _attr_id, SEXP _buf) {
-  //hid_t attr_id = INTEGER(_attr_id)[0];
   hid_t attr_id = STRSXP_2_HID( _attr_id );
   hid_t mem_type_id;
 
