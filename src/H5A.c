@@ -115,7 +115,7 @@ SEXP H5Aread_helper_INTEGER(hid_t attr_id, hsize_t n, SEXP Rdim, SEXP _buf, hid_
   H5T_sign_t sgn = H5Tget_sign(dtype_id);
   herr_t herr;
   
-  if(b <= 4) {
+  if((b < 4) | ((b == 4) & (sgn == H5T_SGN_2))) {
       mem_type_id = H5T_NATIVE_INT;
     
       void * buf;
@@ -131,12 +131,15 @@ SEXP H5Aread_helper_INTEGER(hid_t attr_id, hsize_t n, SEXP Rdim, SEXP _buf, hid_
         setAttrib(Rval, R_DimSymbol, Rdim);
         UNPROTECT(1);
       }
-  } else if (b == 8) { // 64-bit integer
-      
+  } else if ( ((b == 4) & (sgn == H5T_SGN_NONE)) | (b == 8) ) { 
+      // unsigned32-bit or 64-bit integer
       void* intbuf;
       void* buf;
       
-      if(sgn == H5T_SGN_NONE) {
+      if(b == 4) {
+          mem_type_id = H5T_STD_U32LE;
+          intbuf = R_alloc(n, sizeof(unsigned int));
+      } else if(b == 8 & sgn == H5T_SGN_NONE) {
           mem_type_id = H5T_NATIVE_UINT64;
           intbuf = R_alloc(n, sizeof(unsigned long long));
       } else {
@@ -176,11 +179,7 @@ SEXP H5Aread_helper_INTEGER(hid_t attr_id, hsize_t n, SEXP Rdim, SEXP _buf, hid_
           }
           if (bit64conversion == 1) {  //convert to double
               long long i;
-              if ((b < 4) | ((b == 4) & (sgn == H5T_SGN_2))) {
-                  for (i=0; i<n; i++){
-                      ((double *)buf)[i] = ((int *)intbuf)[i];
-                  }
-              } else if ((b == 4) & (sgn == H5T_SGN_NONE)) {
+              if ((b == 4) & (sgn == H5T_SGN_NONE)) {
                   uint32_to_double(intbuf, n, buf);
               } else if (b == 8) {
                   int64_to_double(intbuf, n, buf, sgn);

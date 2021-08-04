@@ -18,7 +18,7 @@ h5readAttributes <- function(file, name, native = FALSE, ...) {
   loc = h5checktypeOrOpenLoc(file, readonly=TRUE, native = native)
   on.exit(h5closeitLoc(loc))
   if (!H5Lexists(loc$H5Identifier, name)) {
-    stop("Object ",name," does not exist in this HDF5 file.")
+    stop("Object ", name, " does not exist in this HDF5 file.")
   } else {
     oid = H5Oopen(loc$H5Identifier, name)
     on.exit(H5Oclose(oid), add = TRUE)
