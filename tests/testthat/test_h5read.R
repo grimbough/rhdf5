@@ -207,7 +207,7 @@ B = array(1:1000, dim = c(10,10,10))
 ## output file name
 h5File <- tempfile(pattern = "ex_read", fileext = ".h5")
 
-# create file with group heirachy  
+# create file with group hierarchy  
 h5createFile(h5File)
 h5write(obj = A, file = h5File, name = "A")
 h5write(obj = B, file = h5File, name = "B")
