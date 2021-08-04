@@ -236,7 +236,7 @@ H5Aread <- function(h5attribute, buf = NULL, bit64conversion) {
       stop("install package 'bit64' before using bit64conversion='bit64'")
   }
 
-  invisible(.Call("_H5Aread", h5attribute@ID, buf, bit64conv, PACKAGE='rhdf5'))
+  return(.Call("_H5Aread", h5attribute@ID, buf, bit64conv, PACKAGE='rhdf5'))
 }
 
 #' Write data to an HDF5 attribute
