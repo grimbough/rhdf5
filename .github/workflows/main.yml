@@ -50,6 +50,10 @@ jobs:
         uses: grimbough/actions-1/setup-r@master
         with:
           r-version: ${{ matrix.config.r }}
+          
+      - name: Set R options    
+        run: |
+          echo "options(Ncpus = 2)" > $HOME/.Rprofile
 
       - uses: r-lib/actions/setup-pandoc@master
       
