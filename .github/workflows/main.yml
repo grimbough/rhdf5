@@ -51,6 +51,10 @@ jobs:
       - name: Set R options    
         run: |
           echo "options(Ncpus = 2)" > $HOME/.Rprofile
+          ## set the CRAN mirror to use
+          echo "local({r <- getOption('repos')" >> $HOME/.Rprofile
+          echo "r['CRAN'] <- 'https://cloud.r-project.org'" >> $HOME/.Rprofile
+          echo "options(repos=r)})" >> $HOME/.Rprofile
 
       - uses: r-lib/actions/setup-pandoc@master
       
