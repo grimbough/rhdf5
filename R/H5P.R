@@ -280,6 +280,21 @@ H5Pset_deflate <- function( h5plist, level ) {
   invisible(res)
 }
 
+#' Set the fill value for an HDF5 dataset
+#' 
+#' `H5Pset_fill_value` sets the fill value for a dataset in the dataset creation property list.
+#'
+#' @param h5plist An object of class [H5IdComponent-class] representing a
+#'   dataset creation property list.
+#' @param value The default fill value of the dataset.
+#' 
+#' @seealso [H5P_fill_time],[H5Pfill_value_defined]
+#'
+#' @name H5P_fill_value
+NULL
+
+#' @rdname H5P_fill_value
+#' @export
 H5Pset_fill_value <- function( h5plist, value ) {
   h5checktypeAndPLC(h5plist, "H5P_DATASET_CREATE")
   storage.mode = storage.mode(value)
@@ -298,12 +313,38 @@ H5Pset_fill_value <- function( h5plist, value ) {
   invisible(res)
 }
 
+#' Determine whether a property list has a fill value defined
+#'
+#' @param h5plist Object of class [H5IdComponent-class] representing a dataset
+#'   creation property list.
+#'
+#' @returns `TRUE` if the fill value is defined, `FALSE` if not.  Will return
+#'   `NULL` if there is a problem determining the status of the fill value.
+#'
+#' @details  Note that the return value for this function is slightly different
+#'   from the C version.  The C API provides three return types and can, in the
+#'   case that a fill value is defined, differentiate whether the value is the
+#'   HDF5 library default or has been set by the application.
+#'
+#' @export
 H5Pfill_value_defined <- function( h5plist ) {
   h5checktypeAndPLC(h5plist, "H5P_DATASET_CREATE")
   res <- .Call("_H5Pfill_value_defined", h5plist@ID, PACKAGE='rhdf5')
   res
 }
 
+#' Set the time when fill values are written to a dataset
+#'
+#' @param h5plist An object of class [H5IdComponent-class] representing a
+#'   dataset creation property list.
+#' @param fill_time When the fill values should be written.  Possible options
+#' can be listed with `h5const("H5D_FILL_TIME")`.
+#'
+#' @name H5P_fill_time
+NULL
+
+#' @rdname H5P_fill_time
+#' @export
 H5Pset_fill_time <- function( h5plist, fill_time = h5default("H5D_FILL_TIME") ) {
   h5checktypeAndPLC(h5plist, "H5P_DATASET_CREATE")
   fill_time <- h5checkConstants( "H5D_FILL_TIME", fill_time )
@@ -311,6 +352,8 @@ H5Pset_fill_time <- function( h5plist, fill_time = h5default("H5D_FILL_TIME") ) 
   invisible(res)
 }
 
+#' @rdname H5P_fill_time
+#' @export
 H5Pget_fill_time <- function( h5plist ) {
   h5checktypeAndPLC(h5plist, "H5P_DATASET_CREATE")
   res <- .Call("_H5Pget_fill_time", h5plist@ID, PACKAGE='rhdf5')

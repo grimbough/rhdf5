@@ -1083,7 +1083,6 @@ SEXP _H5Pset_fill_value( SEXP _plist_id, SEXP _type_id, SEXP _value ) {
 
 /* herr_t H5Pfill_value_defined(hid_t plist_id, H5D_fill_value_t * status) */
 SEXP _H5Pfill_value_defined( SEXP _plist_id ) {
-    //hid_t plist_id = INTEGER(_plist_id)[0];
     hid_t plist_id = STRSXP_2_HID( _plist_id );
     H5D_fill_value_t status;
     herr_t herr = H5Pfill_value_defined(plist_id, &status);
