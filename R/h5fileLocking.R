@@ -18,7 +18,8 @@
 #' within the current R session.  You can set the environment variable outside
 #' of R if this is a more general issue on your system.
 #' 
-#' \code{h5enableFileLocking} will unset the \code{RHDF5_USE_FILE_LOCKING}.
+#' \code{h5enableFileLocking} will unset the \code{RHDF5_USE_FILE_LOCKING}
+#' environment variable.
 #' 
 #' More discussion of HDF5's use of file locking can be found online e.g.
 #' https://forum.hdfgroup.org/t/hdf5-1-10-0-and-flock/3761/4 or
@@ -36,10 +37,10 @@
 #' \code{h5disableFileLocking} and \code{h5enableFileLocking} set are called
 #' for the side effect of setting or unsetting the environment variable
 #' \code{HDF5_USE_FILE_LOCKING} and do not return anything.
+#' 
 #' @author Mike Smith
 #' @keywords IO file
 #' @examples
-#' 
 #' 
 #' ## either a file name or directory can be tested
 #' file <- tempfile()
@@ -53,7 +54,7 @@
 #'   h5disableFileLocking()
 #' }
 #' 
-#' @name h5_testFileLocking
+#' @name h5_FileLocking
 #' @importFrom utils file_test
 #' @export h5testFileLocking
 h5testFileLocking <- function(location) {
@@ -82,10 +83,14 @@ h5testFileLocking <- function(location) {
   return(lock_status >= 0)
 }
 
+#' @rdname h5_FileLocking
+#' @export
 h5disableFileLocking <- function() {
   Sys.setenv(HDF5_USE_FILE_LOCKING = "FALSE")
 }
 
+#' @rdname h5_FileLocking
+#' @export
 h5enableFileLocking <- function() {
   Sys.unsetenv("HDF5_USE_FILE_LOCKING")
 }
