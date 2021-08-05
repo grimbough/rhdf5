@@ -19,10 +19,10 @@ jobs:
       fail-fast: false
       matrix:
         config:
-        - { os: windows-latest, r: 'prerelease'}
-        - { os: macOS-latest, r: 'prerelease'}
-        - { os: ubuntu-18.04, r: 'devel', rspm: "https://packagemanager.rstudio.com/all/__linux__/bionic/latest"}
-        - { os: ubuntu-20.04, r: 'devel', rspm: "https://packagemanager.rstudio.com/all/__linux__/focal/latest"}
+        - { os: windows-latest, r: '4.1'}
+        - { os: macOS-latest, r: '4.1'}
+        - { os: ubuntu-18.04, r: '4.1', rspm: "https://packagemanager.rstudio.com/all/__linux__/bionic/latest"}
+        - { os: ubuntu-20.04, r: '4.1', rspm: "https://packagemanager.rstudio.com/all/__linux__/focal/latest"}
 
     env:
       CRAN: ${{ matrix.config.rspm }}
@@ -71,7 +71,7 @@ jobs:
         run: |
           install.packages(c('rcmdcheck', 'devtools'))
           remotes::install_github(repo = 'Bioconductor/BiocManager')
-          BiocManager::install(version = '3.13', ask = FALSE, update = TRUE)
+          BiocManager::install(version = '3.14', ask = FALSE, update = TRUE)
           toInstall <- remotes::dev_package_deps(dependencies = TRUE)[,'package']
           BiocManager::install(toInstall, ask = FALSE, update = TRUE, INSTALL_opts = '--force-biarch')
         shell: Rscript {0}
