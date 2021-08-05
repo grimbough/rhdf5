@@ -20,6 +20,12 @@
       (https://github.com/grimbough/rhdf5/issues/81)
     }
   }
+  
+  \subsection{CHANGES}{
+    \itemize{
+      \item Documentation switched to roxygen2
+    }
+  }
 }
 
 \section{Changes in version 2.34.0}{

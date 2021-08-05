@@ -51,28 +51,40 @@ SEXP H5O_info_t2SEXP (H5O_info_t *object_info) {
 */
 
 SEXP _H5Oopen( SEXP _loc_id, SEXP _name) {
-  //hid_t loc_id = INTEGER(_loc_id)[0];
   hid_t loc_id = STRSXP_2_HID( _loc_id );
   const char *name = CHAR(STRING_ELT(_name, 0));
   hid_t hid = H5Oopen( loc_id, name, H5P_DEFAULT );
   addHandle(hid);
 
   SEXP Rval;
-  //PROTECT(Rval = allocVector(INTSXP, 1));
-  //INTEGER(Rval)[0] = hid;
   PROTECT(Rval = HID_2_STRSXP(hid));
   UNPROTECT(1);
   return Rval;
 }
 
 SEXP _H5Oclose( SEXP _object_id ) {
-  //hid_t object_id =  INTEGER(_object_id)[0];
   hid_t object_id = STRSXP_2_HID( _object_id );
   herr_t herr = H5Oclose( object_id );
   if (herr == 0) {
     removeHandle(object_id);
   }
 
+  SEXP Rval;
+  PROTECT(Rval = allocVector(INTSXP, 1));
+  INTEGER(Rval)[0] = herr;
+  UNPROTECT(1);
+  return Rval;
+}
+
+SEXP _H5Olink( SEXP _object_id, SEXP _new_loc_id, SEXP _new_link_name, SEXP _lcpl_id, SEXP _lapl_id) {
+  hid_t object_id = STRSXP_2_HID( _object_id );
+  hid_t new_loc_id = STRSXP_2_HID( _new_loc_id );
+  const char *new_link_name = CHAR(STRING_ELT(_new_link_name, 0));
+  hid_t lcpl_id = STRSXP_2_HID( _lcpl_id );
+  hid_t lapl_id = STRSXP_2_HID( _lapl_id );
+  
+  herr_t herr = H5Olink(object_id, new_loc_id, new_link_name, lcpl_id, lapl_id );
+  
   SEXP Rval;
   PROTECT(Rval = allocVector(INTSXP, 1));
   INTEGER(Rval)[0] = herr;

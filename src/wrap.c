@@ -82,6 +82,7 @@ static R_CallMethodDef libraryRCalls[] = {
   {"_H5Iis_valid", (DL_FUNC) &_H5Iis_valid, 1},
   {"_H5Oopen", (DL_FUNC) &_H5Oopen, 2},
   {"_H5Oclose", (DL_FUNC) &_H5Oclose, 1},
+  {"_H5Olink", (DL_FUNC) &_H5Olink, 5},
   {"_H5Oget_num_attrs", (DL_FUNC) &_H5Oget_num_attrs, 1},
   //  {"_H5Oget_info", (DL_FUNC) &_H5Oget_info, 1},
   //  {"_H5Oget_info_by_name", (DL_FUNC) &_H5Oget_info_by_name, 2},

@@ -14,8 +14,8 @@ hsize_t H5Oget_num_attrs ( hid_t obj_id );
 SEXP _H5Oget_num_attrs ( SEXP _obj_id );
 
 SEXP _H5Oopen( SEXP _loc_id, SEXP _object_name);
-/* H5Olink */
 SEXP _H5Oclose( SEXP _oid );
+SEXP _H5Olink( SEXP _object_id, SEXP _new_loc_id, SEXP _new_link_name, SEXP _lcpl_id, SEXP _lapl_id);
 /* H5Ocopy */
 /* H5Ovisit */
 /* H5Ovisit_by_name */

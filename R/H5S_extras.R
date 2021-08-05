@@ -1,4 +1,36 @@
-
+#' Select elements of a dataspace using R-style indexing
+#'
+#' Combines a hyperslab selection specified by `start`, `stride`, `count` and
+#' `block` arguments with the current selection for the dataspace represented by
+#' `h5space`.
+#'
+#' @details `H5Sselect_hyperslab` is similar to, but subtly different from,
+#'   [H5Scombine_hyperslab()].  The former modifies the selection of the
+#'   dataspace provided in the `h5space` argument, while the later returns a new
+#'   dataspace with the combined selection.
+#'
+#' @param h5space [H5IdComponent-class] object representing a dataspace.
+#' @param index A list of integer indices. The length of the list corresponds to
+#'   the number of dimensions of the HDF5 array. If a list element is `NULL`,
+#'   all elements of the respective dimension are selected.
+#'
+#' @examples
+#'
+#' ## create a 1 dimensional dataspace
+#' sid <- H5Screate_simple(c(10,5,3))
+#'
+#' ## Select elements that lie in in the rows 1-3, columns 2-4, 
+#' ## and the entire 3rd dimension
+#' H5Sselect_index(sid, list(1:3, 2:4, NULL))
+#' 
+#' ## We can check the number of selected points. 
+#' ## This should be 27 (3 * 3 * 3)
+#' H5Sget_select_npoints(sid)
+#'
+#' ## always close dataspaces after usage to free resources
+#' H5Sclose(sid)
+#'
+#' @export
 H5Sselect_index <- function( h5space, index ) {
   h5checktype(h5space, "dataspace")
   dim <- H5Sget_simple_extent_dims(h5space)$size
