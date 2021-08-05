@@ -1,8 +1,5 @@
 on:
   push:
-    branches:
-      - master
-      - workflow-testing
   pull_request:
     branches:
       - master
