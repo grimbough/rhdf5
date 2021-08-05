@@ -10,24 +10,22 @@ if(file.exists(h5File))
     file.remove(h5File)
 
 h5createFile(file = h5File)
-A = array(seq(0.1,2.0,by=0.1),dim=c(5,2,2))
-h5write(A, h5File,"A")
 
 test_that("Adding attribute to file", {
     fid <- H5Fopen(h5File)
     
     ## character
     attr <- "foo"
-    h5writeAttribute(attr = attr, h5obj = fid, name = "char_attr")
+    expect_silent(h5writeAttribute(attr = attr, h5obj = fid, name = "char_attr"))
     ## integer
     attr <- 1L
-    h5writeAttribute(attr = attr, h5obj = fid, name = "int_attr")
+    expect_silent(h5writeAttribute(attr = attr, h5obj = fid, name = "int_attr"))
     ## numeric
     attr <- 10.0
-    h5writeAttribute(attr = attr, h5obj = fid, name = "numeric_attr")
+    expect_silent(h5writeAttribute(attr = attr, h5obj = fid, name = "numeric_attr"))
     ## matrix
     attr <- matrix(1:10, nrow = 2)
-    h5writeAttribute(attr = attr, h5obj = fid, name = "matrix_attr")
+    expect_silent(h5writeAttribute(attr = attr, h5obj = fid, name = "matrix_attr"))
     
     H5Fclose(fid)
     
