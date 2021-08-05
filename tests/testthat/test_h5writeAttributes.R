@@ -47,16 +47,16 @@ test_that("Adding attribute to group", {
     
     ## character
     attr <- "foo"
-    h5writeAttribute(attr = attr, h5obj = gid, name = "char_attr")
+    expect_silent(h5writeAttribute(attr = attr, h5obj = gid, name = "char_attr"))
     ## integer
     attr <- 1L
-    h5writeAttribute(attr = attr, h5obj = gid, name = "int_attr")
+    expect_silent(h5writeAttribute(attr = attr, h5obj = gid, name = "int_attr"))
     ## numeric
     attr <- 10.0
-    h5writeAttribute(attr = attr, h5obj = gid, name = "numeric_attr")
+    expect_silent(h5writeAttribute(attr = attr, h5obj = gid, name = "numeric_attr"))
     ## matrix
     attr <- matrix(1:10, nrow = 2)
-    h5writeAttribute(attr = attr, h5obj = gid, name = "matrix_attr")
+    expect_silent(h5writeAttribute(attr = attr, h5obj = gid, name = "matrix_attr"))
     
     H5Gclose(gid)
     H5Fclose(fid)
