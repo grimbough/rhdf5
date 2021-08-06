@@ -5,6 +5,16 @@
 
   \subsection{NEW FEATURES}{
     \itemize{
+      \item Added support for reading attributes where the datatype is either a
+      64-bit or unsigned 32-bit integer.
+    }
+  }
+}
+
+\section{Changes in version 2.36.0}{
+
+  \subsection{NEW FEATURES}{
+    \itemize{
       \item Added additional hyberslab selection functions introduced in 
       HDF5 1.10.7 (\code{H5Scombine_hyperslab}, \code{H5Scombine_select}, 
       \code{H5Sget_select_npoints}).
