@@ -8,6 +8,7 @@
 #include "myhdf5.h"
 #include "HandleList.h"
 #include "printdatatype.h"
+#include "bit64conversion.h"
 
 /*################################*/
 /* constants */

@@ -207,7 +207,7 @@ B = array(1:1000, dim = c(10,10,10))
 ## output file name
 h5File <- tempfile(pattern = "ex_read", fileext = ".h5")
 
-# create file with group heirachy  
+# create file with group hierarchy  
 h5createFile(h5File)
 h5write(obj = A, file = h5File, name = "A")
 h5write(obj = B, file = h5File, name = "B")
@@ -286,10 +286,10 @@ if(file.exists(h5File))
 # create file with integers of different types
 h5createFile(h5File)
 h5createDataset(h5File, "int32", dims=50, storage.mode="integer")
-h5createDataset(h5File, "int64", dims=50, storage.mode="integer64")
+h5createDataset(h5File, "int64", dims=51, storage.mode="integer64")
 h5createDataset(h5File, "uint32", dims=50, H5type = "H5T_STD_U32LE")
 h5write(obj = 1:50, file = h5File, name = "int32")
-h5write(obj = 1:50, file = h5File, name = "int64")
+h5write(obj = c(1:50, 2^32), file = h5File, name = "int64")
 h5write(obj = 2^31 + 1:50, file = h5File, name = "uint32")
 
 test_that("Signed 32bit integers are unchanged for all conversion arguments", {
@@ -307,11 +307,17 @@ test_that("Signed 32bit integers are unchanged for all conversion arguments", {
 
 test_that("signed 64-bit integers are converted", {
     
-    expect_is(x1 <- h5read(h5File, name = "int64", bit64conversion = "int"), "array")
+    expect_is(x1 <- h5read(h5File, name = "int64", bit64conversion = "int"), "array") %>%
+      expect_warning()
+    expect_identical(x1[51], NA_integer_)
     expect_equal(storage.mode(x1), "integer")
+    
     expect_is(x2 <- h5read(h5File, name = "int64", bit64conversion = "double"), "array")
+    expect_identical(x2, array(c(1:50, 2^32)))
     expect_equal(storage.mode(x2), "double")
+    
     expect_is(x3 <- h5read(h5File, name = "int64", bit64conversion = "bit64"), "integer64")
+    expect_identical(x3, as.array(bit64::as.integer64(c(1:50, 2^32))))
     expect_equal(storage.mode(x3), "double")
     
 })

@@ -4,7 +4,7 @@
 \alias{H5Aread}
 \title{Read data from an HDF5 attribute}
 \usage{
-H5Aread(h5attribute, buf = NULL)
+H5Aread(h5attribute, buf = NULL, bit64conversion)
 }
 \arguments{
 \item{h5attribute}{An object of class \linkS4class{H5IdComponent} representing an
@@ -14,6 +14,9 @@ attribute.  Normally created by \code{\link[=H5Aopen]{H5Aopen()}} or similar.}
 fit the size of the memory space \code{h5spaceMem}. No extra memory will be
 allocated for the data. Default is \code{NULL} which means the function will
 return the attribute data.}
+
+\item{bit64conversion}{Defines how 64-bit integers are converted. (See
+the details section for more information on these options.)}
 }
 \value{
 If \code{buf=NULL} returns the contents of the attribute.  Otherwise
@@ -21,4 +24,18 @@ return 0 if attribute is read successfully.
 }
 \description{
 Read data from an HDF5 attribute
+}
+\details{
+Internally, R does not support 64-bit integers. All integers in R are 32-bit
+integers. By setting bit64conversion='int', a coercing to 32-bit integers is
+enforced, with the risk of data loss, but with the insurance that numbers
+are represented as integers. bit64conversion='double' coerces the 64-bit
+integers to floating point numbers. doubles can represent integers with up
+to 54-bits, but they are not represented as integer values anymore. For
+larger numbers there is again a data loss. bit64conversion='bit64' is
+recommended way of coercing. It represents the 64-bit integers as objects
+of class 'integer64' as defined in the package 'bit64'. Make sure that you
+have installed 'bit64'. The datatype 'integer64' is not part of base R, but
+defined in an external package. This can produce unexpected behaviour when
+working with the data.
 }
