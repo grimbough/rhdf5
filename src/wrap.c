@@ -122,21 +122,21 @@ static R_CallMethodDef libraryRCalls[] = {
   {"_H5Pcopy", (DL_FUNC) &_H5Pcopy, 1},
   {"_H5Pclose", (DL_FUNC) &_H5Pclose, 1},
   {"_H5Pclose_class", (DL_FUNC) &_H5Pclose_class, 1},
-  /* {"_H5Pget_version", (DL_FUNC) &_H5Pget_version, 5}, */
-  /* {"_H5Pset_userblock", (DL_FUNC) &_H5Pset_userblock, 2}, */
-  /* {"_H5Pget_userblock", (DL_FUNC) &_H5Pget_userblock, 2}, */
-  /* {"_H5Pset_sizes", (DL_FUNC) &_H5Pset_sizes, 3}, */
-  /* {"_H5Pget_sizes", (DL_FUNC) &_H5Pget_sizes, 3}, */
-  /* {"_H5Pset_sym_k", (DL_FUNC) &_H5Pset_sym_k, 3}, */
-  /* {"_H5Pget_sym_k", (DL_FUNC) &_H5Pget_sym_k, 3}, */
-  /* {"_H5Pset_istore_k", (DL_FUNC) &_H5Pset_istore_k, 2}, */
-  /* {"_H5Pget_istore_k", (DL_FUNC) &_H5Pget_istore_k, 2}, */
-  /* {"_H5Pset_shared_mesg_nindexes", (DL_FUNC) &_H5Pset_shared_mesg_nindexes, 2}, */
-  /* {"_H5Pget_shared_mesg_nindexes", (DL_FUNC) &_H5Pget_shared_mesg_nindexes, 2}, */
-  /* {"_H5Pset_shared_mesg_index", (DL_FUNC) &_H5Pset_shared_mesg_index, 4}, */
-  /* {"_H5Pget_shared_mesg_index", (DL_FUNC) &_H5Pget_shared_mesg_index, 4}, */
-  /* {"_H5Pset_shared_mesg_phase_change", (DL_FUNC) &_H5Pset_shared_mesg_phase_change, 3}, */
-  /* {"_H5Pget_shared_mesg_phase_change", (DL_FUNC) &_H5Pget_shared_mesg_phase_change, 3}, */
+  {"_H5Pget_version", (DL_FUNC) &_H5Pget_version, 1},
+  {"_H5Pset_userblock", (DL_FUNC) &_H5Pset_userblock, 2},
+  {"_H5Pget_userblock", (DL_FUNC) &_H5Pget_userblock, 1},
+  {"_H5Pset_sizes", (DL_FUNC) &_H5Pset_sizes, 3},
+  {"_H5Pget_sizes", (DL_FUNC) &_H5Pget_sizes, 1},
+  {"_H5Pset_sym_k", (DL_FUNC) &_H5Pset_sym_k, 3},
+  {"_H5Pget_sym_k", (DL_FUNC) &_H5Pget_sym_k, 1},
+  {"_H5Pset_istore_k", (DL_FUNC) &_H5Pset_istore_k, 2},
+  {"_H5Pget_istore_k", (DL_FUNC) &_H5Pget_istore_k, 1},
+  {"_H5Pset_shared_mesg_nindexes", (DL_FUNC) &_H5Pset_shared_mesg_nindexes, 2},
+  {"_H5Pget_shared_mesg_nindexes", (DL_FUNC) &_H5Pget_shared_mesg_nindexes, 1},
+  {"_H5Pset_shared_mesg_index", (DL_FUNC) &_H5Pset_shared_mesg_index, 4},
+  {"_H5Pget_shared_mesg_index", (DL_FUNC) &_H5Pget_shared_mesg_index, 2},
+  {"_H5Pset_shared_mesg_phase_change", (DL_FUNC) &_H5Pset_shared_mesg_phase_change, 3},
+  {"_H5Pget_shared_mesg_phase_change", (DL_FUNC) &_H5Pget_shared_mesg_phase_change, 1},
   /* {"_H5Pset_driver", (DL_FUNC) &_H5Pset_driver, 3}, */
   /* {"_H5Pget_driver", (DL_FUNC) &_H5Pget_driver, 1}, */
   /* {"_H5Pget_driver_info", (DL_FUNC) &_H5Pget_driver_info, 1}, */
