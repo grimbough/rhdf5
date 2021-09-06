@@ -209,10 +209,10 @@ H5Pget_shared_mesg_index <- function(h5plist, index_num) {
 #' @export
 H5Pset_shared_mesg_phase_change <- function(h5plist, max_list, min_btree) {
     h5checktype(h5plist, "plist")
-    invisible(.Call("_H5Pset_shared_mesg_phase_change", h5plist@id, max_list, min_btree, PACKAGE="rhdf5"))
+    invisible(.Call("_H5Pset_shared_mesg_phase_change", h5plist@ID, max_list, min_btree, PACKAGE="rhdf5"))
 }
 
-#' @rdname H5P_shared_mesg_nindexes
+#' @rdname H5P_shared_mesg_phase_change
 #' @export
 H5Pget_shared_mesg_phase_change <- function(h5plist) {
     h5checktype(h5plist, "plist")

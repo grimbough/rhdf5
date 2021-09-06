@@ -2,9 +2,12 @@
 % Please edit documentation in R/H5P.R
 \name{H5Pset_shared_mesg_phase_change}
 \alias{H5Pset_shared_mesg_phase_change}
+\alias{H5Pget_shared_mesg_phase_change}
 \title{Get and set threshold values for storage of shared object header message indexes}
 \usage{
 H5Pset_shared_mesg_phase_change(h5plist, max_list, min_btree)
+
+H5Pget_shared_mesg_phase_change(h5plist)
 }
 \arguments{
 \item{h5plist}{\linkS4class{H5IdComponent} object representing the file creation property list}

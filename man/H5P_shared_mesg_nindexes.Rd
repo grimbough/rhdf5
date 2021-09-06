@@ -3,14 +3,11 @@
 \name{H5Pset_shared_mesg_nindexes}
 \alias{H5Pset_shared_mesg_nindexes}
 \alias{H5Pget_shared_mesg_nindexes}
-\alias{H5Pget_shared_mesg_phase_change}
 \title{Get and set the number of object header message indexes}
 \usage{
 H5Pset_shared_mesg_nindexes(h5plist, nindexes)
 
 H5Pget_shared_mesg_nindexes(h5plist)
-
-H5Pget_shared_mesg_phase_change(h5plist)
 }
 \arguments{
 \item{h5plist}{\linkS4class{H5IdComponent} object representing the file creation property list}
