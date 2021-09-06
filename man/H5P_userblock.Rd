@@ -12,7 +12,7 @@ H5Pget_userblock(h5plist)
 \arguments{
 \item{h5plist}{\linkS4class{H5IdComponent} object representing the file creation property list}
 
-\item{Size}{of the user block in bytes}
+\item{size}{of the user block in bytes}
 }
 \description{
 Get and set the user block size

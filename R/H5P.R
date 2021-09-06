@@ -91,7 +91,7 @@ H5Pget_version <- function(h5plist) {
 
 #' Get and set the user block size
 #' @param h5plist [H5IdComponent-class] object representing the file creation property list
-#' @param Size of the user block in bytes
+#' @param size of the user block in bytes
 #' @rdname H5P_userblock
 #' @export
 H5Pset_userblock <- function(h5plist, size) {

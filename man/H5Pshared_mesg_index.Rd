@@ -3,7 +3,7 @@
 \name{H5Pset_shared_mesg_index}
 \alias{H5Pset_shared_mesg_index}
 \alias{H5Pget_shared_mesg_index}
-\title{Get and set shared object header mesage index properties}
+\title{Get and set shared object header message index properties}
 \usage{
 H5Pset_shared_mesg_index(
   h5plist,
@@ -20,11 +20,15 @@ property list}
 
 \item{index_num}{Index being configured.  Indices use C-style 0-based counting, so the first index will be numbered 0.}
 
-\item{mesg_type_flags}{Character specifiying the types of messages that may be stored in this index.
+\item{mesg_type_flags}{Character specifying the types of messages that may be stored in this index.
 Valid values can be found with \code{h5const(type = "H5O_SHMESG_FLAG")}}
 
 \item{min_mesg_size}{Minimum message size}
 }
+\value{
+\code{H5Pget_shared_mesg_index()} returns a list of length 2. The first element is the types of messages
+that may be stored in the index, the second element is the minimum message size.
+}
 \description{
-Get and set shared object header mesage index properties
+Get and set shared object header message index properties
 }
