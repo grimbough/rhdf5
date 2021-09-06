@@ -1,12 +1,21 @@
 \name{NEWS}
 \title{News for Package 'rhdf5'}
 
-\section{Changes in version 2.36.0}{
+\section{Changes in version 2.38.0}{
 
   \subsection{NEW FEATURES}{
     \itemize{
       \item Added support for reading attributes where the datatype is either a
       64-bit or unsigned 32-bit integer.
+      \item Added many functions for working with file creation property lists.
+      (Thanks to @ilia-kats for the contribution, 
+      https://github.com/grimbough/rhdf5/pull/95)
+    }
+  }
+
+  \subsection{CHANGES}{
+    \itemize{
+      \item Documentation switched to roxygen2
     }
   }
 }
@@ -31,11 +40,6 @@
     }
   }
   
-  \subsection{CHANGES}{
-    \itemize{
-      \item Documentation switched to roxygen2
-    }
-  }
 }
 
 \section{Changes in version 2.34.0}{
