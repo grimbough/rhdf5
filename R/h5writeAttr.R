@@ -17,7 +17,10 @@
 #' @export
 h5writeAttribute <- function(attr, h5obj, name, cset=c("ASCII", "UTF8"), variableLengthString=FALSE, asScalar=FALSE) {
   h5checktype(h5obj, "object")
-  res <- UseMethod("h5writeAttribute")
+  if (is(attr, "H5IdComponent"))
+    res <- h5writeAttribute.array(attr, h5obj, name, asScalar=TRUE)
+  else
+    res <- UseMethod("h5writeAttribute")
   invisible(res)
 }
 
@@ -56,7 +59,10 @@ h5writeAttribute.array <- function(attr, h5obj, name, cset=c("ASCII", "UTF8"), v
   if (H5Aexists(h5obj, name)) {
     H5Adelete(h5obj, name)
   }
-  h5createAttribute(h5obj, name, dims = dims, storage.mode = storage.mode(attr), size = size, cset=match.arg(cset))
+  storagemode <- storage.mode(attr)
+  if (storagemode == "S4" && is(attr, "H5IdComponent"))
+    storagemode <- "H5IdComponent"
+  h5createAttribute(h5obj, name, dims = dims, storage.mode = storagemode, size = size, cset=match.arg(cset))
   h5attr <- H5Aopen(h5obj, name)
 
   DimMem <- dim(attr)

@@ -462,6 +462,17 @@ getDatatypeClass(hid_t type) {
   return(name);
 }
 
+char* getReferenceType(hid_t ref_type) {
+    char *name = NULL;
+    if (H5Tequal(ref_type, H5T_STD_REF_DSETREG))
+        name = "DATASET_REGION";
+    else if (H5Tequal(ref_type, H5T_STD_REF_OBJ))
+        name = "OBJECT";
+    else
+        name = "unknown";
+    return name;
+}
+
 SEXP _getDatatypeName(SEXP _type) {
   hid_t type = STRSXP_2_HID( _type );
   SEXP Rval = mkString(getDatatypeName(type));
