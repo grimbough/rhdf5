@@ -45,8 +45,8 @@ void addVector_hid( int pos, SEXP Rval, SEXP groupnames, const char *groupname, 
 
 SEXP _H5constants( ) {
   SEXP Rval;
-  PROTECT(Rval = allocVector(VECSXP, 19));
-  SEXP groupnames = PROTECT(allocVector(STRSXP, 19));
+  PROTECT(Rval = allocVector(VECSXP, 20));
+  SEXP groupnames = PROTECT(allocVector(STRSXP, 20));
   int i=0;
 
   int const_H5F_ACC[2]       = {  H5F_ACC_TRUNC,   H5F_ACC_EXCL };
@@ -80,6 +80,10 @@ SEXP _H5constants( ) {
   int const_H5O_TYPE[4]       = {  -1,             H5O_TYPE_GROUP,   H5O_TYPE_DATASET,   H5O_TYPE_NAMED_DATATYPE };
   const char *name_H5O_TYPE[] = { "H5O_TYPE_ALL", "H5O_TYPE_GROUP", "H5O_TYPE_DATASET", "H5O_TYPE_NAMED_DATATYPE"};
   addVector_int(i++, Rval, groupnames, "H5O_TYPE", 4, const_H5O_TYPE, name_H5O_TYPE);
+  
+  int const_H5O_SHMESG_FLAG[7]       = {  H5O_SHMESG_NONE_FLAG,   H5O_SHMESG_SDSPACE_FLAG,   H5O_SHMESG_DTYPE_FLAG,   H5O_SHMESG_FILL_FLAG,   H5O_SHMESG_PLINE_FLAG,   H5O_SHMESG_ATTR_FLAG,   H5O_SHMESG_ALL_FLAG };
+  const char *name_H5O_SHMESG_FLAG[] = { "H5O_SHMESG_NONE_FLAG", "H5O_SHMESG_SDSPACE_FLAG", "H5O_SHMESG_DTYPE_FLAG", "H5O_SHMESG_FILL_FLAG", "H5O_SHMESG_PLINE_FLAG", "H5O_SHMESG_ATTR_FLAG", "H5O_SHMESG_ALL_FLAG"};
+  addVector_int(i++, Rval, groupnames, "H5O_SHMESG_FLAG", 7, const_H5O_SHMESG_FLAG, name_H5O_SHMESG_FLAG);
 
   int const_H5S[3]       = {  H5S_SCALAR,   H5S_SIMPLE,   H5S_NULL };
   const char *name_H5S[] = { "H5S_SCALAR", "H5S_SIMPLE", "H5S_NULL"};
