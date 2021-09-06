@@ -5,12 +5,8 @@ context("h5 defined constants")
 ############################################################
 
 test_that("const groups", {
-    ## No longer exported---must stop testing
-    ## expect_is( H5loadConstants(), "list" ) %>%
-    ##     expect_length( n = 18 )
-    
     expect_is( h5constType(), "character" ) %>%
-        expect_length(n = 19)
+        expect_length(n = 20)
 })
 
 test_that("constants", {

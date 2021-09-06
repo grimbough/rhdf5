@@ -114,18 +114,20 @@ test_that("shared object header mesage index properties can be retrieved", {
     
     ## this can only be run after H5Pset_shared_mesg_nindexes() has been called
     expect_silent(shd_msg_idx <- H5Pget_shared_mesg_index(pid, index_num = 0L))
-    expect_is(shd_msg_idx, "integer")
+    expect_is(shd_msg_idx, "list")
     expect_identical(names(shd_msg_idx), c("type_flags", "size"))
-    expect_equivalent(shd_msg_idx, c(0L, 250L))
+    expect_equivalent(shd_msg_idx$type_flags, "H5O_SHMESG_NONE_FLAG")
+    expect_equivalent(shd_msg_idx$size, 250)
     
 }) 
 
 test_that("shared object header mesage index properties can be set", {
     
-    expect_silent(H5Pset_shared_mesg_index(pid, index_num = 0L, 1L, 10L))
+    expect_silent(H5Pset_shared_mesg_index(pid, index_num = 0L, 
+                                           mesg_type_flags = "H5O_SHMESG_FILL_FLAG", 10L))
     shd_msg_idx <- H5Pget_shared_mesg_index(pid, index_num = 0L)
-    expect_is(shd_msg_idx, "integer")
-    expect_equivalent(shd_msg_idx, c(1L, 10L))
+    expect_equivalent(shd_msg_idx$type_flags, "H5O_SHMESG_FILL_FLAG")
+    expect_equivalent(shd_msg_idx$size, 10L)
     
 }) 
 
