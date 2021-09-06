@@ -180,24 +180,37 @@ H5Pget_shared_mesg_nindexes <- function(h5plist) {
     .Call("_H5Pget_shared_mesg_nindexes", h5plist@ID, PACKAGE="rhdf5")
 }
 
-#' Get and set shared object header mesage index properties
+#' Get and set shared object header message index properties
 #'
-#' @param h5plist [H5IdComponent-class] object representing the file creation property list
-#' @param index_num Index being configured
-#' @param mesg_type_flags Types of messages that may be stored in this index
+#' @param h5plist [H5IdComponent-class] object representing the file creation
+#'   property list
+#' @param index_num Index being configured.  Indices use C-style 0-based counting, so the first index will be numbered 0.
+#' @param mesg_type_flags Character specifying the types of messages that may be stored in this index.
+#'   Valid values can be found with `h5const(type = "H5O_SHMESG_FLAG")`
 #' @param min_mesg_size Minimum message size
+#' 
+#' @returns `H5Pget_shared_mesg_index()` returns a list of length 2. The first element is the types of messages
+#' that may be stored in the index, the second element is the minimum message size.
+#' 
 #' @rdname H5Pshared_mesg_index
 #' @export
-H5Pset_shared_mesg_index <- function(h5plist, index_num, mesg_type_flags, min_mesg_size) {
+H5Pset_shared_mesg_index <- function(h5plist, index_num, 
+                                     mesg_type_flags = h5default(type = "H5O_SHMESG_FLAG"), 
+                                     min_mesg_size) {
+  
     h5checktype(h5plist, "plist")
-    invisible(.Call("_H5Pset_shared_mesg_index", h5plist@ID, index_num, mesg_type_flags, min_mesg_size, PACKAGE="rhdf5"))
+    mesg_type_flags <- h5checkConstants( "H5O_SHMESG_FLAG", mesg_type_flags )
+    invisible(.Call("_H5Pset_shared_mesg_index", h5plist@ID, index_num, 
+                    mesg_type_flags, min_mesg_size, PACKAGE="rhdf5"))
 }
 
 #' @rdname H5Pshared_mesg_index
 #' @export
 H5Pget_shared_mesg_index <- function(h5plist, index_num) {
     h5checktype(h5plist, "plist")
-    .Call("_H5Pget_shared_mesg_index", h5plist@ID, index_num, PACKAGE="rhdf5")
+    res <- .Call("_H5Pget_shared_mesg_index", h5plist@ID, index_num, PACKAGE="rhdf5")
+    return(list(type_flags = h5const2String("H5O_SHMESG_FLAG", res[1]),
+                size = res[2]))
 }
 
 #' Get and set threshold values for storage of shared object header message indexes

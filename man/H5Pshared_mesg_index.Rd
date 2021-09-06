@@ -5,16 +5,23 @@
 \alias{H5Pget_shared_mesg_index}
 \title{Get and set shared object header mesage index properties}
 \usage{
-H5Pset_shared_mesg_index(h5plist, index_num, mesg_type_flags, min_mesg_size)
+H5Pset_shared_mesg_index(
+  h5plist,
+  index_num,
+  mesg_type_flags = h5default(type = "H5O_SHMESG_FLAG"),
+  min_mesg_size
+)
 
 H5Pget_shared_mesg_index(h5plist, index_num)
 }
 \arguments{
-\item{h5plist}{\linkS4class{H5IdComponent} object representing the file creation property list}
+\item{h5plist}{\linkS4class{H5IdComponent} object representing the file creation
+property list}
 
-\item{index_num}{Index being configured}
+\item{index_num}{Index being configured.  Indices use C-style 0-based counting, so the first index will be numbered 0.}
 
-\item{mesg_type_flags}{Types of messages that may be stored in this index}
+\item{mesg_type_flags}{Character specifiying the types of messages that may be stored in this index.
+Valid values can be found with \code{h5const(type = "H5O_SHMESG_FLAG")}}
 
 \item{min_mesg_size}{Minimum message size}
 }
