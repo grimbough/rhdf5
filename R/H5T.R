@@ -109,3 +109,22 @@ H5Tget_cset <- function( dtype_id ) {
   
   .Call("_H5Tget_cset", dtype_id, PACKAGE = "rhdf5")
 }
+
+#' Determine whether a datatype is a variable length string
+#' 
+#' @param dtype_id ID of HDF5 datatype to query.
+#' 
+#' @export
+H5Tis_variable_str <- function( dtype_id ) {
+  
+  if(missing(dtype_id)) {
+    stop("Argument 'dtype_id' must be supplied")
+  }
+  
+  res <- .Call("_H5Tis_variable_str", dtype_id, PACKAGE = "rhdf5")
+  if(res < 0) {
+    stop("Unable to determine whether datatype is a variable length string")
+  } 
+  
+  return(as.logical(res))
+}
