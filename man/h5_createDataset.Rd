@@ -13,6 +13,7 @@ h5createDataset(
   storage.mode = "double",
   H5type = NULL,
   size = NULL,
+  encoding = c("ASCII", "UTF-8"),
   chunk = dims,
   fillValue,
   level = 6,
@@ -51,7 +52,7 @@ datatypes. If \code{H5type} is specified the argument \code{storage.mode} is
 ignored. It is recommended to use \code{storage.mode}}
 
 \item{size}{For \code{storage.mode='character'} the maximum string length
-has to be specified. rhdf5 writes null padded strings by dafault, thus the
+has to be specified. rhdf5 writes null padded strings by default, thus the
 value provided here should be the length of the longest string.  HDF5 then
 stores the string as fixed length character vectors. Together with
 compression, this should be efficient.}
@@ -61,7 +62,7 @@ vector of the same length as \code{dims}. This argument is usually set
 together with a compression property (argument \code{level}).}
 
 \item{fillValue}{Standard value for filling the dataset. The storage.mode of
-value has to be convertable to the dataset type by HDF5.}
+value has to be convertible to the dataset type by HDF5.}
 
 \item{level}{The compression level used. An integer value between 0 (no
 compression) and 9 (highest and slowest compression).}

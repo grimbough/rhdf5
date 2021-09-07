@@ -92,15 +92,15 @@ h5writeDatasetHelper <- function (obj, h5dataset, index = NULL, start = NULL, st
 #' @param obj The R object to be written.
 #' @param file The filename (character) of the file in which the dataset will be
 #'   located. For advanced programmers it is possible to provide an object of
-#'   class [H5IdComponent-class] representing a H5 location identifier
-#'   (file or group). See \code{\link{H5Fcreate}}, \code{\link{H5Fopen}},
+#'   class [H5IdComponent-class] representing a H5 location identifier (file or
+#'   group). See \code{\link{H5Fcreate}}, \code{\link{H5Fopen}},
 #'   \code{\link{H5Gcreate}}, \code{\link{H5Gopen}} to create an object of this
 #'   kind.
 #' @param h5loc An object of class [H5IdComponent-class] representing a H5
 #'   location identifier (file or group). See \code{\link{H5Fcreate}},
 #'   \code{\link{H5Fopen}}, \code{\link{H5Gcreate}}, \code{\link{H5Gopen}} to
 #'   create an object of this kind.
-#' @param name The name of the dataset in the HDF5 file. 
+#' @param name The name of the dataset in the HDF5 file.
 #' @param index List of indices for subsetting. The length of the list has to
 #'   agree with the dimensional extension of the HDF5 array. Each list element
 #'   is an integer vector of indices. A list element equal to `NULL` chooses all
@@ -142,7 +142,8 @@ h5writeDatasetHelper <- function (obj, h5dataset, index = NULL, start = NULL, st
 #'   string.
 #' @param variableLengthString Whether character vectors should be written as
 #'   variable-length strings into the attributes. If `TRUE`, `size` is ignored.
-#' @param encoding The encoding of the string data type.
+#' @param encoding The encoding of the string data type.  Valid options are
+#'   "ASCII" or "UTF-8".
 #' @param createnewfile If `TRUE`, a new file will be created if necessary.
 #' @param write.attributes (logical) If TRUE, all R-attributes attached to the
 #'   object \code{obj} are written to the HDF5 file.
