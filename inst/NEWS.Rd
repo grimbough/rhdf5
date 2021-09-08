@@ -10,6 +10,9 @@
       \item Added many functions for working with file creation property lists.
       (Thanks to @ilia-kats for the contribution, 
       https://github.com/grimbough/rhdf5/pull/95)
+      \item Added support for variable length and UTF-8 encoded string datasets.
+      (Thanks to Aaron Lun @LTLA for the contribution, 
+      https://github.com/grimbough/rhdf5/pull/88)
     }
   }
 
