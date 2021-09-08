@@ -102,7 +102,8 @@ choice is probably dependent on the nature of the strings you're writing. The
 principle difference is that a dataset of variable length strings will not be
 compressed by HDF5 but each individual string only uses the space it
 requires, whereas in a fixed length dataset each string is of length uses
-\code{size}, but the whole dataset can be compressed.
+\code{size}, but the whole dataset can be compressed. This explored more in the
+examples below.
 
 The \code{filter} argument can take several options matching to compression
 filters distributed in either with the HDF5 library in \pkg{Rhdf5lib} or via
@@ -152,6 +153,35 @@ h5write(matrix(1:5,nr=5,nc=1), file="ex_createDataset.h5", name="B", index=list(
 h5write(ex_strings, file = "ex_createDataset.h5", name = "E")
 
 h5dump("ex_createDataset.h5")
+
+## Investigating fixed vs variable length string datasets
+
+## create 1000 random strings with length between 50 and 100 characters
+words <- ceiling(runif(n = 1000, min = 50, max = 100)) |>
+vapply(FUN = \(x) {
+ paste(sample(letters, size = x, replace = TRUE), collapse = "")
+},
+FUN.VALUE = character(1))
+
+## create two HDF5 files
+f1 <- tempfile()
+f2 <- tempfile()
+h5createFile(f1)
+h5createFile(f2)
+
+## create two string datasets
+## the first is variable length strings, the second fixed at the length of our longest word
+h5createDataset(f1, "strings", dims = length(words), storage.mode = "character", size = NULL, chunk = 25)
+h5createDataset(f2, "strings", dims = length(words), storage.mode = "character", size = max(nchar(words)), chunk = 25)
+
+## Write the data
+h5write(words, f1, "strings")
+h5write(words, f2, "strings")
+
+## Check file sizes.
+## In this example the fixed length string dataset is normally much smaller
+file.size(f1)
+file.size(f2)
 
 }
 \seealso{
