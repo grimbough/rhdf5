@@ -117,6 +117,7 @@ static R_CallMethodDef libraryRCalls[] = {
   {"_H5Tget_strpad", (DL_FUNC) &_H5Tget_strpad, 1},
   {"_H5Tset_cset", (DL_FUNC) &_H5Tset_cset, 2},
   {"_H5Tget_cset", (DL_FUNC) &_H5Tget_cset, 1},
+  {"_H5Tis_variable_str", (DL_FUNC) &_H5Tis_variable_str, 1},
   {"_H5Pcreate", (DL_FUNC) &_H5Pcreate, 1},
   {"_H5Pget_class", (DL_FUNC) &_H5Pget_class, 1},
   {"_H5Pcopy", (DL_FUNC) &_H5Pcopy, 1},
@@ -317,7 +318,6 @@ static R_CallMethodDef libraryRCalls[] = {
   {"_h5listOpenObjects", (DL_FUNC) &_h5listOpenObjects, 1},
 #ifdef _H5P_filters
   {"_H5Pset_lzf", (DL_FUNC) &_H5Pset_lzf, 2},
-  //{"_H5Pset_lz4", (DL_FUNC) &_H5Pset_lz4, 1},
   {"_H5Pset_bzip2", (DL_FUNC) &_H5Pset_bzip2, 2},
   {"_H5Pset_blosc", (DL_FUNC) &_H5Pset_blosc, 6},
 #endif
