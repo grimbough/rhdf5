@@ -42,6 +42,32 @@ test_that("Group creation & closure", {
     expect_silent( info3 <- H5Gget_info_by_idx(fid, n = 1) )
     expect_identical( info, info3 )
     
+    ## some input errors are caught
+    expect_error( H5Gget_info_by_idx(fid, n = 1:10), regexp = "integer of length 1" )
+    expect_error( H5Gget_info_by_idx(fid, n = 0), regexp = "larger than 1" )
+    expect_error( H5Gget_info_by_idx(fid, n = 1, group_name = NULL), regexp = "character string of length 1" )
+    
+    H5Fclose(fid)
+})
+
+test_that("Group creation & closure", {
+    
+    fid <- H5Fopen(name = h5File)
+    ## writing to a group
+    expect_silent(gid <- H5Gopen(h5loc = fid, name = "test_group"))
+    expect_silent( info <- H5Gget_info(gid) )
+    expect_is( info, "list" )
+    expect_named( info, c("storage_type", "nlink", "max_corder", "mounted") )
+    
+    expect_silent(H5Gclose(gid))
+    ## we can use the name rather than the group_id
+    expect_silent( info2 <- H5Gget_info_by_name(fid, "test_group") )
+    expect_identical( info, info2 )
+    
+    ##also by index
+    expect_silent( info3 <- H5Gget_info_by_idx(fid, n = 1) )
+    expect_identical( info, info3 )
+    
     expect_silent(H5Fclose(fid))
 })
 
