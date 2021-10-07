@@ -21,6 +21,16 @@
       \item Documentation switched to roxygen2
     }
   }
+  
+  \subsection{BUG FIXES}{
+    \itemize{
+      \item h5createDataset() now prints a warning if a chunk dimension 
+      exceeds the maximum size of that dimension and automatically
+      sets the corresponding chunk dimension to the maxiumum.
+      (Thanks to Eric Kernfeld @ekernf01 for the report,
+      https://github.com/grimbough/rhdf5/issues/97)
+    }
+  }
 }
 
 \section{Changes in version 2.36.0}{

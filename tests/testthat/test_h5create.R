@@ -183,10 +183,10 @@ test_that("Extendible datasets", {
 })
 
 test_that("Invalid inputs", {
-    expect_message(suppressWarnings(
-      h5createDataset(file = h5File, dataset = "fail", dims = "twenty"))
-      ) %>%
-      expect_false()
+    expect_error(
+      suppressWarnings( h5createDataset(file = h5File, dataset = "fail", dims = "twenty") ), 
+      regexp = "Can not create dataset. 'dims' and 'maxdims' must be numeric"
+    ) 
     expect_message(h5createDataset(file = h5File, dataset = "A", dims = c(20, 10))) %>%
       expect_false()
     expect_error(h5createDataset(file = h5File, dataset = "fail", dims = c(-10, 20)))
@@ -195,6 +195,10 @@ test_that("Invalid inputs", {
                                  dims = c(10, 20), maxdims = c(20, 20), chunk = NULL))
     expect_error(h5createDataset(file = h5File, dataset = "fail", dims = c(10, 20), maxdims = c(20, 10)))
     expect_warning(h5createDataset(file = h5File, dataset = "fail", dims = c(10, 20), level = 1, chunk = NULL))
+    
+    expect_warning(h5createDataset(file = h5File, dataset = "chunkTooLarge",
+                                   dims = c(10,20), chunk = c(10,50)), 
+                   regexp = "One or more chunk dimensions exceeded the maximum for the dataset")
     
 })
 

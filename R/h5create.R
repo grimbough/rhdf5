@@ -196,6 +196,35 @@ h5createGroup <- function(file, group) {
   return(dcpl)
 }
 
+.checkArgs_createDataset <- function(dims, maxdims, chunk) {
+  
+  if (any(is.na(dims)) | any(is.na(maxdims))) {
+    stop("Can not create dataset. 'dims' and 'maxdims' must be numeric.")
+  } 
+  if (any(dims < 0)) {
+    stop('All elements of "dims" must be non-negative.')
+  }
+  if (length(maxdims) != length(dims)) {
+    stop('"maxdims" has to have the same rank as "dims".')
+  } 
+  if (any(maxdims != dims) & is.null(chunk)) {
+    stop('If "maxdims" is different from "dims", chunking is required.')
+  }
+  if (any(maxdims != H5Sunlimited() & maxdims < dims)) {
+    stop('All non-extensible elements of "maxdims" must be equal or larger than "dims".')
+  }
+  
+  chunk_vs_maxdims <- ((chunk > maxdims) & (maxdims != H5Sunlimited()))
+  if(any(chunk_vs_maxdims)) {
+    chunk[ which(chunk_vs_maxdims) ]  <- dims[ which(chunk_vs_maxdims) ]
+    warning("One or more chunk dimensions exceeded the maximum for the dataset.\n",
+            "These have been automatically set to the maximum.\n",
+            "The new chunk dimensions are: ", paste0("c(", paste(chunk, collapse = ","), ")"))
+  }
+  
+  return(chunk)
+}
+
 #' Create HDF5 dataset
 #'
 #' R function to create an HDF5 dataset and defining its dimensionality and
@@ -356,58 +385,42 @@ h5createDataset <- function(file, dataset, dims, maxdims = dims,
   
   dims <- as.numeric(dims)
   maxdims <- as.numeric(maxdims)
-  
-  
-  
+
   res <- FALSE
-  if (is.character(dataset)) {
-    if (H5Lexists(loc$H5Identifier,dataset)) {
+  if (!is.character(dataset)) {
+    stop('"dataset" argument must be a character vector of length one.')
+  }
+  if (H5Lexists(loc$H5Identifier,dataset)) {
       message("Can not create dataset. Object with name '",dataset,"' already exists.")
-    } else {
-      if (any(is.na(dims)) | any(is.na(maxdims))) {
-        message("Can not create dataset. 'dims' and 'maxdims' have to be numeric.")
-      } else {
-        if (length(maxdims) != length(dims)) {
-          stop('"maxdims" has to have the same rank as "dims".')
-        }
-        if (any(maxdims != dims) & is.null(chunk)) {
-          stop('If "maxdims" is different from "dims", chunking is required.')
-        }
-        if (any(maxdims != H5Sunlimited() & maxdims < dims)) {
-          stop('All non-extensible elements of "maxdims" have to be equal or larger than "dims".')
-        }
-        if (any(dims < 0)) {
-          stop('All elements of "dims" must be non-negative.')
-        }
-        if ((level > 0) & (is.null(chunk))) {
-          warning("Compression (level > 0) requires chunking. Set chunk size to activate compression.")
-        }
-        if (length(chunk) > 0) {
-          chunk[which(chunk == 0)] = 1
-        }
-        
-        ## determine data type
-        tid <- .setDataType(H5type, storage.mode, size, encoding = match.arg(encoding))
-        
-        dcpl <- .createDCPL(chunk, dims, level, fillValue, dtype = tid, filter = filter, shuffle = shuffle)
-        on.exit(H5Pclose(dcpl), add = TRUE)
-        
-        ## create dataspace
-        sid <- H5Screate_simple(dims, maxdims)
-        on.exit(H5Sclose(sid), add = TRUE)
-        
-        did <- H5Dcreate(loc$H5Identifier, dataset, tid, sid, dcpl = dcpl)
-        if (is(did, "H5IdComponent")) {
-          if (storage.mode[1] == "logical") {
-            x = "logical"
-            h5writeAttribute(attr = x, h5obj = did, name = "storage.mode")
-          }
-          H5Dclose(did)
-          res <- TRUE
-        }
-      }
-    }
   } 
+  chunk <- .checkArgs_createDataset(dims = dims, maxdims = maxdims, chunk = chunk)
+
+  if ((level > 0) & (is.null(chunk))) {
+    warning("Compression (level > 0) requires chunking. Set chunk size to activate compression.")
+  }
+  if (length(chunk) > 0) {
+    chunk[which(chunk == 0)] = 1
+  }
+  
+  ## determine data type
+  tid <- .setDataType(H5type, storage.mode, size, encoding = match.arg(encoding))
+  
+  dcpl <- .createDCPL(chunk, dims, level, fillValue, dtype = tid, filter = filter, shuffle = shuffle)
+  on.exit(H5Pclose(dcpl), add = TRUE)
+  
+  ## create dataspace
+  sid <- H5Screate_simple(dims, maxdims)
+  on.exit(H5Sclose(sid), add = TRUE)
+  
+  did <- H5Dcreate(loc$H5Identifier, dataset, tid, sid, dcpl = dcpl)
+  if (is(did, "H5IdComponent")) {
+    if (storage.mode[1] == "logical") {
+      x = "logical"
+      h5writeAttribute(attr = x, h5obj = did, name = "storage.mode")
+    }
+    H5Dclose(did)
+    res <- TRUE
+  }
   res
 }
 
