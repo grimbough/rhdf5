@@ -152,9 +152,12 @@ SEXP H5Aread_helper_INTEGER(hid_t attr_id, hsize_t n, SEXP Rdim, SEXP _buf, hid_
       }
       
       herr = H5Aread(attr_id, mem_type_id, intbuf );
+      if(herr< 0) {
+        error("Error reading attribute");
+      }
       
       if (bit64conversion == 0) {  // Convert data to R-integer and replace overflow values with NA_integer
-          void * buf;
+
           if (length(_buf) == 0) {
               Rval = PROTECT(allocVector(INTSXP, n));
               buf = (int *) INTEGER(Rval);
@@ -162,14 +165,13 @@ SEXP H5Aread_helper_INTEGER(hid_t attr_id, hsize_t n, SEXP Rdim, SEXP _buf, hid_
               buf = INTEGER(_buf);
               Rval = _buf;
           }
-          long long i;
           if ((b == 4) & (sgn == H5T_SGN_NONE)) {
               uint32_to_int32(intbuf, n, buf);
           } else if (b == 8) { 
               int64_to_int32(intbuf, n, buf, sgn);
           }
       } else {
-          void * buf;
+
           if (length(_buf) == 0) {
               Rval = PROTECT(allocVector(REALSXP, n));
               buf = (long long *) REAL(Rval);
@@ -178,7 +180,6 @@ SEXP H5Aread_helper_INTEGER(hid_t attr_id, hsize_t n, SEXP Rdim, SEXP _buf, hid_
               Rval = _buf;
           }
           if (bit64conversion == 1) {  //convert to double
-              long long i;
               if ((b == 4) & (sgn == H5T_SGN_NONE)) {
                   uint32_to_double(intbuf, n, buf);
               } else if (b == 8) {
@@ -210,17 +211,7 @@ SEXP H5Aread_helper_FLOAT(hid_t attr_id, hsize_t n, SEXP Rdim, SEXP _buf, hid_t 
   hid_t mem_type_id = -1;
 
   SEXP Rval;
-  /* if (cpdType < 0) { */
-    mem_type_id = H5T_NATIVE_DOUBLE;
-  /* } else { */
-  /*   mem_type_id = H5Tcreate(H5T_COMPOUND, H5Tget_size(H5T_NATIVE_DOUBLE)); */
-  /*   herr_t status = H5Tinsert(mem_type_id, cpdField[0], 0, H5T_NATIVE_DOUBLE); */
-  /*   for (int i=1; i<cpdNField; i++) { */
-  /*     hid_t mem_type_id2 = H5Tcreate(H5T_COMPOUND, H5Tget_size(H5T_NATIVE_DOUBLE)); */
-  /*     herr_t status = H5Tinsert(mem_type_id2, cpdField[i], 0, mem_type_id); */
-  /*     mem_type_id = mem_type_id2; */
-  /*   } */
-  /* } */
+  mem_type_id = H5T_NATIVE_DOUBLE;
   void * buf;
   if (length(_buf) == 0) {
     Rval = PROTECT(allocVector(REALSXP, n));
@@ -229,7 +220,12 @@ SEXP H5Aread_helper_FLOAT(hid_t attr_id, hsize_t n, SEXP Rdim, SEXP _buf, hid_t 
     buf = REAL(_buf);
     Rval = _buf;
   }
+  
   herr_t herr = H5Aread(attr_id, mem_type_id, buf );
+  if(herr < 0) {
+    error("Error reading attribute");
+  }
+  
   if (length(_buf) == 0) {
     setAttrib(Rval, R_DimSymbol, Rdim);
     UNPROTECT(1);
@@ -242,17 +238,7 @@ SEXP H5Aread_helper_STRING(hid_t attr_id, hsize_t n, SEXP Rdim, SEXP _buf, hid_t
 
   SEXP Rval;
   size_t size = H5Tget_size(dtype_id);
-  /* if (cpdType < 0) { */
-    mem_type_id = dtype_id;
-  /* } else { */
-  /*   mem_type_id = H5Tcreate(H5T_COMPOUND, size); */
-  /*   herr_t status = H5Tinsert(mem_type_id, cpdField[0], 0, dtype_id); */
-  /*   for (int i=1; i<cpdNField; i++) { */
-  /* 	hid_t mem_type_id2 = H5Tcreate(H5T_COMPOUND, size); */
-  /* 	herr_t status = H5Tinsert(mem_type_id2, cpdField[i], 0, mem_type_id); */
-  /* 	mem_type_id = mem_type_id2; */
-  /*   } */
-  /* } */
+  mem_type_id = dtype_id;
   Rval = PROTECT(allocVector(STRSXP, n));
   if (H5Tis_variable_str(dtype_id)) {
     char *bufSTR[n];
@@ -263,7 +249,12 @@ SEXP H5Aread_helper_STRING(hid_t attr_id, hsize_t n, SEXP Rdim, SEXP _buf, hid_t
     }
   } else {
     char bufSTR[n][size];
+    
     herr_t herr = H5Aread(attr_id, mem_type_id, bufSTR );
+    if(herr < 0) {
+      error("Error reading attribute");
+    }
+    
     char bufSTR2[n][size+1];
     for (int i=0; i<n; i++) {
       for (int j=0; j<size; j++) {

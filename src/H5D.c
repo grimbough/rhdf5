@@ -164,6 +164,10 @@ SEXP H5Dread_helper_INTEGER(hid_t dataset_id, hid_t file_space_id, hid_t mem_spa
           Rval = _buf;
         }
         herr_t herr = H5Dread(dataset_id, mem_type_id, mem_space_id, file_space_id, H5P_DEFAULT, buf );
+        if(herr < 0) {
+          error("Error reading dataset");
+        }
+        
         if (native)
           PERMUTE(Rval, RAW, mem_space_id);
         
@@ -188,6 +192,10 @@ SEXP H5Dread_helper_INTEGER(hid_t dataset_id, hid_t file_space_id, hid_t mem_spa
           Rval = _buf;
         }
         herr_t herr = H5Dread(dataset_id, mem_type_id, mem_space_id, file_space_id, H5P_DEFAULT, buf );
+        if(herr < 0) {
+          error("Error reading dataset");
+        }
+        
         if (native)
           PERMUTE(Rval, INTEGER, mem_space_id);
         
@@ -218,7 +226,10 @@ SEXP H5Dread_helper_INTEGER(hid_t dataset_id, hid_t file_space_id, hid_t mem_spa
             Rval = _buf;
         }
         herr_t herr = H5Dread(dataset_id, mem_type_id, mem_space_id, file_space_id, H5P_DEFAULT, buf );
-
+        if(herr < 0) {
+          error("Error reading dataset");
+        }
+        
         if (native)
             PERMUTE(Rval, INTEGER, mem_space_id);
         
@@ -257,6 +268,9 @@ SEXP H5Dread_helper_INTEGER(hid_t dataset_id, hid_t file_space_id, hid_t mem_spa
         }
         
         herr_t herr = H5Dread(dataset_id, mem_type_id, mem_space_id, file_space_id, H5P_DEFAULT, intbuf );
+        if(herr < 0) {
+          error("Error reading dataset");
+        }
         
         if (bit64conversion == 0) {  // Convert data to R-integer and replace overflow values with NA_integer
             void * buf;
@@ -267,7 +281,6 @@ SEXP H5Dread_helper_INTEGER(hid_t dataset_id, hid_t file_space_id, hid_t mem_spa
                 buf = INTEGER(_buf);
                 Rval = _buf;
             }
-            long long i;
             if ((b == 4) & (sgn == H5T_SGN_NONE)) {
                 uint32_to_int32(intbuf, n, buf);
             } else if (b == 8) { 
