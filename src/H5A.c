@@ -139,7 +139,7 @@ SEXP H5Aread_helper_INTEGER(hid_t attr_id, hsize_t n, SEXP Rdim, SEXP _buf, hid_
       if(b == 4) {
           mem_type_id = H5T_STD_U32LE;
           intbuf = R_alloc(n, sizeof(unsigned int));
-      } else if(b == 8 & sgn == H5T_SGN_NONE) {
+      } else if((b == 8) & (sgn == H5T_SGN_NONE)) {
           mem_type_id = H5T_NATIVE_UINT64;
           intbuf = R_alloc(n, sizeof(unsigned long long));
       } else {
