@@ -52,4 +52,46 @@ SEXP _H5Pset_lzf( SEXP _plist_id, SEXP _buffersize ) {
   return Rval;
 }
 
+SEXP _H5Pset_rle( SEXP _plist_id ) {
+  
+  herr_t herr;
+  unsigned int cd_values[1];
+  
+  hid_t plist_id = STRSXP_2_HID( _plist_id );
+
+  herr = H5Pset_filter (plist_id, H5Z_FILTER_RLE, H5Z_FLAG_OPTIONAL, (size_t)0, cd_values);
+  SEXP Rval = ScalarInteger(herr);
+  
+  return Rval;
+}
+
+SEXP _H5Pset_lip( SEXP _plist_id, SEXP _nbits) {
+  
+  herr_t herr;
+  unsigned int cd_values[3];
+  
+  hid_t plist_id = STRSXP_2_HID( _plist_id );
+  cd_values[0] = INTEGER(_nbits)[0];
+  
+  herr = H5Pset_filter(plist_id, H5Z_FILTER_LIP, H5Z_FLAG_OPTIONAL, (size_t)1, cd_values);
+  SEXP Rval = ScalarInteger(herr);
+  
+  return Rval;
+}
+
+SEXP _H5Pset_simdcomp( SEXP _plist_id, SEXP _nbits ) {
+  
+  herr_t herr;
+  unsigned int cd_values[1];
+  
+  hid_t plist_id = STRSXP_2_HID( _plist_id );
+  cd_values[0] = INTEGER(_nbits)[0];
+  
+  herr = H5Pset_filter(plist_id, H5Z_FILTER_SIMDCOMP, H5Z_FLAG_OPTIONAL, (size_t)1, cd_values);
+  SEXP Rval = ScalarInteger(herr);
+  
+  return Rval;
+}
+
+
 #endif
