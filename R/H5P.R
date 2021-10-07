@@ -255,10 +255,13 @@ H5Pget_shared_mesg_phase_change <- function(h5plist) {
 #'
 #' @examples
 #'
+#' ## this doesn't work on the Bioconductor Mac build machine
+#' \dontrun{
 #' pid <- H5Pcreate("H5P_FILE_ACCESS")
 #' H5Pset_fapl_ros3( pid )
 #' H5Pclose(pid)
-#'
+#' }
+#' 
 #' @export
 H5Pset_fapl_ros3 <- function( h5plist, s3credentials = NULL ) {
   
