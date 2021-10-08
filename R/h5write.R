@@ -159,16 +159,17 @@ h5writeDatasetHelper <- function (obj, h5dataset, index = NULL, start = NULL, st
 #' @keywords programming interface IO file
 #' @examples
 #'
-#' h5createFile("ex_hdf5file.h5")
+#' h5File <- tempfile(fileext = ".h5")
+#' h5createFile( h5File )
 #'
 #' # write a matrix
 #' B = array(seq(0.1,2.0,by=0.1),dim=c(5,2,2))
 #' attr(B, "scale") <- "liter"
-#' h5write(B, "ex_hdf5file.h5","B")
+#' h5write(B, h5File,"B")
 #'
 #' # write a submatrix
-#' h5createDataset("ex_hdf5file.h5", "S", c(5,8), storage.mode = "integer", chunk=c(5,1), level=7)
-#' h5write(matrix(1:5,nr=5,nc=1), file="ex_hdf5file.h5", name="S", index=list(NULL,1))
+#' h5createDataset(h5File, "S", c(5,8), storage.mode = "integer", chunk=c(5,1), level=7)
+#' h5write(matrix(1:5,nr=5,nc=1), file=h5File, name="S", index=list(NULL,1))
 #'
 #' @name h5_write
 #' @export h5write
