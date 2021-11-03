@@ -179,7 +179,7 @@ h5write <- function(obj, file, name, ...) {
 }
 
 #' @rdname h5_write
-#' @export
+#' @export h5write.default
 h5write.default <- function(obj, file, name, createnewfile=TRUE, write.attributes = FALSE, ..., native = FALSE) {
     loc = h5checktypeOrOpenLoc(file, createnewfile = createnewfile, native = native)
     on.exit(h5closeitLoc(loc))
@@ -218,7 +218,7 @@ h5writeDataset <- function(obj, h5loc, name, ...) {
 }
 
 #' @rdname h5_write
-#' @export
+#' @export h5writeDataset.data.frame
 h5writeDataset.data.frame <- function(obj, h5loc, name, level=6, chunk, DataFrameAsCompound = TRUE) {
     if (DataFrameAsCompound) {
         if (H5Lexists(h5loc, name)) {
@@ -254,7 +254,7 @@ h5writeDataset.data.frame <- function(obj, h5loc, name, level=6, chunk, DataFram
     invisible(res)
 }
 
-#' @export
+#' @export h5writeDataset.list
 h5writeDataset.list <- function(obj, h5loc, name, level=6) {
     exists <- try( { H5Lexists(h5loc, name) } )
     if (exists) {
@@ -287,21 +287,26 @@ h5writeDataset.list <- function(obj, h5loc, name, level=6) {
     }
 }
 
-#' @export
+#' @export h5writeDataset.matrix
 h5writeDataset.matrix    <- function(...) { h5writeDataset.array(...) }
-#' @export
+
+#' @export h5writeDataset.integer
 h5writeDataset.integer   <- function(...) { h5writeDataset.array(...) }
-#' @export
+
+#' @export h5writeDataset.double
 h5writeDataset.double    <- function(...) { h5writeDataset.array(...) }
-#' @export
+
+#' @export h5writeDataset.logical
 h5writeDataset.logical   <- function(...) { h5writeDataset.array(...) }
-#' @export
+
+#' @export h5writeDataset.character
 h5writeDataset.character <- function(...) { h5writeDataset.array(...) }
-#' @export
+
+#' @export h5writeDataset.raw
 h5writeDataset.raw       <- function(...) { h5writeDataset.array(...) }
 
 #' @rdname h5_write
-#' @export 
+#' @export h5writeDataset.array
 h5writeDataset.array <- function(obj, h5loc, name, index = NULL, 
                                  start=NULL, stride=NULL, block=NULL, count=NULL, 
                                  size=NULL, variableLengthString=FALSE, encoding=c("ASCII", "UTF-8"),
