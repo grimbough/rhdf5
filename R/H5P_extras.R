@@ -87,13 +87,13 @@ H5Pset_lzf <- function( h5plist, h5tid ) {
 }
 
 #' @export
-H5Pset_rle <- function( h5plist ) {
+H5Pset_rle <- function( h5plist, bit32 = FALSE ) {
     
     if(!is.loaded('_H5Pset_rle', PACKAGE = 'rhdf5'))
         stop('RLE filter not found.\nPlease install rhdf5filters, and then reinstall rhdf5.')
     
     h5checktypeAndPLC(h5plist, "H5P_DATASET_CREATE")
-    res <- .Call("_H5Pset_rle", h5plist@ID, PACKAGE='rhdf5')
+    res <- .Call("_H5Pset_rle", h5plist@ID, as.integer(bit32), PACKAGE='rhdf5')
     invisible(res)
 }
 
@@ -108,7 +108,7 @@ H5Pset_lip <- function( h5plist, nbits = NULL ) {
     }
     
     if(nbits < 0 || nbits > 32) {
-        warning("nbits must be between 0 and 32")
+        stop("nbits must be between 0 and 32")
     }
     
     h5checktypeAndPLC(h5plist, "H5P_DATASET_CREATE")
@@ -127,7 +127,7 @@ H5Pset_simdcomp <- function( h5plist, nbits = NULL ) {
     }
     
     if(nbits < 0 || nbits > 32) {
-        warning("nbits must be between 0 and 32")
+        stop("nbits must be between 0 and 32")
     }
     
     h5checktypeAndPLC(h5plist, "H5P_DATASET_CREATE")
