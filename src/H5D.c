@@ -978,11 +978,16 @@ SEXP _H5Dwrite( SEXP _dataset_id, SEXP _buf, SEXP _file_space_id, SEXP _mem_spac
         }
 
         break;
+    case S4SXP :
+        Rprintf("here\n");
+        mem_type_id = H5T_STD_REF_OBJ;
+        buf = INTEGER(R_do_slot(_buf, mkString("val")));
+        break;
     default :
         mem_type_id = -1;
-    UNPROTECT(native);
-    Rf_error("Writing '%s' not supported.", Rf_type2char(TYPEOF(_buf)));
-    break;
+        UNPROTECT(native);
+        Rf_error("Writing '%s' not supported.", Rf_type2char(TYPEOF(_buf)));
+        break;
     }
     
     herr_t herr = 3;

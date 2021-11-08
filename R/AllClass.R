@@ -15,3 +15,13 @@ setClass("H5IdComponent",
          slots = c(ID = "character", 
                    native = "logical")
 )
+
+
+#' An S4 class representing an H5 object reference
+#'
+#' @slot val `integer` of length 1.
+#'   
+#' @param object Object of class `H5Ref`
+setClass("H5Ref",
+         slots = c(val = "integer")
+)

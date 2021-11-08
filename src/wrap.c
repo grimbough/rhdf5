@@ -12,6 +12,7 @@
 #include "H5I.h"
 #include "H5L.h"
 #include "H5O.h"
+#include "H5R.h"
 #include "H5S.h"
 #include "H5T.h"
 #include "H5P.h"
@@ -92,6 +93,7 @@ static R_CallMethodDef libraryRCalls[] = {
   {"_H5Lmove", (DL_FUNC) &_H5Lmove, 6},
   {"_H5Lcopy", (DL_FUNC) &_H5Lcopy, 6},
   {"_H5Lget_info", (DL_FUNC) &_H5Lget_info, 2},
+  {"_H5Rcreate", (DL_FUNC) &_H5Rcreate, 4},
   {"_H5Screate", (DL_FUNC) &_H5Screate, 1},
   {"_H5Scopy", (DL_FUNC) &_H5Scopy, 1},
   {"_H5Sclose", (DL_FUNC) &_H5Sclose, 1},

@@ -118,22 +118,7 @@ SEXP _H5constants( ) {
 			       H5T_NATIVE_INT64, H5T_NATIVE_UINT64, H5T_NATIVE_INT_LEAST64, H5T_NATIVE_UINT_LEAST64, H5T_NATIVE_INT_FAST64, H5T_NATIVE_UINT_FAST64,
 			       H5T_NATIVE_DOUBLE,
 			       H5T_C_S1, H5T_FORTRAN_S1,
-                   H5T_STD_REF_OBJ, H5T_STD_REF_DSETREG };
-			      /* H5T_UNIX_D32BE,  H5T_UNIX_D32LE,  H5T_UNIX_D64BE,  H5T_UNIX_D64LE, */
-			      /* H5T_C_S1, H5T_FORTRAN_S1, */
-			      /* H5T_INTEL_I8,    H5T_INTEL_I16,   H5T_INTEL_I32,   H5T_INTEL_I64, */
-			      /* H5T_INTEL_B8,    H5T_INTEL_B16,   H5T_INTEL_B32,   H5T_INTEL_B64, */
-			      /* H5T_INTEL_U8,    H5T_INTEL_U16,   H5T_INTEL_U32,   H5T_INTEL_U64, */
-			      /* H5T_INTEL_F32,   H5T_INTEL_F64, */
-			      /* H5T_ALPHA_I8,    H5T_ALPHA_I16,   H5T_ALPHA_I32,   H5T_ALPHA_I64, */
-			      /* H5T_ALPHA_B8,    H5T_ALPHA_B16,   H5T_ALPHA_B32,   H5T_ALPHA_B64, */
-			      /* H5T_ALPHA_U8,    H5T_ALPHA_U16,   H5T_ALPHA_U32,   H5T_ALPHA_U64, */
-			      /* H5T_ALPHA_F32,   H5T_ALPHA_F64, */
-			      /* H5T_VAX_F32,   H5T_VAX_F64, */
-			      /* H5T_MIPS_I8,    H5T_MIPS_I16,   H5T_MIPS_I32,   H5T_MIPS_I64, */
-			      /* H5T_MIPS_B8,    H5T_MIPS_B16,   H5T_MIPS_B32,   H5T_MIPS_B64, */
-			      /* H5T_MIPS_U8,    H5T_MIPS_U16,   H5T_MIPS_U32,   H5T_MIPS_U64, */
-			      /* H5T_MIPS_F32,   H5T_MIPS_F64, */
+			       H5T_STD_REF_OBJ, H5T_STD_REF_DSETREG };
 
   const char *name_H5T[] = { "H5T_IEEE_F32BE", "H5T_IEEE_F32LE", "H5T_IEEE_F64BE", "H5T_IEEE_F64LE", 
                              "H5T_STD_I8BE",  "H5T_STD_I8LE",  "H5T_STD_I16BE", "H5T_STD_I16LE", 
@@ -156,22 +141,8 @@ SEXP _H5constants( ) {
 			     "H5T_NATIVE_INT64", "H5T_NATIVE_UINT64", "H5T_NATIVE_INT_LEAST64", "H5T_NATIVE_UINT_LEAST64", "H5T_NATIVE_INT_FAST64", "H5T_NATIVE_UINT_FAST64",
 			     "H5T_NATIVE_DOUBLE",
 			     "H5T_C_S1", "H5T_FORTRAN_S1",
-                 "H5T_STD_REF_OBJ", "H5T_STD_REF_DSETREG" };
+			     "H5T_STD_REF_OBJ", "H5T_STD_REF_DSETREG" };
 
-			     /* "H5T_UNIX_D32BE", "H5T_UNIX_D32LE", "H5T_UNIX_D64BE", "H5T_UNIX_D64LE", */
-			     /* "H5T_INTEL_I8", "H5T_INTEL_I16", "H5T_INTEL_I32", "H5T_INTEL_I64", */
-			     /* "H5T_INTEL_B8", "H5T_INTEL_B16", "H5T_INTEL_B32", "H5T_INTEL_B64", */
-			     /* "H5T_INTEL_U8", "H5T_INTEL_U16", "H5T_INTEL_U32", "H5T_INTEL_U64", */
-			     /* "H5T_INTEL_F32", "H5T_INTEL_F64", */
-			     /* "H5T_ALPHA_I8", "H5T_ALPHA_I16", "H5T_ALPHA_I32", "H5T_ALPHA_I64", */
-			     /* "H5T_ALPHA_B8", "H5T_ALPHA_B16", "H5T_ALPHA_B32", "H5T_ALPHA_B64", */
-			     /* "H5T_ALPHA_U8", "H5T_ALPHA_U16", "H5T_ALPHA_U32", "H5T_ALPHA_U64", */
-			     /* "H5T_ALPHA_F32", "H5T_ALPHA_F64", */
-			     /* "H5T_VAX_F32", "H5T_VAX_F64", */
-			     /* "H5T_MIPS_I8", "H5T_MIPS_I16", "H5T_MIPS_I32", "H5T_MIPS_I64", */
-			     /* "H5T_MIPS_B8", "H5T_MIPS_B16", "H5T_MIPS_B32", "H5T_MIPS_B64", */
-			     /* "H5T_MIPS_U8", "H5T_MIPS_U16", "H5T_MIPS_U32", "H5T_MIPS_U64", */
-			     /* "H5T_MIPS_F32", "H5T_MIPS_F64" */
 
   addVector_hid(i++, Rval, groupnames, "H5T", 81, const_H5T, name_H5T);
   /* There are more platform specific datatypes */

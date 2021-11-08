@@ -25,15 +25,12 @@ SEXP _H5Acreate( SEXP _obj_id, SEXP _attr_name, SEXP _type_id, SEXP _space_id ) 
 
 /* hid_t H5Aopen( hid_t obj_id, const char *attr_name, hid_t aapl_id ) */
 SEXP _H5Aopen( SEXP _obj_id, SEXP _attr_name ) {
-  //hid_t obj_id = INTEGER(_obj_id)[0];
   hid_t obj_id = STRSXP_2_HID( _obj_id );
   const char *attr_name = CHAR(STRING_ELT(_attr_name, 0));
   hid_t hid = H5Aopen( obj_id, attr_name, H5P_DEFAULT );
   addHandle( hid );
 
   SEXP Rval;
-  //PROTECT(Rval = allocVector(INTSXP, 1));
-  //INTEGER(Rval)[0] = hid;
   PROTECT(Rval = HID_2_STRSXP(hid));
   UNPROTECT(1);
   return Rval;
