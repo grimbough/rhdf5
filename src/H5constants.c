@@ -45,8 +45,8 @@ void addVector_hid( int pos, SEXP Rval, SEXP groupnames, const char *groupname, 
 
 SEXP _H5constants( ) {
   SEXP Rval;
-  PROTECT(Rval = allocVector(VECSXP, 20));
-  SEXP groupnames = PROTECT(allocVector(STRSXP, 20));
+  PROTECT(Rval = allocVector(VECSXP, 21));
+  SEXP groupnames = PROTECT(allocVector(STRSXP, 21));
   int i=0;
 
   int const_H5F_ACC[2]       = {  H5F_ACC_TRUNC,   H5F_ACC_EXCL };
@@ -119,7 +119,6 @@ SEXP _H5constants( ) {
 			       H5T_NATIVE_DOUBLE,
 			       H5T_C_S1, H5T_FORTRAN_S1,
 			       H5T_STD_REF_OBJ, H5T_STD_REF_DSETREG };
-
   const char *name_H5T[] = { "H5T_IEEE_F32BE", "H5T_IEEE_F32LE", "H5T_IEEE_F64BE", "H5T_IEEE_F64LE", 
                              "H5T_STD_I8BE",  "H5T_STD_I8LE",  "H5T_STD_I16BE", "H5T_STD_I16LE", 
                              "H5T_STD_I32BE", "H5T_STD_I32LE", "H5T_STD_I64BE", "H5T_STD_I64LE", 
@@ -142,10 +141,7 @@ SEXP _H5constants( ) {
 			     "H5T_NATIVE_DOUBLE",
 			     "H5T_C_S1", "H5T_FORTRAN_S1",
 			     "H5T_STD_REF_OBJ", "H5T_STD_REF_DSETREG" };
-
-
   addVector_hid(i++, Rval, groupnames, "H5T", 81, const_H5T, name_H5T);
-  /* There are more platform specific datatypes */
 
   int const_H5T_CLASS[11]      = {  H5T_INTEGER,   H5T_FLOAT,   H5T_TIME,   H5T_STRING,   H5T_BITFIELD,   H5T_OPAQUE,   H5T_COMPOUND,   H5T_REFERENCE,   H5T_ENUM,   H5T_VLEN,   H5T_ARRAY };
   const char *name_H5T_CLASS[] = { "H5T_INTEGER", "H5T_FLOAT", "H5T_TIME", "H5T_STRING", "H5T_BITFIELD", "H5T_OPAQUE", "H5T_COMPOUND", "H5T_REFERENCE", "H5T_ENUM", "H5T_VLEN", "H5T_ARRAY"};
@@ -184,6 +180,10 @@ SEXP _H5constants( ) {
   int const_H5D_ALLOC_TIME[4]      = { H5D_ALLOC_TIME_DEFAULT, H5D_ALLOC_TIME_EARLY, H5D_ALLOC_TIME_INCR, H5D_ALLOC_TIME_LATE };
   const char *name_H5D_ALLOC_TIME[] = { "H5D_ALLOC_TIME_DEFAULT", "H5D_ALLOC_TIME_EARLY", "H5D_ALLOC_TIME_INCR", "H5D_ALLOC_TIME_LATE" };
   addVector_int(i++, Rval, groupnames, "H5D_ALLOC_TIME", 4, const_H5D_ALLOC_TIME, name_H5D_ALLOC_TIME);
+  
+  int const_H5R_TYPE[2] = { H5R_OBJECT, H5R_DATASET_REGION };
+  const char *name_H5R_TYPE[] = { "H5R_OBJECT", "H5R_DATASET_REGION" };
+  addVector_int(i++, Rval, groupnames, "H5R_TYPE", 2, const_H5R_TYPE, name_H5R_TYPE);
 
   /*################################*/
   /* return constants */

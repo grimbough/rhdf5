@@ -23,5 +23,6 @@ setClass("H5IdComponent",
 #'   
 #' @param object Object of class `H5Ref`
 setClass("H5Ref",
-         slots = c(val = "integer")
+         slots = c(val = "integer",
+                   type = "integer")
 )

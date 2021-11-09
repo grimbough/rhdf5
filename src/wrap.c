@@ -96,6 +96,7 @@ static R_CallMethodDef libraryRCalls[] = {
   {"_H5Rcreate", (DL_FUNC) &_H5Rcreate, 4},
   {"_H5Rget_obj_type", (DL_FUNC) &_H5Rget_obj_type, 3},
   {"_H5Rdereference", (DL_FUNC) &_H5Rdereference, 3},
+  {"_H5Rget_name", (DL_FUNC) &_H5Rget_name, 3},
   {"_H5Screate", (DL_FUNC) &_H5Screate, 1},
   {"_H5Scopy", (DL_FUNC) &_H5Scopy, 1},
   {"_H5Sclose", (DL_FUNC) &_H5Sclose, 1},

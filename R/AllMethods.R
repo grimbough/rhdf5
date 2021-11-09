@@ -224,4 +224,12 @@ setMethod(`[<-`, signature = c("H5IdComponent", "ANY","ANY","ANY"),
           } )
 
 
-
+#' @describeIn H5Ref Print details of the object to screen.
+#' 
+#' @export
+setMethod("show",signature="H5Ref", function(object) {
+  
+  cat("HDF5 REFERENCE\n")
+  cat("Type: ", h5const2String("H5R_TYPE", object@type))
+  
+})
