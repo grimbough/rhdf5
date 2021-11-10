@@ -920,6 +920,7 @@ SEXP _H5Dwrite( SEXP _dataset_id, SEXP _buf, SEXP _file_space_id, SEXP _mem_spac
     }
     
     const void * buf;
+    static const char* H5Ref[] = {"H5Ref", ""};
     
     hid_t dim_space_id = mem_space_id == H5S_ALL ? dataset_id : mem_space_id;
     
@@ -979,9 +980,23 @@ SEXP _H5Dwrite( SEXP _dataset_id, SEXP _buf, SEXP _file_space_id, SEXP _mem_spac
 
         break;
     case S4SXP :
-        Rprintf("here\n");
-        mem_type_id = H5T_STD_REF_OBJ;
-        buf = INTEGER(R_do_slot(_buf, mkString("val")));
+        if(R_check_class_etc(_buf, H5Ref) >= 0) {
+          if(INTEGER(R_do_slot(_buf, mkString("type")))[0] == H5R_OBJECT) {
+            Rprintf("Object reference\n");
+            mem_type_id = H5T_STD_REF_OBJ;
+          } else if (INTEGER(R_do_slot(_buf, mkString("type")))[0] == H5R_DATASET_REGION) {
+            Rprintf("Dataset region reference\n");
+            mem_type_id = H5T_STD_REF_DSETREG;
+          } else {
+            Rprintf("here\n");
+            mem_type_id = -1;
+            UNPROTECT(native);
+            Rf_error("Error writing references");
+          }
+          buf = RAW(R_do_slot(_buf, mkString("val")));
+        } else {
+          Rprintf("Class check failed\n");
+        }
         break;
     default :
         mem_type_id = -1;
@@ -990,8 +1005,7 @@ SEXP _H5Dwrite( SEXP _dataset_id, SEXP _buf, SEXP _file_space_id, SEXP _mem_spac
         break;
     }
     
-    herr_t herr = 3;
-    herr = H5Dwrite(dataset_id, mem_type_id, mem_space_id, file_space_id, H5P_DEFAULT, buf );
+    herr_t herr = H5Dwrite(dataset_id, mem_type_id, mem_space_id, file_space_id, H5P_DEFAULT, buf );
     SEXP Rval;
     PROTECT(Rval = allocVector(INTSXP, 1));
     INTEGER(Rval)[0] = herr;
@@ -1001,7 +1015,6 @@ SEXP _H5Dwrite( SEXP _dataset_id, SEXP _buf, SEXP _file_space_id, SEXP _mem_spac
 
 /* hid_t H5Dget_space(hid_t dataset_id ) */
 SEXP _H5Dget_space(SEXP _dataset_id ) {
-    //hid_t dataset_id = INTEGER(_dataset_id)[0];
     hid_t dataset_id = STRSXP_2_HID( _dataset_id );
     hid_t sid = H5Dget_space( dataset_id );
     addHandle(sid);
