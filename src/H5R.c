@@ -1,14 +1,8 @@
 #include "H5R.h"
 
-void * RAWSXP_2_REF(void *raw_ref, H5R_type_t ref_type) {
-  void *ref;
-  if(ref_type == H5R_OBJECT) {
-    ref = R_alloc(sizeof(hobj_ref_t), 1);
-    memcpy(ref, raw_ref, sizeof(hobj_ref_t));
-  } else {
-    ref = R_alloc(sizeof(hdset_reg_ref_t), 1);
-    memcpy(ref, raw_ref, sizeof(hdset_reg_ref_t));
-  }
+void * RAWSXP_2_REF(void *raw_ref, H5R_type_t ref_type, R_xlen_t len) {
+  void *ref = R_alloc(len, 1);
+  memcpy(ref, raw_ref, len);
   return(ref);
 }
 
@@ -57,7 +51,7 @@ SEXP _H5Rget_obj_type(SEXP _loc_id, SEXP _ref_type, SEXP _ref) {
   
   hid_t loc_id =  STRSXP_2_HID( _loc_id );
   H5R_type_t ref_type = (H5R_type_t) INTEGER(_ref_type)[0];
-  void *ref = RAWSXP_2_REF(RAW(_ref), ref_type);
+  void *ref = RAWSXP_2_REF(RAW(_ref), ref_type, xlength(_ref));
   H5O_type_t obj_type;
 
   herr_t status = H5Rget_obj_type (loc_id, ref_type, ref, &obj_type);
@@ -91,7 +85,7 @@ SEXP _H5Rdereference(SEXP _obj_id, SEXP _ref_type, SEXP _ref) {
   
   hid_t obj_id =  STRSXP_2_HID( _obj_id );
   H5R_type_t ref_type = (H5R_type_t) INTEGER(_ref_type)[0];
-  void *ref = RAWSXP_2_REF(RAW(_ref), ref_type);
+  void *ref = RAWSXP_2_REF(RAW(_ref), ref_type, xlength(_ref));
 
   hid_t obj = H5Rdereference(obj_id, H5P_DEFAULT, ref_type, ref);
   
@@ -106,7 +100,7 @@ SEXP _H5Rget_name(SEXP _loc_id, SEXP _ref_type, SEXP _ref) {
   
   hid_t loc_id =  STRSXP_2_HID( _loc_id );
   H5R_type_t ref_type = (H5R_type_t) INTEGER(_ref_type)[0];
-  void *ref = RAWSXP_2_REF(RAW(_ref), ref_type);
+  void *ref = RAWSXP_2_REF(RAW(_ref), ref_type, xlength(_ref));
   
   /* first call find the number of characters in the name,
    * second call populates the buffer with the name */
@@ -125,7 +119,7 @@ SEXP _H5Rget_region(SEXP _loc_id, SEXP _ref_type, SEXP _ref) {
   
   hid_t loc_id =  STRSXP_2_HID( _loc_id );
   H5R_type_t ref_type = (H5R_type_t) INTEGER(_ref_type)[0];
-  void *ref = RAWSXP_2_REF(RAW(_ref), ref_type);
+  void *ref = RAWSXP_2_REF(RAW(_ref), ref_type, xlength(_ref));
   
   hid_t space_id = H5Rget_region(loc_id, ref_type, ref);
   

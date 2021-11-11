@@ -988,7 +988,6 @@ SEXP _H5Dwrite( SEXP _dataset_id, SEXP _buf, SEXP _file_space_id, SEXP _mem_spac
             Rprintf("Dataset region reference\n");
             mem_type_id = H5T_STD_REF_DSETREG;
           } else {
-            Rprintf("here\n");
             mem_type_id = -1;
             UNPROTECT(native);
             Rf_error("Error writing references");

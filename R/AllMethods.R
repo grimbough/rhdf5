@@ -230,6 +230,41 @@ setMethod(`[<-`, signature = c("H5IdComponent", "ANY","ANY","ANY"),
 setMethod("show",signature="H5Ref", function(object) {
   
   cat("HDF5 REFERENCE\n")
-  cat("Type: ", h5const2String("H5R_TYPE", object@type))
+  cat("Type:", h5const2String("H5R_TYPE", object@type), "\n")
+  cat("Length:", length(object))
   
 })
+
+setMethod("length",
+          signature = "H5Ref",
+          definition = function(x) {
+            if(h5const2String("H5R_TYPE", x@type) == "H5R_OBJECT") {
+              div <- 8
+            } else {
+              div <- 12
+            }
+            return(length(x@val) / div)
+          }
+)
+
+#' @export
+setMethod(f = "c", 
+          signature = "H5Ref", 
+          definition = function(x, ...) {
+            elements <- list(x, ...) 
+            if (length(elements) != 0) { 
+              items <- unlist(lapply(
+                elements,
+                FUN = function(object) {
+                  if (inherits(object, "H5Ref")) {
+                    return(object@val)
+                  } else {
+                    stop("All objects must be of class 'H5Ref'")
+                  }
+                }
+              ))
+              object <- new("H5Ref", val = items, type = x@type)
+            }
+            return(object)
+          }
+)

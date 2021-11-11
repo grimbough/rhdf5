@@ -8,7 +8,7 @@
 #include "myhdf5.h"
 #include "HandleList.h"
 
-void * RAWSXP_2_REF(void *raw_ref, H5R_type_t ref_type);
+void * RAWSXP_2_REF(void *raw_ref, H5R_type_t ref_type, R_xlen_t len);
 
 SEXP _H5Rcreate(SEXP _loc_id, SEXP name, SEXP _ref_type, SEXP _space_id);
 SEXP _H5Rget_obj_type(SEXP _loc_id, SEXP _ref_type, SEXP _ref);
