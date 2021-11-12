@@ -239,9 +239,9 @@ setMethod("length",
           signature = "H5Ref",
           definition = function(x) {
             if(h5const2String("H5R_TYPE", x@type) == "H5R_OBJECT") {
-              div <- 8
+              div <- 8L
             } else {
-              div <- 12
+              div <- 12L
             }
             return(length(x@val) / div)
           }
@@ -265,6 +265,25 @@ setMethod(f = "c",
               ))
               object <- new("H5Ref", val = items, type = x@type)
             }
+            return(object)
+          }
+)
+
+#' @export
+setMethod(f = "[", 
+          signature = "H5Ref", 
+          definition = function(x, i, j, ..., drop = TRUE)  {
+            
+            if(h5const2String("H5R_TYPE", x@type) == "H5R_OBJECT") {
+              div <- 8L
+            } else {
+              div <- 12L
+            }
+            
+            i <- as.integer(i)
+            idx <- c(vapply(i, function(x) ((x-1L)*div)+(1L:div), FUN.VALUE = integer(length = div)))
+            
+            object <- new("H5Ref", val = x@val[idx], type = x@type)
             return(object)
           }
 )
