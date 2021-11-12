@@ -721,6 +721,39 @@ SEXP H5Dread_helper_COMPOUND(hid_t dataset_id, hid_t file_space_id, hid_t mem_sp
 }
 
 
+//SEXP H5Dread_helper_REFERENCE(hid_t attr_id, hsize_t n, SEXP Rdim, SEXP _buf, hid_t dtype_id) {
+SEXP H5Dread_helper_REFERENCE(hid_t dataset_id, hid_t file_space_id, hid_t mem_space_id, hsize_t n, SEXP Rdim, SEXP _buf,
+                          hid_t dtype_id, int native) {
+  
+  void *references;
+  SEXP Rrefs, Rtype, Rval; 
+  
+  if(H5Tequal(dtype_id, H5T_STD_REF_OBJ)) {
+    Rrefs = PROTECT(allocVector(RAWSXP, sizeof(hobj_ref_t) * n ));
+    Rtype = PROTECT(ScalarInteger(H5R_OBJECT));
+  } else if (H5Tequal(dtype_id, H5T_STD_REF_DSETREG)) {
+    Rrefs = PROTECT(allocVector(RAWSXP, sizeof(hdset_reg_ref_t) * n ));
+    Rtype = PROTECT(ScalarInteger(H5R_DATASET_REGION));
+  } else {
+    error("Unkown reference type");
+    return R_NilValue;
+  }
+  
+  references = RAW(Rrefs);
+  
+  herr_t err = H5Dread(dataset_id, dtype_id, H5S_ALL, H5S_ALL, H5P_DEFAULT, references);
+  if (err < 0) {
+    error("could not read dataset");
+    return R_NilValue;
+  }
+
+  Rval = PROTECT(R_do_new_object(R_getClassDef("H5Ref")));
+  R_do_slot_assign(Rval, mkString("val"), Rrefs);
+  R_do_slot_assign(Rval, mkString("type"), Rtype);
+  UNPROTECT(3);
+  return Rval;
+}
+
 
 SEXP H5Dread_helper(hid_t dataset_id, hid_t file_space_id, hid_t mem_space_id, hsize_t n, SEXP Rdim,
                     SEXP _buf, hid_t cpdType, int cpdNField, char ** cpdField, int compoundAsDataFrame,
@@ -765,7 +798,10 @@ SEXP H5Dread_helper(hid_t dataset_id, hid_t file_space_id, hid_t mem_space_id, h
     case H5T_TIME:
     case H5T_BITFIELD:
     case H5T_OPAQUE:
-    case H5T_REFERENCE:
+    case H5T_REFERENCE: {
+        Rval = H5Dread_helper_REFERENCE(dataset_id, file_space_id, mem_space_id, n, Rdim, _buf,
+                                        dtype_id, native );
+    } break;
     case H5T_VLEN:
     default: {
         double na = R_NaReal;

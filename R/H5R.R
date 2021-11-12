@@ -54,6 +54,7 @@ H5Rget_region <- function(ref, h5loc) {
     stop("Only references of type H5R_DATASET_REGION can be used.")
   }
   
-  h5space <- .Call("_H5Rget_region", h5loc@ID, ref@type, ref@val, PACKAGE = "rhdf5")
+  space_id <- .Call("_H5Rget_region", h5loc@ID, ref@type, ref@val, PACKAGE = "rhdf5")
+  h5space <- new("H5IdComponent", ID = space_id, native = FALSE)
   return(h5space)
 }
