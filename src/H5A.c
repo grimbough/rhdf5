@@ -54,8 +54,8 @@ SEXP _H5Aopen_by_name( SEXP _obj_id, SEXP _obj_name, SEXP _attr_name ) {
 SEXP _H5Aopen_by_idx( SEXP _obj_id, SEXP _obj_name, SEXP _idx_type, SEXP _order, SEXP _n ) {
   hid_t obj_id = STRSXP_2_HID( _obj_id );
   const char *obj_name = CHAR(STRING_ELT(_obj_name, 0));
-  H5_index_t idx_type = INTEGER(_idx_type)[0];
-  H5_iter_order_t order = INTEGER(_order)[0];
+  H5_index_t idx_type = (H5_index_t) INTEGER(_idx_type)[0];
+  H5_iter_order_t order = (H5_iter_order_t) INTEGER(_order)[0];
   hsize_t n = INTEGER(_n)[0];
   hid_t hid = H5Aopen_by_idx( obj_id, obj_name, idx_type, order, n, H5P_DEFAULT, H5P_DEFAULT );
   addHandle( hid );
@@ -68,7 +68,6 @@ SEXP _H5Aopen_by_idx( SEXP _obj_id, SEXP _obj_name, SEXP _idx_type, SEXP _order,
 
 /* htri_t H5Aexists( hid_t obj_id, const char *attr_name ) */
 SEXP _H5Aexists( SEXP _obj_id, SEXP _attr_name ) {
-  //hid_t obj_id = INTEGER(_obj_id)[0];
   hid_t obj_id = STRSXP_2_HID( _obj_id );
   const char *attr_name = CHAR(STRING_ELT(_attr_name, 0));
   htri_t htri = H5Aexists( obj_id, attr_name );
@@ -78,7 +77,6 @@ SEXP _H5Aexists( SEXP _obj_id, SEXP _attr_name ) {
 
 /* herr_t H5Aclose(hid_t attr_id) */
 SEXP _H5Aclose( SEXP _attr_id ) {
-  //hid_t attr_id = INTEGER(_attr_id)[0];
   hid_t attr_id = STRSXP_2_HID( _attr_id );
   herr_t herr = H5Aclose( attr_id );
   if (herr == 0) {
@@ -460,7 +458,8 @@ SEXP _H5Awrite( SEXP _attr_id, SEXP _buf) {
     hid_t mem_type_id;
 
     const void * buf;
-    static const char* classname[] = {"H5IdComponent", ""};
+    static const char* H5Ref[] = {"H5Ref", ""};
+    
     if (TYPEOF(_buf) == INTSXP) {
         mem_type_id = H5T_NATIVE_INT;
         buf = INTEGER(_buf);
@@ -491,33 +490,25 @@ SEXP _H5Awrite( SEXP _attr_id, SEXP _buf) {
             }
             buf = strbuf;
         }
-    } else if (TYPEOF(_buf) == S4SXP && R_check_class_etc(_buf, classname) >= 0) {
-        SEXP _obj_id = R_do_slot(_buf, mkString("ID"));
-        hid_t obj_id = STRSXP_2_HID(_obj_id);
-        ssize_t namelength = H5Iget_name(obj_id, NULL, 0);
-        if (namelength > 0) {
-            char *name = R_alloc(sizeof(char), namelength + 1);
-            namelength = H5Iget_name(obj_id, name, namelength + 1);
-            hobj_ref_t *ref = (hobj_ref_t*)R_alloc(sizeof(hobj_ref_t), 1);
-            herr_t err = H5Rcreate(ref, obj_id, name, H5R_OBJECT, -1);
-            if (err < 0) {
-                error("Could not create reference to object.");
-                return R_NilValue;
-            }
+    } else if (TYPEOF(_buf) == S4SXP && R_check_class_etc(_buf, H5Ref) >= 0) {
+        if(INTEGER(R_do_slot(_buf, mkString("type")))[0] == H5R_OBJECT) {
+            Rprintf("Object reference\n");
             mem_type_id = H5T_STD_REF_OBJ;
-            buf = ref;
+        } else if (INTEGER(R_do_slot(_buf, mkString("type")))[0] == H5R_DATASET_REGION) {
+            Rprintf("Dataset region reference\n");
+            mem_type_id = H5T_STD_REF_DSETREG;
         } else {
-            error("Object has no name, cannot create a reference");
-            return R_NilValue;
+            mem_type_id = -1;
+            Rf_error("Error writing references");
         }
+        buf = RAW(R_do_slot(_buf, mkString("val")));
     } else {
         error("Writing of this type of attribute data not supported.");
         SEXP Rval = R_NilValue;
         return Rval;
     }
 
-    herr_t herr = 3;
-    herr = H5Awrite(attr_id, mem_type_id, buf );
+    herr_t herr = H5Awrite(attr_id, mem_type_id, buf );
     SEXP Rval;
     PROTECT(Rval = allocVector(INTSXP, 1));
     INTEGER(Rval)[0] = herr;
