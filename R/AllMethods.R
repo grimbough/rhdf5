@@ -231,7 +231,7 @@ setMethod("show",signature="H5Ref", function(object) {
   
   cat("HDF5 REFERENCE\n")
   cat("Type:", h5const2String("H5R_TYPE", object@type), "\n")
-  cat("Length:", length(object))
+  cat("Length:", length(object), "\n")
   
 })
 

@@ -1018,10 +1018,8 @@ SEXP _H5Dwrite( SEXP _dataset_id, SEXP _buf, SEXP _file_space_id, SEXP _mem_spac
     case S4SXP :
         if(R_check_class_etc(_buf, H5Ref) >= 0) {
           if(INTEGER(R_do_slot(_buf, mkString("type")))[0] == H5R_OBJECT) {
-            Rprintf("Object reference\n");
             mem_type_id = H5T_STD_REF_OBJ;
           } else if (INTEGER(R_do_slot(_buf, mkString("type")))[0] == H5R_DATASET_REGION) {
-            Rprintf("Dataset region reference\n");
             mem_type_id = H5T_STD_REF_DSETREG;
           } else {
             mem_type_id = -1;
