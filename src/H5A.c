@@ -268,86 +268,34 @@ SEXP H5Aread_helper_STRING(hid_t attr_id, hsize_t n, SEXP Rdim, SEXP _buf, hid_t
 }
 
 SEXP H5Aread_helper_REFERENCE(hid_t attr_id, hsize_t n, SEXP Rdim, SEXP _buf, hid_t dtype_id) {
-    hobj_ref_t references[n];
-    herr_t err = H5Aread(attr_id, dtype_id, &references);
-    if (err < 0) {
-        error("could not read attribute");
-        return R_NilValue;
-    }
-    if (!H5Tequal(dtype_id, H5T_STD_REF_OBJ)) {
-        error("Reading references of type %s is not yet implemented", getReferenceType(dtype_id));
-        return R_NilValue;
-    }
-    hid_t obj = H5Rdereference2(attr_id, H5P_DEFAULT, H5R_OBJECT, &references);
-    SEXP hid = PROTECT(HID_2_STRSXP(obj));
-    SEXP Rval = PROTECT(R_do_new_object(R_getClassDef("H5IdComponent")));
-    R_do_slot_assign(Rval, mkString("ID"), hid);
-    UNPROTECT(2);
-    return Rval;
+  
+  void *references;
+  SEXP Rrefs, Rtype, Rval; 
+  
+  if(H5Tequal(dtype_id, H5T_STD_REF_OBJ)) {
+    Rrefs = PROTECT(allocVector(RAWSXP, sizeof(hobj_ref_t) * n ));
+    Rtype = PROTECT(ScalarInteger(H5R_OBJECT));
+  } else if (H5Tequal(dtype_id, H5T_STD_REF_DSETREG)) {
+    Rrefs = PROTECT(allocVector(RAWSXP, sizeof(hdset_reg_ref_t) * n ));
+    Rtype = PROTECT(ScalarInteger(H5R_DATASET_REGION));
+  } else {
+    error("Unkown reference type");
+    return R_NilValue;
+  }
+  
+  references = RAW(Rrefs);
+  herr_t err = H5Aread(attr_id, dtype_id, references);
+  if (err < 0) {
+    error("could not read attribute");
+    return R_NilValue;
+  }
+  
+  Rval = PROTECT(R_do_new_object(R_getClassDef("H5Ref")));
+  R_do_slot_assign(Rval, mkString("val"), Rrefs);
+  R_do_slot_assign(Rval, mkString("type"), Rtype);
+  UNPROTECT(3);
+  return Rval;
 }
-
-/* SEXP H5Dread_helper_COMPOUND(hid_t dataset_id, hid_t file_space_id, hid_t mem_space_id, hsize_t n, SEXP Rdim, SEXP _buf,  */
-/* 			    hid_t dtype_id, hid_t cpdType, int cpdNField, char ** cpdField, int compoundAsDataFrame ) { */
-/*   hid_t mem_type_id = -1; */
-
-/*   if ((LENGTH(Rdim) > 1) && compoundAsDataFrame) { */
-/*     compoundAsDataFrame = 0; */
-/*     printf("Warning: Cannot coerce multi-dimensional data to data.frame. Data returned it as list.\n"); */
-/*   } */
-
-/*   SEXP Rval; */
-/*   if (cpdType < 0) { */
-/*     int N = H5Tget_nmembers(dtype_id); */
-/*     PROTECT(Rval = allocVector(VECSXP, N)); */
-/*     SEXP names = PROTECT(allocVector(STRSXP, N)); */
-/*     for (int i=0; i<N; i++) { */
-/*       SET_STRING_ELT(names, i, mkChar(H5Tget_member_name(dtype_id,i))); */
-/*       char* name[1]; */
-/*       name[0] = H5Tget_member_name(dtype_id,i); */
-/*       SEXP col;  */
-/*       if (compoundAsDataFrame && (H5Tget_member_class(dtype_id,i) == H5T_COMPOUND)) { */
-/* 	printf("Warning: Cannot read hierarchical compound data types as data.frame. Use 'compoundAsDataFrame=FALSE' instead. Values replaced by NA's.\n"); */
-/* 	double na = R_NaReal; */
-/* 	col = PROTECT(allocVector(REALSXP, n)); */
-/* 	for (int i=0; i<n; i++) { REAL(col)[i] = na; } */
-/* 	setAttrib(col, R_DimSymbol, Rdim); */
-/* 	UNPROTECT(1); */
-/*       } else { */
-/* 	col = H5Dread_helper(dataset_id, file_space_id, mem_space_id, n, Rdim, _buf, */
-/* 			     H5Tget_member_type(dtype_id,i), 1, name, compoundAsDataFrame); */
-/*       } */
-/*       SET_VECTOR_ELT(Rval, i, col); */
-/*     } */
-/*     SET_NAMES(Rval, names); */
-/*     if (compoundAsDataFrame) { */
-/*       SEXP rn = PROTECT(allocVector(INTSXP, INTEGER(Rdim)[0])); */
-/*       for (int i=0; i<INTEGER(Rdim)[0]; i++) { INTEGER(rn)[i] = i+1; } */
-/*       UNPROTECT(1); */
-/*       setAttrib(Rval, mkString("row.names"), rn); */
-/*       setAttrib(Rval, R_ClassSymbol, mkString("data.frame")); */
-/*     } */
-/*     UNPROTECT(2); */
-/*   } else { */
-/*     int N = H5Tget_nmembers(dtype_id); */
-/*     PROTECT(Rval = allocVector(VECSXP, N)); */
-/*     SEXP names = PROTECT(allocVector(STRSXP, N)); */
-/*     for (int i=0; i<N; i++) { */
-/*       SET_STRING_ELT(names, i, mkChar(H5Tget_member_name(dtype_id,i))); */
-/*       char* name[cpdNField+1]; */
-/*       name[0] = H5Tget_member_name(dtype_id,i); */
-/*       for (int j=0; j<cpdNField; j++) { */
-/* 	name[j+1] = cpdField[j]; */
-/*       } */
-/*       SEXP col = H5Dread_helper(dataset_id, file_space_id, mem_space_id, n, Rdim, _buf, */
-/* 				H5Tget_member_type(dtype_id,i), cpdNField+1, name, compoundAsDataFrame); */
-      
-/*       SET_VECTOR_ELT(Rval, i, col); */
-/*     } */
-/*     SET_NAMES(Rval, names); */
-/*     UNPROTECT(2); */
-/*   } */
-/*   return(Rval); */
-/* } */
 
 SEXP H5Aread_helper(hid_t attr_id, hsize_t n, SEXP Rdim, SEXP _buf, int bit64conversion ) {
     
@@ -460,13 +408,16 @@ SEXP _H5Awrite( SEXP _attr_id, SEXP _buf) {
     const void * buf;
     static const char* H5Ref[] = {"H5Ref", ""};
     
-    if (TYPEOF(_buf) == INTSXP) {
+    switch(TYPEOF(_buf)) {
+    case INTSXP :
         mem_type_id = H5T_NATIVE_INT;
         buf = INTEGER(_buf);
-    } else if (TYPEOF(_buf) == REALSXP) {
+        break;
+    case REALSXP :
         mem_type_id = H5T_NATIVE_DOUBLE;
         buf = REAL(_buf);
-    } else if (TYPEOF(_buf) == STRSXP) {
+        break;
+    case STRSXP :
         mem_type_id = H5Aget_type(attr_id);
         size_t stsize;
         if (H5Tis_variable_str(mem_type_id)) {
@@ -490,19 +441,22 @@ SEXP _H5Awrite( SEXP _attr_id, SEXP _buf) {
             }
             buf = strbuf;
         }
-    } else if (TYPEOF(_buf) == S4SXP && R_check_class_etc(_buf, H5Ref) >= 0) {
+        break;
+    case S4SXP : 
+      if(R_check_class_etc(_buf, H5Ref) >= 0) {
         if(INTEGER(R_do_slot(_buf, mkString("type")))[0] == H5R_OBJECT) {
-            Rprintf("Object reference\n");
             mem_type_id = H5T_STD_REF_OBJ;
         } else if (INTEGER(R_do_slot(_buf, mkString("type")))[0] == H5R_DATASET_REGION) {
-            Rprintf("Dataset region reference\n");
             mem_type_id = H5T_STD_REF_DSETREG;
         } else {
             mem_type_id = -1;
             Rf_error("Error writing references");
         }
+        }
         buf = RAW(R_do_slot(_buf, mkString("val")));
-    } else {
+        break;
+    default :
+        mem_type_id = -1;
         error("Writing of this type of attribute data not supported.");
         SEXP Rval = R_NilValue;
         return Rval;
@@ -518,7 +472,6 @@ SEXP _H5Awrite( SEXP _attr_id, SEXP _buf) {
 
 /* ssize_t H5Aget_name(hid_t attr_id, size_t buf_size, char *buf ) */
 SEXP _H5Aget_name(SEXP _attr_id ) {
-  //hid_t attr_id = INTEGER(_attr_id)[0];
   hid_t attr_id = STRSXP_2_HID( _attr_id );
   ssize_t s = H5Aget_name(attr_id, 0, NULL );
   char buf[s+1];
@@ -531,11 +484,9 @@ SEXP _H5Aget_name(SEXP _attr_id ) {
 
 /* hid_t H5Aget_space(hid_t attr_id) */
 SEXP _H5Aget_space(SEXP _attr_id ) {
-  //hid_t attr_id = INTEGER(_attr_id)[0];
   hid_t attr_id = STRSXP_2_HID( _attr_id );
   hid_t sid = H5Aget_space( attr_id );
   addHandle(sid);
-  //SEXP Rval = ScalarInteger( sid );
   SEXP Rval;
   PROTECT(Rval = HID_2_STRSXP(sid));
   UNPROTECT(1);
@@ -544,10 +495,8 @@ SEXP _H5Aget_space(SEXP _attr_id ) {
 
 /* hid_t H5Aget_type(hid_t attr_id) */
 SEXP _H5Aget_type( SEXP _attr_id ) {
-  //hid_t attr_id = INTEGER(_attr_id)[0];
   hid_t attr_id = STRSXP_2_HID( _attr_id );
   hid_t hid = H5Aget_type( attr_id );
-  //SEXP Rval = ScalarInteger(hid);
   SEXP Rval;
   PROTECT(Rval = HID_2_STRSXP(hid));
   UNPROTECT(1);
