@@ -94,7 +94,7 @@ h5createGroup <- function(file, group) {
         }
     }
     
-    res
+    invisible(res)
 }
 
 .setDataType <- function(H5type, storage.mode, size, encoding) {
