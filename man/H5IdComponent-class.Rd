@@ -9,7 +9,7 @@
 \alias{$<-,H5IdComponent-method}
 \alias{[,H5IdComponent-method}
 \alias{[<-,H5IdComponent-method}
-\title{An S4 class representing H5 object}
+\title{An S4 class representing an H5 object}
 \usage{
 \S4method{show}{H5IdComponent}(object)
 

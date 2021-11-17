@@ -36,6 +36,22 @@
 NULL
 
 
+#' Create a reference
+#' 
+#' Creates a reference to an object or dataset selection inside an HDF5 file.
+#' 
+#' @param h5loc An `H5IdComponent` object representing the location to be pointed to
+#' by the created reference.
+#' @param name Character string giving the name of the object to be referenced, 
+#' relative to the location given by `h5loc`.
+#' @param ref_type The type of reference to create.  Accepts either `H5R_OBJECT`
+#' or `H5R_DATASET_REGION`.
+#' @param h5space An object of class `H5IdComponent` representing a dataspace
+#' with a selection set.  This argument is only used if creating a 
+#' reference to a dataset region, and will be ignored otherwise.
+#' 
+#' @return An [H5Ref-class] object storing the reference. 
+#' 
 #' @export
 H5Rcreate <- function(h5loc, name, ref_type = "H5R_OBJECT", h5space = NULL) {
   
@@ -56,6 +72,23 @@ H5Rcreate <- function(h5loc, name, ref_type = "H5R_OBJECT", h5space = NULL) {
   return(ref)
 }
 
+#' Open a reference object.
+#'
+#' Given a reference and the file to which that reference applies,
+#' `H5Rdeference()` will open the reference object and return an identifier.
+#'
+#' @details If `ref` contains more than one reference, only the first reference
+#'   will be used.  It must be subset with `[` if one of the other stored
+#'   references should be opened.
+#'
+#' @param ref `H5ref` object containing the reference to be opened.
+#' @param h5loc An `H5IdComponent` object representing the file containing the
+#'   referenced object.
+#'
+#' @return An object of class `H5IdComponent` representing the opened object
+#'   referenced by `ref`.  This should be closed with the appropriate function
+#'   e.g. [H5Dclose()], [H5Oclose()], etc. when no longer needed.
+#'
 #' @export
 H5Rdereference <- function(ref, h5loc) {
   
@@ -64,6 +97,15 @@ H5Rdereference <- function(ref, h5loc) {
   return(obj)
 }
 
+#' Return the name of the object that a reference points to
+#'
+#' @param ref `H5ref` object containing the reference to be queried.
+#' @param h5loc An `H5IdComponent` object representing the file containing the
+#'   referenced object.
+#'
+#' @return Character string of length 1 giving the name of the referenced
+#'   object.
+#'
 #' @export
 H5Rget_name <- function(ref, h5loc) {
 
@@ -71,6 +113,15 @@ H5Rget_name <- function(ref, h5loc) {
   return(name)
 }
 
+#' Identify the type of object that a reference points to
+#' 
+#' @param ref `H5ref` object containing the reference to be queried.
+#' @param h5loc An `H5IdComponent` object representing the file containing the
+#'   referenced object.
+#'   
+#' @return Character string of length 1 identifying the object type.  Valid return
+#' values are: `"GROUP"`, `"DATASET"`, and `"NAMED_DATATYPE"`.
+#' 
 #' @export
 H5Rget_obj_type <- function(ref, h5loc) {
   
@@ -78,13 +129,21 @@ H5Rget_obj_type <- function(ref, h5loc) {
   return(object_type)
 }
 
-#' @param ref An object of class `H5Ref`. 
-#' @param h5loc
+#' Return selection for a reference to dataset region
 #' 
-#' @return An object of class H5IdComponent representing the dataspace of the dataset 
-#' that `ref` points to.  The dataspace will have the selection set that matches the 
-#' selection pointed to by `ref`.
-#'  
+#' Given a dataset region reference, this function will return the dataspace
+#' and selection required to read the data points indicated by the reference.
+#' 
+#' @param ref An object of class `H5Ref`.  This function is only valid
+#' for reference of type `H5R_DATASET_REGION`, and not `H5R_OBJECT`.
+#' @param h5loc An `H5IdComponent` object representing the file containing the
+#'   referenced object.
+#'
+#' @return An object of class `H5IdComponent` representing the dataspace of the
+#'   dataset that `ref` points to.  The dataspace will have the selection set
+#'   that matches the selection pointed to by `ref`. This should be closed using
+#'   [H5Sclose()] when no longer required.
+#'
 #' @export
 H5Rget_region <- function(ref, h5loc) {
   
