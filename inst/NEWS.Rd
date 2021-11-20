@@ -1,6 +1,17 @@
 \name{NEWS}
 \title{News for Package 'rhdf5'}
 
+\section{Changes in version 2.40.0}{
+
+  \subsection{NEW FEATURES}{
+    \itemize{
+      \item Added H5R functions for working with object and dataset region 
+      references.
+    }
+  }
+
+}
+
 \section{Changes in version 2.38.0}{
 
   \subsection{NEW FEATURES}{
