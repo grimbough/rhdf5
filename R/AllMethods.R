@@ -227,14 +227,20 @@ setMethod(`[<-`, signature = c("H5IdComponent", "ANY","ANY","ANY"),
 #' @describeIn H5Ref Print details of the object to screen.
 #' 
 #' @export
-setMethod("show",signature="H5Ref", function(object) {
-  
-  cat("HDF5 REFERENCE\n")
-  cat("Type:", h5const2String("H5R_TYPE", object@type), "\n")
-  cat("Length:", length(object), "\n")
-  
-})
+setMethod("show",
+          signature="H5Ref", 
+          definition = function(object) {
+            
+            cat("HDF5 REFERENCE\n")
+            cat("Type:", h5const2String("H5R_TYPE", object@type), "\n")
+            cat("Length:", length(object), "\n")
+            
+          })
 
+#' @describeIn H5Ref Return the number of references stored in an `H5Ref` 
+#' object.
+#' 
+#' @export
 setMethod("length",
           signature = "H5Ref",
           definition = function(x) {
@@ -247,21 +253,36 @@ setMethod("length",
           }
 )
 
+#' @describeIn H5Ref Combine two or more `H5Ref` objects.  Objects must all
+#' contain the same type of reference, either `H5R_OBJECT` or 
+#' `H5R_DATASET_REFERENCE`.
+#' 
 #' @export
 setMethod(f = "c", 
           signature = "H5Ref", 
           definition = function(x, ...) {
             elements <- list(x, ...) 
             if (length(elements) != 0) { 
+              
+              ## test all objects are H5Ref class
+              valid <- vapply(elements, 
+                              FUN = \(x) { inherits(x, "H5Ref") }, 
+                              FUN.VALUE = logical(1L))
+              if(!all(valid)) {
+                stop("All objects must be of class 'H5Ref'.", call. = FALSE)
+              }
+              
+              ## test all references are of same type
+              types <- vapply(elements, 
+                              FUN = \(x) { x@type }, 
+                              FUN.VALUE = integer(1L))
+              if(length(unique(types)) != 1) {
+                stop("All references must be of the same type.", call. = FALSE)
+              }
+              
               items <- unlist(lapply(
                 elements,
-                FUN = function(object) {
-                  if (inherits(object, "H5Ref")) {
-                    return(object@val)
-                  } else {
-                    stop("All objects must be of class 'H5Ref'")
-                  }
-                }
+                FUN = \(x) { x@val }
               ))
               object <- new("H5Ref", val = items, type = x@type)
             }
@@ -269,6 +290,8 @@ setMethod(f = "c",
           }
 )
 
+#' @describeIn H5Ref Subset an `H5Ref` object.
+#' 
 #' @export
 setMethod(f = "[", 
           signature = "H5Ref", 
