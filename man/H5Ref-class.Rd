@@ -4,9 +4,18 @@
 \name{H5Ref-class}
 \alias{H5Ref-class}
 \alias{show,H5Ref-method}
+\alias{length,H5Ref-method}
+\alias{c,H5Ref-method}
+\alias{[,H5Ref-method}
 \title{An S4 class representing H5 references.}
 \usage{
 \S4method{show}{H5Ref}(object)
+
+\S4method{length}{H5Ref}(x)
+
+\S4method{c}{H5Ref}(x, ...)
+
+\S4method{[}{H5Ref}(x, i, j, ..., drop = TRUE)
 }
 \arguments{
 \item{object}{Object of class \code{H5Ref}}
@@ -24,6 +33,12 @@ that references of different types cannot be combined in a single object.
 \section{Methods (by generic)}{
 \itemize{
 \item \code{show}: Print details of the object to screen.
+
+\item \code{length}: Print details of the object to screen.
+
+\item \code{c}: Print details of the object to screen.
+
+\item \code{[}: Subset an \code{H5Ref} object.
 }}
 
 \section{Slots}{
