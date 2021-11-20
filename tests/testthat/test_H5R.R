@@ -65,6 +65,18 @@ test_that("dataset region references can be created", {
 })
 
 H5Sclose(h5space)
+
+test_that("H5R error checking works", {
+    
+    expect_error(H5Rcreate(fid, name = "/foo/baa", ref_type = "H5R_DATASET_REGION"),
+                 regexp = "H5R_DATASET_REGION references must be accompanied by a H5 dataspace")
+    
+    ref_to_dataset <- H5Rcreate(fid, name = "/foo/baa")
+    expect_error(H5Rget_region(ref = ref_to_dataset, h5loc = fid),
+                 "Only references of type H5R_DATASET_REGION can be used")
+    
+})
+
 H5Fclose(fid)
 
 
