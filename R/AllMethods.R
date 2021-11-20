@@ -154,7 +154,7 @@ setMethod(`$<-`, signature = c("H5IdComponent"),
 #'   replacement.  See \code{\link[base]{drop}} for further details.
 #'
 #' @export
-setMethod(`[`, signature = c("H5IdComponent", "ANY", "ANY", "ANY"),
+setMethod("[", signature = c("H5IdComponent", "ANY", "ANY", "ANY"),
           function(x, i, j, ..., drop = TRUE) {
             h5id = x
             index = as.list(sys.call())[-c(1,2)]
@@ -257,6 +257,9 @@ setMethod("length",
 #' contain the same type of reference, either `H5R_OBJECT` or 
 #' `H5R_DATASET_REFERENCE`.
 #' 
+#' @param x An `H5Ref` object.
+#' @param ... Additional `H5Ref` objects to be combined with `x`.
+#' 
 #' @export
 setMethod(f = "c", 
           signature = "H5Ref", 
@@ -292,10 +295,13 @@ setMethod(f = "c",
 
 #' @describeIn H5Ref Subset an `H5Ref` object.
 #' 
+#' @param x An `H5Ref` object.
+#' @param i Integer vector giving the indices of references to select.
+#' 
 #' @export
 setMethod(f = "[", 
-          signature = "H5Ref", 
-          definition = function(x, i, j, ..., drop = TRUE)  {
+          signature = c("H5Ref", "ANY"),
+          definition = function(x, i)  {
             
             if(h5const2String("H5R_TYPE", x@type) == "H5R_OBJECT") {
               div <- 8L

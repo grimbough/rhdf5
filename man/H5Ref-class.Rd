@@ -15,10 +15,16 @@
 
 \S4method{c}{H5Ref}(x, ...)
 
-\S4method{[}{H5Ref}(x, i, j, ..., drop = TRUE)
+\S4method{[}{H5Ref}(x, i)
 }
 \arguments{
 \item{object}{Object of class \code{H5Ref}}
+
+\item{x}{An \code{H5Ref} object.}
+
+\item{...}{Additional \code{H5Ref} objects to be combined with \code{x}.}
+
+\item{i}{Integer vector giving the indices of references to select.}
 }
 \description{
 A class representing one or more HDF5 references.
@@ -34,9 +40,12 @@ that references of different types cannot be combined in a single object.
 \itemize{
 \item \code{show}: Print details of the object to screen.
 
-\item \code{length}: Print details of the object to screen.
+\item \code{length}: Return the number of references stored in an \code{H5Ref}
+object.
 
-\item \code{c}: Print details of the object to screen.
+\item \code{c}: Combine two or more \code{H5Ref} objects.  Objects must all
+contain the same type of reference, either \code{H5R_OBJECT} or
+\code{H5R_DATASET_REFERENCE}.
 
 \item \code{[}: Subset an \code{H5Ref} object.
 }}
