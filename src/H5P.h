@@ -22,21 +22,21 @@ SEXP _H5Pclose( SEXP _plist );
 // File Creation Properties
 ////////////////////////////////////////////////////
 
-/* SEXP _H5Pget_version( SEXP _plist, SEXP _super, SEXP _freelist, SEXP _stab, SEXP _shhdr ); */
-/* SEXP _H5Pset_userblock( SEXP _plist, SEXP _size ); */
-/* SEXP _H5Pget_userblock( SEXP _plist, SEXP _size ); */
-/* SEXP _H5Pset_sizes( SEXP _plist, SEXP _sizeof_addr, SEXP _sizeof_size ); */
-/* SEXP _H5Pget_sizes( SEXP _plist, SEXP _sizeof_addr, SEXP _sizeof_size ); */
-/* SEXP _H5Pset_sym_k( SEXP _fcpl_id, SEXP _ik, SEXP _lk ); */
-/* SEXP _H5Pget_sym_k( SEXP _fcpl_id, SEXP _ik, SEXP _lk ); */
-/* SEXP _H5Pset_istore_k( SEXP _fcpl_id, SEXP _ik ); */
-/* SEXP _H5Pget_istore_k( SEXP _fcpl_id, SEXP _ik ); */
-/* SEXP _H5Pset_shared_mesg_nindexes( SEXP _plist_id, SEXP _nindexes ); */
-/* SEXP _H5Pget_shared_mesg_nindexes( SEXP _fcpl_id, SEXP _nindexes ); */
-/* SEXP _H5Pset_shared_mesg_index( SEXP _fcpl_id, SEXP _index_num, SEXP _mesg_type_flags, SEXP _min_mesg_size ); */
-/* SEXP _H5Pget_shared_mesg_index( SEXP _fcpl_id, SEXP _index_num, SEXP _mesg_type_flags, SEXP _min_mesg_size ); */
-/* SEXP _H5Pset_shared_mesg_phase_change( SEXP _fcpl_id, SEXP _max_list, SEXP _min_btree ); */
-/* SEXP _H5Pget_shared_mesg_phase_change( SEXP _fcpl_id, SEXP _max_list, SEXP _min_btree ); */
+SEXP _H5Pget_version( SEXP _plist);
+SEXP _H5Pset_userblock( SEXP _plist, SEXP _size );
+SEXP _H5Pget_userblock( SEXP _plist );
+SEXP _H5Pset_sizes( SEXP _plist, SEXP _sizeof_addr, SEXP _sizeof_size );
+SEXP _H5Pget_sizes( SEXP _plist );
+SEXP _H5Pset_sym_k( SEXP _fcpl_id, SEXP _ik, SEXP _lk );
+SEXP _H5Pget_sym_k( SEXP _fcpl_id);
+SEXP _H5Pset_istore_k( SEXP _fcpl_id, SEXP _ik );
+SEXP _H5Pget_istore_k( SEXP _fcpl_id);
+SEXP _H5Pset_shared_mesg_nindexes( SEXP _plist_id, SEXP _nindexes );
+SEXP _H5Pget_shared_mesg_nindexes( SEXP _fcpl_id);
+SEXP _H5Pset_shared_mesg_index( SEXP _fcpl_id, SEXP _index_num, SEXP _mesg_type_flags, SEXP _min_mesg_size );
+SEXP _H5Pget_shared_mesg_index( SEXP _fcpl_id, SEXP _index_num);
+SEXP _H5Pset_shared_mesg_phase_change( SEXP _fcpl_id, SEXP _max_list, SEXP _min_btree );
+SEXP _H5Pget_shared_mesg_phase_change( SEXP _fcpl_id);
 
 ////////////////////////////////////////////////////
 // File Access Properties

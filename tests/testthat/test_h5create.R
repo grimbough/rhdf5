@@ -81,13 +81,38 @@ test_that("Create more datasets with different data types", {
     expect_is(contents$char[1,1], "character")
 })
 
+test_that("datasets of fixed and variable length characters can be created", {
+  
+  expect_true(
+    h5createDataset(file = h5File, dataset = "variable_length", 
+                    dims = 1, storage.mode = "character", size = NULL)
+  )
+  expect_true(
+    h5createDataset(file = h5File, dataset = "fixed_length", dims = 1, 
+                    storage.mode = "character", size = 10)
+  )
+  
+  fid <- H5Fopen(h5File)
+  did_var <- H5Dopen(fid, name = "variable_length")
+  tid_var <- H5Dget_type(did_var)
+  did_fix <- H5Dopen(fid, name = "fixed_length")
+  tid_fix <- H5Dget_type(did_fix)
+  
+  ## Variable length strings return NULL when queried for size
+  expect_true(H5Tis_variable_str(tid_var))
+  expect_false(H5Tis_variable_str(tid_fix))
+  expect_identical(H5Tget_size(tid_fix), 10L)
+  
+  sapply(c(did_var, did_fix), FUN = H5Dclose)
+  H5Fclose(fid)
+})
+  
+
 test_that("Invalid storage mode arguments", {
     expect_error( h5createDataset(file = h5File, dataset = "foo", dims = c(1,1), storage.mode = "foo") )
     expect_error( h5createDataset(file = h5File, dataset = "foo", dims = c(1,1), storage.mode = 10) ) 
     expect_error( h5createDataset(file = h5File, dataset = "foo", dims = c(1,1), storage.mode = 1L) )
     expect_error( h5createDataset(file = h5File, dataset = "foo", dims = c(1,1), storage.mode = FALSE) )
-    ## character without size argument
-    expect_error( h5createDataset(file = h5File, dataset = "foo", dims = c(1,1), storage.mode = "character", size = NULL) )
 })
 
 
@@ -158,10 +183,10 @@ test_that("Extendible datasets", {
 })
 
 test_that("Invalid inputs", {
-    expect_message(suppressWarnings(
-      h5createDataset(file = h5File, dataset = "fail", dims = "twenty"))
-      ) %>%
-      expect_false()
+    expect_error(
+      suppressWarnings( h5createDataset(file = h5File, dataset = "fail", dims = "twenty") ), 
+      regexp = "Can not create dataset. 'dims' and 'maxdims' must be numeric"
+    ) 
     expect_message(h5createDataset(file = h5File, dataset = "A", dims = c(20, 10))) %>%
       expect_false()
     expect_error(h5createDataset(file = h5File, dataset = "fail", dims = c(-10, 20)))
@@ -170,6 +195,10 @@ test_that("Invalid inputs", {
                                  dims = c(10, 20), maxdims = c(20, 20), chunk = NULL))
     expect_error(h5createDataset(file = h5File, dataset = "fail", dims = c(10, 20), maxdims = c(20, 10)))
     expect_warning(h5createDataset(file = h5File, dataset = "fail", dims = c(10, 20), level = 1, chunk = NULL))
+    
+    expect_warning(h5createDataset(file = h5File, dataset = "chunkTooLarge",
+                                   dims = c(10,20), chunk = c(10,50)), 
+                   regexp = "One or more chunk dimensions exceeded the maximum for the dataset")
     
 })
 

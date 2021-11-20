@@ -12,6 +12,7 @@
 #include "H5I.h"
 #include "H5L.h"
 #include "H5O.h"
+#include "H5R.h"
 #include "H5S.h"
 #include "H5T.h"
 #include "H5P.h"
@@ -41,7 +42,7 @@ static R_CallMethodDef libraryRCalls[] = {
   {"_H5Aopen_by_name", (DL_FUNC) &_H5Aopen_by_name, 3},
   {"_H5Aopen_by_idx", (DL_FUNC) &_H5Aopen_by_idx, 5},
   {"_H5Aexists", (DL_FUNC) &_H5Aexists, 2},
-  {"_H5Aread", (DL_FUNC) &_H5Aread, 2},
+  {"_H5Aread", (DL_FUNC) &_H5Aread, 3},
   {"_H5Awrite", (DL_FUNC) &_H5Awrite, 2},
   {"_H5Aclose", (DL_FUNC) &_H5Aclose, 1},
   {"_H5Adelete", (DL_FUNC) &_H5Adelete, 2},
@@ -92,6 +93,11 @@ static R_CallMethodDef libraryRCalls[] = {
   {"_H5Lmove", (DL_FUNC) &_H5Lmove, 6},
   {"_H5Lcopy", (DL_FUNC) &_H5Lcopy, 6},
   {"_H5Lget_info", (DL_FUNC) &_H5Lget_info, 2},
+  {"_H5Rcreate", (DL_FUNC) &_H5Rcreate, 4},
+  {"_H5Rget_obj_type", (DL_FUNC) &_H5Rget_obj_type, 3},
+  {"_H5Rdereference", (DL_FUNC) &_H5Rdereference, 3},
+  {"_H5Rget_name", (DL_FUNC) &_H5Rget_name, 3},
+  {"_H5Rget_region", (DL_FUNC) &_H5Rget_region, 3},
   {"_H5Screate", (DL_FUNC) &_H5Screate, 1},
   {"_H5Scopy", (DL_FUNC) &_H5Scopy, 1},
   {"_H5Sclose", (DL_FUNC) &_H5Sclose, 1},
@@ -117,26 +123,27 @@ static R_CallMethodDef libraryRCalls[] = {
   {"_H5Tget_strpad", (DL_FUNC) &_H5Tget_strpad, 1},
   {"_H5Tset_cset", (DL_FUNC) &_H5Tset_cset, 2},
   {"_H5Tget_cset", (DL_FUNC) &_H5Tget_cset, 1},
+  {"_H5Tis_variable_str", (DL_FUNC) &_H5Tis_variable_str, 1},
   {"_H5Pcreate", (DL_FUNC) &_H5Pcreate, 1},
   {"_H5Pget_class", (DL_FUNC) &_H5Pget_class, 1},
   {"_H5Pcopy", (DL_FUNC) &_H5Pcopy, 1},
   {"_H5Pclose", (DL_FUNC) &_H5Pclose, 1},
   {"_H5Pclose_class", (DL_FUNC) &_H5Pclose_class, 1},
-  /* {"_H5Pget_version", (DL_FUNC) &_H5Pget_version, 5}, */
-  /* {"_H5Pset_userblock", (DL_FUNC) &_H5Pset_userblock, 2}, */
-  /* {"_H5Pget_userblock", (DL_FUNC) &_H5Pget_userblock, 2}, */
-  /* {"_H5Pset_sizes", (DL_FUNC) &_H5Pset_sizes, 3}, */
-  /* {"_H5Pget_sizes", (DL_FUNC) &_H5Pget_sizes, 3}, */
-  /* {"_H5Pset_sym_k", (DL_FUNC) &_H5Pset_sym_k, 3}, */
-  /* {"_H5Pget_sym_k", (DL_FUNC) &_H5Pget_sym_k, 3}, */
-  /* {"_H5Pset_istore_k", (DL_FUNC) &_H5Pset_istore_k, 2}, */
-  /* {"_H5Pget_istore_k", (DL_FUNC) &_H5Pget_istore_k, 2}, */
-  /* {"_H5Pset_shared_mesg_nindexes", (DL_FUNC) &_H5Pset_shared_mesg_nindexes, 2}, */
-  /* {"_H5Pget_shared_mesg_nindexes", (DL_FUNC) &_H5Pget_shared_mesg_nindexes, 2}, */
-  /* {"_H5Pset_shared_mesg_index", (DL_FUNC) &_H5Pset_shared_mesg_index, 4}, */
-  /* {"_H5Pget_shared_mesg_index", (DL_FUNC) &_H5Pget_shared_mesg_index, 4}, */
-  /* {"_H5Pset_shared_mesg_phase_change", (DL_FUNC) &_H5Pset_shared_mesg_phase_change, 3}, */
-  /* {"_H5Pget_shared_mesg_phase_change", (DL_FUNC) &_H5Pget_shared_mesg_phase_change, 3}, */
+  {"_H5Pget_version", (DL_FUNC) &_H5Pget_version, 1},
+  {"_H5Pset_userblock", (DL_FUNC) &_H5Pset_userblock, 2},
+  {"_H5Pget_userblock", (DL_FUNC) &_H5Pget_userblock, 1},
+  {"_H5Pset_sizes", (DL_FUNC) &_H5Pset_sizes, 3},
+  {"_H5Pget_sizes", (DL_FUNC) &_H5Pget_sizes, 1},
+  {"_H5Pset_sym_k", (DL_FUNC) &_H5Pset_sym_k, 3},
+  {"_H5Pget_sym_k", (DL_FUNC) &_H5Pget_sym_k, 1},
+  {"_H5Pset_istore_k", (DL_FUNC) &_H5Pset_istore_k, 2},
+  {"_H5Pget_istore_k", (DL_FUNC) &_H5Pget_istore_k, 1},
+  {"_H5Pset_shared_mesg_nindexes", (DL_FUNC) &_H5Pset_shared_mesg_nindexes, 2},
+  {"_H5Pget_shared_mesg_nindexes", (DL_FUNC) &_H5Pget_shared_mesg_nindexes, 1},
+  {"_H5Pset_shared_mesg_index", (DL_FUNC) &_H5Pset_shared_mesg_index, 4},
+  {"_H5Pget_shared_mesg_index", (DL_FUNC) &_H5Pget_shared_mesg_index, 2},
+  {"_H5Pset_shared_mesg_phase_change", (DL_FUNC) &_H5Pset_shared_mesg_phase_change, 3},
+  {"_H5Pget_shared_mesg_phase_change", (DL_FUNC) &_H5Pget_shared_mesg_phase_change, 1},
   /* {"_H5Pset_driver", (DL_FUNC) &_H5Pset_driver, 3}, */
   /* {"_H5Pget_driver", (DL_FUNC) &_H5Pget_driver, 1}, */
   /* {"_H5Pget_driver_info", (DL_FUNC) &_H5Pget_driver_info, 1}, */
@@ -317,7 +324,6 @@ static R_CallMethodDef libraryRCalls[] = {
   {"_h5listOpenObjects", (DL_FUNC) &_h5listOpenObjects, 1},
 #ifdef _H5P_filters
   {"_H5Pset_lzf", (DL_FUNC) &_H5Pset_lzf, 2},
-  //{"_H5Pset_lz4", (DL_FUNC) &_H5Pset_lz4, 1},
   {"_H5Pset_bzip2", (DL_FUNC) &_H5Pset_bzip2, 2},
   {"_H5Pset_blosc", (DL_FUNC) &_H5Pset_blosc, 6},
 #endif

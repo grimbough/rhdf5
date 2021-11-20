@@ -164,6 +164,10 @@ SEXP H5Dread_helper_INTEGER(hid_t dataset_id, hid_t file_space_id, hid_t mem_spa
           Rval = _buf;
         }
         herr_t herr = H5Dread(dataset_id, mem_type_id, mem_space_id, file_space_id, H5P_DEFAULT, buf );
+        if(herr < 0) {
+          error("Error reading dataset");
+        }
+        
         if (native)
           PERMUTE(Rval, RAW, mem_space_id);
         
@@ -188,6 +192,10 @@ SEXP H5Dread_helper_INTEGER(hid_t dataset_id, hid_t file_space_id, hid_t mem_spa
           Rval = _buf;
         }
         herr_t herr = H5Dread(dataset_id, mem_type_id, mem_space_id, file_space_id, H5P_DEFAULT, buf );
+        if(herr < 0) {
+          error("Error reading dataset");
+        }
+        
         if (native)
           PERMUTE(Rval, INTEGER, mem_space_id);
         
@@ -218,7 +226,10 @@ SEXP H5Dread_helper_INTEGER(hid_t dataset_id, hid_t file_space_id, hid_t mem_spa
             Rval = _buf;
         }
         herr_t herr = H5Dread(dataset_id, mem_type_id, mem_space_id, file_space_id, H5P_DEFAULT, buf );
-
+        if(herr < 0) {
+          error("Error reading dataset");
+        }
+        
         if (native)
             PERMUTE(Rval, INTEGER, mem_space_id);
         
@@ -257,6 +268,9 @@ SEXP H5Dread_helper_INTEGER(hid_t dataset_id, hid_t file_space_id, hid_t mem_spa
         }
         
         herr_t herr = H5Dread(dataset_id, mem_type_id, mem_space_id, file_space_id, H5P_DEFAULT, intbuf );
+        if(herr < 0) {
+          error("Error reading dataset");
+        }
         
         if (bit64conversion == 0) {  // Convert data to R-integer and replace overflow values with NA_integer
             void * buf;
@@ -267,41 +281,10 @@ SEXP H5Dread_helper_INTEGER(hid_t dataset_id, hid_t file_space_id, hid_t mem_spa
                 buf = INTEGER(_buf);
                 Rval = _buf;
             }
-            long long i;
             if ((b == 4) & (sgn == H5T_SGN_NONE)) {
-                for (i=0; i<n; i++) {
-                    ((int *)buf)[i] = ((unsigned int *)intbuf)[i];
-                }
-                for (i=0; i<n; i++) {
-                    if (((unsigned int *)intbuf)[i] > INT_MAX) {
-                        ((int *)buf)[i] = INT_MIN;
-                        warn = 1;
-                    }
-                }
-            } else if ((b == 8) & (sgn == H5T_SGN_2)) {
-                for (i=0; i<n; i++) {
-                    ((int *)buf)[i] = ((long long *)intbuf)[i];
-                }
-                for (i=0; i<n; i++) {
-                    if (((long long *)intbuf)[i] > INT_MAX) {
-                        ((int *)buf)[i] = INT_MIN;
-                        warn = 1;
-                    }
-                    if (((long long *)intbuf)[i] < INT_MIN) {
-                        ((int *)buf)[i] = INT_MIN;
-                        warn = 1;
-                    }
-                }
-            } else if ((b == 8) & (sgn == H5T_SGN_NONE)) {
-                for (i=0; i<n; i++) {
-                    ((int *)buf)[i] = ((unsigned long long *)intbuf)[i];
-                }
-                for (i=0; i<n; i++) {
-                    if (((unsigned long long *)intbuf)[i] > INT_MAX) {
-                        ((int *)buf)[i] = INT_MIN;
-                        warn = 1;
-                    }
-                }
+                uint32_to_int32(intbuf, n, buf);
+            } else if (b == 8) { 
+                int64_to_int32(intbuf, n, buf, sgn);
             }
         } else {
             void * buf;
@@ -319,30 +302,9 @@ SEXP H5Dread_helper_INTEGER(hid_t dataset_id, hid_t file_space_id, hid_t mem_spa
                         ((double *)buf)[i] = ((int *)intbuf)[i];
                     }
                 } else if ((b == 4) & (sgn == H5T_SGN_NONE)) {
-                    for (i=0; i<n; i++){
-                        ((double *)buf)[i] = ((unsigned int *)intbuf)[i];
-                    }
-                } else if ((b == 8) & (sgn == H5T_SGN_2)) {
-                    for (i=0; i<n; i++){
-                        ((double *)buf)[i] = ((long long *)intbuf)[i];
-                    }
-                    for (i=0; i<n; i++) {
-                        if (((long long *)intbuf)[i] > 0x001fffffffffffffL) {
-                            warn_double = 1;
-                        }
-                        if (((long long *)intbuf)[i] < (long long) 0xffe0000000000000L) {
-                            warn_double = 1;
-                        }
-                    }
-                } else if ((b == 8) & (sgn == H5T_SGN_NONE)) {
-                    for (i=0; i<n; i++){
-                        ((double *)buf)[i] = ((unsigned long long *)intbuf)[i];
-                    }
-                    for (i=0; i<n; i++) {
-                        if (((unsigned long long *)intbuf)[i] > 0x001fffffffffffffUL) {
-                            warn_double = 1;
-                        }
-                    }
+                    uint32_to_double(intbuf, n, buf);
+                } else if (b == 8) {
+                    int64_to_double(intbuf, n, buf, sgn);
                 }
             } else { // convert to integer64 class
                 long long i;
@@ -351,23 +313,9 @@ SEXP H5Dread_helper_INTEGER(hid_t dataset_id, hid_t file_space_id, hid_t mem_spa
                         ((long long *)buf)[i] = ((int *)intbuf)[i];
                     }
                 } else if ((b == 4) & (sgn == H5T_SGN_NONE)) {
-                    for (i=0; i<n; i++){
-                        ((long long *)buf)[i] = ((unsigned int *)intbuf)[i];
-                    }
-                } else if ((b == 8) & (sgn == H5T_SGN_2)) {
-                    for (i=0; i<n; i++){
-                        ((long long *)buf)[i] = ((long long *)intbuf)[i];
-                    }
-                } else if ((b == 8) & (sgn == H5T_SGN_NONE)) {
-                    for (i=0; i<n; i++){
-                        ((long long *)buf)[i] = ((unsigned long long *)intbuf)[i];
-                    }
-                    for (i=0; i<n; i++) {
-                        if (((unsigned long long *)intbuf)[i] > LLONG_MAX) {
-                            ((long long *)buf)[i] = LLONG_MIN;
-                            warn_overflow_64bit = 1;
-                        }
-                    }
+                    uint32_to_integer64(intbuf, n, buf);
+                } else if (b == 8) {
+                    int64_to_integer64(intbuf, n, buf, sgn);
                 }
                 if (native)
                     PERMUTE(Rval, INTEGER, mem_space_id);
@@ -773,6 +721,39 @@ SEXP H5Dread_helper_COMPOUND(hid_t dataset_id, hid_t file_space_id, hid_t mem_sp
 }
 
 
+//SEXP H5Dread_helper_REFERENCE(hid_t attr_id, hsize_t n, SEXP Rdim, SEXP _buf, hid_t dtype_id) {
+SEXP H5Dread_helper_REFERENCE(hid_t dataset_id, hid_t file_space_id, hid_t mem_space_id, hsize_t n, SEXP Rdim, SEXP _buf,
+                          hid_t dtype_id, int native) {
+  
+  void *references;
+  SEXP Rrefs, Rtype, Rval; 
+  
+  if(H5Tequal(dtype_id, H5T_STD_REF_OBJ)) {
+    Rrefs = PROTECT(allocVector(RAWSXP, sizeof(hobj_ref_t) * n ));
+    Rtype = PROTECT(ScalarInteger(H5R_OBJECT));
+  } else if (H5Tequal(dtype_id, H5T_STD_REF_DSETREG)) {
+    Rrefs = PROTECT(allocVector(RAWSXP, sizeof(hdset_reg_ref_t) * n ));
+    Rtype = PROTECT(ScalarInteger(H5R_DATASET_REGION));
+  } else {
+    error("Unkown reference type");
+    return R_NilValue;
+  }
+  
+  references = RAW(Rrefs);
+  
+  herr_t err = H5Dread(dataset_id, dtype_id, H5S_ALL, H5S_ALL, H5P_DEFAULT, references);
+  if (err < 0) {
+    error("could not read dataset");
+    return R_NilValue;
+  }
+
+  Rval = PROTECT(R_do_new_object(R_getClassDef("H5Ref")));
+  R_do_slot_assign(Rval, mkString("val"), Rrefs);
+  R_do_slot_assign(Rval, mkString("type"), Rtype);
+  UNPROTECT(3);
+  return Rval;
+}
+
 
 SEXP H5Dread_helper(hid_t dataset_id, hid_t file_space_id, hid_t mem_space_id, hsize_t n, SEXP Rdim,
                     SEXP _buf, hid_t cpdType, int cpdNField, char ** cpdField, int compoundAsDataFrame,
@@ -817,7 +798,10 @@ SEXP H5Dread_helper(hid_t dataset_id, hid_t file_space_id, hid_t mem_space_id, h
     case H5T_TIME:
     case H5T_BITFIELD:
     case H5T_OPAQUE:
-    case H5T_REFERENCE:
+    case H5T_REFERENCE: {
+        Rval = H5Dread_helper_REFERENCE(dataset_id, file_space_id, mem_space_id, n, Rdim, _buf,
+                                        dtype_id, native );
+    } break;
     case H5T_VLEN:
     default: {
         double na = R_NaReal;
@@ -972,6 +956,7 @@ SEXP _H5Dwrite( SEXP _dataset_id, SEXP _buf, SEXP _file_space_id, SEXP _mem_spac
     }
     
     const void * buf;
+    static const char* H5Ref[] = {"H5Ref", ""};
     
     hid_t dim_space_id = mem_space_id == H5S_ALL ? dataset_id : mem_space_id;
     
@@ -1005,30 +990,55 @@ SEXP _H5Dwrite( SEXP _dataset_id, SEXP _buf, SEXP _file_space_id, SEXP _mem_spac
         mem_type_id = H5Dget_type(dataset_id);
         if (native)
             PERMUTE(_buf, STRING_PTR, dim_space_id);
+
         /* prepare for hdf5 */
-        size_t stsize = H5Tget_size( mem_type_id );
-        char * strbuf = (char *)R_alloc(LENGTH(_buf),stsize);
-        int z=0;
-        int j;
-        for (int i=0; i < LENGTH(_buf); i++) {
-            for (j=0; (j < LENGTH(STRING_ELT(_buf,i))) & (j < stsize); j++) {
-                strbuf[z++] = CHAR(STRING_ELT(_buf,i))[j];
+        if (!H5Tis_variable_str(mem_type_id)) {
+            size_t stsize = H5Tget_size( mem_type_id );
+            char * strbuf = (char *)R_alloc(LENGTH(_buf),stsize);
+            int z=0;
+            int j;
+            for (int i=0; i < LENGTH(_buf); i++) {
+                for (j=0; (j < LENGTH(STRING_ELT(_buf,i))) & (j < stsize); j++) {
+                    strbuf[z++] = CHAR(STRING_ELT(_buf,i))[j];
+                }
+                for (; j < stsize; j++) {
+                    strbuf[z++] = '\0';
+                }
             }
-            for (; j < stsize; j++) {
-                strbuf[z++] = '\0';
+            buf = strbuf;
+        } else {
+            const char ** strbuf = (const char **)R_alloc(LENGTH(_buf), sizeof(char*));
+            for (int i=0; i < LENGTH(_buf); i++) {
+                strbuf[i] = CHAR(STRING_ELT(_buf, i));
             }
+            buf = strbuf;
         }
-        buf = strbuf;
+
+        break;
+    case S4SXP :
+        if(R_check_class_etc(_buf, H5Ref) >= 0) {
+          if(INTEGER(R_do_slot(_buf, mkString("type")))[0] == H5R_OBJECT) {
+            mem_type_id = H5T_STD_REF_OBJ;
+          } else if (INTEGER(R_do_slot(_buf, mkString("type")))[0] == H5R_DATASET_REGION) {
+            mem_type_id = H5T_STD_REF_DSETREG;
+          } else {
+            mem_type_id = -1;
+            UNPROTECT(native);
+            Rf_error("Error writing references");
+          }
+          buf = RAW(R_do_slot(_buf, mkString("val")));
+        } else {
+          Rprintf("Class check failed\n");
+        }
         break;
     default :
         mem_type_id = -1;
-    UNPROTECT(native);
-    Rf_error("Writing '%s' not supported.", Rf_type2char(TYPEOF(_buf)));
-    break;
+        UNPROTECT(native);
+        Rf_error("Writing '%s' not supported.", Rf_type2char(TYPEOF(_buf)));
+        break;
     }
     
-    herr_t herr = 3;
-    herr = H5Dwrite(dataset_id, mem_type_id, mem_space_id, file_space_id, H5P_DEFAULT, buf );
+    herr_t herr = H5Dwrite(dataset_id, mem_type_id, mem_space_id, file_space_id, H5P_DEFAULT, buf );
     SEXP Rval;
     PROTECT(Rval = allocVector(INTSXP, 1));
     INTEGER(Rval)[0] = herr;
@@ -1038,7 +1048,6 @@ SEXP _H5Dwrite( SEXP _dataset_id, SEXP _buf, SEXP _file_space_id, SEXP _mem_spac
 
 /* hid_t H5Dget_space(hid_t dataset_id ) */
 SEXP _H5Dget_space(SEXP _dataset_id ) {
-    //hid_t dataset_id = INTEGER(_dataset_id)[0];
     hid_t dataset_id = STRSXP_2_HID( _dataset_id );
     hid_t sid = H5Dget_space( dataset_id );
     addHandle(sid);
@@ -1092,4 +1101,3 @@ SEXP _H5Dset_extent( SEXP _dataset_id, SEXP _size ) {
     UNPROTECT(1);
     return Rval;
 }
-

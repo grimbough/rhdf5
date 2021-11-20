@@ -17,13 +17,18 @@ jobs:
       matrix:
         config:
         - { os: windows-latest, r: '4.1'}
+<<<<<<< HEAD
         - { os: macOS-latest, r: '4.1'}
+=======
+        - { os: macOS-latest, r: 'release'}
+>>>>>>> master
         - { os: ubuntu-18.04, r: '4.1', rspm: "https://packagemanager.rstudio.com/all/__linux__/bionic/latest"}
         - { os: ubuntu-20.04, r: '4.1', rspm: "https://packagemanager.rstudio.com/all/__linux__/focal/latest"}
 
     env:
       CRAN: ${{ matrix.config.rspm }}
-        
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      
     steps:
     
       - name: Set environment variables
@@ -51,10 +56,7 @@ jobs:
       - name: Set R options    
         run: |
           echo "options(Ncpus = 2)" > $HOME/.Rprofile
-          ## set the CRAN mirror to use
-          echo "local({r <- getOption('repos')" >> $HOME/.Rprofile
-          echo "r['CRAN'] <- 'https://cloud.r-project.org'" >> $HOME/.Rprofile
-          echo "options(repos=r)})" >> $HOME/.Rprofile
+          echo "options(BioC_mirror = 'https://packagemanager.rstudio.com/bioconductor')" >> $HOME/.Rprofile
 
       - uses: r-lib/actions/setup-pandoc@master
       
@@ -74,9 +76,8 @@ jobs:
 
       - name: Install dependencies
         run: |
-          install.packages(c('rcmdcheck', 'devtools'))
-          remotes::install_github(repo = 'Bioconductor/BiocManager')
-          BiocManager::install(version = '3.14', ask = FALSE, update = TRUE)
+          install.packages(c('rcmdcheck', 'devtools', 'BiocManager'))
+          BiocManager::install(version = '3.15', ask = FALSE, update = TRUE)
           toInstall <- remotes::dev_package_deps(dependencies = TRUE)[,'package']
           BiocManager::install(toInstall, ask = FALSE, update = TRUE, INSTALL_opts = '--force-biarch')
         shell: Rscript {0}
@@ -92,7 +93,7 @@ jobs:
           Rscript -e "rcmdcheck::rcmdcheck(args = c('--no-manual', '--force-multiarch', '--install-args=`"--force-biarch`"'), error_on = 'warning', check_dir = 'check')"
           
       - name: Test coverage
-        if: ${{ matrix.config.os == 'macOS-latest' }}
+        if: ${{ matrix.config.os == 'windows-latest' }}
         run: |
           BiocManager::install('covr', update = FALSE, ask = FALSE)
           covr::codecov()

@@ -1,6 +1,49 @@
 \name{NEWS}
 \title{News for Package 'rhdf5'}
 
+\section{Changes in version 2.40.0}{
+
+  \subsection{NEW FEATURES}{
+    \itemize{
+      \item Added H5R functions for working with object and dataset region 
+      references.
+    }
+  }
+
+}
+
+\section{Changes in version 2.38.0}{
+
+  \subsection{NEW FEATURES}{
+    \itemize{
+      \item Added support for reading attributes where the datatype is either a
+      64-bit or unsigned 32-bit integer.
+      \item Added many functions for working with file creation property lists.
+      (Thanks to @ilia-kats for the contribution, 
+      https://github.com/grimbough/rhdf5/pull/95)
+      \item Added support for variable length and UTF-8 encoded string datasets.
+      (Thanks to Aaron Lun @LTLA for the contribution, 
+      https://github.com/grimbough/rhdf5/pull/88)
+    }
+  }
+
+  \subsection{CHANGES}{
+    \itemize{
+      \item Documentation switched to roxygen2
+    }
+  }
+  
+  \subsection{BUG FIXES}{
+    \itemize{
+      \item h5createDataset() now prints a warning if a chunk dimension 
+      exceeds the maximum size of that dimension and automatically
+      sets the corresponding chunk dimension to the maxiumum.
+      (Thanks to Eric Kernfeld @ekernf01 for the report,
+      https://github.com/grimbough/rhdf5/issues/97)
+    }
+  }
+}
+
 \section{Changes in version 2.36.0}{
 
   \subsection{NEW FEATURES}{
@@ -21,11 +64,6 @@
     }
   }
   
-  \subsection{CHANGES}{
-    \itemize{
-      \item Documentation switched to roxygen2
-    }
-  }
 }
 
 \section{Changes in version 2.34.0}{

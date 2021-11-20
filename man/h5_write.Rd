@@ -35,6 +35,8 @@ h5writeDataset(obj, h5loc, name, ...)
   block = NULL,
   count = NULL,
   size = NULL,
+  variableLengthString = FALSE,
+  encoding = c("ASCII", "UTF-8"),
   level = 6
 )
 }
@@ -43,8 +45,8 @@ h5writeDataset(obj, h5loc, name, ...)
 
 \item{file}{The filename (character) of the file in which the dataset will be
 located. For advanced programmers it is possible to provide an object of
-class \linkS4class{H5IdComponent} representing a H5 location identifier
-(file or group). See \code{\link{H5Fcreate}}, \code{\link{H5Fopen}},
+class \linkS4class{H5IdComponent} representing a H5 location identifier (file or
+group). See \code{\link{H5Fcreate}}, \code{\link{H5Fopen}},
 \code{\link{H5Gcreate}}, \code{\link{H5Gopen}} to create an object of this
 kind.}
 
@@ -107,8 +109,15 @@ if index is not NULL.}
 \item{count}{The number of blocks to be written. This argument is ignored, if
 index is not NULL.}
 
-\item{size}{The length of string data type. Variable length strings are not
-yet supported for datasets, only for attributes.}
+\item{size}{The length of the fixed-width string data type, when \code{obj} is a
+character vector. If \code{NULL}, this is set to the length of the largest
+string.}
+
+\item{variableLengthString}{Whether character vectors should be written as
+variable-length strings into the attributes. If \code{TRUE}, \code{size} is ignored.}
+
+\item{encoding}{The encoding of the string data type.  Valid options are
+"ASCII" or "UTF-8".}
 }
 \value{
 \code{h5write} returns 0 if successful.
@@ -135,16 +144,17 @@ in the C-programs (e.g. HDFView) counting starts with 0.
 }
 \examples{
 
-h5createFile("ex_hdf5file.h5")
+h5File <- tempfile(fileext = ".h5")
+h5createFile( h5File )
 
 # write a matrix
 B = array(seq(0.1,2.0,by=0.1),dim=c(5,2,2))
 attr(B, "scale") <- "liter"
-h5write(B, "ex_hdf5file.h5","B")
+h5write(B, h5File,"B")
 
 # write a submatrix
-h5createDataset("ex_hdf5file.h5", "S", c(5,8), storage.mode = "integer", chunk=c(5,1), level=7)
-h5write(matrix(1:5,nr=5,nc=1), file="ex_hdf5file.h5", name="S", index=list(NULL,1))
+h5createDataset(h5File, "S", c(5,8), storage.mode = "integer", chunk=c(5,1), level=7)
+h5write(matrix(1:5,nr=5,nc=1), file=h5File, name="S", index=list(NULL,1))
 
 }
 \references{

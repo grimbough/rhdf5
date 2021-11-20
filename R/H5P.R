@@ -75,6 +75,162 @@ H5Pclose <- function( h5plist ) {
   invisible(.Call("_H5Pclose", h5plist@ID, PACKAGE='rhdf5'))
 }
 
+####################################################
+## File Creation Properties
+####################################################
+
+#' Get version information for objects in a file creation property list
+#'
+#' @param h5plist [H5IdComponent-class] object representing the file creation property list
+#' @returns Named integer vector
+#' @export
+H5Pget_version <- function(h5plist) {
+    h5checktype(h5plist, "plist")
+    .Call("_H5Pget_version", h5plist@ID, PACKAGE="rhdf5")
+}
+
+#' Get and set the user block size
+#' @param h5plist [H5IdComponent-class] object representing the file creation property list
+#' @param size of the user block in bytes
+#' @rdname H5P_userblock
+#' @export
+H5Pset_userblock <- function(h5plist, size) {
+    h5checktype(h5plist, "plist")
+    invisible(.Call("_H5Pset_userblock", h5plist@ID, size, PACKAGE="rhdf5"))
+}
+
+#' @rdname H5P_userblock
+#' @export
+H5Pget_userblock <- function(h5plist) {
+    h5checktype(h5plist, "plist")
+    .Call("_H5Pget_userblock", h5plist@ID, PACKAGE="rhdf5")
+}
+
+#' Get and set the sizes of offsets and lengths used in an HDF5 file
+#'
+#' @param h5plist [H5IdComponent-class] object representing the file creation property list
+#' @param sizeof_addr Offset size in bytes
+#' @param sizeof_size Length size in bytes
+#' @rdname H5P_sizes
+#' @export
+H5Pset_sizes <- function(h5plist, sizeof_addr, sizeof_size) {
+    h5checktype(h5plist, "plist")
+    invisible(.Call("_H5Pset_sizes", h5plist@ID, sizeof_addr, sizeof_size, PACKAGE="rhdf5"))
+}
+
+#' @rdname H5P_sizes
+#' @export
+H5Pget_sizes <- function(h5plist) {
+    h5checktype(h5plist, "plist")
+    .Call("_H5Pget_sizes", h5plist@ID, PACKAGE="rhdf5")
+}
+
+#' Get and set the size of the symbol table B-tree 1/2 rank and the leaf node 1/2 size
+#'
+#' @param h5plist [H5IdComponent-class] object representing the file creation property list
+#' @param ik Symbol table B-tree 1/2 rank
+#' @param lk Symbol table leaf node 1/2 size
+#' @rdname H5P_sym_k
+#' @export
+H5Pset_sym_k <- function(h5plist, ik, lk) {
+    h5checktype(h5plist, "plist")
+    invisible(.Call("_H5Pset_sym_k", h5plist@ID, ik, lk, PACKAGE="rhdf5"))
+}
+
+#' @rdname H5P_sym_k
+#' @export
+H5Pget_sym_k <- function(h5plist) {
+    h5checktype(h5plist, "plist")
+    .Call("_H5Pget_sym_k", h5plist@ID, PACKAGE="rhdf5")
+}
+
+#' Get and set the 1/2 rank of an indexed storage B-tree
+#'
+#' @param h5plist [H5IdComponent-class] object representing the file creation property list
+#' @param ik chunked Storage B-tree 1/2 rank
+#' @rdname H5P_istore_k
+#' @export
+H5Pset_istore_k <- function(h5plist, ik) {
+    h5checktype(h5plist, "plist")
+    invisible(.Call("_H5Pset_istore_k", h5plist@ID, ik, PACKAGE="rhdf5"))
+}
+
+#' @rdname H5P_istore_k
+#' @export
+H5Pget_istore_k <- function(h5plist) {
+    h5checktype(h5plist, "plist")
+    .Call("_H5Pget_istore_k", h5plist@ID, PACKAGE="rhdf5")
+}
+
+#' Get and set the number of object header message indexes
+#'
+#' @param h5plist [H5IdComponent-class] object representing the file creation property list
+#' @param nindexes Number of shared object header message indexes to be available in files
+#' @rdname H5P_shared_mesg_nindexes
+#' @export
+H5Pset_shared_mesg_nindexes <- function(h5plist, nindexes) {
+    h5checktype(h5plist, "plist")
+    invisible(.Call("_H5Pset_shared_mesg_nindexes", h5plist@ID, nindexes, PACKAGE="rhdf5"))
+}
+
+#' @rdname H5P_shared_mesg_nindexes
+#' @export
+H5Pget_shared_mesg_nindexes <- function(h5plist) {
+    h5checktype(h5plist, "plist")
+    .Call("_H5Pget_shared_mesg_nindexes", h5plist@ID, PACKAGE="rhdf5")
+}
+
+#' Get and set shared object header message index properties
+#'
+#' @param h5plist [H5IdComponent-class] object representing the file creation
+#'   property list
+#' @param index_num Index being configured.  Indices use C-style 0-based counting, so the first index will be numbered 0.
+#' @param mesg_type_flags Character specifying the types of messages that may be stored in this index.
+#'   Valid values can be found with `h5const(type = "H5O_SHMESG_FLAG")`
+#' @param min_mesg_size Minimum message size
+#' 
+#' @returns `H5Pget_shared_mesg_index()` returns a list of length 2. The first element is the types of messages
+#' that may be stored in the index, the second element is the minimum message size.
+#' 
+#' @rdname H5Pshared_mesg_index
+#' @export
+H5Pset_shared_mesg_index <- function(h5plist, index_num, 
+                                     mesg_type_flags = h5default(type = "H5O_SHMESG_FLAG"), 
+                                     min_mesg_size) {
+  
+    h5checktype(h5plist, "plist")
+    mesg_type_flags <- h5checkConstants( "H5O_SHMESG_FLAG", mesg_type_flags )
+    invisible(.Call("_H5Pset_shared_mesg_index", h5plist@ID, index_num, 
+                    mesg_type_flags, min_mesg_size, PACKAGE="rhdf5"))
+}
+
+#' @rdname H5Pshared_mesg_index
+#' @export
+H5Pget_shared_mesg_index <- function(h5plist, index_num) {
+    h5checktype(h5plist, "plist")
+    res <- .Call("_H5Pget_shared_mesg_index", h5plist@ID, index_num, PACKAGE="rhdf5")
+    return(list(type_flags = h5const2String("H5O_SHMESG_FLAG", res[1]),
+                size = res[2]))
+}
+
+#' Get and set threshold values for storage of shared object header message indexes
+#'
+#' @param h5plist [H5IdComponent-class] object representing the file creation property list
+#' @param max_list Threshold above which storage shifts from list to B-tree
+#' @param min_btree Threshold below which storage reverts to list format
+#' @rdname H5P_shared_mesg_phase_change
+#' @export
+H5Pset_shared_mesg_phase_change <- function(h5plist, max_list, min_btree) {
+    h5checktype(h5plist, "plist")
+    invisible(.Call("_H5Pset_shared_mesg_phase_change", h5plist@ID, max_list, min_btree, PACKAGE="rhdf5"))
+}
+
+#' @rdname H5P_shared_mesg_phase_change
+#' @export
+H5Pget_shared_mesg_phase_change <- function(h5plist) {
+    h5checktype(h5plist, "plist")
+    .Call("_H5Pget_shared_mesg_phase_change", h5plist@ID, PACKAGE="rhdf5")
+}
 
 ####################################################
 ## File Access Properties
@@ -99,10 +255,13 @@ H5Pclose <- function( h5plist ) {
 #'
 #' @examples
 #'
+#' ## this doesn't work on the Bioconductor Mac build machine
+#' \dontrun{
 #' pid <- H5Pcreate("H5P_FILE_ACCESS")
 #' H5Pset_fapl_ros3( pid )
 #' H5Pclose(pid)
-#'
+#' }
+#' 
 #' @export
 H5Pset_fapl_ros3 <- function( h5plist, s3credentials = NULL ) {
   
@@ -280,6 +439,21 @@ H5Pset_deflate <- function( h5plist, level ) {
   invisible(res)
 }
 
+#' Set the fill value for an HDF5 dataset
+#' 
+#' `H5Pset_fill_value` sets the fill value for a dataset in the dataset creation property list.
+#'
+#' @param h5plist An object of class [H5IdComponent-class] representing a
+#'   dataset creation property list.
+#' @param value The default fill value of the dataset.
+#' 
+#' @seealso [H5P_fill_time],[H5Pfill_value_defined]
+#'
+#' @name H5P_fill_value
+NULL
+
+#' @rdname H5P_fill_value
+#' @export
 H5Pset_fill_value <- function( h5plist, value ) {
   h5checktypeAndPLC(h5plist, "H5P_DATASET_CREATE")
   storage.mode = storage.mode(value)
@@ -298,12 +472,38 @@ H5Pset_fill_value <- function( h5plist, value ) {
   invisible(res)
 }
 
+#' Determine whether a property list has a fill value defined
+#'
+#' @param h5plist Object of class [H5IdComponent-class] representing a dataset
+#'   creation property list.
+#'
+#' @returns `TRUE` if the fill value is defined, `FALSE` if not.  Will return
+#'   `NULL` if there is a problem determining the status of the fill value.
+#'
+#' @details  Note that the return value for this function is slightly different
+#'   from the C version.  The C API provides three return types and can, in the
+#'   case that a fill value is defined, differentiate whether the value is the
+#'   HDF5 library default or has been set by the application.
+#'
+#' @export
 H5Pfill_value_defined <- function( h5plist ) {
   h5checktypeAndPLC(h5plist, "H5P_DATASET_CREATE")
   res <- .Call("_H5Pfill_value_defined", h5plist@ID, PACKAGE='rhdf5')
   res
 }
 
+#' Set the time when fill values are written to a dataset
+#'
+#' @param h5plist An object of class [H5IdComponent-class] representing a
+#'   dataset creation property list.
+#' @param fill_time When the fill values should be written.  Possible options
+#' can be listed with `h5const("H5D_FILL_TIME")`.
+#'
+#' @name H5P_fill_time
+NULL
+
+#' @rdname H5P_fill_time
+#' @export
 H5Pset_fill_time <- function( h5plist, fill_time = h5default("H5D_FILL_TIME") ) {
   h5checktypeAndPLC(h5plist, "H5P_DATASET_CREATE")
   fill_time <- h5checkConstants( "H5D_FILL_TIME", fill_time )
@@ -311,6 +511,8 @@ H5Pset_fill_time <- function( h5plist, fill_time = h5default("H5D_FILL_TIME") ) 
   invisible(res)
 }
 
+#' @rdname H5P_fill_time
+#' @export
 H5Pget_fill_time <- function( h5plist ) {
   h5checktypeAndPLC(h5plist, "H5P_DATASET_CREATE")
   res <- .Call("_H5Pget_fill_time", h5plist@ID, PACKAGE='rhdf5')

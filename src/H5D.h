@@ -8,6 +8,7 @@
 #include "myhdf5.h"
 #include "HandleList.h"
 #include "printdatatype.h"
+#include "bit64conversion.h"
 
 /*################################*/
 /* constants */
@@ -48,6 +49,8 @@ SEXP H5Dread_helper_ARRAY(hid_t dataset_id, hid_t file_space_id, hid_t mem_space
 SEXP H5Dread_helper_COMPOUND(hid_t dataset_id, hid_t file_space_id, hid_t mem_space_id, hsize_t n, SEXP Rdim, SEXP _buf, 
 			     hid_t dtype_id, hid_t cpdType, int cpdNField, char ** cpdField, int compoundAsDataFrame,
 			     int bit64conversion, int native);
+SEXP H5Dread_helper_REFERENCE(hid_t dataset_id, hid_t file_space_id, hid_t mem_space_id, hsize_t n, SEXP Rdim, SEXP _buf,
+                          hid_t dtype_id, int native);
 SEXP H5Dread_helper(hid_t dataset_id, hid_t file_space_id, hid_t mem_space_id, hsize_t n, SEXP Rdim, SEXP _buf, 
 		    hid_t cpdType, int cpdNField, char ** cpdField, int compoundAsDataFrame,
                     int bit64conversion, int native );

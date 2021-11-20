@@ -1,7 +1,7 @@
 Package: rhdf5
 Type: Package
 Title: R Interface to HDF5
-Version: 2.37.1
+Version: 2.39.1
 Authors@R: c(person("Bernd", "Fischer", role = c("aut")), 
         person("Mike", "Smith", 
             role=c("aut", "cre"), 
@@ -27,10 +27,10 @@ Imports: Rhdf5lib (>= 1.13.4),
   rhdf5filters
 Depends: R (>= 4.0.0), methods
 Suggests: bit64, BiocStyle, knitr, rmarkdown, testthat,  
-  microbenchmark, dplyr, ggplot2
+  microbenchmark, dplyr, ggplot2, mockery
 LinkingTo: Rhdf5lib
 SystemRequirements: GNU make
 biocViews: Infrastructure, DataImport
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2

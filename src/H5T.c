@@ -130,3 +130,16 @@ SEXP _H5Tget_cset( SEXP _dtype_id ) {
   UNPROTECT(1);
   return Rval;
 }
+
+/* htri_t H5Tis_variable_str( hid_t dtype_id ) */
+SEXP _H5Tis_variable_str( SEXP _dtype_id ) {
+  
+  hid_t dtype_id = STRSXP_2_HID( _dtype_id );
+  htri_t res = H5Tis_variable_str( dtype_id );
+  
+  SEXP Rval;
+  PROTECT(Rval = allocVector(INTSXP, 1));
+  INTEGER(Rval)[0] = res;
+  UNPROTECT(1);
+  return Rval;
+}

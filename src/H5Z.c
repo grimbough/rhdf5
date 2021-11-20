@@ -4,8 +4,12 @@
 SEXP _H5Zfilter_avail( SEXP _filter ) {
     H5Z_filter_t filter =  INTEGER( _filter )[0];
     
-    herr_t avail = H5Zfilter_avail( filter );
+    htri_t avail = H5Zfilter_avail( filter );
     
-    SEXP Rval = ScalarInteger(avail);
+    if(avail < 0) {
+        error("Unable to check filter availability\n");
+    }
+    
+    SEXP Rval = ScalarLogical(avail);
     return Rval; 
 }

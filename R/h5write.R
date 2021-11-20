@@ -92,15 +92,15 @@ h5writeDatasetHelper <- function (obj, h5dataset, index = NULL, start = NULL, st
 #' @param obj The R object to be written.
 #' @param file The filename (character) of the file in which the dataset will be
 #'   located. For advanced programmers it is possible to provide an object of
-#'   class [H5IdComponent-class] representing a H5 location identifier
-#'   (file or group). See \code{\link{H5Fcreate}}, \code{\link{H5Fopen}},
+#'   class [H5IdComponent-class] representing a H5 location identifier (file or
+#'   group). See \code{\link{H5Fcreate}}, \code{\link{H5Fopen}},
 #'   \code{\link{H5Gcreate}}, \code{\link{H5Gopen}} to create an object of this
 #'   kind.
 #' @param h5loc An object of class [H5IdComponent-class] representing a H5
 #'   location identifier (file or group). See \code{\link{H5Fcreate}},
 #'   \code{\link{H5Fopen}}, \code{\link{H5Gcreate}}, \code{\link{H5Gopen}} to
 #'   create an object of this kind.
-#' @param name The name of the dataset in the HDF5 file. 
+#' @param name The name of the dataset in the HDF5 file.
 #' @param index List of indices for subsetting. The length of the list has to
 #'   agree with the dimensional extension of the HDF5 array. Each list element
 #'   is an integer vector of indices. A list element equal to `NULL` chooses all
@@ -137,8 +137,13 @@ h5writeDatasetHelper <- function (obj, h5dataset, index = NULL, start = NULL, st
 #'   table from python or with a struct-type from C. The disadvantage is that
 #'   the data has to be rearranged on disk and thus can slow down I/O. If fast
 #'   reading is required, `DataFrameAsCompound=FALSE` is recommended.
-#' @param size The length of string data type. Variable length strings are not
-#'   yet supported for datasets, only for attributes.
+#' @param size The length of the fixed-width string data type, when `obj` is a
+#'   character vector. If `NULL`, this is set to the length of the largest
+#'   string.
+#' @param variableLengthString Whether character vectors should be written as
+#'   variable-length strings into the attributes. If `TRUE`, `size` is ignored.
+#' @param encoding The encoding of the string data type.  Valid options are
+#'   "ASCII" or "UTF-8".
 #' @param createnewfile If `TRUE`, a new file will be created if necessary.
 #' @param write.attributes (logical) If TRUE, all R-attributes attached to the
 #'   object \code{obj} are written to the HDF5 file.
@@ -154,16 +159,17 @@ h5writeDatasetHelper <- function (obj, h5dataset, index = NULL, start = NULL, st
 #' @keywords programming interface IO file
 #' @examples
 #'
-#' h5createFile("ex_hdf5file.h5")
+#' h5File <- tempfile(fileext = ".h5")
+#' h5createFile( h5File )
 #'
 #' # write a matrix
 #' B = array(seq(0.1,2.0,by=0.1),dim=c(5,2,2))
 #' attr(B, "scale") <- "liter"
-#' h5write(B, "ex_hdf5file.h5","B")
+#' h5write(B, h5File,"B")
 #'
 #' # write a submatrix
-#' h5createDataset("ex_hdf5file.h5", "S", c(5,8), storage.mode = "integer", chunk=c(5,1), level=7)
-#' h5write(matrix(1:5,nr=5,nc=1), file="ex_hdf5file.h5", name="S", index=list(NULL,1))
+#' h5createDataset(h5File, "S", c(5,8), storage.mode = "integer", chunk=c(5,1), level=7)
+#' h5write(matrix(1:5,nr=5,nc=1), file=h5File, name="S", index=list(NULL,1))
 #'
 #' @name h5_write
 #' @export h5write
@@ -298,31 +304,31 @@ h5writeDataset.raw       <- function(...) { h5writeDataset.array(...) }
 #' @export 
 h5writeDataset.array <- function(obj, h5loc, name, index = NULL, 
                                  start=NULL, stride=NULL, block=NULL, count=NULL, 
-                                 size=NULL, level=6) {
+                                 size=NULL, variableLengthString=FALSE, encoding=c("ASCII", "UTF-8"),
+                                 level=6) {
 
     exists <- try( { H5Lexists(h5loc, name) } )
     if (!exists) {
-        if (is.null(size)) {
-            if (storage.mode(obj) == "character") {
-                if (length(obj) > 0) {
-                    size <- max(nchar(obj), na.rm = TRUE)
-                    ## if any NA, the minimum string length is 2
-                    if(any(is.na(obj)) && size < 2) { size <- 2 }
-                    ## empty string gives size 0, and errors
-                    if(size == 0) { size <- 1 }
-                } else {
-                    size <- 1
-                }
-            }
-            if (is.null(dim(obj))) {
-                dim <- length(obj) 
+        if (storage.mode(obj) == "character" && !variableLengthString && is.null(size)) {
+            if (length(obj) > 0) {
+                size <- max(nchar(obj), na.rm = TRUE)
+                ## if any NA, the minimum string length is 2
+                if(any(is.na(obj)) && size < 2) { size <- 2 }
+                ## empty string gives size 0, and errors
+                if(size == 0) { size <- 1 }
             } else {
-                dim <- dim(obj)
-                if (h5loc@native) dim <- rev(dim)
+                size <- 1
             }
-            h5createDataset(h5loc, name, dim, storage.mode = storage.mode(obj), 
-                            size = size, chunk=dim, level=level) 
         }
+        if (is.null(dim(obj))) {
+            dim <- length(obj) 
+        } else {
+            dim <- dim(obj)
+            if (h5loc@native) dim <- rev(dim)
+        }
+        h5createDataset(h5loc, name, dim, storage.mode = storage.mode(obj), 
+                        size = size, encoding = match.arg(encoding),
+                        chunk=dim, level=level) 
     }
     h5dataset <- H5Dopen(h5loc, name)
     on.exit( H5Dclose(h5dataset) )

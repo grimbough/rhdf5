@@ -233,7 +233,7 @@ h5read <- function(file, name, index=NULL, start=NULL, stride=NULL, block=NULL,
                 A = H5Aopen_by_idx(loc$H5Identifier, n = i-1, objname = name)
                 attrname <- H5Aget_name(A)
                 if (attrname != "dim") {
-                    attr(obj, attrname) = H5Aread(A)
+                    attr(obj, attrname) = H5Aread(A, ...)
                 }
                 ## Don't put this in on.exit() 
                 ## A is overwritten in the loop and we lose track of it

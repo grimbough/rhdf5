@@ -10,6 +10,7 @@
 
 char* getDatatypeName(hid_t type);
 char* getDatatypeClass(hid_t type);
+char* getReferenceType(hid_t ref_type);
 
 SEXP _getDatatypeName(SEXP _type);
 SEXP _getDatatypeClass(SEXP _type);

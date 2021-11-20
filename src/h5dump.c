@@ -65,7 +65,6 @@ herr_t opAddToDumpTree( hid_t g_id, const char *name, const H5L_info_t *info, vo
                 data->last = newElement;
 
                 if ((data->maxdepth < 0) | (data->depth < data->maxdepth)) {
-                    hsize_t idx=0;
                     char* group = data->group;
                     data->group = (char *) R_alloc((strlen(name)+strlen(group)+2), sizeof(char));
                     strcpy(data->group, group);
@@ -243,6 +242,9 @@ SEXP _h5dump( SEXP _loc_id, SEXP _depth, SEXP _index_type, SEXP _order ) {
     hsize_t idx=0;
 
     herr_t herr = H5Literate( loc_id, data.index_type, data.order, &idx, &opAddToDumpTree, &data );
+    if(herr < 0) {
+      error("Error iterating through file");
+    }
     
     SEXP Rval;
     Rval = getTree(data.first, &data, loc_id, 0);

@@ -59,152 +59,191 @@ SEXP _H5Pclose( SEXP _plist ) {
 
 
 /* /\* herr_t H5Pget_version(hid_t plist, unsigned * super, unsigned * freelist, unsigned * stab, unsigned * shhdr) *\/ */
-/* SEXP _H5Pget_version( SEXP _plist, SEXP _super, SEXP _freelist, SEXP _stab, SEXP _shhdr ) { */
-/*   hid_t plist = INTEGER(_plist)[0]; */
-/*   TODO: unsigned * super = _super */
-/*   TODO: unsigned * freelist = _freelist */
-/*   TODO: unsigned * stab = _stab */
-/*   TODO: unsigned * shhdr = _shhdr */
-/*   herr_t herr = H5Pget_version(hid_tplist, unsigned *super, unsigned *freelist, unsigned *stab, unsigned *shhdr); */
-/*   SEXP Rval = ScalarInteger(herr); */
-/*   return Rval; */
-/* } */
+SEXP _H5Pget_version(SEXP _plist) {
+    hid_t plist = STRSXP_2_HID(_plist);
+    unsigned super, freelist, stab, shhdr;
+    herr_t herr = H5Pget_version(plist, &super, &freelist, &stab, &shhdr);
+    SEXP Rval;
+    if (herr >= 0) {
+        static const char *names[] = {"superblock", "freelist", "symboltable", "shobjheader", ""};
+        Rval = PROTECT(Rf_mkNamed(INTSXP, names));
+        int *rval = INTEGER(Rval);
+        rval[0] = super;
+        rval[1] = freelist;
+        rval[2] = stab;
+        rval[3] = shhdr;
+        UNPROTECT(1);
+    } else
+        Rval = R_NilValue;
+    return Rval;
+}
 
 /* /\* herr_t H5Pset_userblock(hid_t plist, hsize_t size) *\/ */
-/* SEXP _H5Pset_userblock( SEXP _plist, SEXP _size ) { */
-/*   hid_t plist = INTEGER(_plist)[0]; */
-/*   hsize_t size = INTEGER(_size)[0]; */
-/*   herr_t herr = H5Pset_userblock(hid_tplist, hsize_tsize); */
-/*   SEXP Rval = ScalarInteger(herr); */
-/*   return Rval; */
-/* } */
+SEXP _H5Pset_userblock(SEXP _plist, SEXP _size) {
+    hid_t plist = STRSXP_2_HID(_plist);
+    hsize_t size = INTEGER_VALUE(_size);
+    herr_t herr = H5Pset_userblock(plist, size);
+    SEXP Rval = ScalarInteger(herr);
+    return Rval;
+}
 
 /* /\* herr_t H5Pget_userblock(hid_t plist, hsize_t * size) *\/ */
-/* SEXP _H5Pget_userblock( SEXP _plist, SEXP _size ) { */
-/*   hid_t plist = INTEGER(_plist)[0]; */
-/*   TODO: hsize_t * size = _size */
-/*   herr_t herr = H5Pget_userblock(hid_tplist, hsize_t *size); */
-/*   SEXP Rval = ScalarInteger(herr); */
-/*   return Rval; */
-/* } */
+SEXP _H5Pget_userblock(SEXP _plist) {
+    hid_t plist = STRSXP_2_HID(_plist);
+    hsize_t size;
+    herr_t herr = H5Pget_userblock(plist, &size);
+    SEXP Rval = ScalarInteger(herr >= 0 ? size : herr);
+    return Rval;
+}
 
 /* /\* herr_t H5Pset_sizes(hid_t plist, size_t sizeof_addr, size_t sizeof_size) *\/ */
-/* SEXP _H5Pset_sizes( SEXP _plist, SEXP _sizeof_addr, SEXP _sizeof_size ) { */
-/*   hid_t plist = INTEGER(_plist)[0]; */
-/*   size_t sizeof_addr = INTEGER(_sizeof_addr)[0]; */
-/*   size_t sizeof_size = INTEGER(_sizeof_size)[0]; */
-/*   herr_t herr = H5Pset_sizes(hid_tplist, size_tsizeof_addr, size_tsizeof_size); */
-/*   SEXP Rval = ScalarInteger(herr); */
-/*   return Rval; */
-/* } */
+SEXP _H5Pset_sizes(SEXP _plist, SEXP _sizeof_addr, SEXP _sizeof_size) {
+    hid_t plist = STRSXP_2_HID(_plist);
+    size_t sizeof_addr = INTEGER_VALUE(_sizeof_addr);
+    size_t sizeof_size = INTEGER_VALUE(_sizeof_size);
+    herr_t herr = H5Pset_sizes(plist, sizeof_addr, sizeof_size);
+    SEXP Rval = ScalarInteger(herr);
+    return Rval;
+}
 
 /* /\* herr_t H5Pget_sizes(hid_t plist, size_t * sizeof_addr, size_t * sizeof_size) *\/ */
-/* SEXP _H5Pget_sizes( SEXP _plist, SEXP _sizeof_addr, SEXP _sizeof_size ) { */
-/*   hid_t plist = INTEGER(_plist)[0]; */
-/*   TODO: size_t * sizeof_addr = _sizeof_addr */
-/*   TODO: size_t * sizeof_size = _sizeof_size */
-/*   herr_t herr = H5Pget_sizes(hid_tplist, size_t *sizeof_addr, size_t *sizeof_size); */
-/*   SEXP Rval = ScalarInteger(herr); */
-/*   return Rval; */
-/* } */
+SEXP _H5Pget_sizes(SEXP _plist) {
+    hid_t plist = STRSXP_2_HID(_plist);
+    size_t sizeof_addr, sizeof_size;
+    herr_t herr = H5Pget_sizes(plist, &sizeof_addr, &sizeof_size);
+    SEXP Rval;
+    if (herr >= 0) {
+        static const char *names[] = {"offset", "length", ""};
+        Rval = PROTECT(Rf_mkNamed(INTSXP, names));
+        int *rval = INTEGER(Rval);
+        rval[0] = sizeof_addr;
+        rval[1] = sizeof_size;
+        UNPROTECT(1);
+    } else
+        Rval = ScalarInteger(herr);
+  return Rval;
+}
 
 /* /\* herr_t H5Pset_sym_k(hid_t fcpl_id, unsigned ik, unsigned lk) *\/ */
-/* SEXP _H5Pset_sym_k( SEXP _fcpl_id, SEXP _ik, SEXP _lk ) { */
-/*   hid_t fcpl_id = INTEGER(_fcpl_id)[0]; */
-/*   unsigned ik = INTEGER(_ik)[0]; */
-/*   unsigned lk = INTEGER(_lk)[0]; */
-/*   herr_t herr = H5Pset_sym_k(hid_tfcpl_id, unsignedik, unsignedlk); */
-/*   SEXP Rval = ScalarInteger(herr); */
-/*   return Rval; */
-/* } */
+SEXP _H5Pset_sym_k(SEXP _plist, SEXP _ik, SEXP _lk) {
+    hid_t plist = STRSXP_2_HID(_plist);
+    unsigned ik = INTEGER_VALUE(_ik);
+    unsigned lk = INTEGER_VALUE(_lk);
+    herr_t herr = H5Pset_sym_k(plist, ik, lk);
+    SEXP Rval = ScalarInteger(herr);
+    return Rval;
+}
 
 /* /\* herr_t H5Pget_sym_k(hid_t fcpl_id, unsigned * ik, unsigned * lk) *\/ */
-/* SEXP _H5Pget_sym_k( SEXP _fcpl_id, SEXP _ik, SEXP _lk ) { */
-/*   hid_t fcpl_id = INTEGER(_fcpl_id)[0]; */
-/*   TODO: unsigned * ik = _ik */
-/*   TODO: unsigned * lk = _lk */
-/*   herr_t herr = H5Pget_sym_k(hid_tfcpl_id, unsigned *ik, unsigned *lk); */
-/*   SEXP Rval = ScalarInteger(herr); */
-/*   return Rval; */
-/* } */
+SEXP _H5Pget_sym_k(SEXP _plist) {
+    hid_t plist = STRSXP_2_HID(_plist);
+    unsigned ik, lk;
+    herr_t herr = H5Pget_sym_k(plist, &ik, &lk);
+    SEXP Rval;
+    if (herr >= 0) {
+        static const char *names[] = {"ik", "lk", ""};
+        Rval = PROTECT(Rf_mkNamed(INTSXP, names));
+        int *rval = INTEGER(Rval);
+        rval[0] = ik;
+        rval[1] = lk;
+        UNPROTECT(1);
+    } else
+        Rval = ScalarInteger(herr);
+    return Rval;
+}
 
 /* /\* herr_t H5Pset_istore_k(hid_t fcpl_id, unsigned ik) *\/ */
-/* SEXP _H5Pset_istore_k( SEXP _fcpl_id, SEXP _ik ) { */
-/*   hid_t fcpl_id = INTEGER(_fcpl_id)[0]; */
-/*   unsigned ik = INTEGER(_ik)[0]; */
-/*   herr_t herr = H5Pset_istore_k(hid_tfcpl_id, unsignedik); */
-/*   SEXP Rval = ScalarInteger(herr); */
-/*   return Rval; */
-/* } */
+SEXP _H5Pset_istore_k(SEXP _plist, SEXP _ik) {
+    hid_t plist = STRSXP_2_HID(_plist);
+    unsigned ik = INTEGER_VALUE(_ik);
+    herr_t herr = H5Pset_istore_k(plist, ik);
+    SEXP Rval = ScalarInteger(herr);
+    return Rval;
+}
 
 /* /\* herr_t H5Pget_istore_k(hid_t fcpl_id, unsigned * ik) *\/ */
-/* SEXP _H5Pget_istore_k( SEXP _fcpl_id, SEXP _ik ) { */
-/*   hid_t fcpl_id = INTEGER(_fcpl_id)[0]; */
-/*   TODO: unsigned * ik = _ik */
-/*   herr_t herr = H5Pget_istore_k(hid_tfcpl_id, unsigned *ik); */
-/*   SEXP Rval = ScalarInteger(herr); */
-/*   return Rval; */
-/* } */
+SEXP _H5Pget_istore_k(SEXP _plist) {
+    hid_t plist = STRSXP_2_HID(_plist);
+    unsigned ik;
+    herr_t herr = H5Pget_istore_k(plist, &ik);
+    SEXP Rval = ScalarInteger(herr >= 0 ? ik : herr);
+    return Rval;
+}
 
 /* /\* herr_t H5Pset_shared_mesg_nindexes(hid_t plist_id, unsigned nindexes) *\/ */
-/* SEXP _H5Pset_shared_mesg_nindexes( SEXP _plist_id, SEXP _nindexes ) { */
-/*   hid_t plist_id = INTEGER(_plist_id)[0]; */
-/*   unsigned nindexes = INTEGER(_nindexes)[0]; */
-/*   herr_t herr = H5Pset_shared_mesg_nindexes(hid_tplist_id, unsignednindexes); */
-/*   SEXP Rval = ScalarInteger(herr); */
-/*   return Rval; */
-/* } */
+SEXP _H5Pset_shared_mesg_nindexes(SEXP _plist, SEXP _nindexes) {
+    hid_t plist = STRSXP_2_HID(_plist);
+    unsigned nindexes = INTEGER_VALUE(_nindexes);
+    herr_t herr = H5Pset_shared_mesg_nindexes(plist, nindexes);
+    SEXP Rval = ScalarInteger(herr);
+    return Rval;
+}
 
 /* /\* herr_t H5Pget_shared_mesg_nindexes(hid_t fcpl_id, unsigned nindexes) *\/ */
-/* SEXP _H5Pget_shared_mesg_nindexes( SEXP _fcpl_id, SEXP _nindexes ) { */
-/*   hid_t fcpl_id = INTEGER(_fcpl_id)[0]; */
-/*   unsigned nindexes = INTEGER(_nindexes)[0]; */
-/*   herr_t herr = H5Pget_shared_mesg_nindexes(hid_tfcpl_id, unsignednindexes); */
-/*   SEXP Rval = ScalarInteger(herr); */
-/*   return Rval; */
-/* } */
+SEXP _H5Pget_shared_mesg_nindexes(SEXP _plist) {
+    hid_t plist = STRSXP_2_HID(_plist);
+    unsigned nindexes;
+    herr_t herr = H5Pget_shared_mesg_nindexes(plist, &nindexes);
+    SEXP Rval = ScalarInteger(herr >= 0 ? nindexes : herr);
+    return Rval;
+}
 
 /* /\* herr_t H5Pset_shared_mesg_index(hid_t fcpl_id, unsigned index_num, unsigned mesg_type_flags, unsigned min_mesg_size) *\/ */
-/* SEXP _H5Pset_shared_mesg_index( SEXP _fcpl_id, SEXP _index_num, SEXP _mesg_type_flags, SEXP _min_mesg_size ) { */
-/*   hid_t fcpl_id = INTEGER(_fcpl_id)[0]; */
-/*   unsigned index_num = INTEGER(_index_num)[0]; */
-/*   unsigned mesg_type_flags = INTEGER(_mesg_type_flags)[0]; */
-/*   unsigned min_mesg_size = INTEGER(_min_mesg_size)[0]; */
-/*   herr_t herr = H5Pset_shared_mesg_index(hid_tfcpl_id, unsignedindex_num, unsignedmesg_type_flags, unsignedmin_mesg_size); */
-/*   SEXP Rval = ScalarInteger(herr); */
-/*   return Rval; */
-/* } */
+SEXP _H5Pset_shared_mesg_index(SEXP _plist, SEXP _index_num, SEXP _mesg_type_flags, SEXP _min_mesg_size ) {
+    hid_t plist = STRSXP_2_HID(_plist);
+    unsigned index_num = INTEGER_VALUE(_index_num);
+    unsigned mesg_type_flags = INTEGER_VALUE(_mesg_type_flags);
+    unsigned min_mesg_size = INTEGER_VALUE(_min_mesg_size);
+    herr_t herr = H5Pset_shared_mesg_index(plist, index_num, mesg_type_flags, min_mesg_size);
+    SEXP Rval = ScalarInteger(herr);
+    return Rval;
+}
 
 /* /\* herr_t H5Pget_shared_mesg_index(hid_t fcpl_id, unsigned index_num, unsigned mesg_type_flags, unsigned min_mesg_size) *\/ */
-/* SEXP _H5Pget_shared_mesg_index( SEXP _fcpl_id, SEXP _index_num, SEXP _mesg_type_flags, SEXP _min_mesg_size ) { */
-/*   hid_t fcpl_id = INTEGER(_fcpl_id)[0]; */
-/*   unsigned index_num = INTEGER(_index_num)[0]; */
-/*   unsigned mesg_type_flags = INTEGER(_mesg_type_flags)[0]; */
-/*   unsigned min_mesg_size = INTEGER(_min_mesg_size)[0]; */
-/*   herr_t herr = H5Pget_shared_mesg_index(hid_tfcpl_id, unsignedindex_num, unsignedmesg_type_flags, unsignedmin_mesg_size); */
-/*   SEXP Rval = ScalarInteger(herr); */
-/*   return Rval; */
-/* } */
+SEXP _H5Pget_shared_mesg_index(SEXP _plist, SEXP _index_num) {
+    hid_t plist = STRSXP_2_HID(_plist);
+    unsigned index_num = INTEGER_VALUE(_index_num), mesg_type_flags, min_mesg_size;
+    herr_t herr = H5Pget_shared_mesg_index(plist, index_num, &mesg_type_flags, &min_mesg_size);
+    SEXP Rval;
+    if (herr >= 0) {
+        static const char *names[] = {"type_flags", "size", ""};
+        Rval = PROTECT(Rf_mkNamed(INTSXP, names));
+        int *rval = INTEGER(Rval);
+        rval[0] = mesg_type_flags;
+        rval[1] = min_mesg_size;
+        UNPROTECT(1);
+    } else
+        Rval = ScalarInteger(herr);
+    return Rval;
+}
 
 /* /\* herr_t H5Pset_shared_mesg_phase_change(hid_t fcpl_id, unsigned max_list, unsigned min_btree) *\/ */
-/* SEXP _H5Pset_shared_mesg_phase_change( SEXP _fcpl_id, SEXP _max_list, SEXP _min_btree ) { */
-/*   hid_t fcpl_id = INTEGER(_fcpl_id)[0]; */
-/*   unsigned max_list = INTEGER(_max_list)[0]; */
-/*   unsigned min_btree = INTEGER(_min_btree)[0]; */
-/*   herr_t herr = H5Pset_shared_mesg_phase_change(hid_tfcpl_id, unsignedmax_list, unsignedmin_btree); */
-/*   SEXP Rval = ScalarInteger(herr); */
-/*   return Rval; */
-/* } */
+SEXP _H5Pset_shared_mesg_phase_change(SEXP _plist, SEXP _max_list, SEXP _min_btree) {
+    hid_t plist = STRSXP_2_HID(_plist);
+    unsigned max_list = INTEGER_VALUE(_max_list);
+    unsigned min_btree = INTEGER_VALUE(_min_btree);
+    herr_t herr = H5Pset_shared_mesg_phase_change(plist, max_list, min_btree);
+    SEXP Rval = ScalarInteger(herr);
+    return Rval;
+}
 
 /* /\* herr_t H5Pget_shared_mesg_phase_change(hid_t fcpl_id, unsigned max_list, unsigned min_btree) *\/ */
-/* SEXP _H5Pget_shared_mesg_phase_change( SEXP _fcpl_id, SEXP _max_list, SEXP _min_btree ) { */
-/*   hid_t fcpl_id = INTEGER(_fcpl_id)[0]; */
-/*   unsigned max_list = INTEGER(_max_list)[0]; */
-/*   unsigned min_btree = INTEGER(_min_btree)[0]; */
-/*   herr_t herr = H5Pget_shared_mesg_phase_change(hid_tfcpl_id, unsignedmax_list, unsignedmin_btree); */
-/*   SEXP Rval = ScalarInteger(herr); */
-/*   return Rval; */
-/* } */
+SEXP _H5Pget_shared_mesg_phase_change(SEXP _plist) {
+    hid_t plist = STRSXP_2_HID(_plist);
+    unsigned max_list, min_btree;
+    herr_t herr = H5Pget_shared_mesg_phase_change(plist, &max_list, &min_btree);
+    SEXP Rval;
+    if (herr >= 0) {
+        static const char *names[] = {"max_list", "min_btree", ""};
+        Rval = PROTECT(Rf_mkNamed(INTSXP, names));
+        int *rval = INTEGER(Rval);
+        rval[0] = max_list;
+        rval[1] = min_btree;
+        UNPROTECT(1);
+    } else
+        Rval = ScalarInteger(herr);
+    return Rval;
+}
 
 
 ////////////////////////////////////////////////////
@@ -1083,7 +1122,6 @@ SEXP _H5Pset_fill_value( SEXP _plist_id, SEXP _type_id, SEXP _value ) {
 
 /* herr_t H5Pfill_value_defined(hid_t plist_id, H5D_fill_value_t * status) */
 SEXP _H5Pfill_value_defined( SEXP _plist_id ) {
-    //hid_t plist_id = INTEGER(_plist_id)[0];
     hid_t plist_id = STRSXP_2_HID( _plist_id );
     H5D_fill_value_t status;
     herr_t herr = H5Pfill_value_defined(plist_id, &status);
