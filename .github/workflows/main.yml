@@ -16,20 +16,16 @@ jobs:
       fail-fast: false
       matrix:
         config:
-        - { os: windows-latest, r: 'devel', cran: "https://packagemanager.rstudio.com/cran/latest"}
-        - { os: macOS-11,       r: 'devel', cran: "https://packagemanager.rstudio.com/cran/latest"}
-        - { os: ubuntu-18.04,   r: 'devel', cran: "https://packagemanager.rstudio.com/all/__linux__/bionic/latest"}
-        - { os: ubuntu-20.04,   r: 'devel', cran: "https://packagemanager.rstudio.com/all/__linux__/focal/latest"}
+        - { os: windows-latest, r: 'devel'}
+        - { os: macOS-11,       r: 'devel'}
+        - { os: ubuntu-18.04,   r: 'devel'}
+        - { os: ubuntu-20.04,   r: 'devel'}
 
     env:
-      CRAN: ${{ matrix.config.cran }}
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
       
     steps:
-    
-      - name: Set environment variables
-        run: |
-          echo "R_REMOTES_NO_ERRORS_FROM_WARNINGS=true" >> $GITHUB_ENV
     
       - name: Configure git
         run: |
@@ -57,11 +53,28 @@ jobs:
         run: |
           echo "options(BioC_mirror = 'https://packagemanager.rstudio.com/bioconductor')" >> $HOME/.Rprofile
       
-      - uses: r-lib/actions/setup-r-dependencies@v1
+      - name: Install dependencies (non-Windows)
+        uses: r-lib/actions/setup-r-dependencies@v1
+        if: runner.os != 'Windows
         with:
           extra-packages: |
             covr
             rcmdcheck
+            
+      - name: Install dependencies (Windows)
+        if: runner.os == 'Windows
+        run: |
+          install.packages(c('BiocManager', 'remotes', 'rcmdcheck'))
+          BiocManager::install(version = 'devel', ask = FALSE, update = TRUE)
+          library(remotes)
+          toInstall <- remotes::dev_package_deps(dependencies = TRUE)
+          update(toInstall)
+        shell: Rscript {0}
+        
+      - name: Session Info
+        run: |
+          sessionInfo()
+        shell: Rscript {0}
         
       - name: Non-windows check
         if: ${{ matrix.config.os != 'windows-latest' }}
