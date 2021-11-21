@@ -64,7 +64,7 @@ jobs:
       - name: Install dependencies (Windows)
         if: runner.os == 'Windows'
         run: |
-          install.packages(c('BiocManager', 'remotes', 'rcmdcheck'))
+          install.packages(c('BiocManager', 'remotes', 'rcmdcheck', 'covr'))
           BiocManager::install(version = 'devel', ask = FALSE, update = TRUE)
           library(remotes)
           toInstall <- remotes::dev_package_deps(dependencies = TRUE)
