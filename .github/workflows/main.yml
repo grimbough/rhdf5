@@ -55,14 +55,14 @@ jobs:
       
       - name: Install dependencies (non-Windows)
         uses: r-lib/actions/setup-r-dependencies@v1
-        if: runner.os != 'Windows
+        if: runner.os != 'Windows'
         with:
           extra-packages: |
             covr
             rcmdcheck
             
       - name: Install dependencies (Windows)
-        if: runner.os == 'Windows
+        if: runner.os == 'Windows'
         run: |
           install.packages(c('BiocManager', 'remotes', 'rcmdcheck'))
           BiocManager::install(version = 'devel', ask = FALSE, update = TRUE)
