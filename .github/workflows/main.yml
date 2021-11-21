@@ -27,12 +27,6 @@ jobs:
       
     steps:
     
-      - name: Configure git
-        run: |
-          git config --global core.autocrlf false
-          git config --global user.email "ghau@example.com"
-          git config --global user.name "GitHub Actions User"
-          
       - name: Install system libraries
         if: runner.os == 'Linux'
         run: |
@@ -51,7 +45,9 @@ jobs:
           
       - name: Set R options    
         run: |
-          echo "options(BioC_mirror = 'https://packagemanager.rstudio.com/bioconductor')" >> $HOME/.Rprofile
+          echo "options(BioC_mirror = 'https://packagemanager.rstudio.com/bioconductor')" >> ${HOME}/.Rprofile
+          cat ${HOME}/.Rprofile
+          echo ${HOME}
       
       - name: Install dependencies (non-Windows)
         uses: r-lib/actions/setup-r-dependencies@v1
@@ -61,6 +57,7 @@ jobs:
             covr
             rcmdcheck
             
+      ## Windows is currently hanging on the step above, so we do it the old fashioned way
       - name: Install dependencies (Windows)
         if: runner.os == 'Windows'
         run: |
