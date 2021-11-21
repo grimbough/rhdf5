@@ -34,7 +34,7 @@ jobs:
           git config --global user.name "GitHub Actions User"
           
       - name: Install system libraries
-        if: ${{ runner.os == 'Linux' }}
+        if: runner.os == 'Linux'
         run: |
           sudo apt-get install libcurl4-openssl-dev
           
@@ -73,6 +73,8 @@ jobs:
         
       - name: Session Info
         run: |
+          options("BioC_mirror")
+          BiocManager::version()
           sessionInfo()
         shell: Rscript {0}
         
