@@ -17,9 +17,9 @@ jobs:
       matrix:
         config:
         - { os: windows-latest, r: 'devel', cran: "https://packagemanager.rstudio.com/cran/latest"}
-        - { os: macOS-latest, r: 'devel', cran: "https://packagemanager.rstudio.com/cran/latest"}
-        - { os: ubuntu-18.04, r: 'devel', cran: "https://packagemanager.rstudio.com/all/__linux__/bionic/latest"}
-        - { os: ubuntu-20.04, r: 'devel', cran: "https://packagemanager.rstudio.com/all/__linux__/focal/latest"}
+        - { os: macOS-11,       r: 'devel', cran: "https://packagemanager.rstudio.com/cran/latest"}
+        - { os: ubuntu-18.04,   r: 'devel', cran: "https://packagemanager.rstudio.com/all/__linux__/bionic/latest"}
+        - { os: ubuntu-20.04,   r: 'devel', cran: "https://packagemanager.rstudio.com/all/__linux__/focal/latest"}
 
     env:
       CRAN: ${{ matrix.config.cran }}
@@ -50,6 +50,8 @@ jobs:
           r-version: ${{ matrix.config.r }}
           use-public-rspm: true
           Ncpus: 2
+          
+      - uses: r-lib/actions/setup-pandoc@v1
           
       - name: Set R options    
         run: |
