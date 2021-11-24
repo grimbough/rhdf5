@@ -291,7 +291,7 @@ h5createGroup <- function(file, group) {
 #'   The default value of `NULL` will result in using variable length strings.
 #'   See the details for more information on this option.
 #' @param encoding The encoding of the string data type. Valid options are
-#'   "ASCII" or "UTF-8".
+#'   "ASCII" or "UTF8".
 #' @param chunk The chunk size used to store the dataset. It is an integer
 #'   vector of the same length as \code{dims}. This argument is usually set
 #'   together with a compression property (argument \code{level}).
@@ -376,7 +376,7 @@ h5createGroup <- function(file, group) {
 #' @export h5createDataset
 h5createDataset <- function(file, dataset, dims, maxdims = dims, 
                             storage.mode = "double", H5type = NULL, 
-                            size = NULL, encoding = c("ASCII", "UTF-8"),
+                            size = NULL, encoding = c("ASCII", "UTF8"),
                             chunk = dims, fillValue, 
                             level = 6, filter = "gzip", shuffle = TRUE,
                             native = FALSE) {

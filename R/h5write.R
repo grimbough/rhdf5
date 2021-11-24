@@ -143,7 +143,7 @@ h5writeDatasetHelper <- function (obj, h5dataset, index = NULL, start = NULL, st
 #' @param variableLengthString Whether character vectors should be written as
 #'   variable-length strings into the attributes. If `TRUE`, `size` is ignored.
 #' @param encoding The encoding of the string data type.  Valid options are
-#'   "ASCII" or "UTF-8".
+#'   "ASCII" or "UTF8".
 #' @param createnewfile If `TRUE`, a new file will be created if necessary.
 #' @param write.attributes (logical) If TRUE, all R-attributes attached to the
 #'   object \code{obj} are written to the HDF5 file.
@@ -304,7 +304,7 @@ h5writeDataset.raw       <- function(...) { h5writeDataset.array(...) }
 #' @export 
 h5writeDataset.array <- function(obj, h5loc, name, index = NULL, 
                                  start=NULL, stride=NULL, block=NULL, count=NULL, 
-                                 size=NULL, variableLengthString=FALSE, encoding=c("ASCII", "UTF-8"),
+                                 size=NULL, variableLengthString=FALSE, encoding=c("ASCII", "UTF8"),
                                  level=6) {
 
     exists <- try( { H5Lexists(h5loc, name) } )
