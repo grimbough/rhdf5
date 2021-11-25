@@ -16,81 +16,83 @@ jobs:
       fail-fast: false
       matrix:
         config:
-        - { os: windows-latest, r: '4.1'}
-        - { os: macOS-latest, r: 'release'}
-        - { os: ubuntu-18.04, r: '4.1', rspm: "https://packagemanager.rstudio.com/all/__linux__/bionic/latest"}
-        - { os: ubuntu-20.04, r: '4.1', rspm: "https://packagemanager.rstudio.com/all/__linux__/focal/latest"}
+        - { os: windows-latest, r: 'devel'}
+        - { os: macOS-11,       r: 'devel'}
+        - { os: ubuntu-18.04,   r: 'devel'}
+        - { os: ubuntu-20.04,   r: 'devel'}
 
     env:
-      CRAN: ${{ matrix.config.rspm }}
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
       
     steps:
     
-      - name: Set environment variables
-        run: |
-          echo "R_REMOTES_NO_ERRORS_FROM_WARNINGS=true" >> $GITHUB_ENV
-    
+      ## R CMD check complains about Windows line endings without this
       - name: Configure git
         run: |
           git config --global core.autocrlf false
-          git config --global user.email "ghau@example.com"
-          git config --global user.name "GitHub Actions User"
-          
+    
       - name: Install system libraries
-        if: ${{ runner.os == 'Linux' }}
+        if: runner.os == 'Linux'
         run: |
           sudo apt-get install libcurl4-openssl-dev
           
       - uses: actions/checkout@v1
           
       - name: Setup R
-        uses: grimbough/actions-1/setup-r@master
+        uses: r-lib/actions/setup-r@v1
         with:
           r-version: ${{ matrix.config.r }}
+          use-public-rspm: true
+          Ncpus: 2
+          
+      - uses: r-lib/actions/setup-pandoc@v1
           
       - name: Set R options    
         run: |
-          echo "options(Ncpus = 2)" > $HOME/.Rprofile
-          echo "options(BioC_mirror = 'https://packagemanager.rstudio.com/bioconductor')" >> $HOME/.Rprofile
-
-      - uses: r-lib/actions/setup-pandoc@master
+          echo "options(BioC_mirror = 'https://packagemanager.rstudio.com/bioconductor')" >> ${HOME}/.Rprofile
+          cat ${HOME}/.Rprofile
+          echo ${HOME}
       
-      - name: Query dependencies
-        run: |
-          install.packages('remotes')
-          saveRDS(remotes::dev_package_deps(dependencies = TRUE), ".github/depends.Rds", version = 2)
-        shell: Rscript {0}
-
-      - name: Cache R packages
+      - name: Install dependencies (non-Windows)
+        uses: r-lib/actions/setup-r-dependencies@v1
         if: runner.os != 'Windows'
-        uses: actions/cache@v2
         with:
-          path: ${{ env.R_LIBS_USER }}
-          key: ${{ matrix.config.os }}-r-${{ matrix.config.r }}-1-${{ hashFiles('.github/depends.Rds') }}
-          restore-keys: ${{ matrix.config.os }}-r-${{ matrix.config.r }}-1-
-
-      - name: Install dependencies
+          extra-packages: |
+            covr
+            rcmdcheck
+            
+      ## Windows is currently hanging on the step above, so we do it the old fashioned way
+      - name: Install dependencies (Windows)
+        if: runner.os == 'Windows'
         run: |
-          install.packages(c('rcmdcheck', 'devtools', 'BiocManager'))
-          BiocManager::install(version = '3.15', ask = FALSE, update = TRUE)
-          toInstall <- remotes::dev_package_deps(dependencies = TRUE)[,'package']
-          BiocManager::install(toInstall, ask = FALSE, update = TRUE, INSTALL_opts = '--force-biarch')
+          options(BioC_mirror = 'https://packagemanager.rstudio.com/bioconductor')
+          install.packages(c('BiocManager', 'remotes', 'rcmdcheck', 'covr'))
+          BiocManager::install(version = 'devel', ask = FALSE, update = TRUE)
+          library(remotes)
+          toInstall <- remotes::dev_package_deps(dependencies = TRUE)
+          update(toInstall)
+        shell: Rscript {0}
+        
+      - name: Session Info
+        run: |
+          options("BioC_mirror")
+          BiocManager::version()
+          sessionInfo()
         shell: Rscript {0}
         
       - name: Non-windows check
-        if: ${{ matrix.config.os != 'windows-latest' }}
+        if: runner.os != 'Windows'
         run: |
           Rscript -e "rcmdcheck::rcmdcheck(args = c('--no-manual'), error_on = 'warning', check_dir = 'check')"
 
       - name: Windows check
-        if: ${{ matrix.config.os == 'windows-latest' }}
+        if: runner.os == 'Windows'
         run: |
           Rscript -e "rcmdcheck::rcmdcheck(args = c('--no-manual', '--force-multiarch', '--install-args=`"--force-biarch`"'), error_on = 'warning', check_dir = 'check')"
           
       - name: Test coverage
-        if: ${{ matrix.config.os == 'windows-latest' }}
+        if: runner.os == 'Windows'
         run: |
-          BiocManager::install('covr', update = FALSE, ask = FALSE)
           covr::codecov()
         shell: Rscript {0}
