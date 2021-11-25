@@ -27,6 +27,11 @@ jobs:
       
     steps:
     
+      ## R CMD check complains about Windows line endings without this
+      - name: Configure git
+        run: |
+          git config --global core.autocrlf false
+    
       - name: Install system libraries
         if: runner.os == 'Linux'
         run: |
@@ -61,6 +66,7 @@ jobs:
       - name: Install dependencies (Windows)
         if: runner.os == 'Windows'
         run: |
+          options(BioC_mirror = 'https://packagemanager.rstudio.com/bioconductor')
           install.packages(c('BiocManager', 'remotes', 'rcmdcheck', 'covr'))
           BiocManager::install(version = 'devel', ask = FALSE, update = TRUE)
           library(remotes)
@@ -76,17 +82,17 @@ jobs:
         shell: Rscript {0}
         
       - name: Non-windows check
-        if: ${{ matrix.config.os != 'windows-latest' }}
+        if: runner.os != 'Windows'
         run: |
           Rscript -e "rcmdcheck::rcmdcheck(args = c('--no-manual'), error_on = 'warning', check_dir = 'check')"
 
       - name: Windows check
-        if: ${{ matrix.config.os == 'windows-latest' }}
+        if: runner.os == 'Windows'
         run: |
           Rscript -e "rcmdcheck::rcmdcheck(args = c('--no-manual', '--force-multiarch', '--install-args=`"--force-biarch`"'), error_on = 'warning', check_dir = 'check')"
           
       - name: Test coverage
-        if: ${{ matrix.config.os == 'windows-latest' }}
+        if: runner.os == 'Windows'
         run: |
           covr::codecov()
         shell: Rscript {0}
