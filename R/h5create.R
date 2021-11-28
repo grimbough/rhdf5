@@ -465,7 +465,8 @@ h5createDataset <- function(file, dataset, dims, maxdims = dims,
 #' 
 #' If this argument is set to \code{NULL}, HDF5 will instead store
 #' variable-length strings.
-#' @param cset The encoding to use when \code{storage.mode='character'}.
+#' @param cset The encoding to use when \code{storage.mode='character'}. Valid 
+#' options are "ASCII" or "UTF-8"
 #' @param native An object of class \code{logical}. If TRUE, array-like objects
 #' are treated as stored in HDF5 row-major rather than R column-major
 #' orientation. Using \code{native = TRUE} increases HDF5 file portability
@@ -493,7 +494,7 @@ h5createDataset <- function(file, dataset, dims, maxdims = dims,
 #' @export h5createAttribute
 h5createAttribute <- function(obj, attr, dims, maxdims = dims, file, 
                               storage.mode = "double", H5type = NULL, 
-                              size = NULL, cset = c("ASCII", "UTF8"), 
+                              size = NULL, cset = c("ASCII", "UTF-8"), 
                               native = FALSE) {
     
     obj = h5checktypeOrOpenObj(obj, file, native = native)

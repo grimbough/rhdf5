@@ -14,7 +14,7 @@ H5Tget_cset(dtype_id)
 \item{dtype_id}{ID of HDF5 datatype to query or modify.}
 
 \item{cset}{Encoding to use for string types. Valid options are 'ASCII' and
-'UTF8'.}
+'UTF-8'.}
 }
 \description{
 Retrieve or set the character set to be used in a string datatype.

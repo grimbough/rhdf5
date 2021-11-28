@@ -81,7 +81,7 @@ H5Tget_strpad <- function( dtype_id ) {
 #' 
 #' @param dtype_id ID of HDF5 datatype to query or modify.
 #' @param cset Encoding to use for string types. Valid options are 'ASCII' and 
-#' 'UTF8'.
+#' 'UTF-8'.
 #' 
 #' @name H5T_cset
 NULL
@@ -91,10 +91,10 @@ NULL
 H5Tset_cset <- function( dtype_id, cset = "ASCII") {
   
   cset_int <- switch(cset, 
-                     ASCII = 0L, 
-                     UTF8 = 1L, 
+                     "ASCII" = 0L, 
+                     "UTF-8" = 1L, 
                      stop("Invalid value to 'cset' argument.\n",
-                          "Valid options are: 'ASCII', 'UTF8'")) 
+                          "Valid options are: 'ASCII', 'UTF-8'")) 
   
   .Call("_H5Tset_cset", dtype_id, cset_int, PACKAGE = "rhdf5")
 }
