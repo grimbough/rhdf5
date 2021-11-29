@@ -304,7 +304,7 @@ h5writeDataset.raw       <- function(...) { h5writeDataset.array(...) }
 #' @export 
 h5writeDataset.array <- function(obj, h5loc, name, index = NULL, 
                                  start=NULL, stride=NULL, block=NULL, count=NULL, 
-                                 size=NULL, variableLengthString=FALSE, encoding=c("ASCII", "UTF-8"),
+                                 size=NULL, variableLengthString=FALSE, encoding = NULL,
                                  level=6) {
 
     exists <- try( { H5Lexists(h5loc, name) } )
@@ -327,7 +327,8 @@ h5writeDataset.array <- function(obj, h5loc, name, index = NULL,
             if (h5loc@native) dim <- rev(dim)
         }
         h5createDataset(h5loc, name, dim, storage.mode = storage.mode(obj), 
-                        size = size, encoding = match.arg(encoding),
+                        size = size, 
+                        encoding = match.arg(encoding, choices = c("ASCII", "UTF-8", "UTF8")),
                         chunk=dim, level=level) 
     }
     h5dataset <- H5Dopen(h5loc, name)

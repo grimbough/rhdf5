@@ -13,7 +13,7 @@ h5createDataset(
   storage.mode = "double",
   H5type = NULL,
   size = NULL,
-  encoding = c("ASCII", "UTF-8"),
+  encoding = NULL,
   chunk = dims,
   fillValue,
   level = 6,

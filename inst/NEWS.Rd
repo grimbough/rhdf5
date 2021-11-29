@@ -9,6 +9,25 @@
       references.
     }
   }
+  
+  \subsection{CHANGES}{
+    \itemize{
+      \item Argument 'cset' to \code{h5createAttribute()} and 
+      \code{h5writeAttribute()} have been deprecated.  The 'encoding'
+      argument should be used going forward.  This ensures consistency with 
+      \code{h5create()} and \code{h5write()}.
+    }
+  }
+  
+  \subsection{BUG FIXES}{
+    \itemize{
+      \item The documentation for the 'encoding' argument to 
+      \code{h5createDataset()} and \code{h5writeDataset()} 'UTF-8' was a valid
+      option, however this would produce an error. This has now been fixed.
+      (Thanks to @ilia-kats for identifying this, 
+      https://github.com/grimbough/rhdf5/pull/101)
+    }
+  }
 
 }
 
