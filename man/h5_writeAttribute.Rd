@@ -10,7 +10,7 @@ h5writeAttribute(
   attr,
   h5obj,
   name,
-  cset = c("ASCII", "UTF8"),
+  cset = c("ASCII", "UTF-8"),
   variableLengthString = FALSE,
   asScalar = FALSE
 )
@@ -19,7 +19,7 @@ h5writeAttribute(
   attr,
   h5obj,
   name,
-  cset = c("ASCII", "UTF8"),
+  cset = c("ASCII", "UTF-8"),
   variableLengthString = FALSE,
   asScalar = FALSE
 )

@@ -108,12 +108,12 @@ test_that("Checking other string options when adding attributes", {
     
     ## different encoding
     attr <- "blah2"
-    h5writeAttribute(attr = attr, h5obj = gid, name = "char_attr2", cset = "UTF8")
+    h5writeAttribute(attr = attr, h5obj = gid, name = "char_attr2", cset = "UTF-8")
 
     ## as a scalar
     attr <- "blah3"
-    h5writeAttribute(attr = attr, h5obj = gid, name = "char_attr3", cset = "UTF8", asScalar = TRUE)
-    expect_error(h5writeAttribute(attr = c(attr, attr), h5obj = gid, name = "char_attr3", cset = "UTF8", asScalar = TRUE), "cannot use")
+    h5writeAttribute(attr = attr, h5obj = gid, name = "char_attr3", cset = "UTF-8", asScalar = TRUE)
+    expect_error(h5writeAttribute(attr = c(attr, attr), h5obj = gid, name = "char_attr3", cset = "UTF-8", asScalar = TRUE), "cannot use")
 
     H5Gclose(gid)
     H5Fclose(fid)

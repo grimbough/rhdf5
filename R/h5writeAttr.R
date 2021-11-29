@@ -15,7 +15,7 @@
 #'   
 #' @name h5_writeAttribute
 #' @export
-h5writeAttribute <- function(attr, h5obj, name, cset=c("ASCII", "UTF8"), variableLengthString=FALSE, asScalar=FALSE) {
+h5writeAttribute <- function(attr, h5obj, name, cset=c("ASCII", "UTF-8"), variableLengthString=FALSE, asScalar=FALSE) {
   h5checktype(h5obj, "object")
   if (is(attr, "H5IdComponent"))
     res <- h5writeAttribute.array(attr, h5obj, name, asScalar=TRUE)
@@ -38,7 +38,7 @@ h5writeAttribute.character <- function(...) { h5writeAttribute.array(...) }
 h5writeAttribute.default <- function(attr, h5obj, name, ...) { warning("No function found to write attribute of class '",class(attr),"'. Attribute '",name,"' is not written to hdf5-file.") }
 
 #' @rdname h5_writeAttribute
-h5writeAttribute.array <- function(attr, h5obj, name, cset=c("ASCII", "UTF8"), variableLengthString=FALSE, asScalar=FALSE) {
+h5writeAttribute.array <- function(attr, h5obj, name, cset=c("ASCII", "UTF-8"), variableLengthString=FALSE, asScalar=FALSE) {
   if (asScalar) {
     if (length(attr) != 1L) {
       stop("cannot use 'asScalar=TRUE' when 'length(attr) > 1'")
