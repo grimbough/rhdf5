@@ -376,7 +376,7 @@ h5createGroup <- function(file, group) {
 #' @export h5createDataset
 h5createDataset <- function(file, dataset, dims, maxdims = dims, 
                             storage.mode = "double", H5type = NULL, 
-                            size = NULL, encoding = c("ASCII", "UTF-8"),
+                            size = NULL, encoding = NULL,
                             chunk = dims, fillValue, 
                             level = 6, filter = "gzip", shuffle = TRUE,
                             native = FALSE) {
@@ -404,7 +404,8 @@ h5createDataset <- function(file, dataset, dims, maxdims = dims,
   }
   
   ## determine data type
-  tid <- .setDataType(H5type, storage.mode, size, encoding = match.arg(encoding))
+  tid <- .setDataType(H5type, storage.mode, size, 
+                      encoding = match.arg(encoding, choices = c("ASCII", "UTF-8", "UTF8")))
   
   dcpl <- .createDCPL(chunk, dims, level, fillValue, dtype = tid, filter = filter, shuffle = shuffle)
   on.exit(H5Pclose(dcpl), add = TRUE)
@@ -426,62 +427,61 @@ h5createDataset <- function(file, dataset, dims, maxdims = dims,
 }
 
 #' Create HDF5 attribute
-#' 
+#'
 #' R function to create an HDF5 attribute and defining its dimensionality.
-#' 
+#'
 #' Creates a new attribute and attaches it to an existing HDF5 object. The
 #' function will fail, if the file doesn't exist or if there exists already
 #' another attribute with the same name for this object.
-#' 
-#' You can use [h5writeAttribute()] immediately. It will create the
-#' attribute for you.
-#' 
-#' @param obj The name (character) of the object the attribute will be
-#' attatched to. For advanced programmers it is possible to provide an object
-#' of class [H5IdComponent-class] representing a H5 object identifier
-#' (file, group, dataset). See [H5Fcreate()], [H5Fopen()],
-#' [H5Gcreate()], [H5Gopen()], [H5Dcreate()],
-#' [H5Dopen()] to create an object of this kind.
-#' @param file The filename (character) of the file in which the dataset will
-#' be located. For advanced programmers it is possible to provide an object of
-#' class [H5IdComponent-class] representing an H5 location identifier. See
-#' [H5Fcreate()], [H5Fopen()], [H5Gcreate()],
-#' [H5Gopen()] to create an object of this kind. The \code{file}
-#' argument is not required, if the argument \code{obj} is of type
-#' \code{H5IdComponent}.
+#'
+#' You can use [h5writeAttribute()] immediately. It will create the attribute
+#' for you.
+#'
+#' @param obj The name (character) of the object the attribute will be attatched
+#'   to. For advanced programmers it is possible to provide an object of class
+#'   [H5IdComponent-class] representing a H5 object identifier (file, group,
+#'   dataset). See [H5Fcreate()], [H5Fopen()], [H5Gcreate()], [H5Gopen()],
+#'   [H5Dcreate()], [H5Dopen()] to create an object of this kind.
+#' @param file The filename (character) of the file in which the dataset will be
+#'   located. For advanced programmers it is possible to provide an object of
+#'   class [H5IdComponent-class] representing an H5 location identifier. See
+#'   [H5Fcreate()], [H5Fopen()], [H5Gcreate()], [H5Gopen()] to create an object
+#'   of this kind. The \code{file} argument is not required, if the argument
+#'   \code{obj} is of type \code{H5IdComponent}.
 #' @param attr Name of the attribute to be created.
 #' @param dims The dimensions of the attribute as a numeric vector. If
-#' \code{NULL}, a scalar dataspace will be created instead.
+#'   \code{NULL}, a scalar dataspace will be created instead.
 #' @param maxdims The maximum extension of the attribute.
 #' @param storage.mode The storage mode of the data to be written. Can be
-#' obtained by \code{storage.mode(mydata)}.
+#'   obtained by \code{storage.mode(mydata)}.
 #' @param H5type Advanced programmers can specify the datatype of the dataset
-#' within the file. See \code{h5const("H5T")} for a list of available
-#' datatypes. If \code{H5type} is specified the argument \code{storage.mode} is
-#' ignored. It is recommended to use \code{storage.mode}
+#'   within the file. See \code{h5const("H5T")} for a list of available
+#'   datatypes. If \code{H5type} is specified the argument \code{storage.mode}
+#'   is ignored. It is recommended to use \code{storage.mode}
 #' @param size The maximum string length when \code{storage.mode='character'}.
-#' If this is specified, HDF5 stores each string of \code{attr} as fixed length
-#' character arrays. Together with compression, this should be efficient.
-#' 
-#' If this argument is set to \code{NULL}, HDF5 will instead store
-#' variable-length strings.
-#' @param cset The encoding to use when \code{storage.mode='character'}. Valid 
-#' options are "ASCII" or "UTF-8"
+#'   If this is specified, HDF5 stores each string of \code{attr} as fixed
+#'   length character arrays. Together with compression, this should be
+#'   efficient.
+#'
+#'   If this argument is set to \code{NULL}, HDF5 will instead store
+#'   variable-length strings.
+#' @param encoding The encoding of the string data type i.e. when `storage.mode
+#'   = 'character'`. Valid options are "ASCII" and "UTF-8".
+#' @param cset *Deprecated in favour of the `encoding` argument.*
 #' @param native An object of class \code{logical}. If TRUE, array-like objects
-#' are treated as stored in HDF5 row-major rather than R column-major
-#' orientation. Using \code{native = TRUE} increases HDF5 file portability
-#' between programming languages. A file written with \code{native = TRUE}
-#' should also be read with \code{native = TRUE}
+#'   are treated as stored in HDF5 row-major rather than R column-major
+#'   orientation. Using \code{native = TRUE} increases HDF5 file portability
+#'   between programming languages. A file written with \code{native = TRUE}
+#'   should also be read with \code{native = TRUE}
 #' @return Returns TRUE is attribute was created successfully and FALSE
-#' otherwise.
+#'   otherwise.
 #' @author Bernd Fischer
-#' @seealso [h5createFile()], [h5createGroup()],
-#' [h5createDataset()], [h5read()], [h5write()],
-#' \link{rhdf5}
+#' @seealso [h5createFile()], [h5createGroup()], [h5createDataset()],
+#'   [h5read()], [h5write()], \link{rhdf5}
 #' @references \url{https://portal.hdfgroup.org/display/HDF5}
 #' @keywords programming interface IO file
 #' @examples
-#' 
+#'
 #' h5createFile("ex_createAttribute.h5")
 #' h5write(1:1, "ex_createAttribute.h5","A")
 #' fid <- H5Fopen("ex_createAttribute.h5")
@@ -489,13 +489,21 @@ h5createDataset <- function(file, dataset, dims, maxdims = dims,
 #' h5createAttribute (did, "time", c(1,10))
 #' H5Dclose(did)
 #' H5Fclose(fid)
-#' 
+#'
 #' @name h5_createAttribute
 #' @export h5createAttribute
 h5createAttribute <- function(obj, attr, dims, maxdims = dims, file, 
                               storage.mode = "double", H5type = NULL, 
-                              size = NULL, cset = c("ASCII", "UTF-8"),
+                              size = NULL, encoding = NULL, cset = NULL, 
                               native = FALSE) {
+  
+    ## remove the cset argument in BioC 3.16
+    if(!is.null(cset)) {
+      if(is.null(encoding)) 
+        encoding <- cset
+      message("The 'cset' argument has been deprecated.\n",
+              "Please use the argument 'encoding' instead.")
+    }
     
     obj = h5checktypeOrOpenObj(obj, file, native = native)
     on.exit(h5closeitObj(obj))
@@ -521,7 +529,8 @@ h5createAttribute <- function(obj, attr, dims, maxdims = dims, file,
                           integer = h5constants$H5T["H5T_STD_I32LE"],
                           character = {
                               tid <- H5Tcopy("H5T_C_S1")
-                              H5Tset_cset(tid, match.arg(cset))
+                              H5Tset_cset(tid, cset = match.arg(encoding, 
+                                                                choices = c("ASCII", "UTF-8", "UTF8")))
                               if (!is.null(size) && !is.numeric(size)) {
                                 stop("'size' should be NULL or a number when 'storage.mode=\"character\"'")
                               }

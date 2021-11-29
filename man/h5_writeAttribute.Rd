@@ -10,7 +10,8 @@ h5writeAttribute(
   attr,
   h5obj,
   name,
-  cset = c("ASCII", "UTF-8"),
+  encoding = NULL,
+  cset = NULL,
   variableLengthString = FALSE,
   asScalar = FALSE
 )
@@ -19,7 +20,8 @@ h5writeAttribute(
   attr,
   h5obj,
   name,
-  cset = c("ASCII", "UTF-8"),
+  encoding = NULL,
+  cset = NULL,
   variableLengthString = FALSE,
   asScalar = FALSE
 )
@@ -35,7 +37,10 @@ this kind.}
 
 \item{name}{The name of the attribute to be written.}
 
-\item{cset}{The encoding of the string data type.}
+\item{encoding}{The encoding of the string data type. Valid options are
+"ASCII" and "UTF-8".}
+
+\item{cset}{\emph{Deprecated in favour of the \code{encoding} argument.}}
 
 \item{variableLengthString}{Whether character vectors should be written as
 variable-length strings into the attributes.}

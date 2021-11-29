@@ -36,7 +36,7 @@ h5writeDataset(obj, h5loc, name, ...)
   count = NULL,
   size = NULL,
   variableLengthString = FALSE,
-  encoding = c("ASCII", "UTF-8"),
+  encoding = NULL,
   level = 6
 )
 }

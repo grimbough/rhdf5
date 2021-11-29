@@ -104,26 +104,34 @@ test_that("Checking other string options when adding attributes", {
 
     ## variable strings
     attr <- "blah"
-    h5writeAttribute(attr = attr, h5obj = gid, name = "char_attr", variableLengthString = TRUE)
+    expect_silent(h5writeAttribute(attr = attr, h5obj = gid, name = "char_attr", 
+                                   variableLengthString = TRUE))
     
     ## different encoding
     attr <- "blah2"
-    h5writeAttribute(attr = attr, h5obj = gid, name = "char_attr2", cset = "UTF-8")
+    expect_silent(h5writeAttribute(attr = attr, h5obj = gid, name = "char_attr2", 
+                                   encoding = "UTF-8"))
 
     ## as a scalar
     attr <- "blah3"
-    h5writeAttribute(attr = attr, h5obj = gid, name = "char_attr3", cset = "UTF-8", asScalar = TRUE)
-    expect_error(h5writeAttribute(attr = c(attr, attr), h5obj = gid, name = "char_attr3", cset = "UTF-8", asScalar = TRUE), "cannot use")
+    expect_silent(h5writeAttribute(attr = attr, h5obj = gid, name = "char_attr3", 
+                                   encoding = "UTF-8", asScalar = TRUE)) 
+    expect_error(h5writeAttribute(attr = c(attr, attr), h5obj = gid, name = "char_attr3", 
+                                  encoding = "UTF-8", asScalar = TRUE), "cannot use")
 
+    ## expect a message telling us this argument is deprecated
+    attr <- "blah4"
+    expect_message(h5writeAttribute(attr = attr, h5obj = gid, name = "char_attr4", cset = "UTF-8"))
+    
     H5Gclose(gid)
     H5Fclose(fid)
 
     attr_back <- h5readAttributes(h5File, name = "blah_group")
-    expect_length(attr_back, n = 3)
+    expect_length(attr_back, n = 4)
 
-    expected <- c("char_attr", "char_attr2", "char_attr3")
+    expected <- c("char_attr", "char_attr2", "char_attr3", "char_attr4")
     expect_identical(sort(expected), sort(names(attr_back)))
-    expect_identical(unname(unlist(attr_back[expected])), c("blah", "blah2", "blah3"))
+    expect_identical(unname(unlist(attr_back[expected])), c("blah", "blah2", "blah3", "blah4"))
 })
 
 test_that("Unable to add logical attribute", {

@@ -90,8 +90,11 @@ NULL
 #' @export
 H5Tset_cset <- function( dtype_id, cset = "ASCII") {
   
+  
+  
   cset_int <- switch(cset, 
                      "ASCII" = 0L, 
+                     "UTF8" = 1L,
                      "UTF-8" = 1L, 
                      stop("Invalid value to 'cset' argument.\n",
                           "Valid options are: 'ASCII', 'UTF-8'")) 

@@ -106,6 +106,39 @@ test_that("datasets of fixed and variable length characters can be created", {
   sapply(c(did_var, did_fix), FUN = H5Dclose)
   H5Fclose(fid)
 })
+
+test_that("Encoding of string datasets can be set", {
+  
+  expect_true(
+    h5createDataset(file = h5File, dataset = "ascii", 
+                    dims = 1, storage.mode = "character",
+                    encoding = "ASCII")
+  )
+  expect_true(
+    h5createDataset(file = h5File, dataset = "utf-8", 
+                    dims = 1, storage.mode = "character",
+                    encoding = "UTF-8")
+  )
+  
+  ## UTF8 should be UTF-8 but is accepted for legacy reasons
+  expect_silent(
+    h5createDataset(file = h5File, dataset = "utf8", 
+                    dims = 1, storage.mode = "character",
+                    encoding = "UTF8")
+  ) |> expect_true()
+  
+  fid <- H5Fopen(h5File)
+  did_ascii <- H5Dopen(fid, name = "ascii")
+  tid_ascii <- H5Dget_type(did_ascii)
+  did_utf8 <- H5Dopen(fid, name = "utf-8")
+  tid_utf8 <- H5Dget_type(did_utf8)
+  
+  expect_equal(H5Tget_cset(tid_ascii), 0L)
+  expect_equal(H5Tget_cset(tid_utf8), 1L)
+  
+  sapply(c(did_ascii, did_utf8), FUN = H5Dclose)
+  H5Fclose(fid)
+})
   
 
 test_that("Invalid storage mode arguments", {
@@ -283,8 +316,10 @@ test_that("string encoding is handled properly", {
     h5closeAll()
 
     # Now Unicode.
-    h5createAttribute(file = h5File, obj = "foo", dims = c(1,1), attr = "utf_str_attr", 
-                      storage.mode = "character", cset="UTF-8", size = NULL)
+    expect_silent(h5createAttribute(file = h5File, obj = "foo", dims = c(1,1), 
+                                    attr = "utf_str_attr", storage.mode = "character", 
+                                    encoding = "UTF-8", size = NULL)) |> 
+      expect_true()
     
     fhandle <- H5Fopen(h5File)
     dhandle <- H5Dopen(fhandle, "foo")
