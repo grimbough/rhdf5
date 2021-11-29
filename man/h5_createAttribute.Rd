@@ -14,7 +14,7 @@ h5createAttribute(
   storage.mode = "double",
   H5type = NULL,
   size = NULL,
-  cset = c("ASCII", "UTF8"),
+  cset = c("ASCII", "UTF-8"),
   native = FALSE
 )
 }
@@ -56,7 +56,8 @@ character arrays. Together with compression, this should be efficient.
 If this argument is set to \code{NULL}, HDF5 will instead store
 variable-length strings.}
 
-\item{cset}{The encoding to use when \code{storage.mode='character'}.}
+\item{cset}{The encoding to use when \code{storage.mode='character'}. Valid
+options are "ASCII" or "UTF-8"}
 
 \item{native}{An object of class \code{logical}. If TRUE, array-like objects
 are treated as stored in HDF5 row-major rather than R column-major

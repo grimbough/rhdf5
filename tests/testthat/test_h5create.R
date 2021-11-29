@@ -284,7 +284,7 @@ test_that("string encoding is handled properly", {
 
     # Now Unicode.
     h5createAttribute(file = h5File, obj = "foo", dims = c(1,1), attr = "utf_str_attr", 
-                      storage.mode = "character", cset="UTF8", size = NULL)
+                      storage.mode = "character", cset="UTF-8", size = NULL)
     
     fhandle <- H5Fopen(h5File)
     dhandle <- H5Dopen(fhandle, "foo")
