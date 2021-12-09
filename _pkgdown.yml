@@ -79,3 +79,4 @@ reference:
   - H5Pcreate
   - H5Pget_class
   - H5Pset_fapl_ros3
+  - H5P_filters

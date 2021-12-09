@@ -1136,7 +1136,6 @@ SEXP _H5Pfill_value_defined( SEXP _plist_id ) {
 
 /* herr_t H5Pset_fill_time(hid_t plist_id, H5D_fill_time_t fill_time) */
 SEXP _H5Pset_fill_time( SEXP _plist_id, SEXP _fill_time ) {
-    //hid_t plist_id = INTEGER(_plist_id)[0];
     hid_t plist_id = STRSXP_2_HID( _plist_id );
     H5D_fill_time_t fill_time = INTEGER(_fill_time)[0];
     herr_t herr = H5Pset_fill_time(plist_id, fill_time);
@@ -1146,7 +1145,6 @@ SEXP _H5Pset_fill_time( SEXP _plist_id, SEXP _fill_time ) {
 
 /* herr_t H5Pget_fill_time(hid_t plist_id, H5D_fill_time_t * fill_time) */
 SEXP _H5Pget_fill_time( SEXP _plist_id ) {
-    //hid_t plist_id = INTEGER(_plist_id)[0];
     hid_t plist_id = STRSXP_2_HID( _plist_id );
     H5D_fill_time_t fill_time;
     herr_t herr = H5Pget_fill_time(plist_id, &fill_time);
@@ -1161,7 +1159,6 @@ SEXP _H5Pget_fill_time( SEXP _plist_id ) {
 
 /* herr_t H5Pset_alloc_time(hid_t plist_id, H5D_alloc_time_t alloc_time) */
 SEXP _H5Pset_alloc_time( SEXP _plist_id, SEXP _alloc_time ) {
-    //hid_t plist_id = INTEGER(_plist_id)[0];
     hid_t plist_id = STRSXP_2_HID( _plist_id );
     H5D_alloc_time_t alloc_time = INTEGER(_alloc_time)[0];
     herr_t herr = H5Pset_alloc_time(plist_id, alloc_time);
@@ -1171,7 +1168,6 @@ SEXP _H5Pset_alloc_time( SEXP _plist_id, SEXP _alloc_time ) {
 
 /* herr_t H5Pget_alloc_time(hid_t plist_id, H5D_alloc_time_t * alloc_time) */
 SEXP _H5Pget_alloc_time( SEXP _plist_id ) {
-    //hid_t plist_id = INTEGER(_plist_id)[0];
     hid_t plist_id = STRSXP_2_HID( _plist_id );
     H5D_alloc_time_t alloc_time;
     herr_t herr = H5Pget_alloc_time(plist_id, &alloc_time);
@@ -1307,13 +1303,13 @@ SEXP _H5Pget_filter( SEXP _plist_id, SEXP _idx ) {
 /*   return Rval; */
 /* } */
 
-/* /\* herr_t H5Pset_nbit(hid_t plist_id) *\/ */
-/* SEXP _H5Pset_nbit( SEXP _plist_id ) { */
-/*   hid_t plist_id = INTEGER(_plist_id)[0]; */
-/*   herr_t herr = H5Pset_nbit(hid_tplist_id); */
-/*   SEXP Rval = ScalarInteger(herr); */
-/*   return Rval; */
-/* } */
+/* herr_t H5Pset_nbit(hid_t plist_id) *\/ */
+SEXP _H5Pset_nbit( SEXP _plist_id ) {
+  hid_t plist_id = STRSXP_2_HID( _plist_id );
+  herr_t herr = H5Pset_nbit(plist_id);
+  SEXP Rval = ScalarInteger(herr);
+  return Rval;
+} 
 
 /* /\* herr_t H5Pset_scaleoffset(hid_t plist_id, H5Z_SO_scale_type_t scale_type, int scale_factor) *\/ */
 /* SEXP _H5Pset_scaleoffset( SEXP _plist_id, SEXP _scale_type, SEXP _scale_factor ) { */

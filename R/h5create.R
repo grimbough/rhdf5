@@ -309,7 +309,7 @@ h5createGroup <- function(file, group) {
 #'   orientation. Using \code{native = TRUE} increases HDF5 file portability
 #'   between programming languages. A file written with \code{native = TRUE}
 #'   should also be read with \code{native = TRUE}
-#' @return Returns TRUE is dataset was created successfully and FALSE otherwise.
+#' @return Returns (invisibly) `TRUE` if dataset was created successfully and `FALSE` otherwise.
 #' @author Bernd Fischer, Mike L. Smith
 #' @seealso [h5createFile()], [h5createGroup()], [h5read()], [h5write()]
 #' @examples
@@ -423,7 +423,7 @@ h5createDataset <- function(file, dataset, dims, maxdims = dims,
     H5Dclose(did)
     res <- TRUE
   }
-  res
+  invisible(res)
 }
 
 #' Create HDF5 attribute

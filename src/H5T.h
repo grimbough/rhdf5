@@ -16,5 +16,8 @@ SEXP _H5Tget_strpad( SEXP _dtype_id );
 SEXP _H5Tset_cset( SEXP _dtype_id, SEXP _cset );
 SEXP _H5Tget_cset( SEXP _dtype_id );
 SEXP _H5Tis_variable_str( SEXP _dtype_id );
+SEXP _H5Tset_precision( SEXP _dtype_id, SEXP _precision );
+SEXP _H5Tset_offset( SEXP _dtype_id, SEXP _offset );
+SEXP _H5Tget_offset( SEXP _dtype_id );
 
 #endif

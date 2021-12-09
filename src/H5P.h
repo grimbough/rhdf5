@@ -157,7 +157,7 @@ SEXP _H5Pget_filter( SEXP _plist_id, SEXP _idx );
 /* SEXP _H5Pmodify_filter( SEXP _plist_id, SEXP _filter_id, SEXP _flags, SEXP _cd_nelmts, SEXP _cd_values[] ); */
 /* SEXP _H5Premove_filter( SEXP _plist_id, SEXP _filter ); */
 /* SEXP _H5Pset_fletcher32( SEXP _plist_id ); */
-/* SEXP _H5Pset_nbit( SEXP _plist_id ); */
+SEXP _H5Pset_nbit( SEXP _plist_id );
 /* SEXP _H5Pset_scaleoffset( SEXP _plist_id, SEXP _scale_type, SEXP _scale_factor ); */
 SEXP _H5Pset_shuffle( SEXP _plist_id );
 SEXP _H5Pset_szip( SEXP _plist, SEXP _options_mask, SEXP _pixels_per_block );

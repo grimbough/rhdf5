@@ -534,22 +534,54 @@ H5Pget_alloc_time <- function( h5plist ) {
   res
 }
 
+#' Query dataset filter properties.
+#'
+#' Return information about the filter pipeline applied to a dataset creation
+#' property list.
+#'
+#' * `H5Pall_filters_avail()` checks whether all filters required to process a
+#' dataset are available to **rhdf5**.  This can be required if reading files
+#' created with other HDF5 software. 
+#' * `H5Pget_nfilters()` returns the number of
+#' filters in the dataset chunk processing pipeline. 
+#' * `H5Pget_filter()`
+#' provides details of a specific filter in the pipeline. This includes the
+#' filter name and the parameters provided to it e.g. compression level.
+#'
+#' @param h5plist Object of class [H5IdComponent-class] representing a dataset
+#'   creation property list.
+#' @param idx Integer of length 1.  This argument selects which filter to return
+#'   information about.  Indexing is R-style 1-based.
+#'   
+
+#' @rdname H5P_filters
+#' @export
 H5Pall_filters_avail <- function( h5plist ) {
     h5checktypeAndPLC(h5plist, "H5P_DATASET_CREATE")
     res <- .Call("_H5Pall_filters_avail", h5plist@ID, PACKAGE='rhdf5')
     return(res)
 }
 
+#' @rdname H5P_filters
+#' @export
 H5Pget_nfilters <- function( h5plist ) {
     h5checktypeAndPLC(h5plist, "H5P_DATASET_CREATE")
     res <- .Call("_H5Pget_nfilters", h5plist@ID, PACKAGE='rhdf5')
     res
 }
 
+#' @rdname H5P_filters
+#' @export
 H5Pget_filter <- function( h5plist, idx ) {
     h5checktypeAndPLC(h5plist, "H5P_DATASET_CREATE")
     idx <- as.integer(idx)
-    res <- .Call("_H5Pget_filter", h5plist@ID, idx, PACKAGE='rhdf5')
+    
+    if( (idx < 1) || (idx > H5Pget_nfilters(h5plist)) ) {
+      stop("'idx' argument is outside the range of filters set on this property list.", 
+           call. = FALSE)
+    } 
+    
+    res <- .Call("_H5Pget_filter", h5plist@ID, idx-1L, PACKAGE='rhdf5')
     return(res)
 }
 

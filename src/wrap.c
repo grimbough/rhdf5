@@ -124,6 +124,9 @@ static R_CallMethodDef libraryRCalls[] = {
   {"_H5Tset_cset", (DL_FUNC) &_H5Tset_cset, 2},
   {"_H5Tget_cset", (DL_FUNC) &_H5Tget_cset, 1},
   {"_H5Tis_variable_str", (DL_FUNC) &_H5Tis_variable_str, 1},
+  {"_H5Tset_precision", (DL_FUNC) &_H5Tset_precision, 2},
+  {"_H5Tset_offset", (DL_FUNC) &_H5Tset_offset, 2},
+  {"_H5Tget_offset", (DL_FUNC) &_H5Tget_offset, 1},
   {"_H5Pcreate", (DL_FUNC) &_H5Pcreate, 1},
   {"_H5Pget_class", (DL_FUNC) &_H5Pget_class, 1},
   {"_H5Pcopy", (DL_FUNC) &_H5Pcopy, 1},
@@ -239,7 +242,7 @@ static R_CallMethodDef libraryRCalls[] = {
   /* {"_H5Pmodify_filter", (DL_FUNC) &_H5Pmodify_filter, 5}, */
   /* {"_H5Premove_filter", (DL_FUNC) &_H5Premove_filter, 2}, */
   /* {"_H5Pset_fletcher32", (DL_FUNC) &_H5Pset_fletcher32, 1}, */
-  /* {"_H5Pset_nbit", (DL_FUNC) &_H5Pset_nbit, 1}, */
+  {"_H5Pset_nbit", (DL_FUNC) &_H5Pset_nbit, 1},
   /* {"_H5Pset_scaleoffset", (DL_FUNC) &_H5Pset_scaleoffset, 3}, */
   {"_H5Pset_shuffle", (DL_FUNC) &_H5Pset_shuffle, 1},
   {"_H5Pset_szip", (DL_FUNC) &_H5Pset_szip, 3},
