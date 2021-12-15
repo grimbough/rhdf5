@@ -1681,7 +1681,7 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
 # determine if the filters package is installed
-FILTERS=`"${R_HOME}/bin${R_ARCH_BIN}/Rscript" -e 'quit(status = !require("rhdf5filters", quietly = TRUE))' && echo _H5P_filters || echo undef`
+FILTERS=`"${R_HOME}/bin${R_ARCH_BIN}/Rscript" -e 'quit(status = !require("rhdf5filters", quietly = TRUE))' 1> /dev/null && echo _H5P_filters || echo undef`
 
 
 ac_config_files="$ac_config_files src/external_filters.h"
