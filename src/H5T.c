@@ -158,6 +158,19 @@ SEXP _H5Tset_precision( SEXP _dtype_id, SEXP _precision ) {
   return Rval;
 }
 
+/* size_t H5Tget_precision( hid_t dtype_id ) */
+SEXP _H5Tget_precision( SEXP _dtype_id ) {
+  
+  hid_t dtype_id = STRSXP_2_HID( _dtype_id );
+  
+  size_t precision = H5Tget_precision(dtype_id);
+  
+  SEXP Rval;
+  PROTECT(Rval = ScalarInteger(precision));
+  UNPROTECT(1);
+  return Rval;
+}
+
 /* herr_t H5Tset_offset( hid_t dtype_id, size_t offset ) */
 SEXP _H5Tset_offset( SEXP _dtype_id, SEXP _offset ) {
   

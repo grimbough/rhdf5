@@ -125,6 +125,7 @@ static R_CallMethodDef libraryRCalls[] = {
   {"_H5Tget_cset", (DL_FUNC) &_H5Tget_cset, 1},
   {"_H5Tis_variable_str", (DL_FUNC) &_H5Tis_variable_str, 1},
   {"_H5Tset_precision", (DL_FUNC) &_H5Tset_precision, 2},
+  {"_H5Tget_precision", (DL_FUNC) &_H5Tget_precision, 1},
   {"_H5Tset_offset", (DL_FUNC) &_H5Tset_offset, 2},
   {"_H5Tget_offset", (DL_FUNC) &_H5Tget_offset, 1},
   {"_H5Pcreate", (DL_FUNC) &_H5Pcreate, 1},

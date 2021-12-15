@@ -590,10 +590,30 @@ H5Pget_filter <- function( h5plist, idx ) {
 #' @param h5plist Object of class [H5IdComponent-class] representing a dataset
 #' creation property list.
 #' 
+#' @returns Returns (invisibly) and integer vector of length 1.  The only
+#'   element of this vector will be non-negative if the filter was set
+#'   successfully and negative otherwise.
+#' 
 #' @export
 H5Pset_shuffle <- function( h5plist ) {
   h5checktypeAndPLC(h5plist, "H5P_DATASET_CREATE")
   res <- .Call("_H5Pset_shuffle", h5plist@ID, PACKAGE='rhdf5')
+  invisible(res)
+}
+
+#' Add the N-Bit filter to the chunk processing pipeline.
+#'
+#' @param h5plist Object of class [H5IdComponent-class] representing a dataset
+#'   creation property list.
+#'
+#' @returns Returns (invisibly) and integer vector of length 1.  The only
+#'   element of this vector will be non-negative if the filter was set
+#'   successfully and negative otherwise.
+#'
+#' @export
+H5Pset_nbit <- function( h5plist ) {
+  h5checktypeAndPLC(h5plist, "H5P_DATASET_CREATE")
+  res <- .Call("_H5Pset_nbit", h5plist@ID, PACKAGE = "rhdf5")
   invisible(res)
 }
 

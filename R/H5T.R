@@ -131,3 +131,54 @@ H5Tis_variable_str <- function( dtype_id ) {
   
   return(as.logical(res))
 }
+
+#' Retrieve or set the precision of an HDF5 datatype
+#'
+#' @param dtype_id ID of HDF5 datatype to set precision of.
+#' @param precision The number of bytes of precision for the datatype.
+#' 
+#' @returns 
+#' * `H5Tget_precision()` returns an integer giving the number of 
+#' significant bits used by the given datatype.
+#' * `H5Tset_precision()` is call for its side-effect of modifying the 
+#' precision of a datatype.  It will invisibly return `TRUE` if this is
+#' successful and will stop with an error if the operation fails.
+#'
+#' @name H5T_precision
+NULL
+
+#' @rdname H5T_precision
+#' @export
+H5Tset_precision <- function( dtype_id, precision ) {
+  
+  if(missing(dtype_id)) {
+    stop("Argument 'dtype_id' must be supplied")
+  }
+  
+  precision <- as.integer(precision)
+  if(precision < 1) {
+    stop("'precision' argument must be greater than 0.")
+  } 
+  
+  res <- .Call("_H5Tset_precision", tid, as.integer(precision), PACKAGE = "rhdf5")
+  if(res < 0) {
+    stop("Unable to set data type precision")
+  } 
+  
+  return(invisible(TRUE))
+}
+
+#' @rdname H5T_precision
+#' @export
+H5Tget_precision <- function( dtype_id ) {
+  
+  if(missing(dtype_id)) {
+    stop("Argument 'dtype_id' must be supplied")
+  }
+  
+  precision <- .Call("_H5Tset_precision", tid, as.integer(precision), PACKAGE = "rhdf5")
+  
+  return(precision)
+  
+}
+  
