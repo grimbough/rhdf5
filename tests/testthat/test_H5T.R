@@ -1,6 +1,7 @@
 library(rhdf5)
 
 tid <- H5Tcopy("H5T_C_S1")
+integer_tid <- H5Tcopy("H5T_STD_U32LE")
 
 test_that("String padding can be read and changed", {
     
@@ -34,7 +35,15 @@ test_that("H5T error handling works", {
     expect_error(H5Tget_cset(dtype_id = tid, cset = "FOOBAA"))
 })
 
-
+test_that("Precision can be modified", {
+  expect_identical(H5Tget_precision(integer_tid), 32L)
+  expect_true(H5Tset_precision(integer_tid, precision = 8))
+  expect_identical(H5Tget_precision(integer_tid), 8L)
+  
+  expect_error(H5Tget_precision(), regexp = "Argument 'dtype_id' must be supplied")
+  expect_error(H5Tset_precision(), regexp = "Argument 'dtype_id' must be supplied")
+  expect_error(H5Tset_precision(integer_tid, 0), regexp = "'precision' argument must be greater than 0")
+})
 
 test_that("No open HDF5 objects are left", {
     expect_equal( length(h5validObjects()), 0 )

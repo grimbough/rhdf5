@@ -66,6 +66,7 @@ reference:
 - title: "HDF5 Dataset Creation Properties"
 - contents:
   - H5Pset_shuffle
+  - H5Pset_nbit
   - H5Pset_deflate
   - H5Pset_szip
   - H5Pset_bzip2

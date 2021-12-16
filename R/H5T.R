@@ -160,7 +160,7 @@ H5Tset_precision <- function( dtype_id, precision ) {
     stop("'precision' argument must be greater than 0.")
   } 
   
-  res <- .Call("_H5Tset_precision", tid, as.integer(precision), PACKAGE = "rhdf5")
+  res <- .Call("_H5Tset_precision", dtype_id, as.integer(precision), PACKAGE = "rhdf5")
   if(res < 0) {
     stop("Unable to set data type precision")
   } 
@@ -176,7 +176,7 @@ H5Tget_precision <- function( dtype_id ) {
     stop("Argument 'dtype_id' must be supplied")
   }
   
-  precision <- .Call("_H5Tset_precision", tid, as.integer(precision), PACKAGE = "rhdf5")
+  precision <- .Call("_H5Tget_precision", dtype_id, PACKAGE = "rhdf5")
   
   return(precision)
   

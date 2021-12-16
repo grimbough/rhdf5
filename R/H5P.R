@@ -590,7 +590,7 @@ H5Pget_filter <- function( h5plist, idx ) {
 #' @param h5plist Object of class [H5IdComponent-class] representing a dataset
 #' creation property list.
 #' 
-#' @returns Returns (invisibly) and integer vector of length 1.  The only
+#' @returns Returns (invisibly) an integer vector of length 1.  The only
 #'   element of this vector will be non-negative if the filter was set
 #'   successfully and negative otherwise.
 #' 
@@ -606,7 +606,7 @@ H5Pset_shuffle <- function( h5plist ) {
 #' @param h5plist Object of class [H5IdComponent-class] representing a dataset
 #'   creation property list.
 #'
-#' @returns Returns (invisibly) and integer vector of length 1.  The only
+#' @returns Returns (invisibly) an integer vector of length 1.  The only
 #'   element of this vector will be non-negative if the filter was set
 #'   successfully and negative otherwise.
 #'

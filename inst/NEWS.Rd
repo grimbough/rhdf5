@@ -7,6 +7,10 @@
     \itemize{
       \item Added H5R functions for working with object and dataset region 
       references.
+      \item The HDF5 N-Bit filter has been enabled with via the function
+      \code{H5Pset_nbit()}.  This can be combined with 
+      \code{H5Tset_precision()} to compress integer and floating-point 
+      datasets.
     }
   }
   
