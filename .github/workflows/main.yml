@@ -92,7 +92,7 @@ jobs:
           Rscript -e "rcmdcheck::rcmdcheck(args = c('--no-manual', '--force-multiarch', '--install-args=`"--force-biarch`"'), error_on = 'warning', check_dir = 'check')"
           
       - name: Test coverage
-        if: runner.os == 'ubuntu-20.04'
+        if: ${{ matrix.config.os }} == 'ubuntu-20.04'
         run: |
           covr::codecov()
         shell: Rscript {0}

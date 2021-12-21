@@ -11,7 +11,7 @@ H5Pset_shuffle(h5plist)
 creation property list.}
 }
 \value{
-Returns (invisibly) and integer vector of length 1.  The only
+Returns (invisibly) an integer vector of length 1.  The only
 element of this vector will be non-negative if the filter was set
 successfully and negative otherwise.
 }
