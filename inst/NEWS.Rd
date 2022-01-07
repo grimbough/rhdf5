@@ -26,10 +26,12 @@
   \subsection{BUG FIXES}{
     \itemize{
       \item The documentation for the 'encoding' argument to 
-      \code{h5createDataset()} and \code{h5writeDataset()} 'UTF-8' was a valid
-      option, however this would produce an error. This has now been fixed.
-      (Thanks to @ilia-kats for identifying this, 
+      \code{h5createDataset()} and \code{h5writeDataset()} stated 'UTF-8' was a 
+      valid option, however this would produce an error. This has now been 
+      fixed. (Thanks to @ilia-kats for identifying this, 
       https://github.com/grimbough/rhdf5/pull/101)
+      \item Fixed bug where an uninitialized value was used in the C code
+      underlying \code{h5dump()} potentially causing crashes.
     }
   }
 

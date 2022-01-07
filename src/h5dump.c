@@ -240,6 +240,8 @@ SEXP _h5dump( SEXP _loc_id, SEXP _depth, SEXP _index_type, SEXP _order ) {
     data.index_type = (H5_index_t) INTEGER(_index_type)[0];
     data.order = (H5_iter_order_t) INTEGER(_order)[0];
     hsize_t idx=0;
+    // set native to false here.  It will be converted later during h5dump()
+    data.native = 0;
 
     herr_t herr = H5Literate( loc_id, data.index_type, data.order, &idx, &opAddToDumpTree, &data );
     if(herr < 0) {
