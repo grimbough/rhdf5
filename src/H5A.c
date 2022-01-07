@@ -238,6 +238,7 @@ SEXP H5Aread_helper_STRING(hid_t attr_id, hsize_t n, SEXP Rdim, SEXP _buf, hid_t
   if (H5Tis_variable_str(dtype_id)) {
     char *bufSTR[n];
     herr_t herr = H5Aread(attr_id, mem_type_id, bufSTR );
+    if(herr < 0) { error("Error reading attribute"); }
     for (int i=0; i<n; i++) {
       SET_STRING_ELT(Rval, i, mkChar(bufSTR[i]));
       free(bufSTR[i]);
@@ -246,9 +247,7 @@ SEXP H5Aread_helper_STRING(hid_t attr_id, hsize_t n, SEXP Rdim, SEXP _buf, hid_t
     char bufSTR[n][size];
     
     herr_t herr = H5Aread(attr_id, mem_type_id, bufSTR );
-    if(herr < 0) {
-      error("Error reading attribute");
-    }
+    if(herr < 0) { error("Error reading attribute"); }
     
     char bufSTR2[n][size+1];
     for (int i=0; i<n; i++) {
@@ -463,6 +462,7 @@ SEXP _H5Awrite( SEXP _attr_id, SEXP _buf) {
     }
 
     herr_t herr = H5Awrite(attr_id, mem_type_id, buf );
+    if(herr < 0) { error("Error writing attribute"); }
     SEXP Rval;
     PROTECT(Rval = allocVector(INTSXP, 1));
     INTEGER(Rval)[0] = herr;

@@ -16,9 +16,9 @@ getDatatypeName(hid_t type) {
 /*     hid_t       super; */
 /*     hid_t       tmp_type; */
 /*     htri_t      is_vlstr=FALSE; */
-  const char  *order_s=NULL;  /* byte order string */
+  const char  *order_s;  /* byte order string */
   H5T_sign_t  sign;           /* sign scheme value */
-  const char  *sign_s=NULL;   /* sign scheme string */
+  const char  *sign_s;   /* sign scheme string */
 
   /* htri_t TRUE = H5Tequal( H5T_STD_I8LE, H5T_STD_I8LE ); */
 
