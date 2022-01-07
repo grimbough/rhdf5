@@ -2,6 +2,8 @@
 
 herr_t opAddToDumpTree( hid_t g_id, const char *name, const H5L_info_t *info, void *op_data) {
     
+    Rprintf("%s\n", name);
+    
     H5O_info_t infobuf;
     H5L_info_t Linfobuf;
     opDumpTree *data = (opDumpTree *) op_data;
