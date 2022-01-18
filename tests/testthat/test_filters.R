@@ -16,6 +16,8 @@ test_that("Tests for filters work", {
 
 test_that("Missing filters are identified", {
     
+    skip_if_not_installed("mockery")
+  
     dcpl <- H5Pcreate(type = "H5P_DATASET_CREATE")
     
     ## lots of things to mock here!
