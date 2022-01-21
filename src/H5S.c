@@ -236,7 +236,7 @@ SEXP _H5Sselect_valid( SEXP _space_id ) {
 /* herr_t H5Sselect_hyperslab(hid_t space_id, H5S_seloper_t op, const hsize_t *start, const hsize_t *stride, const hsize_t *count, const hsize_t *block ) */
 SEXP _H5Sselect_hyperslab( SEXP _space_id, SEXP _op, SEXP _start, SEXP _stride, SEXP _count, SEXP _block ) {
     hid_t space_id = STRSXP_2_HID( _space_id );
-    H5S_seloper_t op =  INTEGER(_op)[0];
+    H5S_seloper_t op =  (H5S_seloper_t) INTEGER(_op)[0];
     hsize_t start[LENGTH(_start)];
     hsize_t stride[LENGTH(_stride)];
     hsize_t count[LENGTH(_count)];
@@ -256,6 +256,9 @@ SEXP _H5Sselect_hyperslab( SEXP _space_id, SEXP _op, SEXP _start, SEXP _stride, 
     }
     
     herr_t herr = H5Sselect_hyperslab( space_id, op, start, stride, count, block );
+    if(herr < 0) {
+      error("Unable to select hyperslab\n");
+    }
 
     SEXP Rval = ScalarInteger(0);
     return Rval;
@@ -266,7 +269,7 @@ SEXP _H5Sselect_hyperslab( SEXP _space_id, SEXP _op, SEXP _start, SEXP _stride, 
  const hsize_t stride[], const hsize_t count[], const hsize_t block[] ) */
 SEXP _H5Scombine_hyperslab( SEXP _space_id, SEXP _op, SEXP _start, SEXP _stride, SEXP _count, SEXP _block ) {
   hid_t space_id = STRSXP_2_HID( _space_id );
-  H5S_seloper_t op =  INTEGER(_op)[0];
+  H5S_seloper_t op = (H5S_seloper_t) INTEGER(_op)[0];
   
   hsize_t start[LENGTH(_start)];
   hsize_t stride[LENGTH(_stride)];

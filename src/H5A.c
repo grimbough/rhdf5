@@ -196,6 +196,8 @@ SEXP H5Aread_helper_INTEGER(hid_t attr_id, hsize_t n, SEXP Rdim, SEXP _buf, hid_
           setAttrib(Rval, R_DimSymbol, Rdim);
           UNPROTECT(1);
       }
+  } else {
+      error("Unknown integer type\n");
   }
 
   return(Rval);
@@ -402,7 +404,7 @@ SEXP _H5Aread( SEXP _attr_id, SEXP _buf, SEXP _bit64conversion ) {
 /* herr_t H5Awrite(hid_t attr_id, hid_t mem_type_id, const void *buf ) */
 SEXP _H5Awrite( SEXP _attr_id, SEXP _buf) {
     hid_t attr_id = STRSXP_2_HID( _attr_id );
-    hid_t mem_type_id;
+    hid_t mem_type_id = -1;
 
     const void * buf;
     static const char* H5Ref[] = {"H5Ref", ""};

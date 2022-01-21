@@ -11,6 +11,9 @@ hsize_t H5Oget_num_attrs ( hid_t obj_id ) {
   hsize_t n=0;
   hsize_t idx=0;
   herr_t herr = H5Aiterate( obj_id, H5_INDEX_CRT_ORDER, H5_ITER_NATIVE, &idx, &opAcount, &n);
+  if(herr < 0) {
+    error("Unable to determine the number of attributes\n");
+  }
   return(n);
 }
 

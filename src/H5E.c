@@ -62,9 +62,6 @@ herr_t custom_print_cb(unsigned n, const H5E_error2_t *err_desc, void* client_da
     }
     
     return 0;
-    
-    error:
-        return -1;
 }
 
 herr_t custom_print_cb_compact(unsigned n, const H5E_error2_t *err_desc, void* client_data)
@@ -72,8 +69,7 @@ herr_t custom_print_cb_compact(unsigned n, const H5E_error2_t *err_desc, void* c
     char maj[MSG_SIZE];
     char min[MSG_SIZE];
     char cls[MSG_SIZE];
-    const int indent = 4;
-    
+
     /* Get descriptions for the major and minor error numbers */
     if(H5Eget_class_name(err_desc->cls_id, cls, MSG_SIZE)<0)
         error("test error 1");
@@ -94,9 +90,6 @@ herr_t custom_print_cb_compact(unsigned n, const H5E_error2_t *err_desc, void* c
     }
     
     return 0;
-    
-    error:
-        return -1;
 }
 
 herr_t _rhdf5PrintErrorR( hid_t estack_id, void * stream) {

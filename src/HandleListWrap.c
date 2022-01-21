@@ -160,6 +160,9 @@ SEXP _h5listOpenObjects( SEXP _file_id ) {
         anobj = *objs++;
         ot = H5Iget_type(anobj);
         status = H5Iget_name(anobj, name, 1024);
+        if(status < 0) {
+          error("Unable to get name\n");
+        }
         Rprintf(" %d: type %d, name %s\n",i,ot,name);
     }
     
