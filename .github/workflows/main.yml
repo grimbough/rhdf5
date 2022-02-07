@@ -10,16 +10,14 @@ jobs:
   R-CMD-check:
     runs-on: ${{ matrix.config.os }}
 
-    name: ${{ matrix.config.os }} (${{ matrix.config.r }})
+    name: ${{ matrix.config.os }} (${{ matrix.config.bioc-version }})
 
     strategy:
       fail-fast: false
       matrix:
         config:
-        - { os: windows-latest, r: 'devel'}
-        - { os: macOS-11,       r: 'devel'}
-        - { os: ubuntu-18.04,   r: 'devel'}
-        - { os: ubuntu-20.04,   r: 'devel'}
+          os: [ubuntu-20.04, windows-2022, macos-11]
+          bioc-version: [release, devel]
 
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
@@ -42,38 +40,21 @@ jobs:
       - name: Setup R
         uses: r-lib/actions/setup-r@v1
         with:
-          r-version: ${{ matrix.config.r }}
-          use-public-rspm: true
-          Ncpus: 2
+        
+      - name: Setup R and Bioconductor
+        uses: grimbough/bioc-actions/setup-bioc@v0
+          bioc-version: ${{ matrix.config.bioc-version }}
+          bioc-mirror: https://packagemanager.rstudio.com/bioconductor
           
       - uses: r-lib/actions/setup-pandoc@v1
           
-      - name: Set R options    
-        run: |
-          echo "options(BioC_mirror = 'https://packagemanager.rstudio.com/bioconductor')" >> ${HOME}/.Rprofile
-          cat ${HOME}/.Rprofile
-          echo ${HOME}
-      
       - name: Install dependencies (non-Windows)
         uses: r-lib/actions/setup-r-dependencies@v1
-        if: runner.os != 'Windows'
         with:
           extra-packages: |
             covr
             rcmdcheck
             
-      ## Windows is currently hanging on the step above, so we do it the old fashioned way
-      - name: Install dependencies (Windows)
-        if: runner.os == 'Windows'
-        run: |
-          options(BioC_mirror = 'https://packagemanager.rstudio.com/bioconductor')
-          install.packages(c('BiocManager', 'remotes', 'rcmdcheck', 'covr'))
-          BiocManager::install(version = 'devel', ask = FALSE, update = TRUE)
-          library(remotes)
-          toInstall <- remotes::dev_package_deps(dependencies = TRUE)
-          update(toInstall)
-        shell: Rscript {0}
-        
       - name: Session Info
         run: |
           options("BioC_mirror")
@@ -86,11 +67,6 @@ jobs:
         run: |
           Rscript -e "rcmdcheck::rcmdcheck(args = c('--no-manual'), error_on = 'warning', check_dir = 'check')"
 
-      - name: Windows check
-        if: runner.os == 'Windows'
-        run: |
-          Rscript -e "rcmdcheck::rcmdcheck(args = c('--no-manual', '--force-multiarch', '--install-args=`"--force-biarch`"'), error_on = 'warning', check_dir = 'check')"
-          
       - name: Test coverage
         if: ${{ matrix.config.os }} == 'ubuntu-20.04'
         run: |
