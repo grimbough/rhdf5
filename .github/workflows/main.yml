@@ -6,6 +6,10 @@ on:
 
 name: R-CMD-check
 
+env:
+  GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+  R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
+
 jobs:
   R-CMD-check:
     runs-on: ${{ matrix.config.os }}
@@ -16,13 +20,10 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          os: [ubuntu-20.04, windows-2022, macos-11]
-          bioc-version: [release, devel]
-
-    env:
-      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
-      R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
-      
+        - { os: windows-2022, bioc-version: 'devel', bioc-mirror: 'https://ftp.gwdg.de/pub/misc/bioconductor'}
+        - { os: macOS-11,     bioc-version: 'devel', bioc-mirror: 'https://ftp.gwdg.de/pub/misc/bioconductor'}
+        - { os: ubuntu-20.04, bioc-version: 'devel', bioc-mirror: 'https://ftp.gwdg.de/pub/misc/bioconductor'}
+        - { os: ubuntu-20.04, bioc-version: '3.14',  bioc-mirror: 'https://packagemanager.rstudio.com/bioconductor'}
     steps:
     
       ## R CMD check complains about Windows line endings without this
@@ -37,38 +38,32 @@ jobs:
           
       - uses: actions/checkout@v1
           
-      - name: Setup R
-        uses: r-lib/actions/setup-r@v1
-        with:
-        
       - name: Setup R and Bioconductor
-        uses: grimbough/bioc-actions/setup-bioc@v0
+        uses: grimbough/bioc-actions/setup-bioc@v1
+        with:
           bioc-version: ${{ matrix.config.bioc-version }}
-          bioc-mirror: https://packagemanager.rstudio.com/bioconductor
+          bioc-mirror: ${{ matrix.config.bioc-mirror }}
           
       - uses: r-lib/actions/setup-pandoc@v1
           
-      - name: Install dependencies (non-Windows)
-        uses: r-lib/actions/setup-r-dependencies@v1
+      - name: Install dependencies
+        uses: r-lib/actions/setup-r-dependencies@v2
         with:
           extra-packages: |
             covr
             rcmdcheck
             
-      - name: Session Info
-        run: |
-          options("BioC_mirror")
-          BiocManager::version()
-          sessionInfo()
-        shell: Rscript {0}
-        
-      - name: Non-windows check
-        if: runner.os != 'Windows'
-        run: |
-          Rscript -e "rcmdcheck::rcmdcheck(args = c('--no-manual'), error_on = 'warning', check_dir = 'check')"
+      - name: Bioc - Build, Install, Check
+        uses: grimbough/bioc-actions/build-install-check@v1
+
+      - name: Run BiocCheck
+        uses: grimbough/bioc-actions/run-BiocCheck@v1
+        with:
+          error-on: 'never'
+          arguments: '--no-check-bioc-help' 
 
       - name: Test coverage
-        if: ${{ matrix.config.os }} == 'ubuntu-20.04'
+        if: ${{ matrix.config.os }} == 'windows-2022'
         run: |
           covr::codecov()
         shell: Rscript {0}
