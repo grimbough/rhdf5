@@ -32,6 +32,10 @@
       https://github.com/grimbough/rhdf5/pull/101)
       \item Fixed bug where an uninitialized value was used in the C code
       underlying \code{h5dump()} potentially causing crashes.
+      \item Addressed issue in \code{h5dump()} and \code{h5ls()} that falsely 
+      declared there were duplicated groups when used on a file with external
+      links (Thanks to @acope3 for reporting this,
+      https://github.com/grimbough/rhdf5/issues/107).
     }
   }
 
