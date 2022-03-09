@@ -96,6 +96,27 @@ test_that("h5ls warns if identical groups are detected", {
     
 })
 
+test_that("h5ls doesn't report false positives with external links to groups", {
+  
+  f1 <- tempfile()
+  f2 <- tempfile()
+  h5createFile(f1)
+  h5createFile(f2)
+  h5createGroup(f1, group = "/test/")
+  h5createGroup(f2, group = "/test/")
+  h5write(1:10, file = f1, name = "/test/A")
+  h5write(1:10, file = f2, name = "/test/B")
+
+  f3 <- tempfile()
+  fid <- H5Fcreate(name = f3)
+  H5Lcreate_external(link_loc = fid, link_name = "A", target_file_name = f2, target_obj_name = "/test/")
+  H5Lcreate_external(link_loc = fid, link_name = "B", target_file_name = f3, target_obj_name = "/test/")
+  H5Fclose(fid)
+  
+  expect_silent(h5ls(f1, recursive = 1))
+  
+})
+
 ############################################################
 context("h5ls cleanup")
 ##########################################################
