@@ -78,13 +78,14 @@ void format_dimensions (H5S_class_t space_type, opObjListElement *newElement, hs
  otherwise.
  
  ************************************************************/
-int group_check (struct opObjListElement *od, haddr_t target_addr)
+int group_check (struct opObjListElement *od, haddr_t target_addr, unsigned long target_fileno)
 {
-    if (od->addr == target_addr)    /* Addresses match */
-return 1;      
-    else if (!od->prev)             /* Root group reached with no matches */
-return 0;       
-    else                            /* Recursively examine the next node */
-return group_check (od->prev, target_addr);
+    if (od->addr == target_addr && od->fileno == target_fileno) {  /* Addresses match */
+      return 1;
+    } else if (!od->prev) {            /* Root group reached with no matches */
+      return 0;       
+    } else {                          /* Recursively examine the next node */
+      return group_check (od->prev, target_addr, target_fileno);
+    }
 }
 

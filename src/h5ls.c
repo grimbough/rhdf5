@@ -24,6 +24,7 @@ herr_t opAddToObjList( hid_t g_id, const char *name, const H5L_info_t *info, voi
     strcpy(newElement->group, data->group);
     newElement->info = (*info);
     newElement->addr = infobuf.addr;
+    newElement->fileno = infobuf.fileno;
 
     hid_t oid = H5Oopen( g_id, name, H5P_DEFAULT );
     newElement->type = H5Iget_type(oid);
@@ -33,7 +34,7 @@ herr_t opAddToObjList( hid_t g_id, const char *name, const H5L_info_t *info, voi
     switch (infobuf.type) {
         case H5O_TYPE_GROUP: {
             /* check if we have an recursive loop in the hierarchy */
-            if ( data->n > 0 && group_check (data->last, infobuf.addr) ) {
+            if ( data->n > 0 && group_check (data->last, infobuf.addr, infobuf.fileno) ) {
                 warning ("Identical objects found\n");
             } else { /* otherwise create a new element in our linked list */
             
