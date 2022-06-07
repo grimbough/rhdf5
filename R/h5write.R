@@ -322,7 +322,7 @@ h5writeDataset.array <- function(obj, h5loc, name, index = NULL,
                 }
             }
             if (is.null(encoding)) {
-                encoding <- if (Encoding(obj) == "UTF-8") "UTF-8" else "ASCII"
+                encoding <- if (any(Encoding(obj) == "UTF-8")) "UTF-8" else "ASCII"
             }
         }
         if (is.null(dim(obj))) {
