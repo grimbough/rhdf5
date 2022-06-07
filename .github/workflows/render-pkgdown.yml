@@ -3,9 +3,8 @@ name: render pkgdown
 on:
   push:
     branches: 
-      - rd2roxygen
       - master
-  workflow-dispatch:
+  workflow_dispatch:
 
 jobs:
   render:
