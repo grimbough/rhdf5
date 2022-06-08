@@ -1,4 +1,8 @@
 reference:
+- title: "About rhdf5"
+- contents:
+  - rhdf5
+  
 - title: "High level functions"
   desc: >
     Wrappers around several low-level functions
@@ -106,3 +110,7 @@ reference:
 - title: "HDF5 Filters"
 - contents: 
   - starts_with("H5Z")
+
+- title: "H5 Library Functions"
+- contents: 
+  - H5functions
