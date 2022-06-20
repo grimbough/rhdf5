@@ -53,6 +53,7 @@ H5Lcreate_external <- function( target_file_name, target_obj_name, link_loc, lin
 #'   location identifier (file or group).
 #' @param name The name of the link to be checked
 #' 
+#' @importFrom utils head
 #' @export
 H5Lexists <- function( h5loc, name ) {
   h5checktype(h5loc, "loc")
