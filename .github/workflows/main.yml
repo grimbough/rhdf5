@@ -23,7 +23,7 @@ jobs:
         - { os: windows-2022, bioc-version: 'devel', bioc-mirror: 'https://ftp.gwdg.de/pub/misc/bioconductor'}
         - { os: macOS-11,     bioc-version: 'devel', bioc-mirror: 'https://ftp.gwdg.de/pub/misc/bioconductor'}
         - { os: ubuntu-20.04, bioc-version: 'devel', bioc-mirror: 'https://ftp.gwdg.de/pub/misc/bioconductor'}
-        - { os: ubuntu-20.04, bioc-version: '3.14',  bioc-mirror: 'https://packagemanager.rstudio.com/bioconductor'}
+        - { os: ubuntu-20.04, bioc-version: 'release',  bioc-mirror: 'https://packagemanager.rstudio.com/bioconductor'}
     steps:
     
       ## R CMD check complains about Windows line endings without this
@@ -63,7 +63,7 @@ jobs:
           arguments: '--no-check-bioc-help' 
 
       - name: Test coverage
-        if: ${{ matrix.config.os }} == 'windows-2022'
+        if: runner.os == 'Windows'
         run: |
           covr::codecov()
         shell: Rscript {0}
