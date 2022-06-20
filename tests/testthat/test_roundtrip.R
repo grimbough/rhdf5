@@ -46,3 +46,12 @@ test_that("character vectors survive a round trip", {
     expect_equivalent(words, back_words)
     
 })
+
+test_that("UTF-8 strings are preserved", {
+  
+  input <- "α ≤ 0.1"
+  expect_silent(h5write(obj = input, file = h5file, name = 'utf8'))
+  expect_silent(output <- h5read(file = h5file, name = "utf8"))
+  expect_equivalent(input, output)
+  expect_equal(Encoding(output), "UTF-8")
+})

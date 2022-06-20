@@ -28,4 +28,40 @@ test_that("Filter information can be retrieved", {
   
 })
 
+test_that("UTF8 strings can be used for fill values", {
+  
+  fill_value <- "αααα-test"
+  
+  tf <- tempfile(fileext = ".h5")
+  fid <- H5Fcreate(tf)
+  sid <- H5Screate_simple(dims = 1)
+  tid <- H5Tcopy("H5T_C_S1")
+  H5Tset_size(tid, size = nchar(fill_value, type = "bytes")+1)
+  H5Tset_cset(tid, "UTF-8")
+  
+  pid <- H5Pcreate(type = "H5P_DATASET_CREATE")
+  expect_silent(H5Pset_fill_value(pid, fill_value))
+  
+  did1 <- H5Dcreate(h5loc = fid, name = "/strings", dtype_id = tid, dcpl = pid, h5space = sid)
+
+  H5Dclose(did1)
+  H5Pclose(pid)
+  H5Sclose(sid)
+  H5Fclose(fid)
+  
+  expect_equivalent(h5read(tf, name = "/strings"), fill_value)
+  
+})
+
+test_that("H5P error handling works", {
+  
+  expect_silent(pid <- H5Pcreate("H5P_DATASET_CREATE"))
+  
+  expect_error(H5Pset_obj_track_times(pid, track_times = "TEST"))
+  expect_error(H5Pset_obj_track_times(pid, track_times = 1L))
+  expect_error(H5Pset_obj_track_times(pid, track_times = NA))
+  
+  H5Pclose(pid)
+})
+
 H5Pclose(dcpl)
