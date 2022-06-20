@@ -89,10 +89,8 @@ NULL
 #' @rdname H5T_cset
 #' @export
 H5Tset_cset <- function( dtype_id, cset = "ASCII") {
-  
-  
-  
-  cset_int <- switch(cset, 
+
+    cset_int <- switch(cset, 
                      "ASCII" = 0L, 
                      "UTF8" = 1L,
                      "UTF-8" = 1L, 

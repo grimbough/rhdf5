@@ -66,7 +66,7 @@ h5writeAttribute.array <- function(attr, h5obj, name, encoding = NULL, cset=NULL
 
   size <- NULL
   if (storage.mode(attr) == "character" && !variableLengthString) {
-    size <- max(nchar(attr))+1
+    size <- max(nchar(attr, type = "bytes"))+1
   }
 
   if (H5Aexists(h5obj, name)) {

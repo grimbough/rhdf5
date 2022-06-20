@@ -309,15 +309,20 @@ h5writeDataset.array <- function(obj, h5loc, name, index = NULL,
 
     exists <- try( { H5Lexists(h5loc, name) } )
     if (!exists) {
-        if (storage.mode(obj) == "character" && !variableLengthString && is.null(size)) {
-            if (length(obj) > 0) {
-                size <- max(nchar(obj), na.rm = TRUE)
-                ## if any NA, the minimum string length is 2
-                if(any(is.na(obj)) && size < 2) { size <- 2 }
-                ## empty string gives size 0, and errors
-                if(size == 0) { size <- 1 }
-            } else {
-                size <- 1
+        if (storage.mode(obj) == "character") {
+            if(!variableLengthString && is.null(size)) {
+                if (length(obj) > 0) {
+                    size <- max(nchar(obj, type = "bytes"), na.rm = TRUE)
+                    ## if any NA, the minimum string length is 2
+                    if(any(is.na(obj)) && size < 2) { size <- 2 }
+                    ## empty string gives size 0, and errors
+                    if(size == 0) { size <- 1 }
+                } else {
+                    size <- 1
+                }
+            }
+            if (is.null(encoding)) {
+                encoding <- if (any(Encoding(obj) == "UTF-8")) "UTF-8" else "ASCII"
             }
         }
         if (is.null(dim(obj))) {

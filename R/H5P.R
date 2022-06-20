@@ -445,7 +445,7 @@ H5Pset_deflate <- function( h5plist, level ) {
 #'
 #' @param h5plist An object of class [H5IdComponent-class] representing a
 #'   dataset creation property list.
-#' @param value The default fill value of the dataset.
+#' @param value The default fill value of the dataset. A vector of length 1.
 #' 
 #' @seealso [H5P_fill_time],[H5Pfill_value_defined]
 #'
@@ -455,6 +455,11 @@ NULL
 #' @rdname H5P_fill_value
 #' @export
 H5Pset_fill_value <- function( h5plist, value ) {
+  
+  if(length(value) > 1L) {
+    stop("'value' must be a vector of length 1.")
+  }
+  
   h5checktypeAndPLC(h5plist, "H5P_DATASET_CREATE")
   storage.mode = storage.mode(value)
   tid <- switch(storage.mode,
@@ -463,8 +468,11 @@ H5Pset_fill_value <- function( h5plist, value ) {
                 logical = h5constants$H5T["H5T_STD_I8LE"],
                 character = {
                     tid <- H5Tcopy("H5T_C_S1")
-                    size <- nchar(value)+1
+                    size <- nchar(value, type = "bytes")
                     H5Tset_size(tid, size)
+                    H5Tset_strpad(tid, strpad = "NULLPAD")
+                    if(Encoding(value) == "UTF-8") { cset <- "UTF-8" } else { cset <- "ASCII" }
+                    H5Tset_cset(tid, cset = cset)
                     tid
                 },
                 { stop("datatype ",storage.mode," not supported. Try 'double', 'integer', or 'character'.") } )
