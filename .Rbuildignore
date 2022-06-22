@@ -7,3 +7,4 @@ BinaryFiles
 .gitignore
 .BBSoptions
 .github
+^\.github$
