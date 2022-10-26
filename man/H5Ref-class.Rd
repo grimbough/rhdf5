@@ -38,18 +38,18 @@ that references of different types cannot be combined in a single object.
 }
 \section{Methods (by generic)}{
 \itemize{
-\item \code{show}: Print details of the object to screen.
+\item \code{show(H5Ref)}: Print details of the object to screen.
 
-\item \code{length}: Return the number of references stored in an \code{H5Ref}
+\item \code{length(H5Ref)}: Return the number of references stored in an \code{H5Ref}
 object.
 
-\item \code{c}: Combine two or more \code{H5Ref} objects.  Objects must all
+\item \code{c(H5Ref)}: Combine two or more \code{H5Ref} objects.  Objects must all
 contain the same type of reference, either \code{H5R_OBJECT} or
 \code{H5R_DATASET_REFERENCE}.
 
 \item \code{[}: Subset an \code{H5Ref} object.
-}}
 
+}}
 \section{Slots}{
 
 \describe{
