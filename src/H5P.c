@@ -894,7 +894,6 @@ SEXP _H5Pget_char_encoding( SEXP _plist_id ) {
 
 /* herr_t H5Pset_create_intermediate_group(hid_t lcpl_id, unsigned crt_intermed_group) */
 SEXP _H5Pset_create_intermediate_group( SEXP _lcpl_id, SEXP _crt_intermed_group ) {
-    //hid_t lcpl_id = INTEGER(_lcpl_id)[0];
     hid_t lcpl_id = STRSXP_2_HID( _lcpl_id );
     unsigned crt_intermed_group = (unsigned int)INTEGER(_crt_intermed_group)[0];
     herr_t herr = H5Pset_create_intermediate_group(lcpl_id, crt_intermed_group);
@@ -904,7 +903,6 @@ SEXP _H5Pset_create_intermediate_group( SEXP _lcpl_id, SEXP _crt_intermed_group 
 
 /* herr_t H5Pget_create_intermediate_group(hid_t lcpl_id, unsigned * crt_intermed_group) */
 SEXP _H5Pget_create_intermediate_group( SEXP _lcpl_id ) {
-    //hid_t lcpl_id = INTEGER(_lcpl_id)[0];
     hid_t lcpl_id = STRSXP_2_HID( _lcpl_id );
     unsigned crt_intermed_group[1];
     herr_t herr = H5Pget_create_intermediate_group(lcpl_id, crt_intermed_group);

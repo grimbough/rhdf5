@@ -336,13 +336,45 @@ H5Pget_char_encoding <- function( h5plist ) {
   res
 }
 
-H5Pset_create_intermediate_group <- function( h5plist, crt_intermed_group ) {
+#' Get and set whether to create missing intermediate groups
+#'
+#' @param h5plist An object of class [H5IdComponent-class] representing a link
+#'   creation property list.
+#' @param create_groups A logical of length 1 specifying whether missing
+#'   groups should be created when a new object is created.  Default is `TRUE`.
+#'   
+#' @examples  
+#' pid <- H5Pcreate("H5P_LINK_CREATE")
+#' 
+#' ## by default intermediate groups are not created
+#' H5Pget_create_intermediate_group( pid )
+#' 
+#' ## Change the setting so groups will be created
+#' 
+#' H5Pget_create_intermediate_group( pid )
+#' 
+#' ## tidy up
+#' H5Pclose(pid)
+#'
+#' @name H5P_create_intermediate_group
+NULL
+
+#' @rdname H5P_create_intermediate_group 
+#' @export
+H5Pset_create_intermediate_group <- function( h5plist, create_groups = TRUE ) {
+  
   h5checktypeAndPLC(h5plist, "H5P_LINK_CREATE")
-  crt_intermed_group = as.integer(crt_intermed_group)
+  if(!is.logical(create_groups)) {
+    stop("The 'create_groups' argument should be either TRUE or FALSE")
+  }
+  
+  crt_intermed_group = as.integer(create_groups)
   res <- .Call("_H5Pset_create_intermediate_group", h5plist@ID, crt_intermed_group, PACKAGE='rhdf5')
   invisible(res)
 }
 
+#' @rdname H5P_create_intermediate_group 
+#' @export
 H5Pget_create_intermediate_group <- function( h5plist ) {
   h5checktypeAndPLC(h5plist, "H5P_LINK_CREATE")
   res <- .Call("_H5Pget_create_intermediate_group", h5plist@ID, PACKAGE='rhdf5')
