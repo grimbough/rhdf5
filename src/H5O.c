@@ -95,6 +95,26 @@ SEXP _H5Olink( SEXP _object_id, SEXP _new_loc_id, SEXP _new_link_name, SEXP _lcp
   return Rval;
 }
 
+/* herr_t H5Ocopy	(hid_t src_loc_id, const char *src_name, hid_t dst_loc_id, const char *dst_name, hid_t ocpypl_id, hid_t lcpl_id) */
+SEXP _H5Ocopy( SEXP _src_loc_id, SEXP _src_name, SEXP _dest_loc_id, SEXP _dest_name, SEXP _ocpypl_id, SEXP _lcpl_id ) {
+  
+  hid_t src_loc_id = STRSXP_2_HID( _src_loc_id );
+  const char *src_name = CHAR(STRING_ELT(_src_name, 0));
+  
+  hid_t dest_loc_id = STRSXP_2_HID( _dest_loc_id );
+  const char *dest_name = CHAR(STRING_ELT(_dest_name, 0));
+  
+  hid_t ocpypl_id = STRSXP_2_HID( _ocpypl_id );
+  hid_t lcpl_id = STRSXP_2_HID( _lcpl_id );
+  
+  herr_t herr = H5Ocopy(src_loc_id, src_name, dest_loc_id, dest_name, ocpypl_id, lcpl_id);
+  
+  SEXP Rval;
+  PROTECT(Rval = allocVector(INTSXP, 1));
+  INTEGER(Rval)[0] = herr;
+  UNPROTECT(1);
+  return Rval;
+}
 
 /* herr_t H5Oget_info( hid_t object_id, H5O_info_t *object_info ) */
 /*
