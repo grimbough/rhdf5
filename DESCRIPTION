@@ -1,8 +1,8 @@
 Package: rhdf5
 Type: Package
 Title: R Interface to HDF5
-Version: 2.41.1
-Date: 2022-06-20
+Version: 2.41.2
+Date: 2022-10-26
 Authors@R: c(person("Bernd", "Fischer", role = c("aut")), 
         person("Mike", "Smith", 
             role=c("aut", "cre"), 
@@ -34,4 +34,4 @@ SystemRequirements: GNU make
 biocViews: Infrastructure, DataImport
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.0
+RoxygenNote: 7.2.1
