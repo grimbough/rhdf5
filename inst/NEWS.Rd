@@ -1,6 +1,26 @@
 \name{NEWS}
 \title{News for Package 'rhdf5'}
 
+\section{Changes in version 2.42.0}{
+
+  \subsection{CHANGES}{
+    \itemize{
+      \item Function \code{H5Ocopy()} has been included.
+      \item UTF-8 encoded character datsets will be marked as having the same
+      encoding when read into an R session.
+    }
+  }
+
+  \subsection{BUG FIXES}{
+    \itemize{
+      \item \code{h5write()} no longer truncates multibyte UTF-8 strings 
+      (Thanks to Aaron Lun @LTLA for reporting this and providing a fix,
+      https://github.com/grimbough/rhdf5/issues/111). 
+    }
+  }
+
+}
+
 \section{Changes in version 2.40.0}{
 
   \subsection{NEW FEATURES}{
