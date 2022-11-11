@@ -2,19 +2,31 @@
 % Please edit documentation in R/H5.R
 \name{h5closeAll}
 \alias{h5closeAll}
-\title{Close all open HDF5 handles}
+\title{Close open HDF5 handles}
 \usage{
-h5closeAll()
+h5closeAll(...)
+}
+\arguments{
+\item{...}{One or more objects of class \linkS4class{H5IdComponent} which should be
+closed.  If nothing is provided to the function, all open handles will be
+closed.}
 }
 \value{
-Doesn't return anything. Called for the side-effect of closing
-any open HDF5 handles.
+Doesn't return anything. Called for the side-effect of closing open
+HDF5 handles.
 }
 \description{
-Occasionally references to HDF5 files, groups, datasets etc can be created
-and not closed correctly.  This function identifies all open handles and
-closes them.  It replaces the functionality previously supplied by
-\code{\link[=H5close]{H5close()}}.
+This functions can be used in two ways.  Firstly, it can be passed one or
+more \linkS4class{H5IdComponent} objects and it'll will try to close all of them
+regardless of the whether they represent a file, group, dataset etc.  This
+can be easier than making multiple calls to \code{\link[=H5Fclose]{H5Fclose()}}, \code{\link[=H5Gclose]{H5Gclose()}}, etc.
+}
+\details{
+Secondly, cccasionally references to HDF5 files, groups, datasets etc can be
+created and not closed correctly.  Maybe because a function stopped before
+getting to the close statement, or the open handle was not assigned to an R
+variable.  If no arguments are provide this function identifies all open
+handles and closes them.
 }
 \examples{
 

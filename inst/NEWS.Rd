@@ -8,6 +8,8 @@
       \item Function \code{H5Ocopy()} has been included.
       \item UTF-8 encoded character datsets will be marked as having the same
       encoding when read into an R session.
+      \item h5closeAll() now accepts objects as arguments to allow closing
+      specific HDF5 identifiers.
     }
   }
 
