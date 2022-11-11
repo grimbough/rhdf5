@@ -89,7 +89,7 @@ If there is a easily described pattern to the regions you want to access e.g. a 
 
 ## Irregular selections
 
-However, things get a little more tricky if you want an irregular selection of data, which is actually a pretty common operation.  For example, imagine wanting to select a random set of columns from our data.  If there isn't a regular pattern to the columns you want to select, what are the options?  Perhaps the most obvious thing we can try is to skip the use of either `index` or the hyperslab parameters and use 10,000 separate read operations instead.  Below we choose a random selection of columns and then apply the function `f1()` to each in turn.
+However, things get a little more tricky if you want an irregular selection of data, which is actually a pretty common operation.  For example, imagine wanting to select a random set of columns from our data.  If there isn't a regular pattern to the columns you want to select, what are the options?  Perhaps the most obvious thing we can try is to skip the use of either `index` or the hyperslab parameters and use 10,000 separate read operations instead.  Below we choose a random selection of columns^[in the interested of time we actually select only 1,000 columns here] and then apply the function `f1()` to each in turn.
 
 ```{r singleReads, cache = TRUE}
 columns <- sample(x = seq_len(20000), size = 10000, replace = FALSE) %>%
@@ -106,8 +106,8 @@ system.time(res4 <- vapply(X = columns, FUN = f1,
 
 This is clearly a terrible idea, it takes ages!  For reference, using the `index` argument with this set of columns takes `r system.time(h5read(file = ex_file, name = "counts", index = list(NULL, columns)))['elapsed']` seconds.  This poor performance is driven by two things:
 
-1. Our dataset was created as a single chunk.  This means for each access the entire dataset is read from disk, which we end up doing 10,000 times.
-2. *rhdf5* does a lot of validation on the objects that are passed around internally.  Within a call to `h5read()` HDF5 identifiers are created for the file, dataset, file dataspace, and memory dataspace, each of which are checked for validity.  This overhead is negligible when only one call to `h5read()` is made, but becomes significant when we make 10,000 separate calls.
+1. Our dataset was created as a single chunk.  This means for each access the entire dataset is read from disk, which we end up doing thousands of times.
+2. *rhdf5* does a lot of validation on the objects that are passed around internally.  Within a call to `h5read()` HDF5 identifiers are created for the file, dataset, file dataspace, and memory dataspace, each of which are checked for validity.  This overhead is negligible when only one call to `h5read()` is made, but becomes significant when we make thousands of separate calls.
 
 There's not much more you can do if the dataset is not chunked appropriately, and using the `index` argument is reasonable.  However storing data in this format defeats one of HDF5's key utilities, namely rapid random access.  As such it's probably fairly rare to encounter datasets that aren't chunked in a more meaningful manner.  With this in mind we'll create a new dataset in our file, based on the same matrix but this time split into 100 $\times$ 100 chunks. 
 
@@ -138,20 +138,23 @@ system.time(f2())
 ```
 
 ```{r benchmark, echo = FALSE, cache = TRUE}
-bm <- microbenchmark::microbenchmark(
+bm <- bench::mark(
   f2(10), f2(25), f2(50), f2(100), 
   f2(250), f2(500), f2(1000), 
   f2(2000), f2(5000), f2(10000),
-  times = 3
-) %>% mutate(block_size = gsub(".*\\(([0-9]+)\\)", "\\1", expr) 
-             %>% as.integer(),
-             time = time / 1e9)
+  iterations = 3, check = FALSE, time_unit = "s", memory = FALSE, filter_gc = FALSE
+)
+
+bm2 <- data.frame(block_size = gsub(".*\\(([0-9]+)\\)", "\\1", bm$expression) |>
+                    as.integer() |>
+                    rep(each = 3), 
+                  time = unlist(bm$time))
 ```
 
-We can see this has a significant effect, although it's still an order of magnitude slower than when we were dealing with regularly spaced subsets.  The efficiency here will vary based on a number of factors including the size of the dataset chunks and the sparsity of the column index, and you varying the `block_size` argument will produce differing performances.  The plot below shows the timings achived by providing a selection of values to `block_size`.  It suggests the optimal parameter in this case is probably a block size of `r bm %>% arrange(time) %>% slice(1) %>% .$block_size`, which took `r bm %>% arrange(time) %>% slice(1) %>% .$time %>% round(2)` seconds - noticeably faster than when passing all columns to the `index` argument in a single call.
+We can see this has a significant effect, although it's still an order of magnitude slower than when we were dealing with regularly spaced subsets.  The efficiency here will vary based on a number of factors including the size of the dataset chunks and the sparsity of the column index, and you varying the `block_size` argument will produce differing performances.  The plot below shows the timings achived by providing a selection of values to `block_size`.  It suggests the optimal parameter in this case is probably a block size of `r bm2 %>% arrange(time) %>% slice(1) %>% .$block_size`, which took `r bm2 %>% arrange(time) %>% slice(1) %>% .$time %>% round(2)` seconds - noticeably faster than when passing all columns to the `index` argument in a single call.
 
 ```{r, echo = FALSE, fig.width=6, fig.height=3, fig.wide = TRUE}
-ggplot(bm, aes(x = block_size, y = time)) + 
+ggplot(bm2, aes(x = block_size, y = time)) + 
   geom_point() + 
   scale_x_log10() +
   theme_bw() + 
@@ -197,7 +200,10 @@ bm <- bench::mark(
   iterations = 3, check = FALSE, time_unit = "s", memory = FALSE, filter_gc = FALSE
 )
 
-bm2 <- data.frame(n = rep(as.integer(gsub(".*\\(([0-9]+)\\)", "\\1", bm2$expression)), each = 3), time = unlist(bm2$time))
+bm2 <- data.frame(n = gsub(".*\\(([0-9]+)\\)", "\\1", bm$expression) |>
+                            as.integer() |>
+                            rep(each = 3), 
+                  time = unlist(bm$time))
 
 ggplot(bm2,aes(x = n, y = time)) +
   geom_point() + 
@@ -210,68 +216,8 @@ ggplot(bm2,aes(x = n, y = time)) +
 
 ## Summary
 
-Efficiently extracting arbitrary subsets of a HDF5 dataset with *rhdf5* is a balancing act between the number of hyperslab unions, the number of calls to `h5read()`, and the number of times a chunk is read. For a (mostly) contiguous subset using the `index` argument is sufficient, while for regularly spaced but disjoint subsets the hyperslab selection parameters offer an efficient, if slightly more complex, alternative.  Otherwise finding the optimal strategy may involve some experimentation in a similar fashion to we have seen above. 
+Efficiently extracting arbitrary subsets of a HDF5 dataset with *rhdf5* is a balancing act between the number of hyperslab unions, the number of calls to `h5read()`, and the number of times a chunk is read. Many of the lessons learnt will creating this document have been incorporated into the `h5read()` function.  Internally, this function attempts to find the balance by looking for patterns in the data selection requested, and minimises the number of hyperslab unions and read operations required to extract the requested data.
 
-
-<!--
-```{r, echo = FALSE, eval = FALSE}
-h5createDataset(file = ex_file, dataset = "counts_chunked", dims = dim(m1),
-                storage.mode = "integer", chunk = c(100,1), level = 6)
-h5write(obj = m1, file = ex_file, name = "counts_chunked")
-f2 <- function(cols) { h5read(file = ex_file, name = 'counts_chunked', index = list(NULL, cols))}
-system.time(res5 <- vapply(columns, f2, integer(length = 100)))
-```
-
-```{r, echo = FALSE, eval = FALSE}
-h5createDataset(file = ex_file, dataset = "counts_chunked_100", dims = dim(m1),
-                storage.mode = "integer", chunk = c(100,100), level = 6)
-h5write(obj = m1, file = ex_file, name = "counts_chunked_100")
-
-f2 <- function(col, fid, dapl, did, sid, mem_sid) { 
-    size <- H5Sselect_index(h5space = sid, index = list(NULL, col))
-    res <- H5Dread(did, sid, mem_sid)
-    res
-}
-
-fid <- H5Fopen(ex_file)
-dapl <- H5Pcreate("H5P_DATASET_ACCESS")
-did <- H5Dopen(h5loc = fid, name = "counts", dapl = dapl)
-sid <- H5Dget_space(h5dataset = did)
-mem_sid <- H5Screate_simple(c(100,1))
-system.time(res5 <- vapply(columns, f2, integer(length = 100), fid, dapl, did, sid, mem_sid))
-H5Sclose(sid)
-H5Sclose(mem_sid)
-H5Pclose(dapl)
-H5Dclose(did)
-H5Fclose(fid)
-```
-
-```{r, echo = FALSE, eval = FALSE}
-h5createDataset(file = ex_file, dataset = "counts_chunked", dims = dim(m1),
-                storage.mode = "integer", chunk = c(100,1), level = 6)
-h5write(obj = m1, file = ex_file, name = "counts_chunked")
-
-f2 <- function(col, fid, dapl, did) { 
-    sid <- .Call("_H5Dget_space", did@ID, PACKAGE = "rhdf5")
-    #sid <- H5Dget_space(did)
-    mem_sid <- .Call("_H5Screate_simple", c(100,1), c(100,1), PACKAGE='rhdf5')
-    .Call("_H5Sselect_index", sid, list(col-1,0), list(1,100), PACKAGE='rhdf5')
-    res <- .Call("_H5Dread", did@ID, sid, mem_sid, NULL, TRUE, 0L, FALSE, FALSE, PACKAGE='rhdf5')
-    invisible(.Call("_H5Sclose", sid, PACKAGE='rhdf5'))
-    #H5Sclose(sid)
-    invisible(.Call("_H5Sclose", mem_sid, PACKAGE='rhdf5'))
-    res
-}
-
-fid <- H5Fopen(ex_file)
-dapl <- H5Pcreate("H5P_DATASET_ACCESS")
-did <- H5Dopen(h5loc = fid, name = "counts_chunked", dapl = dapl)
-system.time(res5 <- vapply(columns, f2, double(length = 100), fid, dapl, did))
-H5Pclose(dapl)
-H5Dclose(did)
-H5Fclose(fid)
-```
--->
 
 # Writing in parallel
 
@@ -386,7 +332,7 @@ split_and_gather <- function(output_file, input_dsets, BPPARAM = NULL) {
 
 An example of calling this using two cores on your local machine is: 
 
-```{r}
+```{r, eval = FALSE}
 split_and_gather(tempfile(), input_dsets = dsets,
                  BPPARAM = MulticoreParam(workers = 2))
 ```
@@ -407,7 +353,7 @@ bench_results <- bench::mark(
 bench_results |> select(expression, min, median)
 ```
 
-We can see from our benchmark results that there is some performance improvement to be achieved by using the parallel approach.  Based on the median times of out three iterations using two cores sees an speedup of `round(bench_results$median[1] / bench_results$median[3], 2)` and `round(bench_results$median[1] / bench_results$median[4], 1)` with 4 cores.  This isn't quite linear, presumably be cause there are overheads involved both in using a two-step process and initialising the parallel workers, but it is a noticable improvement.
+We can see from our benchmark results that there is some performance improvement to be achieved by using the parallel approach.  Based on the median times of out three iterations using two cores sees an speedup of `r round(bench_results$median[1] / bench_results$median[3], 2)` and `r round(bench_results$median[1] / bench_results$median[4], 1)` with 4 cores.  This isn't quite linear, presumably be cause there are overheads involved both in using a two-step process and initialising the parallel workers, but it is a noticeable improvement.
 
 # Session info {.unnumbered}
 
