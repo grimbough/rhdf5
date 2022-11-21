@@ -21,9 +21,12 @@ editor_options:
 ---
 
 ```{r setup, echo = FALSE, include=FALSE}
+set.seed(1234)
+
 library(rhdf5)
 library(dplyr)
 library(ggplot2)
+library(BiocParallel)
 ```
 
 # Introduction
@@ -62,11 +65,11 @@ system.time(
 )
 ```
 
-As we can see this is massively slower than the previous example.  This is because creating unions of hyperslabs is currently very slow in HDF5 (see [Union of non-consecutive hyperslabs is very slow](https://forum.hdfgroup.org/t/union-of-non-consecutive-hyperslabs-is-very-slow/5062) for another report of this behaviour), with the performance penalty increasing exponentially relative to the number of unions.  When we use the `index` argument *rhdf5* creates a hyperslab for each disjoint set of values we want to extract and then merges them. In our first example this only require the creation of a single 100 $\times$ 10,000 hyperslab, where as in the second case we require 10,000 hyperslabs of dimension 100 $\times$ 1 and 9,999 merge operations.
+We can see this is marginally slower, because there's a small overhead in selecting this disjoint set of columns, but it's only marginal and using the `index` argument looks sufficient.
 
 ## Using hyperslab selections
 
-If there is a regular pattern to the regions you want to access, then it is likely you could also apply use HDF5's hyperslab selection method ^[The parameters for defining hyperslab selection `start`, `stride`, `block`, & `count` are not particularly intuitive if you are used to R's index selection methods.  More examples discussing how to specify them can be found at [www.hdfgroup.org](https://portal.hdfgroup.org/display/HDF5/Reading+From+or+Writing+To+a+Subset+of+a+Dataset).  The following code defines the parameters to select every other column, the same as in our previous example.
+If you're new to R, but have experience with HDF5 you might be more familiar with using HDF5's hyperslab selection method^[The parameters for defining hyperslab selection `start`, `stride`, `block`, & `count` are not particularly intuitive if you are used to R's index selection methods.  More examples discussing how to specify them can be found at [www.hdfgroup.org](https://portal.hdfgroup.org/display/HDF5/Reading+From+or+Writing+To+a+Subset+of+a+Dataset).  The following code defines the parameters to select every other column, the same as in our previous example.
 
 ```{r extract3, echo = TRUE}
 start <- c(1,1)
@@ -80,11 +83,93 @@ system.time(
 identical(res2, res3)
 ```
 
-This is clearly significantly quicker than using the `index` argument in the example, and the call to `identical()` confirms we're returning the same data.
+This runs in a similar time to when we used the `index` argument in the example above, and the call to `identical()` confirms we're returning the same data.  In fact, under the hood, *rhdf5* converts the `index` argument into `start`, `stride`, `block`, & `count` before accessing the file, which is why the performance is so similar. 
 
-*rhdf5* is sophisticated enough to combine consecutive columns into a single call, so selecting completely disjoint alternative columns represents a worst case scenario.  The impact would be far less if, for example, we wanted to extract columns 1 - 5,000 and 6,001 - 11,000.  In that scenario it would probably not be noticeably beneficial to move away from using the `index` argument, but for less contiguous selections making use of the hyperslab selection parameters can be extremely beneficial.
+If there is a easily described pattern to the regions you want to access e.g. a single block or a regular spacing, then either of these approaches is effective.
 
-```{r, eval = TRUE, echo = FALSE, fig.width=6, fig.height=3, fig.wide = TRUE}
+## Irregular selections
+
+However, things get a little more tricky if you want an irregular selection of data, which is actually a pretty common operation.  For example, imagine wanting to select a random set of columns from our data.  If there isn't a regular pattern to the columns you want to select, what are the options?  Perhaps the most obvious thing we can try is to skip the use of either `index` or the hyperslab parameters and use 10,000 separate read operations instead.  Below we choose a random selection of columns^[in the interested of time we actually select only 1,000 columns here] and then apply the function `f1()` to each in turn.
+
+```{r singleReads, cache = TRUE}
+columns <- sample(x = seq_len(20000), size = 10000, replace = FALSE) %>%
+  sort()
+
+f1 <- function(cols, name) { 
+  h5read(file = ex_file, name = name, 
+         index = list(NULL, cols))
+  }
+system.time(res4 <- vapply(X = columns, FUN = f1, 
+                           FUN.VALUE = integer(length = 100), 
+                           name = 'counts'))
+```
+
+This is clearly a terrible idea, it takes ages!  For reference, using the `index` argument with this set of columns takes `r system.time(h5read(file = ex_file, name = "counts", index = list(NULL, columns)))['elapsed']` seconds.  This poor performance is driven by two things:
+
+1. Our dataset was created as a single chunk.  This means for each access the entire dataset is read from disk, which we end up doing thousands of times.
+2. *rhdf5* does a lot of validation on the objects that are passed around internally.  Within a call to `h5read()` HDF5 identifiers are created for the file, dataset, file dataspace, and memory dataspace, each of which are checked for validity.  This overhead is negligible when only one call to `h5read()` is made, but becomes significant when we make thousands of separate calls.
+
+There's not much more you can do if the dataset is not chunked appropriately, and using the `index` argument is reasonable.  However storing data in this format defeats one of HDF5's key utilities, namely rapid random access.  As such it's probably fairly rare to encounter datasets that aren't chunked in a more meaningful manner.  With this in mind we'll create a new dataset in our file, based on the same matrix but this time split into 100 $\times$ 100 chunks. 
+
+```{r createChunked, echo = TRUE, eval = TRUE, results='hide'}
+h5createDataset(file = ex_file, dataset = "counts_chunked", 
+                dims = dim(m1), storage.mode = "integer", 
+                chunk = c(100,100), level = 6)
+h5write(obj = m1, file = ex_file, name = "counts_chunked")
+```
+
+If we rerun the same code, but reading from the chunked datasets we get an idea for how much time is wasted extracting the entire dataset over and over.
+
+```{r read_chunked, eval = TRUE}
+system.time(res5 <- vapply(X = columns, FUN = f1, 
+                           FUN.VALUE = integer(length = 100), 
+                           name = 'counts_chunked'))
+```
+
+This is still quite slow, and the remaining time is being spent on the overheads associated with multiple calls to `h5read()`.  To reduce these the function `f2()`^[This is not the greatest function ever, things like the file name are hardcoded out of sight, but it illustrates the technique.] defined below splits the list of columns we want to return into sets grouped by the parameter `block_size`.  In the default case this means any columns between 1 & 100 will be placed together, then any between 101 & 200, etc.  We then `lapply` our previous `f1()` function over these groups.  The effect here is to reduce the number of calls to `h5read()`, while keeping the number of hyperslab unions down by not having too many columns in any one call.
+
+```{r}
+f2 <- function(block_size = 100) {
+  cols_grouped <- split(columns,  (columns-1) %/% block_size)
+  res <-  lapply(cols_grouped, f1, name = 'counts_chunked') %>%
+    do.call('cbind', .)
+}
+system.time(f2())
+```
+
+```{r benchmark, echo = FALSE, cache = TRUE}
+bm <- bench::mark(
+  f2(10), f2(25), f2(50), f2(100), 
+  f2(250), f2(500), f2(1000), 
+  f2(2000), f2(5000), f2(10000),
+  iterations = 3, check = FALSE, time_unit = "s", memory = FALSE, filter_gc = FALSE
+)
+
+bm2 <- data.frame(block_size = gsub(".*\\(([0-9]+)\\)", "\\1", bm$expression) |>
+                    as.integer() |>
+                    rep(each = 3), 
+                  time = unlist(bm$time))
+```
+
+We can see this has a significant effect, although it's still an order of magnitude slower than when we were dealing with regularly spaced subsets.  The efficiency here will vary based on a number of factors including the size of the dataset chunks and the sparsity of the column index, and you varying the `block_size` argument will produce differing performances.  The plot below shows the timings achived by providing a selection of values to `block_size`.  It suggests the optimal parameter in this case is probably a block size of `r bm2 %>% arrange(time) %>% slice(1) %>% .$block_size`, which took `r bm2 %>% arrange(time) %>% slice(1) %>% .$time %>% round(2)` seconds - noticeably faster than when passing all columns to the `index` argument in a single call.
+
+```{r, echo = FALSE, fig.width=6, fig.height=3, fig.wide = TRUE}
+ggplot(bm2, aes(x = block_size, y = time)) + 
+  geom_point() + 
+  scale_x_log10() +
+  theme_bw() + 
+  ylab('time (seconds)')
+```
+
+### Using hyperslab selection tools
+
+If we were stuck with the single-chunk dataset and want to minimise the number of read operations, it's necessary to create larger selections than the single column approach used above.  We could again consider using the HDF5 hyperslab selection tools, and if it's not easy to discern an underlying pattern to the selection, perhaps the simplest way of approaching this with the would be to create one selection for each column.  You could then use functions like `H5Scombine_hyperslab()` or `H5Scombine_select()` to iteratively join these selections until all columns were selected, and then perform the read operation.
+
+### Slowdown when selecting unions of hyperslabs
+
+Unfortunately, this approach doesn't scale very well.  This is because creating unions of hyperslabs is currently very slow in HDF5 (see [Union of non-consecutive hyperslabs is very slow](https://forum.hdfgroup.org/t/union-of-non-consecutive-hyperslabs-is-very-slow/5062) for another report of this behaviour), with the performance penalty increasing exponentially relative to the number of unions.  The plot below shows the the exponential increase in time as the number of hyberslab unions increases.
+
+```{r, eval = TRUE, echo = FALSE, fig.width=6, fig.height=3, fig.wide = TRUE, fig.cap='The time taken to join hyperslabs increases expontentially with the number of join operations.  These timings are taken with no reading occuring, just the creation of a dataset selection.'}
 ## this code demonstrates the exponential increase in time as the 
 ## number of hyberslab unions increases
 
@@ -106,18 +191,21 @@ select_index <- function(n = 1) {
   H5Fclose(fid)
 }
 
-bm <- microbenchmark::microbenchmark(
+bm <- bench::mark(
   select_index(1), select_index(2), select_index(5), 
   select_index(10), select_index(20), select_index(50),
   select_index(100), select_index(200), select_index(500),
   select_index(1000), select_index(2000), select_index(5000),
   select_index(10000),
-  times = 3
-) %>% mutate(n = gsub(".*\\(([0-9]+)\\)", "\\1", expr) 
-             %>% as.integer(),
-             time = time / 1e9)
+  iterations = 3, check = FALSE, time_unit = "s", memory = FALSE, filter_gc = FALSE
+)
 
-ggplot(bm,aes(x = n, y = time)) +
+bm2 <- data.frame(n = gsub(".*\\(([0-9]+)\\)", "\\1", bm$expression) |>
+                            as.integer() |>
+                            rep(each = 3), 
+                  time = unlist(bm$time))
+
+ggplot(bm2,aes(x = n, y = time)) +
   geom_point() + 
   scale_x_log10() + 
   scale_y_log10() +
@@ -126,143 +214,146 @@ ggplot(bm,aes(x = n, y = time)) +
   ylab('time (seconds)')
 ```
 
-## Irregular selections
-
-If there isn't a regular pattern to the columns you want to select, what are the options?  Perhaps the most obvious thing we can try is to skip the use of either `index` or the hyperslab parameters and use 10,000 separate read operations instead.  Below we choose a random selection of columns and then apply the function `f1()` to each in turn.
-
-```{r singleReads, cached = TRUE}
-set.seed(1234)
-columns <- sample(x = seq_len(20000), size = 10000, replace = FALSE) %>%
-  sort()
-
-f1 <- function(cols, name) { 
-  h5read(file = ex_file, name = name, 
-         index = list(NULL, cols))
-  }
-system.time(res4 <- vapply(X = columns, FUN = f1, 
-                           FUN.VALUE = integer(length = 100), 
-                           name = 'counts'))
-```
-
-This is clearly a terrible idea, it takes ages!  For reference, using the `index` argument with this set of columns takes `r system.time(h5read(file = ex_file, name = "counts", index = list(NULL, columns)))['elapsed']` seconds.  This poor performance is driven by two things:
-
-1. Our dataset had no chunking applied to it when it was created.  This means for each access the entire dataset is read from disk, which we end up doing 10,000 times.
-2. *rhdf5* does a lot of validation on the objects that are passed around internally.  Within a call to `h5read()` HDF5 identifiers are created for the file, dataset, file dataspace, and memory dataspace, each of which are checked for validity.  This overhead is negligible when only one call to `h5read()` is made, but become significant when we make 10,000 separate calls.
-
-There's not much more you can do if the dataset is not chunked, and using the `index` argument is reasonable.  However storing data in this format defeats of of HDF5's key utilities, namely rapid random access.  As such it's probably fairly rare to encounter datasets that aren't chunked.  With this in mind we'll create a new dataset in our file, based on the same matrix but this time split into 100 $\times$ 100 chunks. 
-
-```{r createChunked, echo = TRUE, eval = TRUE, results='hide'}
-h5createDataset(file = ex_file, dataset = "counts_chunked", 
-                dims = dim(m1), storage.mode = "integer", 
-                chunk = c(100,100), level = 6)
-h5write(obj = m1, file = ex_file, name = "counts_chunked")
-```
-
-If we rerun the same code, but reading from the chunked datasets we get an idea for how much time is wasted exctracted the entire dataset over and over.
-
-```{r read_chunked, eval = TRUE}
-system.time(res5 <- vapply(X = columns, FUN = f1, 
-                           FUN.VALUE = integer(length = 100), 
-                           name = 'counts_chunked'))
-```
-
-This is still quite slow, and the remaining time is being spent on the overheads associated with multiple calls to `h5read()`.  To reduce these the function `f2()`^[This is not the greatest function ever, things like the file name are hardcoded out of sight, but it illustrates the technique.] defined below splits the list of columns we want to return into sets grouped by the parameter `block_size`.  In the default case this means any columns between 1 & 100 will be placed together, then any between 101 & 200, etc.  We then `lapply` our previous `f1()` function over these groups.  The effect here is to reduce the number of calls to `h5read()`, while keeping the number of hyperslab unions down by not having too many columns in any one call.
-
-```{r}
-f2 <- function(block_size = 100) {
-  cols_grouped <- split(columns,  (columns-1) %/% block_size)
-  res <-  lapply(cols_grouped, f1, name = 'counts_chunked') %>%
-    do.call('cbind', .)
-}
-system.time(f2())
-```
-
-```{r benchmark, echo = FALSE, cache = TRUE}
-bm <- microbenchmark::microbenchmark(
-  f2(10), f2(25), f2(50), f2(100), 
-  f2(250), f2(500), f2(1000), 
-  f2(2000), f2(5000), f2(10000),
-  times = 3
-) %>% mutate(block_size = gsub(".*\\(([0-9]+)\\)", "\\1", expr) 
-             %>% as.integer(),
-             time = time / 1e9)
-```
-
-We can see this has a significant effect, although it's still an order of magnitude slower than when we were dealing with regularly spaced subsets.  The efficiency here will vary based on a number of factors including the size of the dataset chunks and the sparsity of the column index, and you varying the `block_size` argument will produce differing performances.  The plot below shows the timings achived by providing a selection of values to `block_size`.  It suggests the optimal parameter in this case is probably a block size of `r bm %>% arrange(time) %>% slice(1) %>% .$block_size`, which took `r bm %>% arrange(time) %>% slice(1) %>% .$time %>% round(2)` seconds - noticeably faster than when passing all columns to the `index` argument in a single call.
-
-```{r, echo = FALSE, fig.width=6, fig.height=3, fig.wide = TRUE}
-ggplot(bm, aes(x = block_size, y = time)) + 
-  geom_point() + 
-  scale_x_log10() +
-  theme_bw() + 
-  ylab('time (seconds)')
-```
-
 ## Summary
 
-Efficiently extracting arbitrary subsets of a HDF5 dataset with *rhdf5* is a balancing act between the number of hyperslab unions, the number of calls to `h5read()`, and the number of times a chunk is read. For a (mostly) contiguous subset using the `index` argument is sufficient, while for regularly spaced but disjoint subsets the hyperslab selection parameters offer an efficient, if slightly more complex, alternative.  Otherwise finding the optimal strategy may involve some experimentation in a similar fashion to we have seen above. 
+Efficiently extracting arbitrary subsets of a HDF5 dataset with *rhdf5* is a balancing act between the number of hyperslab unions, the number of calls to `h5read()`, and the number of times a chunk is read. Many of the lessons learnt will creating this document have been incorporated into the `h5read()` function.  Internally, this function attempts to find the balance by looking for patterns in the data selection requested, and minimises the number of hyperslab unions and read operations required to extract the requested data.
 
 
-<!--
-```{r, echo = FALSE, eval = FALSE}
-h5createDataset(file = ex_file, dataset = "counts_chunked", dims = dim(m1),
-                storage.mode = "integer", chunk = c(100,1), level = 6)
-h5write(obj = m1, file = ex_file, name = "counts_chunked")
-f2 <- function(cols) { h5read(file = ex_file, name = 'counts_chunked', index = list(NULL, cols))}
-system.time(res5 <- vapply(columns, f2, integer(length = 100)))
+# Writing in parallel
+
+Using `r Biocpkg('rhdf')` it isn't possible to open an HDF5 file and write multiple datasets in parallel.  However we can try to mimic this behaviour by writing each dataset to it's own HDF5 file in parallel and then using the function `H5Ocopy()` to efficiently populate a complete final file.  We'll test this approach here.
+
+## Example data
+
+First lets create some example data to we written to our HDF5 files.  The code below creates a list of 10 matrices, filled with random values between 0 and 1.  We then name the entries in the list `dset_1` etc.
+
+```{r example-dsets}
+dsets <- lapply(1:10, FUN = \(i) { matrix(runif(10000000), ncol = 100)} )
+names(dsets) <- paste0("dset_", 1:10)
 ```
 
-```{r, echo = FALSE, eval = FALSE}
-h5createDataset(file = ex_file, dataset = "counts_chunked_100", dims = dim(m1),
-                storage.mode = "integer", chunk = c(100,100), level = 6)
-h5write(obj = m1, file = ex_file, name = "counts_chunked_100")
+## Serial writing of datasets
 
-f2 <- function(col, fid, dapl, did, sid, mem_sid) { 
-    size <- H5Sselect_index(h5space = sid, index = list(NULL, col))
-    res <- H5Dread(did, sid, mem_sid)
-    res
+Now lets define a function that takes our list of datasets and writes all of them to a single HDF5 file.  
+
+```{r}
+simple_writer <- function(file_name, dsets) {
+  
+  fid <- H5Fcreate(name = file_name)
+  on.exit(H5Fclose(fid))
+  
+  for(i in seq_along(dsets)) {
+    dset_name = paste0("dset_", i)
+    h5createDataset(file = fid, dataset = dset_name, 
+                    dims = dim(dsets[[i]]), chunk = c(10000, 10))
+    h5writeDataset(dsets[[i]], h5loc = fid, name = dset_name)
+  }
+  
+}
+```
+
+An example of calling this function would look like: `simple_writer(file_name = "my_datasets.h5", dsets = dsets)`.  This would create the file `my_datasets.h5` and it will contain the 10 datasets we created above, each named `dset_1` etc, which are the names we gave the list elements.
+
+## Parallel writing of datasets
+
+Now lets created two functions to tests our split / gather approach to creating the final file.  The first of the functions below will create a temporary file with a random name and write a single dataset to this file.  The second function expects to be given a table of temporary files and the name of the dataset they contain.  It will then use `H5Ocopy()` to write each of these into a single output file.
+
+
+```{r}
+## Write a single dataset to a temporary file
+## Arguments: 
+## - dset_name: The name of the dataset to be created
+## - dset: The dataset to be written
+split_tmp_h5 <- function(dset_name, dset) {
+
+  ## create a tempory HDF5 file for this dataset  
+  file_name <- tempfile(pattern = "par", fileext = ".h5")
+  fid <- H5Fcreate(file_name)
+  on.exit(H5Fclose(fid))
+  
+  ## create and write the dataset
+  ## we use some predefined chunk sizes 
+  h5createDataset(file = fid, dataset = dset_name, 
+                  dims = dim(dset), chunk = c(10000, 10))
+  h5writeDataset(dset, h5loc = fid, name = dset_name)
+  
+  return(c(file_name, dset_name))
 }
 
-fid <- H5Fopen(ex_file)
-dapl <- H5Pcreate("H5P_DATASET_ACCESS")
-did <- H5Dopen(h5loc = fid, name = "counts", dapl = dapl)
-sid <- H5Dget_space(h5dataset = did)
-mem_sid <- H5Screate_simple(c(100,1))
-system.time(res5 <- vapply(columns, f2, integer(length = 100), fid, dapl, did, sid, mem_sid))
-H5Sclose(sid)
-H5Sclose(mem_sid)
-H5Pclose(dapl)
-H5Dclose(did)
-H5Fclose(fid)
-```
-
-```{r, echo = FALSE, eval = FALSE}
-h5createDataset(file = ex_file, dataset = "counts_chunked", dims = dim(m1),
-                storage.mode = "integer", chunk = c(100,1), level = 6)
-h5write(obj = m1, file = ex_file, name = "counts_chunked")
-
-f2 <- function(col, fid, dapl, did) { 
-    sid <- .Call("_H5Dget_space", did@ID, PACKAGE = "rhdf5")
-    #sid <- H5Dget_space(did)
-    mem_sid <- .Call("_H5Screate_simple", c(100,1), c(100,1), PACKAGE='rhdf5')
-    .Call("_H5Sselect_index", sid, list(col-1,0), list(1,100), PACKAGE='rhdf5')
-    res <- .Call("_H5Dread", did@ID, sid, mem_sid, NULL, TRUE, 0L, FALSE, FALSE, PACKAGE='rhdf5')
-    invisible(.Call("_H5Sclose", sid, PACKAGE='rhdf5'))
-    #H5Sclose(sid)
-    invisible(.Call("_H5Sclose", mem_sid, PACKAGE='rhdf5'))
-    res
+## Gather scattered datasets into a final single file
+## Arguments: 
+## - output_file: The path to the final HDF5 to be created
+## - input: A data.frame with two columns containing the paths to the temp
+## files and the name of the dataset inside that file
+gather_tmp_h5 <- function(output_file, input) {
+  
+  ## create the output file
+  fid <- H5Fcreate(name = output_file)
+  on.exit(H5Fclose(fid))
+  
+  ## iterate over the temp files and copy the named dataset into our new file
+  for(i in seq_len(nrow(input))) {
+    fid2 <- H5Fopen(input$file[i])
+    H5Ocopy(fid2, input$dset[i], h5loc_dest = fid, name_dest = input$dset[i])
+    H5Fclose(fid2)
+  }
+  
 }
-
-fid <- H5Fopen(ex_file)
-dapl <- H5Pcreate("H5P_DATASET_ACCESS")
-did <- H5Dopen(h5loc = fid, name = "counts_chunked", dapl = dapl)
-system.time(res5 <- vapply(columns, f2, double(length = 100), fid, dapl, did))
-H5Pclose(dapl)
-H5Dclose(did)
-H5Fclose(fid)
 ```
--->
 
+Finally we need to create a wrapper function that brings our split and gather functions together.  Like the `simple_writer()` function we created earlier, this takes the name of an output file and the list of datasets to be written as input.  We can also provide a `BiocParallelParam` instance from `r Biocpkg("BiocParallel")` to trial writing the temporary file in parallel.  If the `BPPARAM` argument isn't provided then they will be written in serial.
+
+```{r, define-split-gather}
+split_and_gather <- function(output_file, input_dsets, BPPARAM = NULL) {
+  
+  if(is.null(BPPARAM)) { BPPARAM <- BiocParallel::SerialParam() }
+  
+  ## write each of the matrices to a separate file
+  tmp <- 
+    bplapply(seq_along(input_dsets), 
+           FUN = function(i) {
+             split_tmp_h5(dset_name = names(input_dsets)[i], 
+                          dset = input_dsets[[i]])
+           }, 
+           BPPARAM = BPPARAM) 
+  
+  ## create a table of file and the dataset names
+  input_table <- do.call(rbind, tmp) |> 
+    as.data.frame()
+  names(input_table) <- c("file", "dset")
+  
+  ## copy all datasets from temp files in to final output
+  gather_tmp_h5(output_file = output_file, input = input_table)
+  
+  ## remove the temporary files
+  file.remove(input_table$file)
+}
+```
+
+An example of calling this using two cores on your local machine is: 
+
+```{r, eval = FALSE}
+split_and_gather(tempfile(), input_dsets = dsets,
+                 BPPARAM = MulticoreParam(workers = 2))
+```
+
+Below we can see some timings comparing calling `simple_writer()` with `split_and_gather()` using 1, 2, and 4 cores.
+
+```{r, run-writing-benchmark, cache = TRUE, message=FALSE, echo=FALSE}
+bench_results <- bench::mark(
+  "simple writer" = simple_writer(file_name = tempfile(), dsets = dsets),
+  "split/gather - 1 core" = split_and_gather(tempfile(), input_dsets = dsets, 
+                                             BPPARAM = NULL),
+  "split/gather - 2 cores" = split_and_gather(tempfile(), input_dsets = dsets, 
+                                              BPPARAM = MulticoreParam(workers = 2)), 
+  "split/gather - 4 cores" = split_and_gather(tempfile(), input_dsets = dsets, 
+                                              BPPARAM = MulticoreParam(workers = 4)),
+  iterations = 3, check = FALSE, time_unit = "s", memory = FALSE, filter_gc = FALSE
+)
+bench_results |> select(expression, min, median)
+```
+
+We can see from our benchmark results that there is some performance improvement to be achieved by using the parallel approach.  Based on the median times of out three iterations using two cores sees an speedup of `r round(bench_results$median[1] / bench_results$median[3], 2)` and `r round(bench_results$median[1] / bench_results$median[4], 1)` with 4 cores.  This isn't quite linear, presumably be cause there are overheads involved both in using a two-step process and initialising the parallel workers, but it is a noticeable improvement.
 
 # Session info {.unnumbered}
 

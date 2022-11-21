@@ -10,6 +10,11 @@ H5Pset_shuffle(h5plist)
 \item{h5plist}{Object of class \linkS4class{H5IdComponent} representing a dataset
 creation property list.}
 }
+\value{
+Returns (invisibly) an integer vector of length 1.  The only
+element of this vector will be non-negative if the filter was set
+successfully and negative otherwise.
+}
 \description{
 Add the shuffle filter to the chunk processing pipeline.
 }

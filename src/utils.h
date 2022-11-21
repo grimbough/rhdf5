@@ -23,6 +23,7 @@ typedef struct opObjListElement {
     struct opObjListElement *next; /* Pointer to previous element */
     struct opObjListElement *child;
     haddr_t addr;                  /* Group address */
+    unsigned long fileno;          /* File the object is found in */
 } opObjListElement;
 
 /* used in h5ls */
@@ -57,6 +58,6 @@ typedef struct {
 void concatdim(char *s1, hsize_t next_dim, int index);
 void concatdim_native(char *s1, hsize_t next_dim, int index);
 void format_dimensions(H5S_class_t space_type, opObjListElement *newElement, hsize_t *size, hsize_t *maxsize, int native);
-int  group_check(struct opObjListElement *od, haddr_t target_addr);
+int  group_check(struct opObjListElement *od, haddr_t target_addr, unsigned long target_fileno);
 
 #endif

@@ -143,3 +143,57 @@ SEXP _H5Tis_variable_str( SEXP _dtype_id ) {
   UNPROTECT(1);
   return Rval;
 }
+
+/* herr_t H5Tset_precision( hid_t dtype_id, size_t precision ) */
+SEXP _H5Tset_precision( SEXP _dtype_id, SEXP _precision ) {
+  
+  hid_t dtype_id = STRSXP_2_HID( _dtype_id );
+  size_t precision = INTEGER(_precision)[0];
+  
+  herr_t herr = H5Tset_precision(dtype_id, precision);
+  
+  SEXP Rval;
+  PROTECT(Rval = ScalarInteger(herr));
+  UNPROTECT(1);
+  return Rval;
+}
+
+/* size_t H5Tget_precision( hid_t dtype_id ) */
+SEXP _H5Tget_precision( SEXP _dtype_id ) {
+  
+  hid_t dtype_id = STRSXP_2_HID( _dtype_id );
+  
+  size_t precision = H5Tget_precision(dtype_id);
+  
+  SEXP Rval;
+  PROTECT(Rval = ScalarInteger(precision));
+  UNPROTECT(1);
+  return Rval;
+}
+
+/* herr_t H5Tset_offset( hid_t dtype_id, size_t offset ) */
+SEXP _H5Tset_offset( SEXP _dtype_id, SEXP _offset ) {
+  
+  hid_t dtype_id = STRSXP_2_HID( _dtype_id );
+  size_t offset = INTEGER(_offset)[0];
+  
+  herr_t herr = H5Tset_precision(dtype_id, offset);
+  
+  SEXP Rval;
+  PROTECT(Rval = ScalarInteger(herr));
+  UNPROTECT(1);
+  return Rval;
+}
+
+/* int H5Tget_offset( hid_t dtype_id ) */
+SEXP _H5Tget_offset( SEXP _dtype_id ) {
+  
+  hid_t dtype_id = STRSXP_2_HID( _dtype_id );
+
+  int offset = H5Tget_precision(dtype_id);
+  
+  SEXP Rval;
+  PROTECT(Rval = ScalarInteger(offset));
+  UNPROTECT(1);
+  return Rval;
+}

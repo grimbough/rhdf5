@@ -154,7 +154,7 @@ setMethod(`$<-`, signature = c("H5IdComponent"),
 #'   replacement.  See \code{\link[base]{drop}} for further details.
 #'
 #' @export
-setMethod(`[`, signature = c("H5IdComponent", "ANY", "ANY", "ANY"),
+setMethod("[", signature = c("H5IdComponent", "ANY", "ANY", "ANY"),
           function(x, i, j, ..., drop = TRUE) {
             h5id = x
             index = as.list(sys.call())[-c(1,2)]
@@ -224,4 +224,95 @@ setMethod(`[<-`, signature = c("H5IdComponent", "ANY","ANY","ANY"),
           } )
 
 
+#' @describeIn H5Ref Print details of the object to screen.
+#' 
+#' @export
+setMethod("show",
+          signature="H5Ref", 
+          definition = function(object) {
+            
+            cat("HDF5 REFERENCE\n")
+            cat("Type:", h5const2String("H5R_TYPE", object@type), "\n")
+            cat("Length:", length(object), "\n")
+            
+          })
 
+#' @describeIn H5Ref Return the number of references stored in an `H5Ref` 
+#' object.
+#' 
+#' @export
+setMethod("length",
+          signature = "H5Ref",
+          definition = function(x) {
+            if(h5const2String("H5R_TYPE", x@type) == "H5R_OBJECT") {
+              div <- 8L
+            } else {
+              div <- 12L
+            }
+            return(length(x@val) / div)
+          }
+)
+
+#' @describeIn H5Ref Combine two or more `H5Ref` objects.  Objects must all
+#' contain the same type of reference, either `H5R_OBJECT` or 
+#' `H5R_DATASET_REFERENCE`.
+#' 
+#' @param x An `H5Ref` object.
+#' @param ... Additional `H5Ref` objects to be combined with `x`.
+#' 
+#' @export
+setMethod(f = "c", 
+          signature = "H5Ref", 
+          definition = function(x, ...) {
+            elements <- list(x, ...) 
+            if (length(elements) != 0) { 
+              
+              ## test all objects are H5Ref class
+              valid <- vapply(elements, 
+                              FUN = \(x) { inherits(x, "H5Ref") }, 
+                              FUN.VALUE = logical(1L))
+              if(!all(valid)) {
+                stop("All objects must be of class 'H5Ref'.", call. = FALSE)
+              }
+              
+              ## test all references are of same type
+              types <- vapply(elements, 
+                              FUN = \(x) { x@type }, 
+                              FUN.VALUE = integer(1L))
+              if(length(unique(types)) != 1) {
+                stop("All references must be of the same type.", call. = FALSE)
+              }
+              
+              items <- unlist(lapply(
+                elements,
+                FUN = \(x) { x@val }
+              ))
+              object <- new("H5Ref", val = items, type = x@type)
+            }
+            return(object)
+          }
+)
+
+#' @describeIn H5Ref Subset an `H5Ref` object.
+#' 
+#' @param x An `H5Ref` object.
+#' @param i Integer vector giving the indices of references to select.
+#' 
+#' @export
+setMethod(f = "[", 
+          signature = c("H5Ref", "ANY"),
+          definition = function(x, i)  {
+            
+            if(h5const2String("H5R_TYPE", x@type) == "H5R_OBJECT") {
+              div <- 8L
+            } else {
+              div <- 12L
+            }
+            
+            i <- as.integer(i)
+            idx <- c(vapply(i, function(x) ((x-1L)*div)+(1L:div), FUN.VALUE = integer(length = div)))
+            
+            object <- new("H5Ref", val = x@val[idx], type = x@type)
+            return(object)
+          }
+)

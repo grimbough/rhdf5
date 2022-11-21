@@ -94,7 +94,7 @@ h5createGroup <- function(file, group) {
         }
     }
     
-    res
+    invisible(res)
 }
 
 .setDataType <- function(H5type, storage.mode, size, encoding) {
@@ -196,6 +196,36 @@ h5createGroup <- function(file, group) {
   return(dcpl)
 }
 
+.checkArgs_createDataset <- function(dims, maxdims, chunk) {
+  
+  if (any(is.na(dims)) | any(is.na(maxdims))) {
+    stop("Can not create dataset. 'dims' and 'maxdims' must be numeric.")
+  } 
+  if (any(dims < 0)) {
+    stop('All elements of "dims" must be non-negative.')
+  }
+  if (length(maxdims) != length(dims)) {
+    stop('"maxdims" has to have the same rank as "dims".')
+  } 
+  if (any(maxdims != dims) & is.null(chunk)) {
+    stop('If "maxdims" is different from "dims", chunking is required.')
+  }
+  if (any(maxdims != H5Sunlimited() & maxdims < dims)) {
+    stop('All non-extensible elements of "maxdims" must be equal or larger than "dims".')
+  }
+  
+  chunk_vs_maxdims <- ((chunk > maxdims) & (maxdims != H5Sunlimited()))
+  if(any(chunk_vs_maxdims)) {
+    chunk[ which(chunk_vs_maxdims) ]  <- dims[ which(chunk_vs_maxdims) ]
+    warning("One or more chunk dimensions exceeded the maximum for the dataset.\n",
+            "These have been automatically set to the maximum.\n",
+            "The new chunk dimensions are: ", paste0("c(", paste(chunk, collapse = ","), ")"),
+            call. = FALSE)
+  }
+  
+  return(chunk)
+}
+
 #' Create HDF5 dataset
 #'
 #' R function to create an HDF5 dataset and defining its dimensionality and
@@ -279,7 +309,7 @@ h5createGroup <- function(file, group) {
 #'   orientation. Using \code{native = TRUE} increases HDF5 file portability
 #'   between programming languages. A file written with \code{native = TRUE}
 #'   should also be read with \code{native = TRUE}
-#' @return Returns TRUE is dataset was created successfully and FALSE otherwise.
+#' @return Returns (invisibly) `TRUE` if dataset was created successfully and `FALSE` otherwise.
 #' @author Bernd Fischer, Mike L. Smith
 #' @seealso [h5createFile()], [h5createGroup()], [h5read()], [h5write()]
 #' @examples
@@ -346,7 +376,7 @@ h5createGroup <- function(file, group) {
 #' @export h5createDataset
 h5createDataset <- function(file, dataset, dims, maxdims = dims, 
                             storage.mode = "double", H5type = NULL, 
-                            size = NULL, encoding = c("ASCII", "UTF-8"),
+                            size = NULL, encoding = NULL,
                             chunk = dims, fillValue, 
                             level = 6, filter = "gzip", shuffle = TRUE,
                             native = FALSE) {
@@ -356,117 +386,102 @@ h5createDataset <- function(file, dataset, dims, maxdims = dims,
   
   dims <- as.numeric(dims)
   maxdims <- as.numeric(maxdims)
-  
-  
-  
+
   res <- FALSE
-  if (is.character(dataset)) {
-    if (H5Lexists(loc$H5Identifier,dataset)) {
+  if (!is.character(dataset)) {
+    stop('"dataset" argument must be a character vector of length one.')
+  }
+  if (H5Lexists(loc$H5Identifier,dataset)) {
       message("Can not create dataset. Object with name '",dataset,"' already exists.")
-    } else {
-      if (any(is.na(dims)) | any(is.na(maxdims))) {
-        message("Can not create dataset. 'dims' and 'maxdims' have to be numeric.")
-      } else {
-        if (length(maxdims) != length(dims)) {
-          stop('"maxdims" has to have the same rank as "dims".')
-        }
-        if (any(maxdims != dims) & is.null(chunk)) {
-          stop('If "maxdims" is different from "dims", chunking is required.')
-        }
-        if (any(maxdims != H5Sunlimited() & maxdims < dims)) {
-          stop('All non-extensible elements of "maxdims" have to be equal or larger than "dims".')
-        }
-        if (any(dims < 0)) {
-          stop('All elements of "dims" must be non-negative.')
-        }
-        if ((level > 0) & (is.null(chunk))) {
-          warning("Compression (level > 0) requires chunking. Set chunk size to activate compression.")
-        }
-        if (length(chunk) > 0) {
-          chunk[which(chunk == 0)] = 1
-        }
-        
-        ## determine data type
-        tid <- .setDataType(H5type, storage.mode, size, encoding = match.arg(encoding))
-        
-        dcpl <- .createDCPL(chunk, dims, level, fillValue, dtype = tid, filter = filter, shuffle = shuffle)
-        on.exit(H5Pclose(dcpl), add = TRUE)
-        
-        ## create dataspace
-        sid <- H5Screate_simple(dims, maxdims)
-        on.exit(H5Sclose(sid), add = TRUE)
-        
-        did <- H5Dcreate(loc$H5Identifier, dataset, tid, sid, dcpl = dcpl)
-        if (is(did, "H5IdComponent")) {
-          if (storage.mode[1] == "logical") {
-            x = "logical"
-            h5writeAttribute(attr = x, h5obj = did, name = "storage.mode")
-          }
-          H5Dclose(did)
-          res <- TRUE
-        }
-      }
-    }
   } 
-  res
+  chunk <- .checkArgs_createDataset(dims = dims, maxdims = maxdims, chunk = chunk)
+
+  if ((level > 0) & (is.null(chunk))) {
+    warning("Compression (level > 0) requires chunking. Set chunk size to activate compression.")
+  }
+  if (length(chunk) > 0) {
+    chunk[which(chunk == 0)] = 1
+  }
+  
+  ## determine data type
+  tid <- .setDataType(H5type, storage.mode, size, 
+                      encoding = match.arg(encoding, choices = c("ASCII", "UTF-8", "UTF8")))
+  
+  dcpl <- .createDCPL(chunk, dims, level, fillValue, dtype = tid, filter = filter, shuffle = shuffle)
+  on.exit(H5Pclose(dcpl), add = TRUE)
+  
+  ## create dataspace
+  sid <- H5Screate_simple(dims, maxdims)
+  on.exit(H5Sclose(sid), add = TRUE)
+  
+  did <- H5Dcreate(loc$H5Identifier, dataset, tid, sid, dcpl = dcpl)
+  if (is(did, "H5IdComponent")) {
+    if (storage.mode[1] == "logical") {
+      x = "logical"
+      h5writeAttribute(attr = x, h5obj = did, name = "storage.mode")
+    }
+    H5Dclose(did)
+    res <- TRUE
+  }
+  invisible(res)
 }
 
 #' Create HDF5 attribute
-#' 
+#'
 #' R function to create an HDF5 attribute and defining its dimensionality.
-#' 
+#'
 #' Creates a new attribute and attaches it to an existing HDF5 object. The
 #' function will fail, if the file doesn't exist or if there exists already
 #' another attribute with the same name for this object.
-#' 
-#' You can use [h5writeAttribute()] immediately. It will create the
-#' attribute for you.
-#' 
-#' @param obj The name (character) of the object the attribute will be
-#' attatched to. For advanced programmers it is possible to provide an object
-#' of class [H5IdComponent-class] representing a H5 object identifier
-#' (file, group, dataset). See [H5Fcreate()], [H5Fopen()],
-#' [H5Gcreate()], [H5Gopen()], [H5Dcreate()],
-#' [H5Dopen()] to create an object of this kind.
-#' @param file The filename (character) of the file in which the dataset will
-#' be located. For advanced programmers it is possible to provide an object of
-#' class [H5IdComponent-class] representing an H5 location identifier. See
-#' [H5Fcreate()], [H5Fopen()], [H5Gcreate()],
-#' [H5Gopen()] to create an object of this kind. The \code{file}
-#' argument is not required, if the argument \code{obj} is of type
-#' \code{H5IdComponent}.
+#'
+#' You can use [h5writeAttribute()] immediately. It will create the attribute
+#' for you.
+#'
+#' @param obj The name (character) of the object the attribute will be attatched
+#'   to. For advanced programmers it is possible to provide an object of class
+#'   [H5IdComponent-class] representing a H5 object identifier (file, group,
+#'   dataset). See [H5Fcreate()], [H5Fopen()], [H5Gcreate()], [H5Gopen()],
+#'   [H5Dcreate()], [H5Dopen()] to create an object of this kind.
+#' @param file The filename (character) of the file in which the dataset will be
+#'   located. For advanced programmers it is possible to provide an object of
+#'   class [H5IdComponent-class] representing an H5 location identifier. See
+#'   [H5Fcreate()], [H5Fopen()], [H5Gcreate()], [H5Gopen()] to create an object
+#'   of this kind. The \code{file} argument is not required, if the argument
+#'   \code{obj} is of type \code{H5IdComponent}.
 #' @param attr Name of the attribute to be created.
 #' @param dims The dimensions of the attribute as a numeric vector. If
-#' \code{NULL}, a scalar dataspace will be created instead.
+#'   \code{NULL}, a scalar dataspace will be created instead.
 #' @param maxdims The maximum extension of the attribute.
 #' @param storage.mode The storage mode of the data to be written. Can be
-#' obtained by \code{storage.mode(mydata)}.
+#'   obtained by \code{storage.mode(mydata)}.
 #' @param H5type Advanced programmers can specify the datatype of the dataset
-#' within the file. See \code{h5const("H5T")} for a list of available
-#' datatypes. If \code{H5type} is specified the argument \code{storage.mode} is
-#' ignored. It is recommended to use \code{storage.mode}
+#'   within the file. See \code{h5const("H5T")} for a list of available
+#'   datatypes. If \code{H5type} is specified the argument \code{storage.mode}
+#'   is ignored. It is recommended to use \code{storage.mode}
 #' @param size The maximum string length when \code{storage.mode='character'}.
-#' If this is specified, HDF5 stores each string of \code{attr} as fixed length
-#' character arrays. Together with compression, this should be efficient.
-#' 
-#' If this argument is set to \code{NULL}, HDF5 will instead store
-#' variable-length strings.
-#' @param cset The encoding to use when \code{storage.mode='character'}.
+#'   If this is specified, HDF5 stores each string of \code{attr} as fixed
+#'   length character arrays. Together with compression, this should be
+#'   efficient.
+#'
+#'   If this argument is set to \code{NULL}, HDF5 will instead store
+#'   variable-length strings.
+#' @param encoding The encoding of the string data type i.e. when `storage.mode
+#'   = 'character'`. Valid options are "ASCII" and "UTF-8".
+#' @param cset *Deprecated in favour of the `encoding` argument.*
 #' @param native An object of class \code{logical}. If TRUE, array-like objects
-#' are treated as stored in HDF5 row-major rather than R column-major
-#' orientation. Using \code{native = TRUE} increases HDF5 file portability
-#' between programming languages. A file written with \code{native = TRUE}
-#' should also be read with \code{native = TRUE}
+#'   are treated as stored in HDF5 row-major rather than R column-major
+#'   orientation. Using \code{native = TRUE} increases HDF5 file portability
+#'   between programming languages. A file written with \code{native = TRUE}
+#'   should also be read with \code{native = TRUE}
 #' @return Returns TRUE is attribute was created successfully and FALSE
-#' otherwise.
+#'   otherwise.
 #' @author Bernd Fischer
-#' @seealso [h5createFile()], [h5createGroup()],
-#' [h5createDataset()], [h5read()], [h5write()],
-#' \link{rhdf5}
+#' @seealso [h5createFile()], [h5createGroup()], [h5createDataset()],
+#'   [h5read()], [h5write()], \link{rhdf5}
 #' @references \url{https://portal.hdfgroup.org/display/HDF5}
 #' @keywords programming interface IO file
 #' @examples
-#' 
+#'
 #' h5createFile("ex_createAttribute.h5")
 #' h5write(1:1, "ex_createAttribute.h5","A")
 #' fid <- H5Fopen("ex_createAttribute.h5")
@@ -474,13 +489,21 @@ h5createDataset <- function(file, dataset, dims, maxdims = dims,
 #' h5createAttribute (did, "time", c(1,10))
 #' H5Dclose(did)
 #' H5Fclose(fid)
-#' 
+#'
 #' @name h5_createAttribute
 #' @export h5createAttribute
 h5createAttribute <- function(obj, attr, dims, maxdims = dims, file, 
                               storage.mode = "double", H5type = NULL, 
-                              size = NULL, cset = c("ASCII", "UTF8"), 
+                              size = NULL, encoding = NULL, cset = NULL, 
                               native = FALSE) {
+  
+    ## remove the cset argument in BioC 3.16
+    if(!is.null(cset)) {
+      if(is.null(encoding)) 
+        encoding <- cset
+      message("The 'cset' argument has been deprecated.\n",
+              "Please use the argument 'encoding' instead.")
+    }
     
     obj = h5checktypeOrOpenObj(obj, file, native = native)
     on.exit(h5closeitObj(obj))
@@ -506,13 +529,15 @@ h5createAttribute <- function(obj, attr, dims, maxdims = dims, file,
                           integer = h5constants$H5T["H5T_STD_I32LE"],
                           character = {
                               tid <- H5Tcopy("H5T_C_S1")
-                              H5Tset_cset(tid, match.arg(cset))
+                              H5Tset_cset(tid, cset = match.arg(encoding, 
+                                                                choices = c("ASCII", "UTF-8", "UTF8")))
                               if (!is.null(size) && !is.numeric(size)) {
                                 stop("'size' should be NULL or a number when 'storage.mode=\"character\"'")
                               }
                               H5Tset_size(tid, size) # NULL = variable.
                               tid
                           },
+                          H5IdComponent=h5constants$H5T["H5T_STD_REF_OBJ"],
                           { stop("datatype ",storage.mode," not yet implemented. Try 'double', 'integer', or 'character'.") } )
         } else {
             stop("Can not create dataset. 'storage.mode' has to be a character.")

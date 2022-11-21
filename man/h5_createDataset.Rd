@@ -13,7 +13,7 @@ h5createDataset(
   storage.mode = "double",
   H5type = NULL,
   size = NULL,
-  encoding = c("ASCII", "UTF-8"),
+  encoding = NULL,
   chunk = dims,
   fillValue,
   level = 6,
@@ -81,7 +81,7 @@ between programming languages. A file written with \code{native = TRUE}
 should also be read with \code{native = TRUE}}
 }
 \value{
-Returns TRUE is dataset was created successfully and FALSE otherwise.
+Returns (invisibly) \code{TRUE} if dataset was created successfully and \code{FALSE} otherwise.
 }
 \description{
 R function to create an HDF5 dataset and defining its dimensionality and

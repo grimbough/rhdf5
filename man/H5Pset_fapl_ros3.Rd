@@ -27,8 +27,11 @@ are accessing public data this argument should be \code{NULL}.
 }
 \examples{
 
+## this doesn't work on the Bioconductor Mac build machine
+\dontrun{
 pid <- H5Pcreate("H5P_FILE_ACCESS")
 H5Pset_fapl_ros3( pid )
 H5Pclose(pid)
+}
 
 }

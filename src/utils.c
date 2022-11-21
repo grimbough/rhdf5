@@ -7,12 +7,8 @@ void concatdim(char *s1, hsize_t next_dim, int index)
     char tmp[1000];
     memset(tmp, '\0',1000);
     strncpy(tmp, s1, 999);
-    
-#ifdef H5_HAVE_WINDOWS
-    snprintf(s1, 1000, "%s%I64u%s", tmp, next_dim, index ? " x ": "");
-#else
+
     snprintf(s1, 1000, "%.977s%llu%.3s", tmp, next_dim, index ? " x " : "");
-#endif
 }
 
 void concatdim_native(char *s1, hsize_t next_dim, int index)
@@ -21,11 +17,7 @@ void concatdim_native(char *s1, hsize_t next_dim, int index)
     memset(tmp, '\0',1000);
     strncpy(tmp, s1, 999);
     
-#ifdef H5_HAVE_WINDOWS
-    snprintf(s1, 1000, "%s%s%I64u", tmp, index ? " x ": "", next_dim);
-#else
     snprintf(s1, 1000, "%.977s%.3s%llu", tmp, index ? " x " : "", next_dim);
-#endif
 }
 
 
@@ -86,12 +78,14 @@ void format_dimensions (H5S_class_t space_type, opObjListElement *newElement, hs
  otherwise.
  
  ************************************************************/
-int group_check (struct opObjListElement *od, haddr_t target_addr)
+int group_check (struct opObjListElement *od, haddr_t target_addr, unsigned long target_fileno)
 {
-    if (od->addr == target_addr)    /* Addresses match */
-return 1;      
-    else if (!od->prev)             /* Root group reached with no matches */
-return 0;       
-    else                            /* Recursively examine the next node */
-return group_check (od->prev, target_addr);
+    if (od->addr == target_addr && od->fileno == target_fileno) {  /* Addresses match */
+      return 1;
+    } else if (!od->prev) {            /* Root group reached with no matches */
+      return 0;       
+    } else {                          /* Recursively examine the next node */
+      return group_check (od->prev, target_addr, target_fileno);
+    }
 }
+

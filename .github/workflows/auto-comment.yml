@@ -1,0 +1,22 @@
+name: Create Comment
+
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  create-comment:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create comment
+        uses: actions-cool/issues-helper@v3
+        with:
+          actions: 'create-comment'
+          token: ${{ secrets.GITHUB_TOKEN }}
+          issue-number: ${{ github.event.issue.number }}
+          body: |
+            Thank you for opening this issue. 
+  
+            Please note that the repository maintainer (@grimbough) is currently 
+            on parental leave until October 2022 and any response will take 
+            longer than usual.

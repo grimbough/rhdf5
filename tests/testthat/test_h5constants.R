@@ -6,7 +6,7 @@ context("h5 defined constants")
 
 test_that("const groups", {
     expect_is( h5constType(), "character" ) %>%
-        expect_length(n = 20)
+        expect_length(n = 21)
 })
 
 test_that("constants", {

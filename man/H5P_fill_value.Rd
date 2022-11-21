@@ -11,7 +11,7 @@ H5Pset_fill_value(h5plist, value)
 \item{h5plist}{An object of class \linkS4class{H5IdComponent} representing a
 dataset creation property list.}
 
-\item{value}{The default fill value of the dataset.}
+\item{value}{The default fill value of the dataset. A vector of length 1.}
 }
 \description{
 \code{H5Pset_fill_value} sets the fill value for a dataset in the dataset creation property list.

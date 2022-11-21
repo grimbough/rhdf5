@@ -1,6 +1,8 @@
 RHDF5_LIBS = $(shell "$(R_HOME)/bin${R_ARCH_BIN}/Rscript" -e 'Rhdf5lib::pkgconfig("PKG_C_LIBS")')
 PKG_LIBS = $(RHDF5_LIBS)
 
+#PKG_CFLAGS = -Wall
+
 # uncomment below to print the contents of $(PKG_LIBS)
 # $(info $$PKG_LIBS is [${PKG_LIBS}])
 

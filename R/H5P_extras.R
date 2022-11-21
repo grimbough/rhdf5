@@ -34,7 +34,8 @@ H5Pset_blosc <- function( h5plist, h5tid, method = 1L, level = 6L, shuffle = TRU
     if(!is.loaded('_H5Pset_blosc', PACKAGE = 'rhdf5'))
         stop('BLOSC filter not found.\nPlease install rhdf5filters, and then reinstall rhdf5.')
     
-    if(!method %in% 1:6) {
+    method <- as.integer(method)
+    if(method < 1 || method > 6) {
         method <- 1L
         warning('Invalid method selected. Using BLOSC_LZ')
     }

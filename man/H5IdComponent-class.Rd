@@ -9,7 +9,7 @@
 \alias{$<-,H5IdComponent-method}
 \alias{[,H5IdComponent-method}
 \alias{[<-,H5IdComponent-method}
-\title{An S4 class representing H5 object}
+\title{An S4 class representing an H5 object}
 \usage{
 \S4method{show}{H5IdComponent}(object)
 
@@ -53,9 +53,9 @@ open files, groups, datasets, dataspaces, attributes, and datatypes.
 }
 \section{Methods (by generic)}{
 \itemize{
-\item \code{show}: Print details of the object to screen.
+\item \code{show(H5IdComponent)}: Print details of the object to screen.
 
-\item \code{&}: Returns a group handle or dataset handle for the
+\item \code{e1 & e2}: Returns a group handle or dataset handle for the
 group or dataset \code{name} in the HDF5 location \code{h5loc}. \code{h5loc} can either be a file handle
 as returned by \link{H5Fopen} or a group handle as e.g. returned by \code{h5f$g1} or
 \code{h5f$'/g1/g2'}.
@@ -64,7 +64,7 @@ as returned by \link{H5Fopen} or a group handle as e.g. returned by \code{h5f$g1
 a file handle as returned by \link{H5Fopen} or a group handle as e.g. returned by
 \code{h5f$g1} or \code{h5f$'/g1/g2'}.
 
-\item \code{$<-}: Writes the assigned object to to the HDF5 file at
+\item \code{`$`(H5IdComponent) <- value}: Writes the assigned object to to the HDF5 file at
 location e1. e1 can either be a file handle as returned by \link{H5Fopen} or a
 group handle as e.g. returned by h5f$g1 or h5f$'/g1/g2's. The storage.mode
 of the assigned object has to be compatible to the datatype of the HDF5
@@ -77,12 +77,12 @@ properties (e.g. compression level or chunk size), please use the function
 subset of an HDF5 dataset. The given dimensions have to fit the dimensions
 of the HDF5 dataset.
 
-\item \code{[<-}: Subsetting of an HDF5 dataset. The function writes
+\item \code{`[`(H5IdComponent) <- value}: Subsetting of an HDF5 dataset. The function writes
 an R data object to a subset of an HDF5 dataset. The given dimensions have
 to fit the dimensions of the HDF5 dataset. The HDF5 dataset has to be
 created beforehand, e.g. by \link{h5createDataset}.
-}}
 
+}}
 \section{Slots}{
 
 \describe{

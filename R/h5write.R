@@ -159,16 +159,17 @@ h5writeDatasetHelper <- function (obj, h5dataset, index = NULL, start = NULL, st
 #' @keywords programming interface IO file
 #' @examples
 #'
-#' h5createFile("ex_hdf5file.h5")
+#' h5File <- tempfile(fileext = ".h5")
+#' h5createFile( h5File )
 #'
 #' # write a matrix
 #' B = array(seq(0.1,2.0,by=0.1),dim=c(5,2,2))
 #' attr(B, "scale") <- "liter"
-#' h5write(B, "ex_hdf5file.h5","B")
+#' h5write(B, h5File,"B")
 #'
 #' # write a submatrix
-#' h5createDataset("ex_hdf5file.h5", "S", c(5,8), storage.mode = "integer", chunk=c(5,1), level=7)
-#' h5write(matrix(1:5,nr=5,nc=1), file="ex_hdf5file.h5", name="S", index=list(NULL,1))
+#' h5createDataset(h5File, "S", c(5,8), storage.mode = "integer", chunk=c(5,1), level=7)
+#' h5write(matrix(1:5,nr=5,nc=1), file=h5File, name="S", index=list(NULL,1))
 #'
 #' @name h5_write
 #' @export h5write
@@ -303,20 +304,25 @@ h5writeDataset.raw       <- function(...) { h5writeDataset.array(...) }
 #' @export 
 h5writeDataset.array <- function(obj, h5loc, name, index = NULL, 
                                  start=NULL, stride=NULL, block=NULL, count=NULL, 
-                                 size=NULL, variableLengthString=FALSE, encoding=c("ASCII", "UTF-8"),
+                                 size=NULL, variableLengthString=FALSE, encoding = NULL,
                                  level=6) {
 
     exists <- try( { H5Lexists(h5loc, name) } )
     if (!exists) {
-        if (storage.mode(obj) == "character" && !variableLengthString && is.null(size)) {
-            if (length(obj) > 0) {
-                size <- max(nchar(obj), na.rm = TRUE)
-                ## if any NA, the minimum string length is 2
-                if(any(is.na(obj)) && size < 2) { size <- 2 }
-                ## empty string gives size 0, and errors
-                if(size == 0) { size <- 1 }
-            } else {
-                size <- 1
+        if (storage.mode(obj) == "character") {
+            if(!variableLengthString && is.null(size)) {
+                if (length(obj) > 0) {
+                    size <- max(nchar(obj, type = "bytes"), na.rm = TRUE)
+                    ## if any NA, the minimum string length is 2
+                    if(any(is.na(obj)) && size < 2) { size <- 2 }
+                    ## empty string gives size 0, and errors
+                    if(size == 0) { size <- 1 }
+                } else {
+                    size <- 1
+                }
+            }
+            if (is.null(encoding)) {
+                encoding <- if (any(Encoding(obj) == "UTF-8")) "UTF-8" else "ASCII"
             }
         }
         if (is.null(dim(obj))) {
@@ -326,7 +332,8 @@ h5writeDataset.array <- function(obj, h5loc, name, index = NULL,
             if (h5loc@native) dim <- rev(dim)
         }
         h5createDataset(h5loc, name, dim, storage.mode = storage.mode(obj), 
-                        size = size, encoding = match.arg(encoding),
+                        size = size, 
+                        encoding = match.arg(encoding, choices = c("ASCII", "UTF-8", "UTF8")),
                         chunk=dim, level=level) 
     }
     h5dataset <- H5Dopen(h5loc, name)

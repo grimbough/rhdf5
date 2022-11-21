@@ -6,9 +6,9 @@ This R/Bioconductor package provides an interface between HDF5 and R. HDF5's mai
 
 ## Current Status
 
-| Travis        | BioC           | Test Coverage |
-| ------------- |-------------| -----|
-| [![Build Status](https://travis-ci.org/grimbough/rhdf5.svg?branch=master)](https://travis-ci.org/grimbough/rhdf5) | [![BioC Status](https://bioconductor.org/shields/build/devel/bioc/rhdf5.svg)](http://bioconductor.org/checkResults/devel/bioc-LATEST/rhdf5/) | [![Codecov](http://img.shields.io/codecov/c/github/grimbough/rhdf5.svg)](https://codecov.io/gh/grimbough/rhdf5) |
+| GitHub Actions | Bioconductor Build Sysytem | Test Coverage |
+| ------------- |-------------| ----- |
+| [![Package Checks](https://github.com/grimbough/rhdf5/actions/workflows/main.yml/badge.svg)](https://github.com/grimbough/rhdf5/actions/workflows/main.yml) | [![BioC Status](https://bioconductor.org/shields/build/devel/bioc/rhdf5.svg)](http://bioconductor.org/checkResults/devel/bioc-LATEST/rhdf5/) | [![Codecov](http://img.shields.io/codecov/c/github/grimbough/rhdf5.svg)](https://codecov.io/gh/grimbough/rhdf5) |
 
 ## Contact
 
@@ -17,7 +17,7 @@ For bug reports, please register an [issue](https://github.com/grimbough/rhdf5/i
 
 ## Funding 
 
-Funding for continued development and maintenance of this package is provided by the German Network for Bioinformatics Infrastructure & the Chan Zuckerberg Initiative.
+Funding for continued development and maintenance of this package has been provided by the German Network for Bioinformatics Infrastructure & the Chan Zuckerberg Initiative.
 
 |    |    |
 |:---|---:|

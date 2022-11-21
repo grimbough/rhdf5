@@ -255,10 +255,13 @@ H5Pget_shared_mesg_phase_change <- function(h5plist) {
 #'
 #' @examples
 #'
+#' ## this doesn't work on the Bioconductor Mac build machine
+#' \dontrun{
 #' pid <- H5Pcreate("H5P_FILE_ACCESS")
 #' H5Pset_fapl_ros3( pid )
 #' H5Pclose(pid)
-#'
+#' }
+#' 
 #' @export
 H5Pset_fapl_ros3 <- function( h5plist, s3credentials = NULL ) {
   
@@ -333,13 +336,45 @@ H5Pget_char_encoding <- function( h5plist ) {
   res
 }
 
-H5Pset_create_intermediate_group <- function( h5plist, crt_intermed_group ) {
+#' Get and set whether to create missing intermediate groups
+#'
+#' @param h5plist An object of class [H5IdComponent-class] representing a link
+#'   creation property list.
+#' @param create_groups A logical of length 1 specifying whether missing
+#'   groups should be created when a new object is created.  Default is `TRUE`.
+#'   
+#' @examples  
+#' pid <- H5Pcreate("H5P_LINK_CREATE")
+#' 
+#' ## by default intermediate groups are not created
+#' H5Pget_create_intermediate_group( pid )
+#' 
+#' ## Change the setting so groups will be created
+#' 
+#' H5Pget_create_intermediate_group( pid )
+#' 
+#' ## tidy up
+#' H5Pclose(pid)
+#'
+#' @name H5P_create_intermediate_group
+NULL
+
+#' @rdname H5P_create_intermediate_group 
+#' @export
+H5Pset_create_intermediate_group <- function( h5plist, create_groups = TRUE ) {
+  
   h5checktypeAndPLC(h5plist, "H5P_LINK_CREATE")
-  crt_intermed_group = as.integer(crt_intermed_group)
+  if(!is.logical(create_groups)) {
+    stop("The 'create_groups' argument should be either TRUE or FALSE")
+  }
+  
+  crt_intermed_group = as.integer(create_groups)
   res <- .Call("_H5Pset_create_intermediate_group", h5plist@ID, crt_intermed_group, PACKAGE='rhdf5')
   invisible(res)
 }
 
+#' @rdname H5P_create_intermediate_group 
+#' @export
 H5Pget_create_intermediate_group <- function( h5plist ) {
   h5checktypeAndPLC(h5plist, "H5P_LINK_CREATE")
   res <- .Call("_H5Pget_create_intermediate_group", h5plist@ID, PACKAGE='rhdf5')
@@ -442,7 +477,7 @@ H5Pset_deflate <- function( h5plist, level ) {
 #'
 #' @param h5plist An object of class [H5IdComponent-class] representing a
 #'   dataset creation property list.
-#' @param value The default fill value of the dataset.
+#' @param value The default fill value of the dataset. A vector of length 1.
 #' 
 #' @seealso [H5P_fill_time],[H5Pfill_value_defined]
 #'
@@ -452,6 +487,11 @@ NULL
 #' @rdname H5P_fill_value
 #' @export
 H5Pset_fill_value <- function( h5plist, value ) {
+  
+  if(length(value) > 1L) {
+    stop("'value' must be a vector of length 1.")
+  }
+  
   h5checktypeAndPLC(h5plist, "H5P_DATASET_CREATE")
   storage.mode = storage.mode(value)
   tid <- switch(storage.mode,
@@ -460,8 +500,11 @@ H5Pset_fill_value <- function( h5plist, value ) {
                 logical = h5constants$H5T["H5T_STD_I8LE"],
                 character = {
                     tid <- H5Tcopy("H5T_C_S1")
-                    size <- nchar(value)+1
+                    size <- nchar(value, type = "bytes")
                     H5Tset_size(tid, size)
+                    H5Tset_strpad(tid, strpad = "NULLPAD")
+                    if(Encoding(value) == "UTF-8") { cset <- "UTF-8" } else { cset <- "ASCII" }
+                    H5Tset_cset(tid, cset = cset)
                     tid
                 },
                 { stop("datatype ",storage.mode," not supported. Try 'double', 'integer', or 'character'.") } )
@@ -531,22 +574,54 @@ H5Pget_alloc_time <- function( h5plist ) {
   res
 }
 
+#' Query dataset filter properties.
+#'
+#' Return information about the filter pipeline applied to a dataset creation
+#' property list.
+#'
+#' * `H5Pall_filters_avail()` checks whether all filters required to process a
+#' dataset are available to **rhdf5**.  This can be required if reading files
+#' created with other HDF5 software. 
+#' * `H5Pget_nfilters()` returns the number of
+#' filters in the dataset chunk processing pipeline. 
+#' * `H5Pget_filter()`
+#' provides details of a specific filter in the pipeline. This includes the
+#' filter name and the parameters provided to it e.g. compression level.
+#'
+#' @param h5plist Object of class [H5IdComponent-class] representing a dataset
+#'   creation property list.
+#' @param idx Integer of length 1.  This argument selects which filter to return
+#'   information about.  Indexing is R-style 1-based.
+#'   
+
+#' @rdname H5P_filters
+#' @export
 H5Pall_filters_avail <- function( h5plist ) {
     h5checktypeAndPLC(h5plist, "H5P_DATASET_CREATE")
     res <- .Call("_H5Pall_filters_avail", h5plist@ID, PACKAGE='rhdf5')
     return(res)
 }
 
+#' @rdname H5P_filters
+#' @export
 H5Pget_nfilters <- function( h5plist ) {
     h5checktypeAndPLC(h5plist, "H5P_DATASET_CREATE")
     res <- .Call("_H5Pget_nfilters", h5plist@ID, PACKAGE='rhdf5')
     res
 }
 
+#' @rdname H5P_filters
+#' @export
 H5Pget_filter <- function( h5plist, idx ) {
     h5checktypeAndPLC(h5plist, "H5P_DATASET_CREATE")
     idx <- as.integer(idx)
-    res <- .Call("_H5Pget_filter", h5plist@ID, idx, PACKAGE='rhdf5')
+    
+    if( (idx < 1) || (idx > H5Pget_nfilters(h5plist)) ) {
+      stop("'idx' argument is outside the range of filters set on this property list.", 
+           call. = FALSE)
+    } 
+    
+    res <- .Call("_H5Pget_filter", h5plist@ID, idx-1L, PACKAGE='rhdf5')
     return(res)
 }
 
@@ -555,10 +630,30 @@ H5Pget_filter <- function( h5plist, idx ) {
 #' @param h5plist Object of class [H5IdComponent-class] representing a dataset
 #' creation property list.
 #' 
+#' @returns Returns (invisibly) an integer vector of length 1.  The only
+#'   element of this vector will be non-negative if the filter was set
+#'   successfully and negative otherwise.
+#' 
 #' @export
 H5Pset_shuffle <- function( h5plist ) {
   h5checktypeAndPLC(h5plist, "H5P_DATASET_CREATE")
   res <- .Call("_H5Pset_shuffle", h5plist@ID, PACKAGE='rhdf5')
+  invisible(res)
+}
+
+#' Add the N-Bit filter to the chunk processing pipeline.
+#'
+#' @param h5plist Object of class [H5IdComponent-class] representing a dataset
+#'   creation property list.
+#'
+#' @returns Returns (invisibly) an integer vector of length 1.  The only
+#'   element of this vector will be non-negative if the filter was set
+#'   successfully and negative otherwise.
+#'
+#' @export
+H5Pset_nbit <- function( h5plist ) {
+  h5checktypeAndPLC(h5plist, "H5P_DATASET_CREATE")
+  res <- .Call("_H5Pset_nbit", h5plist@ID, PACKAGE = "rhdf5")
   invisible(res)
 }
 

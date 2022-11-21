@@ -53,6 +53,7 @@ H5Lcreate_external <- function( target_file_name, target_obj_name, link_loc, lin
 #'   location identifier (file or group).
 #' @param name The name of the link to be checked
 #' 
+#' @importFrom utils head
 #' @export
 H5Lexists <- function( h5loc, name ) {
   h5checktype(h5loc, "loc")
@@ -64,7 +65,7 @@ H5Lexists <- function( h5loc, name ) {
   Lexists = TRUE
   i=1
   while ((i <= length(name)) && (Lexists)) {
-    res <- .Call("_H5Lexists", h5loc@ID, paste(name[1:i],collapse="/"), PACKAGE='rhdf5')
+    res <- .Call("_H5Lexists", h5loc@ID, paste(head(name, n = i), collapse="/"), PACKAGE='rhdf5')
     Lexists <- ifelse(res > 0, TRUE, FALSE)
     i <- i + 1
   }

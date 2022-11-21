@@ -45,7 +45,7 @@ h5save <- function(..., file, name = NULL, createnewfile=TRUE, native = FALSE) {
 
   loc = h5checktypeOrOpenLoc(file, createnewfile=createnewfile, native = native)
 
-  for (i in 1:N) {
+  for (i in seq_len(N)) {
     h5write(list(...)[[i]], file = loc$H5Identifier, name = name[i])
   }
 

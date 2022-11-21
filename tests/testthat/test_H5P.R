@@ -83,16 +83,7 @@ test_that("Dataset creation properties can be set", {
     expect_silent(H5Pclose(pid))
 })
 
-test_that("H5P error handling works", {
-    
-    expect_silent(pid <- H5Pcreate("H5P_DATASET_CREATE"))
-    
-    expect_error(H5Pset_obj_track_times(pid, track_times = "TEST"))
-    expect_error(H5Pset_obj_track_times(pid, track_times = 1L))
-    expect_error(H5Pset_obj_track_times(pid, track_times = NA))
-    
-    expect_silent(H5Pclose(pid))
-})
+
 
 
 test_that("No open HDF5 objects are left", {

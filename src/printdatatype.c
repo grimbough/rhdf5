@@ -12,13 +12,13 @@ getDatatypeName(hid_t type) {
 /*     hsize_t     dims[H5DUMP_MAX_RANK]; */
 /*     H5T_str_t   str_pad; */
 /*     H5T_cset_t  cset; */
-  H5T_order_t order;
+/*  H5T_order_t order; */
 /*     hid_t       super; */
 /*     hid_t       tmp_type; */
 /*     htri_t      is_vlstr=FALSE; */
-  const char  *order_s=NULL;  /* byte order string */
-  H5T_sign_t  sign;           /* sign scheme value */
-  const char  *sign_s=NULL;   /* sign scheme string */
+/*  const char  *order_s;   byte order string */
+/*  H5T_sign_t  sign;           sign scheme value */
+/*  const char  *sign_s;    sign scheme string */
 
   /* htri_t TRUE = H5Tequal( H5T_STD_I8LE, H5T_STD_I8LE ); */
 
@@ -97,6 +97,7 @@ getDatatypeName(hid_t type) {
       } else {
 	
 	/* byte order */
+	/* not currently used, commenting out for now - MLS 2022-01-21
 	if(H5Tget_size(type)>1) {
 	  order = H5Tget_order(type);
 	  if (H5T_ORDER_LE == order) {
@@ -110,9 +111,10 @@ getDatatypeName(hid_t type) {
 	  }
 	} else {
 	  order_s = "";
-	}
+	} */
 	
 	/* sign */
+	/* not currently used, commenting out for now - MLS 2022-01-21
 	if ((sign=H5Tget_sign(type))>=0) {
 	  if (H5T_SGN_NONE == sign) {
 	    sign_s = " unsigned";
@@ -123,7 +125,7 @@ getDatatypeName(hid_t type) {
 	  }
 	} else {
 	  sign_s = " unknown-sign";
-	}
+	} */
 
 	name = "unknown integer";
 	/* TODO print integer format correctly to name*/
@@ -158,6 +160,7 @@ getDatatypeName(hid_t type) {
       } else {
 	
 	/* byte order */
+	/* not currently used, commenting out for now - MLS 2022-01-21
 	if(H5Tget_size(type)>1) {
 	  order = H5Tget_order(type);
 	  if (H5T_ORDER_LE == order) {
@@ -171,7 +174,7 @@ getDatatypeName(hid_t type) {
 	  }
 	} else {
 	  order_s = "";
-	}
+	} */
 	
 	name = "unknown floating-point";
 	/* TODO: print floating-point format correctly to name */
@@ -460,6 +463,17 @@ getDatatypeClass(hid_t type) {
   default:            name = "unknown"; break;
   }
   return(name);
+}
+
+char* getReferenceType(hid_t ref_type) {
+    char *name = NULL;
+    if (H5Tequal(ref_type, H5T_STD_REF_DSETREG))
+        name = "DATASET_REGION";
+    else if (H5Tequal(ref_type, H5T_STD_REF_OBJ))
+        name = "OBJECT";
+    else
+        name = "unknown";
+    return name;
 }
 
 SEXP _getDatatypeName(SEXP _type) {

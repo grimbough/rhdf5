@@ -1,6 +1,68 @@
 \name{NEWS}
 \title{News for Package 'rhdf5'}
 
+\section{Changes in version 2.42.0}{
+
+  \subsection{CHANGES}{
+    \itemize{
+      \item Function \code{H5Ocopy()} has been included.
+      \item UTF-8 encoded character datsets will be marked as having the same
+      encoding when read into an R session.
+      \item h5closeAll() now accepts objects as arguments to allow closing
+      specific HDF5 identifiers.
+    }
+  }
+
+  \subsection{BUG FIXES}{
+    \itemize{
+      \item \code{h5write()} no longer truncates multibyte UTF-8 strings 
+      (Thanks to Aaron Lun @LTLA for reporting this and providing a fix,
+      https://github.com/grimbough/rhdf5/issues/111). 
+    }
+  }
+
+}
+
+\section{Changes in version 2.40.0}{
+
+  \subsection{NEW FEATURES}{
+    \itemize{
+      \item Added H5R functions for working with object and dataset region 
+      references.
+      \item The HDF5 N-Bit filter has been enabled with via the function
+      \code{H5Pset_nbit()}.  This can be combined with 
+      \code{H5Tset_precision()} to compress integer and floating-point 
+      datasets.
+    }
+  }
+  
+  \subsection{CHANGES}{
+    \itemize{
+      \item Argument 'cset' to \code{h5createAttribute()} and 
+      \code{h5writeAttribute()} have been deprecated.  The 'encoding'
+      argument should be used going forward.  This ensures consistency with 
+      \code{h5create()} and \code{h5write()}.
+    }
+  }
+  
+  \subsection{BUG FIXES}{
+    \itemize{
+      \item The documentation for the 'encoding' argument to 
+      \code{h5createDataset()} and \code{h5writeDataset()} stated 'UTF-8' was a 
+      valid option, however this would produce an error. This has now been 
+      fixed. (Thanks to @ilia-kats for identifying this, 
+      https://github.com/grimbough/rhdf5/pull/101)
+      \item Fixed bug where an uninitialized value was used in the C code
+      underlying \code{h5dump()} potentially causing crashes.
+      \item Addressed issue in \code{h5dump()} and \code{h5ls()} that falsely 
+      declared there were duplicated groups when used on a file with external
+      links (Thanks to @acope3 for reporting this,
+      https://github.com/grimbough/rhdf5/issues/107).
+    }
+  }
+
+}
+
 \section{Changes in version 2.38.0}{
 
   \subsection{NEW FEATURES}{
@@ -19,6 +81,16 @@
   \subsection{CHANGES}{
     \itemize{
       \item Documentation switched to roxygen2
+    }
+  }
+  
+  \subsection{BUG FIXES}{
+    \itemize{
+      \item h5createDataset() now prints a warning if a chunk dimension 
+      exceeds the maximum size of that dimension and automatically
+      sets the corresponding chunk dimension to the maxiumum.
+      (Thanks to Eric Kernfeld @ekernf01 for the report,
+      https://github.com/grimbough/rhdf5/issues/97)
     }
   }
 }

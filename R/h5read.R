@@ -1,6 +1,6 @@
 h5readDataset <- function (h5dataset, index = NULL, start = NULL, stride = NULL, 
                            block = NULL, count = NULL, compoundAsDataFrame = TRUE, drop = FALSE, ...) {
-
+    
     h5spaceFile <- H5Dget_space(h5dataset)
     on.exit(H5Sclose(h5spaceFile))
     h5spaceMem = NULL
@@ -41,17 +41,17 @@ h5readDataset <- function (h5dataset, index = NULL, start = NULL, stride = NULL,
                        h5spaceMem = h5spaceMem,
                        compoundAsDataFrame = compoundAsDataFrame, drop = drop, ...)
     },
-        error = function(e) { 
-            err <- h5checkFilters(h5dataset)
-            ## if we fail here it doesn't make it to the usual H5Dclose call
-            on.exit(H5Dclose(h5dataset))
-            if(nchar(err) > 0)
-                stop(err, call. = FALSE)
-            else 
-                stop(e)
-        }
+    error = function(e) { 
+        err <- h5checkFilters(h5dataset)
+        ## if we fail here it doesn't make it to the usual H5Dclose call
+        on.exit(H5Dclose(h5dataset))
+        if(nchar(err) > 0)
+            stop(err, call. = FALSE)
+        else 
+            stop(e)
+    }
     )
-
+    
     ## Here we reorder data to match the order requested in index.
     ## The calls to H5Sselect_index will have returned data linearly
     ## from the file, not the potentially random order requested.
@@ -59,13 +59,13 @@ h5readDataset <- function (h5dataset, index = NULL, start = NULL, stride = NULL,
         I = list()
         for (i in seq_along(index)) {
             if(!index_null[i]) { ## skip if the index was generated inside this function
-              tmp <- unique(index[[i]])
-              if(is.unsorted(tmp)) { 
-                tmp <- sort.int(tmp) 
-              } 
-              I[[i]] = match(index[[i]], tmp)
+                tmp <- unique(index[[i]])
+                if(is.unsorted(tmp)) { 
+                    tmp <- sort.int(tmp) 
+                } 
+                I[[i]] = match(index[[i]], tmp)
             } else {
-              I[[i]] <- seq_len(s[i])
+                I[[i]] <- seq_len(s[i])
             }
         }
         obj.dim <- lapply(dim(obj), FUN = seq_len)
@@ -74,7 +74,7 @@ h5readDataset <- function (h5dataset, index = NULL, start = NULL, stride = NULL,
             obj <- do.call("[", c(list(obj), I, drop = FALSE))
         } 
     }
-
+    
     return(obj)
 }
 
@@ -212,12 +212,18 @@ h5read <- function(file, name, index=NULL, start=NULL, stride=NULL, block=NULL,
             obj <- h5readDataset(h5dataset, index = index, start = start, stride = stride, 
                                  block = block, count = count, compoundAsDataFrame = compoundAsDataFrame, drop = drop, ...)
             ## coerce the string "NA" to NA if required
-            if(storage.mode(obj) == "character" && H5Aexists(h5dataset, name = "as.na")) {
-                if(any(obj == "NA")) {
-                    obj[obj == "NA"] <- NA_character_
+            if(storage.mode(obj) == "character") {
+                if(H5Aexists(h5dataset, name = "as.na")) {
+                    if(any(obj == "NA")) {
+                        obj[obj == "NA"] <- NA_character_
+                    }
+                }
+                ## determine if this is ASCII or UTF-8 encoding
+                h5type <- H5Dget_type(h5dataset)
+                if(H5Tget_cset(h5type) == 1L) { 
+                    Encoding(obj) <- "UTF-8" 
                 }
             }
-
             cl <- attr(obj,"class")
             if (!is.null(cl) & callGeneric) {
                 if (exists(paste("h5read",cl,sep="."),mode="function")) {

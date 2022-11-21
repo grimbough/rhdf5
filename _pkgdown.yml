@@ -1,4 +1,8 @@
 reference:
+- title: "About rhdf5"
+- contents:
+  - rhdf5
+  
 - title: "High level functions"
   desc: >
     Wrappers around several low-level functions
@@ -59,13 +63,29 @@ reference:
 - contents: 
   - starts_with("H5T")
   
-- title: "HDF5 Object Creation Properties"
+- title: "HDF5 Property Lists"
+- subtitle: "File Creation Properties"
+- contents:
+  - H5Pget_version
+  - H5Pset_shared_mesg_nindexes
+  - H5Pset_shared_mesg_phase_change
+  - H5Pset_istore_k
+  - H5Pset_shared_mesg_index
+  - H5Pset_sizes
+  - H5Pset_sym_k
+  - H5Pset_userblock
+- subtitle: "File Access Properties"
+- contents:
+  - H5P_libver_bounds
+  - H5Pset_fapl_ros3
+- subtitle: "Object Creation Properties"
 - contents:
   - H5Pobject_track_times
-  
-- title: "HDF5 Dataset Creation Properties"
+- subtitle: "Dataset Creation Properties"
 - contents:
+  - H5Pall_filters_avail
   - H5Pset_shuffle
+  - H5Pset_nbit
   - H5Pset_deflate
   - H5Pset_szip
   - H5Pset_bzip2
@@ -78,4 +98,19 @@ reference:
   - H5Pcopy
   - H5Pcreate
   - H5Pget_class
+  - H5P_fill_value
+  - H5P_fill_time
+  - H5Pfill_value_defined
   - H5Pset_fapl_ros3
+  
+- title: "HDF5 References"
+- contents: 
+  - starts_with("H5R")
+
+- title: "HDF5 Filters"
+- contents: 
+  - starts_with("H5Z")
+
+- title: "H5 Library Functions"
+- contents: 
+  - H5functions

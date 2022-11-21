@@ -12,6 +12,7 @@
 #include "H5I.h"
 #include "H5L.h"
 #include "H5O.h"
+#include "H5R.h"
 #include "H5S.h"
 #include "H5T.h"
 #include "H5P.h"
@@ -83,6 +84,7 @@ static R_CallMethodDef libraryRCalls[] = {
   {"_H5Oopen", (DL_FUNC) &_H5Oopen, 2},
   {"_H5Oclose", (DL_FUNC) &_H5Oclose, 1},
   {"_H5Olink", (DL_FUNC) &_H5Olink, 5},
+  {"_H5Ocopy", (DL_FUNC) &_H5Ocopy, 6},
   {"_H5Oget_num_attrs", (DL_FUNC) &_H5Oget_num_attrs, 1},
   //  {"_H5Oget_info", (DL_FUNC) &_H5Oget_info, 1},
   //  {"_H5Oget_info_by_name", (DL_FUNC) &_H5Oget_info_by_name, 2},
@@ -92,6 +94,11 @@ static R_CallMethodDef libraryRCalls[] = {
   {"_H5Lmove", (DL_FUNC) &_H5Lmove, 6},
   {"_H5Lcopy", (DL_FUNC) &_H5Lcopy, 6},
   {"_H5Lget_info", (DL_FUNC) &_H5Lget_info, 2},
+  {"_H5Rcreate", (DL_FUNC) &_H5Rcreate, 4},
+  {"_H5Rget_obj_type", (DL_FUNC) &_H5Rget_obj_type, 3},
+  {"_H5Rdereference", (DL_FUNC) &_H5Rdereference, 3},
+  {"_H5Rget_name", (DL_FUNC) &_H5Rget_name, 3},
+  {"_H5Rget_region", (DL_FUNC) &_H5Rget_region, 3},
   {"_H5Screate", (DL_FUNC) &_H5Screate, 1},
   {"_H5Scopy", (DL_FUNC) &_H5Scopy, 1},
   {"_H5Sclose", (DL_FUNC) &_H5Sclose, 1},
@@ -118,6 +125,10 @@ static R_CallMethodDef libraryRCalls[] = {
   {"_H5Tset_cset", (DL_FUNC) &_H5Tset_cset, 2},
   {"_H5Tget_cset", (DL_FUNC) &_H5Tget_cset, 1},
   {"_H5Tis_variable_str", (DL_FUNC) &_H5Tis_variable_str, 1},
+  {"_H5Tset_precision", (DL_FUNC) &_H5Tset_precision, 2},
+  {"_H5Tget_precision", (DL_FUNC) &_H5Tget_precision, 1},
+  {"_H5Tset_offset", (DL_FUNC) &_H5Tset_offset, 2},
+  {"_H5Tget_offset", (DL_FUNC) &_H5Tget_offset, 1},
   {"_H5Pcreate", (DL_FUNC) &_H5Pcreate, 1},
   {"_H5Pget_class", (DL_FUNC) &_H5Pget_class, 1},
   {"_H5Pcopy", (DL_FUNC) &_H5Pcopy, 1},
@@ -233,7 +244,7 @@ static R_CallMethodDef libraryRCalls[] = {
   /* {"_H5Pmodify_filter", (DL_FUNC) &_H5Pmodify_filter, 5}, */
   /* {"_H5Premove_filter", (DL_FUNC) &_H5Premove_filter, 2}, */
   /* {"_H5Pset_fletcher32", (DL_FUNC) &_H5Pset_fletcher32, 1}, */
-  /* {"_H5Pset_nbit", (DL_FUNC) &_H5Pset_nbit, 1}, */
+  {"_H5Pset_nbit", (DL_FUNC) &_H5Pset_nbit, 1},
   /* {"_H5Pset_scaleoffset", (DL_FUNC) &_H5Pset_scaleoffset, 3}, */
   {"_H5Pset_shuffle", (DL_FUNC) &_H5Pset_shuffle, 1},
   {"_H5Pset_szip", (DL_FUNC) &_H5Pset_szip, 3},

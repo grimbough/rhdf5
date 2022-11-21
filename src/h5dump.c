@@ -24,6 +24,7 @@ herr_t opAddToDumpTree( hid_t g_id, const char *name, const H5L_info_t *info, vo
     strcpy(newElement->group, data->group);
     newElement->info = (*info);
     newElement->addr = infobuf.addr;
+    newElement->fileno = infobuf.fileno;
 
     hid_t oid = H5Oopen( g_id, name, H5P_DEFAULT );
     newElement->type = H5Iget_type(oid);
@@ -33,7 +34,7 @@ herr_t opAddToDumpTree( hid_t g_id, const char *name, const H5L_info_t *info, vo
     switch (infobuf.type) {
         case H5O_TYPE_GROUP: {
             /* check if we have an recursive loop in the hierarchy */
-            if ( data->n > 0 && group_check (data->last, infobuf.addr) ) {
+            if ( data->n > 0 && group_check (data->last, infobuf.addr, infobuf.fileno) ) {
                 warning ("Identical objects found\n");
             } else { /* otherwise create a new element in our linked list */
             
@@ -65,7 +66,6 @@ herr_t opAddToDumpTree( hid_t g_id, const char *name, const H5L_info_t *info, vo
                 data->last = newElement;
 
                 if ((data->maxdepth < 0) | (data->depth < data->maxdepth)) {
-                    hsize_t idx=0;
                     char* group = data->group;
                     data->group = (char *) R_alloc((strlen(name)+strlen(group)+2), sizeof(char));
                     strcpy(data->group, group);
@@ -241,8 +241,13 @@ SEXP _h5dump( SEXP _loc_id, SEXP _depth, SEXP _index_type, SEXP _order ) {
     data.index_type = (H5_index_t) INTEGER(_index_type)[0];
     data.order = (H5_iter_order_t) INTEGER(_order)[0];
     hsize_t idx=0;
+    // set native to false here.  It will be converted later during h5dump()
+    data.native = 0;
 
     herr_t herr = H5Literate( loc_id, data.index_type, data.order, &idx, &opAddToDumpTree, &data );
+    if(herr < 0) {
+      error("Error iterating through file");
+    }
     
     SEXP Rval;
     Rval = getTree(data.first, &data, loc_id, 0);
