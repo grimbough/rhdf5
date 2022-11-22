@@ -99,6 +99,17 @@ H5Pset_rle <- function( h5plist, bit32 = FALSE ) {
 }
 
 #' @export
+H5Pset_turborle <- function( h5plist ) {
+  
+  if(!is.loaded('_H5Pset_turborle', PACKAGE = 'rhdf5'))
+    stop('Turbo RLE filter not found.\nPlease install rhdf5filters, and then reinstall rhdf5.')
+  
+  h5checktypeAndPLC(h5plist, "H5P_DATASET_CREATE")
+  res <- .Call("_H5Pset_turborle", h5plist@ID, PACKAGE='rhdf5')
+  invisible(res)
+}
+
+#' @export
 H5Pset_lip <- function( h5plist, nbits = NULL ) {
     
     if(!is.loaded('_H5Pset_lip', PACKAGE = 'rhdf5'))
