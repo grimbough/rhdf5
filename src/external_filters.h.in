@@ -11,14 +11,16 @@
 #define H5Z_FILTER_BLOSC 32001
 #define H5Z_FILTER_LZF 32000
 #define H5Z_FILTER_RLE 30007
+#define H5Z_FILTER_RLE8 30008
 #define H5Z_FILTER_LIP 30009
 #define H5Z_FILTER_SIMDCOMP 30010
-#define H5Z_FILTER_TRLE 30011
+#define H5Z_FILTER_TURBORLE 30011
 
 SEXP _H5Pset_bzip2( SEXP _plist_id, SEXP _level );
 SEXP _H5Pset_blosc( SEXP _plist_id, SEXP _method, SEXP _level, SEXP _shuffle, SEXP _typesize, SEXP _buffersize );
 SEXP _H5Pset_lzf( SEXP _plist_id, SEXP _buffersize );
 SEXP _H5Pset_rle( SEXP _plist_id, SEXP _bit32 );
+SEXP _H5Pset_rle8( SEXP _plist_id );
 SEXP _H5Pset_turborle( SEXP _plist_id );
 SEXP _H5Pset_lip( SEXP _plist_id, SEXP _nbits);
 SEXP _H5Pset_simdcomp( SEXP _plist_id, SEXP _nbits);

@@ -66,6 +66,19 @@ SEXP _H5Pset_rle( SEXP _plist_id, SEXP _bit32) {
   return Rval;
 }
 
+SEXP _H5Pset_rle8( SEXP _plist_id ) {
+  
+  herr_t herr;
+  unsigned int cd_values[1];
+  
+  hid_t plist_id = STRSXP_2_HID( _plist_id );
+
+  herr = H5Pset_filter (plist_id, H5Z_FILTER_RLE8, H5Z_FLAG_OPTIONAL, (size_t)0, cd_values);
+  SEXP Rval = ScalarInteger(herr);
+  
+  return Rval;
+}
+
 SEXP _H5Pset_turborle( SEXP _plist_id ) {
   
   herr_t herr;
@@ -73,7 +86,7 @@ SEXP _H5Pset_turborle( SEXP _plist_id ) {
   
   hid_t plist_id = STRSXP_2_HID( _plist_id );
 
-  herr = H5Pset_filter (plist_id, H5Z_FILTER_TRLE, H5Z_FLAG_OPTIONAL, (size_t)1, cd_values);
+  herr = H5Pset_filter (plist_id, H5Z_FILTER_TURBORLE, H5Z_FLAG_OPTIONAL, (size_t)1, cd_values);
   SEXP Rval = ScalarInteger(herr);
   
   return Rval;
