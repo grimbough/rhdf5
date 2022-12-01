@@ -1,15 +1,26 @@
 \name{NEWS}
 \title{News for Package 'rhdf5'}
 
-\section{Changes in version 2.42.0}{
+\section{Changes in version 2.44.0}{
 
   \subsection{CHANGES}{
     \itemize{
       \item Function \code{H5Ocopy()} has been included.
-      \item UTF-8 encoded character datsets will be marked as having the same
-      encoding when read into an R session.
       \item h5closeAll() now accepts objects as arguments to allow closing
       specific HDF5 identifiers.
+      \item Functions \code{H5Teunum_create()} and \code{H5Tenum_insert()}
+      have been included.
+    }
+  }
+
+}
+
+\section{Changes in version 2.42.0}{
+
+  \subsection{CHANGES}{
+    \itemize{
+      \item UTF-8 encoded character datsets will be marked as having the same
+      encoding when read into an R session.
     }
   }
 
