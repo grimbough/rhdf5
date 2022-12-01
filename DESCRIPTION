@@ -28,7 +28,7 @@ Imports: Rhdf5lib (>= 1.13.4),
   rhdf5filters
 Depends: R (>= 4.0.0), methods
 Suggests: bit64, BiocStyle, knitr, rmarkdown, testthat,  
-  microbenchmark, dplyr, ggplot2, mockery, BiocParallel
+  bench, dplyr, ggplot2, mockery, BiocParallel
 LinkingTo: Rhdf5lib
 SystemRequirements: GNU make
 biocViews: Infrastructure, DataImport
