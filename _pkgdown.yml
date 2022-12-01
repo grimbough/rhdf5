@@ -78,6 +78,8 @@ reference:
 - contents:
   - H5P_libver_bounds
   - H5Pset_fapl_ros3
+- subtitle: "Group Creation Properties"
+  - H5P_create_intermediate_group
 - subtitle: "Object Creation Properties"
 - contents:
   - H5Pobject_track_times
