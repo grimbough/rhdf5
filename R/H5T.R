@@ -179,4 +179,47 @@ H5Tget_precision <- function( dtype_id ) {
   return(precision)
   
 }
+
+#' Create or modify an HDF5 enum datatype
+#'
+#' @param dtype_id ID of HDF5 datatype to work with.  For `H5Tenum_create`, this
+#'   is the identifier of the basedatype, and must be an integer e.g.
+#'   `H5T_NATIVE_INT`. For `H5Tenum_insert` this will be a datatype identifier
+#'   created by `H5Tenum_create`.
+#' @param name The name of a the new enum member.  This is analogous to a
+#'   "level" in an R factor.
+#' @param value The value of the new member.  Must be compatible with the base
+#'   datatype defined by `dtype_id`.
+#'
+#' @returns * `H5Tinsert_enum()` returns an character representing the H5 identifier
+#' of the new datatype. * `H5Tset_precision()` is called
+#'   for its side-effect of modifying the existing datatype.  It will
+#'   invisibly return `TRUE` if this is successful `FALSE` if not.
+#'   
+#' @examples 
+#' tid <- H5Tenum_create(dtype_id = "H5T_NATIVE_UCHAR")
+#' H5Tenum_insert(tid, name = "TRUE", value = 1L)
+#' H5Tenum_insert(tid, name = "FALSE", value = 0L)
+#'
+#' @name H5T_enum
+NULL
+
+#' @rdname H5T_enum
+#' @export
+H5Tenum_create <- function(dtype_id = "H5T_NATIVE_INT") {
+  dtype_id <- h5checkConstants( "H5T", dtype_id )
+  tid <- .Call("_H5Tenum_create", dtype_id, PACKAGE = "rhdf5")
+}
   
+#' @rdname H5T_enum
+#' @export
+H5Tenum_insert <- function(dtype_id, name, value) {
+  
+  if(!is.integer(value)) {
+    stop("The 'value' argument must be an integer.")
+  }
+  
+  res <- .Call("_H5Tenum_insert", dtype_id, name, value)
+  
+  return(invisible(res >= 0))
+}

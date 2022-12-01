@@ -197,3 +197,30 @@ SEXP _H5Tget_offset( SEXP _dtype_id ) {
   UNPROTECT(1);
   return Rval;
 }
+
+SEXP _H5Tenum_create( SEXP _base_id ) {
+  
+  hid_t base_id = STRSXP_2_HID( _base_id );
+  
+  hid_t tid = H5Tenum_create(base_id);
+  
+  SEXP Rval;
+  PROTECT(Rval = HID_2_STRSXP(tid));
+  UNPROTECT(1);
+  return Rval;
+}
+
+SEXP _H5Tenum_insert( SEXP _type, SEXP _name, SEXP _value ) {
+  
+  hid_t type = STRSXP_2_HID( _type );
+  const char *name = CHAR(STRING_ELT(_name, 0));
+  void * value = INTEGER(_value);
+
+  herr_t herr = H5Tenum_insert(type, name, value);
+  
+  SEXP Rval;
+  PROTECT(Rval = ScalarInteger(herr));
+  UNPROTECT(1);
+  return Rval;
+}
+  

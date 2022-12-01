@@ -270,13 +270,14 @@ H5Dread <- function( h5dataset, h5spaceFile=NULL, h5spaceMem=NULL, buf = NULL, c
 #' that match the size and shape of `h5dataset` will be used.
 #' 
 #' @export
-H5Dwrite <- function( h5dataset, buf, h5spaceMem=NULL, h5spaceFile=NULL ) {
+H5Dwrite <- function( h5dataset, buf, h5type=NULL, h5spaceMem=NULL, h5spaceFile=NULL ) {
   h5checktype(h5dataset, "dataset")
   h5checktypeOrNULL(h5spaceFile, "dataspace")
   h5checktypeOrNULL(h5spaceMem, "dataspace")
+  if (is.null(h5type)) { tidMem <- NULL } else { tidMem <- h5type }
   if (is.null(h5spaceMem)) { sidMem <- NULL } else { sidMem <- h5spaceMem@ID }
   if (is.null(h5spaceFile)) { sidFile <- NULL } else { sidFile <- h5spaceFile@ID }
-  invisible(.Call("_H5Dwrite", h5dataset@ID, buf, sidFile, sidMem, h5dataset@native, PACKAGE='rhdf5'))
+  invisible(.Call("_H5Dwrite", h5dataset@ID, buf, sidFile, sidMem, h5type, h5dataset@native, PACKAGE='rhdf5'))
 }
 
 #' Change the dimensions of an HDF5 dataset

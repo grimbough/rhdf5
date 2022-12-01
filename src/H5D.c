@@ -950,11 +950,12 @@ SEXP _H5Dread( SEXP _dataset_id, SEXP _file_space_id, SEXP _mem_space_id, SEXP _
 
 /* herr_t H5Dwrite(hid_t dataset_id, hid_t mem_type_id, hid_t mem_space_id, hid_t file_space_id, hid_t xfer_plist_id, const void * buf ) */
 /* TODO more parameters: hid_t xfer_plist_id */
-SEXP _H5Dwrite( SEXP _dataset_id, SEXP _buf, SEXP _file_space_id, SEXP _mem_space_id, SEXP _native) {
+SEXP _H5Dwrite( SEXP _dataset_id, SEXP _buf, SEXP _file_space_id, SEXP _mem_space_id, SEXP _mem_type_id, SEXP _native) {
     hid_t dataset_id = STRSXP_2_HID( _dataset_id );
     int native = LOGICAL(_native)[0];
     hid_t mem_type_id;
     hid_t mem_space_id;
+    
     if (length(_mem_space_id) == 0) {
         mem_space_id = H5S_ALL;
     } else {
@@ -974,13 +975,21 @@ SEXP _H5Dwrite( SEXP _dataset_id, SEXP _buf, SEXP _file_space_id, SEXP _mem_spac
     
     switch(TYPEOF(_buf)) {
     case RAWSXP :
-        mem_type_id = H5T_NATIVE_UCHAR;
+        if(isNull(_mem_type_id)) {
+          mem_type_id = H5T_NATIVE_UCHAR;
+        } else {
+          mem_type_id = STRSXP_2_HID( _mem_type_id );
+        }
         if (native)
             PERMUTE(_buf, RAW, dim_space_id);
         buf = RAW(_buf);
         break;
     case INTSXP :
-        mem_type_id = H5T_NATIVE_INT;
+        if(isNull(_mem_type_id)) {
+          mem_type_id = H5T_NATIVE_INT;
+        } else {
+          mem_type_id = STRSXP_2_HID( _mem_type_id );
+        }
         if (native)
             PERMUTE(_buf, INTEGER, dim_space_id);
         buf = INTEGER(_buf);
@@ -1094,7 +1103,6 @@ SEXP _H5Dget_create_plist( SEXP _dataset_id ) {
 
 /* herr_t H5Dset_extent( hid_t dset_id, const hsize_t size[] ) */
 SEXP _H5Dset_extent( SEXP _dataset_id, SEXP _size ) {
-    //hid_t dataset_id = INTEGER(_dataset_id)[0];
     hid_t dataset_id = STRSXP_2_HID( _dataset_id );
     int rank = length(_size);
     herr_t herr = 3;

@@ -4,7 +4,7 @@
 \alias{H5Dwrite}
 \title{Write data to dataset}
 \usage{
-H5Dwrite(h5dataset, buf, h5spaceMem = NULL, h5spaceFile = NULL)
+H5Dwrite(h5dataset, buf, h5type = NULL, h5spaceMem = NULL, h5spaceFile = NULL)
 }
 \arguments{
 \item{h5dataset}{Object of class \linkS4class{H5IdComponent} representing an open HDF5

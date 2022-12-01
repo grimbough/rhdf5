@@ -20,5 +20,7 @@ SEXP _H5Tset_precision( SEXP _dtype_id, SEXP _precision );
 SEXP _H5Tget_precision( SEXP _dtype_id );
 SEXP _H5Tset_offset( SEXP _dtype_id, SEXP _offset );
 SEXP _H5Tget_offset( SEXP _dtype_id );
+SEXP _H5Tenum_create( SEXP _base_id );
+SEXP _H5Tenum_insert( SEXP _type, SEXP _name, SEXP _value );
 
 #endif

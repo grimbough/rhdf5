@@ -25,7 +25,7 @@ h5File <- tempfile(pattern = "H5_", fileext = ".h5")
 if(file.exists(h5File))
     file.remove(h5File)
 
-test_that("H5closeAll", {
+test_that("h5closeAll closed everything", {
   
     ## file
     fid <- H5Fcreate( h5File )
