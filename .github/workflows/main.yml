@@ -1,5 +1,7 @@
 on:
   push:
+    branches:
+      - !joss-article
   pull_request:
     branches:
       - master
