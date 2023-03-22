@@ -30,7 +30,18 @@ bibliography: paper.bib
 
 # Summary
 
-
+Bioconductor is an open-source software project and community that provides
+tools for the analysis and comprehension of biological data. One of the key
+missions of Bioconductor is to provide software infrastructure for common tasks
+and datatypes, allowing researchers to focus on developing interoperable tools
+for higher-level data analysis without reinventing the wheel.  As the volume of
+data produced by experiments in molecular biology continues to grow,
+outstripping advances in compute power, it has become imperative to provide
+technical solutions that allow researchers to easily interact with datasets that
+exceed the memory capacity of standard consumer hardware.  One such approach is
+provided by the HDF5 (Hierarchical Data Format 5) file format, which allows
+efficient access to subsets of compressed data on disk. Here we present the
+current state-of-the-art for working with HDF5 files in Bioconductor.
 
 # Statement of need
 
