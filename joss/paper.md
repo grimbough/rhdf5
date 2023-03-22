@@ -73,24 +73,59 @@ on HDF5 files in Bioconductor.
 
 ## rhdf5
 
+rhdf5 provides the ability to interact with HDF5 files.  
+
+Firstly, it provides
+a large majority of the functionality found in the HDF5 C-API, maintaining
+as much of the functionality found there as possible.
+
+In addition rhdf5 also provides simplified 'wrapper' functions for common operations (e.g.
+writing a new dataset), with many of the more 
+
+To illustrate the two approaches the code below demonstrates how an rhdf5 user could
+create a new HDF5 file and populate it was a dataset called "A" that contains 
+the two integers 1 & 2.
+
+```r
+# C API-like interface
+## Create and HDF5 file, dataspace, and dataset
+fid <- H5Fcreate( name = "/my/special/file.h5" )
+sid <- H5Screate_simple( c(2,1) )
+did <- H5Dcreate( fid, "A", "H5T_STD_I32LE", sid )
+
+## write a vector of length 2 to the dataset
+H5Dwrite(did, 1L:2L, h5spaceMem = sid, h5spaceFile = sid)
+
+## close all open HDF5 object handles
+H5Dclose( did )
+H5Sclose( sid )
+H5Fclose( fid )
+
+# Simplified wrapper functions
+## Create an HDF5 file
+h5createFile( file = "/my/special/file.h5" )
+## Write a vector of length 2 to a dataset call "A"
+h5write( file = "/my/special/file.h5",
+         obj = 1L:2L,
+         name = "A" )
+```
+
 ## HDF5array
+
+The previously mentioned packages provide general purpose tools for working with
+HDF5 files in R, regardless of the research domain or datatype.  However, for users
+of Bioconductor (and indeed R in general) it is common to work with single
+HDF5 datasets representing vectors, matrices, or higher-dimensional arrays.
+The HDF5array package defines R classes and methods that provide convenient
+array-like containers for representing and manipulating HDF5 datasets in a memory-efficient manner, using syntax that is familiar to any R programmer.
+
 
 # Availability
 
 All four packages can be readily installed from Bioconductor. Developmental
-versions can be found on GitHub. 
-<!--# Package dependencies and system requirements
-are documented at # https://js2264.github.io/VplotR/. VplotR has been tested
-using R (version 3.5 
-# and later) on macOS (versions 10.11 and later), Ubuntu
-18.04.2 and Windows 
-# machines. To ensure stability, VplotR includes unit tests
-for most functions and 
-# supports continuous integration using the Travis CI
-platform. -->
-Code contributions, bug reports, fixes and feature requests are most
-welcome by opening issues and pull requests at the appropriate GitHub
-repositories.
+versions can be found on GitHub.   Code contributions, bug reports, fixes and
+feature requests are most welcome by opening issues and pull requests at the
+appropriate GitHub repositories.
 
 <!--
 # Citations
@@ -118,7 +153,8 @@ For a quick reference, the following citation commands can be used:
 -->
 # Acknowledgements
 
-We acknowledge significant contributions from Bernd Fischer, the original author
-of rhdf5.
+We would like to acknowledge the significant contribution of Bernd Fischer, the
+original author of rhdf5.  In addition, we also thank Gregoire Pau, Martin
+Morgan, and Daniel van Twisk for their contributions to the various pacakges.
 
 # References
