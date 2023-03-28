@@ -43,7 +43,7 @@ void format_dimensions (H5S_class_t space_type, opObjListElement *newElement, hs
         strcpy(newElement->dim, tmp);
         
         if(maxsize[0] == H5S_UNLIMITED) {
-            sprintf(tmp, "UNLIMITED");
+            snprintf(tmp, 10, "UNLIMITED");
         } else {
             memset(tmp, '\0', 1000 * sizeof(char));
             if (native) {

@@ -334,9 +334,7 @@ SEXP H5Aread_helper(hid_t attr_id, hsize_t n, SEXP Rdim, SEXP _buf, int bit64con
     for (int i=0; i<n; i++) { REAL(Rval)[i] = na; }
     setAttrib(Rval, R_DimSymbol, Rdim);
     UNPROTECT(1);
-    char str[256];
-    sprintf(str, "Reading attribute data of type '%s' not yet implemented. Values replaced by NA's.", getDatatypeClass(dtype_id));
-    warning(str);
+    warning("Reading attribute data of type '%s' not yet implemented. Values replaced by NA's.", getDatatypeClass(dtype_id));
   } break;
   }
 

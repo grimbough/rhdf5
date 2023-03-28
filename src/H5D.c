@@ -517,9 +517,7 @@ SEXP H5Dread_helper_ENUM(hid_t dataset_id, hid_t file_space_id, hid_t mem_space_
         for (int i=0; i<n; i++) { REAL(Rval)[i] = na; }
         setAttrib(Rval, R_DimSymbol, Rdim);
         UNPROTECT(1);
-        char str[256];
-        sprintf(str, "h5read for type ENUM [%s] not yet implemented. Values replaced by NA's.", getDatatypeClass(H5Tget_super( dtype_id )));
-        warning(str);
+        warning("h5read for type ENUM [%s] not yet implemented. Values replaced by NA's.", getDatatypeClass(H5Tget_super( dtype_id )));
     }
     
     return(Rval);
@@ -653,9 +651,7 @@ SEXP H5Dread_helper_ARRAY(hid_t dataset_id, hid_t file_space_id, hid_t mem_space
         if ((cpdNField > 0) & (compoundAsDataFrame > 0)) {
             warning("h5read cannot coerce COMPOUND dataset with element of type ARRAY to data.frame. Values replaced by NA's. Try h5read with argument compoundAsDataFrame=FALSE to read element of type ARRAY.");
         } else {
-            char str[256];
-            sprintf(str, "h5read for type ARRAY [%s] not yet implemented. Values replaced by NA's.", getDatatypeClass(H5Tget_super( dtype_id )));
-            warning(str);
+            warning("h5read for type ARRAY [%s] not yet implemented. Values replaced by NA's.", getDatatypeClass(H5Tget_super( dtype_id )));
         }
     }
     
@@ -818,9 +814,7 @@ SEXP H5Dread_helper(hid_t dataset_id, hid_t file_space_id, hid_t mem_space_id, h
         for (int i=0; i<n; i++) { REAL(Rval)[i] = na; }
         setAttrib(Rval, R_DimSymbol, Rdim);
         UNPROTECT(1);
-        char str[256];
-        sprintf(str, "h5read for type '%s' not yet implemented. Values replaced by NA's.", getDatatypeClass(dtype_id));
-        warning(str);
+        warning("h5read for type '%s' not yet implemented. Values replaced by NA's.", getDatatypeClass(dtype_id));
     } break;
     }
     
