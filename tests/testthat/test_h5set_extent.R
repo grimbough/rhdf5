@@ -20,7 +20,7 @@ test_that("Dimensions as expected", {
 })
 
 test_that("Changing dataset dimensions", {
-    expect_equal( h5set_extent(file = h5File, dataset = "foo", dims = c(2, length(D))), 0 )
+    expect_true( h5set_extent(file = h5File, dataset = "foo", dims = c(2, length(D))))
     expect_equal( dim(h5read(h5File, name = "foo")), c(2,length(D)) )
 })
 

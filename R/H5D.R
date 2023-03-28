@@ -281,25 +281,29 @@ H5Dwrite <- function( h5dataset, buf, h5type=NULL, h5spaceMem=NULL, h5spaceFile=
 }
 
 #' Change the dimensions of an HDF5 dataset
-#' 
-#' @details This function can only be applied to datasets that meet the 
-#' following criteria:
+#'
+#' @details This function can only be applied to datasets that meet the
+#'   following criteria:
 #' * A chunked dataset with unlimited dimensions
-#' * A chunked dataset with fixed dimensions if the new dimension sizes are 
-#' less than the maximum sizes set with maxdims
-#' #' 
-#' @param h5dataset Object of class [H5IdComponent-class] representing an open HDF5 
-#' dataset.
+#' * A chunked dataset with fixed dimensions if the new dimension sizes are
+#'   less than the maximum sizes set with maxdims
+#'
+#' @param h5dataset Object of class [H5IdComponent-class] representing an open
+#'   HDF5 dataset.
 #' @param size An integer vector with the new dimension of the dataset.
-#' 
+#'
+#' @returns A logical vector of length 1.  Value will be `TRUE` if the operation
+#'   was sucessful and `FALSE` otherwise.
+#'
 #' @author Bernd Fischer, Mike Smith
-#' 
+#'
 #' @export
 H5Dset_extent <- function( h5dataset, size) {
     h5checktype(h5dataset, "dataset")
     size <- as.numeric(size)
     if (!h5dataset@native) size <- rev(size)
-    invisible(.Call("_H5Dset_extent", h5dataset@ID, size, PACKAGE='rhdf5'))
+    res <- .Call("_H5Dset_extent", h5dataset@ID, size, PACKAGE='rhdf5')
+    return(invisible(res >= 0))
 }
 
     

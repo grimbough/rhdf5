@@ -1,7 +1,7 @@
 #' Set a new dataset extension
 #' 
 #' Set a new dataset extension to an existing dataset in an HDF5 file
-#' #' 
+#'  
 #' @param file The filename (character) of the file in which the dataset will
 #' be located. For advanced programmers it is possible to provide an object of
 #' class [H5IdComponent-class] representing a H5 location identifier
@@ -22,9 +22,11 @@
 #' orientation. Using \code{native = TRUE} increases HDF5 file portability
 #' between programming languages. A file written with \code{native = TRUE}
 #' should also be read with \code{native = TRUE}
-#' @return Returns 0 if the dimension of the dataset was changed successfully
-#' and a negative value otherwise.
-#' @author Bernd Fischer
+#' 
+#' @return Returns `TRUE` if the dimension of the dataset was changed successfully
+#' and `FALSE` otherwise.
+#' 
+#' @author Bernd Fischer, Mike Smith
 #' @examples
 #' 
 #' tmpfile <- tempfile()
@@ -38,26 +40,26 @@
 #' @export h5set_extent
 h5set_extent <- function(file, dataset, dims, native = FALSE) {
 
-    loc = h5checktypeOrOpenLoc(file, native = native)
+    loc <- h5checktypeOrOpenLoc(file, native = native)
     on.exit( h5closeitLoc(loc) )
     
     if (is.character(dataset)) {
         if (!H5Lexists(loc$H5Identifier, dataset)) {
-            stop("Object ",dataset," does not exist in this HDF5 file.")
+            stop("Object ", dataset, " does not exist in this HDF5 file.")
         } else {
-            did = H5Oopen(loc$H5Identifier, dataset)
-            type = H5Iget_type(did)
+            did <- H5Oopen(loc$H5Identifier, dataset)
+            type <- H5Iget_type(did)
             if (type != "H5I_DATASET") {
                 H5Oclose(did)
                 stop("'", dataset, "' is not a dataset.")
             }
-            res = H5Dset_extent(did, dims)
+            res <- H5Dset_extent(did, dims)
             H5Oclose(did)
         }
     } else {
         h5checktype(dataset, "dataset")
         ## TODO: only valid for chunked datasets, so we should check for them
-        res = H5Dset_extent(dataset, dims)
+        res <- H5Dset_extent(dataset, dims)
     }
     
     invisible(res)
