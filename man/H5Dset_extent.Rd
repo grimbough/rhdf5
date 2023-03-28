@@ -7,10 +7,14 @@
 H5Dset_extent(h5dataset, size)
 }
 \arguments{
-\item{h5dataset}{Object of class \linkS4class{H5IdComponent} representing an open HDF5
-dataset.}
+\item{h5dataset}{Object of class \linkS4class{H5IdComponent} representing an open
+HDF5 dataset.}
 
 \item{size}{An integer vector with the new dimension of the dataset.}
+}
+\value{
+A logical vector of length 1.  Value will be \code{TRUE} if the operation
+was sucessful and \code{FALSE} otherwise.
 }
 \description{
 Change the dimensions of an HDF5 dataset
@@ -22,7 +26,6 @@ following criteria:
 \item A chunked dataset with unlimited dimensions
 \item A chunked dataset with fixed dimensions if the new dimension sizes are
 less than the maximum sizes set with maxdims
-#'
 }
 }
 \author{

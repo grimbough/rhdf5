@@ -6,7 +6,7 @@
 \alias{show,H5Ref-method}
 \alias{length,H5Ref-method}
 \alias{c,H5Ref-method}
-\alias{[,H5Ref-method}
+\alias{[,H5Ref,ANY,ANY,ANY-method}
 \title{An S4 class representing H5 references.}
 \usage{
 \S4method{show}{H5Ref}(object)
@@ -15,7 +15,7 @@
 
 \S4method{c}{H5Ref}(x, ...)
 
-\S4method{[}{H5Ref}(x, i)
+\S4method{[}{H5Ref,ANY,ANY,ANY}(x, i)
 }
 \arguments{
 \item{object}{Object of class \code{H5Ref}}
@@ -47,7 +47,7 @@ object.
 contain the same type of reference, either \code{H5R_OBJECT} or
 \code{H5R_DATASET_REFERENCE}.
 
-\item \code{[}: Subset an \code{H5Ref} object.
+\item \code{x[i}: Subset an \code{H5Ref} object.
 
 }}
 \section{Slots}{

@@ -33,12 +33,11 @@ between programming languages. A file written with \code{native = TRUE}
 should also be read with \code{native = TRUE}}
 }
 \value{
-Returns 0 if the dimension of the dataset was changed successfully
-and a negative value otherwise.
+Returns \code{TRUE} if the dimension of the dataset was changed successfully
+and \code{FALSE} otherwise.
 }
 \description{
 Set a new dataset extension to an existing dataset in an HDF5 file
-#'
 }
 \examples{
 
@@ -51,5 +50,5 @@ h5ls(tmpfile, all=TRUE)[c("dim", "maxdim")]
 
 }
 \author{
-Bernd Fischer
+Bernd Fischer, Mike Smith
 }
