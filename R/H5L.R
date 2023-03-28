@@ -104,12 +104,14 @@ H5Lget_info <- function( h5loc, name ) {
 #' 
 #' @examples 
 #' 
+#' h5file <- tempfile(pattern = "_ex_H5L.h5")
+#' 
 #' # create an hdf5 file and a group
-#' h5createFile("ex_H5L.h5")
-#' h5createGroup("ex_H5L.h5","/foo")
+#' h5createFile( h5file )
+#' h5createGroup(h5file,"/foo")
 #' 
 #' # reopen file and confirm "/foo" exists but "/baa" does not
-#' fid <- H5Fopen("ex_H5L.h5")
+#' fid <- H5Fopen(h5file)
 #' H5Lexists(fid, "/foo")
 #' 
 #' # remove the link to "/foo" and confirm it no longer exists

@@ -155,20 +155,21 @@ h5readDataset <- function (h5dataset, index = NULL, start = NULL, stride = NULL,
 #' @seealso \code{\link{h5ls}}
 #' @examples
 #' 
-#' h5createFile("ex_hdf5file.h5")
+#' h5File <- tempfile(pattern = "ex_hdf5file.h5")
+#' h5createFile(h5File)
 #' 
 #' # write a matrix
 #' B = array(seq(0.1,2.0,by=0.1),dim=c(5,2,2))
-#' h5write(B, "ex_hdf5file.h5","B")
+#' h5write(B, h5File, "B")
 #' 
 #' # read a matrix
-#' E = h5read("ex_hdf5file.h5","B")
+#' E = h5read(h5File,"B")
 #' 
 #' # write and read submatrix
-#' h5createDataset("ex_hdf5file.h5", "S", c(5,8), storage.mode = "integer", chunk=c(5,1), level=7)
-#' h5write(matrix(1:5,nr=5,nc=1), file="ex_hdf5file.h5", name="S", index=list(NULL,1))
-#' h5read("ex_hdf5file.h5", "S")
-#' h5read("ex_hdf5file.h5", "S", index=list(NULL,2:3))
+#' h5createDataset(h5File, "S", c(5,8), storage.mode = "integer", chunk=c(5,1), level=7)
+#' h5write(matrix(1:5,nr=5,nc=1), file=h5File, name="S", index=list(NULL,1))
+#' h5read(h5File, "S")
+#' h5read(h5File, "S", index=list(NULL,2:3))
 #' 
 #' # Read a subset of an hdf5 file in a public S3 bucket
 #' \donttest{

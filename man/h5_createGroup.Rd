@@ -30,13 +30,14 @@ Creates a new group within an HDF5 file.
 }
 \examples{
 
-h5createFile("ex_createGroup.h5")
+h5File <- tempfile(pattern = "ex_createGroup.h5")
+h5createFile(h5File)
 
 # create groups
-h5createGroup("ex_createGroup.h5","foo")
-h5createGroup("ex_createGroup.h5","foo/foobaa")
+h5createGroup(h5File, "foo")
+h5createGroup(h5File, "foo/foobaa")
 
-h5ls("ex_createGroup.h5")
+h5ls(h5File)
 
 }
 \seealso{

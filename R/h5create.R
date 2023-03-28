@@ -13,13 +13,15 @@
 #' [h5read()], [h5write()], \link{rhdf5}
 #' @examples
 #' 
-#' h5createFile("ex_createFile.h5")
+#' h5File <- tempfile(pattern = "ex_createFile.h5")
+#' 
+#' h5createFile(h5File)
 #' 
 #' # create groups
-#' h5createGroup("ex_createFile.h5","foo")
-#' h5createGroup("ex_createFile.h5","foo/foobaa")
+#' h5createGroup(h5File,"foo")
+#' h5createGroup(h5File,"foo/foobaa")
 #' 
-#' h5ls("ex_createFile.h5")
+#' h5ls(h5File)
 #' 
 #' @name h5_createFile
 #' @export h5createFile
@@ -67,13 +69,14 @@ h5createFile <- function(file) {
 #' [h5read()], [h5write()]
 #' @examples
 #' 
-#' h5createFile("ex_createGroup.h5")
+#' h5File <- tempfile(pattern = "ex_createGroup.h5")
+#' h5createFile(h5File)
 #' 
 #' # create groups
-#' h5createGroup("ex_createGroup.h5","foo")
-#' h5createGroup("ex_createGroup.h5","foo/foobaa")
+#' h5createGroup(h5File, "foo")
+#' h5createGroup(h5File, "foo/foobaa")
 #' 
-#' h5ls("ex_createGroup.h5")
+#' h5ls(h5File)
 #' 
 #' @name h5_createGroup
 #' @export h5createGroup
@@ -485,9 +488,10 @@ h5createDataset <- function(file, dataset, dims, maxdims = dims,
 #' @keywords programming interface IO file
 #' @examples
 #'
-#' h5createFile("ex_createAttribute.h5")
-#' h5write(1:1, "ex_createAttribute.h5","A")
-#' fid <- H5Fopen("ex_createAttribute.h5")
+#' h5File <- tempfile(pattern = "ex_createAttribute.h5")
+#' h5createFile(h5File)
+#' h5write(1:1, h5File, "A")
+#' fid <- H5Fopen(h5File)
 #' did <- H5Dopen(fid, "A")
 #' h5createAttribute (did, "time", c(1,10))
 #' H5Dclose(did)

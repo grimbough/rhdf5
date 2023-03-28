@@ -83,9 +83,10 @@ for you.
 }
 \examples{
 
-h5createFile("ex_createAttribute.h5")
-h5write(1:1, "ex_createAttribute.h5","A")
-fid <- H5Fopen("ex_createAttribute.h5")
+h5File <- tempfile(pattern = "ex_createAttribute.h5")
+h5createFile(h5File)
+h5write(1:1, h5File, "A")
+fid <- H5Fopen(h5File)
 did <- H5Dopen(fid, "A")
 h5createAttribute (did, "time", c(1,10))
 H5Dclose(did)

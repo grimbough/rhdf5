@@ -28,10 +28,12 @@ to release resources.
 }
 \examples{
 
-h5createFile("ex_list_identifier.h5")
+h5File <- tempfile("ex_list_identifier.h5")
+
+h5createFile(h5File)
 
 # create groups
-h5createGroup("ex_list_identifier.h5","foo")
+h5createGroup(h5File,"foo")
 
 h5listIdentifier()
 h5validObjects()
