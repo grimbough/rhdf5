@@ -26,8 +26,8 @@ dimensions.  Returns \code{NULL} if the given dataset is not chunked.
 Additional functions for finding details of dataset chunking.
 }
 \details{
-This function does not map directly to the HDF5 C API but is
-included as a useful addition.
+These functions do not map directly to the HDF5 C API but follow the same style and are
+included as potentially useful additions.
 \itemize{
 \item \code{H5Dis_chunked} tests whether a dataset is chunked.
 \item \code{H5Dchunk_dims} will return the dimensions of the dataset chunks.

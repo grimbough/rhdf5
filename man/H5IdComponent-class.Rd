@@ -7,8 +7,8 @@
 \alias{&,H5IdComponent,character-method}
 \alias{$,H5IdComponent-method}
 \alias{$<-,H5IdComponent-method}
-\alias{[,H5IdComponent,ANY,ANY,ANY-method}
-\alias{[<-,H5IdComponent,ANY,ANY,ANY-method}
+\alias{[,H5IdComponent-method}
+\alias{[<-,H5IdComponent-method}
 \title{An S4 class representing an H5 object}
 \usage{
 \S4method{show}{H5IdComponent}(object)
@@ -19,9 +19,9 @@
 
 \S4method{$}{H5IdComponent}(x, name) <- value
 
-\S4method{[}{H5IdComponent,ANY,ANY,ANY}(x, i, j, ..., drop = TRUE)
+\S4method{[}{H5IdComponent}(x, i, j, ..., drop = TRUE)
 
-\S4method{[}{H5IdComponent,ANY,ANY,ANY}(x, i, j, ...) <- value
+\S4method{[}{H5IdComponent}(x, i, j, ...) <- value
 }
 \arguments{
 \item{object}{Object of class \code{H5IdComponent}}
@@ -73,11 +73,11 @@ dimensions of the HDF5 dataset. To create a new HDF5 dataset with specific
 properties (e.g. compression level or chunk size), please use the function
 \link{h5createDataset} first.
 
-\item \code{x[i}: Subsetting of an HDF5 dataset. The function reads a
+\item \code{[}: Subsetting of an HDF5 dataset. The function reads a
 subset of an HDF5 dataset. The given dimensions have to fit the dimensions
 of the HDF5 dataset.
 
-\item \code{`[`(x = H5IdComponent, i = ANY, j = ANY) <- value}: Subsetting of an HDF5 dataset. The function writes
+\item \code{`[`(H5IdComponent) <- value}: Subsetting of an HDF5 dataset. The function writes
 an R data object to a subset of an HDF5 dataset. The given dimensions have
 to fit the dimensions of the HDF5 dataset. The HDF5 dataset has to be
 created beforehand, e.g. by \link{h5createDataset}.

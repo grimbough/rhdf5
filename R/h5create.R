@@ -314,34 +314,35 @@ h5createGroup <- function(file, group) {
 #' @seealso [h5createFile()], [h5createGroup()], [h5read()], [h5write()]
 #' @examples
 #'
-#' h5createFile("ex_createDataset.h5")
+#' h5File <- tempfile(pattern = "_ex_createDataset.h5")
+#' h5createFile(h5File)
 #'
 #' # create dataset with compression
-#' h5createDataset("ex_createDataset.h5", "A", c(5,8), storage.mode = "integer", chunk=c(5,1), level=6)
+#' h5createDataset(h5File, "A", c(5,8), storage.mode = "integer", chunk=c(5,1), level=6)
 #'
 #' # create dataset without compression
-#' h5createDataset("ex_createDataset.h5", "B", c(5,8), storage.mode = "integer")
-#' h5createDataset("ex_createDataset.h5", "C", c(5,8), storage.mode = "double")
+#' h5createDataset(h5File, "B", c(5,8), storage.mode = "integer")
+#' h5createDataset(h5File, "C", c(5,8), storage.mode = "double")
 #'
 #' # create dataset with bzip2 compression
-#' h5createDataset("ex_createDataset.h5", "D", c(5,8), storage.mode = "integer",
+#' h5createDataset(h5File, "D", c(5,8), storage.mode = "integer",
 #'     chunk=c(5,1), filter = "BZIP2", level=6)
 #'
 #' # create a dataset of strings & define size based on longest string
 #' ex_strings <- c('long', 'longer', 'longest')
-#' h5createDataset("ex_createDataset.h5", "E",
+#' h5createDataset(h5File, "E",
 #'     storage.mode = "character", chunk = 3, level = 6,
 #'     dims = length(ex_strings), size = max(nchar(ex_strings)))
 #'
 #'
 #' # write data to dataset
-#' h5write(matrix(1:40,nr=5,nc=8), file="ex_createDataset.h5", name="A")
+#' h5write(matrix(1:40,nr=5,nc=8), file=h5File, name="A")
 #' # write second column
-#' h5write(matrix(1:5,nr=5,nc=1), file="ex_createDataset.h5", name="B", index=list(NULL,2))
+#' h5write(matrix(1:5,nr=5,nc=1), file=h5File, name="B", index=list(NULL,2))
 #' # write character vector
-#' h5write(ex_strings, file = "ex_createDataset.h5", name = "E")
+#' h5write(ex_strings, file = h5File, name = "E")
 #'
-#' h5dump("ex_createDataset.h5")
+#' h5dump( h5File )
 #'
 #' ## Investigating fixed vs variable length string datasets
 #'
@@ -360,8 +361,10 @@ h5createGroup <- function(file, group) {
 #'
 #' ## create two string datasets
 #' ## the first is variable length strings, the second fixed at the length of our longest word
-#' h5createDataset(f1, "strings", dims = length(words), storage.mode = "character", size = NULL, chunk = 25)
-#' h5createDataset(f2, "strings", dims = length(words), storage.mode = "character", size = max(nchar(words)), chunk = 25)
+#' h5createDataset(f1, "strings", dims = length(words), storage.mode = "character", 
+#'                 size = NULL, chunk = 25)
+#' h5createDataset(f2, "strings", dims = length(words), storage.mode = "character", 
+#'                 size = max(nchar(words)), chunk = 25)
 #'
 #' ## Write the data
 #' h5write(words, f1, "strings")

@@ -265,6 +265,8 @@ H5Dread <- function( h5dataset, h5spaceFile=NULL, h5spaceMem=NULL, buf = NULL, c
 #' @param h5dataset Object of class [H5IdComponent-class] representing an open HDF5 
 #' dataset.
 #' @param buf The R object containing the data to be written to the dataset.
+#' @param h5type Datatype of the HDF5 dataset to be written.  If left as `NULL`
+#' it will use the dataype of the R object supplied to `buf`.
 #' @param h5spaceMem,h5spaceFile [H5IdComponent-class] objects representing the 
 #' memory and file dataspaces respectively.  If these are left `NULL` dataspaces 
 #' that match the size and shape of `h5dataset` will be used.

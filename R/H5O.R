@@ -85,7 +85,8 @@ H5Oclose <- function( h5obj ) {
 #' ## if we want to create a new group hierarchy we can use a link creation property list
 #' lcpl <- H5Pcreate("H5P_LINK_CREATE")
 #' H5Pset_create_intermediate_group( lcpl, create_groups = TRUE )
-#' H5Ocopy(h5loc = fid1, name = "DS1", h5loc_dest = fid2, name_dest = "/foo/baa/DS1_nested", lcpl = lcpl)
+#' H5Ocopy(h5loc = fid1, name = "DS1", h5loc_dest = fid2, 
+#'         name_dest = "/foo/baa/DS1_nested", lcpl = lcpl)
 #' 
 #' ## tidy up
 #' H5Pclose(lcpl)

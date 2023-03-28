@@ -12,6 +12,9 @@ dataset.}
 
 \item{buf}{The R object containing the data to be written to the dataset.}
 
+\item{h5type}{Datatype of the HDF5 dataset to be written.  If left as \code{NULL}
+it will use the dataype of the R object supplied to \code{buf}.}
+
 \item{h5spaceMem, h5spaceFile}{\linkS4class{H5IdComponent} objects representing the
 memory and file dataspaces respectively.  If these are left \code{NULL} dataspaces
 that match the size and shape of \code{h5dataset} will be used.}
