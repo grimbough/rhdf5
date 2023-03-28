@@ -53,12 +53,22 @@ h5set_extent <- function(file, dataset, dims, native = FALSE) {
                 H5Oclose(did)
                 stop("'", dataset, "' is not a dataset.")
             }
+            
+            if(!H5Dis_chunked(did)) {
+              stop("Only chunked datasets can have their extent changed.\n'",
+                   dataset, "' is not chunked.")
+            }
+            
             res <- H5Dset_extent(did, dims)
             H5Oclose(did)
         }
     } else {
         h5checktype(dataset, "dataset")
-        ## TODO: only valid for chunked datasets, so we should check for them
+        ## Only valid for chunked datasets, so we should check for them
+        if(!H5Dis_chunked(did)) {
+          stop("Only chunked datasets can have their extent changed.\n'",
+            dataset, "' is not chunked.")
+        }
         res <- H5Dset_extent(dataset, dims)
     }
     
