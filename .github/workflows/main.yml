@@ -34,9 +34,9 @@ jobs:
       - name: Install system libraries
         if: runner.os == 'Linux'
         run: |
-          sudo apt-get install libcurl4-openssl-dev
+          sudo apt-get update && sudo apt-get install libcurl4-openssl-dev
           
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v3
           
       - name: Setup R and Bioconductor
         uses: grimbough/bioc-actions/setup-bioc@v1
@@ -44,7 +44,7 @@ jobs:
           bioc-version: ${{ matrix.config.bioc-version }}
           bioc-mirror: ${{ matrix.config.bioc-mirror }}
           
-      - uses: r-lib/actions/setup-pandoc@v1
+      - uses: r-lib/actions/setup-pandoc@v2
           
       - name: Install dependencies
         uses: r-lib/actions/setup-r-dependencies@v2
