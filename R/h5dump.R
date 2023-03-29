@@ -68,7 +68,7 @@ h5loadData <- function(h5loc, L, all=FALSE, ..., native) {
 #' @keywords programming interface IO file
 #' @examples
 #' 
-#' h5File <- tempfile(pattern = "ex_ls_dump.h5")
+#' h5File <- tempfile(pattern = "ex_dump.h5")
 #' h5createFile(h5File)
 #' 
 #' # create groups

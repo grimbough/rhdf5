@@ -69,8 +69,9 @@ H5get_libversion <- function( ) {
 #'
 #'
 #' ## create an empty file and then re-open it
-#' h5createFile("ex_h5closeAll.h5")
-#' H5Fopen("ex_h5closeAll.h5")
+#' h5File <- tempfile(pattern = "ex_h5closeAll.h5")
+#' h5createFile(h5File)
+#' H5Fopen(h5File)
 #'
 #' ## list all open identifiers
 #' h5listIdentifier()

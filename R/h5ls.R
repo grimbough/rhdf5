@@ -46,20 +46,20 @@ h5lsConvertToDataframe <- function(L, all=FALSE, native) {
 #' @keywords programming interface IO file
 #' @examples
 #' 
-#' h5createFile("ex_ls_dump.h5")
+#' h5File <- tempfile(pattern = "ex_dump.h5")
+#' h5createFile(h5File)
 #' 
 #' # create groups
-#' h5createGroup("ex_ls_dump.h5","foo")
-#' h5createGroup("ex_ls_dump.h5","foo/foobaa")
+#' h5createGroup(h5File,"foo")
+#' h5createGroup(h5File,"foo/foobaa")
 #' 
 #' # write a matrix
 #' B = array(seq(0.1,2.0,by=0.1),dim=c(5,2,2))
 #' attr(B, "scale") <- "liter"
-#' h5write(B, "ex_ls_dump.h5","foo/B")
+#' h5write(B, h5File,"foo/B")
 #' 
 #' # list content of hdf5 file
-#' h5ls("ex_ls_dump.h5",all=TRUE)
-#' h5dump("ex_ls_dump.h5")
+#' h5ls(h5File,all=TRUE)
 #' 
 #' # list content of an hdf5 file in a public S3 bucket
 #' \donttest{
