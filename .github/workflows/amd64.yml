@@ -1,4 +1,4 @@
-name: test build deploy
+Wasname: test build deploy
 
 on:
   push:
@@ -50,8 +50,6 @@ jobs:
       - name: Run the build process with Docker
         uses: addnab/docker-run-action@v3
         with:
-          username: ${{ github.actor }}
-          password: ${{ secrets.GRCH_TOKEN }}
           registry: gcr.io
           image: grimbough/bioc-with-tinytex:3.16
           options: |
