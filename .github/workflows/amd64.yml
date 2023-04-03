@@ -1,4 +1,4 @@
-Wasname: test build deploy
+name: test build deploy
 
 on:
   push:
