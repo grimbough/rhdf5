@@ -40,6 +40,13 @@ jobs:
       #     entrypoint: Rscript
       #     args: "-e 'library(remotes)' -e 'dev_package_deps(\'rhdf5\', dependencies = TRUE) |> update(upgrade = \'always\')'"
       
+    - name: Login to GitHub Container Registry
+      uses: docker/login-action@v2
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GHCR_TOKEN }}
+      
       - name: Install pkgs
         run:
          docker run --platform linux/arm64 --entrypoint Rscript ghcr.io/grimbough/bioc-tinytex:3.16 -e 'library\(remotes\)' -e 'dev_package_deps\("rhdf5", dependencies = TRUE\) |> update\(upgrade = "always"\)'
