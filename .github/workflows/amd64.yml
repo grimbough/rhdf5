@@ -58,7 +58,7 @@ jobs:
           run: |
             uname -a
             export R_LIBS_USER=/R-lib
-            Rscript -e 'library(remotes)' -e 'dev_package_deps(\'rhdf5\', dependencies = TRUE) |> update(upgrade = \'always\')'
+            Rscript -e 'library(remotes)'
       
  
       - name: Install pkgs
