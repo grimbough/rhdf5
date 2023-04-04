@@ -65,7 +65,7 @@ jobs:
             ls -l /build
             export R_LIBS_USER=/R-lib
             echo "options(Ncpus=2L, timeout = 300)" >> ~/.Rprofile
-            Rscript -e 'library(remotes)' -e 'dev_package_deps("/build/${PKG}", dependencies = TRUE) |> update(upgrade = "always")'
+            Rscript -e "library(remotes)" -e "dev_package_deps('/build/${PKG}', dependencies = TRUE) |> update(upgrade = 'always')"
             
   check-arm64:
     name: Test package on ARM64
