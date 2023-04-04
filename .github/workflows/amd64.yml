@@ -59,6 +59,7 @@ jobs:
             -v ${{ runner.temp }}/R-lib:/R-lib
             -v ${{ github.workspace }}/../:/build
             --env R_USER_LIB=/R-lib
+            --env PKG=${{ env.PKG }}
           run: |
             uname -a
             ls -l /build
@@ -94,6 +95,7 @@ jobs:
             -v ${{ runner.temp }}/R-lib:/R-lib
             -v ${{ github.workspace }}/../:/build
             --env R_USER_LIB=/R-lib
+            --env PKG=${{ env.PKG }}
           run: |
             uname -a
             ls -l /build
@@ -104,18 +106,15 @@ jobs:
             mkdir -p ${PKG}.buildbin-libdir
             R CMD INSTALL --build --library=${PKG}.buildbin-libdir ${PKG}*.tar.gz
 
-      - name: Install pkgs
-        run: |
-         docker run --platform linux/arm64 \
-           -v ${{ runner.temp }}/R-lib:/R-lib \
-           -v ${{ github.workspace }}:/rhdf5 \
-           --env R_USER_LIB=/R-lib \
-           --entrypoint R \
-           ghcr.io/grimbough/bioc-with-tinytex:devel-arm64 \
-                       R CMD build --keep-empty-dirs --no-resave-data ${PKG}
-            R CMD check --install=check:${PKG}.install-out.txt --library="${R_LIBS_USER}" --no-vignettes --timings ${PKG}*.tar.gz
-            mkdir -p ${PKG}.buildbin-libdir
-            R CMD INSTALL --build --library=${PKG}.buildbin-libdir ${PKG}*.tar.gz
+      - uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: my-artifact
+          path: |
+            ${{ github.workspace }}/*.tar.gz
+            ${{ github.workspace }}/*.install-out.txt
+            ${{ github.workspace }}/*.Rcheck
+          if-no-files-found: warn
           
 
 
