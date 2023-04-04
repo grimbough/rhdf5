@@ -85,8 +85,22 @@ jobs:
           restore-keys: |
             R_lib-ARM64-${{ hashFiles('**/DESCRIPTION') }}
             R_lib-ARM64-
+
+      - name: R CMD INSTALL
+        uses: addnab/docker-run-action@v3
+        with:
+          image: ghcr.io/grimbough/bioc-with-tinytex:devel-arm64
+          options: |
+            --platform linux/arm64
+            -v ${{ runner.temp }}/R-lib:/R-lib
+            -v ${{ github.workspace }}/../:/build
+            --env R_LIBS_USER=/R-lib
+            --env PKG=${{ env.PKG }}
+            --workdir /build
+          run: |
+            R CMD INSTALL ${PKG} &> ${PKG}.install-out.txt
           
-      - name: Run the build process with Docker
+      - name: R CMD build
         uses: addnab/docker-run-action@v3
         with:
           image: ghcr.io/grimbough/bioc-with-tinytex:devel-arm64
@@ -116,7 +130,7 @@ jobs:
             R CMD check --install=check:${PKG}.install-out.txt --library="${R_LIBS_USER}" --no-vignettes --timings ${PKG}*.tar.gz
             cat ${PKG}.install-out.txt
 
-      - name: R CMD INSTALL --build
+      - name: Build Package Binary
         uses: addnab/docker-run-action@v3
         with:
           image: ghcr.io/grimbough/bioc-with-tinytex:devel-arm64
