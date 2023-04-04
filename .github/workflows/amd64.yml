@@ -55,20 +55,21 @@ jobs:
           options: |
             --platform linux/arm64 
             -v ${{ runner.temp }}/R-lib:/R-lib
+            -v ${{ github.workspace }}:/rhdf5
           run: |
             uname -a
             export R_LIBS_USER=/R-lib
-            Rscript -e 'library(remotes)'
+            Rscript -e 'library(remotes)' -e 'dev_package_deps("/rhdf5", dependencies = TRUE)
       
  
       - name: Install pkgs
         run:
-         docker run --platform linux/arm64 --entrypoint Rscript ghcr.io/grimbough/bioc-with-tinytex:3.16 -e 'library(remotes)' -e 'dev_package_deps("rhdf5", dependencies = TRUE) |> update(upgrade = "always")'
+         docker run --platform linux/arm64 -v ${{ runner.temp }}/R-lib:/R-lib -v ${{ github.workspace }}:/rhdf5  --entrypoint Rscript ghcr.io/grimbough/bioc-with-tinytex:3.16 -e 'library(remotes)' -e 'dev_package_deps("/rhdf5", dependencies = TRUE) |> update(upgrade = "always")'
   
   check-arm64:
     name: Test package on ARM64
     runs-on: ubuntu-22.04
-
+    needs:   install-depdendencies
     steps:
     
       - name: checkout
