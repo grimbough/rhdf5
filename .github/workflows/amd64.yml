@@ -100,6 +100,7 @@ jobs:
           run: |
             ls -l
             R CMD INSTALL ${PKG} &> ${PKG}.install-out.txt
+            cat ${PKG}.install-out.txt            
             ls -l
 
       - name: R CMD build
@@ -156,9 +157,9 @@ jobs:
         with:
           name: my-artifact
           path: |
-            ${{ github.workspace }}/../*.tar.gz
-            ${{ github.workspace }}/../*.install-out.txt
-            ${{ github.workspace }}/../*.Rcheck
+            ~/**/*.tar.gz
+            ~/**/*.install-out.txt
+            ~/**/*.Rcheck
           if-no-files-found: warn
           
 
