@@ -37,12 +37,6 @@ jobs:
             R_lib-ARM64-${{ hashFiles('**/DESCRIPTION') }}
             R_lib-ARM64-
             
-      # - name: Install pkgs
-      #   uses: docker://ghcr.io/grimbough/bioc-tinytex:3.16
-      #   with:
-      #     entrypoint: Rscript
-      #     args: "-e 'library(remotes)' -e 'dev_package_deps(\'rhdf5\', dependencies = TRUE) |> update(upgrade = \'always\')'"
-      
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v2
         with:
@@ -58,12 +52,10 @@ jobs:
             --platform linux/arm64
             -v ${{ runner.temp }}/R-lib:/R-lib
             -v ${{ github.workspace }}/../:/build
-            --env R_USER_LIB=/R-lib
+            --env R_LIBS_USER=/R-lib
             --env PKG=${{ env.PKG }}
           run: |
             uname -a
-            ls -l /build
-            export R_LIBS_USER=/R-lib
             echo "options(Ncpus=2L, timeout = 300)" >> ~/.Rprofile
             Rscript -e "library(remotes)" -e "dev_package_deps('/build/${PKG}', dependencies = TRUE) |> update(upgrade = 'always')"
             
@@ -102,11 +94,11 @@ jobs:
             --platform linux/arm64
             -v ${{ runner.temp }}/R-lib:/R-lib
             -v ${{ github.workspace }}/../:/build
-            --env R_USER_LIB=/R-lib
+            --env R_LIBS_USER=/R-lib
             --env PKG=${{ env.PKG }}
             --workdir /build
           run: |
-            ls -l "${R_USER_LIB}"
+            ls -l "${R_LIBS_USER}"
             R CMD build --keep-empty-dirs --no-resave-data ${PKG}
 
       - name: R CMD check
@@ -117,7 +109,7 @@ jobs:
             --platform linux/arm64
             -v ${{ runner.temp }}/R-lib:/R-lib
             -v ${{ github.workspace }}/../:/build
-            --env R_USER_LIB=/R-lib
+            --env R_LIBS_USER=/R-lib
             --env PKG=${{ env.PKG }}
             --workdir /build
           run: |
@@ -132,7 +124,7 @@ jobs:
             --platform linux/arm64
             -v ${{ runner.temp }}/R-lib:/R-lib
             -v ${{ github.workspace }}/../:/build
-            --env R_USER_LIB=/R-lib
+            --env R_LIBS_USER=/R-lib
             --env PKG=${{ env.PKG }}
             --workdir /build
           run: |
