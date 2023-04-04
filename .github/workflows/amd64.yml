@@ -99,9 +99,9 @@ jobs:
             --workdir /build
           run: |
             ls -l
-            R CMD INSTALL --help
-            R CMD INSTALL rhdf5          
+            R CMD INSTALL ${PKG} &> ${PKG}.install-out.txt 
             ls -l
+          shell: bash
 
       - name: R CMD build
         uses: addnab/docker-run-action@v3
