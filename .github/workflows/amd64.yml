@@ -103,6 +103,7 @@ jobs:
             -v ${{ runner.temp }}/R-lib:/R-lib
             -v ${{ github.workspace }}/../:/build
             --env R_USER_LIB=/R-lib
+            --env PKG=${{ env.PKG }}
             --workdir /build
           run: |
             uname -a
