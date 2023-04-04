@@ -34,12 +34,6 @@ jobs:
             R_lib-ARM64-${{ hashFiles('**/DESCRIPTION') }}
             R_lib-ARM64-
             
-      # - name: Install pkgs
-      #   uses: docker://ghcr.io/grimbough/bioc-tinytex:3.16
-      #   with:
-      #     entrypoint: Rscript
-      #     args: "-e 'library(remotes)' -e 'dev_package_deps(\'rhdf5\', dependencies = TRUE) |> update(upgrade = \'always\')'"
-      
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v2
         with:
@@ -51,7 +45,7 @@ jobs:
         uses: addnab/docker-run-action@v3
         with:
           registry: gcr.io
-          image: bioconductor/bioconductor:devel-arm64
+          image: grimbough/bioc-with-tinytex:3.16
           options: |
             --platform linux/arm64 
             -v ${{ runner.temp }}/R-lib:/R-lib
@@ -62,13 +56,13 @@ jobs:
             Rscript -e 'library(remotes)' -e 'dev_package_deps("/rhdf5", dependencies = TRUE) |> update(upgrade = "always")'
       
  
-      - name: Install pkgs
-        run:
-         docker run --platform linux/arm64 \
-           -v ${{ runner.temp }}/R-lib:/R-lib \
-           -v ${{ github.workspace }}:/rhdf5 \
-           --entrypoint \
-           Rscript ghcr.io/grimbough/bioc-with-tinytex:3.16 -e 'library(remotes)' -e 'dev_package_deps("/rhdf5", dependencies = TRUE) |> update(upgrade = "always")'
+      # - name: Install pkgs
+      #   run:
+      #    docker run --platform linux/arm64 \
+      #      -v ${{ runner.temp }}/R-lib:/R-lib \
+      #      -v ${{ github.workspace }}:/rhdf5 \
+      #      --entrypoint \
+      #      Rscript ghcr.io/grimbough/bioc-with-tinytex:3.16 -e 'library(remotes)' -e 'dev_package_deps("/rhdf5", dependencies = TRUE) |> update(upgrade = "always")'
   
   check-arm64:
     name: Test package on ARM64
