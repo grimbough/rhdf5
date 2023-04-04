@@ -54,9 +54,10 @@ jobs:
           options: |
             --platform linux/arm64
             -v ${{ runner.temp }}/R-lib:/R-lib
-            -v ${PWD}:/build
+            -v ${{ github.workspace }}:/build
           run: |
             uname -a
+            ls -l /build
             export R_LIBS_USER=/R-lib
             echo "options(Ncpus=2L, timeout = 300)" >> ~/.Rprofile
             Rscript -e 'library(remotes)' -e 'dev_package_deps("/rhdf5", dependencies = TRUE) |> update(upgrade = "always")'
