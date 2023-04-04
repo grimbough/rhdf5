@@ -99,8 +99,10 @@ jobs:
             --workdir /build
           run: |
             ls -l
-            R CMD INSTALL ${PKG} &> ${PKG}.install-out.txt
-            cat ${PKG}.install-out.txt            
+   #         R CMD INSTALL ${PKG} &> ${PKG}.install-out.txt
+   #         cat ${PKG}.install-out.txt
+            R CMD INSTALL --help
+            R CMD INSTALL rhdf5          
             ls -l
 
       - name: R CMD build
