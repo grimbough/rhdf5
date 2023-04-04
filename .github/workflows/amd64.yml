@@ -51,7 +51,7 @@ jobs:
         uses: addnab/docker-run-action@v3
         with:
           registry: gcr.io
-          image: grimbough/bioc-with-tinytex:3.16
+          image: bioconductor/bioconductor:devel-arm64
           options: |
             --platform linux/arm64 
             -v ${{ runner.temp }}/R-lib:/R-lib
