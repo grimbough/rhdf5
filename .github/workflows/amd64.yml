@@ -71,118 +71,38 @@ jobs:
            --entrypoint Rscript \
            ghcr.io/grimbough/bioc-with-tinytex:devel-arm64 -e 'library(remotes)' -e 'dev_package_deps("/build/rhdf5", dependencies = TRUE) |> update(upgrade = "always")'
   
-  check-arm64:
-    name: Test package on ARM64
-    runs-on: ubuntu-22.04
-    needs:   install-depdendencies
-    steps:
-    
-      - name: checkout
-        uses: actions/checkout@v3
-        
-      - name: Make R library
-        run: mkdir -p ${RUNNER_TEMP}/R-lib
-        
-      - name: Cache Dependencies
-        id: cache-deps
-        uses: actions/cache@v3
-        with:
-          path: ${{ runner.temp }}/R-lib
-          key: R-lib
+  # check-arm64:
+  #   name: Test package on ARM64
+  #   runs-on: ubuntu-22.04
+  #   needs:   install-depdendencies
+  #   steps:
+  #   
+  #     - name: checkout
+  #       uses: actions/checkout@v3
+  #       
+  #     - name: Make R library
+  #       run: mkdir -p ${RUNNER_TEMP}/R-lib
+  #       
+  #     - name: Cache Dependencies
+  #       id: cache-deps
+  #       uses: actions/cache@v3
+  #       with:
+  #         path: ${{ runner.temp }}/R-lib
+  #         key: R-lib
+  # 
+  #     - name: Install pkgs
+  #       run: |
+  #        docker run --platform linux/arm64 \
+  #          -v ${{ runner.temp }}/R-lib:/R-lib \
+  #          -v ${{ github.workspace }}:/rhdf5 \
+  #          --env R_USER_LIB=/R-lib \
+  #          --entrypoint R \
+  #          ghcr.io/grimbough/bioc-with-tinytex:devel-arm64 \
+  #                      R CMD build --keep-empty-dirs --no-resave-data ${PKG}
+  #           R CMD check --install=check:${PKG}.install-out.txt --library="${R_LIBS_USER}" --no-vignettes --timings ${PKG}*.tar.gz
+  #           mkdir -p ${PKG}.buildbin-libdir
+  #           R CMD INSTALL --build --library=${PKG}.buildbin-libdir ${PKG}*.tar.gz
+          
 
-      - name: Install pkgs
-        run:
-         docker run --platform linux/arm64 \
-           -v ${{ runner.temp }}/R-lib:/R-lib \
-           -v ${{ github.workspace }}:/rhdf5 \
-           --env R_USER_LIB=/R-lib \
-           --entrypoint R \
-           ghcr.io/grimbough/bioc-with-tinytex:devel-arm64 \
-           -e 'library(remotes)' -e 'dev_package_deps("/rhdf5", dependencies = TRUE) |> update(upgrade = "always")'
-          
-          install: |
-            mkdir -p /build /tmp/R-lib
-            echo "options(Ncpus=2L, timeout = 300)" >> ~/.Rprofile
 
-          dockerRunArgs: |
-            --volume "${PWD}:/build"
-            --volume "${RUNNER_TEMP}/R-lib:/tmp/R-lib"
-            
-          env: |
-            R_LIBS_USER: /tmp/R-lib
-            PKG: /build/rhdf5
-            
-          run: |
-            uname -m
-            env
-            Rscript -e "library(remotes)" -e "dev_package_deps(Sys.getenv('PKG'), dependencies = TRUE) |> update(upgrade = 'always')"
-            
-      - name: Install Package
-        uses: uraimo/run-on-arch-action@v2
-        with:
-          arch: none
-          distro: none
-          base_image: --platform=linux/arm64 bioconductor/bioconductor_docker:RELEASE_3_16
-          githubToken: ${{ secrets.GHCR_TOKEN }}
-          
-          dockerRunArgs: |
-            --volume "${PWD}:/build"
-            --volume "${RUNNER_TEMP}/R-lib:/tmp/R-lib"
-          env: |
-            R_LIBS_USER: /tmp/R-lib
-            PKG: /build/rhdf5
-          
-          run: |  
-            Rscript -e "options('Ncpus')"
-            R CMD INSTALL ${PKG} &> ${PKG}.install-out.txt
-            cat ${PKG}.install-out.txt
-            
-      - name: Build & Check Package
-        uses: uraimo/run-on-arch-action@v2
-        with:
-          arch: none
-          distro: none
-          base_image: --platform=linux/arm64 bioconductor/bioconductor_docker:RELEASE_3_16
-          githubToken: ${{ secrets.GHCR_TOKEN }}
-          
-          install: |
-            Rscript -e "install.packages('tinytex')" \
-              -e "tinytex::install_tinytex(extra_packages = c(
-                'bera', 'caption', 'changepage', 'enumitem', 'fancyhdr', 
-                'footmisc', 'marginfix', 'mathtools', 'nowidow', 'parnotes', 
-                'parskip', 'placeins', 'ragged2e', 'soul', 'titlesec', 'xstring',
-                'preprint', 'courier'
-              ))"
-
-          dockerRunArgs: |
-            --volume "${PWD}:/build"
-            --volume "${RUNNER_TEMP}/R-lib:/tmp/R-lib"
-          env: |
-            R_LIBS_USER: /tmp/R-lib
-            PKG: /build/rhdf5
-          
-          run: |
-            ## pdflatex isn't on the PATH unless we set this
-            PATH=~/bin/:${PATH}
-            R CMD build --keep-empty-dirs --no-resave-data ${PKG}
-            R CMD check --install=check:${PKG}.install-out.txt --library="${R_LIBS_USER}" --no-vignettes --timings ${PKG}*.tar.gz
-            mkdir -p ${PKG}.buildbin-libdir
-            R CMD INSTALL --build --library=${PKG}.buildbin-libdir ${PKG}*.tar.gz
-            
-      - name: What's here?
-        run: |
-          echo "$PWD"
-          ls -lh ${PWD}
-          echo "${{ runner.temp }}/R-lib"
-          ls -l ${{ runner.temp }}/R-lib
-            
-      - uses: actions/upload-artifact@v3
-        if: always()
-        with:
-          name: my-artifact
-          path: |
-            ${GITHUB_WORKSPACE}/*.tar.gz
-            ${GITHUB_WORKSPACE}/*.install-out.txt
-            ${GITHUB_WORKSPACE}/*.Rcheck
-          if-no-files-found: warn
   
