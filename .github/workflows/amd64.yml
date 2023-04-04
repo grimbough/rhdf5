@@ -34,6 +34,12 @@ jobs:
             R_lib-ARM64-${{ hashFiles('**/DESCRIPTION') }}
             R_lib-ARM64-
             
+      # - name: Install pkgs
+      #   uses: docker://ghcr.io/grimbough/bioc-tinytex:3.16
+      #   with:
+      #     entrypoint: Rscript
+      #     args: "-e 'library(remotes)' -e 'dev_package_deps(\'rhdf5\', dependencies = TRUE) |> update(upgrade = \'always\')'"
+      
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v2
         with:
@@ -45,24 +51,25 @@ jobs:
         uses: addnab/docker-run-action@v3
         with:
           registry: gcr.io
-          image: grimbough/bioc-with-tinytex:3.16
+          image: grimbough/bioc-with-tinytex:devel-arm64
           options: |
-            --platform linux/arm64 
+            --platform linux/arm64
             -v ${{ runner.temp }}/R-lib:/R-lib
-            -v ${{ github.workspace }}:/rhdf5
+            -v ${PWD}:/build
           run: |
             uname -a
             export R_LIBS_USER=/R-lib
+            echo "options(Ncpus=2L, timeout = 300)" >> ~/.Rprofile
             Rscript -e 'library(remotes)' -e 'dev_package_deps("/rhdf5", dependencies = TRUE) |> update(upgrade = "always")'
       
- 
-      # - name: Install pkgs
-      #   run:
-      #    docker run --platform linux/arm64 \
-      #      -v ${{ runner.temp }}/R-lib:/R-lib \
-      #      -v ${{ github.workspace }}:/rhdf5 \
-      #      --entrypoint \
-      #      Rscript ghcr.io/grimbough/bioc-with-tinytex:3.16 -e 'library(remotes)' -e 'dev_package_deps("/rhdf5", dependencies = TRUE) |> update(upgrade = "always")'
+      - name: Install pkgs
+        run:
+         docker run --platform linux/arm64 \
+           --volume ${{ runner.temp }}/R-lib:/R-lib \
+           --volume "${PWD}:/build" \
+           --env R_USER_LIB=/R-lib \
+           --entrypoint Rscript \
+           ghcr.io/grimbough/bioc-with-tinytex:devel-arm64 -e 'library(remotes)' -e 'dev_package_deps("/build/rhdf5", dependencies = TRUE) |> update(upgrade = "always")'
   
   check-arm64:
     name: Test package on ARM64
@@ -72,9 +79,6 @@ jobs:
     
       - name: checkout
         uses: actions/checkout@v3
-        
-      - name: Clone package to be tested
-        run: git clone https://git.bioconductor.org/packages/BiocStyle
         
       - name: Make R library
         run: mkdir -p ${RUNNER_TEMP}/R-lib
@@ -86,13 +90,15 @@ jobs:
           path: ${{ runner.temp }}/R-lib
           key: R-lib
 
-      - name: Install Dependencies
-        uses: uraimo/run-on-arch-action@v2
-        with:
-          arch: none
-          distro: none
-          base_image: --platform=linux/arm64 bioconductor/bioconductor_docker:RELEASE_3_16
-          githubToken: ${{ secrets.GHCR_TOKEN }}
+      - name: Install pkgs
+        run:
+         docker run --platform linux/arm64 \
+           -v ${{ runner.temp }}/R-lib:/R-lib \
+           -v ${{ github.workspace }}:/rhdf5 \
+           --env R_USER_LIB=/R-lib \
+           --entrypoint R \
+           ghcr.io/grimbough/bioc-with-tinytex:devel-arm64 \
+           -e 'library(remotes)' -e 'dev_package_deps("/rhdf5", dependencies = TRUE) |> update(upgrade = "always")'
           
           install: |
             mkdir -p /build /tmp/R-lib
