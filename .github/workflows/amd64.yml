@@ -84,7 +84,10 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ${{ runner.temp }}/R-lib
-          key: R-lib
+          key: R_lib-ARM64-${{ hashFiles('**/DESCRIPTION') }}
+          restore-keys: |
+            R_lib-ARM64-${{ hashFiles('**/DESCRIPTION') }}
+            R_lib-ARM64-
           
       - name: Run the build process with Docker
         uses: addnab/docker-run-action@v3
