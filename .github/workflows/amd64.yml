@@ -50,8 +50,8 @@ jobs:
       - name: Run the build process with Docker
         uses: addnab/docker-run-action@v3
         with:
-          registry: ghcr.io
-          image: grimbough/bioc-with-tinytex:devel-arm64
+          registry: gcr.io
+          image: bioc-with-tinytex:devel-arm64
           options: |
             --platform linux/arm64
             -v ${{ runner.temp }}/R-lib:/R-lib
