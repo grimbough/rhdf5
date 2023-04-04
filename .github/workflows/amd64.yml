@@ -78,6 +78,11 @@ jobs:
 
       - name: Make R library
         run: mkdir -p ${RUNNER_TEMP}/R-lib
+        
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+        with:
+          platforms: arm64
 
       - name: Cache Dependencies
         id: cache-deps
