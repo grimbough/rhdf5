@@ -106,6 +106,7 @@ jobs:
             --env PKG=${{ env.PKG }}
             --workdir /build
           run: |
+            ls -l "${R_USER_LIB}"
             R CMD build --keep-empty-dirs --no-resave-data ${PKG}
 
       - name: R CMD check
