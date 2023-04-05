@@ -6,9 +6,21 @@
   \subsection{CHANGES}{
     \itemize{
       \item h5closeAll() now accepts objects as arguments to allow closing
-      specific HDF5 identifiers.
+      a set of HDF5 identifiers.
       \item Functions \code{H5Teunum_create()} and \code{H5Tenum_insert()}
       have been included.
+      \item \code{h5set_extent()} will now test whether a dataset is chunked
+      and inform the user if not. This uses the new function 
+      \code{H5Dis_chunked()}.
+    }
+  }
+  
+  \subsection{BUG FIXES}{
+    \itemize{
+      \item Modified how the constant \code{H5S_UNLIMITED} was being passed to
+      the HDF5 library.  The previous strategy was not working on the ARM64
+      architecture, and leading to failures when trying to change the size of
+      a dataset.
     }
   }
 
