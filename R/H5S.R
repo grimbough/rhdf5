@@ -50,8 +50,8 @@ H5Screate_simple <- function( dims, maxdims, native = FALSE ) {
   if (missing(maxdims)) {
     maxdims = dims
   }
-  dims <- as.numeric(dims)
-  maxdims <- as.numeric(maxdims)
+  dims <- as.integer(dims)
+  maxdims <- as.integer(maxdims)
   if (!native) {
     dims <- rev(dims)
     maxdims <- rev(maxdims)
@@ -152,8 +152,8 @@ H5Sset_extent_simple <- function( h5space, dims, maxdims) {
   if (missing(maxdims)) {
     maxdims = dims
   }
-  dims <- as.numeric(dims)
-  maxdims <- as.numeric(maxdims)
+  dims <- as.integer(dims)
+  maxdims <- as.integer(maxdims)
   if (!h5space@native){
       dims <- rev(dims)
       maxdims <- rev(maxdims)
@@ -516,7 +516,8 @@ H5Scombine_select <- function( h5space1, op = h5default("H5S_SELECT"), h5space2 
 #' 
 #' @export
 H5Sunlimited <- function()  {
-  as.integer(h5checkConstants("H5S_UNLIMITED", "H5S_UNLIMITED"))
+  #as.integer(h5checkConstants("H5S_UNLIMITED", "H5S_UNLIMITED"))
+  as.integer(-1)
 }
 
 
