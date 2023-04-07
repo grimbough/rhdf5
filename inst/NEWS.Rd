@@ -21,6 +21,9 @@
       the HDF5 library.  The previous strategy was not working on the ARM64
       architecture, and leading to failures when trying to change the size of
       a dataset.
+      \item Resolved issue when reporting missing filters where R-to-C indexing 
+      was being applied twice, resulting in the message:
+      "'idx' argument is outside the range of filters set on this property list"
     }
   }
 
