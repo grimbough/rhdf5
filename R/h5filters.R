@@ -22,7 +22,7 @@ h5checkFilters <- function(h5id) {
         err <-"Unable to read dataset.\nNot all required filters available.\n"
         missing <- NULL
         for(i in seq_len( nfilters )) {
-            filter <- H5Pget_filter(pid, i-1)
+            filter <- H5Pget_filter(pid, i)
             avail <- H5Zfilter_avail(filter_id = filter[[1]])
             if(!avail) {
                 missing <- c(missing, filter[[2]])
