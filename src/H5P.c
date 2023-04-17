@@ -1190,6 +1190,19 @@ SEXP _H5Pget_alloc_time( SEXP _plist_id ) {
 /*   return Rval; */
 /* } */
 
+SEXP _H5Pset_filter( SEXP _plist_id, SEXP _filter_id, SEXP _mandatory, SEXP _cd_values ) {
+  hid_t plist_id  = STRSXP_2_HID( _plist_id );
+  H5Z_filter_t filter_id = (H5Z_filter_t) INTEGER(_filter_id)[0];
+  unsigned int flags = (asLogical(_mandatory) == 0) ? H5Z_FLAG_OPTIONAL : H5Z_FLAG_MANDATORY;
+  size_t cd_nelmts = (size_t) length(_cd_values);
+  unsigned int *cd_values = (unsigned int *) R_alloc(sizeof(unsigned int), cd_nelmts);
+  for(int i = 0; i < cd_nelmts; i++)  { cd_values[i] = INTEGER(_cd_values)[i]; }
+  
+  herr_t herr = H5Pset_filter(plist_id, filter_id, flags, cd_nelmts, cd_values);
+  SEXP Rval = ScalarInteger(herr);
+  return Rval; 
+}
+
 /* htri_t H5Pall_filters_avail(hid_t plist_id) */
 SEXP _H5Pall_filters_avail( SEXP _plist_id ) {
     hid_t plist_id  = STRSXP_2_HID( _plist_id );

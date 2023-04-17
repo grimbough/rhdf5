@@ -581,9 +581,9 @@ H5Pget_alloc_time <- function( h5plist ) {
 #'
 #' * `H5Pall_filters_avail()` checks whether all filters required to process a
 #' dataset are available to **rhdf5**.  This can be required if reading files
-#' created with other HDF5 software. 
+#' created with other HDF5 software.
 #' * `H5Pget_nfilters()` returns the number of
-#' filters in the dataset chunk processing pipeline. 
+#' filters in the dataset chunk processing pipeline.
 #' * `H5Pget_filter()`
 #' provides details of a specific filter in the pipeline. This includes the
 #' filter name and the parameters provided to it e.g. compression level.
@@ -592,7 +592,6 @@ H5Pget_alloc_time <- function( h5plist ) {
 #'   creation property list.
 #' @param idx Integer of length 1.  This argument selects which filter to return
 #'   information about.  Indexing is R-style 1-based.
-#'   
 
 #' @rdname H5P_filters
 #' @export
@@ -623,6 +622,31 @@ H5Pget_filter <- function( h5plist, idx ) {
     
     res <- .Call("_H5Pget_filter", h5plist@ID, idx-1L, PACKAGE='rhdf5')
     return(res)
+}
+
+#' Add a filter to the dataset filter pipeline.
+#' 
+#' @param h5plist Object of class [H5IdComponent-class] representing a dataset
+#'   creation property list.
+#' @param filter_id Integer of length 1, giving the ID of the filter to be used.
+#' @param is_mandatory Logical of length 1.  Filters can be either optional or
+#'   mandatory.  If this argument is set to `FALSE` the filter won't be applied
+#'   to a chunk in the case of failure, but the data will still be written.
+#'   Setting to `TRUE` will result in a failure when writing the dataset if the
+#'   filter fails for some reason.
+#' @param cd_values Integer vector giving parameters to be supplied to the
+#'   filter. No guidance is given for the number of values supplied here, it is
+#'   specific to each filter and the user is expected to know appropriate
+#'   options for the requested filter.
+#' @export
+H5Pset_filter <- function( h5plist, filter_id, is_mandatory = FALSE, cd_values ) {
+  h5checktypeAndPLC(h5plist, "H5P_DATASET_CREATE")
+  filter_id <- as.integer(filter_id)
+  is_mandatory <- as.logical(is_mandatory)
+  cd_values <- as.integer(cd_values)
+  
+  res <- .Call("_H5Pset_filter", h5plist@ID, filter_id, is_mandatory, cd_values, PACKAGE='rhdf5')
+  return(res)
 }
 
 #' Add the shuffle filter to the chunk processing pipeline.

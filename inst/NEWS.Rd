@@ -12,6 +12,7 @@
       \item \code{h5set_extent()} will now test whether a dataset is chunked
       and inform the user if not. This uses the new function 
       \code{H5Dis_chunked()}.
+      \item The function \code{H5Pset_filter()} is now exposed to the user.
     }
   }
   
