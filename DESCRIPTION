@@ -1,7 +1,7 @@
 Package: rhdf5
 Type: Package
 Title: R Interface to HDF5
-Version: 2.43.4
+Version: 2.43.5
 Date: 2023-04-07
 Authors@R: c(person("Bernd", "Fischer", role = c("aut")), 
         person("Mike", "Smith", 

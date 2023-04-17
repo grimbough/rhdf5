@@ -8,3 +8,4 @@ BinaryFiles
 .BBSoptions
 .github
 ^\.github$
+vignettes/practical_tips_cache
