@@ -298,6 +298,27 @@ SEXP H5Aread_helper_REFERENCE(hid_t attr_id, hsize_t n, SEXP Rdim, SEXP _buf, hi
   return Rval;
 }
 
+SEXP H5Aread_helper_ENUM(hid_t attr_id, hsize_t n, SEXP Rdim, SEXP _buf, hid_t dtype_id) {
+  
+  SEXP Rval = PROTECT(allocVector(STRSXP, (int) n));
+
+  Rprintf("H5Tsize: %d\n", H5Tget_size(dtype_id));
+  
+  void *buf = R_alloc(H5Tget_size(dtype_id), n);
+  H5Aread(attr_id, dtype_id, buf);
+  
+  for (int i=0; i < n; i++) {
+    char * st = H5allocate_memory(1024, TRUE);
+    H5Tenum_nameof	(	dtype_id, buf, st, 1024);
+    SET_STRING_ELT(Rval, i, mkChar(st));
+    H5free_memory(st);
+    buf += H5Tget_size(dtype_id);
+  }
+
+  UNPROTECT(1);
+  return Rval;
+}
+
 SEXP H5Aread_helper(hid_t attr_id, hsize_t n, SEXP Rdim, SEXP _buf, int bit64conversion ) {
     
     hid_t dtype_id;
@@ -325,7 +346,9 @@ SEXP H5Aread_helper(hid_t attr_id, hsize_t n, SEXP Rdim, SEXP _buf, int bit64con
   case H5T_TIME:
   case H5T_BITFIELD:
   case H5T_OPAQUE:
-  case H5T_ENUM:
+  case H5T_ENUM: {
+    Rval = H5Aread_helper_ENUM(attr_id, n, Rdim, _buf, dtype_id);
+  } break;
   case H5T_VLEN:
   case H5T_ARRAY:
   default: {

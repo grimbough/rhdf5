@@ -25,7 +25,7 @@ BugReports: https://github.com/grimbough/rhdf5/issues
 LazyLoad: true
 VignetteBuilder: knitr
 Imports: Rhdf5lib (>= 1.13.4),
-  rhdf5filters
+  rhdf5filters, S4Vectors
 Depends: R (>= 4.0.0), methods
 Suggests: bit64, BiocStyle, knitr, rmarkdown, testthat,  
   bench, dplyr, ggplot2, mockery, BiocParallel
