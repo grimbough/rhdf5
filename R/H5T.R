@@ -223,3 +223,10 @@ H5Tenum_insert <- function(dtype_id, name, value) {
   
   return(invisible(res >= 0))
 }
+
+H5Tget_class <- function(dtype_id) {
+  
+  type <- .Call("_H5Tget_class", dtype_id, PACKAGE = "rhdf5")
+  return(type)
+  
+}
