@@ -330,7 +330,7 @@ static R_CallMethodDef libraryRCalls[] = {
   {"_h5errorHandling", (DL_FUNC) &_h5errorHandling, 1},
   {"_h5fileLock", (DL_FUNC) &_h5fileLock, 1},
   {"_h5listOpenObjects", (DL_FUNC) &_h5listOpenObjects, 1},
-  {"_h5getEnumNames", (DL_FUNC) &_h5GetEnumNames, 1},
+  {"_h5getEnumNames", (DL_FUNC) &_h5getEnumNames, 1},
 #ifdef _H5P_filters
   {"_H5Pset_lzf", (DL_FUNC) &_H5Pset_lzf, 2},
   {"_H5Pset_bzip2", (DL_FUNC) &_H5Pset_bzip2, 2},
