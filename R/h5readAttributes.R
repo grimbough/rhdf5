@@ -35,7 +35,7 @@ h5readAttributes <- function(file, name, native = FALSE, ...) {
         ## if we have an enum type where the levels are only TRUE,FALSE,NA
         ## convert the result to an R logical.  This is consistent with h5py
         if(H5Tget_class(tid) == "H5T_ENUM") {
-          enumNames <- h5GetEnumNames(tid)
+          enumNames <- h5getEnumNames(tid)
           if(all(enumNames %in% c("TRUE", "FALSE", "NA")))
             res[[attrname]] <- as.logical(res[[attrname]])
         }

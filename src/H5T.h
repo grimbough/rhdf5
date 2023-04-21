@@ -26,5 +26,6 @@ SEXP _H5Tenum_insert( SEXP _type, SEXP _name, SEXP _value );
 
 // found in H5T_extras.c
 SEXP _h5getEnumNames( SEXP _dtype_id );
+SEXP _h5getEnumValues( SEXP _dtype_id );
 
 #endif
