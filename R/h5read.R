@@ -263,6 +263,8 @@ h5read <- function(file, name, index=NULL, start=NULL, stride=NULL, block=NULL,
     return(FALSE)
   }
   
+  ## TODO: test attribute values
+  
   ## test datasets exist
   group_data <- h5ls(gid, recursive = FALSE)
   if(!all(c("values", "mask") %in% group_data$name)) {
