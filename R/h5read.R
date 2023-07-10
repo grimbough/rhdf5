@@ -204,8 +204,12 @@ h5read <- function(file, name, index=NULL, start=NULL, stride=NULL, block=NULL,
         if (is.na(num_attrs)) { num_attrs = 0 }
         if (type == "H5I_GROUP") {
             gid <- H5Gopen(loc$H5Identifier, name)
-            obj = h5dump(gid, start=start, stride=stride, block=block, 
+            obj <- if(.isAnndataNullable(gid)) {
+              .h5readNullable(gid)
+            } else {
+              h5dump(gid, start=start, stride=stride, block=block, 
                          count=count, compoundAsDataFrame = compoundAsDataFrame, callGeneric = callGeneric, ...)
+            }
             H5Gclose(gid)
         } else if (type == "H5I_DATASET") {
             h5dataset <- H5Dopen(loc$H5Identifier, name)
@@ -250,4 +254,43 @@ h5read <- function(file, name, index=NULL, start=NULL, stride=NULL, block=NULL,
     }  # !H5Lexists
     
     obj
+}
+
+.isAnndataNullable <- function(gid) {
+  
+  ## test attribute existence
+  if(!H5Aexists(gid, "encoding-type") || !H5Aexists(gid, "encoding-version")) {
+    return(FALSE)
+  }
+  
+  ## TODO: test attribute values
+  
+  ## test datasets exist
+  group_data <- h5ls(gid, recursive = FALSE)
+  if(!all(c("values", "mask") %in% group_data$name)) {
+    return(FALSE)
+  }
+  
+  return(TRUE)
+  
+}
+
+## expects to be called inside h5read
+.h5readNullable <- function(gid) {
+  
+  ## the way H5Dread treats ENUM is weird and inconsistent with H5Aread
+  ## we do some casting as.logical here, but it'd be better elsewhere
+  values <- h5read(gid, "values")
+  mask <- h5read(gid, "mask")
+  values[which(as.logical(mask))] <- NA
+  
+  aid <- H5Aopen(gid, name = "encoding-type")
+  on.exit(H5Aclose(aid))
+  enc_type <- H5Aread(aid)
+  
+  if(enc_type == "nullable-boolean") {
+    values <- as.logical(values)
+  }
+  
+  return(values)
 }

@@ -157,6 +157,19 @@ test_that("reading & writing scalar dataspaces", {
     
 })
 
+test_that("we can read anndata nullable arrays", {
+  h5File <- system.file("testfiles", "nullable_examples.h5", package = "rhdf5")
+  
+  expect_identical(
+    h5read(h5File, name = "nullable_boolean"),
+    c(TRUE, FALSE, NA)
+  )
+  expect_equivalent(
+    h5read(h5File, name = "nullable_integer"),
+    c(1L, NA, 3L, 4L)
+  )
+})
+
 ############################################################
 context("NA values")
 ############################################################

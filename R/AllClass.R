@@ -37,3 +37,8 @@ setClass("H5Ref",
          slots = c(val = "raw",
                    type = "integer")
 )
+
+#' #' @importClassesFrom S4Vectors Factor
+#' setClass("H5Enum",
+#'          contains = "Factor"
+#' )

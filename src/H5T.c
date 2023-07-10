@@ -224,3 +224,52 @@ SEXP _H5Tenum_insert( SEXP _type, SEXP _name, SEXP _value ) {
   return Rval;
 }
   
+SEXP _H5Tget_class( SEXP _dtype_id ) {
+
+  hid_t type = STRSXP_2_HID( _dtype_id );
+  H5T_class_t tid_class = H5Tget_class(type);
+  SEXP Rval = PROTECT(allocVector(STRSXP, 1));
+
+  switch(tid_class) {
+  case H5T_INTEGER: {
+    SET_STRING_ELT(Rval, 0, mkChar("H5T_INTEGER"));
+  } break;
+  case H5T_FLOAT: {
+    SET_STRING_ELT(Rval, 0, mkChar("H5T_FLOAT"));
+  } break;
+  case H5T_TIME: {
+    SET_STRING_ELT(Rval, 0, mkChar("H5T_TIME"));
+  } break;
+  case H5T_STRING: {
+    SET_STRING_ELT(Rval, 0, mkChar("H5T_STRING"));
+  } break;
+  case H5T_BITFIELD: {
+    SET_STRING_ELT(Rval, 0, mkChar("H5T_BITFIELD"));
+  } break;
+  case H5T_OPAQUE: {
+    SET_STRING_ELT(Rval, 0, mkChar("H5T_OPAQUE"));
+  } break;
+  case H5T_COMPOUND: {
+    SET_STRING_ELT(Rval, 0, mkChar("H5T_COMPOUND"));
+  } break;
+  case H5T_REFERENCE: {
+    SET_STRING_ELT(Rval, 0, mkChar("H5T_REFERENCE"));
+  } break;
+  case H5T_ENUM: {
+    SET_STRING_ELT(Rval, 0, mkChar("H5T_ENUM"));
+  } break;
+  case H5T_VLEN: {
+    SET_STRING_ELT(Rval, 0, mkChar("H5T_VLEN"));
+  } break;
+  case H5T_ARRAY: {
+    SET_STRING_ELT(Rval, 0, mkChar("H5T_ARRAY"));
+  } break;
+  default: {
+    UNPROTECT(1);
+    error("Unknown class");
+  } break;
+  }
+  
+  UNPROTECT(1);
+  return Rval;
+}
