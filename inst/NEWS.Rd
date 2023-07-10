@@ -1,6 +1,17 @@
 \name{NEWS}
 \title{News for Package 'rhdf5'}
 
+\section{Changes in version 2.46.0}{
+
+  \subsection{CHANGES}{
+    \itemize{
+      \item Added support for reading nullable booleans and integers from
+      the AnnData specification.  \code{h5read()} will detect these automatically
+      an attempt to cooerce them to the appropriate R data format.
+    }
+  }
+}
+
 \section{Changes in version 2.44.0}{
 
   \subsection{CHANGES}{
