@@ -49,6 +49,12 @@ jobs:
           bioc-mirror: ${{ matrix.config.bioc-mirror }}
           
       - uses: r-lib/actions/setup-pandoc@v2
+      
+      - name: Install dependencies temp
+        if: runner.os == 'macos'
+        run: |
+          BiocManager::install('grimbough/rhdf5filters')
+        shell: Rscript {0}
           
       - name: Install dependencies
         uses: r-lib/actions/setup-r-dependencies@v2

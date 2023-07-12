@@ -1,2 +1,6 @@
 src/*o
 .Rproj.user
+
+src/external_filters.h
+
+vignettes/*_cache
