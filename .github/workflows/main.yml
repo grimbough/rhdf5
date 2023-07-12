@@ -25,9 +25,9 @@ jobs:
       matrix:
         config:
         - { os: windows-2022, bioc-version: 'devel', bioc-mirror: 'https://ftp.gwdg.de/pub/misc/bioconductor'}
-        - { os: macOS-11,     bioc-version: 'devel', bioc-mirror: 'https://ftp.gwdg.de/pub/misc/bioconductor'}
-        - { os: ubuntu-20.04, bioc-version: 'devel', bioc-mirror: 'https://ftp.gwdg.de/pub/misc/bioconductor'}
-        - { os: ubuntu-20.04, bioc-version: 'release',  bioc-mirror: 'https://packagemanager.rstudio.com/bioconductor'}
+        - { os: macOS-12,     bioc-version: 'devel', bioc-mirror: 'https://ftp.gwdg.de/pub/misc/bioconductor'}
+        - { os: ubuntu-22.04, bioc-version: 'devel', bioc-mirror: 'https://ftp.gwdg.de/pub/misc/bioconductor'}
+        - { os: ubuntu-22.04, bioc-version: 'release',  bioc-mirror: 'https://packagemanager.posit.co/bioconductor'}
     steps:
     
       ## R CMD check complains about Windows line endings without this
