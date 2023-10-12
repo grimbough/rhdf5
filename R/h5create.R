@@ -117,13 +117,17 @@ h5createGroup <- function(file, group) {
                       H5Tset_cset(tid, encoding)
                       tid
                     },
-                    { stop("datatype ",storage.mode, " not yet implemented.\n", 
+                    { stop("datatype ",storage.mode, " not yet implemented.\n",
                            "Try 'logical', 'double', 'integer', 'integer64' or 'character'.") } )
     } else {
       stop("Can not create dataset. 'storage.mode' has to be a character.")
     }
-  } else {
+  } else if (!grepl("^\\d+$", H5type)) {
     tid <- h5checkConstants("H5T", H5type)
+  } else if (!tryCatch(H5Tget_precision(H5type), error=\(...) FALSE)) {
+     tid <- NA
+  } else {
+      tid <- H5type
   }
   if (is.na(tid)) {
     stop("Can not create dataset. H5type unknown. Check h5const('H5T') for valid types.")
@@ -289,7 +293,8 @@ h5createGroup <- function(file, group) {
 #' @param H5type Advanced programmers can specify the datatype of the dataset
 #'   within the file. See \code{h5const("H5T")} for a list of available
 #'   datatypes. If \code{H5type} is specified the argument \code{storage.mode}
-#'   is ignored. It is recommended to use \code{storage.mode}
+#'   is ignored. It is recommended to use \code{storage.mode}. \code{H5type}
+#'   can also be the ID of a created datatype, e.g. with [H5Tenum_create].
 #' @param size For `storage.mode='character'` the maximum string length to use.
 #'   The default value of `NULL` will result in using variable length strings.
 #'   See the details for more information on this option.

@@ -1,11 +1,11 @@
-h5writeDatasetHelper <- function (obj, h5dataset, index = NULL, start = NULL, stride = NULL, 
-                                  block = NULL, count = NULL)
+h5writeDatasetHelper <- function (obj, h5dataset, index = NULL, start = NULL, stride = NULL,
+                                  block = NULL, count = NULL, h5type = NULL)
 {
     try({
         h5spaceFile <- H5Dget_space(h5dataset)
         on.exit(H5Sclose(h5spaceFile))
     })
-    
+
     if (!is.null(index)) {
         s = H5Sget_simple_extent_dims(h5spaceFile)$size
         if (length(index) != length(s)) {
@@ -61,8 +61,18 @@ h5writeDatasetHelper <- function (obj, h5dataset, index = NULL, start = NULL, st
         h5spaceMem <- H5Screate_simple(DimMem, NULL)
         on.exit(H5Sclose(h5spaceMem), add = TRUE, after = FALSE)
     })
+    if (!is.null(h5type)) {
+        if (!grepl("^\\d+$", h5type)) {
+            h5type <- h5checkConstants("H5T", h5type)
+        } else if (!tryCatch(H5Tget_precision(h5type), error=\(...) FALSE)) {
+            h5type <- NA
+        }
+        if (is.na(h5type)) {
+            stop("Can not write dataset. H5type unknown. Check h5const('H5T') for valid types.")
+        }
+    }
     try({
-        res <- H5Dwrite(h5dataset, obj, h5spaceMem = h5spaceMem, 
+        res <- H5Dwrite(h5dataset, obj, h5type = h5type, h5spaceMem = h5spaceMem,
                         h5spaceFile = h5spaceFile)
     })
 
@@ -147,6 +157,10 @@ h5writeDatasetHelper <- function (obj, h5dataset, index = NULL, start = NULL, st
 #' @param createnewfile If `TRUE`, a new file will be created if necessary.
 #' @param write.attributes (logical) If TRUE, all R-attributes attached to the
 #'   object \code{obj} are written to the HDF5 file.
+#' @param h5type (character) Datatype of the dataset to be written. See
+#'   \code{h5const("H5T")} for a list of available datatypes. Alternatively,
+#'   \code{h5type} can be the ID of a created datatype, e.g. with
+#'   [H5Tenum_create]. If `NULL`, it will use the datatype of the R object.
 #' @param \dots Further arguments passed to \code{\link{H5Dwrite}}.
 #'
 #' @return \code{h5write} returns 0 if successful.
@@ -301,11 +315,11 @@ h5writeDataset.character <- function(...) { h5writeDataset.array(...) }
 h5writeDataset.raw       <- function(...) { h5writeDataset.array(...) }
 
 #' @rdname h5_write
-#' @export 
-h5writeDataset.array <- function(obj, h5loc, name, index = NULL, 
-                                 start=NULL, stride=NULL, block=NULL, count=NULL, 
+#' @export
+h5writeDataset.array <- function(obj, h5loc, name, index = NULL,
+                                 start=NULL, stride=NULL, block=NULL, count=NULL,
                                  size=NULL, variableLengthString=FALSE, encoding = NULL,
-                                 level=6) {
+                                 level=6, h5type=NULL) {
 
     exists <- try( { H5Lexists(h5loc, name) } )
     if (!exists) {
@@ -326,22 +340,22 @@ h5writeDataset.array <- function(obj, h5loc, name, index = NULL,
             }
         }
         if (is.null(dim(obj))) {
-            dim <- length(obj) 
+            dim <- length(obj)
         } else {
             dim <- dim(obj)
             if (h5loc@native) dim <- rev(dim)
         }
-        h5createDataset(h5loc, name, dim, storage.mode = storage.mode(obj), 
-                        size = size, 
+        h5createDataset(h5loc, name, dim, storage.mode = storage.mode(obj),
+                        size = size,
                         encoding = match.arg(encoding, choices = c("ASCII", "UTF-8", "UTF8")),
-                        chunk=dim, level=level) 
+                        chunk=dim, level=level)
     }
     h5dataset <- H5Dopen(h5loc, name)
     on.exit( H5Dclose(h5dataset) )
-    h5writeDatasetHelper(obj=obj, h5dataset=h5dataset, index = index, start = start, stride = stride, 
-                         block = block, count = count)
+    h5writeDatasetHelper(obj=obj, h5dataset=h5dataset, index = index, start = start, stride = stride,
+                         block = block, count = count, h5type = h5type)
     h5writeAttribute(1L, h5dataset, name = "rhdf5-NA.OK")
-    
+
     if(storage.mode(obj) == "character" && any(is.na(obj))) {
         h5writeAttribute(1L, h5dataset, name = "as.na")
         if(any(obj == "NA", na.rm = TRUE)) {

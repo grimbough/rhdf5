@@ -37,7 +37,8 @@ h5writeDataset(obj, h5loc, name, ...)
   size = NULL,
   variableLengthString = FALSE,
   encoding = NULL,
-  level = 6
+  level = 6,
+  h5type = NULL
 )
 }
 \arguments{
@@ -118,6 +119,11 @@ variable-length strings into the attributes. If \code{TRUE}, \code{size} is igno
 
 \item{encoding}{The encoding of the string data type.  Valid options are
 "ASCII" or "UTF-8".}
+
+\item{h5type}{(character) Datatype of the dataset to be written. See
+\code{h5const("H5T")} for a list of available datatypes. Alternatively,
+\code{h5type} can be the ID of a created datatype, e.g. with
+\link{H5Tenum_create}. If \code{NULL}, it will use the datatype of the R object.}
 }
 \value{
 \code{h5write} returns 0 if successful.
