@@ -301,7 +301,7 @@ gather_tmp_h5 <- function(output_file, input) {
 }
 ```
 
-Finally we need to create a wrapper function that brings our split and gather functions together.  Like the `simple_writer()` function we created earlier, this takes the name of an output file and the list of datasets to be written as input.  We can also provide a `BiocParallelParam` instance from `r Biocpkg("BiocParallel")` to trial writing the temporary file in parallel.  If the `BPPARAM` argument isn't provided then they will be written in serial.
+Finally we need to create a wrapper function that brings our split and gather functions together.  Like the `simple_writer()` function we created earlier, this takes the name of an output file and the list of datasets to be written as input.  We can also provide a `BiocParallelParam` instance from `r BiocStyle::Biocpkg("BiocParallel")` to trial writing the temporary file in parallel.  If the `BPPARAM` argument isn't provided then they will be written in serial.
 
 ```{r, define-split-gather}
 split_and_gather <- function(output_file, input_dsets, BPPARAM = NULL) {
