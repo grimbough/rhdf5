@@ -221,7 +221,7 @@ Efficiently extracting arbitrary subsets of a HDF5 dataset with *rhdf5* is a bal
 
 # Writing in parallel
 
-Using `r Biocpkg('rhdf')` it isn't possible to open an HDF5 file and write multiple datasets in parallel.  However we can try to mimic this behaviour by writing each dataset to it's own HDF5 file in parallel and then using the function `H5Ocopy()` to efficiently populate a complete final file.  We'll test this approach here.
+Using `r BiocStyle::Biocpkg('rhdf')` it isn't possible to open an HDF5 file and write multiple datasets in parallel.  However we can try to mimic this behaviour by writing each dataset to it's own HDF5 file in parallel and then using the function `H5Ocopy()` to efficiently populate a complete final file.  We'll test this approach here.
 
 ## Example data
 
