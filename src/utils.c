@@ -89,3 +89,27 @@ int group_check (struct opObjListElement *od, haddr_t target_addr, unsigned long
     }
 }
 
+/* used in H5Dread and H5Aread when reading a string datatype */
+void * read_string_datatype(hid_t mem_type_id, SEXP _buf) {
+    if (!H5Tis_variable_str(mem_type_id)) {
+        size_t stsize = H5Tget_size( mem_type_id );
+        char * strbuf = (char *)R_alloc(LENGTH(_buf),stsize);
+        int i, j, z=0;
+
+        for (i=0; i < LENGTH(_buf); i++) {
+            for (j=0; (j < LENGTH(STRING_ELT(_buf,i))) & (j < stsize); j++) {
+                strbuf[z++] = CHAR(STRING_ELT(_buf,i))[j];
+            }
+            for (; j < stsize; j++) {
+                strbuf[z++] = '\0';
+            }
+        }
+        return(strbuf);
+    } else {
+        const char ** strbuf = (const char **)R_alloc(LENGTH(_buf), sizeof(char*));
+        for (int i=0; i < LENGTH(_buf); i++) {
+            strbuf[i] = CHAR(STRING_ELT(_buf, i));
+        }
+        return(strbuf);
+    }
+}

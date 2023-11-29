@@ -1006,28 +1006,7 @@ SEXP _H5Dwrite( SEXP _dataset_id, SEXP _buf, SEXP _file_space_id, SEXP _mem_spac
         if (native)
             PERMUTE(_buf, STRING_PTR, dim_space_id);
 
-        /* prepare for hdf5 */
-        if (!H5Tis_variable_str(mem_type_id)) {
-            size_t stsize = H5Tget_size( mem_type_id );
-            char * strbuf = (char *)R_alloc(LENGTH(_buf),stsize);
-            int z=0;
-            int j;
-            for (int i=0; i < LENGTH(_buf); i++) {
-                for (j=0; (j < LENGTH(STRING_ELT(_buf,i))) & (j < stsize); j++) {
-                    strbuf[z++] = CHAR(STRING_ELT(_buf,i))[j];
-                }
-                for (; j < stsize; j++) {
-                    strbuf[z++] = '\0';
-                }
-            }
-            buf = strbuf;
-        } else {
-            const char ** strbuf = (const char **)R_alloc(LENGTH(_buf), sizeof(char*));
-            for (int i=0; i < LENGTH(_buf); i++) {
-                strbuf[i] = CHAR(STRING_ELT(_buf, i));
-            }
-            buf = strbuf;
-        }
+        buf = read_string_datatype(mem_type_id, _buf);
 
         break;
     case S4SXP :
