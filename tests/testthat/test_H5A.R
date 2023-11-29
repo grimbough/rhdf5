@@ -152,16 +152,18 @@ test_that("fixed length string attributes are correct", {
   H5Tset_size(tid, nchar(attr_value)) 
   
   fid <- H5Fopen(h5File)
+  sid <- H5Screate("H5S_SCALAR")
   aid <- H5Acreate(fid, name = attr_name, 
-                   dtype_id=tid, h5space=H5Screate("H5S_SCALAR"))
+                   dtype_id=tid, h5space = sid)
 
   H5Awrite(aid, attr_value) # string of length 7
   
-  H5Aclose(aid)
-  H5Fclose(fid)
+  h5closeAll(aid, sid, fid)
   
   attr <- h5readAttributes(h5File, "/")
   expect_is(attr, class = "list")
   expect_equal(names(attr), attr_name)
   expect_equal(attr$name, attr_value)
 })
+
+expect_length(h5validObjects(), 0)
