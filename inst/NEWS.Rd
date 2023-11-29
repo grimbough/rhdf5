@@ -1,6 +1,24 @@
 \name{NEWS}
 \title{News for Package 'rhdf5'}
 
+\section{Changes in version 2.48.0}{
+
+  \subsection{Bug fixes}{
+    \itemize{
+      \item Addressed a bug where fixed length string attributes would be one
+      character shorter than they should be. Backported to rhdf5 2.47.1.
+      (Thanks to Aaron Lun @LTLA for reporting this
+      https://github.com/grimbough/rhdf5/issues/132). 
+      \item Fixed an issue where zero length datasets of uint32, int64 or uint64 
+      datatypes could not be read.  This would fail with an error message saying
+      there was not enough memory. Backported to rhdf5 2.47.1.
+      (Thanks to Aaron Lun @LTLA for reporting this
+      https://github.com/grimbough/rhdf5/issues/134). 
+    }
+  }
+}
+
+
 \section{Changes in version 2.46.0}{
 
   \subsection{CHANGES}{

@@ -9,6 +9,7 @@
 #include "HandleList.h"
 #include "printdatatype.h"
 #include "bit64conversion.h"
+#include "utils.h"
 
 /*################################*/
 /* functions */
