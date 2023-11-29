@@ -125,224 +125,235 @@ SEXP _H5Dget_storage_size( SEXP _dataset_id ) {
     return Rval;
 }
 
-SEXP H5Dread_helper_INTEGER(hid_t dataset_id, hid_t file_space_id, hid_t mem_space_id, hsize_t n, SEXP Rdim, SEXP _buf, 
-                            hid_t dtype_id, hid_t cpdType, int cpdNField, char ** cpdField, int compoundAsDataFrame,
-                            int bit64conversion, int native ) {
+SEXP H5Dread_helper_INTEGER(hid_t dataset_id, hid_t file_space_id, hid_t mem_space_id, hsize_t n, 
+                            SEXP Rdim, SEXP _buf, hid_t dtype_id, hid_t cpdType, int cpdNField, 
+                            char ** cpdField, int compoundAsDataFrame, int bit64conversion, int native ) {
     hid_t mem_type_id = -1;
     herr_t herr = 0;
     SEXP Rval;
     
     int b = H5Tget_size(dtype_id);
     H5T_sign_t sgn = H5Tget_sign(dtype_id);
-
+    
     int warn = 0;
     int warn_overflow_64bit = 0;
     int warn_double = 0;
     
-    /* 1-byte integers. Reading strategy is dependent on whether these 
-     * are signed or unsigned (RAWSXP vs INTSXP) */
-    if(b == 1) {
-      void * buf;
-
-      if(sgn == H5T_SGN_NONE) {
-        if (cpdType < 0) {
-          mem_type_id = H5T_NATIVE_UCHAR;
+    /* short cut if we're reading 0 elements */
+    if(n == 0) {
+        if((b == 1) && (sgn == H5T_SGN_NONE)) {
+            Rval = PROTECT(allocVector(RAWSXP, 0));
         } else {
-          mem_type_id = H5Tcreate(H5T_COMPOUND, H5Tget_size(H5T_NATIVE_UCHAR));
-          herr = H5Tinsert(mem_type_id, cpdField[0], 0, H5T_NATIVE_UCHAR);
-          for (int i=1; i<cpdNField; i++) {
-            hid_t mem_type_id2 = H5Tcreate(H5T_COMPOUND, H5Tget_size(H5T_NATIVE_UCHAR));
-            herr = H5Tinsert(mem_type_id2, cpdField[i], 0, mem_type_id);
-            mem_type_id = mem_type_id2;
-          }
+            Rval = PROTECT(allocVector(INTSXP, 0));
         }
-        
-        if (length(_buf) == 0) {
-          Rval = PROTECT(allocVector(RAWSXP, n));
-          buf = RAW(Rval);
-        } else {
-          buf = RAW(_buf);
-          Rval = _buf;
-        }
-        herr = H5Dread(dataset_id, mem_type_id, mem_space_id, file_space_id, H5P_DEFAULT, buf );
-        if(herr < 0) {
-          error("Error reading dataset");
-        }
-        
-        if (native)
-          PERMUTE(Rval, RAW, mem_space_id);
-        
-      } else {
-        
-        if (cpdType < 0) {
-          mem_type_id = H5T_NATIVE_INT32;
-        } else {
-          mem_type_id = H5Tcreate(H5T_COMPOUND, H5Tget_size(H5T_NATIVE_INT32));
-          herr = H5Tinsert(mem_type_id, cpdField[0], 0, H5T_NATIVE_INT32);
-          for (int i=1; i<cpdNField; i++) {
-            hid_t mem_type_id2 = H5Tcreate(H5T_COMPOUND, H5Tget_size(H5T_NATIVE_INT32));
-            herr = H5Tinsert(mem_type_id2, cpdField[i], 0, mem_type_id);
-            mem_type_id = mem_type_id2;
-          }
-        }
-        if (length(_buf) == 0) {
-          Rval = PROTECT(allocVector(INTSXP, n));
-          buf = INTEGER(Rval);
-        } else {
-          buf = INTEGER(_buf);
-          Rval = _buf;
-        }
-        herr = H5Dread(dataset_id, mem_type_id, mem_space_id, file_space_id, H5P_DEFAULT, buf );
-        if(herr < 0) {
-          error("Error reading dataset");
-        }
-        
-        if (native)
-          PERMUTE(Rval, INTEGER, mem_space_id);
-        
-      }
-      if (length(_buf) == 0) {
         setAttrib(Rval, R_DimSymbol, Rdim);
-      }
-      
+        UNPROTECT(1);
+        return(Rval);
     } else {
-    if ( ((b >= 2) & (b < 4)) | ((b == 4) & (sgn == H5T_SGN_2))) {   // Read directly to R-integer without loss of data (short or signed int)
-        if (cpdType < 0) {
-            mem_type_id = H5T_NATIVE_INT32;
-        } else {
-            mem_type_id = H5Tcreate(H5T_COMPOUND, H5Tget_size(H5T_NATIVE_INT32));
-            herr = H5Tinsert(mem_type_id, cpdField[0], 0, H5T_NATIVE_INT32);
-            for (int i=1; i<cpdNField; i++) {
-                hid_t mem_type_id2 = H5Tcreate(H5T_COMPOUND, H5Tget_size(H5T_NATIVE_INT32));
-                herr = H5Tinsert(mem_type_id2, cpdField[i], 0, mem_type_id);
-                mem_type_id = mem_type_id2;
+        
+        
+        /* 1-byte integers. Reading strategy is dependent on whether these 
+         * are signed or unsigned (RAWSXP vs INTSXP) */
+        if(b == 1) {
+            void * buf;
+            
+            if(sgn == H5T_SGN_NONE) {
+                if (cpdType < 0) {
+                    mem_type_id = H5T_NATIVE_UCHAR;
+                } else {
+                    mem_type_id = H5Tcreate(H5T_COMPOUND, H5Tget_size(H5T_NATIVE_UCHAR));
+                    herr = H5Tinsert(mem_type_id, cpdField[0], 0, H5T_NATIVE_UCHAR);
+                    for (int i=1; i<cpdNField; i++) {
+                        hid_t mem_type_id2 = H5Tcreate(H5T_COMPOUND, H5Tget_size(H5T_NATIVE_UCHAR));
+                        herr = H5Tinsert(mem_type_id2, cpdField[i], 0, mem_type_id);
+                        mem_type_id = mem_type_id2;
+                    }
+                }
+                
+                if (length(_buf) == 0) {
+                    Rval = PROTECT(allocVector(RAWSXP, n));
+                    buf = RAW(Rval);
+                } else {
+                    buf = RAW(_buf);
+                    Rval = _buf;
+                }
+                herr = H5Dread(dataset_id, mem_type_id, mem_space_id, file_space_id, H5P_DEFAULT, buf );
+                if(herr < 0) {
+                    error("Error reading dataset");
+                }
+                
+                if (native)
+                    PERMUTE(Rval, RAW, mem_space_id);
+                
+            } else {
+                
+                if (cpdType < 0) {
+                    mem_type_id = H5T_NATIVE_INT32;
+                } else {
+                    mem_type_id = H5Tcreate(H5T_COMPOUND, H5Tget_size(H5T_NATIVE_INT32));
+                    herr = H5Tinsert(mem_type_id, cpdField[0], 0, H5T_NATIVE_INT32);
+                    for (int i=1; i<cpdNField; i++) {
+                        hid_t mem_type_id2 = H5Tcreate(H5T_COMPOUND, H5Tget_size(H5T_NATIVE_INT32));
+                        herr = H5Tinsert(mem_type_id2, cpdField[i], 0, mem_type_id);
+                        mem_type_id = mem_type_id2;
+                    }
+                }
+                if (length(_buf) == 0) {
+                    Rval = PROTECT(allocVector(INTSXP, n));
+                    buf = INTEGER(Rval);
+                } else {
+                    buf = INTEGER(_buf);
+                    Rval = _buf;
+                }
+                herr = H5Dread(dataset_id, mem_type_id, mem_space_id, file_space_id, H5P_DEFAULT, buf );
+                if(herr < 0) {
+                    error("Error reading dataset");
+                }
+                
+                if (native)
+                    PERMUTE(Rval, INTEGER, mem_space_id);
+                
             }
-        }
-        void * buf;
-        if (length(_buf) == 0) {
-            Rval = PROTECT(allocVector(INTSXP, n));
-            buf = INTEGER(Rval);
-        } else {
-            buf = INTEGER(_buf);
-            Rval = _buf;
-        }
-        herr_t herr = H5Dread(dataset_id, mem_type_id, mem_space_id, file_space_id, H5P_DEFAULT, buf );
-        if(herr < 0) {
-          error("Error reading dataset");
-        }
-        
-        if (native)
-            PERMUTE(Rval, INTEGER, mem_space_id);
-        
-        if (length(_buf) == 0) {
-            setAttrib(Rval, R_DimSymbol, Rdim);
-        }
-    } else { 
-        hid_t dtypeNative;
-        void* intbuf;
-        if ((b < 4) | ((b == 4) & (sgn == H5T_SGN_2))) {
-            dtypeNative = H5T_NATIVE_INT;
-            intbuf = R_alloc(n, sizeof(int));
-        } else if ((b == 4) & (sgn == H5T_SGN_NONE)) {
-            dtypeNative = H5T_NATIVE_UINT;
-            intbuf = R_alloc(n, sizeof(unsigned int));
-        } else if ((b == 8) & (sgn == H5T_SGN_2)) {
-            dtypeNative = H5T_NATIVE_INT64;
-            intbuf = R_alloc(n, sizeof(long long));
-        } else if ((b == 8) & (sgn == H5T_SGN_NONE)) {
-            dtypeNative = H5T_NATIVE_UINT64;
-            intbuf = R_alloc(n, sizeof(unsigned long long));
-        } else {
-            error("Unkown data type.  Aborting.\n");
-        }
-        if (intbuf == 0) {
-            error("Not enough memory to read data! Try to read a subset of data by specifying the index or count parameter.");
-        }
-        if (cpdType < 0) {
-            mem_type_id = dtypeNative;
-        } else {
-            mem_type_id = H5Tcreate(H5T_COMPOUND, H5Tget_size(dtypeNative));
-            herr = H5Tinsert(mem_type_id, cpdField[0], 0, dtypeNative);
-            for (int i=1; i<cpdNField; i++) {
-                hid_t mem_type_id2 = H5Tcreate(H5T_COMPOUND, H5Tget_size(dtypeNative));
-                herr = H5Tinsert(mem_type_id2, cpdField[i], 0, mem_type_id);
-                mem_type_id = mem_type_id2;
+            if (length(_buf) == 0) {
+                setAttrib(Rval, R_DimSymbol, Rdim);
             }
-        }
-        
-        herr_t herr = H5Dread(dataset_id, mem_type_id, mem_space_id, file_space_id, H5P_DEFAULT, intbuf );
-        if(herr < 0) {
-          error("Error reading dataset");
-        }
-        
-        if (bit64conversion == 0) {  // Convert data to R-integer and replace overflow values with NA_integer
+            
+        } else if ( ((b >= 2) & (b < 4)) | ((b == 4) & (sgn == H5T_SGN_2))) {   // Read directly to R-integer without loss of data (short or signed int)
+            if (cpdType < 0) {
+                mem_type_id = H5T_NATIVE_INT32;
+            } else {
+                mem_type_id = H5Tcreate(H5T_COMPOUND, H5Tget_size(H5T_NATIVE_INT32));
+                herr = H5Tinsert(mem_type_id, cpdField[0], 0, H5T_NATIVE_INT32);
+                for (int i=1; i<cpdNField; i++) {
+                    hid_t mem_type_id2 = H5Tcreate(H5T_COMPOUND, H5Tget_size(H5T_NATIVE_INT32));
+                    herr = H5Tinsert(mem_type_id2, cpdField[i], 0, mem_type_id);
+                    mem_type_id = mem_type_id2;
+                }
+            }
             void * buf;
             if (length(_buf) == 0) {
                 Rval = PROTECT(allocVector(INTSXP, n));
-                buf = (int *) INTEGER(Rval);
+                buf = INTEGER(Rval);
             } else {
                 buf = INTEGER(_buf);
                 Rval = _buf;
             }
-            if ((b == 4) & (sgn == H5T_SGN_NONE)) {
-                uint32_to_int32(intbuf, n, buf);
-            } else if (b == 8) { 
-                int64_to_int32(intbuf, n, buf, sgn);
+            herr_t herr = H5Dread(dataset_id, mem_type_id, mem_space_id, file_space_id, H5P_DEFAULT, buf );
+            if(herr < 0) {
+                error("Error reading dataset");
             }
-        } else {
-            void * buf;
+            
+            if (native)
+                PERMUTE(Rval, INTEGER, mem_space_id);
+            
             if (length(_buf) == 0) {
-                Rval = PROTECT(allocVector(REALSXP, n));
-                buf = (long long *) REAL(Rval);
+                setAttrib(Rval, R_DimSymbol, Rdim);
+            }
+        } else { 
+            
+            hid_t dtypeNative;
+            void* intbuf;
+            if ((b < 4) | ((b == 4) & (sgn == H5T_SGN_2))) {
+                dtypeNative = H5T_NATIVE_INT;
+                intbuf = R_alloc(n, sizeof(int));
+            } else if ((b == 4) & (sgn == H5T_SGN_NONE)) {
+                dtypeNative = H5T_NATIVE_UINT;
+                intbuf = R_alloc(n, sizeof(unsigned int));
+            } else if ((b == 8) & (sgn == H5T_SGN_2)) {
+                dtypeNative = H5T_NATIVE_INT64;
+                intbuf = R_alloc(n, sizeof(long long));
+            } else if ((b == 8) & (sgn == H5T_SGN_NONE)) {
+                dtypeNative = H5T_NATIVE_UINT64;
+                intbuf = R_alloc(n, sizeof(unsigned long long));
             } else {
-                buf = REAL(_buf);
-                Rval = _buf;
+                error("Unkown data type.  Aborting.\n");
             }
-            if (bit64conversion == 1) {  //convert to double
-                long long i;
-                if ((b < 4) | ((b == 4) & (sgn == H5T_SGN_2))) {
-                    for (i=0; i<n; i++){
-                        ((double *)buf)[i] = ((int *)intbuf)[i];
-                    }
-                } else if ((b == 4) & (sgn == H5T_SGN_NONE)) {
-                    uint32_to_double(intbuf, n, buf);
-                } else if (b == 8) {
-                    int64_to_double(intbuf, n, buf, sgn);
+
+            if (cpdType < 0) {
+                mem_type_id = dtypeNative;
+            } else {
+                mem_type_id = H5Tcreate(H5T_COMPOUND, H5Tget_size(dtypeNative));
+                herr = H5Tinsert(mem_type_id, cpdField[0], 0, dtypeNative);
+                for (int i=1; i<cpdNField; i++) {
+                    hid_t mem_type_id2 = H5Tcreate(H5T_COMPOUND, H5Tget_size(dtypeNative));
+                    herr = H5Tinsert(mem_type_id2, cpdField[i], 0, mem_type_id);
+                    mem_type_id = mem_type_id2;
                 }
-            } else { // convert to integer64 class
-                long long i;
-                if ((b < 4) | ((b == 4) & (sgn == H5T_SGN_2))) {
-                    for (i=0; i<n; i++){
-                        ((long long *)buf)[i] = ((int *)intbuf)[i];
-                    }
-                } else if ((b == 4) & (sgn == H5T_SGN_NONE)) {
-                    uint32_to_integer64(intbuf, n, buf);
-                } else if (b == 8) {
-                    int64_to_integer64(intbuf, n, buf, sgn);
+            }
+            
+            herr_t herr = H5Dread(dataset_id, mem_type_id, mem_space_id, file_space_id, H5P_DEFAULT, intbuf );
+            if(herr < 0) {
+                error("Error reading dataset");
+            }
+            
+            if (bit64conversion == 0) {  // Convert data to R-integer and replace overflow values with NA_integer
+                void * buf;
+                if (length(_buf) == 0) {
+                    Rval = PROTECT(allocVector(INTSXP, n));
+                    buf = (int *) INTEGER(Rval);
+                } else {
+                    buf = INTEGER(_buf);
+                    Rval = _buf;
                 }
-                if (native)
-                    PERMUTE(Rval, INTEGER, mem_space_id);
-                SEXP la = PROTECT(mkString("integer64"));
-                setAttrib(Rval, R_ClassSymbol, la);
-                UNPROTECT(1);
+                if ((b == 4) & (sgn == H5T_SGN_NONE)) {
+                    uint32_to_int32(intbuf, n, buf);
+                } else if (b == 8) { 
+                    int64_to_int32(intbuf, n, buf, sgn);
+                }
+            } else {
+                void * buf;
+                if (length(_buf) == 0) {
+                    Rval = PROTECT(allocVector(REALSXP, n));
+                    buf = (long long *) REAL(Rval);
+                } else {
+                    buf = REAL(_buf);
+                    Rval = _buf;
+                }
+                if (bit64conversion == 1) {  //convert to double
+                    long long i;
+                    if ((b < 4) | ((b == 4) & (sgn == H5T_SGN_2))) {
+                        for (i=0; i<n; i++){
+                            ((double *)buf)[i] = ((int *)intbuf)[i];
+                        }
+                    } else if ((b == 4) & (sgn == H5T_SGN_NONE)) {
+                        uint32_to_double(intbuf, n, buf);
+                    } else if (b == 8) {
+                        int64_to_double(intbuf, n, buf, sgn);
+                    }
+                } else { // convert to integer64 class
+                    long long i;
+                    if ((b < 4) | ((b == 4) & (sgn == H5T_SGN_2))) {
+                        for (i=0; i<n; i++){
+                            ((long long *)buf)[i] = ((int *)intbuf)[i];
+                        }
+                    } else if ((b == 4) & (sgn == H5T_SGN_NONE)) {
+                        uint32_to_integer64(intbuf, n, buf);
+                    } else if (b == 8) {
+                        int64_to_integer64(intbuf, n, buf, sgn);
+                    }
+                    if (native)
+                        PERMUTE(Rval, INTEGER, mem_space_id);
+                    SEXP la = PROTECT(mkString("integer64"));
+                    setAttrib(Rval, R_ClassSymbol, la);
+                    UNPROTECT(1);
+                }
+            }
+            if (length(_buf) == 0) {
+                setAttrib(Rval, R_DimSymbol, Rdim);
             }
         }
-        if (length(_buf) == 0) {
-            setAttrib(Rval, R_DimSymbol, Rdim);
+        
+        if (warn > 0) {
+            warning("NAs produced by integer overflow while converting 64-bit integer or unsigned 32-bit integer from HDF5 to a 32-bit integer in R.\nChoose bit64conversion='bit64' or bit64conversion='double' to avoid data loss and see the vignette 'rhdf5' for more details about 64-bit integers.");
+        } else if (warn_overflow_64bit > 0) {
+            warning("NAs produced by integer overflow while converting unsigned 64-bit integer from HDF5 to signed 64-bit integer in R.");
+        } else if (warn_double > 0) {
+            warning("integer precision lost while converting 64-bit integer or unsigned 32-bit integer from HDF5 to double in R.\nChoose bit64conversion='bit64' to avoid data loss and see the vignette 'rhdf5' for more details about 64-bit integers.");
         }
+        
+        UNPROTECT( (length(_buf) == 0) + native );
+        return(Rval);
     }
-    }
-    
-    if (warn > 0) {
-        warning("NAs produced by integer overflow while converting 64-bit integer or unsigned 32-bit integer from HDF5 to a 32-bit integer in R.\nChoose bit64conversion='bit64' or bit64conversion='double' to avoid data loss and see the vignette 'rhdf5' for more details about 64-bit integers.");
-    } else if (warn_overflow_64bit > 0) {
-        warning("NAs produced by integer overflow while converting unsigned 64-bit integer from HDF5 to signed 64-bit integer in R.");
-    } else if (warn_double > 0) {
-        warning("integer precision lost while converting 64-bit integer or unsigned 32-bit integer from HDF5 to double in R.\nChoose bit64conversion='bit64' to avoid data loss and see the vignette 'rhdf5' for more details about 64-bit integers.");
-    }
-    
-    UNPROTECT( (length(_buf) == 0) + native );
-    return(Rval);
 }
 
 
@@ -352,39 +363,47 @@ SEXP H5Dread_helper_FLOAT(hid_t dataset_id, hid_t file_space_id, hid_t mem_space
     herr_t herr = 0;
     
     SEXP Rval;
-    if (cpdType < 0) {
-        mem_type_id = H5T_NATIVE_DOUBLE;
+
+    if(n == 0) {
+        Rval = PROTECT(allocVector(REALSXP, 0));
+        setAttrib(Rval, R_DimSymbol, Rdim);
+        UNPROTECT(1);
     } else {
-        mem_type_id = H5Tcreate(H5T_COMPOUND, H5Tget_size(H5T_NATIVE_DOUBLE));
-        herr = H5Tinsert(mem_type_id, cpdField[0], 0, H5T_NATIVE_DOUBLE);
-        for (int i=1; i<cpdNField; i++) {
-            hid_t mem_type_id2 = H5Tcreate(H5T_COMPOUND, H5Tget_size(H5T_NATIVE_DOUBLE));
-            herr = H5Tinsert(mem_type_id2, cpdField[i], 0, mem_type_id);
-            mem_type_id = mem_type_id2;
+
+        if (cpdType < 0) {
+            mem_type_id = H5T_NATIVE_DOUBLE;
+        } else {
+            mem_type_id = H5Tcreate(H5T_COMPOUND, H5Tget_size(H5T_NATIVE_DOUBLE));
+            herr = H5Tinsert(mem_type_id, cpdField[0], 0, H5T_NATIVE_DOUBLE);
+            for (int i=1; i<cpdNField; i++) {
+                hid_t mem_type_id2 = H5Tcreate(H5T_COMPOUND, H5Tget_size(H5T_NATIVE_DOUBLE));
+                herr = H5Tinsert(mem_type_id2, cpdField[i], 0, mem_type_id);
+                mem_type_id = mem_type_id2;
+            }
         }
+        void * buf;
+        if (length(_buf) == 0) {
+            Rval = PROTECT(allocVector(REALSXP, n));
+            buf = REAL(Rval);
+        } else {
+            buf = REAL(_buf);
+            Rval = _buf;
+        }
+        
+        herr = H5Dread(dataset_id, mem_type_id, mem_space_id, file_space_id, H5P_DEFAULT, buf );
+        if(herr < 0) {
+          error("Unable to read dataset");
+        }
+        
+        if (native)
+          PERMUTE(Rval, REAL, mem_space_id);
+        
+        if (length(_buf) == 0) {
+          setAttrib(Rval, R_DimSymbol, Rdim);
+        }
+        
+        UNPROTECT( (length(_buf) == 0) + native );
     }
-    void * buf;
-    if (length(_buf) == 0) {
-        Rval = PROTECT(allocVector(REALSXP, n));
-        buf = REAL(Rval);
-    } else {
-        buf = REAL(_buf);
-        Rval = _buf;
-    }
-    
-    herr = H5Dread(dataset_id, mem_type_id, mem_space_id, file_space_id, H5P_DEFAULT, buf );
-    if(herr < 0) {
-      error("Unable to read dataset");
-    }
-    
-    if (native)
-      PERMUTE(Rval, REAL, mem_space_id);
-    
-    if (length(_buf) == 0) {
-      setAttrib(Rval, R_DimSymbol, Rdim);
-    }
-    
-    UNPROTECT( (length(_buf) == 0) + native );
     return(Rval);
 }
 
@@ -424,17 +443,11 @@ SEXP H5Dread_helper_STRING(hid_t dataset_id, hid_t file_space_id, hid_t mem_spac
           }
       } else {
           void* bufSTR = R_alloc(n * size, sizeof(char));
-          if (bufSTR == 0) {
-              error("Not enough memory to read data! Try to read a subset of data by specifying the index or count parameter.");
-          }
           herr = H5Dread(dataset_id, mem_type_id, mem_space_id, file_space_id, H5P_DEFAULT, bufSTR );
           if(herr < 0) { 
             error("Unable to read dataset");
           }
           char* bufSTR2 = R_alloc(size + 1, sizeof(char));
-          if (bufSTR2 == 0) {
-              error("Not enough memory to read data! Try to read a subset of data by specifying the index or count parameter.");
-          }
           bufSTR2[size] = '\0';
           char* bufSTR3 = ((char* )bufSTR);
           for (int i=0; i<n; i++) {
