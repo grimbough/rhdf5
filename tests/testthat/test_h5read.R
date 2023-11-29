@@ -109,7 +109,14 @@ test_that("writing & reading empty vectors", {
     expect_silent(h5write(obj = logical(0), file = h5File, name = "logical"))
     expect_silent(h5write(obj = raw(0), file = h5File, name = "raw"))
     #expect_silent(h5write(obj = factor(levels = c("L1", "L2")), file = h5File, name = "factor"))
-    
+
+    ## testing some different datatypes
+    fid <- H5Fopen(h5File)
+    sid <- H5Screate_simple(0)
+    did1 <- H5Dcreate(fid, "unit32", dtype_id="H5T_NATIVE_UINT32", h5space=sid)
+    did2 <- H5Dcreate(fid, "unit64", dtype_id="H5T_NATIVE_UINT64", h5space=sid)
+    h5closeAll(did1, did2, sid, fid)
+
     expect_silent(tmp <- h5read(file = h5File, name = "char")) %>%
         expect_is("character") %>%
         expect_length(0)
@@ -129,6 +136,14 @@ test_that("writing & reading empty vectors", {
         expect_is("array") %>%
         expect_length(0) %>%
         storage.mode() %>% expect_identical("raw") 
+    expect_silent(h5read(file = h5File, name = "unit32")) %>%
+        expect_is("array") %>%
+        expect_length(0) %>%
+        storage.mode() %>% expect_identical("integer") 
+    expect_silent(h5read(file = h5File, name = "unit64")) %>%
+        expect_is("array") %>%
+        expect_length(0) %>%
+        storage.mode() %>% expect_identical("integer") 
 
 })
 

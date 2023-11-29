@@ -1,8 +1,6 @@
 library(rhdf5)
 
 h5File <- tempfile(pattern = "H5D_", fileext = ".h5")
-if(file.exists(h5File))
-    file.remove(h5File)
 
 expect_true( h5createFile(h5File) )
 expect_silent( h5write(matrix(1:200, ncol = 2), file = h5File, name = "foo") )
