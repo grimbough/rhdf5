@@ -5,6 +5,8 @@
 
   \subsection{Bug fixes}{
     \itemize{
+      \item Corrected an issue where the function prototype for _h5fileLock()
+      differed from the actual implementation.
       \item Addressed a bug where fixed length string attributes would be one
       character shorter than they should be. Backported to rhdf5 2.46.1.
       (Thanks to Aaron Lun @LTLA for reporting this
