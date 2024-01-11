@@ -114,9 +114,9 @@ herr_t _rhdf5PrintErrorR( hid_t estack_id, void * stream) {
                 strcat(str, "\n");
                 strcat(str, client_data.txt[i]);
             }
-            error(str);
+            error("%s", str);
         } else if (client_data.n == 1) {
-            error(client_data.txt[0]);
+            error("%s", client_data.txt[0]);
         } else {
             error("libhdf5 (no error message captured).");
         }
@@ -146,9 +146,9 @@ herr_t _rhdf5PrintErrorRcompact( hid_t estack_id, void * stream) {
                 strcat(str, "\n");
                 strcat(str, client_data.txt[i]);
             }
-            error(str);
+            error("%s", str);
         } else if (client_data.n == 1) {
-            error(client_data.txt[0]);
+            error("%s", client_data.txt[0]);
         } else {
             error("libhdf5 (no error message captured).");
         }
