@@ -48,7 +48,8 @@ obtained by \code{storage.mode(mydata)}.}
 \item{H5type}{Advanced programmers can specify the datatype of the dataset
 within the file. See \code{h5const("H5T")} for a list of available
 datatypes. If \code{H5type} is specified the argument \code{storage.mode}
-is ignored. It is recommended to use \code{storage.mode}}
+is ignored. It is recommended to use \code{storage.mode}. \code{H5type}
+can also be the ID of a created datatype, e.g. with \link{H5Tenum_create}.}
 
 \item{size}{For \code{storage.mode='character'} the maximum string length to use.
 The default value of \code{NULL} will result in using variable length strings.
@@ -172,9 +173,9 @@ h5createFile(f2)
 
 ## create two string datasets
 ## the first is variable length strings, the second fixed at the length of our longest word
-h5createDataset(f1, "strings", dims = length(words), storage.mode = "character", 
+h5createDataset(f1, "strings", dims = length(words), storage.mode = "character",
                 size = NULL, chunk = 25)
-h5createDataset(f2, "strings", dims = length(words), storage.mode = "character", 
+h5createDataset(f2, "strings", dims = length(words), storage.mode = "character",
                 size = max(nchar(words)), chunk = 25)
 
 ## Write the data
