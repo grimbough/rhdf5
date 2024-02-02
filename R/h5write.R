@@ -88,6 +88,10 @@ h5writeDatasetHelper <- function (obj, h5dataset, index = NULL, start = NULL, st
 #' When viewing the HDF5 datasets with any C-program (e.g. HDFView), the order
 #' of dimensions is inverted. In the R interface counting starts with 1, whereas
 #' in the C-programs (e.g. HDFView) counting starts with 0.
+#' 
+#' If code \code{obj} is of type 'complex' then it will be written as a compound
+#' datatype to the HDF5, with elements named 'r' and 'i' for the real and 
+#' imaginary parts respectively.
 #'
 #' @param obj The R object to be written.
 #' @param file The filename (character) of the file in which the dataset will be
@@ -299,6 +303,8 @@ h5writeDataset.logical   <- function(...) { h5writeDataset.array(...) }
 h5writeDataset.character <- function(...) { h5writeDataset.array(...) }
 #' @export
 h5writeDataset.raw       <- function(...) { h5writeDataset.array(...) }
+#' @export
+h5writeDataset.complex   <- function(...) { h5writeDataset.array(...) }
 
 #' @rdname h5_write
 #' @export 

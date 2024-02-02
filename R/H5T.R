@@ -1,3 +1,18 @@
+H5Tcreate <- function( type, size ) {
+
+    type <- h5checkConstants( "H5T_CLASS", type )
+
+    allowed_types <- c("H5T_STRING", "H5T_COMPOUND", 
+                       "H5T_ENUM", "H5T_OPAQUE")
+    if(!type %in% h5constants$H5T_CLASS[ allowed_types ]) {
+        stop("H5Tcreate can only be used with the following data types:\n", 
+             paste(allowed_types, collapse = " ") )
+    } 
+    
+    invisible(.Call("_H5Tcreate", as.integer(type), 
+                    as.integer(size), PACKAGE='rhdf5'))
+}
+
 #' Copy an existing datatype
 #' 
 #' @param dtype_id Datatype to copy.  Can either be a character
@@ -183,7 +198,7 @@ H5Tget_precision <- function( dtype_id ) {
 #' Create or modify an HDF5 enum datatype
 #'
 #' @param dtype_id ID of HDF5 datatype to work with.  For `H5Tenum_create`, this
-#'   is the identifier of the basedatype, and must be an integer e.g.
+#'   is the identifier of the base data type, and must be an integer e.g.
 #'   `H5T_NATIVE_INT`. For `H5Tenum_insert` this will be a datatype identifier
 #'   created by `H5Tenum_create`.
 #' @param name The name of a the new enum member.  This is analogous to a

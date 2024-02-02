@@ -117,6 +117,11 @@ h5createGroup <- function(file, group) {
                       H5Tset_cset(tid, encoding)
                       tid
                     },
+                    complex = {
+                      ## We will store two numerics in the compound datatype
+                      tid <- .Call("_h5createComplexDataType", PACKAGE = 'rhdf5')
+                      tid
+                    },
                     { stop("datatype ",storage.mode, " not yet implemented.\n", 
                            "Try 'logical', 'double', 'integer', 'integer64' or 'character'.") } )
     } else {

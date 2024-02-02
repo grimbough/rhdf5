@@ -23,7 +23,7 @@ SEXP _h5errorHandling( SEXP _type ) {
     return Rval;
 }
 
-#define MSG_SIZE       64
+#define MSG_SIZE       128
 
 struct DataCollector {
   int n;
@@ -100,7 +100,7 @@ herr_t _rhdf5PrintErrorR( hid_t estack_id, void * stream) {
         hid_t estack_id_copy = H5Eget_current_stack();
         struct DataCollector client_data;
         client_data.n = 0;
-        herr_t eee = H5Ewalk(estack_id_copy, H5E_WALK_DOWNWARD, &custom_print_cb, &client_data);
+        herr_t eee = H5Ewalk(estack_id_copy, H5E_WALK_UPWARD, &custom_print_cb, &client_data);
         if(eee < 0) { error("Error walking through HDF5 error stack"); }
         
         int L = 0;

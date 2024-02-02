@@ -1,5 +1,18 @@
 #include "H5T.h"
 
+SEXP _H5Tcreate( SEXP _type, SEXP _size ) {
+    
+    H5T_class_t type = (H5T_class_t) INTEGER(_type)[0];
+    size_t size = (size_t ) INTEGER(_size)[0];
+    
+    hid_t tid = H5Tcreate(type, size);
+    
+    SEXP Rval;
+    PROTECT(Rval = HID_2_STRSXP(tid));
+    UNPROTECT(1);
+    return Rval;
+}
+
 /* hid_t H5Tcopy( hid_t dtype_id ) */
 SEXP _H5Tcopy( SEXP _dtype_id ) {
 

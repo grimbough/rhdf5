@@ -90,8 +90,12 @@ test_that("Writing to file handle", {
                                  h5loc = fid, name = "data.frame"))
     expect_silent(h5writeDataset(obj = data.frame("col_A" = 1:10, "col_B" = letters[1:10]), 
                                  h5loc = fid, name = "data.frame2", DataFrameAsCompound = FALSE))
+    expect_silent(h5writeDataset(obj = complex(length.out = 10, real = 1:10, imaginary = 10:1), 
+                                 h5loc = fid, name = "complex"))
     H5Fclose(fid)
 })
+
+
 
 ############################################################
 context("h5write with data.frames")

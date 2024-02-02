@@ -12,7 +12,7 @@ H5Tenum_insert(dtype_id, name, value)
 }
 \arguments{
 \item{dtype_id}{ID of HDF5 datatype to work with.  For \code{H5Tenum_create}, this
-is the identifier of the basedatype, and must be an integer e.g.
+is the identifier of the base data type, and must be an integer e.g.
 \code{H5T_NATIVE_INT}. For \code{H5Tenum_insert} this will be a datatype identifier
 created by \code{H5Tenum_create}.}
 

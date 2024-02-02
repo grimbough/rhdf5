@@ -3,6 +3,14 @@
 
 \section{Changes in version 2.48.0}{
 
+  \subsection{CHANGES}{
+    \itemize{
+      \item R complex types can now be written to HDF5.  These will be stored as
+      a compound datatype with two elements (r & i) representing the real and
+      imaginary parts.
+    }
+  }
+
   \subsection{Bug fixes}{
     \itemize{
       \item Corrected an issue where the function prototype for _h5fileLock()

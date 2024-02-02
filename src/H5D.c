@@ -1022,6 +1022,16 @@ SEXP _H5Dwrite( SEXP _dataset_id, SEXP _buf, SEXP _file_space_id, SEXP _mem_spac
         buf = read_string_datatype(mem_type_id, _buf);
 
         break;
+    case CPLXSXP :
+        if(isNull(_mem_type_id)) {
+          mem_type_id = H5Dget_type( dataset_id );
+        } else {
+          mem_type_id = STRSXP_2_HID( _mem_type_id );
+        } 
+        
+        buf = COMPLEX(_buf);
+        
+        break;
     case S4SXP :
         if(R_check_class_etc(_buf, H5Ref) >= 0) {
           if(INTEGER(R_do_slot(_buf, mkString("type")))[0] == H5R_OBJECT) {

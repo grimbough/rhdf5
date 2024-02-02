@@ -30,7 +30,6 @@ test_that("data.frame columns survive a round trip", {
     
 })
 
-
 test_that("character vectors survive a round trip", {
     
     words <- vapply(1:10, FUN = function(x) { 
@@ -54,4 +53,19 @@ test_that("UTF-8 strings are preserved", {
   expect_silent(output <- h5read(file = h5file, name = "utf8"))
   expect_equivalent(input, output)
   expect_equal(Encoding(output), "UTF-8")
+})
+
+test_that("Complex numbers are writen to a compound datatype", {
+
+  mat <- matrix(as.complex(1:9), ncol = 3)
+  expect_silent(h5write(obj = mat, file = h5file, name = 'complex'))
+  
+  ## we don't expect to get back a complex number at the moment
+  ## We should get a list of length 2 containing the real and imaginary parts
+  expect_silent(res <- h5read(file = h5file, name = 'complex', 
+                       compoundAsDataFrame = FALSE))
+  expect_is(res, 'list')
+  expect_named(res, expected = c('r','i'))
+  expect_identical(res$r, Re(mat))
+  expect_identical(res$i, Im(mat))
 })

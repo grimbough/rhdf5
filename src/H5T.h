@@ -8,6 +8,7 @@
 #include "myhdf5.h"
 #include "H5constants.h"
 
+SEXP _H5Tcreate( SEXP _type, SEXP _size );
 SEXP _H5Tget_class( SEXP _dtype_id );
 SEXP _H5Tcopy( SEXP _dtype_id );
 SEXP _H5Tset_size( SEXP _dtype_id, SEXP _size );
@@ -27,5 +28,5 @@ SEXP _H5Tenum_insert( SEXP _type, SEXP _name, SEXP _value );
 // found in H5T_extras.c
 SEXP _h5getEnumNames( SEXP _dtype_id );
 SEXP _h5getEnumValues( SEXP _dtype_id );
-
+SEXP _h5createComplexDataType();
 #endif

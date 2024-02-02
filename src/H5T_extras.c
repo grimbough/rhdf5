@@ -40,3 +40,16 @@ SEXP _h5getEnumValues( SEXP _dtype_id ) {
   UNPROTECT(1);
   return Rval;
 }
+
+SEXP _h5createComplexDataType() {
+  
+  hid_t dtype_id = H5Tcreate(H5T_COMPOUND, 2 * H5Tget_size(H5T_IEEE_F64LE));
+  
+  H5Tinsert(dtype_id, "r", 0, H5T_IEEE_F64LE);
+  H5Tinsert(dtype_id, "i", H5Tget_size(H5T_IEEE_F64LE), H5T_IEEE_F64LE);
+  
+  SEXP Rval;
+  PROTECT(Rval = HID_2_STRSXP(dtype_id));
+  UNPROTECT(1);
+  return Rval;
+}

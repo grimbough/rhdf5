@@ -141,6 +141,10 @@ R the first dimension is the fastest changing dimension.
 When viewing the HDF5 datasets with any C-program (e.g. HDFView), the order
 of dimensions is inverted. In the R interface counting starts with 1, whereas
 in the C-programs (e.g. HDFView) counting starts with 0.
+
+If code \code{obj} is of type 'complex' then it will be written as a compound
+datatype to the HDF5, with elements named 'r' and 'i' for the real and
+imaginary parts respectively.
 }
 \examples{
 
