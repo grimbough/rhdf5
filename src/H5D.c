@@ -701,9 +701,7 @@ SEXP H5Dread_helper_COMPLEX(hid_t dataset_id, hid_t file_space_id, hid_t mem_spa
   if(herr < 0) {
     error("Unable to read dataset");
   }
-  
-  Rprintf("Native: %d\n", native);
-  
+
   if (native)
     PERMUTE(Rval, COMPLEX, mem_space_id);
 
@@ -719,8 +717,6 @@ SEXP H5Dread_helper_COMPOUND(hid_t dataset_id, hid_t file_space_id, hid_t mem_sp
     SEXP Rval;
   
     if(is_complex(dtype_id)) {
-      Rprintf("Native: %d\n", native);
-        Rprintf("is complex\n");
         Rval = H5Dread_helper_COMPLEX(dataset_id, file_space_id, mem_space_id, n, Rdim, dtype_id, native);
         return(Rval);
     }

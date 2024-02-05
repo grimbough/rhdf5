@@ -57,15 +57,12 @@ test_that("UTF-8 strings are preserved", {
 
 test_that("Complex numbers are writen to a compound datatype", {
 
-  mat <- matrix(as.complex(1:9), ncol = 3)
+  mat <- matrix(complex(length.out = 30, real = 1:30, imaginary = 30:1), ncol = 10)
   expect_silent(h5write(obj = mat, file = h5file, name = 'complex'))
   
-  ## we don't expect to get back a complex number at the moment
-  ## We should get a list of length 2 containing the real and imaginary parts
-  expect_silent(res <- h5read(file = h5file, name = 'complex', 
-                       compoundAsDataFrame = FALSE))
-  expect_is(res, 'list')
-  expect_named(res, expected = c('r','i'))
-  expect_identical(res$r, Re(mat))
-  expect_identical(res$i, Im(mat))
+  expect_silent(res <- h5read(file = h5file, name = 'complex'))
+  expect_is(res, 'matrix')
+  expect_type(res, 'complex')
+  expect_identical(res, mat)
+  expect_identical(h5read(file = h5file, name = 'complex', native = TRUE), t(mat))
 })
