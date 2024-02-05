@@ -100,7 +100,15 @@ h5readDataset <- function (h5dataset, index = NULL, start = NULL, stride = NULL,
 #' of dimensions is inverted. In the R interface counting starts with 1,
 #' whereas in the C-programs (e.g. HDFView) counting starts with 0.
 #' 
-#' @param file The filename (character) of the file in which the dataset is
+#' Special cases.  There are a few instances where rhdf5 will make assumptions 
+#' about the dataset you are reading and treat it slightly differently.  1)
+#' complex numbers.  If your datasets is a compound datatype, has only two 
+#' columns, and these are named 'r' and 'i' rhdf5 will assume the data is 
+#' intended to be complex numbers and will read this into R's complex type.  If
+#' that is not the case, you will need to extract the two values separately
+#' using the \code{Re()} and \code{Im()} accessors manually.
+#' 
+#' @param file The file name (character) of the file in which the dataset is
 #' be located. It is possible to provide an object of
 #' class [H5IdComponent-class] representing a H5 location identifier
 #' (file or group). See \code{\link{H5Fcreate}}, \code{\link{H5Fopen}},
@@ -109,7 +117,7 @@ h5readDataset <- function (h5dataset, index = NULL, start = NULL, stride = NULL,
 #' @param name The name of the dataset in the HDF5 file.
 #' @param index List of indices for subsetting. The length of the list has to
 #' agree with the dimensional extension of the HDF5 array. Each list element is
-#' an integer vector of indices. A list element equal to NULL choses all
+#' an integer vector of indices. A list element equal to NULL chooses all
 #' indices in this dimension. Counting is R-style 1-based.
 #' @param start The start coordinate of a hyperslab (similar to subsetting in
 #' R). Counting is R-style 1-based. This argument is ignored, if index is not
