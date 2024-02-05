@@ -91,10 +91,12 @@ If there is a easily described pattern to the regions you want to access e.g. a 
 
 However, things get a little more tricky if you want an irregular selection of data, which is actually a pretty common operation.  For example, imagine wanting to select a random set of columns from our data.  If there isn't a regular pattern to the columns you want to select, what are the options?  Perhaps the most obvious thing we can try is to skip the use of either `index` or the hyperslab parameters and use 10,000 separate read operations instead.  Below we choose a random selection of columns^[in the interested of time we actually select only 1,000 columns here] and then apply the function `f1()` to each in turn.
 
-```{r singleReads, eval = (Sys.info()['sysname'] == "Linux"), cache = TRUE}
+```{r, chooseColunns, eval = TRUE}
 columns <- sample(x = seq_len(20000), size = 1000, replace = FALSE) %>%
   sort()
+```
 
+```{r singleReads, eval = (Sys.info()['sysname'] == "Linux"), cache = TRUE}
 f1 <- function(cols, name) { 
   h5read(file = ex_file, name = name, 
          index = list(NULL, cols))
@@ -107,7 +109,8 @@ system.time(res4 <- vapply(X = columns, FUN = f1,
 This is clearly a terrible idea, it takes ages!  For reference, using the `index` argument with this set of columns takes `r system.time(h5read(file = ex_file, name = "counts", index = list(NULL, columns)))['elapsed']` seconds.  This poor performance is driven by two things:
 
 1. Our dataset was created as a single chunk.  This means for each access the entire dataset is read from disk, which we end up doing thousands of times.
-2. *rhdf5* does a lot of validation on the objects that are passed around internally.  Within a call to `h5read()` HDF5 identifiers are created for the file, dataset, file dataspace, and memory dataspace, each of which are checked for validity.  This overhead is negligible when only one call to `h5read()` is made, but becomes significant when we make thousands of separate calls.
+2. *rhdf5* does a lot of validation on the objects that are passed around internally.  Within a call to `h5read()` HDF5 identifiers are created for the file, dataset, file dataspace, and memory dataspace, each of which are checked for validity.  This overhead is negligible when only one call to `h5read()` is made, but be
+comes significant when we make thousands of separate calls.
 
 There's not much more you can do if the dataset is not chunked appropriately, and using the `index` argument is reasonable.  However storing data in this format defeats one of HDF5's key utilities, namely rapid random access.  As such it's probably fairly rare to encounter datasets that aren't chunked in a more meaningful manner.  With this in mind we'll create a new dataset in our file, based on the same matrix but this time split into 100 $\times$ 100 chunks. 
 
