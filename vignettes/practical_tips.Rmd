@@ -91,8 +91,8 @@ If there is a easily described pattern to the regions you want to access e.g. a 
 
 However, things get a little more tricky if you want an irregular selection of data, which is actually a pretty common operation.  For example, imagine wanting to select a random set of columns from our data.  If there isn't a regular pattern to the columns you want to select, what are the options?  Perhaps the most obvious thing we can try is to skip the use of either `index` or the hyperslab parameters and use 10,000 separate read operations instead.  Below we choose a random selection of columns^[in the interested of time we actually select only 1,000 columns here] and then apply the function `f1()` to each in turn.
 
-```{r singleReads, cache = TRUE}
-columns <- sample(x = seq_len(20000), size = 10000, replace = FALSE) %>%
+```{r singleReads, eval = (Sys.info()['sysname'] == "Linux"), cache = TRUE}
+columns <- sample(x = seq_len(20000), size = 1000, replace = FALSE) %>%
   sort()
 
 f1 <- function(cols, name) { 
@@ -151,7 +151,7 @@ bm2 <- data.frame(block_size = gsub(".*\\(([0-9]+)\\)", "\\1", bm$expression) |>
                   time = unlist(bm$time))
 ```
 
-We can see this has a significant effect, although it's still an order of magnitude slower than when we were dealing with regularly spaced subsets.  The efficiency here will vary based on a number of factors including the size of the dataset chunks and the sparsity of the column index, and you varying the `block_size` argument will produce differing performances.  The plot below shows the timings achived by providing a selection of values to `block_size`.  It suggests the optimal parameter in this case is probably a block size of `r bm2 %>% arrange(time) %>% slice(1) %>% .$block_size`, which took `r bm2 %>% arrange(time) %>% slice(1) %>% .$time %>% round(2)` seconds - noticeably faster than when passing all columns to the `index` argument in a single call.
+We can see this has a significant effect, although it's still an order of magnitude slower than when we were dealing with regularly spaced subsets.  The efficiency here will vary based on a number of factors including the size of the dataset chunks and the sparsity of the column index, and you varying the `block_size` argument will produce differing performances.  The plot below shows the timings achieved by providing a selection of values to `block_size`.  It suggests the optimal parameter in this case is probably a block size of `r bm2 %>% arrange(time) %>% slice(1) %>% .$block_size`, which took `r bm2 %>% arrange(time) %>% slice(1) %>% .$time %>% round(2)` seconds - noticeably faster than when passing all columns to the `index` argument in a single call.
 
 ```{r, echo = FALSE, fig.width=6, fig.height=3, fig.wide = TRUE}
 ggplot(bm2, aes(x = block_size, y = time)) + 
@@ -169,7 +169,7 @@ If we were stuck with the single-chunk dataset and want to minimise the number o
 
 Unfortunately, this approach doesn't scale very well.  This is because creating unions of hyperslabs is currently very slow in HDF5 (see [Union of non-consecutive hyperslabs is very slow](https://forum.hdfgroup.org/t/union-of-non-consecutive-hyperslabs-is-very-slow/5062) for another report of this behaviour), with the performance penalty increasing exponentially relative to the number of unions.  The plot below shows the the exponential increase in time as the number of hyberslab unions increases.
 
-```{r, eval = TRUE, echo = FALSE, fig.width=6, fig.height=3, fig.wide = TRUE, fig.cap='The time taken to join hyperslabs increases expontentially with the number of join operations.  These timings are taken with no reading occuring, just the creation of a dataset selection.'}
+```{r, hyperslab-benchmark, eval = (Sys.info()['sysname'] == "Linux"), echo = FALSE, fig.width=6, fig.height=3, fig.wide = TRUE, fig.cap='The time taken to join hyperslabs increases expontentially with the number of join operations.  These timings are taken with no reading occuring, just the creation of a dataset selection.'}
 ## this code demonstrates the exponential increase in time as the 
 ## number of hyberslab unions increases
 
@@ -339,7 +339,7 @@ split_and_gather(tempfile(), input_dsets = dsets,
 
 Below we can see some timings comparing calling `simple_writer()` with `split_and_gather()` using 1, 2, and 4 cores.
 
-```{r, run-writing-benchmark, cache = TRUE, message=FALSE, echo=FALSE}
+```{r, run-writing-benchmark, eval = (Sys.info()['sysname'] == "Linux"), cache = TRUE, message=FALSE, echo=FALSE}
 bench_results <- bench::mark(
   "simple writer" = simple_writer(file_name = tempfile(), dsets = dsets),
   "split/gather - 1 core" = split_and_gather(tempfile(), input_dsets = dsets, 
@@ -348,12 +348,12 @@ bench_results <- bench::mark(
                                               BPPARAM = MulticoreParam(workers = 2)), 
   "split/gather - 4 cores" = split_and_gather(tempfile(), input_dsets = dsets, 
                                               BPPARAM = MulticoreParam(workers = 4)),
-  iterations = 3, check = FALSE, time_unit = "s", memory = FALSE, filter_gc = FALSE
+  iterations = 2, check = FALSE, time_unit = "s", memory = FALSE, filter_gc = FALSE
 )
 bench_results |> select(expression, min, median)
 ```
 
-We can see from our benchmark results that there is some performance improvement to be achieved by using the parallel approach.  Based on the median times of out three iterations using two cores sees an speedup of `r round(bench_results$median[1] / bench_results$median[3], 2)` and `r round(bench_results$median[1] / bench_results$median[4], 1)` with 4 cores.  This isn't quite linear, presumably be cause there are overheads involved both in using a two-step process and initialising the parallel workers, but it is a noticeable improvement.
+We can see from our benchmark results that there is some performance improvement to be achieved by using the parallel approach.  Based on the median times of out three iterations using two cores sees an speedup of `r round(bench_results$median[1] / bench_results$median[3], 2)` and `r round(bench_results$median[1] / bench_results$median[4], 1)` with 4 cores.  This isn't quite linear, presumably because there are overheads involved both in using a two-step process and initialising the parallel workers, but it is a noticeable improvement.
 
 # Session info {.unnumbered}
 
