@@ -22,10 +22,11 @@ jobs:
       fail-fast: false
       matrix:
         config:
-        - { os: windows-2022, bioc-version: 'devel', bioc-mirror: 'https://ftp.gwdg.de/pub/misc/bioconductor'}
-        - { os: macOS-12,     bioc-version: 'devel', bioc-mirror: 'https://ftp.gwdg.de/pub/misc/bioconductor'}
-        - { os: ubuntu-22.04, bioc-version: 'devel', bioc-mirror: 'https://ftp.gwdg.de/pub/misc/bioconductor'}
-        - { os: ubuntu-22.04, bioc-version: 'release',  bioc-mirror: 'https://packagemanager.posit.co/bioconductor'}
+        - { os: windows-2022, bioc-version: 'devel', bioc-mirror: 'https://ftp.gwdg.de/pub/misc/bioconductor',  Ncpus: 4}
+        - { os: macOS-14,     bioc-version: 'devel', bioc-mirror: 'https://ftp.gwdg.de/pub/misc/bioconductor',  Ncpus: 3}
+        - { os: macOS-12,     bioc-version: 'devel', bioc-mirror: 'https://ftp.gwdg.de/pub/misc/bioconductor',  Ncpus: 3}
+        - { os: ubuntu-22.04, bioc-version: 'devel', bioc-mirror: 'https://ftp.gwdg.de/pub/misc/bioconductor',  Ncpus: 4}
+        - { os: ubuntu-22.04, bioc-version: 'release',  bioc-mirror: 'https://packagemanager.posit.co/bioconductor',  Ncpus: 4}
     steps:
     
       ## R CMD check complains about Windows line endings without this
@@ -38,7 +39,7 @@ jobs:
         run: |
           sudo apt-get update && sudo apt-get install libcurl4-openssl-dev
           
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
           
       - name: Setup R and Bioconductor
         uses: grimbough/bioc-actions/setup-bioc@v1
