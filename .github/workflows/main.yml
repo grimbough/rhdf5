@@ -52,8 +52,11 @@ jobs:
       - name: temp rhdf5filters install
         if: matrix.config.os == 'macOS-14'
         run: |
-          source("https://mac.R-project.org/bin/install.R")
-          install.libs("openssl")
+          sudo R -e 'source("https://mac.R-project.org/bin/install.R")' -e 'install.libs("openssl")'
+      
+      - name: temp rhdf5filters install
+        if: matrix.config.os == 'macOS-14'
+        run: |
           install.packages("remotes")
           BiocManager::install("grimbough/rhdf5filters")
         shell: Rscript {0}
