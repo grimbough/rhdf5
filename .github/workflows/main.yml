@@ -49,6 +49,11 @@ jobs:
           
       - uses: r-lib/actions/setup-pandoc@v2
       
+      - name: temp rhdf5filters install
+        if: runner.os == 'macOS-14'
+        run: |
+          R -e 'install.packages("remotes")' -e 'BiocManager::install("grimbough/rhdf5filters")'
+      
       - name: Install dependencies
         uses: r-lib/actions/setup-r-dependencies@v2
         with:
