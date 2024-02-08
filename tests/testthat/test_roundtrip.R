@@ -20,14 +20,16 @@ test_that("data.frame columns survive a round trip", {
             character(1) ),
         stringsAsFactors = FALSE
     )
+    test_frame_single <- test_frame['integer']
     
     
     expect_silent(h5write(obj = test_frame, file = h5file, name = 'data_frame'))
+    expect_silent(h5write(obj = test_frame_single, file = h5file, name = 'data_frame2'))
     
     expect_silent(back_frame <- h5read(file = h5file, name = "data_frame") )
+    expect_silent(back_frame2 <- h5read(file = h5file, name = "data_frame2") )
     expect_equivalent(back_frame$integer, test_frame$integer)
     expect_equivalent(back_frame$words, test_frame$words)
-    
 })
 
 test_that("character vectors survive a round trip", {

@@ -676,17 +676,20 @@ SEXP H5Dread_helper_ARRAY(hid_t dataset_id, hid_t file_space_id, hid_t mem_space
 int is_complex(hid_t dtype_id) {
   
   int res = 0;
-  char *field1 = H5Tget_member_name(dtype_id, 0);
-  char *field2 = H5Tget_member_name(dtype_id, 1);
 
   if(H5Tget_nmembers(dtype_id) == 2) {
+    
+    char *field1 = H5Tget_member_name(dtype_id, 0);
+    char *field2 = H5Tget_member_name(dtype_id, 1);
+    
     if((strcmp(field1, "r") == 0) && (strcmp(field2, "i") == 0)) {
       res = 1;
     }
+    
+    free(field1);
+    free(field2);
   }
   
-  free(field1);
-  free(field2);
   return(res);
 }
 
