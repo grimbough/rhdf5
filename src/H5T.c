@@ -236,6 +236,20 @@ SEXP _H5Tenum_insert( SEXP _type, SEXP _name, SEXP _value ) {
   UNPROTECT(1);
   return Rval;
 }
+
+/* int H5Tget_nmembers	(	hid_t 	type_id	)	 */
+SEXP _H5Tget_nmembers( SEXP _dtype_id ) {
+  
+  hid_t dtype_id = STRSXP_2_HID( _dtype_id );
+  
+  int nmembers = H5Tget_nmembers(dtype_id);
+  
+  SEXP Rval;
+  PROTECT(Rval = ScalarInteger(nmembers));
+  UNPROTECT(1);
+  return Rval;
+}
+ 
   
 SEXP _H5Tget_class( SEXP _dtype_id ) {
 

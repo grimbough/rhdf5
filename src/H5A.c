@@ -443,6 +443,10 @@ SEXP _H5Awrite( SEXP _attr_id, SEXP _buf) {
         mem_type_id = H5Aget_type(attr_id);
         buf = read_string_datatype(mem_type_id, _buf);
         break;
+    case LGLSXP :
+        mem_type_id = H5Aget_type(attr_id);
+        buf = LOGICAL(_buf);
+        break;
     case S4SXP : 
       if(R_check_class_etc(_buf, H5Ref) >= 0) {
         if(INTEGER(R_do_slot(_buf, mkString("type")))[0] == H5R_OBJECT) {

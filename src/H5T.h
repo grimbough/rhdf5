@@ -24,6 +24,7 @@ SEXP _H5Tset_offset( SEXP _dtype_id, SEXP _offset );
 SEXP _H5Tget_offset( SEXP _dtype_id );
 SEXP _H5Tenum_create( SEXP _base_id );
 SEXP _H5Tenum_insert( SEXP _type, SEXP _name, SEXP _value );
+SEXP _H5Tget_nmembers( SEXP _dtype_id );
 
 // found in H5T_extras.c
 SEXP _h5getEnumNames( SEXP _dtype_id );

@@ -239,9 +239,22 @@ H5Tenum_insert <- function(dtype_id, name, value) {
   return(invisible(res >= 0))
 }
 
+#' @export
 H5Tget_class <- function(dtype_id) {
   
   type <- .Call("_H5Tget_class", dtype_id, PACKAGE = "rhdf5")
   return(type)
   
+}
+
+#' @export
+H5Tget_nmembers <- function(dtype_id) {
+  
+  H5T_class <- H5Tget_class(dtype_id)
+  if(!H5T_class %in% c('H5T_COMPOUND', 'H5T_ENUM')) {
+    stop("The data type of 'dtype_id' must be either 'H5T_COMPOUND' or 'H5T_ENUM'")
+  }
+  
+  n_members <- .Call("_H5Tget_nmembers", dtype_id, PACKAGE = "rhdf5")
+  return(n_members)
 }

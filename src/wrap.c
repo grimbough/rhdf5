@@ -133,6 +133,7 @@ static R_CallMethodDef libraryRCalls[] = {
   {"_H5Tget_offset", (DL_FUNC) &_H5Tget_offset, 1},
   {"_H5Tenum_create", (DL_FUNC) &_H5Tenum_create, 1},
   {"_H5Tenum_insert", (DL_FUNC) &_H5Tenum_insert, 3},
+  {"_H5Tget_nmembers", (DL_FUNC) &_H5Tget_nmembers, 1},
   {"_h5createComplexDataType", (DL_FUNC) &_h5createComplexDataType, 0},
   {"_H5Pcreate", (DL_FUNC) &_H5Pcreate, 1},
   {"_H5Pget_class", (DL_FUNC) &_H5Pget_class, 1},
