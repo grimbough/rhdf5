@@ -532,8 +532,8 @@ h5createAttribute <- function(obj, attr, dims, maxdims = dims, file,
     } else {
       stop("Can not create attribute. 'dims' and 'maxdims' have to be numeric.")
     }
-
     on.exit(H5Sclose(sid), add = TRUE)
+    
     if (is.null(H5type)) {
         if (is.character(storage.mode)) {
             tid <- switch(storage.mode[1],
@@ -549,13 +549,18 @@ h5createAttribute <- function(obj, attr, dims, maxdims = dims, file,
                               H5Tset_size(tid, size) # NULL = variable.
                               tid
                           },
+                          logical = {
+                            stop("Can not create dataset. 'storage.mode' has to be a character.")
+                          },
                           H5IdComponent=h5constants$H5T["H5T_STD_REF_OBJ"],
                           { stop("datatype ",storage.mode," not yet implemented. Try 'double', 'integer', or 'character'.") } )
         } else {
             stop("Can not create dataset. 'storage.mode' has to be a character.")
         }
     } else {
-        tid <- h5checkConstants("H5T", H5type)
+        if(!grepl(pattern = "^[[:digit:]]+$", tid)) {
+          tid <- h5checkConstants("H5T", H5type)
+        }
     }
     if(!grepl(pattern = "^[[:digit:]]+$", tid)) {
         message("Can not create attribute. H5type unknown. Check h5const('H5T') for valid types.")

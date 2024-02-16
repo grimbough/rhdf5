@@ -9,7 +9,7 @@
 #' @param name The name of the attribute (character).
 #' @param dtype_id A character name of a datatype. See \code{h5const("H5T")} for 
 #' possible datatypes. Can also be an integer representing an HDF5 datatype. 
-#' Only simple datatypes are allowed for atttributes.
+#' Only simple datatypes are allowed for attributes.
 #' @param h5space An object of class [H5IdComponent-class] representing a H5 
 #' dataspace. See [H5Dget_space()], [H5Screate_simple()], [H5Screate()] to create an object 
 #' of this kind.
@@ -20,7 +20,6 @@
 H5Acreate <- function( h5obj, name, dtype_id, h5space ) {
   h5checktype(h5obj, "object")
   if (length(name)!=1 || !is.character(name)) stop("'name' must be a character string of length 1")
-  ##if (!is.integer(dtype_id)) {
   ## dont check if we have an H5T identifier already    
   if (!grepl(pattern = "^[[:digit:]]+$", dtype_id)) {
     dtype_id<- h5checkConstants( "H5T", dtype_id)

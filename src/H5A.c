@@ -426,9 +426,12 @@ SEXP _H5Aread( SEXP _attr_id, SEXP _buf, SEXP _bit64conversion ) {
 SEXP _H5Awrite( SEXP _attr_id, SEXP _buf) {
     hid_t attr_id = STRSXP_2_HID( _attr_id );
     hid_t mem_type_id = -1;
-
+    
     const void * buf;
     static const char* H5Ref[] = {"H5Ref", ""};
+    int values[3] = {1, 0, NA_LOGICAL};
+    
+    int n_unprotect = 0;
     
     switch(TYPEOF(_buf)) {
     case INTSXP :
@@ -444,7 +447,17 @@ SEXP _H5Awrite( SEXP _attr_id, SEXP _buf) {
         buf = read_string_datatype(mem_type_id, _buf);
         break;
     case LGLSXP :
-        mem_type_id = H5Aget_type(attr_id);
+        // create memory enum type
+        mem_type_id = H5Tenum_create(H5T_NATIVE_INT32);
+        H5Tenum_insert(mem_type_id, "TRUE",  &values[0]);
+        H5Tenum_insert(mem_type_id, "FALSE", &values[1]);
+        
+        hid_t attr_type_id = H5Aget_type(attr_id);
+        int n = H5Tget_nmembers(attr_type_id);
+        // only do this if we have 3 values in the datatype: TRUE, FALSE & NA
+        if(n == 3) {
+          H5Tenum_insert(mem_type_id, "NA", &values[2]);
+        }
         buf = LOGICAL(_buf);
         break;
     case S4SXP : 
@@ -471,8 +484,9 @@ SEXP _H5Awrite( SEXP _attr_id, SEXP _buf) {
     if(herr < 0) { error("Error writing attribute"); }
     SEXP Rval;
     PROTECT(Rval = allocVector(INTSXP, 1));
+    n_unprotect++;
     INTEGER(Rval)[0] = herr;
-    UNPROTECT(1);
+    UNPROTECT(n_unprotect);
     return Rval;
 }
 

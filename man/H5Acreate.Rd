@@ -15,7 +15,7 @@ identifier (file, group, or dataset). See \code{\link[=H5Fcreate]{H5Fcreate()}},
 
 \item{dtype_id}{A character name of a datatype. See \code{h5const("H5T")} for
 possible datatypes. Can also be an integer representing an HDF5 datatype.
-Only simple datatypes are allowed for atttributes.}
+Only simple datatypes are allowed for attributes.}
 
 \item{h5space}{An object of class \linkS4class{H5IdComponent} representing a H5
 dataspace. See \code{\link[=H5Dget_space]{H5Dget_space()}}, \code{\link[=H5Screate_simple]{H5Screate_simple()}}, \code{\link[=H5Screate]{H5Screate()}} to create an object

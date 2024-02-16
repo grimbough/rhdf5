@@ -51,7 +51,8 @@ h5writeAttribute.default <- function(attr, h5obj, name, ...) { warning("No funct
 
 #' @rdname h5_writeAttribute
 h5writeAttribute.array <- function(attr, h5obj, name, encoding = NULL, cset=NULL, 
-                                   variableLengthString=FALSE, asScalar=FALSE) {
+                                   variableLengthString=FALSE, asScalar=FALSE,
+                                   checkForNA = FALSE) {
   if (asScalar) {
     if (length(attr) != 1L) {
       stop("cannot use 'asScalar=TRUE' when 'length(attr) > 1'")
@@ -73,8 +74,22 @@ h5writeAttribute.array <- function(attr, h5obj, name, encoding = NULL, cset=NULL
     H5Adelete(h5obj, name)
   }
   storagemode <- storage.mode(attr)
-  if (storagemode == "S4" && is(attr, "H5IdComponent"))
+  if (storagemode == "S4" && is(attr, "H5IdComponent")) {
     storagemode <- "H5IdComponent"
+  } else if (storagemode == "logical") {
+    any_na <- ifelse(checkForNA, yes = any(is.na(attr)), no = FALSE)
+    
+    tid <- H5Tenum_create(dtype_id = "H5T_NATIVE_UCHAR")
+    H5Tenum_insert(tid, name = "TRUE", value = 1L)
+    H5Tenum_insert(tid, name = "FALSE", value = 0L)
+    if(any_na) 
+      H5Tenum_insert(tid, name = "NA", value = 255L)
+    
+    
+    
+  }
+  
+  
   h5createAttribute(h5obj, name, dims = dims, storage.mode = storagemode, 
                     size = size, 
                     encoding = match.arg(encoding, choices = c("ASCII", "UTF-8", "UTF8")))

@@ -23,7 +23,8 @@ h5writeAttribute(
   encoding = NULL,
   cset = NULL,
   variableLengthString = FALSE,
-  asScalar = FALSE
+  asScalar = FALSE,
+  checkForNA = FALSE
 )
 }
 \arguments{
