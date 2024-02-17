@@ -29,9 +29,9 @@ H5Screate <- function( type = h5default("H5S"), native = FALSE ) {
 
 #' Create a simple dataspace
 #'
-#' @param dims An integer vector defining the initial dimensions of the dataspace.
+#' @param dims A numeric vector defining the initial dimensions of the dataspace.
 #' The length of `dims` determines the rank of the dataspace.
-#' @param maxdims An integer vector with the same length length as `dims`.  Specifies the 
+#' @param maxdims A numeric vector with the same length length as `dims`.  Specifies the
 #' upper limit on the size of the dataspace dimensions.  Only needs to be specified
 #' if this is different from the values given to `dims`.
 #' @param native An object of class `logical`. If `TRUE`, array-like
@@ -47,11 +47,12 @@ H5Screate <- function( type = h5default("H5S"), native = FALSE ) {
 #'
 #' @export
 H5Screate_simple <- function( dims, maxdims, native = FALSE ) {
+  dims <- as.numeric(dims)
   if (missing(maxdims)) {
-    maxdims = dims
+    maxdims <- dims
+  } else {
+    maxdims <- as.numeric(maxdims)
   }
-  dims <- as.integer(dims)
-  maxdims <- as.integer(maxdims)
   if (!native) {
     dims <- rev(dims)
     maxdims <- rev(maxdims)
