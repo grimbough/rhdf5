@@ -550,7 +550,11 @@ h5createAttribute <- function(obj, attr, dims, maxdims = dims, file,
                               tid
                           },
                           logical = {
-                            stop("Can not create dataset. 'storage.mode' has to be a character.")
+                              tid <- H5Tenum_create(dtype_id = "H5T_NATIVE_UCHAR")
+                              H5Tenum_insert(tid, name = "TRUE", value = 1L)
+                              H5Tenum_insert(tid, name = "FALSE", value = 0L)
+                              H5Tenum_insert(tid, name = "NA", value = 255L)
+                              tid
                           },
                           H5IdComponent=h5constants$H5T["H5T_STD_REF_OBJ"],
                           { stop("datatype ",storage.mode," not yet implemented. Try 'double', 'integer', or 'character'.") } )
@@ -558,8 +562,8 @@ h5createAttribute <- function(obj, attr, dims, maxdims = dims, file,
             stop("Can not create dataset. 'storage.mode' has to be a character.")
         }
     } else {
-        if(!grepl(pattern = "^[[:digit:]]+$", tid)) {
-          tid <- h5checkConstants("H5T", H5type)
+        if(grepl(pattern = "^[[:digit:]]+$", H5type)) {
+          tid <- H5type
         }
     }
     if(!grepl(pattern = "^[[:digit:]]+$", tid)) {

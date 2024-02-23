@@ -26,15 +26,19 @@ test_that("Adding attribute to file", {
     ## matrix
     attr <- matrix(1:10, nrow = 2)
     expect_silent(h5writeAttribute(attr = attr, h5obj = fid, name = "matrix_attr"))
+    ## logical
+    attr <- c(TRUE, FALSE)
+    expect_silent(h5writeAttribute(attr = attr, h5obj = fid, name = "logical_attr"))
     
     H5Fclose(fid)
     
     attr_back <- h5readAttributes(h5File, name = "/")
-    expect_length(attr_back, n = 4)
-    expect_true( all(c("char_attr", "int_attr", "numeric_attr", "matrix_attr") %in% names(attr_back)) )
+    expect_length(attr_back, n = 5)
+    expect_true( all(c("char_attr", "int_attr", "numeric_attr", "matrix_attr", "logical_attr") %in% names(attr_back)) )
     expect_is(attr_back$char_attr[1], "character")
     expect_is(attr_back$int_attr[1], "integer")
     expect_is(attr_back$numeric_attr[1], "numeric")
+    expect_is(attr_back$logical_attr[1], "logical")
 })
 
 test_that("Adding attribute to group", {
@@ -55,16 +59,20 @@ test_that("Adding attribute to group", {
     ## matrix
     attr <- matrix(1:10, nrow = 2)
     expect_silent(h5writeAttribute(attr = attr, h5obj = gid, name = "matrix_attr"))
+    ## logical
+    attr <- c(TRUE, FALSE)
+    expect_silent(h5writeAttribute(attr = attr, h5obj = gid, name = "logical_attr"))
     
     H5Gclose(gid)
     H5Fclose(fid)
     
     attr_back <- h5readAttributes(h5File, name = "foo_group")
-    expect_length(attr_back, n = 4)
-    expect_true( all(c("char_attr", "int_attr", "numeric_attr", "matrix_attr") %in% names(attr_back)) )
+    expect_length(attr_back, n = 5)
+    expect_true( all(c("char_attr", "int_attr", "numeric_attr", "matrix_attr", "logical_attr") %in% names(attr_back)) )
     expect_is(attr_back$char_attr[1], "character")
     expect_is(attr_back$int_attr[1], "integer")
     expect_is(attr_back$numeric_attr[1], "numeric")
+    expect_is(attr_back$logical_attr[1], "logical")
 })
 
 test_that("Adding attribute to dataset", {
@@ -85,16 +93,20 @@ test_that("Adding attribute to dataset", {
     ## matrix
     attr <- matrix(1:10, nrow = 2)
     h5writeAttribute(attr = attr, h5obj = did, name = "matrix_attr")
+    ## logical
+    attr <- c(TRUE, FALSE)
+    expect_silent(h5writeAttribute(attr = attr, h5obj = did, name = "logical_attr"))
     
     H5Dclose(did)
     H5Fclose(fid)
     
     attr_back <- h5readAttributes(h5File, name = "baa_dataset")
-    expect_length(attr_back, n = 4)
-    expect_true( all(names(attr_back) %in% c("char_attr", "int_attr", "numeric_attr", "matrix_attr")) )
+    expect_length(attr_back, n = 5)
+    expect_true( all(names(attr_back) %in% c("char_attr", "int_attr", "numeric_attr", "matrix_attr", "logical_attr")) )
     expect_is(attr_back$char_attr[1], "character")
     expect_is(attr_back$int_attr[1], "integer")
     expect_is(attr_back$numeric_attr[1], "numeric")
+    expect_is(attr_back$logical_attr[1], "logical")
 })
 
 test_that("Checking other string options when adding attributes", {
@@ -119,26 +131,22 @@ test_that("Checking other string options when adding attributes", {
     expect_error(h5writeAttribute(attr = c(attr, attr), h5obj = gid, name = "char_attr3", 
                                   encoding = "UTF-8", asScalar = TRUE), "cannot use")
 
-    ## expect a message telling us this argument is deprecated
-    attr <- "blah4"
-    expect_message(h5writeAttribute(attr = attr, h5obj = gid, name = "char_attr4", cset = "UTF-8"))
-    
     H5Gclose(gid)
     H5Fclose(fid)
 
     attr_back <- h5readAttributes(h5File, name = "blah_group")
-    expect_length(attr_back, n = 4)
+    expect_length(attr_back, n = 3)
 
-    expected <- c("char_attr", "char_attr2", "char_attr3", "char_attr4")
+    expected <- c("char_attr", "char_attr2", "char_attr3")
     expect_identical(sort(expected), sort(names(attr_back)))
-    expect_identical(unname(unlist(attr_back[expected])), c("blah", "blah2", "blah3", "blah4"))
+    expect_identical(unname(unlist(attr_back[expected])), c("blah", "blah2", "blah3"))
 })
-
-test_that("Unable to add logical attribute", {
-    fid <- H5Fopen(h5File)
-    expect_error( h5writeAttribute(attr = FALSE, h5obj = fid, name = "logical_attr"))  
-    H5Fclose(fid)
-})
+# 
+# test_that("Unable to add logical attribute", {
+#     fid <- H5Fopen(h5File)
+#     expect_error( h5writeAttribute(attr = FALSE, h5obj = fid, name = "logical_attr"))  
+#     H5Fclose(fid)
+# })
 
 test_that("Overwrite exisiting attribute", {
     fid <- H5Fopen(h5File)

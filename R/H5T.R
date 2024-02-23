@@ -206,12 +206,14 @@ H5Tget_precision <- function( dtype_id ) {
 #' @param value The value of the new member.  Must be compatible with the base
 #'   datatype defined by `dtype_id`.
 #'
-#' @returns * `H5Tinsert_enum()` returns an character representing the H5 identifier
-#' of the new datatype. * `H5Tset_precision()` is called
-#'   for its side-effect of modifying the existing datatype.  It will
-#'   invisibly return `TRUE` if this is successful `FALSE` if not.
-#'   
-#' @examples 
+#' @returns
+#' * `H5Tinsert_enum()` returns an character representing the H5 identifier
+#' of the new datatype.
+#' * `H5Tset_precision()` is called for its side-effect of modifying the 
+#' existing datatype.  It will invisibly
+#' return `TRUE` if this is successful `FALSE` if not.
+#'
+#' @examples
 #' tid <- H5Tenum_create(dtype_id = "H5T_NATIVE_UCHAR")
 #' H5Tenum_insert(tid, name = "TRUE", value = 1L)
 #' H5Tenum_insert(tid, name = "FALSE", value = 0L)
@@ -239,6 +241,31 @@ H5Tenum_insert <- function(dtype_id, name, value) {
   return(invisible(res >= 0))
 }
 
+#' Get details of HDF5 data types
+#'
+#' @param dtype_id ID of HDF5 datatype to work with.  Normally created with
+#' a function like `H5Tcopy` or `H5Tenum_create`.
+#'
+#' @returns
+#' * `H5Tget_class()` returns an character vector of length 1 giving the
+#' class of the data type.
+#' * `H5Tget_nmembers()` returns the number of members in the given
+#' datatype.  Will fail with an error if the supplied datatype is not of type 
+#' `H5T_COMPUND` or `H5T_ENUM`.
+#'
+#' @examples
+#' ## create an enum datatype with two entries
+#' tid <- H5Tenum_create(dtype_id = "H5T_NATIVE_UCHAR")
+#' H5Tenum_insert(tid, name = "TRUE", value = 1L)
+#' H5Tenum_insert(tid, name = "FALSE", value = 0L)
+#' 
+#' H5Tget_class(tid)
+#' H5Tget_nmembers(tid)
+#'
+#' @name H5T_ops
+NULL
+
+#' @rdname H5T_ops
 #' @export
 H5Tget_class <- function(dtype_id) {
   
@@ -247,6 +274,7 @@ H5Tget_class <- function(dtype_id) {
   
 }
 
+#' @rdname H5T_ops
 #' @export
 H5Tget_nmembers <- function(dtype_id) {
   

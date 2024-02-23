@@ -25,9 +25,10 @@ datatype defined by \code{dtype_id}.}
 \value{
 \itemize{
 \item \code{H5Tinsert_enum()} returns an character representing the H5 identifier
-of the new datatype. * \code{H5Tset_precision()} is called
-for its side-effect of modifying the existing datatype.  It will
-invisibly return \code{TRUE} if this is successful \code{FALSE} if not.
+of the new datatype.
+\item \code{H5Tset_precision()} is called for its side-effect of modifying the
+existing datatype.  It will invisibly
+return \code{TRUE} if this is successful \code{FALSE} if not.
 }
 }
 \description{
