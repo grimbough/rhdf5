@@ -60,6 +60,20 @@ test_that("We can create a simple dataspace", {
     expect_silent(H5Sclose(sid))
 })
 
+test_that("We can create a dataspace with unlimited or non 32-bit integer dims", {
+  expect_silent(sid <- H5Screate_simple(dims = c(10, 2), maxdims = c(10, 3e9)))
+  dspace_dims <- H5Sget_simple_extent_dims(sid)
+  expect_is(dspace_dims$maxsize, 'numeric')
+  expect_equal(dspace_dims$maxsize, c(10, 3e9))
+  
+  expect_silent(H5Sset_extent_simple(sid, dims = c(1,2), maxdims = c(10, H5Sunlimited())))
+  dspace_dims <- H5Sget_simple_extent_dims(sid)
+  expect_is(dspace_dims$maxsize, 'integer')
+  expect_equal( dspace_dims$maxsize, c(10, -1) )
+  
+  expect_silent(H5Sclose(sid))
+})
+
 ############################################################
 context("H5S Select Hyperslab")
 ############################################################

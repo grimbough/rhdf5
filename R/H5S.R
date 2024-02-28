@@ -150,11 +150,14 @@ H5Sget_simple_extent_dims <- function( h5space ) {
 #' @export
 H5Sset_extent_simple <- function( h5space, dims, maxdims) {
   h5checktype(h5space, "dataspace")
+  
+  dims <- as.numeric(dims)
   if (missing(maxdims)) {
-    maxdims = dims
+    maxdims <- dims
+  } else {
+    maxdims <- as.numeric(maxdims)
   }
-  dims <- as.integer(dims)
-  maxdims <- as.integer(maxdims)
+  
   if (!h5space@native){
       dims <- rev(dims)
       maxdims <- rev(maxdims)
