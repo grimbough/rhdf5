@@ -45,7 +45,7 @@ SEXP _H5Screate_simple( SEXP _dims, SEXP _maxdims ) {
     int rank = length(_dims);
     hsize_t dims[rank];
     for (int i=0; i<rank; i++) {
-        dims[i] = (hsize_t) INTEGER(_dims)[i];
+        dims[i] = (hsize_t) REAL(_dims)[i];
     }
     if (length(_maxdims) == 0) {
         hid = H5Screate_simple( rank, dims, NULL);
@@ -57,8 +57,10 @@ SEXP _H5Screate_simple( SEXP _dims, SEXP _maxdims ) {
         } else {
             hsize_t maxdims[rank];
             for (int i=0; i<rank; i++) {
-                maxdims[i] = (hsize_t) INTEGER(_maxdims)[i];
+                maxdims[i] = (hsize_t) REAL(_maxdims)[i];
                 // We explicitly use -1 to represent unlimited dimensions
+                /* NOTE (H.P. 2024/2/16): 'maxdims' contains unsigned
+                   values (hsize_t) so this comparison will always be false. */
                 if(maxdims[i] == -1) {
                   maxdims[i] = H5S_UNLIMITED;
                 }
