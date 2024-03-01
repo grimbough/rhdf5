@@ -140,12 +140,14 @@ H5Sget_simple_extent_dims <- function( h5space ) {
 #' 
 #' @param h5space [H5IdComponent-class] object representing a dataspace.
 #' @param dims Dimension of the dataspace. This argument is similar to the dim
-#' attribute of an array. When viewing the HDF5 dataset with an C-program 
-#' (e.g. HDFView), the dimensions appear in inverted order, because the 
-#' fastest changing dimension in R is the first one, and in C its the last 
-#' one.
+#' attribute of an array. 
 #' @param maxdims Maximum extension of the dimension of the dataset in the 
 #' file. If not provided, it is set to `dims`.
+#' 
+#' When viewing the HDF5 dataset with other software 
+#' (e.g. HDFView), the dimensions appear in inverted order, because the 
+#' fastest changing dimension in R is the first one, and in C it's the last 
+#' one.
 #' 
 #' @export
 H5Sset_extent_simple <- function( h5space, dims, maxdims) {

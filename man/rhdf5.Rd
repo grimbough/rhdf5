@@ -2,7 +2,6 @@
 % Please edit documentation in R/Rhdf5.R
 \docType{package}
 \name{rhdf5}
-\alias{rhdf5-package}
 \alias{rhdf5}
 \title{rhdf5: An interface between HDF5 and R}
 \description{
@@ -11,28 +10,4 @@ The rhdf5 package provides two categories of functions:
 \item \code{h5} functions are high-level R functions that provide a convenient way of accessing HDF5 files
 \item \code{H5} functions mirror much of the the HDF5 C API
 }
-}
-\seealso{
-Useful links:
-\itemize{
-  \item \url{https://github.com/grimbough/rhdf5}
-  \item Report bugs at \url{https://github.com/grimbough/rhdf5/issues}
-}
-
-}
-\author{
-\strong{Maintainer}: Mike Smith \email{mike.smith@embl.de} (\href{https://orcid.org/0000-0002-7800-3848}{ORCID})
-
-Authors:
-\itemize{
-  \item Bernd Fischer
-  \item Gregoire Pau
-}
-
-Other contributors:
-\itemize{
-  \item Martin Morgan [contributor]
-  \item Daniel van Twisk [contributor]
-}
-
 }
