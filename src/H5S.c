@@ -45,7 +45,7 @@ SEXP _H5Screate_simple( SEXP _dims, SEXP _maxdims ) {
     int rank = length(_dims);
     hsize_t dims[rank];
     for (int i=0; i<rank; i++) {
-        dims[i] = (hsize_t) INTEGER(_dims)[i];
+        dims[i] = (hsize_t) REAL(_dims)[i];
     }
     if (length(_maxdims) == 0) {
         hid = H5Screate_simple( rank, dims, NULL);
@@ -56,12 +56,11 @@ SEXP _H5Screate_simple( SEXP _dims, SEXP _maxdims ) {
             hid = -1;
         } else {
             hsize_t maxdims[rank];
+            double maxdim;
             for (int i=0; i<rank; i++) {
-                maxdims[i] = (hsize_t) INTEGER(_maxdims)[i];
                 // We explicitly use -1 to represent unlimited dimensions
-                if(maxdims[i] == -1) {
-                  maxdims[i] = H5S_UNLIMITED;
-                }
+                maxdim = REAL(_maxdims)[i];
+                maxdims[i] = maxdim < 0 ? H5S_UNLIMITED : (hsize_t) maxdim;
             }
             hid = H5Screate_simple( rank, dims, maxdims);
             addHandle(hid);
@@ -108,16 +107,16 @@ SEXP _H5Sget_simple_extent_dims( SEXP _space_id ) {
     } else {
         for (int i=0; i < rank; i++) {
             size_is_numeric += size[i] > R_LEN_T_MAX;
-            maxsize_is_numeric += maxsize[i] > R_LEN_T_MAX;
+            maxsize_is_numeric += (maxsize[i] > R_LEN_T_MAX) & (maxsize[i] != H5S_UNLIMITED);
         }
         Rsize = PROTECT(allocVector(REALSXP, rank));
         Rmaxsize = PROTECT(allocVector(REALSXP, rank));
         for (int i=0; i < rank; i++) {
-            REAL(Rsize)[i] = size[i];
-            REAL(Rmaxsize)[i] = maxsize[i];
+            REAL(Rsize)[i] = (double) size[i];
+            REAL(Rmaxsize)[i] = (maxsize[i] == H5S_UNLIMITED) ? -1 : (double) maxsize[i];
         }
-        SET_VECTOR_ELT(Rval,1,Rsize);
-        SET_VECTOR_ELT(Rval,2,Rmaxsize);
+        SET_VECTOR_ELT(Rval,1, Rsize);
+        SET_VECTOR_ELT(Rval,2, Rmaxsize);
         UNPROTECT(2);
     }
     
@@ -143,7 +142,7 @@ SEXP _H5Sset_extent_simple( SEXP _space_id, SEXP _current_size, SEXP _maximum_si
     int rank = length(_current_size);
     hsize_t current_size[rank];
     for (int i=0; i<rank; i++) {
-        current_size[i] = (hsize_t) INTEGER(_current_size)[i];
+        current_size[i] = (hsize_t) REAL(_current_size)[i];
     }
     if (length(_maximum_size) == 0) {
         herr = H5Sset_extent_simple( space_id, rank, current_size, NULL);
@@ -153,12 +152,11 @@ SEXP _H5Sset_extent_simple( SEXP _space_id, SEXP _current_size, SEXP _maximum_si
             herr = -1;
         } else {
             hsize_t maximum_size[rank];
+            double maxdim;
             for (int i=0; i<rank; i++) {
-                maximum_size[i] = (hsize_t) INTEGER(_maximum_size)[i];
-                // We explicitly use -1 to represent unlimited dimensions
-                if(maximum_size[i] == -1) {
-                  maximum_size[i] = H5S_UNLIMITED;
-                }
+              // We explicitly use -1 to represent unlimited dimensions
+              maxdim = REAL(_maximum_size)[i];
+              maximum_size[i] = maxdim < 0 ? H5S_UNLIMITED : (hsize_t) maxdim;
             }
             herr = H5Sset_extent_simple( space_id, rank, current_size, maximum_size);
         }

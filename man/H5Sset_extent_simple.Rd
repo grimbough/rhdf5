@@ -10,13 +10,15 @@ H5Sset_extent_simple(h5space, dims, maxdims)
 \item{h5space}{\linkS4class{H5IdComponent} object representing a dataspace.}
 
 \item{dims}{Dimension of the dataspace. This argument is similar to the dim
-attribute of an array. When viewing the HDF5 dataset with an C-program
-(e.g. HDFView), the dimensions appear in inverted order, because the
-fastest changing dimension in R is the first one, and in C its the last
-one.}
+attribute of an array.}
 
 \item{maxdims}{Maximum extension of the dimension of the dataset in the
-file. If not provided, it is set to \code{dims}.}
+file. If not provided, it is set to \code{dims}.
+
+When viewing the HDF5 dataset with other software
+(e.g. HDFView), the dimensions appear in inverted order, because the
+fastest changing dimension in R is the first one, and in C it's the last
+one.}
 }
 \description{
 Set the size of a dataspace

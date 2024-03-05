@@ -29,9 +29,9 @@ H5Screate <- function( type = h5default("H5S"), native = FALSE ) {
 
 #' Create a simple dataspace
 #'
-#' @param dims An integer vector defining the initial dimensions of the dataspace.
+#' @param dims A numeric vector defining the initial dimensions of the dataspace.
 #' The length of `dims` determines the rank of the dataspace.
-#' @param maxdims An integer vector with the same length length as `dims`.  Specifies the 
+#' @param maxdims A numeric vector with the same length length as `dims`.  Specifies the
 #' upper limit on the size of the dataspace dimensions.  Only needs to be specified
 #' if this is different from the values given to `dims`.
 #' @param native An object of class `logical`. If `TRUE`, array-like
@@ -47,11 +47,12 @@ H5Screate <- function( type = h5default("H5S"), native = FALSE ) {
 #'
 #' @export
 H5Screate_simple <- function( dims, maxdims, native = FALSE ) {
+  dims <- as.numeric(dims)
   if (missing(maxdims)) {
-    maxdims = dims
+    maxdims <- dims
+  } else {
+    maxdims <- as.numeric(maxdims)
   }
-  dims <- as.integer(dims)
-  maxdims <- as.integer(maxdims)
   if (!native) {
     dims <- rev(dims)
     maxdims <- rev(maxdims)
@@ -139,21 +140,26 @@ H5Sget_simple_extent_dims <- function( h5space ) {
 #' 
 #' @param h5space [H5IdComponent-class] object representing a dataspace.
 #' @param dims Dimension of the dataspace. This argument is similar to the dim
-#' attribute of an array. When viewing the HDF5 dataset with an C-program 
-#' (e.g. HDFView), the dimensions appear in inverted order, because the 
-#' fastest changing dimension in R is the first one, and in C its the last 
-#' one.
+#' attribute of an array. 
 #' @param maxdims Maximum extension of the dimension of the dataset in the 
 #' file. If not provided, it is set to `dims`.
+#' 
+#' When viewing the HDF5 dataset with other software 
+#' (e.g. HDFView), the dimensions appear in inverted order, because the 
+#' fastest changing dimension in R is the first one, and in C it's the last 
+#' one.
 #' 
 #' @export
 H5Sset_extent_simple <- function( h5space, dims, maxdims) {
   h5checktype(h5space, "dataspace")
+  
+  dims <- as.numeric(dims)
   if (missing(maxdims)) {
-    maxdims = dims
+    maxdims <- dims
+  } else {
+    maxdims <- as.numeric(maxdims)
   }
-  dims <- as.integer(dims)
-  maxdims <- as.integer(maxdims)
+  
   if (!h5space@native){
       dims <- rev(dims)
       maxdims <- rev(maxdims)

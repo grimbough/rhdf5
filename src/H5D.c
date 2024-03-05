@@ -682,9 +682,8 @@ int is_complex(hid_t dtype_id) {
     char *field1 = H5Tget_member_name(dtype_id, 0);
     char *field2 = H5Tget_member_name(dtype_id, 1);
     
-    if((strcmp(field1, "r") == 0) && (strcmp(field2, "i") == 0)) {
+    if((strcmp(field1, "r") == 0) && (strcmp(field2, "i") == 0))
       res = 1;
-    }
     
     free(field1);
     free(field2);
@@ -702,6 +701,7 @@ SEXP H5Dread_helper_COMPLEX(hid_t dataset_id, hid_t file_space_id, hid_t mem_spa
   
   herr_t herr = H5Dread(dataset_id, dtype_id, mem_space_id, file_space_id, H5P_DEFAULT, buf );
   if(herr < 0) {
+    UNPROTECT(1);
     error("Unable to read dataset");
   }
 
@@ -718,11 +718,6 @@ SEXP H5Dread_helper_COMPOUND(hid_t dataset_id, hid_t file_space_id, hid_t mem_sp
                              int bit64conversion, int native ) {
   
     SEXP Rval;
-  
-    if(is_complex(dtype_id)) {
-        Rval = H5Dread_helper_COMPLEX(dataset_id, file_space_id, mem_space_id, n, Rdim, dtype_id, native);
-        return(Rval);
-    }
 
     if ((LENGTH(Rdim) > 1) && compoundAsDataFrame) {
         compoundAsDataFrame = 0;
@@ -784,6 +779,23 @@ SEXP H5Dread_helper_COMPOUND(hid_t dataset_id, hid_t file_space_id, hid_t mem_sp
     return(Rval);
 }
 
+SEXP H5Dread_helper_COMPOUND_OR_COMPLEX(
+    hid_t dataset_id, hid_t file_space_id, hid_t mem_space_id, hsize_t n, SEXP Rdim, SEXP _buf, 
+    hid_t dtype_id, hid_t cpdType, int cpdNField, char ** cpdField, int compoundAsDataFrame,
+    int bit64conversion, int native ) {
+  
+  SEXP Rval;
+  
+  if(is_complex(dtype_id)) {
+    Rval = H5Dread_helper_COMPLEX(dataset_id, file_space_id, mem_space_id, n, Rdim, dtype_id, native);
+  } else {
+    Rval = H5Dread_helper_COMPOUND(dataset_id, file_space_id, mem_space_id, n, Rdim, _buf, 
+                                   dtype_id, cpdType, cpdNField, cpdField, compoundAsDataFrame,
+                                   bit64conversion, native);
+  }
+  
+  return(Rval);
+}
 
 //SEXP H5Dread_helper_REFERENCE(hid_t attr_id, hsize_t n, SEXP Rdim, SEXP _buf, hid_t dtype_id) {
 SEXP H5Dread_helper_REFERENCE(hid_t dataset_id, hid_t file_space_id, hid_t mem_space_id, hsize_t n, SEXP Rdim, SEXP _buf,
@@ -848,7 +860,7 @@ SEXP H5Dread_helper(hid_t dataset_id, hid_t file_space_id, hid_t mem_space_id, h
                                      dtype_id, cpdType, cpdNField, cpdField, compoundAsDataFrame, native );
     } break;
     case H5T_COMPOUND: {
-        Rval = H5Dread_helper_COMPOUND(dataset_id, file_space_id, mem_space_id, n, Rdim, _buf, 
+        Rval = H5Dread_helper_COMPOUND_OR_COMPLEX(dataset_id, file_space_id, mem_space_id, n, Rdim, _buf, 
                                        dtype_id, cpdType, cpdNField, cpdField, compoundAsDataFrame,
                                        bit64conversion, native );
     } break;

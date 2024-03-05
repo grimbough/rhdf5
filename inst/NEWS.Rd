@@ -8,6 +8,12 @@
       \item R complex types can now be written to HDF5.  These will be stored as
       a compound datatype with two elements (r & i) representing the real and
       imaginary parts.
+      \item Functions \code{H5Screate_simple} and \code{H5Sset_extent_simple} 
+      now accept numeric values to the \code{dim} and \code{maxdim} arguments,
+      allowing the creation of HDF5 dataspaces larger than R's maximum
+      integer value.
+      (Thanks to @hpages for reporting this and providing a patch
+      https://github.com/grimbough/rhdf5/pull/140).
     }
   }
 

@@ -7,10 +7,10 @@
 H5Screate_simple(dims, maxdims, native = FALSE)
 }
 \arguments{
-\item{dims}{An integer vector defining the initial dimensions of the dataspace.
+\item{dims}{A numeric vector defining the initial dimensions of the dataspace.
 The length of \code{dims} determines the rank of the dataspace.}
 
-\item{maxdims}{An integer vector with the same length length as \code{dims}.  Specifies the
+\item{maxdims}{A numeric vector with the same length length as \code{dims}.  Specifies the
 upper limit on the size of the dataspace dimensions.  Only needs to be specified
 if this is different from the values given to \code{dims}.}
 
