@@ -174,21 +174,6 @@ H5Dget_storage_size <- function( h5dataset ) {
     }
   }
     
-  ## warn about NA conversion for integers if 'rhdf5.NA-OK' is missing
-  if(!H5Aexists(h5obj = h5dataset, name = "rhdf5-NA.OK")) {
-    if( (storage.mode(res) == "integer" || is(res, "integer64")) && any(is.na(res))) {
-      if(storage.mode(res) == "integer") {
-        na_val <- "-2^31"
-      } else if (is(res, "integer64")) {
-        na_val <- "-2^63"
-      } else { ## we should never end up here
-        na_val <- "DEFAULT"
-      }
-      message("The value ", na_val, " was detected in the dataset.\n",
-              "This has been converted to NA within R.")
-    }
-  }
-
   res
 }
 

@@ -1,3 +1,37 @@
+.h5postProcessDataset <- function(obj, h5dataset) {
+  ## warn about NA conversion for integers if 'rhdf5.NA-OK' is missing
+  if( storage.mode(obj) == "integer" || is(obj, "integer64") ) {
+    if(any(is.na(obj))) {
+      if( !H5Aexists(h5obj = h5dataset, name = "rhdf5-NA.OK") ) {
+        if(storage.mode(obj) == "integer") {
+          na_val <- "-2^31"
+        } else if (is(obj, "integer64")) {
+          na_val <- "-2^63"
+        } else { ## we should never end up here
+          na_val <- "DEFAULT"
+        }
+        message("The value ", na_val, " was detected in the dataset.\n",
+                "This has been converted to NA within R.")
+      }
+    }
+  } else if( storage.mode(obj) == "character" ) { 
+    ## coerce the string "NA" to NA if required
+    if(H5Aexists(h5dataset, name = "as.na")) {
+      na_char_idx <- (obj == "NA")
+      if(any(na_char_idx)) {
+        obj[na_char_idx] <- NA_character_
+      }
+    }
+    ## determine if this is ASCII or UTF-8 encoding
+    h5type <- H5Dget_type(h5dataset)
+    if(H5Tget_cset(h5type) == 1L) { 
+      Encoding(obj) <- "UTF-8" 
+    }
+  }
+  
+  return(obj)
+}
+
 h5readDataset <- function (h5dataset, index = NULL, start = NULL, stride = NULL, 
                            block = NULL, count = NULL, compoundAsDataFrame = TRUE, drop = FALSE, ...) {
     
@@ -224,19 +258,7 @@ h5read <- function(file, name, index=NULL, start=NULL, stride=NULL, block=NULL,
             on.exit(H5Dclose(h5dataset), add = TRUE)
             obj <- h5readDataset(h5dataset, index = index, start = start, stride = stride, 
                                  block = block, count = count, compoundAsDataFrame = compoundAsDataFrame, drop = drop, ...)
-            ## coerce the string "NA" to NA if required
-            if(storage.mode(obj) == "character") {
-                if(H5Aexists(h5dataset, name = "as.na")) {
-                    if(any(obj == "NA")) {
-                        obj[obj == "NA"] <- NA_character_
-                    }
-                }
-                ## determine if this is ASCII or UTF-8 encoding
-                h5type <- H5Dget_type(h5dataset)
-                if(H5Tget_cset(h5type) == 1L) { 
-                    Encoding(obj) <- "UTF-8" 
-                }
-            }
+            obj <- .h5postProcessDataset(obj = obj, h5dataset = h5dataset)
             cl <- attr(obj,"class")
             if (!is.null(cl) & callGeneric) {
                 if (exists(paste("h5read",cl,sep="."),mode="function")) {
