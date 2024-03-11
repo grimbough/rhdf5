@@ -3,6 +3,8 @@
 ## Current caveat is that we typically return an array even when there is only
 ## one dimension.
 
+library(rhdf5)
+
 h5file <- tempfile(pattern = "h5_roundtrip_", fileext = ".h5")
 
 test_that("data.frame columns survive a round trip", {
@@ -58,6 +60,8 @@ test_that("UTF-8 strings are preserved", {
 })
 
 test_that("Complex numbers are writen to a compound datatype", {
+  
+  h5file <- tempfile(pattern = "h5_roundtrip_", fileext = ".h5")
 
   mat <- matrix(complex(length.out = 30, real = 1:30, imaginary = 30:1), ncol = 10)
   expect_silent(h5write(obj = mat, file = h5file, name = 'complex'))
