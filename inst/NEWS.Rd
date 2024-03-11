@@ -14,6 +14,10 @@
       integer value.
       (Thanks to @hpages for reporting this and providing a patch
       https://github.com/grimbough/rhdf5/pull/140).
+      \item Messages about the presence of \code{INT_MIN} in datasets created
+      outside of rhdf5, and how R will convert them to \code{NA} have been
+      moved from \code{H5Dread} to the high-level \code{h5read} function. 
+      (See https://github.com/LTLA/scRNAseq/issues/44 for more details).
     }
   }
 
