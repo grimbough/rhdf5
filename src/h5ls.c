@@ -224,7 +224,7 @@ SEXP _h5ls( SEXP _loc_id, SEXP _depth, SEXP _datasetinfo, SEXP _index_type, SEXP
             UNPROTECT(1);
             
             setAttrib(Rval, R_ClassSymbol, mkString("data.frame"));
-            setAttrib(Rval, mkString("row.names"), rowNames);
+            setAttrib(Rval, R_RowNamesSymbol, rowNames);
             
             UNPROTECT(13);
             UNPROTECT(1);

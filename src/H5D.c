@@ -52,7 +52,7 @@ for (int li = 0, lj = 0; li < LENGTH(FROM); li++) {               \
 }                                                                 \
 FROM = to;                                                        \
 } while(0)
-
+  
 /* hid_t H5Dcreate( hid_t loc_id, const char *name, hid_t dtype_id, hid_t space_id, hid_t lcpl_id, hid_t dcpl_id, hid_t dapl_id ) */
 SEXP _H5Dcreate( SEXP _loc_id, SEXP _name, SEXP _dtype_id, SEXP _space_id, SEXP _lcpl_id, SEXP _dcpl_id, SEXP _dapl_id ) {
 
@@ -685,8 +685,8 @@ int is_complex(hid_t dtype_id) {
     if((strcmp(field1, "r") == 0) && (strcmp(field2, "i") == 0))
       res = 1;
     
-    free(field1);
-    free(field2);
+    H5free_memory(field1);
+    H5free_memory(field2);
   }
   
   return(res);
@@ -705,11 +705,12 @@ SEXP H5Dread_helper_COMPLEX(hid_t dataset_id, hid_t file_space_id, hid_t mem_spa
     error("Unable to read dataset");
   }
 
-  if (native)
+  if (native) {
     PERMUTE(Rval, COMPLEX, mem_space_id);
+  }
 
   setAttrib(Rval, R_DimSymbol, Rdim);
-  UNPROTECT(1);
+  UNPROTECT(1 + native);
   return Rval;
 }
 
@@ -752,7 +753,7 @@ SEXP H5Dread_helper_COMPOUND(hid_t dataset_id, hid_t file_space_id, hid_t mem_sp
             SEXP rn = PROTECT(allocVector(INTSXP, INTEGER(Rdim)[0]));
             for (int i=0; i<INTEGER(Rdim)[0]; i++) { INTEGER(rn)[i] = i+1; }
             UNPROTECT(1);
-            setAttrib(Rval, mkString("row.names"), rn);
+            setAttrib(Rval, R_RowNamesSymbol, rn);
             setAttrib(Rval, R_ClassSymbol, mkString("data.frame"));
         }
         UNPROTECT(2);

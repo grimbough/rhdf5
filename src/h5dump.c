@@ -207,7 +207,7 @@ SEXP getTree(opObjListElement* elstart, opDumpTree* data, hid_t loc_id, int dept
                     SET_STRING_ELT(infonames, 11, mkChar("maxdim"));
                     SET_NAMES(info, infonames);
                     setAttrib(info, R_ClassSymbol, mkString("data.frame"));
-                    setAttrib(info, mkString("row.names"), ScalarInteger(1));
+                    setAttrib(info, R_RowNamesSymbol, ScalarInteger(1));
                     UNPROTECT(1);
                     
                     SET_VECTOR_ELT(Rval,n,info);
