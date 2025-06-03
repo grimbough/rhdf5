@@ -51,10 +51,13 @@ SEXP _h5createDataFrame(SEXP _obj, SEXP _loc_id, SEXP _name, SEXP _level, SEXP _
     hsize_t n = LENGTH(VECTOR_ELT(_obj,0));
     hid_t space = H5Screate_simple (1, &n, &n);
     
-    hid_t plist = H5P_DEFAULT;
+    hid_t plist = H5Pcreate(H5P_DATASET_CREATE);
+    H5Pset_fill_time( plist, H5D_FILL_TIME_ALLOC );
+    H5Pset_obj_track_times(plist, 0);
+
+    /* enter here if we're using compression */    
     if (level > 0) {
-        plist = H5Pcreate(H5P_DATASET_CREATE);
-        H5Pset_fill_time( plist, H5D_FILL_TIME_ALLOC );
+
         int rank = 1L;
         hsize_t cdim[rank];
         
