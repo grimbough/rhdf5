@@ -23,7 +23,15 @@ h5write(obj, file, name, ...)
 
 h5writeDataset(obj, h5loc, name, ...)
 
-\method{h5writeDataset}{data.frame}(obj, h5loc, name, level = 6, chunk, DataFrameAsCompound = TRUE)
+\method{h5writeDataset}{data.frame}(
+  obj,
+  h5loc,
+  name,
+  level = 6,
+  chunk,
+  DataFrameAsCompound = TRUE,
+  ...
+)
 
 \method{h5writeDataset}{array}(
   obj,
@@ -37,7 +45,8 @@ h5writeDataset(obj, h5loc, name, ...)
   size = NULL,
   variableLengthString = FALSE,
   encoding = NULL,
-  level = 6
+  level = 6,
+  ...
 )
 }
 \arguments{
