@@ -263,8 +263,10 @@ h5writeDataset.data.frame <- function(
   name,
   level = 6,
   chunk,
-  DataFrameAsCompound = TRUE
+  DataFrameAsCompound = TRUE,
+  ...
 ) {
+  chkDots(...)
   if (DataFrameAsCompound) {
     if (H5Lexists(h5loc, name)) {
       stop(
@@ -272,7 +274,7 @@ h5writeDataset.data.frame <- function(
       )
     }
     if (!is.null(level)) {
-      level <- as.integer(level)
+      level = as.integer(level)
       if (missing(chunk)) {
         chunk <- nrow(obj)
       }
@@ -284,19 +286,19 @@ h5writeDataset.data.frame <- function(
       name,
       level,
       as.integer(chunk),
-      PACKAGE = "rhdf5"
+      PACKAGE = 'rhdf5'
     )
-    .Call("_h5writeDataFrame", obj, did, PACKAGE = "rhdf5")
-    .Call("_H5Dclose", did, PACKAGE = "rhdf5")
+    .Call("_h5writeDataFrame", obj, did, PACKAGE = 'rhdf5')
+    .Call("_H5Dclose", did, PACKAGE = 'rhdf5')
     res <- 0
   } else {
     a <- attr(obj, "names")
     if (is.null(a)) {
-      attr(obj, "names") <- sprintf("col%d", seq_len(ncol(obj)))
+      attr(obj, "names") = sprintf("col%d", seq_len(ncol(obj)))
     } else {
       if (any(duplicated(a))) {
-        a[duplicated(a)] <- sprintf("col%d", seq_len(ncol(obj)))[duplicated(a)]
-        attr(obj, "names") <- a
+        a[duplicated(a)] = sprintf("col%d", seq_len(ncol(obj)))[duplicated(a)]
+        attr(obj, "names") = a
       }
     }
     ## we can't write out factors, so convert any to character
@@ -319,7 +321,8 @@ h5writeDataset.data.frame <- function(
 }
 
 #' @export
-h5writeDataset.list <- function(obj, h5loc, name, level = 6) {
+h5writeDataset.list <- function(obj, h5loc, name, level = 6, ...) {
+  chkDots(...)
   exists <- try({
     H5Lexists(h5loc, name)
   })
@@ -327,29 +330,29 @@ h5writeDataset.list <- function(obj, h5loc, name, level = 6) {
     message(
       "Existing object within HDF5 file cannot be overwritten with a list object. First delete the group or dataset from the HDF5 file."
     )
-    res <- 0
+    res = 0
   } else {
-    N <- names(obj)
-    newnames <- FALSE
+    N = names(obj)
+    newnames = FALSE
     if (is.null(N)) {
-      newnames <- TRUE
+      newnames = TRUE
     } else {
       if (any(nchar(N) == 0)) {
-        newnames <- TRUE
+        newnames = TRUE
       } else {
         if (length(N) != length(obj)) {
-          newnames <- TRUE
+          newnames = TRUE
         }
       }
     }
     if (newnames) {
-      N <- sprintf("ELT%d", seq_len(length(obj)))
+      N = sprintf("ELT%d", seq_len(length(obj)))
     }
-    res <- NULL
+    res = NULL
     h5createGroup(h5loc, name)
-    gid <- H5Gopen(h5loc, name)
+    gid = H5Gopen(h5loc, name)
     for (i in seq_len(length(obj))) {
-      res <- h5write(obj[[i]], gid, N[i])
+      res = h5write(obj[[i]], gid, N[i])
     }
     H5Gclose(gid)
   }
@@ -398,8 +401,10 @@ h5writeDataset.array <- function(
   size = NULL,
   variableLengthString = FALSE,
   encoding = NULL,
-  level = 6
+  level = 6,
+  ...
 ) {
+  chkDots(...)
   exists <- try({
     H5Lexists(h5loc, name)
   })
