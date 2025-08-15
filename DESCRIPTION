@@ -39,7 +39,7 @@ Imports: Rhdf5lib (>= 1.13.4),
   rhdf5filters (>= 1.15.5)
 Depends: R (>= 4.0.0), methods
 Suggests: bit64, BiocStyle, knitr, rmarkdown, testthat,
-  bench, dplyr, ggplot2, mockery, BiocParallel
+  bench, dplyr, ggplot2, mockery, BiocParallel, curl
 LinkingTo: Rhdf5lib
 SystemRequirements: GNU make
 biocViews: Infrastructure, DataImport
