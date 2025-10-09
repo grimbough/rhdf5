@@ -13,6 +13,9 @@
       \code{H5Dget_num_chunks()}.
       \item Added function \code{h5readTimestamps} to extract object timestamp
       metadata.
+      \item The previously deprecated `cset` argument in
+      \code{h5createAttribute()} has been removed entirely. Please use the
+      `encoding` argument instead.
     }
   }
 
