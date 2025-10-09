@@ -58,8 +58,6 @@ variable-length strings.}
 
 \item{encoding}{The encoding of the string data type i.e. when \code{storage.mode = 'character'}. Valid options are "ASCII" and "UTF-8".}
 
-\item{cset}{\emph{Deprecated in favour of the \code{encoding} argument.}}
-
 \item{native}{An object of class \code{logical}. If TRUE, array-like objects
 are treated as stored in HDF5 row-major rather than R column-major
 orientation. Using \code{native = TRUE} increases HDF5 file portability
