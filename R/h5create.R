@@ -479,7 +479,6 @@ h5createDataset <- function(file, dataset, dims, maxdims = dims,
 #'   variable-length strings.
 #' @param encoding The encoding of the string data type i.e. when `storage.mode
 #'   = 'character'`. Valid options are "ASCII" and "UTF-8".
-#' @param cset *Deprecated in favour of the `encoding` argument.*
 #' @param native An object of class \code{logical}. If TRUE, array-like objects
 #'   are treated as stored in HDF5 row-major rather than R column-major
 #'   orientation. Using \code{native = TRUE} increases HDF5 file portability
@@ -505,19 +504,10 @@ h5createDataset <- function(file, dataset, dims, maxdims = dims,
 #'
 #' @name h5_createAttribute
 #' @export h5createAttribute
-h5createAttribute <- function(obj, attr, dims, maxdims = dims, file, 
-                              storage.mode = "double", H5type = NULL, 
-                              size = NULL, encoding = NULL, cset = NULL, 
-                              native = FALSE) {
-  
-    ## remove the cset argument in BioC 3.16
-    if(!is.null(cset)) {
-      if(is.null(encoding)) 
-        encoding <- cset
-      message("The 'cset' argument has been deprecated.\n",
-              "Please use the argument 'encoding' instead.")
-    }
-    
+h5createAttribute <- function(obj, attr, dims, maxdims = dims, file,
+                              storage.mode = "double", H5type = NULL,
+                              size = NULL, encoding = NULL, native = FALSE) {
+
     obj = h5checktypeOrOpenObj(obj, file, native = native)
     on.exit(h5closeitObj(obj))
     
