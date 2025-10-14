@@ -17,14 +17,16 @@
 #' ## links to the group "/foo" found in the file "multiple_dtypes.h5"
 #' ## distributed with the package.
 #'
-#' h5File1 <- system.file("testfiles", "multiple_dtypes.h5", package="rhdf5")
+#' h5File1 <- system.file("testfiles", "multiple_dtypes.h5", package = "rhdf5")
 #' h5File2 <- tempfile(pattern = "H5L_2_", fileext = ".h5")
 #' h5createFile(h5File2)
 #'
 #' ## open the new file & create a link to the group "/foo" in the original file
 #' fid <- H5Fopen(h5File2)
-#' H5Lcreate_external(target_file_name = h5File1, target_obj_name = "/foo",
-#'   link_loc = fid, link_name = "/external_link")
+#' H5Lcreate_external(
+#'   target_file_name = h5File1, target_obj_name = "/foo",
+#'   link_loc = fid, link_name = "/external_link"
+#' )
 #' H5Fclose(fid)
 #'
 #' ## check the new file has a group called "/external_link"
@@ -40,7 +42,7 @@ H5Lcreate_external <- function(
   if (length(target_file_name) != 1 || !is.character(target_file_name)) {
     stop("'target_file_name' must be a character string of length 1")
   }
-  target_file_name = normalizePath(target_file_name, mustWork = FALSE)
+  target_file_name <- normalizePath(target_file_name, mustWork = FALSE)
 
   if (length(target_obj_name) != 1 || !is.character(target_obj_name)) {
     stop("'target_obj_name' must be a character string of length 1")
@@ -58,7 +60,7 @@ H5Lcreate_external <- function(
     target_obj_name,
     link_loc@ID,
     link_name,
-    PACKAGE = 'rhdf5'
+    PACKAGE = "rhdf5"
   ))
 }
 
@@ -76,16 +78,16 @@ H5Lexists <- function(h5loc, name) {
     stop("'name' must be a character string of length 1")
   }
 
-  name = strsplit(name, split = "/")[[1]]
-  name = name[nchar(name) > 0]
-  Lexists = TRUE
-  i = 1
+  name <- strsplit(name, split = "/")[[1]]
+  name <- name[nchar(name) > 0]
+  Lexists <- TRUE
+  i <- 1
   while ((i <= length(name)) && (Lexists)) {
     res <- .Call(
       "_H5Lexists",
       h5loc@ID,
       paste(head(name, n = i), collapse = "/"),
-      PACKAGE = 'rhdf5'
+      PACKAGE = "rhdf5"
     )
     Lexists <- ifelse(res > 0, TRUE, FALSE)
     i <- i + 1
@@ -114,7 +116,7 @@ H5Lget_info <- function(h5loc, name) {
     stop("'name' must be a character string of length 1")
   }
 
-  res <- .Call("_H5Lget_info", h5loc@ID, name, PACKAGE = 'rhdf5')
+  res <- .Call("_H5Lget_info", h5loc@ID, name, PACKAGE = "rhdf5")
   res$type <- h5const2String("H5L_TYPE", res$type)
   res
 }
@@ -130,8 +132,8 @@ H5Lget_info <- function(h5loc, name) {
 #' h5file <- tempfile(pattern = "_ex_H5L.h5")
 #'
 #' # create an hdf5 file and a group
-#' h5createFile( h5file )
-#' h5createGroup(h5file,"/foo")
+#' h5createFile(h5file)
+#' h5createGroup(h5file, "/foo")
 #'
 #' # reopen file and confirm "/foo" exists but "/baa" does not
 #' fid <- H5Fopen(h5file)
@@ -154,10 +156,10 @@ H5Ldelete <- function(h5loc, name) {
     stop("Specified link doesn't exist.")
   }
 
-  res <- .Call("_H5Ldelete", h5loc@ID, name, PACKAGE = 'rhdf5')
+  res <- .Call("_H5Ldelete", h5loc@ID, name, PACKAGE = "rhdf5")
 
   if (res < 0) {
-    stop('Link deletion failed')
+    stop("Link deletion failed")
   } else {
     return(invisible(res))
   }
@@ -239,11 +241,11 @@ H5Lmove <- function(
     name_dest,
     lcpl,
     lapl,
-    PACKAGE = 'rhdf5'
+    PACKAGE = "rhdf5"
   )
 
   if (res < 0) {
-    stop('Link deletion failed')
+    stop("Link deletion failed")
   } else {
     return(invisible(res))
   }
@@ -296,11 +298,11 @@ H5Lcopy <- function(
     name_dest,
     lcpl,
     lapl,
-    PACKAGE = 'rhdf5'
+    PACKAGE = "rhdf5"
   )
 
   if (res < 0) {
-    stop('Link deletion failed')
+    stop("Link deletion failed")
   } else {
     return(invisible(res))
   }

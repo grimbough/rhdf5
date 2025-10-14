@@ -51,7 +51,7 @@ test_that("dataset region references can be created", {
   expect_equal(H5Rget_name(ref = ref_to_region, h5loc = fid), "/foo/baa")
 
   expect_silent(sid <- H5Rget_region(ref = ref_to_region, h5loc = fid)) |>
-    expect_is('H5IdComponent')
+    expect_is("H5IdComponent")
   expect_equal(H5Sget_select_npoints(sid), 3L)
 
   expect_equal(H5Rget_obj_type(ref = ref_to_region, h5loc = fid), "DATASET")

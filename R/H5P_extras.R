@@ -6,9 +6,9 @@
 #'
 #' @export
 H5Pset_bzip2 <- function(h5plist, level = 2L) {
-  if (!is.loaded('_H5Pset_bzip2', PACKAGE = 'rhdf5')) {
+  if (!is.loaded("_H5Pset_bzip2", PACKAGE = "rhdf5")) {
     stop(
-      'BZIP2 filter not found.\nPlease install rhdf5filters, and then reinstall rhdf5.'
+      "BZIP2 filter not found.\nPlease install rhdf5filters, and then reinstall rhdf5."
     )
   }
 
@@ -17,7 +17,7 @@ H5Pset_bzip2 <- function(h5plist, level = 2L) {
     "_H5Pset_bzip2",
     h5plist@ID,
     as.integer(level),
-    PACKAGE = 'rhdf5'
+    PACKAGE = "rhdf5"
   )
   invisible(res)
 }
@@ -43,16 +43,16 @@ H5Pset_blosc <- function(
   level = 6L,
   shuffle = TRUE
 ) {
-  if (!is.loaded('_H5Pset_blosc', PACKAGE = 'rhdf5')) {
+  if (!is.loaded("_H5Pset_blosc", PACKAGE = "rhdf5")) {
     stop(
-      'BLOSC filter not found.\nPlease install rhdf5filters, and then reinstall rhdf5.'
+      "BLOSC filter not found.\nPlease install rhdf5filters, and then reinstall rhdf5."
     )
   }
 
   method <- as.integer(method)
   if (method < 1 || method > 6) {
     method <- 1L
-    warning('Invalid method selected. Using BLOSC_LZ')
+    warning("Invalid method selected. Using BLOSC_LZ")
   }
 
   ## START: simplified reimplementation of C code from H5Zblosc.c
@@ -77,7 +77,7 @@ H5Pset_blosc <- function(
     as.integer(as.logical(shuffle)),
     as.integer(typesize),
     as.integer(bufsize),
-    PACKAGE = 'rhdf5'
+    PACKAGE = "rhdf5"
   )
   invisible(res)
 }
@@ -90,9 +90,9 @@ H5Pset_blosc <- function(
 #'
 #' @export
 H5Pset_lzf <- function(h5plist, h5tid) {
-  if (!is.loaded('_H5Pset_lzf', PACKAGE = 'rhdf5')) {
+  if (!is.loaded("_H5Pset_lzf", PACKAGE = "rhdf5")) {
     stop(
-      'LZF filter not found.\nPlease install rhdf5filters, and then reinstall rhdf5.'
+      "LZF filter not found.\nPlease install rhdf5filters, and then reinstall rhdf5."
     )
   }
 
@@ -111,7 +111,7 @@ H5Pset_lzf <- function(h5plist, h5tid) {
     "_H5Pset_lzf",
     h5plist@ID,
     as.integer(bufsize),
-    PACKAGE = 'rhdf5'
+    PACKAGE = "rhdf5"
   )
   invisible(res)
 }

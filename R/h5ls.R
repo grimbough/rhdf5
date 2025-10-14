@@ -50,16 +50,16 @@ h5lsConvertToDataframe <- function(L, all = FALSE, native) {
 #' h5createFile(h5File)
 #'
 #' # create groups
-#' h5createGroup(h5File,"foo")
-#' h5createGroup(h5File,"foo/foobaa")
+#' h5createGroup(h5File, "foo")
+#' h5createGroup(h5File, "foo/foobaa")
 #'
 #' # write a matrix
-#' B = array(seq(0.1,2.0,by=0.1),dim=c(5,2,2))
+#' B <- array(seq(0.1, 2.0, by = 0.1), dim = c(5, 2, 2))
 #' attr(B, "scale") <- "liter"
-#' h5write(B, h5File,"foo/B")
+#' h5write(B, h5File, "foo/B")
 #'
 #' # list content of hdf5 file
-#' h5ls(h5File,all=TRUE)
+#' h5ls(h5File, all = TRUE)
 #'
 #' # list content of an hdf5 file in a public S3 bucket
 #' \donttest{
@@ -105,12 +105,12 @@ h5ls <- function(
   order <- h5checkConstants("H5_ITER", order)
   if (is.logical(recursive)) {
     if (recursive) {
-      depth = -1L
+      depth <- -1L
     } else {
-      depth = 1L
+      depth <- 1L
     }
   } else if (is.numeric(recursive) | is.integer(recursive)) {
-    depth = as.integer(recursive)
+    depth <- as.integer(recursive)
     if (length(recursive) > 1) {
       warning("'recursive' must be of length 1.  Only using first value.")
     } else if (recursive == 0) {
@@ -130,7 +130,7 @@ h5ls <- function(
     index_type,
     order,
     loc$H5Identifier@native,
-    PACKAGE = 'rhdf5'
+    PACKAGE = "rhdf5"
   )
   h5lsConvertToDataframe(L, all = all, native = loc$H5Identifier@native)
 }

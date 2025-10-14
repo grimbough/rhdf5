@@ -19,7 +19,7 @@
 #' h5createFile(h5File)
 #'
 #' # create groups
-#' h5createGroup(h5File,"foo")
+#' h5createGroup(h5File, "foo")
 #'
 #' h5listIdentifier()
 #' h5validObjects()
@@ -30,16 +30,16 @@ NULL
 #' @rdname h5listObjects
 #' @export h5listIdentifier
 h5listIdentifier <- function() {
-  res <- .Call("_h5listIdentifier", PACKAGE = 'rhdf5')
-  res$type = h5const2String("H5I_TYPE", res$type)
-  res = as.data.frame(res)
+  res <- .Call("_h5listIdentifier", PACKAGE = "rhdf5")
+  res$type <- h5const2String("H5I_TYPE", res$type)
+  res <- as.data.frame(res)
   res
 }
 
 #' @rdname h5listObjects
 #' @export h5validObjects
 h5validObjects <- function(native = FALSE) {
-  ids <- .Call("_h5validObjects", PACKAGE = 'rhdf5')
+  ids <- .Call("_h5validObjects", PACKAGE = "rhdf5")
   res <- list()
   for (i in seq_len(length(ids))) {
     res[[i]] <- new("H5IdComponent", ID = ids[i], native = native)
@@ -53,11 +53,11 @@ h5listOpenObjects <- function(h5file) {
 }
 
 getDatatypeName <- function(type) {
-  .Call("_getDatatypeName", type, PACKAGE = 'rhdf5')
+  .Call("_getDatatypeName", type, PACKAGE = "rhdf5")
 }
 
 getDatatypeClass <- function(type) {
-  .Call("_getDatatypeClass", type, PACKAGE = 'rhdf5')
+  .Call("_getDatatypeClass", type, PACKAGE = "rhdf5")
 }
 
 #' Print the rhdf5 and libhdf5 version numbers
@@ -83,8 +83,8 @@ h5version <- function() {
   )
 
   part2 <- ifelse(
-    requireNamespace('rhdf5filters'),
-    paste0(" and rhdf5filters ", as.character(packageVersion('rhdf5filters'))),
+    requireNamespace("rhdf5filters"),
+    paste0(" and rhdf5filters ", as.character(packageVersion("rhdf5filters"))),
     ""
   )
   message(part1, part2)

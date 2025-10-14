@@ -18,8 +18,8 @@
 #' h5createFile(h5File)
 #'
 #' # create groups
-#' h5createGroup(h5File,"foo")
-#' h5createGroup(h5File,"foo/foobaa")
+#' h5createGroup(h5File, "foo")
+#' h5createGroup(h5File, "foo/foobaa")
 #'
 #' h5ls(h5File)
 #'
@@ -28,7 +28,7 @@
 h5createFile <- function(file) {
   res <- FALSE
   if (is.character(file)) {
-    file = normalizePath(file, mustWork = FALSE)
+    file <- normalizePath(file, mustWork = FALSE)
     if (file.exists(file)) {
       message("file '", file, "' already exists.")
     } else {
@@ -80,7 +80,7 @@ h5createFile <- function(file) {
 #' @name h5_createGroup
 #' @export h5createGroup
 h5createGroup <- function(file, group) {
-  loc = h5checktypeOrOpenLoc(file, native = FALSE)
+  loc <- h5checktypeOrOpenLoc(file, native = FALSE)
   on.exit(h5closeitLoc(loc))
 
   res <- FALSE
@@ -122,7 +122,7 @@ h5createGroup <- function(file, group) {
         },
         complex = {
           ## We will store two numerics in the compound datatype
-          tid <- .Call("_h5createComplexDataType", PACKAGE = 'rhdf5')
+          tid <- .Call("_h5createComplexDataType", PACKAGE = "rhdf5")
           tid
         },
         {
@@ -163,7 +163,7 @@ h5createGroup <- function(file, group) {
       chunk_size <- H5Tget_size(dtype) * prod(chunk)
       if (chunk_size > 2^32 - 1) {
         root_dim <- floor(((2^32 - 1) / H5Tget_size(dtype))^(1 / length(chunk)))
-        chunk[chunk > root_dim] = root_dim
+        chunk[chunk > root_dim] <- root_dim
         message(
           "Current chunk settings will exceed HDF5's 4GB limit.\n",
           "Automatically adjusting them to: ",
@@ -380,41 +380,47 @@ h5createGroup <- function(file, group) {
 #' h5createFile(h5File)
 #'
 #' # create dataset with compression
-#' h5createDataset(h5File, "A", c(5,8), storage.mode = "integer", chunk=c(5,1), level=6)
+#' h5createDataset(h5File, "A", c(5, 8), storage.mode = "integer", chunk = c(5, 1), level = 6)
 #'
 #' # create dataset without compression
-#' h5createDataset(h5File, "B", c(5,8), storage.mode = "integer")
-#' h5createDataset(h5File, "C", c(5,8), storage.mode = "double")
+#' h5createDataset(h5File, "B", c(5, 8), storage.mode = "integer")
+#' h5createDataset(h5File, "C", c(5, 8), storage.mode = "double")
 #'
 #' # create dataset with bzip2 compression
-#' h5createDataset(h5File, "D", c(5,8), storage.mode = "integer",
-#'     chunk=c(5,1), filter = "BZIP2", level=6)
+#' h5createDataset(h5File, "D", c(5, 8),
+#'   storage.mode = "integer",
+#'   chunk = c(5, 1), filter = "BZIP2", level = 6
+#' )
 #'
 #' # create a dataset of strings & define size based on longest string
-#' ex_strings <- c('long', 'longer', 'longest')
+#' ex_strings <- c("long", "longer", "longest")
 #' h5createDataset(h5File, "E",
-#'     storage.mode = "character", chunk = 3, level = 6,
-#'     dims = length(ex_strings), size = max(nchar(ex_strings)))
+#'   storage.mode = "character", chunk = 3, level = 6,
+#'   dims = length(ex_strings), size = max(nchar(ex_strings))
+#' )
 #'
 #'
 #' # write data to dataset
-#' h5write(matrix(1:40,nr=5,nc=8), file=h5File, name="A")
+#' h5write(matrix(1:40, nr = 5, nc = 8), file = h5File, name = "A")
 #' # write second column
-#' h5write(matrix(1:5,nr=5,nc=1), file=h5File, name="B", index=list(NULL,2))
+#' h5write(matrix(1:5, nr = 5, nc = 1), file = h5File, name = "B", index = list(NULL, 2))
 #' # write character vector
 #' h5write(ex_strings, file = h5File, name = "E")
 #'
-#' h5dump( h5File )
+#' h5dump(h5File)
 #'
 #' ## Investigating fixed vs variable length string datasets
 #'
 #' ## create 1000 random strings with length between 50 and 100 characters
-#' words <- vapply(X = ceiling(runif(n = 1000, min = 50, max = 100)),
-#'                 FUN = function(x) {
-#'                     paste(sample(letters, size = x, replace = TRUE),
-#'                           collapse = "")
-#'                 },
-#'                 FUN.VALUE = character(1))
+#' words <- vapply(
+#'   X = ceiling(runif(n = 1000, min = 50, max = 100)),
+#'   FUN = function(x) {
+#'     paste(sample(letters, size = x, replace = TRUE),
+#'       collapse = ""
+#'     )
+#'   },
+#'   FUN.VALUE = character(1)
+#' )
 #'
 #' ## create two HDF5 files
 #' f1 <- tempfile()
@@ -424,10 +430,14 @@ h5createGroup <- function(file, group) {
 #'
 #' ## create two string datasets
 #' ## the first is variable length strings, the second fixed at the length of our longest word
-#' h5createDataset(f1, "strings", dims = length(words), storage.mode = "character",
-#'                 size = NULL, chunk = 25)
-#' h5createDataset(f2, "strings", dims = length(words), storage.mode = "character",
-#'                 size = max(nchar(words)), chunk = 25)
+#' h5createDataset(f1, "strings",
+#'   dims = length(words), storage.mode = "character",
+#'   size = NULL, chunk = 25
+#' )
+#' h5createDataset(f2, "strings",
+#'   dims = length(words), storage.mode = "character",
+#'   size = max(nchar(words)), chunk = 25
+#' )
 #'
 #' ## Write the data
 #' h5write(words, f1, "strings")
@@ -456,7 +466,7 @@ h5createDataset <- function(
   shuffle = TRUE,
   native = FALSE
 ) {
-  loc = h5checktypeOrOpenLoc(file, native = native)
+  loc <- h5checktypeOrOpenLoc(file, native = native)
   on.exit(h5closeitLoc(loc))
 
   dims <- as.numeric(dims)
@@ -485,7 +495,7 @@ h5createDataset <- function(
     )
   }
   if (length(chunk) > 0) {
-    chunk[which(chunk == 0)] = 1
+    chunk[which(chunk == 0)] <- 1
   }
 
   ## determine data type
@@ -514,7 +524,7 @@ h5createDataset <- function(
   did <- H5Dcreate(loc$H5Identifier, dataset, tid, sid, dcpl = dcpl)
   if (is(did, "H5IdComponent")) {
     if (storage.mode[1] == "logical") {
-      x = "logical"
+      x <- "logical"
       h5writeAttribute(attr = x, h5obj = did, name = "storage.mode")
     }
     H5Dclose(did)
@@ -583,7 +593,7 @@ h5createDataset <- function(
 #' h5write(1:1, h5File, "A")
 #' fid <- H5Fopen(h5File)
 #' did <- H5Dopen(fid, "A")
-#' h5createAttribute (did, "time", c(1,10))
+#' h5createAttribute(did, "time", c(1, 10))
 #' H5Dclose(did)
 #' H5Fclose(fid)
 #'
@@ -601,7 +611,7 @@ h5createAttribute <- function(
   encoding = NULL,
   native = FALSE
 ) {
-  obj = h5checktypeOrOpenObj(obj, file, native = native)
+  obj <- h5checktypeOrOpenObj(obj, file, native = native)
   on.exit(h5closeitObj(obj))
 
   res <- FALSE

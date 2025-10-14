@@ -18,7 +18,7 @@ if (run_test) {
   test_that("h5ls() works for files in public S3 buckets", {
     skip_on_ci()
     skip_on_bioc()
-    skip_if_offline('rhdf5-public.s3.eu-central-1.amazonaws.com')
+    skip_if_offline("rhdf5-public.s3.eu-central-1.amazonaws.com")
 
     expect_silent(h5ls_out <- h5ls(public_S3_url, s3 = TRUE))
     expect_is(h5ls_out, "data.frame")
@@ -28,7 +28,7 @@ if (run_test) {
   test_that("h5dump() works for files in public S3 buckets", {
     skip_on_ci()
     skip_on_bioc()
-    skip_if_offline('rhdf5-public.s3.eu-central-1.amazonaws.com')
+    skip_if_offline("rhdf5-public.s3.eu-central-1.amazonaws.com")
 
     expect_silent(h5dump_out <- h5dump(public_S3_url, s3 = TRUE))
     expect_is(h5dump_out, "list")

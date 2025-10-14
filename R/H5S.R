@@ -16,12 +16,12 @@
 #' @export
 H5Screate <- function(type = h5default("H5S"), native = FALSE) {
   type <- h5checkConstants("H5S", type)
-  sid <- .Call("_H5Screate", type, PACKAGE = 'rhdf5')
+  sid <- .Call("_H5Screate", type, PACKAGE = "rhdf5")
   if (sid > 0) {
-    h5space = new("H5IdComponent", ID = sid, native = native)
+    h5space <- new("H5IdComponent", ID = sid, native = native)
   } else {
     message("HDF5: unable to create data space")
-    h5space = FALSE
+    h5space <- FALSE
   }
   invisible(h5space)
 }
@@ -57,12 +57,12 @@ H5Screate_simple <- function(dims, maxdims, native = FALSE) {
     dims <- rev(dims)
     maxdims <- rev(maxdims)
   }
-  sid <- .Call("_H5Screate_simple", dims, maxdims, PACKAGE = 'rhdf5')
+  sid <- .Call("_H5Screate_simple", dims, maxdims, PACKAGE = "rhdf5")
   if (sid > 0) {
-    h5space = new("H5IdComponent", ID = sid, native = native)
+    h5space <- new("H5IdComponent", ID = sid, native = native)
   } else {
     message("HDF5: unable to create simple data space")
-    h5space = FALSE
+    h5space <- FALSE
   }
   invisible(h5space)
 }
@@ -77,7 +77,7 @@ H5Screate_simple <- function(dims, maxdims, native = FALSE) {
 #' @export
 H5Sclose <- function(h5space) {
   h5checktype(h5space, "dataspace")
-  invisible(.Call("_H5Sclose", h5space@ID, PACKAGE = 'rhdf5'))
+  invisible(.Call("_H5Sclose", h5space@ID, PACKAGE = "rhdf5"))
 }
 
 #' Create a copy of a dataspace
@@ -94,12 +94,12 @@ H5Sclose <- function(h5space) {
 #' @export
 H5Scopy <- function(h5space) {
   h5checktype(h5space, "dataspace")
-  sid <- .Call("_H5Scopy", h5space@ID, PACKAGE = 'rhdf5')
+  sid <- .Call("_H5Scopy", h5space@ID, PACKAGE = "rhdf5")
   if (sid > 0) {
-    h5spacenew = new("H5IdComponent", ID = sid, native = h5space@native)
+    h5spacenew <- new("H5IdComponent", ID = sid, native = h5space@native)
   } else {
     message("HDF5: unable to copy data space")
-    h5spacenew = FALSE
+    h5spacenew <- FALSE
   }
   invisible(h5spacenew)
 }
@@ -117,7 +117,7 @@ H5Scopy <- function(h5space) {
 #' @export
 H5Sis_simple <- function(h5space) {
   h5checktype(h5space, "dataspace")
-  as.logical(.Call("_H5Sis_simple", h5space@ID, PACKAGE = 'rhdf5'))
+  as.logical(.Call("_H5Sis_simple", h5space@ID, PACKAGE = "rhdf5"))
 }
 
 #' Find the size of a dataspace
@@ -127,7 +127,7 @@ H5Sis_simple <- function(h5space) {
 #' @export
 H5Sget_simple_extent_dims <- function(h5space) {
   h5checktype(h5space, "dataspace")
-  res <- .Call("_H5Sget_simple_extent_dims", h5space@ID, PACKAGE = 'rhdf5')
+  res <- .Call("_H5Sget_simple_extent_dims", h5space@ID, PACKAGE = "rhdf5")
   if (length(res) > 2 && !h5space@native) {
     res$size <- rev(res$size)
     res$maxsize <- rev(res$maxsize)
@@ -168,7 +168,7 @@ H5Sset_extent_simple <- function(h5space, dims, maxdims) {
     h5space@ID,
     dims,
     maxdims,
-    PACKAGE = 'rhdf5'
+    PACKAGE = "rhdf5"
   )
   invisible(res)
 }
@@ -180,7 +180,7 @@ H5Sset_extent_simple <- function(h5space, dims, maxdims) {
 #' @export
 H5Sget_select_npoints <- function(h5space) {
   h5checktype(h5space, "dataspace")
-  res <- .Call('_H5Sget_select_npoints', h5space@ID, PACKAGE = "rhdf5")
+  res <- .Call("_H5Sget_select_npoints", h5space@ID, PACKAGE = "rhdf5")
   return(res)
 }
 
@@ -191,7 +191,7 @@ H5Sget_select_npoints <- function(h5space) {
 #' @export
 H5Sselect_all <- function(h5space) {
   h5checktype(h5space, "dataspace")
-  res <- .Call("_H5Sselect_all", h5space@ID, PACKAGE = 'rhdf5')
+  res <- .Call("_H5Sselect_all", h5space@ID, PACKAGE = "rhdf5")
   invisible(res)
 }
 
@@ -202,7 +202,7 @@ H5Sselect_all <- function(h5space) {
 #' @export
 H5Sselect_none <- function(h5space) {
   h5checktype(h5space, "dataspace")
-  res <- .Call("_H5Sselect_none", h5space@ID, PACKAGE = 'rhdf5')
+  res <- .Call("_H5Sselect_none", h5space@ID, PACKAGE = "rhdf5")
   invisible(res)
 }
 
@@ -213,7 +213,7 @@ H5Sselect_none <- function(h5space) {
 #' @export
 H5Sselect_valid <- function(h5space) {
   h5checktype(h5space, "dataspace")
-  res <- .Call("_H5Sselect_valid", h5space@ID, PACKAGE = 'rhdf5')
+  res <- .Call("_H5Sselect_valid", h5space@ID, PACKAGE = "rhdf5")
   invisible(res)
 }
 
@@ -242,7 +242,7 @@ H5Sselect_elements <- function(h5space, op = h5default("H5S_SELECT"), index) {
     op,
     numElements,
     coords,
-    PACKAGE = 'rhdf5'
+    PACKAGE = "rhdf5"
   )
   if (res < 0) {
     stop("Error selecting elements")
@@ -278,8 +278,10 @@ H5Sselect_elements <- function(h5space, op = h5default("H5S_SELECT"), index) {
 #'
 #' ## select a single block of 5 points in sid_1
 #' ## this is equivalent to [11:16] in R syntax
-#' H5Sselect_hyperslab(sid_1, start = 11, stride = 1,
-#'                     block = 5, count = 1)
+#' H5Sselect_hyperslab(sid_1,
+#'   start = 11, stride = 1,
+#'   block = 5, count = 1
+#' )
 #'
 #' ## confirm we have selected 5 in our original dataspace
 #' H5Sget_select_npoints(sid_1)
@@ -287,9 +289,11 @@ H5Sselect_elements <- function(h5space, op = h5default("H5S_SELECT"), index) {
 #' ## combine the existing selection with a new
 #' ## selection consisting of 2 blocks each of 1 point
 #' ## equivalent to [c(3,5)] in R syntax
-#' H5Sselect_hyperslab(sid_1, op = "H5S_SELECT_OR",
-#'                      start = 3, stride = 2,
-#'                      block = 1, count = 2)
+#' H5Sselect_hyperslab(sid_1,
+#'   op = "H5S_SELECT_OR",
+#'   start = 3, stride = 2,
+#'   block = 1, count = 2
+#' )
 #'
 #' ## The dataspace now has 7 points selected
 #' H5Sget_select_npoints(sid_1)
@@ -372,7 +376,7 @@ H5Sselect_hyperslab <- function(
     stride,
     count,
     block,
-    PACKAGE = 'rhdf5'
+    PACKAGE = "rhdf5"
   )
   if (res < 0) {
     stop("Error selecting hyperslab")
@@ -404,15 +408,19 @@ H5Sselect_hyperslab <- function(
 #'
 #' ## select a single block of 5 points in sid_1
 #' ## this is equivalent to [11:16] in R syntax
-#' H5Sselect_hyperslab(sid_1, start = 11, stride = 1,
-#'                     block = 5, count = 1)#
+#' H5Sselect_hyperslab(sid_1,
+#'   start = 11, stride = 1,
+#'   block = 5, count = 1
+#' ) #
 #'
 #' ## combine the existing selection with a new
 #' ## selection consisting of 2 blocks each of 1 point
 #' ## equivalent to [c(3,5)] in R syntax
-#' sid_2 <- H5Scombine_hyperslab(sid_1, op = "H5S_SELECT_OR",
-#'                               start = 3, stride = 2,
-#'                               block = 1, count = 2)
+#' sid_2 <- H5Scombine_hyperslab(sid_1,
+#'   op = "H5S_SELECT_OR",
+#'   start = 3, stride = 2,
+#'   block = 1, count = 2
+#' )
 #'
 #' ## confirm we have selected 5 in our original dataspace
 #' ## and 7 points in the newly created dataspace
@@ -500,13 +508,13 @@ H5Scombine_hyperslab <- function(
     stride,
     count,
     block,
-    PACKAGE = 'rhdf5'
+    PACKAGE = "rhdf5"
   )
   if (sid > 0) {
-    h5spacenew = new("H5IdComponent", ID = sid, native = h5space@native)
+    h5spacenew <- new("H5IdComponent", ID = sid, native = h5space@native)
   } else {
     message("HDF5: error combining hyperslabs")
-    h5spacenew = FALSE
+    h5spacenew <- FALSE
   }
 
   invisible(h5spacenew)
@@ -532,13 +540,17 @@ H5Scombine_hyperslab <- function(
 #'
 #' ## select a single block of 5 points in sid_1
 #' ## this is equivalent to [11:16] in R syntax
-#' H5Sselect_hyperslab(sid_1, start = 11, stride = 1,
-#'                     block = 5, count = 1)
+#' H5Sselect_hyperslab(sid_1,
+#'   start = 11, stride = 1,
+#'   block = 5, count = 1
+#' )
 #'
 #' ## select 2 blocks of 1 point from sid_2
 #' ## equivalent to [c(3,5)] in R syntax
-#' H5Sselect_hyperslab(sid_2, start = 3, stride = 2,
-#'                     block = 1, count = 2)
+#' H5Sselect_hyperslab(sid_2,
+#'   start = 3, stride = 2,
+#'   block = 1, count = 2
+#' )
 #'
 #' ## confirm we have select 5 and 2 points resepectively
 #' H5Sget_select_npoints(sid_1)
@@ -573,10 +585,10 @@ H5Scombine_select <- function(
   sid <- .Call("_H5Scombine_select", h5space1@ID, op, h5space2@ID)
 
   if (sid > 0) {
-    h5spacenew = new("H5IdComponent", ID = sid, native = h5space1@native)
+    h5spacenew <- new("H5IdComponent", ID = sid, native = h5space1@native)
   } else {
     message("HDF5: unable to copy data space")
-    h5spacenew = FALSE
+    h5spacenew <- FALSE
   }
   invisible(h5spacenew)
 }
@@ -590,6 +602,6 @@ H5Scombine_select <- function(
 #'
 #' @export
 H5Sunlimited <- function() {
-  #as.integer(h5checkConstants("H5S_UNLIMITED", "H5S_UNLIMITED"))
+  # as.integer(h5checkConstants("H5S_UNLIMITED", "H5S_UNLIMITED"))
   as.integer(-1)
 }

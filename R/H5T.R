@@ -13,7 +13,7 @@ H5Tcreate <- function(type, size) {
     "_H5Tcreate",
     as.integer(type),
     as.integer(size),
-    PACKAGE = 'rhdf5'
+    PACKAGE = "rhdf5"
   ))
 }
 
@@ -30,7 +30,7 @@ H5Tcopy <- function(dtype_id = h5default(type = "H5T")) {
   } else {
     dtype_id <- h5checkConstants("H5T", dtype_id)
   }
-  invisible(.Call("_H5Tcopy", dtype_id, PACKAGE = 'rhdf5'))
+  invisible(.Call("_H5Tcopy", dtype_id, PACKAGE = "rhdf5"))
 }
 
 #' Retrieve or set the type of padding used by string datatype
@@ -49,7 +49,7 @@ H5Tset_size <- function(dtype_id = h5default(type = "H5T"), size) {
     stop("Argument 'dtype_id' should be created by a call to H5Tcopy()")
   }
   size <- as.integer(size)
-  invisible(.Call("_H5Tset_size", dtype_id, size, PACKAGE = 'rhdf5'))
+  invisible(.Call("_H5Tset_size", dtype_id, size, PACKAGE = "rhdf5"))
 }
 
 #' @rdname H5T_size
@@ -59,7 +59,7 @@ H5Tget_size <- function(dtype_id) {
     stop("Argument 'dtype_id' must be supplied")
   }
 
-  .Call("_H5Tget_size", dtype_id, PACKAGE = 'rhdf5')
+  .Call("_H5Tget_size", dtype_id, PACKAGE = "rhdf5")
 }
 
 #' Retrieve or set the type of padding used by string datatype
@@ -284,7 +284,7 @@ H5Tget_class <- function(dtype_id) {
 #' @export
 H5Tget_nmembers <- function(dtype_id) {
   H5T_class <- H5Tget_class(dtype_id)
-  if (!H5T_class %in% c('H5T_COMPOUND', 'H5T_ENUM')) {
+  if (!H5T_class %in% c("H5T_COMPOUND", "H5T_ENUM")) {
     stop(
       "The data type of 'dtype_id' must be either 'H5T_COMPOUND' or 'H5T_ENUM'"
     )

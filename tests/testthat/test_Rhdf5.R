@@ -34,7 +34,7 @@ test_that("We can list created objects", {
   expect_length(h5validObjects(), 0)
 })
 
-#test_that("Find location of libray", {
+# test_that("Find location of libray", {
 #
 #    expect_output( Rhdf5lib:::pkgconfig(), regexp = "libhdf5" )
 #
@@ -43,4 +43,4 @@ test_that("We can list created objects", {
 #        libfile <- gsub(pattern = "^-l", replacement = "", x = path)
 #        expect_true( file.exists(libfile) )
 #    }
-#})
+# })

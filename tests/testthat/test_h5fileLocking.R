@@ -8,9 +8,9 @@ test_that("File or directory can be passed", {
   file <- tempfile()
   dir <- tempdir()
   expect_silent(h5testFileLocking(file)) %>%
-    expect_is('logical')
+    expect_is("logical")
   expect_silent(h5testFileLocking(dir)) %>%
-    expect_is('logical')
+    expect_is("logical")
 
   ## Temporary file removed
   expect_false(file.exists(file))

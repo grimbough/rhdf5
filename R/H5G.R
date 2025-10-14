@@ -11,12 +11,12 @@ H5Gcreate <- function(h5loc, name) {
   if (length(name) != 1 || !is.character(name)) {
     stop("'name' must be a character string of length 1")
   }
-  gid <- .Call("_H5Gcreate", h5loc@ID, name, PACKAGE = 'rhdf5')
+  gid <- .Call("_H5Gcreate", h5loc@ID, name, PACKAGE = "rhdf5")
   if (gid > 0) {
-    h5group = new("H5IdComponent", ID = gid, native = h5loc@native)
+    h5group <- new("H5IdComponent", ID = gid, native = h5loc@native)
   } else {
     message("HDF5: unable to create group")
-    h5group = FALSE
+    h5group <- FALSE
   }
   invisible(h5group)
 }
@@ -36,12 +36,12 @@ H5Gcreate <- function(h5loc, name) {
 #' @export
 H5Gcreate_anon <- function(h5loc) {
   h5checktype(h5loc, "loc")
-  gid <- .Call("_H5Gcreate_anon", h5loc@ID, PACKAGE = 'rhdf5')
+  gid <- .Call("_H5Gcreate_anon", h5loc@ID, PACKAGE = "rhdf5")
   if (gid > 0) {
-    h5group = new("H5IdComponent", ID = gid, native = h5loc@native)
+    h5group <- new("H5IdComponent", ID = gid, native = h5loc@native)
   } else {
     message("HDF5: unable to create group")
-    h5group = FALSE
+    h5group <- FALSE
   }
   invisible(h5group)
 }
@@ -64,12 +64,12 @@ H5Gopen <- function(h5loc, name) {
   if (length(name) != 1 || !is.character(name)) {
     stop("'name' must be a character string of length 1")
   }
-  gid <- .Call("_H5Gopen", h5loc@ID, name, PACKAGE = 'rhdf5')
+  gid <- .Call("_H5Gopen", h5loc@ID, name, PACKAGE = "rhdf5")
   if (gid > 0) {
-    h5group = new("H5IdComponent", ID = gid, native = h5loc@native)
+    h5group <- new("H5IdComponent", ID = gid, native = h5loc@native)
   } else {
     message("HDF5: unable to open group")
-    h5group = FALSE
+    h5group <- FALSE
   }
   invisible(h5group)
 }
@@ -82,7 +82,7 @@ H5Gopen <- function(h5loc, name) {
 #' @export
 H5Gclose <- function(h5group) {
   h5checktype(h5group, "group")
-  invisible(.Call("_H5Gclose", h5group@ID, PACKAGE = 'rhdf5'))
+  invisible(.Call("_H5Gclose", h5group@ID, PACKAGE = "rhdf5"))
 }
 
 #' Retrieve information about a group
@@ -99,7 +99,7 @@ H5Gclose <- function(h5group) {
 #' @return A list with group information
 #'
 #' @examples
-#' h5file <- system.file("testfiles", "multiple_dtypes.h5", package="rhdf5")
+#' h5file <- system.file("testfiles", "multiple_dtypes.h5", package = "rhdf5")
 #' fid <- H5Fopen(h5file)
 #' gid <- H5Gopen(fid, "/foo")
 #' gid
@@ -109,7 +109,7 @@ H5Gclose <- function(h5group) {
 #' ## the "get_info_by" functions take the H5 object that contains the
 #' ## group(s) of interest.  We can retrieve information by index or by name
 #' H5Gget_info_by_idx(fid, 3)
-#' H5Gget_info_by_name(fid,"/foo")
+#' H5Gget_info_by_name(fid, "/foo")
 #'
 #' H5Fclose(fid)
 #'
@@ -120,7 +120,7 @@ NULL
 #' @export
 H5Gget_info <- function(h5loc) {
   h5checktype(h5loc, "loc")
-  .Call("_H5Gget_info", h5loc@ID, PACKAGE = 'rhdf5')
+  .Call("_H5Gget_info", h5loc@ID, PACKAGE = "rhdf5")
 }
 
 #' @rdname H5Gget_info
@@ -130,7 +130,7 @@ H5Gget_info_by_name <- function(h5loc, group_name) {
   if (length(group_name) != 1 || !is.character(group_name)) {
     stop("'group_name' must be a character string of length 1")
   }
-  .Call("_H5Gget_info_by_name", h5loc@ID, group_name, PACKAGE = 'rhdf5')
+  .Call("_H5Gget_info_by_name", h5loc@ID, group_name, PACKAGE = "rhdf5")
 }
 
 #' @rdname H5Gget_info
@@ -162,6 +162,6 @@ H5Gget_info_by_idx <- function(
     index_type,
     order,
     n,
-    PACKAGE = 'rhdf5'
+    PACKAGE = "rhdf5"
   )
 }

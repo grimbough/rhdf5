@@ -50,7 +50,7 @@
 #' h5testFileLocking(file)
 #'
 #' ## we can check for file locking, and disable if needed
-#' if( !h5testFileLocking(dir) ) {
+#' if (!h5testFileLocking(dir)) {
 #'   h5disableFileLocking()
 #' }
 #'
@@ -65,9 +65,9 @@ h5testFileLocking <- function(location) {
   ## stop if existing file passed
   if (file_test("-f", location)) {
     stop(
-      'Testing file locking will remove ',
+      "Testing file locking will remove ",
       location,
-      '\nPlease provide a directory or the name of a temporary file to be created.'
+      "\nPlease provide a directory or the name of a temporary file to be created."
     )
   }
 

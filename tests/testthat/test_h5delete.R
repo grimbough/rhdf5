@@ -4,7 +4,7 @@ library(rhdf5)
 context("h5delete")
 ############################################################
 
-A = 1:7
+A <- 1:7
 ## output file name
 h5File <- tempfile(pattern = "ex_delete", fileext = ".h5")
 if (file.exists(h5File)) {

@@ -109,7 +109,7 @@ test_that("unsigned 32-bit integer attributes are read correctly", {
 
   expect_silent(x3 <- H5Aread(aid, bit64conversion = "bit64"))
   expect_equivalent(x3, bit64::as.integer64(c(1:9, 2^31)))
-  expect_is(x3, 'integer64')
+  expect_is(x3, "integer64")
 
   H5Aclose(aid)
   H5Dclose(did)

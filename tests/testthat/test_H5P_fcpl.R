@@ -45,7 +45,7 @@ test_that("Size of userblock can be set", {
   expect_identical(userblock, 512L)
 
   ## valid values are powers of 2 greater than or equal to 512
-  #expect_error(H5Pset_userblock(pid, size = 511L))
+  # expect_error(H5Pset_userblock(pid, size = 511L))
 })
 
 test_that("Sizes of istore can be retrieved", {
@@ -60,7 +60,7 @@ test_that("Sizes of istore can be set", {
   expect_equivalent(istore, 64L)
 
   ## max value is 2^16
-  #expect_error(H5Pset_userblock(pid, size = 66000))
+  # expect_error(H5Pset_userblock(pid, size = 66000))
 })
 
 test_that("Phase change information can be retrieved", {

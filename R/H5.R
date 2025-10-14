@@ -11,10 +11,10 @@
 #' @author Bernd Fischer, Mike Smith
 #' @examples
 #' \dontrun{
-#'   H5open()
-#'   H5close()
-#'   H5garbage_collect()
-#'   H5get_libversion()
+#' H5open()
+#' H5close()
+#' H5garbage_collect()
+#' H5get_libversion()
 #' }
 #' @name H5functions
 NULL
@@ -22,25 +22,25 @@ NULL
 #' @rdname H5functions
 #' @export
 H5open <- function() {
-  invisible(.Call("_H5open", PACKAGE = 'rhdf5'))
+  invisible(.Call("_H5open", PACKAGE = "rhdf5"))
 }
 
 #' @rdname H5functions
 #' @export
 H5close <- function() {
-  invisible(.Call("_H5close", PACKAGE = 'rhdf5'))
+  invisible(.Call("_H5close", PACKAGE = "rhdf5"))
 }
 
 #' @rdname H5functions
 #' @export
 H5garbage_collect <- function() {
-  invisible(.Call("_H5garbage_collect", PACKAGE = 'rhdf5'))
+  invisible(.Call("_H5garbage_collect", PACKAGE = "rhdf5"))
 }
 
 #' @rdname H5functions
 #' @export
 H5get_libversion <- function() {
-  .Call("_H5get_libversion", PACKAGE = 'rhdf5')
+  .Call("_H5get_libversion", PACKAGE = "rhdf5")
 }
 
 #' Close open HDF5 handles

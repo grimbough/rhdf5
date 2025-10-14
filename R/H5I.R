@@ -6,7 +6,7 @@
 #' @export
 H5Iget_name <- function(h5obj) {
   h5checktype(h5obj, "object")
-  name <- .Call("_H5Iget_name", h5obj@ID, PACKAGE = 'rhdf5')
+  name <- .Call("_H5Iget_name", h5obj@ID, PACKAGE = "rhdf5")
   name
 }
 
@@ -26,7 +26,7 @@ H5Iget_name <- function(h5obj) {
 #' @param h5identifier Object of class [H5IdComponent-class].
 #'
 #' @examples
-#' h5file <- system.file("testfiles", "h5ex_t_array.h5", package="rhdf5")
+#' h5file <- system.file("testfiles", "h5ex_t_array.h5", package = "rhdf5")
 #' fid <- H5Fopen(h5file)
 #' gid <- H5Gopen(fid, "/")
 #'
@@ -41,7 +41,7 @@ H5Iget_name <- function(h5obj) {
 #' @export
 H5Iget_type <- function(h5identifier) {
   stopifnot(is(h5identifier, "H5IdComponent"))
-  tid <- .Call("_H5Iget_type", h5identifier@ID, PACKAGE = 'rhdf5')
+  tid <- .Call("_H5Iget_type", h5identifier@ID, PACKAGE = "rhdf5")
   h5const2String("H5I_TYPE", tid)
 }
 
@@ -56,7 +56,7 @@ H5Iget_type <- function(h5identifier) {
 #'
 #' @examples
 #'
-#' h5file <- system.file("testfiles", "h5ex_t_array.h5", package="rhdf5")
+#' h5file <- system.file("testfiles", "h5ex_t_array.h5", package = "rhdf5")
 #' fid <- H5Fopen(h5file)
 #'
 #' ## test whether the identifer to the opened file is valid
@@ -69,6 +69,6 @@ H5Iget_type <- function(h5identifier) {
 #' @export
 H5Iis_valid <- function(h5identifier) {
   stopifnot(is(h5identifier, "H5IdComponent"))
-  tid <- .Call("_H5Iis_valid", h5identifier@ID, PACKAGE = 'rhdf5')
+  tid <- .Call("_H5Iis_valid", h5identifier@ID, PACKAGE = "rhdf5")
   tid
 }

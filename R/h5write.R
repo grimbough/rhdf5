@@ -13,7 +13,7 @@ h5writeDatasetHelper <- function(
   })
 
   if (!is.null(index)) {
-    s = H5Sget_simple_extent_dims(h5spaceFile)$size
+    s <- H5Sget_simple_extent_dims(h5spaceFile)$size
     if (length(index) != length(s)) {
       stop(
         "length of index has to be equal to dimensional extension of HDF5 dataset."
@@ -21,7 +21,7 @@ h5writeDatasetHelper <- function(
     }
     for (i in seq_len(length(index))) {
       if (is.null(index[[i]])) {
-        index[[i]] = seq_len(s[i])
+        index[[i]] <- seq_len(s[i])
       } else if (is.call(index[[i]])) {
         index[[i]] <- eval(index[[i]])
       }
@@ -31,15 +31,15 @@ h5writeDatasetHelper <- function(
     })
     if (length(index) > 1) {
       ## indexing an array
-      d = sapply(index, length)
-      d[d == 0] = dim(obj)[d == 0]
-      dim(obj) = d
+      d <- sapply(index, length)
+      d[d == 0] <- dim(obj)[d == 0]
+      dim(obj) <- d
     }
-    I = list()
+    I <- list()
     for (i in seq_len(length(index))) {
       m <- match(index[[i]], unique(sort(index[[i]])))
-      I[[i]] = order(m)
-      I[[i]] = I[[i]][!duplicated(m[I[[i]]], fromLast = TRUE)]
+      I[[i]] <- order(m)
+      I[[i]] <- I[[i]][!duplicated(m[I[[i]]], fromLast = TRUE)]
     }
     obj <- do.call("[", c(list(obj), I))
   } else {
@@ -56,8 +56,8 @@ h5writeDatasetHelper <- function(
           block <- 1
           count <- 1
         } else {
-          block = rep(1, length(dim(obj)))
-          count = dim(obj)
+          block <- rep(1, length(dim(obj)))
+          count <- dim(obj)
         }
       }
       try({
@@ -73,7 +73,7 @@ h5writeDatasetHelper <- function(
   }
   DimMem <- dim(obj)
   if (is.null(DimMem)) {
-    DimMem = length(obj)
+    DimMem <- length(obj)
   }
   try({
     h5spaceMem <- H5Screate_simple(DimMem)
@@ -186,16 +186,16 @@ h5writeDatasetHelper <- function(
 #' @examples
 #'
 #' h5File <- tempfile(fileext = ".h5")
-#' h5createFile( h5File )
+#' h5createFile(h5File)
 #'
 #' # write a matrix
-#' B = array(seq(0.1,2.0,by=0.1),dim=c(5,2,2))
+#' B <- array(seq(0.1, 2.0, by = 0.1), dim = c(5, 2, 2))
 #' attr(B, "scale") <- "liter"
-#' h5write(B, h5File,"B")
+#' h5write(B, h5File, "B")
 #'
 #' # write a submatrix
-#' h5createDataset(h5File, "S", c(5,8), storage.mode = "integer", chunk=c(5,1), level=7)
-#' h5write(matrix(1:5,nr=5,nc=1), file=h5File, name="S", index=list(NULL,1))
+#' h5createDataset(h5File, "S", c(5, 8), storage.mode = "integer", chunk = c(5, 1), level = 7)
+#' h5write(matrix(1:5, nr = 5, nc = 1), file = h5File, name = "S", index = list(NULL, 1))
 #'
 #' @name h5_write
 #' @export h5write
@@ -215,7 +215,7 @@ h5write.default <- function(
   ...,
   native = FALSE
 ) {
-  loc = h5checktypeOrOpenLoc(
+  loc <- h5checktypeOrOpenLoc(
     file,
     createnewfile = createnewfile,
     native = native
@@ -224,16 +224,16 @@ h5write.default <- function(
 
   res <- h5writeDataset(obj, loc$H5Identifier, name, ...)
   if (write.attributes) {
-    oid = H5Oopen(loc$H5Identifier, name)
-    type = H5Iget_type(oid)
+    oid <- H5Oopen(loc$H5Identifier, name)
+    type <- H5Iget_type(oid)
     H5Oclose(oid)
 
     if (type == "H5I_GROUP") {
-      h5obj = H5Gopen(loc$H5Identifier, name)
+      h5obj <- H5Gopen(loc$H5Identifier, name)
       on.exit(H5Gclose(h5obj), add = TRUE)
     } else {
       if (type == "H5I_DATASET") {
-        h5obj = H5Dopen(loc$H5Identifier, name)
+        h5obj <- H5Dopen(loc$H5Identifier, name)
         on.exit(H5Dclose(h5obj), add = TRUE)
       } else {
         stop("Cannot open object of this type")
@@ -272,7 +272,7 @@ h5writeDataset.data.frame <- function(
       )
     }
     if (!is.null(level)) {
-      level = as.integer(level)
+      level <- as.integer(level)
       if (missing(chunk)) {
         chunk <- nrow(obj)
       }
@@ -284,19 +284,19 @@ h5writeDataset.data.frame <- function(
       name,
       level,
       as.integer(chunk),
-      PACKAGE = 'rhdf5'
+      PACKAGE = "rhdf5"
     )
-    .Call("_h5writeDataFrame", obj, did, PACKAGE = 'rhdf5')
-    .Call("_H5Dclose", did, PACKAGE = 'rhdf5')
+    .Call("_h5writeDataFrame", obj, did, PACKAGE = "rhdf5")
+    .Call("_H5Dclose", did, PACKAGE = "rhdf5")
     res <- 0
   } else {
     a <- attr(obj, "names")
     if (is.null(a)) {
-      attr(obj, "names") = sprintf("col%d", seq_len(ncol(obj)))
+      attr(obj, "names") <- sprintf("col%d", seq_len(ncol(obj)))
     } else {
       if (any(duplicated(a))) {
-        a[duplicated(a)] = sprintf("col%d", seq_len(ncol(obj)))[duplicated(a)]
-        attr(obj, "names") = a
+        a[duplicated(a)] <- sprintf("col%d", seq_len(ncol(obj)))[duplicated(a)]
+        attr(obj, "names") <- a
       }
     }
     ## we can't write out factors, so convert any to character
@@ -327,29 +327,29 @@ h5writeDataset.list <- function(obj, h5loc, name, level = 6) {
     message(
       "Existing object within HDF5 file cannot be overwritten with a list object. First delete the group or dataset from the HDF5 file."
     )
-    res = 0
+    res <- 0
   } else {
-    N = names(obj)
-    newnames = FALSE
+    N <- names(obj)
+    newnames <- FALSE
     if (is.null(N)) {
-      newnames = TRUE
+      newnames <- TRUE
     } else {
       if (any(nchar(N) == 0)) {
-        newnames = TRUE
+        newnames <- TRUE
       } else {
         if (length(N) != length(obj)) {
-          newnames = TRUE
+          newnames <- TRUE
         }
       }
     }
     if (newnames) {
-      N = sprintf("ELT%d", seq_len(length(obj)))
+      N <- sprintf("ELT%d", seq_len(length(obj)))
     }
-    res = NULL
+    res <- NULL
     h5createGroup(h5loc, name)
-    gid = H5Gopen(h5loc, name)
+    gid <- H5Gopen(h5loc, name)
     for (i in seq_len(length(obj))) {
-      res = h5write(obj[[i]], gid, N[i])
+      res <- h5write(obj[[i]], gid, N[i])
     }
     H5Gclose(gid)
   }

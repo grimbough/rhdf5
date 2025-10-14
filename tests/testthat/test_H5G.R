@@ -37,7 +37,7 @@ test_that("Group creation & closure", {
   expect_silent(info2 <- H5Gget_info_by_name(fid, "test_group"))
   expect_identical(info, info2)
 
-  ##also by index
+  ## also by index
   expect_silent(info3 <- H5Gget_info_by_idx(fid, n = 1))
   expect_identical(info, info3)
 
@@ -68,7 +68,7 @@ test_that("Group creation & closure", {
   expect_silent(info2 <- H5Gget_info_by_name(fid, "test_group"))
   expect_identical(info, info2)
 
-  ##also by index
+  ## also by index
   expect_silent(info3 <- H5Gget_info_by_idx(fid, n = 1))
   expect_identical(info, info3)
 

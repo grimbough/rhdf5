@@ -50,7 +50,7 @@ h5readDataset <- function(
 ) {
   h5spaceFile <- H5Dget_space(h5dataset)
   on.exit(H5Sclose(h5spaceFile))
-  h5spaceMem = NULL
+  h5spaceMem <- NULL
   if (!is.null(index)) {
     s <- H5Sget_simple_extent_dims(h5spaceFile)$size
     if (length(index) != length(s)) {
@@ -67,7 +67,7 @@ h5readDataset <- function(
       }
     }
     size <- .H5Sselect_dim(h5spaceFile, index)
-    #size <- .H5Sselect_index( h5spaceFile, index, index_null)
+    # size <- .H5Sselect_index( h5spaceFile, index, index_null)
     h5spaceMem <- H5Screate_simple(size, native = h5dataset@native)
     on.exit(H5Sclose(h5spaceMem), add = TRUE)
   } else {
@@ -79,9 +79,9 @@ h5readDataset <- function(
         !is.null(block)
       ))
     ) {
-      size = 0
+      size <- 0
       try({
-        size = H5Sselect_hyperslab(
+        size <- H5Sselect_hyperslab(
           h5spaceFile,
           start = start,
           stride = stride,
@@ -89,7 +89,7 @@ h5readDataset <- function(
           block = block
         )
       })
-      h5spaceMem = H5Screate_simple(size, native = h5dataset@native)
+      h5spaceMem <- H5Screate_simple(size, native = h5dataset@native)
       on.exit(H5Sclose(h5spaceMem), add = TRUE)
     }
   }
@@ -121,7 +121,7 @@ h5readDataset <- function(
   ## The calls to H5Sselect_index will have returned data linearly
   ## from the file, not the potentially random order requested.
   if (!is.null(index)) {
-    I = list()
+    I <- list()
     for (i in seq_along(index)) {
       if (!index_null[i]) {
         ## skip if the index was generated inside this function
@@ -129,7 +129,7 @@ h5readDataset <- function(
         if (is.unsorted(tmp)) {
           tmp <- sort.int(tmp)
         }
-        I[[i]] = match(index[[i]], tmp)
+        I[[i]] <- match(index[[i]], tmp)
       } else {
         I[[i]] <- seq_len(s[i])
       }
@@ -233,22 +233,23 @@ h5readDataset <- function(
 #' h5createFile(h5File)
 #'
 #' # write a matrix
-#' B = array(seq(0.1,2.0,by=0.1),dim=c(5,2,2))
+#' B <- array(seq(0.1, 2.0, by = 0.1), dim = c(5, 2, 2))
 #' h5write(B, h5File, "B")
 #'
 #' # read a matrix
-#' E = h5read(h5File,"B")
+#' E <- h5read(h5File, "B")
 #'
 #' # write and read submatrix
-#' h5createDataset(h5File, "S", c(5,8), storage.mode = "integer", chunk=c(5,1), level=7)
-#' h5write(matrix(1:5,nr=5,nc=1), file=h5File, name="S", index=list(NULL,1))
+#' h5createDataset(h5File, "S", c(5, 8), storage.mode = "integer", chunk = c(5, 1), level = 7)
+#' h5write(matrix(1:5, nr = 5, nc = 1), file = h5File, name = "S", index = list(NULL, 1))
 #' h5read(h5File, "S")
-#' h5read(h5File, "S", index=list(NULL,2:3))
+#' h5read(h5File, "S", index = list(NULL, 2:3))
 #'
 #' # Read a subset of an hdf5 file in a public S3 bucket
 #' \donttest{
-#' h5read('https://rhdf5-public.s3.eu-central-1.amazonaws.com/rhdf5ex_t_float_3d.h5',
-#'       s3 = TRUE, name = "a1", index = list(NULL, 3, NULL))
+#' h5read("https://rhdf5-public.s3.eu-central-1.amazonaws.com/rhdf5ex_t_float_3d.h5",
+#'   s3 = TRUE, name = "a1", index = list(NULL, 3, NULL)
+#' )
 #' }
 #'
 #' @name h5_read
@@ -293,12 +294,12 @@ h5read <- function(
   if (!H5Lexists(loc$H5Identifier, name)) {
     stop("Object '", name, "' does not exist in this HDF5 file.")
   } else {
-    oid = H5Oopen(loc$H5Identifier, name)
+    oid <- H5Oopen(loc$H5Identifier, name)
     on.exit(H5Oclose(oid), add = TRUE)
-    type = H5Iget_type(oid)
-    num_attrs = H5Oget_num_attrs(oid)
+    type <- H5Iget_type(oid)
+    num_attrs <- H5Oget_num_attrs(oid)
     if (is.na(num_attrs)) {
-      num_attrs = 0
+      num_attrs <- 0
     }
     if (type == "H5I_GROUP") {
       gid <- H5Gopen(loc$H5Identifier, name)
@@ -344,10 +345,10 @@ h5read <- function(
     } ## GROUP
     if (read.attributes & (num_attrs > 0) & !is.null(obj)) {
       for (i in seq_len(num_attrs)) {
-        A = H5Aopen_by_idx(loc$H5Identifier, n = i - 1, objname = name)
+        A <- H5Aopen_by_idx(loc$H5Identifier, n = i - 1, objname = name)
         attrname <- H5Aget_name(A)
         if (attrname != "dim") {
-          attr(obj, attrname) = H5Aread(A, ...)
+          attr(obj, attrname) <- H5Aread(A, ...)
         }
         ## Don't put this in on.exit()
         ## A is overwritten in the loop and we lose track of it

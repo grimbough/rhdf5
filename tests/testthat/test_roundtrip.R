@@ -25,13 +25,13 @@ test_that("data.frame columns survive a round trip", {
     ),
     stringsAsFactors = FALSE
   )
-  test_frame_single <- test_frame['integer']
+  test_frame_single <- test_frame["integer"]
 
-  expect_silent(h5write(obj = test_frame, file = h5file, name = 'data_frame'))
+  expect_silent(h5write(obj = test_frame, file = h5file, name = "data_frame"))
   expect_silent(h5write(
     obj = test_frame_single,
     file = h5file,
-    name = 'data_frame2'
+    name = "data_frame2"
   ))
 
   expect_silent(back_frame <- h5read(file = h5file, name = "data_frame"))
@@ -52,7 +52,7 @@ test_that("character vectors survive a round trip", {
     character(1)
   )
 
-  expect_silent(h5write(obj = words, file = h5file, name = 'char'))
+  expect_silent(h5write(obj = words, file = h5file, name = "char"))
 
   expect_silent(back_words <- h5read(file = h5file, name = "char"))
   expect_equivalent(words, back_words)
@@ -60,7 +60,7 @@ test_that("character vectors survive a round trip", {
 
 test_that("UTF-8 strings are preserved", {
   input <- "α ≤ 0.1"
-  expect_silent(h5write(obj = input, file = h5file, name = 'utf8'))
+  expect_silent(h5write(obj = input, file = h5file, name = "utf8"))
   expect_silent(output <- h5read(file = h5file, name = "utf8"))
   expect_equivalent(input, output)
   expect_equal(Encoding(output), "UTF-8")
@@ -73,14 +73,14 @@ test_that("Complex numbers are writen to a compound datatype", {
     complex(length.out = 30, real = 1:30, imaginary = 30:1),
     ncol = 10
   )
-  expect_silent(h5write(obj = mat, file = h5file, name = 'complex'))
+  expect_silent(h5write(obj = mat, file = h5file, name = "complex"))
 
-  expect_silent(res <- h5read(file = h5file, name = 'complex'))
-  expect_is(res, 'matrix')
-  expect_type(res, 'complex')
+  expect_silent(res <- h5read(file = h5file, name = "complex"))
+  expect_is(res, "matrix")
+  expect_type(res, "complex")
   expect_identical(res, mat)
   expect_identical(
-    h5read(file = h5file, name = 'complex', native = TRUE),
+    h5read(file = h5file, name = "complex", native = TRUE),
     t(mat)
   )
 })

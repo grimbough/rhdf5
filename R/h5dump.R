@@ -8,25 +8,25 @@ h5loadData <- function(h5loc, L, all = FALSE, ..., native) {
             h5constants[["H5L_TYPE"]][c("H5L_TYPE_HARD", "H5L_TYPE_EXTERNAL")]
         ) {
           if (L[[i]]$otype == h5constants[["H5I_TYPE"]]["H5I_DATASET"]) {
-            L[i] = list(h5read(
+            L[i] <- list(h5read(
               h5loc,
               L[[i]]$name,
               ...,
               native = native
             ))
           } else {
-            L[i] = h5lsConvertToDataframe(
+            L[i] <- h5lsConvertToDataframe(
               L[i],
               all = all,
               native = native
             )
           }
         } else {
-          L[i] = h5lsConvertToDataframe(L[i], all = all, native = native)
+          L[i] <- h5lsConvertToDataframe(L[i], all = all, native = native)
         }
       } else {
-        group = H5Gopen(h5loc, names(L)[i])
-        L[i] = list(
+        group <- H5Gopen(h5loc, names(L)[i])
+        L[i] <- list(
           h5loadData(group, L[[i]], all = all, ..., native = native)
         )
         H5Gclose(group)
@@ -78,13 +78,13 @@ h5loadData <- function(h5loc, L, all = FALSE, ..., native) {
 #' h5createFile(h5File)
 #'
 #' # create groups
-#' h5createGroup(h5File,"foo")
-#' h5createGroup(h5File,"foo/foobaa")
+#' h5createGroup(h5File, "foo")
+#' h5createGroup(h5File, "foo/foobaa")
 #'
 #' # write a matrix
-#' B = array(seq(0.1,2.0,by=0.1),dim=c(5,2,2))
+#' B <- array(seq(0.1, 2.0, by = 0.1), dim = c(5, 2, 2))
 #' attr(B, "scale") <- "liter"
-#' h5write(B, h5File,"foo/B")
+#' h5write(B, h5File, "foo/B")
 #'
 #' # list content of hdf5 file
 #' h5dump(h5File)
@@ -132,12 +132,12 @@ h5dump <- function(
   order <- h5checkConstants("H5_ITER", order)
   if (is.logical(recursive)) {
     if (recursive) {
-      depth = -1L
+      depth <- -1L
     } else {
-      depth = 1L
+      depth <- 1L
     }
   } else if (is.numeric(recursive) | is.integer(recursive)) {
-    depth = as.integer(recursive)
+    depth <- as.integer(recursive)
     if (length(recursive) > 1) {
       warning("'recursive' must be of length 1.  Only using first value.")
     } else if (recursive == 0) {
@@ -154,7 +154,7 @@ h5dump <- function(
     depth,
     index_type,
     order,
-    PACKAGE = 'rhdf5'
+    PACKAGE = "rhdf5"
   )
   if (load) {
     L <- h5loadData(loc$H5Identifier, L, all = all, ..., native = native)

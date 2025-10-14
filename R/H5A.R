@@ -33,13 +33,13 @@ H5Acreate <- function(h5obj, name, dtype_id, h5space) {
     name,
     dtype_id,
     h5space@ID,
-    PACKAGE = 'rhdf5'
+    PACKAGE = "rhdf5"
   )
   if (aid > 0) {
-    h5attribute = new("H5IdComponent", ID = aid, native = h5obj@native)
+    h5attribute <- new("H5IdComponent", ID = aid, native = h5obj@native)
   } else {
     message("HDF5: unable to create attribute")
-    h5attribute = FALSE
+    h5attribute <- FALSE
   }
   invisible(h5attribute)
 }
@@ -68,12 +68,12 @@ H5Aopen <- function(h5obj, name) {
   if (length(name) != 1 || !is.character(name)) {
     stop("'name' must be a character string of length 1")
   }
-  aid <- .Call("_H5Aopen", h5obj@ID, name, PACKAGE = 'rhdf5')
+  aid <- .Call("_H5Aopen", h5obj@ID, name, PACKAGE = "rhdf5")
   if (aid > 0) {
-    h5attribute = new("H5IdComponent", ID = aid, native = h5obj@native)
+    h5attribute <- new("H5IdComponent", ID = aid, native = h5obj@native)
   } else {
     message("HDF5: unable to open attribute")
-    h5attribute = FALSE
+    h5attribute <- FALSE
   }
   invisible(h5attribute)
 }
@@ -88,12 +88,12 @@ H5Aopen_by_name <- function(h5obj, objname = ".", name) {
   if (length(name) != 1 || !is.character(name)) {
     stop("'name' must be a character string of length 1")
   }
-  aid <- .Call("_H5Aopen_by_name", h5obj@ID, objname, name, PACKAGE = 'rhdf5')
+  aid <- .Call("_H5Aopen_by_name", h5obj@ID, objname, name, PACKAGE = "rhdf5")
   if (aid > 0) {
-    h5attribute = new("H5IdComponent", ID = aid, native = h5obj@native)
+    h5attribute <- new("H5IdComponent", ID = aid, native = h5obj@native)
   } else {
     message("HDF5: unable to open attribute")
-    h5attribute = FALSE
+    h5attribute <- FALSE
   }
   invisible(h5attribute)
 }
@@ -116,7 +116,7 @@ H5Aopen_by_idx <- function(
   if ((length(n) != 1) || !is.numeric(n)) {
     stop("'n' must be an integer of length 1")
   }
-  n = as.integer(n)
+  n <- as.integer(n)
   aid <- .Call(
     "_H5Aopen_by_idx",
     h5obj@ID,
@@ -124,13 +124,13 @@ H5Aopen_by_idx <- function(
     index_type,
     order,
     n,
-    PACKAGE = 'rhdf5'
+    PACKAGE = "rhdf5"
   )
   if (aid > 0) {
-    h5attribute = new("H5IdComponent", ID = aid, native = h5obj@native)
+    h5attribute <- new("H5IdComponent", ID = aid, native = h5obj@native)
   } else {
     message("HDF5: unable to open attribute")
-    h5attribute = FALSE
+    h5attribute <- FALSE
   }
   invisible(h5attribute)
 }
@@ -148,7 +148,7 @@ H5Aexists <- function(h5obj, name) {
   if (length(name) != 1 || !is.character(name)) {
     stop("'name' must be a character string of length 1")
   }
-  res <- .Call("_H5Aexists", h5obj@ID, name, PACKAGE = 'rhdf5')
+  res <- .Call("_H5Aexists", h5obj@ID, name, PACKAGE = "rhdf5")
   res <- ifelse(res > 0, TRUE, FALSE)
   res
 }
@@ -163,7 +163,7 @@ H5Aexists <- function(h5obj, name) {
 #' @export
 H5Aclose <- function(h5attribute) {
   h5checktype(h5attribute, "attribute")
-  invisible(.Call("_H5Aclose", h5attribute@ID, PACKAGE = 'rhdf5'))
+  invisible(.Call("_H5Aclose", h5attribute@ID, PACKAGE = "rhdf5"))
 }
 
 #' Delete an specified attribute of an HDF5 object
@@ -179,7 +179,7 @@ H5Adelete <- function(h5obj, name) {
   if (length(name) != 1 || !is.character(name)) {
     stop("'name' must be a character string of length 1")
   }
-  res <- .Call("_H5Adelete", h5obj@ID, name, PACKAGE = 'rhdf5')
+  res <- .Call("_H5Adelete", h5obj@ID, name, PACKAGE = "rhdf5")
   res
 }
 
@@ -195,7 +195,7 @@ H5Adelete <- function(h5obj, name) {
 #' @export
 H5Aget_name <- function(h5attribute) {
   h5checktype(h5attribute, "attribute")
-  name <- .Call("_H5Aget_name", h5attribute@ID, PACKAGE = 'rhdf5')
+  name <- .Call("_H5Aget_name", h5attribute@ID, PACKAGE = "rhdf5")
   name
 }
 
@@ -210,12 +210,12 @@ H5Aget_name <- function(h5attribute) {
 #' @export
 H5Aget_space <- function(h5attribute) {
   h5checktype(h5attribute, "attribute")
-  sid <- .Call("_H5Aget_space", h5attribute@ID, PACKAGE = 'rhdf5')
+  sid <- .Call("_H5Aget_space", h5attribute@ID, PACKAGE = "rhdf5")
   if (sid > 0) {
-    h5space = new("H5IdComponent", ID = sid, native = h5attribute@native)
+    h5space <- new("H5IdComponent", ID = sid, native = h5attribute@native)
   } else {
     message("HDF5: unable to create simple data space")
-    h5space = FALSE
+    h5space <- FALSE
   }
   invisible(h5space)
 }
@@ -228,7 +228,7 @@ H5Aget_space <- function(h5attribute) {
 #' @export
 H5Aget_type <- function(h5attribute) {
   h5checktype(h5attribute, "attribute")
-  tid <- .Call("_H5Aget_type", h5attribute@ID, PACKAGE = 'rhdf5')
+  tid <- .Call("_H5Aget_type", h5attribute@ID, PACKAGE = "rhdf5")
   invisible(tid)
 }
 
@@ -264,9 +264,9 @@ H5Aread <- function(h5attribute, buf = NULL, bit64conversion) {
   h5checktype(h5attribute, "attribute")
 
   if (missing(bit64conversion)) {
-    bit64conv = 0L
+    bit64conv <- 0L
   } else {
-    bit64conv = switch(
+    bit64conv <- switch(
       bit64conversion,
       int = 0L,
       double = 1L,
@@ -278,7 +278,7 @@ H5Aread <- function(h5attribute, buf = NULL, bit64conversion) {
     stop("install package 'bit64' before using bit64conversion='bit64'")
   }
 
-  rval = .Call("_H5Aread", h5attribute@ID, buf, bit64conv, PACKAGE = 'rhdf5')
+  rval <- .Call("_H5Aread", h5attribute@ID, buf, bit64conv, PACKAGE = "rhdf5")
   if (is(rval, "H5IdComponent")) {
     rval@native <- h5attribute@native
   }
@@ -295,5 +295,5 @@ H5Aread <- function(h5attribute, buf = NULL, bit64conversion) {
 #' @export
 H5Awrite <- function(h5attribute, buf) {
   h5checktype(h5attribute, "attribute")
-  invisible(.Call("_H5Awrite", h5attribute@ID, buf, PACKAGE = 'rhdf5'))
+  invisible(.Call("_H5Awrite", h5attribute@ID, buf, PACKAGE = "rhdf5"))
 }

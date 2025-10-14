@@ -142,7 +142,7 @@ h5writeAttribute.array <- function(
 
   DimMem <- dim(attr)
   if (is.null(DimMem)) {
-    DimMem = length(attr)
+    DimMem <- length(attr)
   }
   h5spaceMem <- H5Screate_simple(DimMem)
 

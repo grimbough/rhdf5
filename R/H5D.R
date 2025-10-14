@@ -34,9 +34,9 @@ H5Dcreate <- function(
     dtype_id <- h5checkConstants("H5T", dtype_id)
   }
   h5checktype(h5space, "dataspace")
-  lcpl = h5checktypeAndPLC(lcpl, "H5P_LINK_CREATE", allowNULL = TRUE)
-  dcpl = h5checktypeAndPLC(dcpl, "H5P_DATASET_CREATE", allowNULL = TRUE)
-  dapl = h5checktypeAndPLC(dapl, "H5P_DATASET_ACCESS", allowNULL = TRUE)
+  lcpl <- h5checktypeAndPLC(lcpl, "H5P_LINK_CREATE", allowNULL = TRUE)
+  dcpl <- h5checktypeAndPLC(dcpl, "H5P_DATASET_CREATE", allowNULL = TRUE)
+  dapl <- h5checktypeAndPLC(dapl, "H5P_DATASET_ACCESS", allowNULL = TRUE)
   did <- .Call(
     "_H5Dcreate",
     h5loc@ID,
@@ -46,13 +46,13 @@ H5Dcreate <- function(
     lcpl@ID,
     dcpl@ID,
     dapl@ID,
-    PACKAGE = 'rhdf5'
+    PACKAGE = "rhdf5"
   )
   if (did > 0) {
-    h5dataset = new("H5IdComponent", ID = did, native = h5loc@native)
+    h5dataset <- new("H5IdComponent", ID = did, native = h5loc@native)
   } else {
     message("HDF5: unable to create dataset")
-    h5dataset = FALSE
+    h5dataset <- FALSE
   }
   invisible(h5dataset)
 }
@@ -70,16 +70,16 @@ H5Dcreate <- function(
 #'
 #' @examples
 #' h5file <- tempfile(fileext = ".h5")
-#' h5createFile( h5file )
-#' h5createDataset( h5file, dataset = "A", dims = 10)
+#' h5createFile(h5file)
+#' h5createDataset(h5file, dataset = "A", dims = 10)
 #'
-#' fid <- H5Fopen( h5file )
-#' did <- H5Dopen( h5loc = fid, name = "A")
+#' fid <- H5Fopen(h5file)
+#' did <- H5Dopen(h5loc = fid, name = "A")
 #' did
 #'
 #' ## rember to close open handles
-#' H5Dclose( did )
-#' H5Fclose( fid )
+#' H5Dclose(did)
+#' H5Fclose(fid)
 #'
 #' @export
 H5Dopen <- function(h5loc, name, dapl = NULL) {
@@ -87,8 +87,8 @@ H5Dopen <- function(h5loc, name, dapl = NULL) {
   if (length(name) != 1 || !is.character(name)) {
     stop("'filename' must be a character string of length 1")
   }
-  dapl = h5checktypeAndPLC(dapl, "H5P_DATASET_ACCESS", allowNULL = TRUE)
-  did <- .Call("_H5Dopen", h5loc@ID, name, dapl@ID, PACKAGE = 'rhdf5')
+  dapl <- h5checktypeAndPLC(dapl, "H5P_DATASET_ACCESS", allowNULL = TRUE)
+  did <- .Call("_H5Dopen", h5loc@ID, name, dapl@ID, PACKAGE = "rhdf5")
   if (as.numeric(did) > 0) {
     h5dataset <- new("H5IdComponent", ID = did, native = h5loc@native)
   } else {
@@ -106,7 +106,7 @@ H5Dopen <- function(h5loc, name, dapl = NULL) {
 #' @export
 H5Dclose <- function(h5dataset) {
   h5checktype(h5dataset, "dataset")
-  invisible(.Call("_H5Dclose", h5dataset@ID, PACKAGE = 'rhdf5'))
+  invisible(.Call("_H5Dclose", h5dataset@ID, PACKAGE = "rhdf5"))
 }
 
 #' Return a copy of the HDF5 datatype for a dataset
@@ -117,7 +117,7 @@ H5Dclose <- function(h5dataset) {
 #' @export
 H5Dget_type <- function(h5dataset) {
   h5checktype(h5dataset, "dataset")
-  tid <- .Call("_H5Dget_type", h5dataset@ID, PACKAGE = 'rhdf5')
+  tid <- .Call("_H5Dget_type", h5dataset@ID, PACKAGE = "rhdf5")
   invisible(tid)
 }
 
@@ -129,12 +129,12 @@ H5Dget_type <- function(h5dataset) {
 #' @export
 H5Dget_create_plist <- function(h5dataset) {
   h5checktype(h5dataset, "dataset")
-  pid <- .Call("_H5Dget_create_plist", h5dataset@ID, PACKAGE = 'rhdf5')
+  pid <- .Call("_H5Dget_create_plist", h5dataset@ID, PACKAGE = "rhdf5")
   if (pid > 0) {
-    h5plist = new("H5IdComponent", ID = pid, native = h5dataset@native)
+    h5plist <- new("H5IdComponent", ID = pid, native = h5dataset@native)
   } else {
     message("HDF5: unable to create property list")
-    h5plist = FALSE
+    h5plist <- FALSE
   }
   invisible(h5plist)
 }
@@ -151,12 +151,12 @@ H5Dget_create_plist <- function(h5dataset) {
 #' @export
 H5Dget_space <- function(h5dataset) {
   h5checktype(h5dataset, "dataset")
-  sid <- .Call("_H5Dget_space", h5dataset@ID, PACKAGE = 'rhdf5')
+  sid <- .Call("_H5Dget_space", h5dataset@ID, PACKAGE = "rhdf5")
   if (sid > 0) {
-    h5space = new("H5IdComponent", ID = sid, native = h5dataset@native)
+    h5space <- new("H5IdComponent", ID = sid, native = h5dataset@native)
   } else {
     message("HDF5: unable to create simple data space")
-    h5space = FALSE
+    h5space <- FALSE
   }
   invisible(h5space)
 }
@@ -177,7 +177,7 @@ H5Dget_space <- function(h5dataset) {
 #' @export
 H5Dget_storage_size <- function(h5dataset) {
   h5checktype(h5dataset, "dataset")
-  size <- .Call("_H5Dget_storage_size", h5dataset@ID, PACKAGE = 'rhdf5')
+  size <- .Call("_H5Dget_storage_size", h5dataset@ID, PACKAGE = "rhdf5")
   return(size)
 }
 
@@ -191,7 +191,7 @@ H5Dget_storage_size <- function(h5dataset) {
       if (any(na_idx)) {
         res[na_idx] <- NA_integer_
       }
-      storage.mode(res) = "logical"
+      storage.mode(res) <- "logical"
     }
   }
 
@@ -264,9 +264,9 @@ H5Dread <- function(
     sidFile <- h5spaceFile@ID
   }
   if (missing(bit64conversion)) {
-    bit64conv = 0L
+    bit64conv <- 0L
   } else {
-    bit64conv = switch(
+    bit64conv <- switch(
       bit64conversion,
       int = 0L,
       double = 1L,
@@ -290,7 +290,7 @@ H5Dread <- function(
     bit64conv,
     drop,
     h5dataset@native,
-    PACKAGE = 'rhdf5'
+    PACKAGE = "rhdf5"
   )
 
   res <- .postProcessDataSet(h5dataset, res)
@@ -342,7 +342,7 @@ H5Dwrite <- function(
     sidMem,
     h5type,
     h5dataset@native,
-    PACKAGE = 'rhdf5'
+    PACKAGE = "rhdf5"
   ))
 }
 
@@ -370,7 +370,7 @@ H5Dset_extent <- function(h5dataset, size) {
   if (!h5dataset@native) {
     size <- rev(size)
   }
-  res <- .Call("_H5Dset_extent", h5dataset@ID, size, PACKAGE = 'rhdf5')
+  res <- .Call("_H5Dset_extent", h5dataset@ID, size, PACKAGE = "rhdf5")
   return(invisible(res >= 0))
 }
 

@@ -4,7 +4,7 @@ library(rhdf5)
 context("h5write")
 ############################################################
 
-A = 1:7
+A <- 1:7
 ## output file name
 h5File <- tempfile(pattern = "ex_save", fileext = ".h5")
 if (file.exists(h5File)) {
@@ -41,7 +41,7 @@ test_that("Attributes are written too", {
   h5write(obj = B, file = h5File, name = "B", write.attributes = TRUE)
   ## note that attributes aren't retrieved here
   expect_equivalent(as.numeric(h5read(file = h5File, name = "B")), B)
-  #expect_equal( h5read(file = h5File, name = "B", read.attributes = TRUE), B )
+  # expect_equal( h5read(file = h5File, name = "B", read.attributes = TRUE), B )
   expect_true("scale" %in% names(h5readAttributes(file = h5File, name = "B")))
 })
 
@@ -195,11 +195,11 @@ if (.Platform$r_arch != "i386") {
           "test",
           7L,
           nrow(d1),
-          PACKAGE = 'rhdf5'
+          PACKAGE = "rhdf5"
         )
       )
       expect_gt(as.numeric(did), 0)
-      expect_equal(.Call("_H5Dclose", did, PACKAGE = 'rhdf5'), 0)
+      expect_equal(.Call("_H5Dclose", did, PACKAGE = "rhdf5"), 0)
       H5Fclose(fid)
     })
   }
@@ -219,7 +219,7 @@ test_that("We can write a data.frame with multiple factor columns", {
   expect_silent(h5write(
     Z,
     file = h5f1,
-    name = 'data',
+    name = "data",
     DataFrameAsCompound = FALSE
   ))
   expect_equivalent(h5read(file = h5f1, name = "data/X"), as.character(Z$X))
@@ -241,7 +241,7 @@ test_that("We can write a data.frame with many data types", {
   expect_silent(h5write(
     Z,
     file = h5f1,
-    name = 'data',
+    name = "data",
     DataFrameAsCompound = TRUE
   ))
   Z2 <- h5read(file = h5f1, name = "data")

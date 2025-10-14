@@ -16,7 +16,7 @@ NULL
 #' @export
 H5Oget_num_attrs <- function(h5obj) {
   h5checktype(h5obj, "object")
-  n <- .Call("_H5Oget_num_attrs", h5obj@ID, PACKAGE = 'rhdf5')
+  n <- .Call("_H5Oget_num_attrs", h5obj@ID, PACKAGE = "rhdf5")
   n
 }
 
@@ -27,8 +27,8 @@ H5Oget_num_attrs_by_name <- function(h5loc, name) {
   if (length(name) != 1 || !is.character(name)) {
     stop("'name' must be a character string of length 1")
   }
-  h5obj = H5Oopen(h5loc, name)
-  n <- .Call("_H5Oget_num_attrs", h5obj@ID, PACKAGE = 'rhdf5')
+  h5obj <- H5Oopen(h5loc, name)
+  n <- .Call("_H5Oget_num_attrs", h5obj@ID, PACKAGE = "rhdf5")
   H5Oclose(h5obj)
   n
 }

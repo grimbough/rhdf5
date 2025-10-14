@@ -3,7 +3,7 @@
 #' and print the names to the user.
 #' @keywords internal
 h5checkFilters <- function(h5id) {
-  truetype = H5Iget_type(h5id)
+  truetype <- H5Iget_type(h5id)
 
   if (truetype == "H5I_DATASET") {
     pid <- H5Dget_create_plist(h5id)
@@ -13,7 +13,7 @@ h5checkFilters <- function(h5id) {
     pid <- h5checktypeAndPLC(h5id, "H5P_DATASET_CREATE")
   }
 
-  nfilters = H5Pget_nfilters(pid)
+  nfilters <- H5Pget_nfilters(pid)
   if ((nfilters > 0) && (H5Pall_filters_avail(pid) == 0)) {
     err <- "Unable to read dataset.\nNot all required filters available.\n"
     missing <- NULL

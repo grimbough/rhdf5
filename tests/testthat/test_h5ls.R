@@ -4,9 +4,9 @@ library(rhdf5)
 context("h5ls")
 ############################################################
 
-A = 1:7
-B = 1:18
-D = seq(0, 1, by = 0.1)
+A <- 1:7
+B <- 1:18
+D <- seq(0, 1, by = 0.1)
 ## output file name
 h5File <- tempfile(pattern = "ex_h5ls_", fileext = ".h5")
 if (file.exists(h5File)) {
@@ -73,9 +73,9 @@ test_that("Changing traversal order", {
   )
 })
 
-test_that('Passing H5Identifier does not close it', {
+test_that("Passing H5Identifier does not close it", {
   fid <- H5Fopen(h5File)
-  expect_is(h5ls(file = fid), class = 'data.frame')
+  expect_is(h5ls(file = fid), class = "data.frame")
   expect_silent(H5Fclose(fid))
 })
 

@@ -17,7 +17,7 @@
 #' @examples
 #'
 #' ## create a 1 dimensional dataspace
-#' sid <- H5Screate_simple(c(10,5,3))
+#' sid <- H5Screate_simple(c(10, 5, 3))
 #'
 #' ## Select elements that lie in in the rows 1-3, columns 2-4,
 #' ## and the entire 3rd dimension
@@ -35,7 +35,7 @@ H5Sselect_index <- function(h5space, index) {
   h5checktype(h5space, "dataspace")
   dim <- H5Sget_simple_extent_dims(h5space)$size
   if (!is.list(index)) {
-    index = list(index)
+    index <- list(index)
   }
 
   if (length(index) != length(dim)) {
@@ -68,13 +68,13 @@ H5Sselect_index <- function(h5space, index) {
       count[[i]] <- I[seq_len(length(I) - 1) + 1] - I[seq_len(length(I) - 1)]
     }
   }
-  size = sapply(count, sum)
+  size <- sapply(count, sum)
   if (!h5space@native) {
-    start = rev(start)
-    count = rev(count)
+    start <- rev(start)
+    count <- rev(count)
   }
 
-  .Call("_H5Sselect_index", h5space@ID, start, count, PACKAGE = 'rhdf5')
+  .Call("_H5Sselect_index", h5space@ID, start, count, PACKAGE = "rhdf5")
   invisible(size)
 }
 
@@ -86,7 +86,7 @@ H5Sselect_index <- function(h5space, index) {
   h5checktype(h5space, "dataspace")
   dim <- H5Sget_simple_extent_dims(h5space)$size
   if (!is.list(index)) {
-    index = list(index)
+    index <- list(index)
   }
 
   if (length(index) != length(dim)) {
@@ -115,13 +115,13 @@ H5Sselect_index <- function(h5space, index) {
     I <- c(I, length(ind) + 1)
     count[[i]] <- I[seq_len(length(I) - 1) + 1] - I[seq_len(length(I) - 1)]
   }
-  size = sapply(count, sum)
+  size <- sapply(count, sum)
   if (!h5space@native) {
-    start = rev(start)
-    count = rev(count)
+    start <- rev(start)
+    count <- rev(count)
   }
 
-  .Call("_H5Sselect_index", h5space@ID, start, count, PACKAGE = 'rhdf5')
+  .Call("_H5Sselect_index", h5space@ID, start, count, PACKAGE = "rhdf5")
   invisible(size)
 }
 

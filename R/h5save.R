@@ -26,7 +26,9 @@
 #' @seealso [h5ls()], [h5write()]
 #' @examples
 #'
-#' A = 1:7;  B = 1:18; D = seq(0,1,by=0.1)
+#' A <- 1:7
+#' B <- 1:18
+#' D <- seq(0, 1, by = 0.1)
 #'
 #' h5File <- tempfile(pattern = "ex_save.h5")
 #' h5save(A, B, D, file = h5File)
@@ -51,7 +53,7 @@ h5save <- function(
     stop("length of 'name' argument  must fit the number of objects to save.")
   }
 
-  loc = h5checktypeOrOpenLoc(
+  loc <- h5checktypeOrOpenLoc(
     file,
     createnewfile = createnewfile,
     native = native

@@ -15,24 +15,24 @@
 #' @name h5_readAttributes
 #' @export
 h5readAttributes <- function(file, name, native = FALSE, ...) {
-  loc = h5checktypeOrOpenLoc(file, readonly = TRUE, native = native)
+  loc <- h5checktypeOrOpenLoc(file, readonly = TRUE, native = native)
   on.exit(h5closeitLoc(loc))
   if (!H5Lexists(loc$H5Identifier, name)) {
     stop("Object ", name, " does not exist in this HDF5 file.")
   } else {
-    oid = H5Oopen(loc$H5Identifier, name)
+    oid <- H5Oopen(loc$H5Identifier, name)
     on.exit(H5Oclose(oid), add = TRUE)
-    type = H5Iget_type(oid)
-    num_attrs = H5Oget_num_attrs(oid)
+    type <- H5Iget_type(oid)
+    num_attrs <- H5Oget_num_attrs(oid)
     if (is.na(num_attrs)) {
-      num_attrs = 0
+      num_attrs <- 0
     }
-    res = list()
+    res <- list()
     if (num_attrs > 0) {
       for (i in seq_len(num_attrs)) {
-        A = H5Aopen_by_idx(loc$H5Identifier, n = i - 1, objname = name)
+        A <- H5Aopen_by_idx(loc$H5Identifier, n = i - 1, objname = name)
         attrname <- H5Aget_name(A)
-        res[[attrname]] = H5Aread(A, ...)
+        res[[attrname]] <- H5Aread(A, ...)
         tid <- H5Aget_type(A)
         ## if we have an enum type where the levels are only TRUE,FALSE,NA
         ## convert the result to an R logical.  This is consistent with h5py

@@ -30,11 +30,11 @@
 #' @examples
 #'
 #' tmpfile <- tempfile()
-#' h5createFile(file=tmpfile)
-#' h5createDataset(tmpfile, "A", c(10,12), c(20,24))
-#' h5ls(tmpfile, all=TRUE)[c("dim", "maxdim")]
-#' h5set_extent(tmpfile, "A", c(20,24))
-#' h5ls(tmpfile, all=TRUE)[c("dim", "maxdim")]
+#' h5createFile(file = tmpfile)
+#' h5createDataset(tmpfile, "A", c(10, 12), c(20, 24))
+#' h5ls(tmpfile, all = TRUE)[c("dim", "maxdim")]
+#' h5set_extent(tmpfile, "A", c(20, 24))
+#' h5ls(tmpfile, all = TRUE)[c("dim", "maxdim")]
 #'
 #' @name h5_set_extent
 #' @export h5set_extent

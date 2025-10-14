@@ -3,9 +3,9 @@ library(rhdf5)
 context("h5save function")
 ## h5save doesn't close files, so we have to use h5closeAll() after every call!
 
-A = 1:7
-B = 1:18
-D = seq(0, 1, by = 0.1)
+A <- 1:7
+B <- 1:18
+D <- seq(0, 1, by = 0.1)
 ## output file name
 h5File <- tempfile(pattern = "ex_save", fileext = ".h5")
 
@@ -41,9 +41,9 @@ test_that("Fail if file doesn't exist", {
   h5closeAll()
 })
 
-#test_that("Suppress Internal error messages", {
+# test_that("Suppress Internal error messages", {
 #    h5errorHandling(type = "suppress")
-#})
+# })
 
 test_that("Adding to existing file", {
   h5save(A, file = h5File)

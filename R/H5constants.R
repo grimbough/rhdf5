@@ -43,10 +43,10 @@ h5default <- function(type = "") {
 }
 
 H5loadConstants <- function() {
-  invisible(.Call("_H5constants", PACKAGE = 'rhdf5'))
+  invisible(.Call("_H5constants", PACKAGE = "rhdf5"))
 }
 
-h5constants = list()
+h5constants <- list()
 
 h5checkConstants <- function(group, constant) {
   if (!exists("h5constants")) {
@@ -72,11 +72,11 @@ h5const2Factor <- function(group = "", values) {
     stop("unknown 'group' of H5 constants")
   }
   Levels <- unique(c(h5constants[[group]], values))
-  f = factor(values, levels = Levels)
+  f <- factor(values, levels = Levels)
   m <- match(Levels, h5constants[[group]])
   LevelNames <- as.character(Levels)
   LevelNames[is.finite(m)] <- names(h5constants[[group]])[which(is.finite(m))]
-  levels(f) = LevelNames
+  levels(f) <- LevelNames
   f
 }
 

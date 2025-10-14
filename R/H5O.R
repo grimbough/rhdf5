@@ -13,13 +13,13 @@
 #'
 #' # create an hdf5 file and write something
 #' h5createFile(h5File)
-#' h5createGroup(h5File,"foo")
-#' B = array(seq(0.1,2.0,by=0.1),dim=c(5,2,2))
-#' h5write(B, h5File,"foo/B")
+#' h5createGroup(h5File, "foo")
+#' B <- array(seq(0.1, 2.0, by = 0.1), dim = c(5, 2, 2))
+#' h5write(B, h5File, "foo/B")
 #'
 #' # reopen file and dataset and get object info
 #' fid <- H5Fopen(h5File)
-#' oid = H5Oopen(fid, "foo")
+#' oid <- H5Oopen(fid, "foo")
 #' H5Oget_num_attrs(oid)
 #' H5Oclose(oid)
 #' H5Fclose(fid)
@@ -32,12 +32,12 @@ H5Oopen <- function(h5loc, name) {
   if (length(name) != 1 || !is.character(name)) {
     stop("'name' must be a character string of length 1")
   }
-  oid <- .Call("_H5Oopen", h5loc@ID, name, PACKAGE = 'rhdf5')
+  oid <- .Call("_H5Oopen", h5loc@ID, name, PACKAGE = "rhdf5")
   if (oid > 0) {
-    h5object = new("H5IdComponent", ID = oid, native = h5loc@native)
+    h5object <- new("H5IdComponent", ID = oid, native = h5loc@native)
   } else {
     message("HDF5: unable to open object")
-    h5object = FALSE
+    h5object <- FALSE
   }
   invisible(h5object)
 }
@@ -52,7 +52,7 @@ H5Oopen <- function(h5loc, name) {
 #' @export
 H5Oclose <- function(h5obj) {
   h5checktype(h5obj, "object")
-  invisible(.Call("_H5Oclose", h5obj@ID, PACKAGE = 'rhdf5'))
+  invisible(.Call("_H5Oclose", h5obj@ID, PACKAGE = "rhdf5"))
 }
 
 #' Copies an HDF5 object
@@ -71,15 +71,15 @@ H5Oclose <- function(h5obj) {
 #' @examples
 #'
 #' ## Create a temporary copy of an example file check the contents
-#' example_file <- system.file("testfiles", "h5ex_t_array.h5", package="rhdf5")
+#' example_file <- system.file("testfiles", "h5ex_t_array.h5", package = "rhdf5")
 #' file.copy(example_file, tempdir())
 #' h5_file <- file.path(tempdir(), "h5ex_t_array.h5")
 #' h5ls(h5_file)
 #'
 #' ## open the example file and create a new, empty, file
-#' fid1 <- H5Fopen( h5_file )
+#' fid1 <- H5Fopen(h5_file)
 #' h5_file2 <- tempfile(fileext = ".h5")
-#' fid2 <- H5Fcreate( h5_file2 )
+#' fid2 <- H5Fcreate(h5_file2)
 #'
 #' ## We can copy a dataset inside the same file
 #' H5Ocopy(h5loc = fid1, name = "DS1", h5loc_dest = fid1, name_dest = "DS2")
@@ -88,9 +88,11 @@ H5Oclose <- function(h5obj) {
 #'
 #' ## if we want to create a new group hierarchy we can use a link creation property list
 #' lcpl <- H5Pcreate("H5P_LINK_CREATE")
-#' H5Pset_create_intermediate_group( lcpl, create_groups = TRUE )
-#' H5Ocopy(h5loc = fid1, name = "DS1", h5loc_dest = fid2,
-#'         name_dest = "/foo/baa/DS1_nested", lcpl = lcpl)
+#' H5Pset_create_intermediate_group(lcpl, create_groups = TRUE)
+#' H5Ocopy(
+#'   h5loc = fid1, name = "DS1", h5loc_dest = fid2,
+#'   name_dest = "/foo/baa/DS1_nested", lcpl = lcpl
+#' )
 #'
 #' ## tidy up
 #' H5Pclose(lcpl)
@@ -98,9 +100,9 @@ H5Oclose <- function(h5obj) {
 #' H5Fclose(fid2)
 #'
 #' ## Check we now have groups DS1 and DS2 in the original file
-#' h5ls( h5_file )
+#' h5ls(h5_file)
 #' ## Check we have a copy of DS1 at the root and nests in the new file
-#' h5ls( h5_file2 )
+#' h5ls(h5_file2)
 #'
 #' @export
 H5Ocopy <- function(
@@ -138,7 +140,7 @@ H5Ocopy <- function(
     name_dest,
     obj_cpy_pl@ID,
     lcpl@ID,
-    PACKAGE = 'rhdf5'
+    PACKAGE = "rhdf5"
   ))
 
   if (res < 0) {
@@ -162,10 +164,10 @@ H5Ocopy <- function(
 #'
 #' @examples
 #' ## Create a temporary copy of an example file, and open it
-#' example_file <- system.file("testfiles", "h5ex_t_array.h5", package="rhdf5")
+#' example_file <- system.file("testfiles", "h5ex_t_array.h5", package = "rhdf5")
 #' file.copy(example_file, tempdir())
 #' h5_file <- file.path(tempdir(), "h5ex_t_array.h5")
-#' fid <- H5Fopen( h5_file )
+#' fid <- H5Fopen(h5_file)
 #'
 #' ## create a new group without a location in the file
 #' gid <- H5Gcreate_anon(fid)
@@ -179,7 +181,7 @@ H5Ocopy <- function(
 #' H5Fclose(fid)
 #'
 #' ## Check we now have a "/foo" group
-#' h5ls( h5_file )
+#' h5ls(h5_file)
 #'
 #' @export
 H5Olink <- function(h5obj, h5loc, newLinkName, lcpl = NULL, lapl = NULL) {
@@ -196,7 +198,7 @@ H5Olink <- function(h5obj, h5loc, newLinkName, lcpl = NULL, lapl = NULL) {
     newLinkName,
     lcpl@ID,
     lapl@ID,
-    PACKAGE = 'rhdf5'
+    PACKAGE = "rhdf5"
   )
 
   if (res < 0) {
@@ -214,12 +216,12 @@ H5Olink <- function(h5obj, h5loc, newLinkName, lcpl = NULL, lapl = NULL) {
 #' @examples
 #'
 #' ## Create a temporary copy of an example file check the contents
-#' example_file <- system.file("testfiles", "h5ex_t_array.h5", package="rhdf5")
+#' example_file <- system.file("testfiles", "h5ex_t_array.h5", package = "rhdf5")
 #'
 #' ## open the example file, root group, and DS1 dataset
-#' fid <- H5Fopen( example_file )
-#' gid <- H5Gopen( fid, "/" )
-#' did <- H5Dopen( fid, "/DS1" )
+#' fid <- H5Fopen(example_file)
+#' gid <- H5Gopen(fid, "/")
+#' did <- H5Dopen(fid, "/DS1")
 #'
 #' ## List the available object information for both groups and datasets
 #' H5Oget_info(h5loc = gid)
@@ -233,7 +235,7 @@ H5Olink <- function(h5obj, h5loc, newLinkName, lcpl = NULL, lapl = NULL) {
 H5Oget_info <- function(h5loc) {
   h5checktype(h5loc, "object")
 
-  res <- invisible(.Call("_H5Oget_info", h5loc@ID, PACKAGE = 'rhdf5'))
+  res <- invisible(.Call("_H5Oget_info", h5loc@ID, PACKAGE = "rhdf5"))
 
   return(res)
 }

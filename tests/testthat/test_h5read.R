@@ -5,13 +5,13 @@ context("h5read")
 ############################################################
 
 set.seed(1234)
-A = 1L:7L
-B = matrix(1:18, ncol = 2)
-C = c(TRUE, TRUE, FALSE, NA)
-D = seq(0, 1, by = 0.1)
-E = as.raw(sample(0:255, size = 5))
+A <- 1L:7L
+B <- matrix(1:18, ncol = 2)
+C <- c(TRUE, TRUE, FALSE, NA)
+D <- seq(0, 1, by = 0.1)
+E <- as.raw(sample(0:255, size = 5))
 attr(D, "scale") <- "centimeters"
-G = data.frame("col_A" = 1:10, "col_B" = letters[1:10], "col_C" = as.raw(1:10))
+G <- data.frame("col_A" = 1:10, "col_B" = letters[1:10], "col_C" = as.raw(1:10))
 
 ## output file name
 h5File <- tempfile(pattern = "ex_read", fileext = ".h5")
@@ -107,7 +107,7 @@ test_that("writing & reading empty vectors", {
   expect_silent(h5write(obj = double(0), file = h5File, name = "double"))
   expect_silent(h5write(obj = logical(0), file = h5File, name = "logical"))
   expect_silent(h5write(obj = raw(0), file = h5File, name = "raw"))
-  #expect_silent(h5write(obj = factor(levels = c("L1", "L2")), file = h5File, name = "factor"))
+  # expect_silent(h5write(obj = factor(levels = c("L1", "L2")), file = h5File, name = "factor"))
 
   ## testing some different datatypes
   fid <- H5Fopen(h5File)
@@ -247,8 +247,8 @@ test_that("Warnings are generated for integers containing NA written outside rhd
 context("indexing")
 ############################################################
 
-A = matrix(1:100, ncol = 10)
-B = array(1:1000, dim = c(10, 10, 10))
+A <- matrix(1:100, ncol = 10)
+B <- array(1:1000, dim = c(10, 10, 10))
 
 ## output file name
 h5File <- tempfile(pattern = "ex_read", fileext = ".h5")
