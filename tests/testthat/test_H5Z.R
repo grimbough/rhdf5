@@ -6,8 +6,3 @@ test_that("Filters can be tested for", {
   ## Arbitrary filter ID - hopefully doesn't exist
   expect_false(H5Zfilter_avail(999))
 })
-
-
-
-
-

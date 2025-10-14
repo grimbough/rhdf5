@@ -24,36 +24,67 @@
 #'   argument can be used to disable the testing.
 #' @name h5_writeAttribute
 #' @export
-h5writeAttribute <- function(attr, h5obj, name, h5loc, encoding = NULL, 
-                             variableLengthString=FALSE, asScalar=FALSE,
-                             checkForNA = TRUE) {
-  
-  if (is(attr, "H5IdComponent"))
-    res <- h5writeAttribute.array(attr, h5obj, name, asScalar=TRUE)
-  else
+h5writeAttribute <- function(
+  attr,
+  h5obj,
+  name,
+  h5loc,
+  encoding = NULL,
+  variableLengthString = FALSE,
+  asScalar = FALSE,
+  checkForNA = TRUE
+) {
+  if (is(attr, "H5IdComponent")) {
+    res <- h5writeAttribute.array(attr, h5obj, name, asScalar = TRUE)
+  } else {
     res <- UseMethod("h5writeAttribute")
+  }
   invisible(res)
 }
 
 #' @export
-h5writeAttribute.matrix <- function(...) { h5writeAttribute.array(...) }
+h5writeAttribute.matrix <- function(...) {
+  h5writeAttribute.array(...)
+}
 #' @export
-h5writeAttribute.integer <- function(...) { h5writeAttribute.array(...) }
+h5writeAttribute.integer <- function(...) {
+  h5writeAttribute.array(...)
+}
 #' @export
-h5writeAttribute.double <- function(...) { h5writeAttribute.array(...) }
+h5writeAttribute.double <- function(...) {
+  h5writeAttribute.array(...)
+}
 #' @export
-h5writeAttribute.logical <- function(...) { h5writeAttribute.array(...) }
+h5writeAttribute.logical <- function(...) {
+  h5writeAttribute.array(...)
+}
 #' @export
-h5writeAttribute.character <- function(...) { h5writeAttribute.array(...) }
+h5writeAttribute.character <- function(...) {
+  h5writeAttribute.array(...)
+}
 #' @export
-h5writeAttribute.default <- function(attr, h5obj, name, ...) { warning("No function found to write attribute of class '",class(attr),"'. Attribute '",name,"' is not written to hdf5-file.") }
+h5writeAttribute.default <- function(attr, h5obj, name, ...) {
+  warning(
+    "No function found to write attribute of class '",
+    class(attr),
+    "'. Attribute '",
+    name,
+    "' is not written to hdf5-file."
+  )
+}
 
 #' @rdname h5_writeAttribute
-h5writeAttribute.array <- function(attr, h5obj, name, h5loc, encoding = NULL, 
-                                   variableLengthString=FALSE, asScalar=FALSE,
-                                   checkForNA = TRUE) {
-  
-  if(is.character(h5obj) && file.exists(h5obj)) {
+h5writeAttribute.array <- function(
+  attr,
+  h5obj,
+  name,
+  h5loc,
+  encoding = NULL,
+  variableLengthString = FALSE,
+  asScalar = FALSE,
+  checkForNA = TRUE
+) {
+  if (is.character(h5obj) && file.exists(h5obj)) {
     fid <- H5Fopen(h5obj, flags = "H5F_ACC_RDWR")
     on.exit(H5Fclose(fid))
     h5obj <- H5Oopen(h5loc = fid, name = h5loc)
@@ -76,7 +107,7 @@ h5writeAttribute.array <- function(attr, h5obj, name, h5loc, encoding = NULL,
 
   size <- NULL
   if (storage.mode(attr) == "character" && !variableLengthString) {
-    size <- max(nchar(attr, type = "bytes"))+1
+    size <- max(nchar(attr, type = "bytes")) + 1
   }
 
   if (H5Aexists(h5obj, name)) {
@@ -89,17 +120,24 @@ h5writeAttribute.array <- function(attr, h5obj, name, h5loc, encoding = NULL,
   } else if (storagemode == "logical") {
     ## should check for NA values if required
     any_na <- ifelse(checkForNA, yes = any(is.na(attr)), no = FALSE)
-    
+
     tid <- H5Tenum_create(dtype_id = "H5T_NATIVE_UCHAR")
     H5Tenum_insert(tid, name = "TRUE", value = 1L)
     H5Tenum_insert(tid, name = "FALSE", value = 0L)
-    if(any_na) 
+    if (any_na) {
       H5Tenum_insert(tid, name = "NA", value = 255L)
+    }
   }
 
-  h5createAttribute(h5obj, name, dims = dims, storage.mode = storagemode, 
-                    size = size, H5type = tid,
-                    encoding = match.arg(encoding, choices = c("ASCII", "UTF-8", "UTF8")))
+  h5createAttribute(
+    h5obj,
+    name,
+    dims = dims,
+    storage.mode = storagemode,
+    size = size,
+    H5type = tid,
+    encoding = match.arg(encoding, choices = c("ASCII", "UTF-8", "UTF8"))
+  )
   h5attr <- H5Aopen(h5obj, name)
 
   DimMem <- dim(attr)
@@ -108,10 +146,9 @@ h5writeAttribute.array <- function(attr, h5obj, name, h5loc, encoding = NULL,
   }
   h5spaceMem <- H5Screate_simple(DimMem)
 
-  res <- H5Awrite(h5attr, attr) 
+  res <- H5Awrite(h5attr, attr)
 
-  H5Sclose(h5spaceMem) 
-  H5Aclose(h5attr) 
+  H5Sclose(h5spaceMem)
+  H5Aclose(h5attr)
   invisible(res)
 }
-
