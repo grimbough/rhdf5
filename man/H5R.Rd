@@ -15,7 +15,7 @@ library(rhdf5)
 file_name <- tempfile(fileext = ".h5")
 h5createFile(file_name)
 h5createGroup(file = file_name, group = "/foo")
-h5write(1:100, file=file_name, name="/foo/baa")
+h5write(1:100, file = file_name, name = "/foo/baa")
 
 
 fid <- H5Fopen(file_name)
