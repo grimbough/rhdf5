@@ -28,13 +28,12 @@ will be returned as the UNIX epoch \code{1970-01-01 UTC}.
 }
 \examples{
 # example file
-example_file <- system.file("testfiles", "h5ex_t_array.h5", package="rhdf5")
+example_file <- system.file("testfiles", "h5ex_t_array.h5", package = "rhdf5")
 
 ## read timestamps on a group
-h5readTimestamps(example_file, name = '/')
+h5readTimestamps(example_file, name = "/")
 
 ## read timestamps on a datasets
-h5readTimestamps(example_file, name = '/DS1')
-
+h5readTimestamps(example_file, name = "/DS1")
 
 }

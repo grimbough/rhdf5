@@ -27,13 +27,13 @@ dataspace with the combined selection.
 \examples{
 
 ## create a 1 dimensional dataspace
-sid <- H5Screate_simple(c(10,5,3))
+sid <- H5Screate_simple(c(10, 5, 3))
 
-## Select elements that lie in in the rows 1-3, columns 2-4, 
+## Select elements that lie in in the rows 1-3, columns 2-4,
 ## and the entire 3rd dimension
 H5Sselect_index(sid, list(1:3, 2:4, NULL))
 
-## We can check the number of selected points. 
+## We can check the number of selected points.
 ## This should be 27 (3 * 3 * 3)
 H5Sget_select_npoints(sid)
 

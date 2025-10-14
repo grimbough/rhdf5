@@ -5,29 +5,28 @@
 #'   be read.
 #'
 #' @returns A named list of length 4 containing the timestamps on the object.
-#' The timestamps themselves are \code{POSIXct} objects (see 
+#' The timestamps themselves are \code{POSIXct} objects (see
 #' \code{\link[base]{DateTimeClasses}}).
-#' 
-#' @details All timestamps are returned in the UTC timezone.  HDF5 objects 
+#'
+#' @details All timestamps are returned in the UTC timezone.  HDF5 objects
 #' can have between 0 and 4 timestamps set, depending on the property lists
 #' provided when they are created or accessed.  Timestamps that are not tracked
 #' will be returned as the UNIX epoch \code{1970-01-01 UTC}.
-#' 
+#'
 #' @examples
 #' # example file
-#' example_file <- system.file("testfiles", "h5ex_t_array.h5", package="rhdf5")
-#' 
+#' example_file <- system.file("testfiles", "h5ex_t_array.h5", package = "rhdf5")
+#'
 #' ## read timestamps on a group
-#' h5readTimestamps(example_file, name = '/')
-#' 
+#' h5readTimestamps(example_file, name = "/")
+#'
 #' ## read timestamps on a datasets
-#' h5readTimestamps(example_file, name = '/DS1')
-#' 
+#' h5readTimestamps(example_file, name = "/DS1")
 #'
 #' @name h5readTimestamps
 #' @export
 h5readTimestamps <- function(file, name) {
-  loc <- h5checktypeOrOpenLoc(file, readonly=TRUE, native = FALSE)
+  loc <- h5checktypeOrOpenLoc(file, readonly = TRUE, native = FALSE)
   on.exit(h5closeitLoc(loc))
   if (!H5Lexists(loc$H5Identifier, name)) {
     stop("Object ", name, " does not exist in this HDF5 file.")

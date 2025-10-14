@@ -15,7 +15,6 @@ h5createAttribute(
   H5type = NULL,
   size = NULL,
   encoding = NULL,
-  cset = NULL,
   native = FALSE
 )
 }
@@ -86,7 +85,7 @@ h5createFile(h5File)
 h5write(1:1, h5File, "A")
 fid <- H5Fopen(h5File)
 did <- H5Dopen(fid, "A")
-h5createAttribute (did, "time", c(1,10))
+h5createAttribute(did, "time", c(1, 10))
 H5Dclose(did)
 H5Fclose(fid)
 

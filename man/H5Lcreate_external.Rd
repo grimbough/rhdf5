@@ -25,17 +25,19 @@ of the link.
 }
 \examples{
 ## The example below creates a new HDF5 file in a temporary director, and then
-## links to the group "/foo" found in the file "multiple_dtypes.h5" 
+## links to the group "/foo" found in the file "multiple_dtypes.h5"
 ## distributed with the package.
 
-h5File1 <- system.file("testfiles", "multiple_dtypes.h5", package="rhdf5")
+h5File1 <- system.file("testfiles", "multiple_dtypes.h5", package = "rhdf5")
 h5File2 <- tempfile(pattern = "H5L_2_", fileext = ".h5")
 h5createFile(h5File2)
 
 ## open the new file & create a link to the group "/foo" in the original file
 fid <- H5Fopen(h5File2)
-H5Lcreate_external(target_file_name = h5File1, target_obj_name = "/foo", 
-  link_loc = fid, link_name = "/external_link")
+H5Lcreate_external(
+  target_file_name = h5File1, target_obj_name = "/foo",
+  link_loc = fid, link_name = "/external_link"
+)
 H5Fclose(fid)
 
 ## check the new file has a group called "/external_link"

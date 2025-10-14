@@ -21,15 +21,14 @@ groups should be created when a new object is created.  Default is \code{TRUE}.}
 Get and set whether to create missing intermediate groups
 }
 \examples{
- 
 pid <- H5Pcreate("H5P_LINK_CREATE")
 
 ## by default intermediate groups are not created
-H5Pget_create_intermediate_group( pid )
+H5Pget_create_intermediate_group(pid)
 
 ## Change the setting so groups will be created
 
-H5Pget_create_intermediate_group( pid )
+H5Pget_create_intermediate_group(pid)
 
 ## tidy up
 H5Pclose(pid)

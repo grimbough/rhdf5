@@ -65,7 +65,7 @@ h5testFileLocking(dir)
 h5testFileLocking(file)
 
 ## we can check for file locking, and disable if needed
-if( !h5testFileLocking(dir) ) {
+if (!h5testFileLocking(dir)) {
   h5disableFileLocking()
 }
 

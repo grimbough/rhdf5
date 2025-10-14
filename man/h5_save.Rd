@@ -41,7 +41,9 @@ or individually for each dataset by \code{\link[=h5read]{h5read()}}.
 }
 \examples{
 
-A = 1:7;  B = 1:18; D = seq(0,1,by=0.1)
+A <- 1:7
+B <- 1:18
+D <- seq(0, 1, by = 0.1)
 
 h5File <- tempfile(pattern = "ex_save.h5")
 h5save(A, B, D, file = h5File)
