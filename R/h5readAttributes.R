@@ -22,8 +22,7 @@ h5readAttributes <- function(file, name, native = FALSE, ...) {
   } else {
     oid <- H5Oopen(loc$H5Identifier, name)
     on.exit(H5Oclose(oid), add = TRUE)
-    type <- H5Iget_type(oid)
-    num_attrs <- H5Oget_num_attrs(oid)
+      num_attrs <- H5Oget_num_attrs(oid)
     if (is.na(num_attrs)) {
       num_attrs <- 0
     }

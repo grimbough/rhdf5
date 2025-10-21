@@ -150,8 +150,7 @@ This is still quite slow, and the remaining time is being spent on the overheads
 ```{r}
 f2 <- function(block_size = 100) {
   cols_grouped <- split(columns, (columns - 1) %/% block_size)
-  res <- lapply(cols_grouped, f1, name = "counts_chunked") %>%
-    do.call("cbind", .)
+  do.call(cbind, lapply(cols_grouped, f1, name = "counts_chunked"))
 }
 system.time(f2())
 ```

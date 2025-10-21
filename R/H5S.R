@@ -491,7 +491,6 @@ H5Scombine_hyperslab <- function(
   count <- as.numeric(count)
   block <- as.numeric(block)
   stride <- as.numeric(stride)
-  size <- count * block
   start <- start - 1
   if (!h5space@native) {
     start <- rev(start)

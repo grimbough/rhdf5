@@ -253,7 +253,7 @@ H5Sselect_index <- function(h5space, index) {
 
   for (i in seq_len(nrow(starts2))) {
     op <- ifelse(i == 1, "H5S_SELECT_SET", "H5S_SELECT_OR")
-    res <- H5Sselect_hyperslab(
+    H5Sselect_hyperslab(
       h5space,
       op = op,
       start = starts2[i, ],
