@@ -59,7 +59,7 @@ h5readDataset <- function(
       )
     }
 
-    index_null <- sapply(index, is.null)
+    index_null <- vapply(index, is.null, logical(1))
 
     for (i in seq_along(index)) {
       if (is.name(index[[i]]) || is.call(index[[i]])) {

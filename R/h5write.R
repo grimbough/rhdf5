@@ -31,7 +31,7 @@ h5writeDatasetHelper <- function(
     })
     if (length(index) > 1) {
       ## indexing an array
-      d <- sapply(index, length)
+      d <- lengths(index)
       d[d == 0] <- dim(obj)[d == 0]
       dim(obj) <- d
     }
@@ -112,7 +112,7 @@ h5writeDatasetHelper <- function(
 #' in the C-programs (e.g. HDFView) counting starts with 0.
 #'
 #' If code \code{obj} is of type 'complex' then it will be written as a compound
-#' datatype to the HDF5, with elements named 'r' and 'i' for the real and
+#' datatype to the HDF5, with cols named 'r' and 'i' for the real and
 #' imaginary parts respectively.
 #'
 #' @param obj The R object to be written.
@@ -128,8 +128,8 @@ h5writeDatasetHelper <- function(
 #'   create an object of this kind.
 #' @param name The name of the dataset in the HDF5 file.
 #' @param index List of indices for subsetting. The length of the list has to
-#'   agree with the dimensional extension of the HDF5 array. Each list element
-#'   is an integer vector of indices. A list element equal to `NULL` chooses all
+#'   agree with the dimensional extension of the HDF5 array. Each list col
+#'   is an integer vector of indices. A list col equal to `NULL` chooses all
 #'   indices in this dimension. Counting is R-style 1-based.
 #' @param start The start coordinate of a hyperslab (similar to subsetting in
 #'   R). Counting is R-style 1-based. This argument is ignored, if index is not
@@ -146,9 +146,9 @@ h5writeDatasetHelper <- function(
 #'   index is not NULL.
 #' @param chunk Specifies the number of items to be include in an HDF5 chunk. If
 #'   left unspecified the defaults is the smaller of: the total number of
-#'   elements or the number of elements that fit within 4GB of memory. If
+#'   cols or the number of cols that fit within 4GB of memory. If
 #'   `DataFrameAsCompound=FALSE` each row of the `data.frame` can be consider an
-#'   "element".
+#'   "col".
 #' @param level The compression level. An integer value between 0 (no
 #'   compression) and 9 (highest and slowest compression). Only used, if the
 #'   dataset does not yet exist. See [h5createDataset()] to create an dataset.
@@ -296,16 +296,16 @@ h5writeDataset.data.frame <- function(
     if (is.null(a)) {
       attr(obj, "names") = sprintf("col%d", seq_len(ncol(obj)))
     } else {
-      if (any(duplicated(a))) {
+      if (anyDuplicated(a) > 0) {
         a[duplicated(a)] = sprintf("col%d", seq_len(ncol(obj)))[duplicated(a)]
         attr(obj, "names") = a
       }
     }
     ## we can't write out factors, so convert any to character
-    colClass <- sapply(obj, is.factor)
-    if (any(colClass)) {
-      obj[which(colClass)] <- lapply(
-        obj[, which(colClass), drop = FALSE],
+    factor_col <- vapply(obj, is.factor, logical(1))
+    if (any(factor_col)) {
+      obj[factor_col] <- lapply(
+        obj[, factor_col, drop = FALSE],
         FUN = as.character
       )
     }
@@ -337,7 +337,7 @@ h5writeDataset.list <- function(obj, h5loc, name, level = 6, ...) {
     if (is.null(N)) {
       newnames = TRUE
     } else {
-      if (any(nchar(N) == 0)) {
+      if (any(!nzchar(N))) {
         newnames = TRUE
       } else {
         if (length(N) != length(obj)) {
