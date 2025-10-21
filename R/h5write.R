@@ -232,12 +232,11 @@ h5write.default <- function(
       h5obj <- H5Gopen(loc$H5Identifier, name)
       on.exit(H5Gclose(h5obj), add = TRUE)
     } else {
-      if (type == "H5I_DATASET") {
-        h5obj <- H5Dopen(loc$H5Identifier, name)
-        on.exit(H5Dclose(h5obj), add = TRUE)
-      } else {
+      if (type != "H5I_DATASET") {
         stop("Cannot open object of this type")
       }
+      h5obj <- H5Dopen(loc$H5Identifier, name)
+      on.exit(H5Dclose(h5obj), add = TRUE)
     }
     Attr <- attributes(obj)
     for (i in seq_along(Attr)) {

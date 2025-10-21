@@ -160,9 +160,8 @@ H5Ldelete <- function(h5loc, name) {
 
   if (res < 0) {
     stop("Link deletion failed")
-  } else {
-    return(invisible(res))
   }
+  return(invisible(res))
 }
 
 #' Move a link within an HDF5 file
@@ -246,9 +245,8 @@ H5Lmove <- function(
 
   if (res < 0) {
     stop("Link deletion failed")
-  } else {
-    return(invisible(res))
   }
+  return(invisible(res))
 }
 
 #' Copy a link from one location to another
@@ -303,7 +301,6 @@ H5Lcopy <- function(
 
   if (res < 0) {
     stop("Link deletion failed")
-  } else {
-    return(invisible(res))
   }
+  return(invisible(res))
 }

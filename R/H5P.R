@@ -684,7 +684,7 @@ H5Pget_filter <- function(h5plist, idx) {
   h5checktypeAndPLC(h5plist, "H5P_DATASET_CREATE")
   idx <- as.integer(idx)
 
-  if ((idx < 1) || (idx > H5Pget_nfilters(h5plist))) {
+  if (idx < 1 || idx > H5Pget_nfilters(h5plist)) {
     stop(
       "'idx' argument is outside the range of filters set on this property list.",
       call. = FALSE

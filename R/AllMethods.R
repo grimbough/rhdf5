@@ -95,14 +95,14 @@ setMethod(`$`, signature = c("H5IdComponent"), function(x, name) {
   #   if ( .hasSlot(h5id, "par") ) {
   #     par = c(par, h5id@par[names(h5id@par) %in% c("compoundAsDataFrame","read.attributes")])
   #   }
-  if (truetype %in% c("H5I_FILE", "H5I_GROUP")) {
-    res <- h5read(file = h5id, name = name)
-  } else {
+  if (!truetype %in% c("H5I_FILE", "H5I_GROUP")) {
     stop(
       "The provided H5Identifier is not a location identifier.",
       call. = FALSE
     )
   }
+  h5read(file = h5id, name = name)
+
   #
   #   else {
   #     if (truetype == "H5I_DATASET") {
@@ -113,7 +113,6 @@ setMethod(`$`, signature = c("H5IdComponent"), function(x, name) {
   #            call. = FALSE)
   #     }
   #   }
-  res
 })
 
 #' @describeIn H5IdComponent Writes the assigned object to to the HDF5 file at
@@ -133,14 +132,13 @@ setMethod(`$<-`, signature = c("H5IdComponent"), function(x, name, value) {
     stop("Bad HDF5 ID. File, group, or dataset closed?", call. = FALSE)
   }
   truetype <- H5Iget_type(h5id)
-  if (truetype %in% c("H5I_FILE", "H5I_GROUP")) {
-    res <- h5write(value, file = h5id, name = name)
-  } else {
+  if (!truetype %in% c("H5I_FILE", "H5I_GROUP")) {
     stop(
       "The provided H5Identifier is not a location identifier.",
       call. = FALSE
     )
   }
+  h5write(value, file = h5id, name = name)
   h5id
 })
 
@@ -181,16 +179,15 @@ setMethod(
       stop("Bad HDF5 ID. Dataset closed?", call. = FALSE)
     }
     truetype <- H5Iget_type(h5id)
-    if (truetype == "H5I_DATASET") {
-      res <- h5readDataset(h5dataset = h5id, index = index)
-      if (drop) {
-        res <- drop(res)
-      }
-    } else {
+    if (truetype != "H5I_DATASET") {
       stop(
         "The provided H5Identifier is not a dataset identifier and can not be subsetted.",
         call. = FALSE
       )
+    }
+    res <- h5readDataset(h5dataset = h5id, index = index)
+    if (drop) {
+      res <- drop(res)
     }
     res
   }
@@ -227,14 +224,13 @@ setMethod(
       stop("Bad HDF5 ID. Dataset closed?", call. = FALSE)
     }
     truetype <- H5Iget_type(h5id)
-    if (truetype == "H5I_DATASET") {
-      res <- h5writeDatasetHelper(obj = value, h5dataset = h5id, index = index)
-    } else {
+    if (truetype != "H5I_DATASET") {
       stop(
         "The provided H5Identifier is not a dataset identifier and can not be subsetted.",
         call. = FALSE
       )
     }
+    h5writeDatasetHelper(obj = value, h5dataset = h5id, index = index)
     h5id
   }
 )

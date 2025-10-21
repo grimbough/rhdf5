@@ -40,7 +40,7 @@ h5checktype <- function(
       0
     },
     group = {
-      if (truetype != c("H5I_GROUP")) {
+      if (truetype != "H5I_GROUP") {
         stop(
           "Error in ",
           fctname,
@@ -51,7 +51,7 @@ h5checktype <- function(
       0
     },
     loc = {
-      if (!(truetype %in% c("H5I_FILE", "H5I_GROUP"))) {
+      if (!truetype %in% c("H5I_FILE", "H5I_GROUP")) {
         stop(
           "Error in ",
           fctname,
@@ -73,7 +73,7 @@ h5checktype <- function(
       0
     },
     object = {
-      if (!(truetype %in% c("H5I_FILE", "H5I_GROUP", "H5I_DATASET"))) {
+      if (!truetype %in% c("H5I_FILE", "H5I_GROUP", "H5I_DATASET")) {
         stop(
           "Error in ",
           fctname,
@@ -195,19 +195,17 @@ h5checktypeOrOpenLoc <- function(
           file,
           "' is not a valid HDF5 file."
         )
-      } else {
-        res$H5Identifier <- h5loc
-        res$closeit <- TRUE
       }
+      res$H5Identifier <- h5loc
+      res$closeit <- TRUE
     } else {
       if (createnewfile) {
         h5loc <- H5Fcreate(file, native = native)
         if (!is(h5loc, "H5IdComponent")) {
           stop("Error in ", fctname, ". Cannot create file.")
-        } else {
-          res$H5Identifier <- h5loc
-          res$closeit <- TRUE
         }
+        res$H5Identifier <- h5loc
+        res$closeit <- TRUE
       } else {
         stop(
           "Error in ",
@@ -248,10 +246,9 @@ h5checktypeOrOpenLocS3 <- function(
         file,
         "' is not a valid HDF5 file."
       )
-    } else {
-      res$H5Identifier <- h5loc
-      res$closeit <- TRUE
     }
+    res$H5Identifier <- h5loc
+    res$closeit <- TRUE
   } else {
     ## We have passed an H5IdComponent, so it should not be closed after
     h5checktype(file, "loc", fctname = fctname, allow.character = TRUE)
@@ -298,10 +295,9 @@ h5checktypeOrOpenObj <- function(
       h5obj <- H5Oopen(loc$H5Identifier, obj)
       if (!is(h5obj, "H5IdComponent")) {
         stop("Error in ", fctname, ". Cannot open object.")
-      } else {
-        res$H5Identifier <- h5obj
-        res$closeit <- TRUE
       }
+      res$H5Identifier <- h5obj
+      res$closeit <- TRUE
     }
     h5closeitLoc(loc)
   } else {
@@ -335,9 +331,8 @@ h5checktypeAndPLC <- function(
   if (is.null(h5id)) {
     if (!allowNULL) {
       stop("Error in ", fctname, ". Property list is null", call. = FALSE)
-    } else {
-      h5id <- new("H5IdComponent", ID = character(0), native = logical(0))
     }
+    h5id <- new("H5IdComponent", ID = character(0), native = logical(0))
   } else {
     if (!is(h5id, "H5IdComponent")) {
       stop(
@@ -361,7 +356,7 @@ h5checktypeAndPLC <- function(
       )
     }
     h5plc <- H5Pget_class(h5id)
-    if (!(plc %in% names(h5constants[["H5P"]]))) {
+    if (!plc %in% names(h5constants[["H5P"]])) {
       stop("plist class '", plc, "' unknown")
     }
     if (

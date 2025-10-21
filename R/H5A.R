@@ -108,12 +108,12 @@ H5Aopen_by_idx <- function(
   order = h5default("H5_ITER")
 ) {
   h5checktype(h5obj, "object")
-  if ((length(objname) != 1) || !is.character(objname)) {
+  if (length(objname) != 1 || !is.character(objname)) {
     stop("'objname' must be a character string of length 1")
   }
   index_type <- h5checkConstants("H5_INDEX", index_type)
   order <- h5checkConstants("H5_ITER", order)
-  if ((length(n) != 1) || !is.numeric(n)) {
+  if (length(n) != 1 || !is.numeric(n)) {
     stop("'n' must be an integer of length 1")
   }
   n <- as.integer(n)
