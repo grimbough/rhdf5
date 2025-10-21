@@ -2,7 +2,7 @@
 title: "**rhdf5** Practical Tips"
 author:
 - name: Mike L. Smith
-  affiliation: 
+  affiliation:
     - EMBL Heidelberg
     - German Network for Bioinformatics Infrastructure (de.NBI)
 package: rhdf5
@@ -10,13 +10,13 @@ output:
   BiocStyle::html_document:
     toc_float: true
 abstract: |
-  Provides discussion and practical examples for effectively using *rhdf5* 
+  Provides discussion and practical examples for effectively using *rhdf5*
   and the HDF5 file format.
 vignette: |
   %\VignetteIndexEntry{rhdf5 Practical Tips}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
-editor_options: 
+editor_options:
   chunk_output_type: console
 ---
 
@@ -91,7 +91,7 @@ system.time(
 identical(res2, res3)
 ```
 
-This runs in a similar time to when we used the `index` argument in the example above, and the call to `identical()` confirms we're returning the same data.  In fact, under the hood, *rhdf5* converts the `index` argument into `start`, `stride`, `block`, & `count` before accessing the file, which is why the performance is so similar. 
+This runs in a similar time to when we used the `index` argument in the example above, and the call to `identical()` confirms we're returning the same data.  In fact, under the hood, *rhdf5* converts the `index` argument into `start`, `stride`, `block`, & `count` before accessing the file, which is why the performance is so similar.
 
 If there is a easily described pattern to the regions you want to access e.g. a single block or a regular spacing, then either of these approaches is effective.
 
@@ -124,7 +124,7 @@ This is clearly a terrible idea, it takes ages!  For reference, using the `index
 2. *rhdf5* does a lot of validation on the objects that are passed around internally.  Within a call to `h5read()` HDF5 identifiers are created for the file, dataset, file dataspace, and memory dataspace, each of which are checked for validity.  This overhead is negligible when only one call to `h5read()` is made, but be
 comes significant when we make thousands of separate calls.
 
-There's not much more you can do if the dataset is not chunked appropriately, and using the `index` argument is reasonable.  However storing data in this format defeats one of HDF5's key utilities, namely rapid random access.  As such it's probably fairly rare to encounter datasets that aren't chunked in a more meaningful manner.  With this in mind we'll create a new dataset in our file, based on the same matrix but this time split into 100 $\times$ 100 chunks. 
+There's not much more you can do if the dataset is not chunked appropriately, and using the `index` argument is reasonable.  However storing data in this format defeats one of HDF5's key utilities, namely rapid random access.  As such it's probably fairly rare to encounter datasets that aren't chunked in a more meaningful manner.  With this in mind we'll create a new dataset in our file, based on the same matrix but this time split into 100 $\times$ 100 chunks.
 
 ```{r createChunked, echo = TRUE, eval = TRUE, results='hide'}
 h5createDataset(
@@ -242,7 +242,7 @@ Efficiently extracting arbitrary subsets of a HDF5 dataset with *rhdf5* is a bal
 
 # Writing in parallel
 
-Using `r BiocStyle::Biocpkg('rhdf')` it isn't possible to open an HDF5 file and write multiple datasets in parallel.  However we can try to mimic this behaviour by writing each dataset to it's own HDF5 file in parallel and then using the function `H5Ocopy()` to efficiently populate a complete final file.  We'll test this approach here.
+Using `r BiocStyle::Biocpkg('rhdf5')` it isn't possible to open an HDF5 file and write multiple datasets in parallel.  However we can try to mimic this behaviour by writing each dataset to it's own HDF5 file in parallel and then using the function `H5Ocopy()` to efficiently populate a complete final file.  We'll test this approach here.
 
 ## Example data
 
@@ -257,7 +257,7 @@ names(dsets) <- paste0("dset_", 1:10)
 
 ## Serial writing of datasets
 
-Now lets define a function that takes our list of datasets and writes all of them to a single HDF5 file.  
+Now lets define a function that takes our list of datasets and writes all of them to a single HDF5 file.
 
 ```{r}
 simple_writer <- function(file_name, dsets) {
@@ -356,7 +356,7 @@ split_and_gather <- function(output_file, input_dsets, BPPARAM = NULL) {
 }
 ```
 
-An example of calling this using two cores on your local machine is: 
+An example of calling this using two cores on your local machine is:
 
 ```{r, eval = FALSE}
 split_and_gather(tempfile(),
