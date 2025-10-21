@@ -332,27 +332,16 @@ h5writeDataset.list <- function(obj, h5loc, name, level = 6, ...) {
     )
     res = 0
   } else {
-    N = names(obj)
-    newnames = FALSE
-    if (is.null(N)) {
-      newnames = TRUE
-    } else {
-      if (any(!nzchar(N))) {
-        newnames = TRUE
-      } else {
-        if (length(N) != length(obj)) {
-          newnames = TRUE
-        }
-      }
-    }
+    N <- names(obj)
+    newnames <- is.null(N) || !all(nzchar(N)) || length(N) != length(obj)
     if (newnames) {
-      N = sprintf("ELT%d", seq_len(length(obj)))
+      N = sprintf("ELT%d", seq_along(obj))
     }
     res = NULL
     h5createGroup(h5loc, name)
-    gid = H5Gopen(h5loc, name)
-    for (i in seq_len(length(obj))) {
-      res = h5write(obj[[i]], gid, N[i])
+    gid <- H5Gopen(h5loc, name)
+    for (i in seq_along(obj)) {
+      res <- h5write(obj[[i]], gid, N[i])
     }
     H5Gclose(gid)
   }
