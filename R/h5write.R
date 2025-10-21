@@ -41,7 +41,7 @@ h5writeDatasetHelper <- function(
       I[[i]] <- order(m)
       I[[i]] <- I[[i]][!duplicated(m[I[[i]]], fromLast = TRUE)]
     }
-    obj <- do.call("[", c(list(obj), I))
+    obj <- do.call(`[`, c(list(obj), I))
   } else {
     if (
       any(c(
