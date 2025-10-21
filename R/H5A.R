@@ -142,6 +142,9 @@ H5Aopen_by_idx <- function(
 #' [H5Gcreate()], [H5Gopen()], [H5Dcreate()], or [H5Dopen()] to create an object of this kind.
 #' @param name The name of the attribute (character).
 #'
+#' @returns A logical value indicating whether an attribute with name `name`
+#'   exists for the object specified by `h5obj`.
+#'
 #' @export
 H5Aexists <- function(h5obj, name) {
   h5checktype(h5obj, "object")
