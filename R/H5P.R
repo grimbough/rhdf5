@@ -193,7 +193,8 @@ H5Pget_shared_mesg_nindexes <- function(h5plist) {
 #'
 #' @param h5plist [H5IdComponent-class] object representing the file creation
 #'   property list
-#' @param index_num Index being configured.  Indices use C-style 0-based counting, so the first index will be numbered 0.
+#' @param index_num Index being configured.  Indices use C-style 0-based counting,
+#'   so the first index will be numbered 0.
 #' @param mesg_type_flags Character specifying the types of messages that may be stored in this index.
 #'   Valid values can be found with `h5const(type = "H5O_SHMESG_FLAG")`
 #' @param min_mesg_size Minimum message size

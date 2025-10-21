@@ -160,7 +160,11 @@ bm <- bench::mark(
   f2(10), f2(25), f2(50), f2(100),
   f2(250), f2(500), f2(1000),
   f2(2000), f2(5000), f2(10000),
-  iterations = 3, check = FALSE, time_unit = "s", memory = FALSE, filter_gc = FALSE
+  iterations = 3,
+  check = FALSE,
+  time_unit = "s",
+  memory = FALSE,
+  filter_gc = FALSE
 )
 
 bm2 <- data.frame(
@@ -216,7 +220,11 @@ bm <- bench::mark(
   select_index(100), select_index(200), select_index(500),
   select_index(1000), select_index(2000), select_index(5000),
   select_index(10000),
-  iterations = 3, check = FALSE, time_unit = "s", memory = FALSE, filter_gc = FALSE
+  iterations = 3,
+  check = FALSE,
+  time_unit = "s",
+  memory = FALSE,
+  filter_gc = FALSE
 )
 
 bm2 <- data.frame(
@@ -382,9 +390,13 @@ bench_results <- bench::mark(
     input_dsets = dsets,
     BPPARAM = MulticoreParam(workers = 4)
   ),
-  iterations = 2, check = FALSE, time_unit = "s", memory = FALSE, filter_gc = FALSE
+  iterations = 2,
+  check = FALSE,
+  time_unit = "s",
+  memory = FALSE,
+  filter_gc = FALSE
 )
-bench_results |> select(expression, min, median)
+bench_results[, c("expression", "min", "median")]
 ```
 
 ```{r, fake-timings, eval = !run_on_platform, message = FALSE, echo = FALSE}
