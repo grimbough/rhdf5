@@ -89,7 +89,7 @@ H5Lexists <- function(h5loc, name) {
       paste(head(name, n = i), collapse = "/"),
       PACKAGE = "rhdf5"
     )
-    Lexists <- ifelse(res > 0, TRUE, FALSE)
+    Lexists <- res > 0
     i <- i + 1
   }
   Lexists
