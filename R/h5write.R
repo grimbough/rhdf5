@@ -285,10 +285,10 @@ h5writeDataset.data.frame <- function(
       name,
       level,
       as.integer(chunk),
-      PACKAGE = 'rhdf5'
+      PACKAGE = "rhdf5"
     )
-    .Call("_h5writeDataFrame", obj, did, PACKAGE = 'rhdf5')
-    .Call("_H5Dclose", did, PACKAGE = 'rhdf5')
+    .Call("_h5writeDataFrame", obj, did, PACKAGE = "rhdf5")
+    .Call("_H5Dclose", did, PACKAGE = "rhdf5")
     res <- 0
   } else {
     a <- attr(obj, "names")
