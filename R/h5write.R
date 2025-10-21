@@ -51,7 +51,7 @@ h5writeDatasetHelper <- function(
         !is.null(count)
       ))
     ) {
-      if (is.null(block) & is.null(count)) {
+      if (is.null(block) && is.null(count)) {
         if (is.null(dim(obj))) {
           block <- 1
           count <- 1

@@ -173,7 +173,7 @@ h5createGroup <- function(file, group) {
       }
     }
 
-    if ((prod(dims) > 1000000L) & (all(dims == chunk))) {
+    if (prod(dims) > 1000000L && all(dims == chunk)) {
       message(
         "You created a large dataset with compression and chunking.\n",
         "The chunk size is equal to the dataset dimensions.\n",
@@ -255,7 +255,7 @@ h5createGroup <- function(file, group) {
 }
 
 .checkArgs_createDataset <- function(dims, maxdims, chunk) {
-  if (anyNA(dims) | anyNA(maxdims)) {
+  if (anyNA(dims) || anyNA(maxdims)) {
     stop("Can not create dataset. 'dims' and 'maxdims' must be numeric.")
   }
   if (any(dims < 0)) {
@@ -264,7 +264,7 @@ h5createGroup <- function(file, group) {
   if (length(maxdims) != length(dims)) {
     stop('"maxdims" has to have the same rank as "dims".')
   }
-  if (any(maxdims != dims) & is.null(chunk)) {
+  if (any(maxdims != dims) && is.null(chunk)) {
     stop('If "maxdims" is different from "dims", chunking is required.')
   }
   if (any(maxdims != H5Sunlimited() & maxdims < dims)) {
@@ -489,7 +489,7 @@ h5createDataset <- function(
     chunk = chunk
   )
 
-  if ((level > 0) & (is.null(chunk))) {
+  if (level > 0 && is.null(chunk)) {
     warning(
       "Compression (level > 0) requires chunking. Set chunk size to activate compression."
     )
@@ -618,7 +618,7 @@ h5createAttribute <- function(
 
   if (is.null(dims)) {
     sid <- H5Screate()
-  } else if (is.numeric(dims) & is.numeric(maxdims)) {
+  } else if (is.numeric(dims) && is.numeric(maxdims)) {
     sid <- H5Screate_simple(dims, maxdims)
     if (!is(sid, "H5IdComponent")) {
       message("Can not create attribute. 'dims' or 'maxdims' argument invalid.")
