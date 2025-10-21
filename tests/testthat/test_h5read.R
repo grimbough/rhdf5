@@ -449,8 +449,20 @@ test_that("Failing to read BLOSC", {
   expect_silent(h5read(blosc_file, "dset"))
 })
 
+test_that("unsigned native read matches expected ordering (issue #157)", {
+  test_file_157 <- system.file("testfiles", "test_issue157.h5", package = "rhdf5")
+  signed_read <- h5read(test_file_157, "signed")
+  signed_native <- h5read(test_file_157, "signed", native = TRUE)
+  unsigned_read <- h5read(test_file_157, "unsigned")
+  unsigned_native <- h5read(test_file_157, "unsigned", native = TRUE)
+
+  expect_identical(signed_read, t(signed_native))
+  expect_identical(unsigned_read, t(unsigned_native))
+})
+
 ############################################################
 
 test_that("No open HDF5 objects are left", {
   expect_equal(length(h5validObjects()), 0)
 })
+
