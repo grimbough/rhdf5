@@ -137,7 +137,7 @@ h5readDataset <- function(
     obj.dim <- lapply(dim(obj), FUN = seq_len)
     ## only need to compare the dimensions not set automatically
     if (!identical(I[!index_null], obj.dim[!index_null])) {
-      obj <- do.call("[", c(list(obj), I, drop = FALSE))
+      obj <- do.call(`[`, c(list(obj), I, drop = FALSE))
     }
   }
 
