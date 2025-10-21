@@ -319,11 +319,7 @@ H5Dwrite <- function(
   h5checktype(h5dataset, "dataset")
   h5checktypeOrNULL(h5spaceFile, "dataspace")
   h5checktypeOrNULL(h5spaceMem, "dataspace")
-  if (is.null(h5type)) {
-    tidMem <- NULL
-  } else {
-    tidMem <- h5type
-  }
+
   if (is.null(h5spaceMem)) {
     sidMem <- NULL
   } else {

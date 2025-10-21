@@ -80,7 +80,7 @@ h5writeDatasetHelper <- function(
     on.exit(H5Sclose(h5spaceMem), add = TRUE, after = FALSE)
   })
   try({
-    res <- H5Dwrite(
+    H5Dwrite(
       h5dataset,
       obj,
       h5spaceMem = h5spaceMem,
@@ -330,14 +330,12 @@ h5writeDataset.list <- function(obj, h5loc, name, level = 6, ...) {
     message(
       "Existing object within HDF5 file cannot be overwritten with a list object. First delete the group or dataset from the HDF5 file."
     )
-    res = 0
   } else {
     N <- names(obj)
     newnames <- is.null(N) || !all(nzchar(N)) || length(N) != length(obj)
     if (newnames) {
       N = sprintf("ELT%d", seq_along(obj))
     }
-    res = NULL
     h5createGroup(h5loc, name)
     gid <- H5Gopen(h5loc, name)
     for (i in seq_along(obj)) {
