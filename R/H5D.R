@@ -247,7 +247,7 @@ H5Dread <- function(
   h5spaceMem = NULL,
   buf = NULL,
   compoundAsDataFrame = TRUE,
-  bit64conversion,
+  bit64conversion = "int",
   drop = FALSE
 ) {
   h5checktype(h5dataset, "dataset")
@@ -263,21 +263,17 @@ H5Dread <- function(
   } else {
     sidFile <- h5spaceFile@ID
   }
-  if (missing(bit64conversion)) {
-    bit64conv <- 0L
-  } else {
-    bit64conv <- switch(
-      bit64conversion,
-      int = 0L,
-      double = 1L,
-      bit64 = 2L,
-      default = 0L
-    )
-  }
-  if (bit64conv == 2L) {
-    if (!requireNamespace("bit64", quietly = TRUE)) {
-      stop("install package 'bit64' before using bit64conversion='bit64'")
-    }
+
+  bit64conv <- switch(
+    bit64conversion,
+    int = 0L,
+    double = 1L,
+    bit64 = 2L,
+    default = 0L
+  )
+
+  if (bit64conv == 2L && !requireNamespace("bit64", quietly = TRUE)) {
+    stop("install package 'bit64' before using bit64conversion='bit64'")
   }
 
   res <- .Call(

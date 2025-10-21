@@ -262,20 +262,16 @@ H5Aget_type <- function(h5attribute) {
 #' return 0 if attribute is read successfully.
 #'
 #' @export
-H5Aread <- function(h5attribute, buf = NULL, bit64conversion) {
+H5Aread <- function(h5attribute, buf = NULL, bit64conversion = "int") {
   h5checktype(h5attribute, "attribute")
 
-  if (missing(bit64conversion)) {
-    bit64conv <- 0L
-  } else {
-    bit64conv <- switch(
-      bit64conversion,
-      int = 0L,
-      double = 1L,
-      bit64 = 2L,
-      default = 0L
-    )
-  }
+  bit64conv <- switch(
+    bit64conversion,
+    int = 0L,
+    double = 1L,
+    bit64 = 2L,
+    default = 0L
+  )
   if (bit64conv == 2L && !requireNamespace("bit64", quietly = TRUE)) {
     stop("install package 'bit64' before using bit64conversion='bit64'")
   }
