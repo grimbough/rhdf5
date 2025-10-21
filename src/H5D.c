@@ -330,6 +330,8 @@ SEXP H5Dread_helper_INTEGER(hid_t dataset_id, hid_t file_space_id, hid_t mem_spa
                 } else if (b == 8) { 
                     int64_to_int32(intbuf, n, buf, sgn);
                 }
+                if (native)
+                    PERMUTE(Rval, INTEGER, mem_space_id);
             } else {
                 void * buf;
                 if (length(_buf) == 0) {
