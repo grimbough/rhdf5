@@ -6,7 +6,8 @@
 \description{
 The rhdf5 package provides two categories of functions:
 \itemize{
-\item \code{h5} functions are high-level R functions that provide a convenient way of accessing HDF5 files
+\item \code{h5} functions are high-level R functions that provide a convenient way of
+accessing HDF5 files
 \item \code{H5} functions mirror much of the the HDF5 C API
 }
 }
