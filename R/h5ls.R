@@ -6,7 +6,7 @@ h5lsConvertToDataframe <- function(L, all = FALSE, native) {
       L <- L[, c("group", "name", "otype", "dclass", "dim")]
     }
   } else {
-    for (i in seq_len(length(L))) {
+    for (i in seq_along(L)) {
       L[i] <- list(h5lsConvertToDataframe(L[[i]], all = all, native = native))
     }
   }

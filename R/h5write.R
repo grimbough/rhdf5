@@ -19,7 +19,7 @@ h5writeDatasetHelper <- function(
         "length of index has to be equal to dimensional extension of HDF5 dataset."
       )
     }
-    for (i in seq_len(length(index))) {
+    for (i in seq_along(index)) {
       if (is.null(index[[i]])) {
         index[[i]] <- seq_len(s[i])
       } else if (is.call(index[[i]])) {
@@ -36,7 +36,7 @@ h5writeDatasetHelper <- function(
       dim(obj) <- d
     }
     I <- list()
-    for (i in seq_len(length(index))) {
+    for (i in seq_along(index)) {
       m <- match(index[[i]], unique(sort(index[[i]])))
       I[[i]] <- order(m)
       I[[i]] <- I[[i]][!duplicated(m[I[[i]]], fromLast = TRUE)]
@@ -240,7 +240,7 @@ h5write.default <- function(
       }
     }
     Attr <- attributes(obj)
-    for (i in seq_len(length(Attr))) {
+    for (i in seq_along(Attr)) {
       h5writeAttribute(Attr[[i]], h5obj, name = names(Attr)[i])
     }
   }

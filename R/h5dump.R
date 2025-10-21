@@ -1,7 +1,7 @@
 h5loadData <- function(h5loc, L, all = FALSE, ..., native) {
   h5checktype(h5loc, "loc")
   if (length(L) > 0) {
-    for (i in seq_len(length(L))) {
+    for (i in seq_along(L)) {
       if (is.data.frame(L[[i]])) {
         if (
           L[[i]]$ltype %in%
