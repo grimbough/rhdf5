@@ -145,9 +145,8 @@ H5Ocopy <- function(
 
   if (res < 0) {
     stop("Object copying failed")
-  } else {
-    return(invisible(TRUE))
   }
+  return(invisible(TRUE))
 }
 
 #' Create a hard link to an object in an HDF5 file
@@ -203,9 +202,8 @@ H5Olink <- function(h5obj, h5loc, newLinkName, lcpl = NULL, lapl = NULL) {
 
   if (res < 0) {
     stop("Link creation failed")
-  } else {
-    return(invisible(TRUE))
   }
+  return(invisible(TRUE))
 }
 
 #' Retrieves the metadata for an HDF5 object specified by an identifier.

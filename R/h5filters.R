@@ -14,7 +14,7 @@ h5checkFilters <- function(h5id) {
   }
 
   nfilters <- H5Pget_nfilters(pid)
-  if ((nfilters > 0) && (H5Pall_filters_avail(pid) == 0)) {
+  if (nfilters > 0 && H5Pall_filters_avail(pid) == 0) {
     err <- "Unable to read dataset.\nNot all required filters available.\n"
     missing <- NULL
     for (i in seq_len(nfilters)) {

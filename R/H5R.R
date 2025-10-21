@@ -61,10 +61,9 @@ H5Rcreate <- function(h5loc, name, ref_type = "H5R_OBJECT", h5space = NULL) {
       stop(
         "H5R_DATASET_REGION references must be accompanied by a H5 dataspace."
       )
-    } else {
-      ## we pass a dataspace ID of -1 if this is an object reference
-      h5space <- new("H5IdComponent", ID = "-1", native = FALSE)
     }
+    ## we pass a dataspace ID of -1 if this is an object reference
+    h5space <- new("H5IdComponent", ID = "-1", native = FALSE)
   }
 
   ptr <- .Call(

@@ -293,69 +293,69 @@ h5read <- function(
 
   if (!H5Lexists(loc$H5Identifier, name)) {
     stop("Object '", name, "' does not exist in this HDF5 file.")
-  } else {
-    oid <- H5Oopen(loc$H5Identifier, name)
-    on.exit(H5Oclose(oid), add = TRUE)
-    type <- H5Iget_type(oid)
-    num_attrs <- H5Oget_num_attrs(oid)
-    if (is.na(num_attrs)) {
-      num_attrs <- 0
-    }
-    if (type == "H5I_GROUP") {
-      gid <- H5Gopen(loc$H5Identifier, name)
-      obj <- if (.isAnndataNullable(gid)) {
-        .h5readNullable(gid)
-      } else {
-        h5dump(
-          gid,
-          start = start,
-          stride = stride,
-          block = block,
-          count = count,
-          compoundAsDataFrame = compoundAsDataFrame,
-          callGeneric = callGeneric,
-          ...
-        )
-      }
-      H5Gclose(gid)
-    } else if (type == "H5I_DATASET") {
-      h5dataset <- H5Dopen(loc$H5Identifier, name)
-      on.exit(H5Dclose(h5dataset), add = TRUE)
-      obj <- h5readDataset(
-        h5dataset,
-        index = index,
+  }
+
+  oid <- H5Oopen(loc$H5Identifier, name)
+  on.exit(H5Oclose(oid), add = TRUE)
+  type <- H5Iget_type(oid)
+  num_attrs <- H5Oget_num_attrs(oid)
+  if (is.na(num_attrs)) {
+    num_attrs <- 0
+  }
+  if (type == "H5I_GROUP") {
+    gid <- H5Gopen(loc$H5Identifier, name)
+    obj <- if (.isAnndataNullable(gid)) {
+      .h5readNullable(gid)
+    } else {
+      h5dump(
+        gid,
         start = start,
         stride = stride,
         block = block,
         count = count,
         compoundAsDataFrame = compoundAsDataFrame,
-        drop = drop,
+        callGeneric = callGeneric,
         ...
       )
-      obj <- .h5postProcessDataset(obj = obj, h5dataset = h5dataset)
-      cl <- attr(obj, "class")
-      if (!is.null(cl) && callGeneric) {
-        if (exists(paste("h5read", cl, sep = "."), mode = "function")) {
-          obj <- do.call(paste("h5read", cl, sep = "."), args = list(obj = obj))
-        }
-      }
-    } else {
-      message("Reading of object type not supported.")
-      obj <- NULL
-    } ## GROUP
-    if (read.attributes && num_attrs > 0 && !is.null(obj)) {
-      for (i in seq_len(num_attrs)) {
-        A <- H5Aopen_by_idx(loc$H5Identifier, n = i - 1, objname = name)
-        attrname <- H5Aget_name(A)
-        if (attrname != "dim") {
-          attr(obj, attrname) <- H5Aread(A, ...)
-        }
-        ## Don't put this in on.exit()
-        ## A is overwritten in the loop and we lose track of it
-        H5Aclose(A)
+    }
+    H5Gclose(gid)
+  } else if (type == "H5I_DATASET") {
+    h5dataset <- H5Dopen(loc$H5Identifier, name)
+    on.exit(H5Dclose(h5dataset), add = TRUE)
+    obj <- h5readDataset(
+      h5dataset,
+      index = index,
+      start = start,
+      stride = stride,
+      block = block,
+      count = count,
+      compoundAsDataFrame = compoundAsDataFrame,
+      drop = drop,
+      ...
+    )
+    obj <- .h5postProcessDataset(obj = obj, h5dataset = h5dataset)
+    cl <- attr(obj, "class")
+    if (!is.null(cl) && callGeneric) {
+      if (exists(paste("h5read", cl, sep = "."), mode = "function")) {
+        obj <- do.call(paste("h5read", cl, sep = "."), args = list(obj = obj))
       }
     }
-  } # !H5Lexists
+  } else {
+    message("Reading of object type not supported.")
+    obj <- NULL
+  } ## GROUP
+  if (read.attributes && num_attrs > 0 && !is.null(obj)) {
+    for (i in seq_len(num_attrs)) {
+      A <- H5Aopen_by_idx(loc$H5Identifier, n = i - 1, objname = name)
+      attrname <- H5Aget_name(A)
+      if (attrname != "dim") {
+        attr(obj, attrname) <- H5Aread(A, ...)
+      }
+      ## Don't put this in on.exit()
+      ## A is overwritten in the loop and we lose track of it
+      H5Aclose(A)
+    }
+  }
 
   obj
 }

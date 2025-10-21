@@ -27,19 +27,18 @@
 #' @export h5createFile
 h5createFile <- function(file) {
   res <- FALSE
-  if (is.character(file)) {
-    file <- normalizePath(file, mustWork = FALSE)
-    if (file.exists(file)) {
-      message("file '", file, "' already exists.")
-    } else {
-      h5loc <- H5Fcreate(file)
-      if (is(h5loc, "H5IdComponent")) {
-        H5Fclose(h5loc)
-        res <- TRUE
-      }
-    }
-  } else {
+  if (!is.character(file)) {
     stop("file has to be a valid filename.")
+  }
+  file <- normalizePath(file, mustWork = FALSE)
+  if (file.exists(file)) {
+    message("file '", file, "' already exists.")
+  } else {
+    h5loc <- H5Fcreate(file)
+    if (is(h5loc, "H5IdComponent")) {
+      H5Fclose(h5loc)
+      res <- TRUE
+    }
   }
 
   invisible(res)
@@ -105,38 +104,37 @@ h5createGroup <- function(file, group) {
 
 .setDataType <- function(H5type, storage.mode, size, encoding) {
   if (is.null(H5type)) {
-    if (is.character(storage.mode)) {
-      tid <- switch(
-        storage.mode[1],
-        double = h5constants$H5T["H5T_IEEE_F64LE"],
-        integer = h5constants$H5T["H5T_STD_I32LE"],
-        integer64 = h5constants$H5T["H5T_STD_I64LE"],
-        logical = h5constants$H5T["H5T_STD_I8LE"],
-        raw = h5constants$H5T["H5T_STD_U8LE"],
-        character = {
-          tid <- H5Tcopy("H5T_C_S1")
-          H5Tset_strpad(tid, strpad = "NULLPAD")
-          H5Tset_size(tid, size)
-          H5Tset_cset(tid, encoding)
-          tid
-        },
-        complex = {
-          ## We will store two numerics in the compound datatype
-          tid <- .Call("_h5createComplexDataType", PACKAGE = "rhdf5")
-          tid
-        },
-        {
-          stop(
-            "datatype ",
-            storage.mode,
-            " not yet implemented.\n",
-            "Try 'logical', 'double', 'integer', 'integer64' or 'character'."
-          )
-        }
-      )
-    } else {
+    if (!is.character(storage.mode)) {
       stop("Can not create dataset. 'storage.mode' has to be a character.")
     }
+    tid <- switch(
+      storage.mode[1],
+      double = h5constants$H5T["H5T_IEEE_F64LE"],
+      integer = h5constants$H5T["H5T_STD_I32LE"],
+      integer64 = h5constants$H5T["H5T_STD_I64LE"],
+      logical = h5constants$H5T["H5T_STD_I8LE"],
+      raw = h5constants$H5T["H5T_STD_U8LE"],
+      character = {
+        tid <- H5Tcopy("H5T_C_S1")
+        H5Tset_strpad(tid, strpad = "NULLPAD")
+        H5Tset_size(tid, size)
+        H5Tset_cset(tid, encoding)
+        tid
+      },
+      complex = {
+        ## We will store two numerics in the compound datatype
+        tid <- .Call("_h5createComplexDataType", PACKAGE = "rhdf5")
+        tid
+      },
+      {
+        stop(
+          "datatype ",
+          storage.mode,
+          " not yet implemented.\n",
+          "Try 'logical', 'double', 'integer', 'integer64' or 'character'."
+        )
+      }
+    )
   } else {
     tid <- h5checkConstants("H5T", H5type)
   }
@@ -273,7 +271,7 @@ h5createGroup <- function(file, group) {
     )
   }
 
-  chunk_vs_maxdims <- ((chunk > maxdims) & (maxdims != H5Sunlimited()))
+  chunk_vs_maxdims <- (chunk > maxdims) & (maxdims != H5Sunlimited())
   if (any(chunk_vs_maxdims)) {
     chunk[which(chunk_vs_maxdims)] <- dims[which(chunk_vs_maxdims)]
     warning(
@@ -629,44 +627,43 @@ h5createAttribute <- function(
   on.exit(H5Sclose(sid), add = TRUE)
 
   if (is.null(H5type)) {
-    if (is.character(storage.mode)) {
-      tid <- switch(
-        storage.mode[1],
-        double = h5constants$H5T["H5T_IEEE_F64LE"],
-        integer = h5constants$H5T["H5T_STD_I32LE"],
-        character = {
-          tid <- H5Tcopy("H5T_C_S1")
-          H5Tset_cset(
-            tid,
-            cset = match.arg(encoding, choices = c("ASCII", "UTF-8", "UTF8"))
-          )
-          if (!is.null(size) && !is.numeric(size)) {
-            stop(
-              "'size' should be NULL or a number when 'storage.mode=\"character\"'"
-            )
-          }
-          H5Tset_size(tid, size) # NULL = variable.
-          tid
-        },
-        logical = {
-          tid <- H5Tenum_create(dtype_id = "H5T_NATIVE_UCHAR")
-          H5Tenum_insert(tid, name = "TRUE", value = 1L)
-          H5Tenum_insert(tid, name = "FALSE", value = 0L)
-          H5Tenum_insert(tid, name = "NA", value = 255L)
-          tid
-        },
-        H5IdComponent = h5constants$H5T["H5T_STD_REF_OBJ"],
-        {
-          stop(
-            "datatype ",
-            storage.mode,
-            " not yet implemented. Try 'double', 'integer', or 'character'."
-          )
-        }
-      )
-    } else {
+    if (!is.character(storage.mode)) {
       stop("Can not create dataset. 'storage.mode' has to be a character.")
     }
+    tid <- switch(
+      storage.mode[1],
+      double = h5constants$H5T["H5T_IEEE_F64LE"],
+      integer = h5constants$H5T["H5T_STD_I32LE"],
+      character = {
+        tid <- H5Tcopy("H5T_C_S1")
+        H5Tset_cset(
+          tid,
+          cset = match.arg(encoding, choices = c("ASCII", "UTF-8", "UTF8"))
+        )
+        if (!is.null(size) && !is.numeric(size)) {
+          stop(
+            "'size' should be NULL or a number when 'storage.mode=\"character\"'"
+          )
+        }
+        H5Tset_size(tid, size) # NULL = variable.
+        tid
+      },
+      logical = {
+        tid <- H5Tenum_create(dtype_id = "H5T_NATIVE_UCHAR")
+        H5Tenum_insert(tid, name = "TRUE", value = 1L)
+        H5Tenum_insert(tid, name = "FALSE", value = 0L)
+        H5Tenum_insert(tid, name = "NA", value = 255L)
+        tid
+      },
+      H5IdComponent = h5constants$H5T["H5T_STD_REF_OBJ"],
+      {
+        stop(
+          "datatype ",
+          storage.mode,
+          " not yet implemented. Try 'double', 'integer', or 'character'."
+        )
+      }
+    )
   } else {
     if (grepl(pattern = "^[[:digit:]]+$", H5type)) {
       tid <- H5type
