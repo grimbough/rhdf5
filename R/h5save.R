@@ -43,7 +43,7 @@ h5save <- function(
   createnewfile = TRUE,
   native = FALSE
 ) {
-  N <- length(list(...))
+  N <- ...length()
 
   # get object names
   if (is.null(name)) {
