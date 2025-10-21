@@ -119,7 +119,7 @@ h5writeAttribute.array <- function(
     storagemode <- "H5IdComponent"
   } else if (storagemode == "logical") {
     ## should check for NA values if required
-    any_na <- ifelse(checkForNA, yes = any(is.na(attr)), no = FALSE)
+    any_na <- checkForNA && anyNA(attr)
 
     tid <- H5Tenum_create(dtype_id = "H5T_NATIVE_UCHAR")
     H5Tenum_insert(tid, name = "TRUE", value = 1L)

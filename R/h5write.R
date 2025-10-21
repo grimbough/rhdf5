@@ -414,7 +414,7 @@ h5writeDataset.array <- function(
         if (length(obj) > 0) {
           size <- max(nchar(obj, type = "bytes"), na.rm = TRUE)
           ## if any NA, the minimum string length is 2
-          if (any(is.na(obj)) && size < 2) {
+          if (anyNA(obj) && size < 2) {
             size <- 2
           }
           ## empty string gives size 0, and errors
@@ -459,7 +459,7 @@ h5writeDataset.array <- function(
   )
   h5writeAttribute(1L, h5dataset, name = "rhdf5-NA.OK")
 
-  if (storage.mode(obj) == "character" && any(is.na(obj))) {
+  if (storage.mode(obj) == "character" && anyNA(obj)) {
     h5writeAttribute(1L, h5dataset, name = "as.na")
     if (any(obj == "NA", na.rm = TRUE)) {
       warning(

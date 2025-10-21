@@ -255,7 +255,7 @@ h5createGroup <- function(file, group) {
 }
 
 .checkArgs_createDataset <- function(dims, maxdims, chunk) {
-  if (any(is.na(dims)) | any(is.na(maxdims))) {
+  if (anyNA(dims) | anyNA(maxdims)) {
     stop("Can not create dataset. 'dims' and 'maxdims' must be numeric.")
   }
   if (any(dims < 0)) {
