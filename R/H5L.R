@@ -79,7 +79,7 @@ H5Lexists <- function(h5loc, name) {
   }
 
   name <- strsplit(name, split = "/")[[1]]
-  name <- name[nchar(name) > 0]
+  name <- name[nzchar(name)]
   Lexists <- TRUE
   i <- 1
   while ((i <= length(name)) && (Lexists)) {

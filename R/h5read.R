@@ -109,7 +109,7 @@ h5readDataset <- function(
       err <- h5checkFilters(h5dataset)
       ## if we fail here it doesn't make it to the usual H5Dclose call
       on.exit(H5Dclose(h5dataset))
-      if (nchar(err) > 0) {
+      if (nzchar(err)) {
         stop(err, call. = FALSE)
       } else {
         stop(e)
