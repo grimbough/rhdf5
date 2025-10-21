@@ -155,16 +155,12 @@ h5checktypeOrNULL <- function(h5id, type, fctname = deparse(match.call()[1])) {
 h5FileIsOpen <- function(filename) {
   filename <- normalizePath(filename, mustWork = FALSE)
   L <- h5validObjects()
-  isobject <- sapply(L, function(x) {
+  isobject <- vapply(L, function(x) {
     H5Iget_type(x) %in% c("H5I_FILE", "H5I_GROUP", "H5I_DATASET")
-  })
-  if (length(isobject) > 0) {
-    isopen <- any(sapply(L[which(isobject)], function(x) {
-      H5Fget_name(x) == filename
-    }))
-  } else {
-    isopen <- FALSE
-  }
+  }, logical(1))
+  isopen <- any(vapply(L[isobject], function(x) {
+    H5Fget_name(x) == filename
+  }, logical(1)))
   isopen
 }
 

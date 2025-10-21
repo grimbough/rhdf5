@@ -68,7 +68,7 @@ H5Sselect_index <- function(h5space, index) {
       count[[i]] <- I[seq_len(length(I) - 1) + 1] - I[seq_len(length(I) - 1)]
     }
   }
-  size <- sapply(count, sum)
+  size <- vapply(count, sum, numeric(1))
   if (!h5space@native) {
     start <- rev(start)
     count <- rev(count)
@@ -115,7 +115,7 @@ H5Sselect_index <- function(h5space, index) {
     I <- c(I, length(ind) + 1)
     count[[i]] <- I[seq_len(length(I) - 1) + 1] - I[seq_len(length(I) - 1)]
   }
-  size <- sapply(count, sum)
+  size <- vapply(count, sum, numeric(1))
   if (!h5space@native) {
     start <- rev(start)
     count <- rev(count)
@@ -184,6 +184,7 @@ H5Sselect_index <- function(h5space, index) {
       ## This is not optimised!  We check lags 1:10 and pick the
       ## value with the fewest number of runs.
       if (length(index_copy) > 1) {
+        # nolint next: undesirable_function_linter.
         lag <- which.min(sapply(
           seq_len(min(10, length(index_copy) - 1)),
           FUN = function(i, index_copy) {
