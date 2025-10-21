@@ -62,7 +62,7 @@ h5readDataset <- function(
     index_null <- sapply(index, is.null)
 
     for (i in seq_along(index)) {
-      if (is.name(index[[i]]) | is.call(index[[i]])) {
+      if (is.name(index[[i]]) || is.call(index[[i]])) {
         index[[i]] <- eval(index[[i]])
       }
     }
@@ -334,7 +334,7 @@ h5read <- function(
       )
       obj <- .h5postProcessDataset(obj = obj, h5dataset = h5dataset)
       cl <- attr(obj, "class")
-      if (!is.null(cl) & callGeneric) {
+      if (!is.null(cl) && callGeneric) {
         if (exists(paste("h5read", cl, sep = "."), mode = "function")) {
           obj <- do.call(paste("h5read", cl, sep = "."), args = list(obj = obj))
         }
@@ -343,7 +343,7 @@ h5read <- function(
       message("Reading of object type not supported.")
       obj <- NULL
     } ## GROUP
-    if (read.attributes & (num_attrs > 0) & !is.null(obj)) {
+    if (read.attributes && num_attrs > 0 && !is.null(obj)) {
       for (i in seq_len(num_attrs)) {
         A <- H5Aopen_by_idx(loc$H5Identifier, n = i - 1, objname = name)
         attrname <- H5Aget_name(A)

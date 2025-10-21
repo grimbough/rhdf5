@@ -109,7 +109,7 @@ h5ls <- function(
     } else {
       depth <- 1L
     }
-  } else if (is.numeric(recursive) | is.integer(recursive)) {
+  } else if (is.numeric(recursive)) {
     depth <- as.integer(recursive)
     if (length(recursive) > 1) {
       warning("'recursive' must be of length 1.  Only using first value.")
