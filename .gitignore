@@ -4,3 +4,5 @@ src/*o
 src/external_filters.h
 
 vignettes/*_cache
+
+*.venv
