@@ -152,8 +152,7 @@ H5Aexists <- function(h5obj, name) {
     stop("'name' must be a character string of length 1")
   }
   res <- .Call("_H5Aexists", h5obj@ID, name, PACKAGE = "rhdf5")
-  res <- ifelse(res > 0, TRUE, FALSE)
-  res
+  res > 0
 }
 
 
