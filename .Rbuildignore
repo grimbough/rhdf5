@@ -15,3 +15,4 @@ vignettes/practical_tips_cache
 ^_pkgdown\.yml$
 ^docs$
 ^pkgdown$
+^\.lintr$
