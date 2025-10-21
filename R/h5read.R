@@ -1,7 +1,7 @@
 .h5postProcessDataset <- function(obj, h5dataset) {
   ## warn about NA conversion for integers if 'rhdf5.NA-OK' is missing
   if (storage.mode(obj) == "integer" || is(obj, "integer64")) {
-    if (any(is.na(obj))) {
+    if (anyNA(obj)) {
       if (!H5Aexists(h5obj = h5dataset, name = "rhdf5-NA.OK")) {
         if (storage.mode(obj) == "integer") {
           na_val <- "-2^31"
