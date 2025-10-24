@@ -45,7 +45,7 @@ test_that("Fail if given a group", {
 test_that("Fail if missing", {
   expect_error(
     h5set_extent(file = h5File, dataset = "missing", dims = c(1, 1)),
-    regexp = "does not exist in this HDF5 file.$"
+    regexp = "does not exist in this HDF5 file."
   )
 })
 

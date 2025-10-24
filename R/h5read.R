@@ -292,7 +292,10 @@ h5read <- function(
   on.exit(h5closeitLoc(loc), add = TRUE)
 
   if (!H5Lexists(loc$H5Identifier, name)) {
-    stop("Object '", name, "' does not exist in this HDF5 file.")
+    stop(
+      "Object '", name, "' does not exist in this HDF5 file.\n",
+      "Use `h5ls()` to list the objects in the file."
+    )
   }
 
   oid <- H5Oopen(loc$H5Identifier, name)

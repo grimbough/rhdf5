@@ -94,7 +94,7 @@ test_that("Error if file doesn't exist", {
 test_that("Error if asking for something that isn't there", {
   expect_error(
     h5read(file = h5File, name = "missing"),
-    regexp = "does not exist in this HDF5 file.$"
+    regexp = "does not exist in this HDF5 file."
   )
 })
 
