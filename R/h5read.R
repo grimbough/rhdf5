@@ -180,7 +180,8 @@ h5readDataset <- function(
 #' (file or group). See [H5Fcreate()], [H5Fopen()],
 #' [H5Gcreate()], [H5Gopen()] to create an object of this
 #' kind.
-#' @param name The name of the dataset in the HDF5 file.
+#' @param name The name of the dataset in the HDF5 file. The datasets present
+#'   in \code{file} can be listed with the function \code{\link{h5ls}}.
 #' @param index List of indices for subsetting. The length of the list has to
 #' agree with the dimensional extension of the HDF5 array. Each list element is
 #' an integer vector of indices. A list element equal to NULL chooses all

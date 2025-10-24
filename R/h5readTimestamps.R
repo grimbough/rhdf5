@@ -2,7 +2,8 @@
 #'
 #' @param file Character vector of length 1, giving the path to the HDF5 file
 #' @param name Path within the HDF5 file to the object whose attributes should
-#'   be read.
+#'   be read. The datasets present in \code{file} can be listed with the
+#'  function \code{\link{h5ls}}.
 #'
 #' @returns A named list of length 4 containing the timestamps on the object.
 #' The timestamps themselves are `POSIXct` objects (see
