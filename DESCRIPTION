@@ -17,6 +17,10 @@ Authors@R: c(
       "Hugo", "Gruson", role = "cre",
       email = "hugo.gruson@embl.de",
       comment = c(ORCID = "0000-0002-4094-1476")
+    ),
+    person(
+      "German Network for Bioinformatics Infrastructure - de.NBI",
+      role = "fnd"
     )
   )
 Description: This package provides an interface between HDF5 and R.
