@@ -31,7 +31,8 @@ class \linkS4class{H5IdComponent} representing a H5 location identifier
 \code{\link[=H5Gcreate]{H5Gcreate()}}, \code{\link[=H5Gopen]{H5Gopen()}} to create an object of this
 kind.}
 
-\item{name}{The name of the dataset in the HDF5 file.}
+\item{name}{The name of the dataset in the HDF5 file. The datasets present
+in \code{file} can be listed with the function \code{\link{h5ls}}.}
 
 \item{index}{List of indices for subsetting. The length of the list has to
 agree with the dimensional extension of the HDF5 array. Each list element is

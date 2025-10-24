@@ -2,7 +2,8 @@
 #'
 #' @param file Character vector of length 1, giving the path to the HDF5
 #' @param name Path within the HDF5 file to the object whose attributes should
-#'   be read.
+#'   be read. The datasets present in `file`` can be listed with the
+#'   function [h5ls()].
 #' @param native An object of class `logical`. If TRUE, array-like objects
 #'   are treated as stored in HDF5 row-major rather than R column-major
 #'   orientation.
@@ -19,7 +20,9 @@ h5readAttributes <- function(file, name, native = FALSE, ...) {
   on.exit(h5closeitLoc(loc))
   if (!H5Lexists(loc$H5Identifier, name)) {
     stop(
-      "Object ", name, " does not exist in this HDF5 file.\n",
+      "Object ",
+      name,
+      " does not exist in this HDF5 file.\n",
       "Use `h5ls()` to list the objects in the file."
     )
   } else {
