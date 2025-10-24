@@ -12,3 +12,6 @@ vignettes/practical_tips_cache
 .lintr
 ^[.]?air[.]toml$
 ^\.vscode$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
