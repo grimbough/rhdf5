@@ -44,7 +44,10 @@ h5set_extent <- function(file, dataset, dims, native = FALSE) {
 
   if (is.character(dataset)) {
     if (!H5Lexists(loc$H5Identifier, dataset)) {
-      stop("Object ", dataset, " does not exist in this HDF5 file.")
+      stop(
+        "Object ", dataset, " does not exist in this HDF5 file.\n",
+        "Use `h5ls()` to list the objects in the file."
+      )
     } else {
       did <- H5Oopen(loc$H5Identifier, dataset)
       type <- H5Iget_type(did)

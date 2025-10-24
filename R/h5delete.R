@@ -43,7 +43,10 @@ h5deleteAttribute <- function(file, name, attribute) {
       message("Attribute '", attribute, "' not found.")
     }
   } else {
-    message("Object '", name, "' not found in ", file)
+    message(
+      "Object '", name, "' not found in ", file, ".\n",
+      "Use `h5ls()` to list the objects in the file."
+    )
   }
   return(invisible(res))
 }
