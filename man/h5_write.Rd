@@ -85,9 +85,9 @@ dataset does not yet exist. See \code{\link[=h5createDataset]{h5createDataset()}
 
 \item{chunk}{Specifies the number of items to be include in an HDF5 chunk. If
 left unspecified the defaults is the smaller of: the total number of
-elements or the number of elements that fit within 4GB of memory. If
+cols or the number of cols that fit within 4GB of memory. If
 \code{DataFrameAsCompound=FALSE} each row of the \code{data.frame} can be consider an
-"element".}
+"col".}
 
 \item{DataFrameAsCompound}{If true, a \code{data.frame} will be saved as a
 compound data type. Otherwise it is saved like a list. The advantage of
@@ -97,8 +97,8 @@ the data has to be rearranged on disk and thus can slow down I/O. If fast
 reading is required, \code{DataFrameAsCompound=FALSE} is recommended.}
 
 \item{index}{List of indices for subsetting. The length of the list has to
-agree with the dimensional extension of the HDF5 array. Each list element
-is an integer vector of indices. A list element equal to \code{NULL} chooses all
+agree with the dimensional extension of the HDF5 array. Each list col
+is an integer vector of indices. A list col equal to \code{NULL} chooses all
 indices in this dimension. Counting is R-style 1-based.}
 
 \item{start}{The start coordinate of a hyperslab (similar to subsetting in
@@ -152,7 +152,7 @@ of dimensions is inverted. In the R interface counting starts with 1, whereas
 in the C-programs (e.g. HDFView) counting starts with 0.
 
 If code \code{obj} is of type 'complex' then it will be written as a compound
-datatype to the HDF5, with elements named 'r' and 'i' for the real and
+datatype to the HDF5, with cols named 'r' and 'i' for the real and
 imaginary parts respectively.
 }
 \examples{

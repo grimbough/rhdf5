@@ -18,7 +18,8 @@ H5Pget_shared_mesg_index(h5plist, index_num)
 \item{h5plist}{\linkS4class{H5IdComponent} object representing the file creation
 property list}
 
-\item{index_num}{Index being configured.  Indices use C-style 0-based counting, so the first index will be numbered 0.}
+\item{index_num}{Index being configured.  Indices use C-style 0-based counting,
+so the first index will be numbered 0.}
 
 \item{mesg_type_flags}{Character specifying the types of messages that may be stored in this index.
 Valid values can be found with \code{h5const(type = "H5O_SHMESG_FLAG")}}
