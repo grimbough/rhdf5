@@ -18,7 +18,7 @@ full arrays/vectors or subarrays (hyperslabs) within an existing dataset."><meta
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rhdf5</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.55.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.55.3</span>
       </span>
     </div>
 
@@ -84,7 +84,15 @@ full arrays/vectors or subarrays (hyperslabs) within an existing dataset.</p>
 <span><span class="fu">h5writeDataset</span><span class="op">(</span><span class="va">obj</span>, <span class="va">h5loc</span>, <span class="va">name</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for class 'data.frame'</span></span>
-<span><span class="fu">h5writeDataset</span><span class="op">(</span><span class="va">obj</span>, <span class="va">h5loc</span>, <span class="va">name</span>, level <span class="op">=</span> <span class="fl">6</span>, <span class="va">chunk</span>, DataFrameAsCompound <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="fu">h5writeDataset</span><span class="op">(</span></span>
+<span>  <span class="va">obj</span>,</span>
+<span>  <span class="va">h5loc</span>,</span>
+<span>  <span class="va">name</span>,</span>
+<span>  level <span class="op">=</span> <span class="fl">6</span>,</span>
+<span>  <span class="va">chunk</span>,</span>
+<span>  DataFrameAsCompound <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for class 'array'</span></span>
 <span><span class="fu">h5writeDataset</span><span class="op">(</span></span>
@@ -99,7 +107,8 @@ full arrays/vectors or subarrays (hyperslabs) within an existing dataset.</p>
 <span>  size <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  variableLengthString <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  encoding <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  level <span class="op">=</span> <span class="fl">6</span></span>
+<span>  level <span class="op">=</span> <span class="fl">6</span>,</span>
+<span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -161,9 +170,9 @@ dataset does not yet exist. See <code><a href="h5_createDataset.html">h5createDa
 <dt id="arg-chunk">chunk<a class="anchor" aria-label="anchor" href="#arg-chunk"></a></dt>
 <dd><p>Specifies the number of items to be include in an HDF5 chunk. If
 left unspecified the defaults is the smaller of: the total number of
-elements or the number of elements that fit within 4GB of memory. If
+cols or the number of cols that fit within 4GB of memory. If
 <code>DataFrameAsCompound=FALSE</code> each row of the <code>data.frame</code> can be consider an
-"element".</p></dd>
+"col".</p></dd>
 
 
 <dt id="arg-dataframeascompound">DataFrameAsCompound<a class="anchor" aria-label="anchor" href="#arg-dataframeascompound"></a></dt>
@@ -177,8 +186,8 @@ reading is required, <code>DataFrameAsCompound=FALSE</code> is recommended.</p><
 
 <dt id="arg-index">index<a class="anchor" aria-label="anchor" href="#arg-index"></a></dt>
 <dd><p>List of indices for subsetting. The length of the list has to
-agree with the dimensional extension of the HDF5 array. Each list element
-is an integer vector of indices. A list element equal to <code>NULL</code> chooses all
+agree with the dimensional extension of the HDF5 array. Each list col
+is an integer vector of indices. A list col equal to <code>NULL</code> chooses all
 indices in this dimension. Counting is R-style 1-based.</p></dd>
 
 
@@ -243,7 +252,7 @@ R the first dimension is the fastest changing dimension.</p>
 of dimensions is inverted. In the R interface counting starts with 1, whereas
 in the C-programs (e.g. HDFView) counting starts with 0.</p>
 <p>If code <code>obj</code> is of type 'complex' then it will be written as a compound
-datatype to the HDF5, with elements named 'r' and 'i' for the real and
+datatype to the HDF5, with cols named 'r' and 'i' for the real and
 imaginary parts respectively.</p>
     </div>
     <div id="references">

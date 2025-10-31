@@ -37,7 +37,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rhdf5</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.55.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.55.3</span>
       </span>
     </div>
 
@@ -148,7 +148,7 @@ the first 10,000 columns and time how long this takes.</p>
 <span>  <span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##    user  system elapsed </span></span>
-<span><span class="co">##   0.024   0.009   0.034</span></span></code></pre>
+<span><span class="co">##   0.028   0.004   0.032</span></span></code></pre>
 <p>Next, instead of selecting 10,000 consecutive columns we’ll ask for
 every other column. This should still return the same amount of data and
 since our dataset is not chunked involves reading the same volume from
@@ -162,7 +162,7 @@ disk.</p>
 <span>  <span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##    user  system elapsed </span></span>
-<span><span class="co">##   0.065   0.004   0.069</span></span></code></pre>
+<span><span class="co">##   0.062   0.005   0.067</span></span></code></pre>
 <p>We can see this is marginally slower, because there’s a small
 overhead in selecting this disjoint set of columns, but it’s only
 marginal and using the <code>index</code> argument looks sufficient.</p>
@@ -190,7 +190,7 @@ the same as in our previous example.</p>
 <span>  <span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##    user  system elapsed </span></span>
-<span><span class="co">##   0.062   0.000   0.062</span></span></code></pre>
+<span><span class="co">##    0.06    0.00    0.06</span></span></code></pre>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/identical.html" class="external-link">identical</a></span><span class="op">(</span><span class="va">res2</span>, <span class="va">res3</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] TRUE</span></span></code></pre>
@@ -233,9 +233,9 @@ choose a random selection of columns<a href="#fn2" class="footnote-ref" id="fnre
 <span>  name <span class="op">=</span> <span class="st">"counts"</span></span>
 <span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##    user  system elapsed </span></span>
-<span><span class="co">##  20.087   0.062  20.152</span></span></code></pre>
+<span><span class="co">##  19.574   0.073  19.649</span></span></code></pre>
 <p>This is clearly a terrible idea, it takes ages! For reference, using
-the <code>index</code> argument with this set of columns takes 0.091
+the <code>index</code> argument with this set of columns takes 0.09
 seconds. This poor performance is driven by two things:</p>
 <ol style="list-style-type: decimal">
 <li>Our dataset was created as a single chunk. This means for each
@@ -275,7 +275,7 @@ over and over.</p>
 <span>  name <span class="op">=</span> <span class="st">"counts_chunked"</span></span>
 <span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##    user  system elapsed </span></span>
-<span><span class="co">##   2.516   0.035   2.552</span></span></code></pre>
+<span><span class="co">##   2.498   0.037   2.536</span></span></code></pre>
 <p>This is still quite slow, and the remaining time is being spent on
 the overheads associated with multiple calls to <code><a href="../reference/h5_read.html">h5read()</a></code>.
 To reduce these the function <code>f2()</code><a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a> defined below splits
@@ -289,12 +289,11 @@ unions down by not having too many columns in any one call.</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">f2</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">block_size</span> <span class="op">=</span> <span class="fl">100</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">cols_grouped</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/split.html" class="external-link">split</a></span><span class="op">(</span><span class="va">columns</span>, <span class="op">(</span><span class="va">columns</span> <span class="op">-</span> <span class="fl">1</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/r/base/Arithmetic.html" class="external-link">%/%</a></span> <span class="va">block_size</span><span class="op">)</span></span>
-<span>  <span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">cols_grouped</span>, <span class="va">f1</span>, name <span class="op">=</span> <span class="st">"counts_chunked"</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="st">"cbind"</span>, <span class="va">.</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="va">cbind</span>, <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">cols_grouped</span>, <span class="va">f1</span>, name <span class="op">=</span> <span class="st">"counts_chunked"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="fu">f2</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##    user  system elapsed </span></span>
-<span><span class="co">##   0.593   0.010   0.604</span></span></code></pre>
+<span><span class="co">##   0.595   0.010   0.605</span></span></code></pre>
 <p>We can see this has a significant effect, although it’s still an
 order of magnitude slower than when we were dealing with regularly
 spaced subsets. The efficiency here will vary based on a number of
@@ -303,7 +302,7 @@ column index, and you varying the <code>block_size</code> argument will
 produce differing performances. The plot below shows the timings
 achieved by providing a selection of values to <code>block_size</code>.
 It suggests the optimal parameter in this case is probably a block size
-of 10000, which took 0.1 seconds - noticeably faster than when passing
+of 10000, which took 0.09 seconds - noticeably faster than when passing
 all columns to the <code>index</code> argument in a single call.</p>
 <p><img src="practical_tips_files/figure-html/unnamed-chunk-2-1.png" width="576"></p>
 <div class="section level4">
@@ -356,7 +355,7 @@ data.</p>
 <div class="section level2">
 <h2 id="writing-in-parallel">Writing in parallel<a class="anchor" aria-label="anchor" href="#writing-in-parallel"></a>
 </h2>
-<p>Using <em><a href="https://bioconductor.org/packages/3.22/rhdf" class="external-link">rhdf</a></em> it
+<p>Using <em><a href="https://bioconductor.org/packages/3.22/rhdf5" class="external-link">rhdf5</a></em> it
 isn’t possible to open an HDF5 file and write multiple datasets in
 parallel. However we can try to mimic this behaviour by writing each
 dataset to it’s own HDF5 file in parallel and then using the function
@@ -499,14 +498,14 @@ is:</p>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 4 × 3</span></span></span>
 <span><span class="co">##   expression               min median</span></span>
 <span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;bch:expr&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">1</span> simple writer           29.1   29.1</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">2</span> split/gather - 1 core   29.6   29.6</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">3</span> split/gather - 2 cores  15.2   15.3</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">4</span> split/gather - 4 cores  11.4   11.4</span></span></code></pre>
+<span><span class="co">## <span style="color: #BCBCBC;">1</span> simple writer           29.0   29.0</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">2</span> split/gather - 1 core   29.4   29.4</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">3</span> split/gather - 2 cores  15.1   15.1</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">4</span> split/gather - 4 cores  11.5   11.5</span></span></code></pre>
 <p>We can see from our benchmark results that there is some performance
 improvement to be achieved by using the parallel approach. Based on the
 median times of out three iterations using two cores sees an speedup of
-1.9 and 2.6 with 4 cores. This isn’t quite linear, presumably because
+1.92 and 2.5 with 4 cores. This isn’t quite linear, presumably because
 there are overheads involved both in using a two-step process and
 initialising the parallel workers, but it is a noticeable
 improvement.</p>
@@ -537,7 +536,7 @@ improvement.</p>
 <span><span class="co">## </span></span>
 <span><span class="co">## other attached packages:</span></span>
 <span><span class="co">## [1] BiocParallel_1.44.0 ggplot2_4.0.0       dplyr_1.1.4        </span></span>
-<span><span class="co">## [4] rhdf5_2.55.2        BiocStyle_2.38.0   </span></span>
+<span><span class="co">## [4] rhdf5_2.55.3        BiocStyle_2.38.0   </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## loaded via a namespace (and not attached):</span></span>
 <span><span class="co">##  [1] gtable_0.3.6        jsonlite_2.0.0      compiler_4.5.1     </span></span>
