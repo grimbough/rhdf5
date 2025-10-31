@@ -10,7 +10,7 @@ H5Dread(
   h5spaceMem = NULL,
   buf = NULL,
   compoundAsDataFrame = TRUE,
-  bit64conversion,
+  bit64conversion = "int",
   drop = FALSE
 )
 }
