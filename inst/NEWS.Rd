@@ -1,6 +1,17 @@
 \name{NEWS}
 \title{News for Package 'rhdf5'}
 
+\section{Changes in version 2.56.0}{
+
+  \subsection{Bug fixes}{
+    \itemize{
+      \item The value ordering (row-major vs column-major) is not correct when
+      reading unsigned integers with `native=TRUE`. Thanks to Jared Lumpe for
+      the report and detailed reproducible example:
+      https://github.com/Huber-group-EMBL/rhdf5/issues/157.
+  }
+}
+
 \section{Changes in version 2.54.0}{
 
   \subsection{CHANGES}{
