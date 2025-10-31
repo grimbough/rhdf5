@@ -1,9 +1,11 @@
-pandoc: 2.14.2
-pkgdown: 2.0.4
+pandoc: 3.1.11
+pkgdown: 2.1.3
 pkgdown_sha: ~
 articles:
   practical_tips: practical_tips.html
-  rhdf5: rhdf5.html
   rhdf5_cloud_reading: rhdf5_cloud_reading.html
-last_built: 2022-06-22T09:05Z
-
+  rhdf5: rhdf5.html
+last_built: 2025-10-31T07:58Z
+urls:
+  reference: https://huber-group-embl.github.io/rhdf5/reference
+  article: https://huber-group-embl.github.io/rhdf5/articles
