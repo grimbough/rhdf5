@@ -247,7 +247,7 @@ H5Dread <- function(
   h5spaceMem = NULL,
   buf = NULL,
   compoundAsDataFrame = TRUE,
-  bit64conversion = "int",
+  bit64conversion = c("int", "double", "bit64"),
   drop = FALSE
 ) {
   h5checktype(h5dataset, "dataset")
@@ -273,6 +273,7 @@ H5Dread <- function(
       ' Passing `"default"` will be disallowed in the next release cycle.'
     )
   }
+  bit64conversion <- match.arg(bit64conversion)
   bit64conv <- switch(
     bit64conversion,
     int = 0L,
