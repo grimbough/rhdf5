@@ -262,7 +262,11 @@ H5Aget_type <- function(h5attribute) {
 #' return 0 if attribute is read successfully.
 #'
 #' @export
-H5Aread <- function(h5attribute, buf = NULL, bit64conversion = "int") {
+H5Aread <- function(
+  h5attribute,
+  buf = NULL,
+  bit64conversion = c("int", "double", "bit64")
+) {
   h5checktype(h5attribute, "attribute")
 
   bit64conversion <- fix_missing_bit64conversion(bit64conversion)
@@ -274,6 +278,7 @@ H5Aread <- function(h5attribute, buf = NULL, bit64conversion = "int") {
       ' Passing `"default"` will be disallowed in the next release cycle.'
     )
   }
+  bit64conversion <- match.arg(bit64conversion)
   bit64conv <- switch(
     bit64conversion,
     int = 0L,
