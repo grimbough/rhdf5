@@ -265,13 +265,13 @@ H5Aget_type <- function(h5attribute) {
 H5Aread <- function(h5attribute, buf = NULL, bit64conversion = "int") {
   h5checktype(h5attribute, "attribute")
 
-  if (missing(bit64conversion) || bit64conversion == "default") {
+  bit64conversion <- fix_missing_bit64conversion(bit64conversion)
+  if (identical(bit64conversion, "default")) {
     bit64conversion <- "int"
     warning(
       'To rely on the `bit64conversion` argument default, ',
       'you should omit it or explicitly set it to its default value (`"int"`).',
-      ' Passing a missing value or `"default"` will be disallowed in the next ',
-      'release cycle.'
+      ' Passing `"default"` will be disallowed in the next release cycle.'
     )
   }
   bit64conv <- switch(
