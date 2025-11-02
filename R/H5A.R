@@ -265,12 +265,20 @@ H5Aget_type <- function(h5attribute) {
 H5Aread <- function(h5attribute, buf = NULL, bit64conversion = "int") {
   h5checktype(h5attribute, "attribute")
 
+  if (missing(bit64conversion) || bit64conversion == "default") {
+    bit64conversion <- "int"
+    warning(
+      'To rely on the `bit64conversion` argument default, ',
+      'you should omit it or explicitly set it to its default value (`"int"`).',
+      ' Passing a missing value or `"default"` will be disallowed in the next ',
+      'release cycle.'
+    )
+  }
   bit64conv <- switch(
     bit64conversion,
     int = 0L,
     double = 1L,
-    bit64 = 2L,
-    default = 0L
+    bit64 = 2L
   )
   if (bit64conv == 2L && !requireNamespace("bit64", quietly = TRUE)) {
     stop("install package 'bit64' before using bit64conversion='bit64'")
