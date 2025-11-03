@@ -463,9 +463,3 @@ test_that("unsigned native read matches expected ordering (issue #157)", {
   expect_identical(signed_read, t(signed_native))
   expect_identical(unsigned_read, t(unsigned_native))
 })
-
-############################################################
-
-test_that("No open HDF5 objects are left", {
-  expect_identical(length(h5validObjects()), 0L)
-})

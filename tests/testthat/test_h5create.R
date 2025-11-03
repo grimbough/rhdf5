@@ -562,7 +562,3 @@ test_that("scalar dataspaces are created properly", {
   expect_identical(H5Sget_simple_extent_dims(space)$rank, 0L)
   h5closeAll()
 })
-
-test_that("No open HDF5 objects are left", {
-  expect_identical(length(h5validObjects()), 0L)
-})

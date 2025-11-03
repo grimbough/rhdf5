@@ -20,6 +20,7 @@ test_that("BZIP2 filter works for writing", {
   expect_silent(did <- H5Dcreate(fid, "bzip2", tid, sid, dcpl = dcpl))
   expect_silent(H5Dwrite(buf = vec, h5dataset = did))
   expect_silent(H5Dclose(did))
+  expect_silent(H5Pclose(dcpl))
 })
 
 test_that("BLOSC filter works for writing", {
@@ -31,6 +32,7 @@ test_that("BLOSC filter works for writing", {
   expect_silent(did <- H5Dcreate(fid, "blosc_lz", tid, sid, dcpl = dcpl))
   expect_silent(H5Dwrite(buf = vec, h5dataset = did))
   expect_silent(H5Dclose(did))
+  expect_silent(H5Pclose(dcpl))
 })
 
 test_that("LZF filter works for writing", {
@@ -42,6 +44,7 @@ test_that("LZF filter works for writing", {
   expect_silent(did <- H5Dcreate(fid, "lzf", tid, sid, dcpl = dcpl))
   expect_silent(H5Dwrite(buf = vec, h5dataset = did))
   expect_silent(H5Dclose(did))
+  expect_silent(H5Pclose(dcpl))
 })
 
 H5Sclose(sid)

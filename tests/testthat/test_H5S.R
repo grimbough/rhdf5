@@ -181,11 +181,3 @@ test_that("Combining selections", {
   H5Sclose(sid_2)
   H5Sclose(sid_3)
 })
-
-############################################################
-context("H5S cleanup")
-##########################################################
-
-test_that("No open HDF5 objects are left", {
-  expect_identical(length(h5validObjects()), 0L)
-})

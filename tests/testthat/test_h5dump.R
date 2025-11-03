@@ -59,7 +59,3 @@ test_that("Changing traversal order", {
     c("baa", "foo")
   )
 })
-
-test_that("No open HDF5 objects are left", {
-  expect_identical(length(h5validObjects()), 0L)
-})

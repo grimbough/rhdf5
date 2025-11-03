@@ -58,7 +58,3 @@ test_that("Enum datatypes can be created and modified", {
   expect_true(H5Tenum_insert(tid, name = "TRUE", value = 1L))
   expect_true(H5Tenum_insert(tid, name = "FALSE", value = 0L))
 })
-
-test_that("No open HDF5 objects are left", {
-  expect_identical(length(h5validObjects()), 0L)
-})

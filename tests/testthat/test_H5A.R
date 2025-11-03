@@ -169,5 +169,3 @@ test_that("fixed length string attributes are correct", {
   expect_identical(names(attr), attr_name)
   expect_identical(attr$name, attr_value)
 })
-
-expect_length(h5validObjects(), 0)

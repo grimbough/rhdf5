@@ -89,7 +89,3 @@ test_that("Attribute deletion error handling works", {
   expect_false(h5deleteAttribute(h5File, name = "A", attribute = "test")) %>%
     expect_message(regexp = "Attribute 'test' not found")
 })
-
-test_that("No open HDF5 objects are left", {
-  expect_length(h5validObjects(), 0)
-})

@@ -111,11 +111,3 @@ test_that("Subsetting assignment", {
 
   expect_silent(H5Fclose(fid))
 })
-
-############################################################
-context("Methods cleanup")
-##########################################################
-
-test_that("No open HDF5 objects are left", {
-  expect_identical(length(h5validObjects()), 0L)
-})

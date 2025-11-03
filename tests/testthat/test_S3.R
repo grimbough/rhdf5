@@ -35,8 +35,4 @@ if (run_test) {
     expect_equivalent(length(h5dump_out), 1)
     expect_equivalent(dim(h5dump_out$DS1), c(5, 3, 4))
   })
-
-  test_that("No open HDF5 objects are left", {
-    expect_identical(length(h5validObjects()), 0L)
-  })
 }

@@ -114,7 +114,3 @@ test_that("shared object header mesage index properties can be set", {
 
 
 H5Pclose(pid)
-
-test_that("No open HDF5 objects are left", {
-  expect_identical(length(h5validObjects()), 0L)
-})

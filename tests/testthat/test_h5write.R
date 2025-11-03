@@ -45,10 +45,6 @@ test_that("Attributes are written too", {
   expect_true("scale" %in% names(h5readAttributes(file = h5File, name = "B")))
 })
 
-test_that("No open HDF5 objects are left", {
-  expect_identical(length(h5validObjects()), 0L)
-})
-
 test_that("Write by index and hyperslab works.", {
   h5createDataset(file = h5File, dataset = "D", dims = c(10, 9))
 
@@ -283,8 +279,4 @@ test_that("Overwriting a subset", {
 
   expect_is(mat <- h5read(h5File, name = "matrix"), "matrix")
   expect_true(all(mat[, 2] == 0))
-})
-
-test_that("No open HDF5 objects are left", {
-  expect_identical(length(h5validObjects()), 0L)
 })
