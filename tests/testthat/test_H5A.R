@@ -132,6 +132,21 @@ test_that("attributes can be deleted", {
   expect_silent(H5Fclose(fid))
 })
 
+test_that("Missing values in bit64conversion can be passed down", {
+  fid <- H5Fopen(h5File)
+  did <- H5Dopen(fid, name = "A")
+  aid <- H5Aopen(did, name = "uint32")
+
+  f <- function(attribute, bit64conversion) {
+    H5Aread(attribute, bit64conversion = bit64conversion)
+  }
+  expect_warning(f(aid), "To rely on the `bit64conversion` argument default")
+
+  H5Aclose(aid)
+  H5Dclose(did)
+  H5Fclose(fid)
+})
+
 test_that("fixed length string attributes are correct", {
   attr_value <- "Testing"
   attr_name <- "name"
