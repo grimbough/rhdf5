@@ -163,15 +163,8 @@ setMethod(
   signature = c("H5IdComponent", "ANY", "ANY", "ANY"),
   function(x, i, j, ..., drop = TRUE) {
     h5id <- x
-    index <- as.list(sys.call())[-c(1, 2)]
-    for (i in seq_along(index)) {
-      if (index[[i]] == "") {
-        index[i] <- list(NULL)
-      }
-    }
-    if (length(index) == 1 && is.null(index[[1]])) {
-      index <- NULL
-    }
+    index <- extract_Nindex_from_syscall(sys.call(), parent.frame())
+
     isvalid <- H5Iis_valid(h5id)
     if (!isvalid) {
       stop("Bad HDF5 ID. Dataset closed?", call. = FALSE)
@@ -205,16 +198,8 @@ setMethod(
   signature = c("H5IdComponent", "ANY", "ANY", "ANY"),
   function(x, i, j, ..., value) {
     h5id <- x
-    index <- as.list(sys.call())
-    index <- index[-c(1, 2, length(index))]
-    for (i in seq_along(index)) {
-      if (index[[i]] == "") {
-        index[i] <- list(NULL)
-      }
-    }
-    if (length(index) == 1 && is.null(index[[1]])) {
-      index <- NULL
-    }
+    index <- extract_Nindex_from_syscall(sys.call(), parent.frame())
+
     isvalid <- H5Iis_valid(h5id)
     if (!isvalid) {
       stop("Bad HDF5 ID. Dataset closed?", call. = FALSE)
