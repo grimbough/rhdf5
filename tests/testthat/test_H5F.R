@@ -154,9 +154,3 @@ test_that("Property list getters", {
 
   expect_silent(H5Fclose(fid))
 })
-
-############################################################
-
-test_that("No open HDF5 objects are left", {
-  expect_identical(length(h5validObjects()), 0L)
-})

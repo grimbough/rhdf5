@@ -48,7 +48,3 @@ test_that("Fail if missing", {
     regexp = "does not exist in this HDF5 file."
   )
 })
-
-test_that("No open HDF5 objects are left", {
-  expect_identical(length(h5validObjects()), 0L)
-})

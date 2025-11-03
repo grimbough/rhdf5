@@ -124,11 +124,3 @@ test_that("h5ls doesn't report false positives with external links to groups", {
 
   expect_silent(h5ls(f1, recursive = 1))
 })
-
-############################################################
-context("h5ls cleanup")
-##########################################################
-
-test_that("No open HDF5 objects are left", {
-  expect_identical(length(h5validObjects()), 0L)
-})

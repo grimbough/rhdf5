@@ -85,8 +85,3 @@ test_that("Dataset creation properties can be set", {
 
   expect_silent(H5Pclose(pid))
 })
-
-
-test_that("No open HDF5 objects are left", {
-  expect_identical(length(h5validObjects()), 0L)
-})

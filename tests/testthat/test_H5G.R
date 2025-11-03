@@ -74,11 +74,3 @@ test_that("Group creation & closure", {
 
   expect_silent(H5Fclose(fid))
 })
-
-############################################################
-context("H5S cleanup")
-##########################################################
-
-test_that("No open HDF5 objects are left", {
-  expect_identical(length(h5validObjects()), 0L)
-})

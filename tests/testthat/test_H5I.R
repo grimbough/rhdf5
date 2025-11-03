@@ -45,9 +45,12 @@ test_that("getting types", {
   expect_true(H5Iis_valid(did))
   expect_true(H5Iis_valid(gid))
   expect_true(H5Iis_valid(sid))
+})
 
+H5Sclose(sid)
+
+test_that("getting types from closed or invalid objects", {
   ## try with a closed object
-  H5Sclose(sid)
   expect_false(H5Iis_valid(sid))
 
   expect_error(H5Iis_valid("test"))

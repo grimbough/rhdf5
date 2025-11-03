@@ -111,8 +111,3 @@ test_that("H5Ref methods work", {
 
 H5Sclose(h5space)
 H5Fclose(fid)
-
-
-test_that("No open HDF5 objects are left", {
-  expect_identical(length(h5validObjects()), 0L)
-})

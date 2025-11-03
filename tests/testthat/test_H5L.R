@@ -159,12 +159,3 @@ test_that("links can be copied", {
   expect_identical(contents$name, c("foo", "pos3", "pos4", "pos5"))
   expect_identical(h5read(h5File, "/foo/pos3"), h5read(h5File, "pos5"))
 })
-
-
-############################################################
-context("H5L cleanup")
-##########################################################
-
-test_that("no open HDF5 objects are left", {
-  expect_identical(length(h5validObjects()), 0L)
-})

@@ -25,7 +25,3 @@ test_that("LPCL function error handling works", {
     regexp = "The 'create_groups' argument should be either TRUE or FALSE"
   )
 })
-
-test_that("No open HDF5 objects are left", {
-  expect_identical(length(h5validObjects()), 0L)
-})

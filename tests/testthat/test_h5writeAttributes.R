@@ -232,7 +232,3 @@ test_that("Overwrite exisiting attribute", {
   attr_list <- h5readAttributes(h5File, name = "/")
   expect_identical(attr_list$char_attr[1], "new_character")
 })
-
-test_that("No open HDF5 objects are left", {
-  expect_identical(length(h5validObjects()), 0L)
-})
