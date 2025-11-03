@@ -264,7 +264,7 @@ H5Dread <- function(
     sidFile <- h5spaceFile@ID
   }
 
-  bit64conversion <- fix_missing_bit64conversion(bit64conversion)
+  bit64conversion <- fix_missing(bit64conversion, "int")
   if (identical(bit64conversion, "default")) {
     bit64conversion <- "int"
     warning(
