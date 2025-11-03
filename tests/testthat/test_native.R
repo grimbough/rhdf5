@@ -291,7 +291,7 @@ test_that("H5F native functionality", {
   for (native in c(FALSE, TRUE)) {
     h5createGroup(file = h5File, group = "H5Ftest")
 
-    A <- matrix(1:10, nr = 5, nc = 2)
+    A <- matrix(1:10, nrow = 5, ncol = 2)
     h5write(A, h5File, paste0("H5Ftest/A", native), native = native)
 
     h5f <- H5Fopen(h5File, native = native)
@@ -305,7 +305,7 @@ test_that("H5F native functionality", {
 
     H5Oclose(h5d)
 
-    B <- matrix(11:20, nr = 5, nc = 2)
+    B <- matrix(11:20, nrow = 5, ncol = 2)
     h5writeDataset(B, h5f, paste0("H5Ftest/A", native))
 
     H5Fclose(h5f)

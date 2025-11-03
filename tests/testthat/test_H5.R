@@ -35,7 +35,7 @@ test_that("h5closeAll closed everything", {
   did <- H5Dcreate(
     fid,
     name = "dataset",
-    dtype = "H5T_NATIVE_INT8",
+    dtype_id = "H5T_NATIVE_INT8",
     h5space = sid
   )
   ## group

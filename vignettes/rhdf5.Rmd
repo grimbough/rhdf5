@@ -77,8 +77,9 @@ h5write(A, "myhdf5file.h5", "foo/A")
 B <- array(seq(0.1, 2.0, by = 0.1), dim = c(5, 2, 2))
 attr(B, "scale") <- "liter"
 h5write(B, "myhdf5file.h5", "foo/B")
-C <- matrix(paste(LETTERS[1:10], LETTERS[11:20], collapse = ""),
-  nr = 2, nc = 5
+C <- matrix(
+  paste(LETTERS[1:10], LETTERS[11:20], collapse = ""),
+  nrow = 2, ncol = 5
 )
 h5write(C, "myhdf5file.h5", "foo/foobaa/C")
 df <- data.frame(1L:5L, seq(0, 1, length.out = 5),
@@ -191,7 +192,7 @@ specification of the argument index to `h5read()` and
 h5createDataset("myhdf5file.h5", "foo/S", c(5, 8),
   storage.mode = "integer", chunk = c(5, 1), level = 7
 )
-h5write(matrix(1:5, nr = 5, nc = 1),
+h5write(matrix(1:5, nrow = 5, ncol = 1),
   file = "myhdf5file.h5",
   name = "foo/S", index = list(NULL, 1)
 )
@@ -201,17 +202,17 @@ h5write(6:10,
   name = "foo/S", index = list(1, 2:6)
 )
 h5read("myhdf5file.h5", "foo/S")
-h5write(matrix(11:40, nr = 5, nc = 6),
+h5write(matrix(11:40, nrow = 5, ncol = 6),
   file = "myhdf5file.h5",
   name = "foo/S", index = list(1:5, 3:8)
 )
 h5read("myhdf5file.h5", "foo/S")
-h5write(matrix(141:144, nr = 2, nc = 2),
+h5write(matrix(141:144, nrow = 2, ncol = 2),
   file = "myhdf5file.h5",
   name = "foo/S", index = list(3:4, 1:2)
 )
 h5read("myhdf5file.h5", "foo/S")
-h5write(matrix(151:154, nr = 2, nc = 2),
+h5write(matrix(151:154, nrow = 2, ncol = 2),
   file = "myhdf5file.h5",
   name = "foo/S", index = list(2:3, c(3, 6))
 )
@@ -231,7 +232,7 @@ h5createDataset("myhdf5file.h5", "foo/H", c(5, 8),
   storage.mode = "integer",
   chunk = c(5, 1), level = 7
 )
-h5write(matrix(1:5, nr = 5, nc = 1),
+h5write(matrix(1:5, nrow = 5, ncol = 1),
   file = "myhdf5file.h5", name = "foo/H",
   start = c(1, 1)
 )
@@ -241,17 +242,17 @@ h5write(6:10,
   start = c(1, 2), count = c(1, 5)
 )
 h5read("myhdf5file.h5", "foo/H")
-h5write(matrix(11:40, nr = 5, nc = 6),
+h5write(matrix(11:40, nrow = 5, ncol = 6),
   file = "myhdf5file.h5", name = "foo/H",
   start = c(1, 3)
 )
 h5read("myhdf5file.h5", "foo/H")
-h5write(matrix(141:144, nr = 2, nc = 2),
+h5write(matrix(141:144, nrow = 2, ncol = 2),
   file = "myhdf5file.h5", name = "foo/H",
   start = c(3, 1)
 )
 h5read("myhdf5file.h5", "foo/H")
-h5write(matrix(151:154, nr = 2, nc = 2),
+h5write(matrix(151:154, nrow = 2, ncol = 2),
   file = "myhdf5file.h5", name = "foo/H",
   start = c(2, 3), stride = c(1, 3)
 )
