@@ -61,11 +61,6 @@ h5readDataset <- function(
 
     index_null <- vapply(index, is.null, logical(1))
 
-    for (i in seq_along(index)) {
-      if (is.name(index[[i]]) || is.call(index[[i]])) {
-        index[[i]] <- eval(index[[i]])
-      }
-    }
     size <- .H5Sselect_dim(h5spaceFile, index)
     # size <- .H5Sselect_index( h5spaceFile, index, index_null)
     h5spaceMem <- H5Screate_simple(size, native = h5dataset@native)
@@ -336,6 +331,11 @@ h5read <- function(
   } else if (type == "H5I_DATASET") {
     h5dataset <- H5Dopen(loc$H5Identifier, name)
     on.exit(H5Dclose(h5dataset), add = TRUE)
+    for (i in seq_along(index)) {
+      if (is.name(index[[i]]) || is.call(index[[i]])) {
+        index[[i]] <- eval(index[[i]])
+      }
+    }
     obj <- h5readDataset(
       h5dataset,
       index = index,
