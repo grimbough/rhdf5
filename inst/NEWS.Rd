@@ -3,6 +3,17 @@
 
 \section{Changes in version 2.56.0}{
 
+  \subsection{Breaking changes}{
+    \itemize{
+      \item The default value for the `bit64conversion` argument in `H5Aread()`
+      and `H5Dread()` has been set explicitly to `"int"`.
+      Relying on a missing value or `"default"` results in a warning and will be
+      disallowed in the next release cycle.
+      Users should either specify `bit64conversion="int"` explicitly, or omit
+      this argument entirely if they wish to use the provided default.
+    }
+  }
+
   \subsection{Bug fixes}{
     \itemize{
       \item The value ordering (row-major vs column-major) is not correct when
