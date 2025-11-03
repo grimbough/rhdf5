@@ -8,9 +8,9 @@ chunksize = 10L^(0:6)
 level = c(0, 3, 6, 9)
 
 nchunks = length(chunksize)
-WT = matrix(-1, nr = nchunks, nc = 4)
-RT = matrix(-1, nr = nchunks, nc = 4)
-S = matrix(-1, nr = nchunks, nc = 4)
+WT = matrix(-1, nrow = nchunks, ncol = 4)
+RT = matrix(-1, nrow = nchunks, ncol = 4)
+S = matrix(-1, nrow = nchunks, ncol = 4)
 
 for (i in 1:nchunks) {
   for (j in 1:4) {

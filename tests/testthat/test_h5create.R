@@ -275,7 +275,7 @@ test_that("Extendible datasets", {
   h5createDataset(
     file = h5File,
     dataset = "nonCompressed",
-    dim = c(4, 3),
+    dims = c(4, 3),
     maxdims = c(extendible, extendible),
     level = 0
   )

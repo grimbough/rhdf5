@@ -36,7 +36,7 @@ test_that("we can change the size of a dataset", {
     file = h5File,
     dataset = "/size_changer",
     dims = c(0, 0),
-    maxdim = c(H5Sunlimited(), 1000),
+    maxdims = c(H5Sunlimited(), 1000),
     chunk = c(100, 100),
     storage.mode = "integer"
   )
