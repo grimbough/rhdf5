@@ -96,22 +96,22 @@ h5writeDatasetHelper <- function(
 #' Writes an R object to an HDF5 file. This function can be used to write either
 #' full arrays/vectors or subarrays (hyperslabs) within an existing dataset.
 #'
-#' Writes an R object to an HDF5 file. If none of the arguments \code{start,
-#' stride, block, count} is specified, the dataset has the same dimension in the
+#' Writes an R object to an HDF5 file. If none of the arguments `start,
+#' stride, block, count` is specified, the dataset has the same dimension in the
 #' HDF5 file and in memory. If the dataset already exists in the HDF5 file, one
 #' can write subarrays, (so called hyperslabs) to the HDF5 file. The arguments
-#' \code{start, stride, block, count} define the subset of the dataset in the
+#' `start, stride, block, count` define the subset of the dataset in the
 #' HDF5 file that is to be written to. See these introductions to hyperslabs:
-#' \url{https://support.hdfgroup.org/HDF5/Tutor/selectsimple.html},
-#' \url{https://support.hdfgroup.org/HDF5/Tutor/select.html} and
-#' \url{http://ftp.hdfgroup.org/HDF5/Tutor/phypecont.html}. Please note that in
+#' <https://support.hdfgroup.org/HDF5/Tutor/selectsimple.html>,
+#' <https://support.hdfgroup.org/HDF5/Tutor/select.html> and
+#' <http://ftp.hdfgroup.org/HDF5/Tutor/phypecont.html>. Please note that in
 #' R the first dimension is the fastest changing dimension.
 #'
 #' When viewing the HDF5 datasets with any C-program (e.g. HDFView), the order
 #' of dimensions is inverted. In the R interface counting starts with 1, whereas
 #' in the C-programs (e.g. HDFView) counting starts with 0.
 #'
-#' If code \code{obj} is of type 'complex' then it will be written as a compound
+#' If code `obj` is of type 'complex' then it will be written as a compound
 #' datatype to the HDF5, with cols named 'r' and 'i' for the real and
 #' imaginary parts respectively.
 #'
@@ -119,12 +119,12 @@ h5writeDatasetHelper <- function(
 #' @param file The filename (character) of the file in which the dataset will be
 #'   located. For advanced programmers it is possible to provide an object of
 #'   class [H5IdComponent-class] representing a H5 location identifier (file or
-#'   group). See \code{\link{H5Fcreate}}, \code{\link{H5Fopen}},
-#'   \code{\link{H5Gcreate}}, \code{\link{H5Gopen}} to create an object of this
+#'   group). See [H5Fcreate()], [H5Fopen()],
+#'   [H5Gcreate()], [H5Gopen()] to create an object of this
 #'   kind.
 #' @param h5loc An object of class [H5IdComponent-class] representing a H5
-#'   location identifier (file or group). See \code{\link{H5Fcreate}},
-#'   \code{\link{H5Fopen}}, \code{\link{H5Gcreate}}, \code{\link{H5Gopen}} to
+#'   location identifier (file or group). See [H5Fcreate()],
+#'   [H5Fopen()], [H5Gcreate()], [H5Gopen()] to
 #'   create an object of this kind.
 #' @param name The name of the dataset in the HDF5 file.
 #' @param index List of indices for subsetting. The length of the list has to
@@ -135,11 +135,11 @@ h5writeDatasetHelper <- function(
 #'   R). Counting is R-style 1-based. This argument is ignored, if index is not
 #'   NULL.
 #' @param stride The stride of the hypercube. Read the introduction
-#'   \url{http://ftp.hdfgroup.org/HDF5/Tutor/phypecont.html} before using this
+#'   <http://ftp.hdfgroup.org/HDF5/Tutor/phypecont.html> before using this
 #'   argument. R behaves like Fortran in this example. This argument is ignored,
 #'   if index is not NULL.
 #' @param block The block size of the hyperslab. Read the introduction
-#'   \url{http://ftp.hdfgroup.org/HDF5/Tutor/phypecont.html} before using this
+#'   <http://ftp.hdfgroup.org/HDF5/Tutor/phypecont.html> before using this
 #'   argument. R behaves like Fortran in this example. This argument is ignored,
 #'   if index is not NULL.
 #' @param count The number of blocks to be written. This argument is ignored, if
@@ -152,11 +152,11 @@ h5writeDatasetHelper <- function(
 #' @param level The compression level. An integer value between 0 (no
 #'   compression) and 9 (highest and slowest compression). Only used, if the
 #'   dataset does not yet exist. See [h5createDataset()] to create an dataset.
-#' @param native An object of class \code{logical}. If TRUE, array-like objects
+#' @param native An object of class `logical`. If TRUE, array-like objects
 #'   are treated as stored in HDF5 row-major rather than R column-major
-#'   orientation. Using \code{native = TRUE} increases HDF5 file portability
-#'   between programming languages. A file written with \code{native = TRUE}
-#'   should also be read with \code{native = TRUE}
+#'   orientation. Using `native = TRUE` increases HDF5 file portability
+#'   between programming languages. A file written with `native = TRUE`
+#'   should also be read with `native = TRUE`
 #' @param DataFrameAsCompound If true, a `data.frame` will be saved as a
 #'   compound data type. Otherwise it is saved like a list. The advantage of
 #'   saving a data.frame as a compound data type is that it can be read as a
@@ -172,16 +172,16 @@ h5writeDatasetHelper <- function(
 #'   "ASCII" or "UTF-8".
 #' @param createnewfile If `TRUE`, a new file will be created if necessary.
 #' @param write.attributes (logical) If TRUE, all R-attributes attached to the
-#'   object \code{obj} are written to the HDF5 file.
-#' @param \dots Further arguments passed to \code{\link{H5Dwrite}}.
+#'   object `obj` are written to the HDF5 file.
+#' @param \dots Further arguments passed to [H5Dwrite()].
 #'
-#' @return \code{h5write} returns 0 if successful.
+#' @return `h5write` returns 0 if successful.
 #'
 #' @author Bernd Fischer, Mike Smith
 #'
-#' @seealso \code{\link{h5ls}}, \code{\link{h5createFile}},
-#'   \code{\link{h5createDataset}}, \link{rhdf5}
-#' @references \url{https://portal.hdfgroup.org/display/HDF5}
+#' @seealso [h5ls()], [h5createFile()],
+#'   [h5createDataset()], [rhdf5]
+#' @references <https://portal.hdfgroup.org/display/HDF5>
 #' @keywords programming interface IO file
 #' @examples
 #'

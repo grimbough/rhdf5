@@ -1,17 +1,17 @@
 #' Create an HDF5 file
 #'
 #' @param name The name of the HDF5 file to create.
-#' @param flags See \code{h5const("H5F_ACC")} for possible arguments.
+#' @param flags See `h5const("H5F_ACC")` for possible arguments.
 #' @param fcpl,fapl Object object of class [H5IdComponent-class].  This should
 #' representing a file creation property list and a file access property list
 #' respectively. See [H5Pcreate()] or  [H5Pcopy()] to create objects of this
 #' kind.  Leaving as `NULL` will use the default HDF5 settings which are often
 #' sufficient.
-#' @param native An object of class \code{logical}. If `TRUE`, array-like
+#' @param native An object of class `logical`. If `TRUE`, array-like
 #' objects are treated as stored in HDF5 row-major rather than R column-major
-#' orientation. Using \code{native = TRUE} increases HDF5 file portability
-#' between programming languages. A file written with \code{native = TRUE}
-#' should also be read with \code{native = TRUE}.
+#' orientation. Using `native = TRUE` increases HDF5 file portability
+#' between programming languages. A file written with `native = TRUE`
+#' should also be read with `native = TRUE`.
 #'
 #' @export
 H5Fcreate <- function(
@@ -62,7 +62,7 @@ H5Fcreate <- function(
 #' @param flags Character string defining the access mode for opening the file.
 #' @param fapl [H5IdComponent-class] object representing a file access property list.
 #' Leaving this argument as `NULL` will use the default HDF5 properties.
-#' @param native An object of class \code{logical}. If `TRUE`, array-like
+#' @param native An object of class `logical`. If `TRUE`, array-like
 #' objects are treated as stored in HDF5 row-major rather than R column-major
 #' orientation. Using `native = TRUE` increases HDF5 file portability
 #' between programming languages. A file written with `native = TRUE`

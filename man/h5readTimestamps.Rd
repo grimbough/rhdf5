@@ -15,7 +15,7 @@ be read.}
 \value{
 A named list of length 4 containing the timestamps on the object.
 The timestamps themselves are \code{POSIXct} objects (see
-\code{\link[base]{DateTimeClasses}}).
+\code{\link[base:DateTimeClasses]{base::DateTimeClasses()}}).
 }
 \description{
 Read the time stamps associated with an HDF5 group or dataset.
@@ -24,7 +24,7 @@ Read the time stamps associated with an HDF5 group or dataset.
 All timestamps are returned in the UTC timezone.  HDF5 objects
 can have between 0 and 4 timestamps set, depending on the property lists
 provided when they are created or accessed.  Timestamps that are not tracked
-will be returned as the UNIX epoch \code{1970-01-01 UTC}.
+will be returned as the UNIX epoch \verb{1970-01-01 UTC}.
 }
 \examples{
 # example file

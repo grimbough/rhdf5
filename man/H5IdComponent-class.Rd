@@ -40,12 +40,12 @@ the HDF5 dataset.}
 
 \item{i, j, \dots}{Indices specifying elements to extract or replace. Indices
 are \code{numeric} vectors or empty (missing) or \code{NULL}.  Numeric
-values are coerced to integer as by \code{\link[base]{as.integer}} (and
+values are coerced to integer as by \code{\link[base:integer]{base::as.integer()}} (and
 hence truncated towards zero).}
 
 \item{drop}{If \code{TRUE} the result is coerced to the lowest possible dimension
 (see the examples).  This only works for extracting elements, not for the
-replacement.  See \code{\link[base]{drop}} for further details.}
+replacement.  See \code{\link[base:drop]{base::drop()}} for further details.}
 }
 \description{
 A class representing a HDF5 identifier handle. HDF5 identifiers represent

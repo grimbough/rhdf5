@@ -3,23 +3,23 @@
 #' @param attr The R object to be written as an HDF5 attribute.
 #' @param h5obj Normally an object of class [H5IdComponent-class] representing a
 #'   H5 object identifier (file, group, or dataset). See
-#'   \code{\link{H5Fcreate}}, \code{\link{H5Fopen}}, \code{\link{H5Gcreate}},
-#'   \code{\link{H5Gopen}}, \code{\link{H5Dcreate}}, or \code{\link{H5Dopen}} to
+#'   [H5Fcreate()], [H5Fopen()], [H5Gcreate()],
+#'   [H5Gopen()], [H5Dcreate()], or [H5Dopen()] to
 #'   create an object of this kind.  This argument can also be given the path to
 #'   an HDF5 file.
 #' @param name The name of the attribute to be written.
 #' @param h5loc The location of the group or dataset within a file to which the
 #'   attribute should be attached. This argument is only used if the
-#'   \code{h5obj} argument is the path to an HDF5 file, otherwise it is ignored.
+#'   `h5obj` argument is the path to an HDF5 file, otherwise it is ignored.
 #' @param encoding The encoding of the string data type. Valid options are
 #'   "ASCII" and "UTF-8".
 #' @param variableLengthString Whether character vectors should be written as
 #'   variable-length strings into the attributes.
-#' @param asScalar Whether length-1 \code{attr} should be written into a scalar
+#' @param asScalar Whether length-1 `attr` should be written into a scalar
 #'   dataspace.
-#' @param checkForNA Whether a \code{attr} should be checked for \code{NA}
-#'   values before being written.  This only applies of \code{attr} is of type
-#'   logical.  Testing for \code{NA} values can be slow if the object to be
+#' @param checkForNA Whether a `attr` should be checked for `NA`
+#'   values before being written.  This only applies of `attr` is of type
+#'   logical.  Testing for `NA` values can be slow if the object to be
 #'   written is large, so if you are sure no such values will be present this
 #'   argument can be used to disable the testing.
 #' @name h5_writeAttribute

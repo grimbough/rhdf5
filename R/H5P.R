@@ -276,13 +276,13 @@ H5Pget_shared_mesg_phase_change <- function(h5plist) {
 #'   provide three additional details: The AWS region where the files are
 #'   hosted, your AWS access key ID, and your AWS secret access key.  More
 #'   information on how to obtain AWS access keys can be found at
-#'   \url{https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys}.
+#'   <https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys>.
 #'   These are provided as a list to the `s3credentials` argument.  If you
 #'   are accessing public data this argument should be `NULL`.
 #'
 #' @param h5plist [H5IdComponent-class] object representing a file access
 #' property list.
-#' @param s3credentials Either \code{NULL} or a list of length 3 specifying the AWS access credentials (see details).
+#' @param s3credentials Either `NULL` or a list of length 3 specifying the AWS access credentials (see details).
 #'
 #' @examples
 #'
@@ -764,9 +764,9 @@ H5Pset_nbit <- function(h5plist) {
 #' @param h5plist Object of class [H5IdComponent-class] representing a dataset
 #' creation property list.
 #' @param options_mask,pixels_per_block Integer vectors of length 1, setting parameters
-#' of the SZIP algorithm. See \url{https://portal.hdfgroup.org/display/HDF5/H5P_SET_SZIP} for more details.
+#' of the SZIP algorithm. See <https://portal.hdfgroup.org/display/HDF5/H5P_SET_SZIP> for more details.
 #'
-#' @references \url{https://portal.hdfgroup.org/display/HDF5/Szip+Compression+in+HDF+Products}
+#' @references <https://portal.hdfgroup.org/display/HDF5/Szip+Compression+in+HDF+Products>
 #'
 #' @export
 H5Pset_szip <- function(h5plist, options_mask, pixels_per_block) {

@@ -7,7 +7,7 @@
 #' error messages completely.
 #' @return Returns 0 if options are set successfully.
 #' @author Bernd Fischer
-#' @seealso \link{rhdf5}
+#' @seealso [rhdf5]
 #' @examples
 #'
 #' h5errorHandling("normal")

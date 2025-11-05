@@ -6,19 +6,19 @@
 #' identify if file locking is available without throwing an error, and allow
 #' the locking to be disabled for the duration of the R session if needed.
 #'
-#' \code{h5testFileLocking} will create a temporary file and then attempt to
+#' `h5testFileLocking` will create a temporary file and then attempt to
 #' apply a file lock using the appropriate function within the HDF5 library.
 #' The success or failure of the locking is then recorded and the temporary
 #' file removed.  Even relatively low level functions such as
-#' \code{\link{H5Fcreate}} will fail inelegantly if file locking fails.
+#' [H5Fcreate()] will fail inelegantly if file locking fails.
 #'
-#' \code{h5disableFileLocking} will set the environment variable
-#' \code{RHDF5_USE_FILE_LOCKING=FALSE}, which is the recommended was to disable
+#' `h5disableFileLocking` will set the environment variable
+#' `RHDF5_USE_FILE_LOCKING=FALSE`, which is the recommended was to disable
 #' this behaviour if file locking is not supported.  This will only persist
 #' within the current R session.  You can set the environment variable outside
 #' of R if this is a more general issue on your system.
 #'
-#' \code{h5enableFileLocking} will unset the \code{RHDF5_USE_FILE_LOCKING}
+#' `h5enableFileLocking` will unset the `RHDF5_USE_FILE_LOCKING`
 #' environment variable.
 #'
 #' More discussion of HDF5's use of file locking can be found online e.g.
@@ -31,12 +31,12 @@
 #' non-existant location is provided a file with the name will be created,
 #' tested for file locking, and then removed.  Providing an existing file will
 #' result in an error.
-#' @return \code{h5testFileLocking} returns \code{TRUE} if a file can be
-#' successfully locked at the specified location, or \code{FALSE} otherwise.
+#' @return `h5testFileLocking` returns `TRUE` if a file can be
+#' successfully locked at the specified location, or `FALSE` otherwise.
 #'
-#' \code{h5disableFileLocking} and \code{h5enableFileLocking} set are called
+#' `h5disableFileLocking` and `h5enableFileLocking` set are called
 #' for the side effect of setting or unsetting the environment variable
-#' \code{HDF5_USE_FILE_LOCKING} and do not return anything.
+#' `HDF5_USE_FILE_LOCKING` and do not return anything.
 #'
 #' @author Mike Smith
 #' @keywords IO file

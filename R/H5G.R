@@ -93,8 +93,8 @@ H5Gclose <- function(h5group) {
 #' information is sought. It is interpreted relative to `h5loc`.
 #' @param n Position in the index of the group for which information is
 #' retrieved.
-#' @param index_type See \code{h5const("H5_INDEX")} for possible arguments.
-#' @param order See \code{h5const("H5_ITER")} for possible arguments.
+#' @param index_type See `h5const("H5_INDEX")` for possible arguments.
+#' @param order See `h5const("H5_ITER")` for possible arguments.
 #'
 #' @return A list with group information
 #'

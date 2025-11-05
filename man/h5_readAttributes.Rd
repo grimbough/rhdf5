@@ -17,7 +17,7 @@ be read.}
 are treated as stored in HDF5 row-major rather than R column-major
 orientation.}
 
-\item{\dots}{Further arguments passed to \code{\link{H5Aread}}.}
+\item{\dots}{Further arguments passed to \code{\link[=H5Aread]{H5Aread()}}.}
 }
 \value{
 A named list of the same length as the number of attributes attached
