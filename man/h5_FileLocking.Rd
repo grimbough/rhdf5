@@ -16,7 +16,7 @@ h5enableFileLocking()
 \arguments{
 \item{location}{The name of a directory or file to test.  If an existing
 directory is provided a temporary file will be created in this folder.  If
-non-existant location is provided a file with the name will be created,
+non-existent location is provided a file with the name will be created,
 tested for file locking, and then removed.  Providing an existing file will
 result in an error.}
 }
