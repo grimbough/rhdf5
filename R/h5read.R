@@ -151,15 +151,15 @@ h5readDataset <- function(
 #' existing dataset.
 #'
 #' Read an R object from an HDF5 file. If none of the arguments
-#' \code{start, stride, block, count} are specified, the dataset has the same
+#' `start, stride, block, count` are specified, the dataset has the same
 #' dimension in the HDF5 file and in memory. If the dataset already exists in
 #' the HDF5 file, one can read subarrays, so called hyperslabs from
-#' the HDF5 file. The arguments \code{start, stride, block, count} define the
+#' the HDF5 file. The arguments `start, stride, block, count` define the
 #' subset of the dataset in the HDF5 file that is to be read/written. See these
 #' introductions to hyperslabs:
-#' \url{https://support.hdfgroup.org/HDF5/Tutor/selectsimple.html},
-#' \url{https://support.hdfgroup.org/HDF5/Tutor/select.html} and
-#' \url{http://ftp.hdfgroup.org/HDF5/Tutor/phypecont.html}. Please note that in
+#' <https://support.hdfgroup.org/HDF5/Tutor/selectsimple.html>,
+#' <https://support.hdfgroup.org/HDF5/Tutor/select.html> and
+#' <http://ftp.hdfgroup.org/HDF5/Tutor/phypecont.html>. Please note that in
 #' R the first dimension is the fastest changing dimension.
 #'
 #' When viewing the HDF5 datasets with any C-program (e.g. HDFView), the order
@@ -172,13 +172,13 @@ h5readDataset <- function(
 #' columns, and these are named 'r' and 'i' rhdf5 will assume the data is
 #' intended to be complex numbers and will read this into R's complex type.  If
 #' that is not the case, you will need to extract the two values separately
-#' using the \code{Re()} and \code{Im()} accessors manually.
+#' using the `Re()` and `Im()` accessors manually.
 #'
 #' @param file The file name (character) of the file in which the dataset is
 #' be located. It is possible to provide an object of
 #' class [H5IdComponent-class] representing a H5 location identifier
-#' (file or group). See \code{\link{H5Fcreate}}, \code{\link{H5Fopen}},
-#' \code{\link{H5Gcreate}}, \code{\link{H5Gopen}} to create an object of this
+#' (file or group). See [H5Fcreate()], [H5Fopen()],
+#' [H5Gcreate()], [H5Gopen()] to create an object of this
 #' kind.
 #' @param name The name of the dataset in the HDF5 file.
 #' @param index List of indices for subsetting. The length of the list has to
@@ -189,20 +189,20 @@ h5readDataset <- function(
 #' R). Counting is R-style 1-based. This argument is ignored, if index is not
 #' NULL.
 #' @param stride The stride of the hypercube. Read the introduction
-#' \url{http://ftp.hdfgroup.org/HDF5/Tutor/phypecont.html} before using this
+#' <http://ftp.hdfgroup.org/HDF5/Tutor/phypecont.html> before using this
 #' argument. R behaves like Fortran in this example. This argument is ignored,
 #' if index is not NULL.
 #' @param block The block size of the hyperslab. Read the introduction
-#' \url{http://ftp.hdfgroup.org/HDF5/Tutor/phypecont.html} before using this
+#' <http://ftp.hdfgroup.org/HDF5/Tutor/phypecont.html> before using this
 #' argument. R behaves like Fortran in this example. This argument is ignored,
 #' if index is not NULL.
 #' @param count The number of blocks to be read. This argument is ignored,
 #' if index is not NULL.
-#' @param native An object of class \code{logical}. If TRUE, array-like objects
+#' @param native An object of class `logical`. If TRUE, array-like objects
 #' are treated as stored in HDF5 row-major rather than R column-major
-#' orientation. Using \code{native = TRUE} increases HDF5 file portability
-#' between programming languages. A file written with \code{native = TRUE}
-#' should also be read with \code{native = TRUE}
+#' orientation. Using `native = TRUE` increases HDF5 file portability
+#' between programming languages. A file written with `native = TRUE`
+#' should also be read with `native = TRUE`
 #' @param compoundAsDataFrame If true, a compound datatype will be coerced to a
 #' data.frame. This is not possible, if the dataset is multi-dimensional.
 #' Otherwise the compound datatype will be returned as a list. Nested compound
@@ -221,12 +221,12 @@ h5readDataset <- function(
 #' treated as a URL to an Amazon S3 bucket, rather than a local file path.
 #' @param s3credentials A list of length three, providing the credentials for
 #' accessing files in a private Amazon S3 bucket.
-#' @param \dots Further arguments passed to \code{\link{H5Dread}}.
+#' @param \dots Further arguments passed to [H5Dread()].
 #'
-#' @return \code{h5read} returns an array with the data read.
+#' @return `h5read` returns an array with the data read.
 #'
 #' @author Bernd Fischer, Mike Smith
-#' @seealso \code{\link{h5ls}}
+#' @seealso [h5ls()]
 #' @examples
 #'
 #' h5File <- tempfile(pattern = "ex_hdf5file.h5")

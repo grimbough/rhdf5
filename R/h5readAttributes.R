@@ -3,10 +3,10 @@
 #' @param file Character vector of length 1, giving the path to the HDF5
 #' @param name Path within the HDF5 file to the object whose attributes should
 #'   be read.
-#' @param native An object of class \code{logical}. If TRUE, array-like objects
+#' @param native An object of class `logical`. If TRUE, array-like objects
 #'   are treated as stored in HDF5 row-major rather than R column-major
 #'   orientation.
-#' @param \dots Further arguments passed to \code{\link{H5Aread}}.
+#' @param \dots Further arguments passed to [H5Aread()].
 #'
 #' @returns A named list of the same length as the number of attributes attached
 #'   to the specific object.  The names of the list entries correspond to the

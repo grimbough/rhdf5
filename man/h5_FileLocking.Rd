@@ -40,7 +40,7 @@ the locking to be disabled for the duration of the R session if needed.
 apply a file lock using the appropriate function within the HDF5 library.
 The success or failure of the locking is then recorded and the temporary
 file removed.  Even relatively low level functions such as
-\code{\link{H5Fcreate}} will fail inelegantly if file locking fails.
+\code{\link[=H5Fcreate]{H5Fcreate()}} will fail inelegantly if file locking fails.
 
 \code{h5disableFileLocking} will set the environment variable
 \code{RHDF5_USE_FILE_LOCKING=FALSE}, which is the recommended was to disable

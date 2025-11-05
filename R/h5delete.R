@@ -4,8 +4,8 @@
 #'
 #' @param file The filename (character) of the file in which the object is
 #' located.
-#' @param name For \code{h5delete} the name of the object to be deleted. For
-#' \code{h5deleteAttribute} the name of the object to which the attribute
+#' @param name For `h5delete` the name of the object to be deleted. For
+#' `h5deleteAttribute` the name of the object to which the attribute
 #' belongs.
 #' @author Mike Smith
 #' @name h5_delete

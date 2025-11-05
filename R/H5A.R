@@ -7,7 +7,7 @@
 #' identifier (file, group, or dataset). See [H5Fcreate()], [H5Fopen()],
 #' [H5Gcreate()], [H5Gopen()], [H5Dcreate()], or [H5Dopen()] to create an object of this kind.
 #' @param name The name of the attribute (character).
-#' @param dtype_id A character name of a datatype. See \code{h5const("H5T")} for
+#' @param dtype_id A character name of a datatype. See `h5const("H5T")` for
 #' possible datatypes. Can also be an integer representing an HDF5 datatype.
 #' Only simple datatypes are allowed for attributes.
 #' @param h5space An object of class [H5IdComponent-class] representing a H5
@@ -53,8 +53,8 @@ H5Acreate <- function(h5obj, name, dtype_id, h5space) {
 #' @param objname The name of the object the attribute belongs to.
 #' @param n Opens attribute number `n` in the given order and index. Indexing is C-style, base-0,
 #' so the first attribute is opened with `n=0`.
-#' @param index_type See \code{h5const("H5_INDEX")} for possible arguments.
-#' @param order See \code{h5const("H5_ITER")} for possible arguments.
+#' @param index_type See `h5const("H5_INDEX")` for possible arguments.
+#' @param order See `h5const("H5_ITER")` for possible arguments.
 #'
 #' @return An object of class [H5IdComponent-class] representing a H5 attribute identifier.
 #'
@@ -252,7 +252,7 @@ H5Aget_type <- function(h5attribute) {
 #' @param h5attribute An object of class [H5IdComponent-class] representing an
 #' attribute.  Normally created by [H5Aopen()] or similar.
 #' @param buf Optional buffer to store retrieved values. The buffer size has to
-#' fit the size of the memory space \code{h5spaceMem}. No extra memory will be
+#' fit the size of the memory space `h5spaceMem`. No extra memory will be
 #' allocated for the data. Default is `NULL` which means the function will
 #' return the attribute data.
 #' @param bit64conversion Defines how 64-bit integers are converted. (See

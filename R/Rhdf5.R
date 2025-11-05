@@ -3,13 +3,13 @@
 #' A list of all valid HDF5 identifiers. H5 objects should be closed after usage
 #' to release resources.
 #'
-#' @param native An object of class \code{logical}. If TRUE, array-like objects
+#' @param native An object of class `logical`. If TRUE, array-like objects
 #' are treated as stored in HDF5 row-major rather than R column-major
-#' orientation. Using \code{native = TRUE} increases HDF5 file portability
-#' between programming languages. A file written with \code{native = TRUE}
-#' should also be read with \code{native = TRUE}
-#' @return \code{h5validObjects} returns a list of [H5IdComponent-class]
-#' objects. \code{h5listIdentifier} prints the valid identifiers on screen and
+#' orientation. Using `native = TRUE` increases HDF5 file portability
+#' between programming languages. A file written with `native = TRUE`
+#' should also be read with `native = TRUE`
+#' @return `h5validObjects` returns a list of [H5IdComponent-class]
+#' objects. `h5listIdentifier` prints the valid identifiers on screen and
 #' returns NULL.
 #' @author Bernd Fischer, Mike Smith
 #' @examples

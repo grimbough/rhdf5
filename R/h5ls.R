@@ -38,11 +38,11 @@ h5lsConvertToDataframe <- function(L, all = FALSE, native) {
 #' between programming languages. A file written with `native = TRUE`
 #' should also be read with `native = TRUE`
 #'
-#' @return \code{h5ls} returns a `data.frame` with the file content.
+#' @return `h5ls` returns a `data.frame` with the file content.
 #'
 #' @author Bernd Fischer, Mike L. Smith
 #' @seealso [h5dump()]
-#' @references \url{https://portal.hdfgroup.org/display/HDF5}
+#' @references <https://portal.hdfgroup.org/display/HDF5>
 #' @keywords programming interface IO file
 #' @examples
 #'

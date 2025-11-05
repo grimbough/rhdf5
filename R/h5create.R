@@ -10,7 +10,7 @@
 #'
 #' @author Bernd Fischer
 #' @seealso [h5createGroup()], [h5createDataset()],
-#' [h5read()], [h5write()], \link{rhdf5}
+#' [h5read()], [h5write()], [rhdf5]
 #' @examples
 #'
 #' h5File <- tempfile(pattern = "ex_createFile.h5")
@@ -308,23 +308,23 @@ h5createGroup <- function(file, group) {
 #' `size`, but the whole dataset can be compressed. This explored more in the
 #' examples below.
 #'
-#' The \code{filter} argument can take several options matching to compression
+#' The `filter` argument can take several options matching to compression
 #' filters distributed in either with the HDF5 library in \pkg{Rhdf5lib} or via
 #' the \pkg{rhdf5filters} package.  The plugins available and the corresponding
 #' values for selecting them are shown below:
 #'
 #' \describe{ \item{zlib: Ubiquitous deflate compression algorithm used in GZIP
 #' or ZIP files.  All three options below achieve the same result.}{ \itemize{
-#' \item\code{"GZIP"}, \item\code{"ZLIB"}, \item\code{"DEFLATE"} } } \item{szip:
+#' \item`"GZIP"`, \item`"ZLIB"`, \item`"DEFLATE"` } } \item{szip:
 #' Compression algorithm maintained by the HDF5 group.}{ \itemize{
-#' \item\code{"SZIP"} } } \item{bzip2}{ \itemize{ \item\code{"BZIP2"} } }
+#' \item`"SZIP"` } } \item{bzip2}{ \itemize{ \item`"BZIP2"` } }
 #' \item{BLOSC meta compressor: As a meta-compressor BLOSC wraps several
 #' different compression algorithms.  Each of the options below will active a
-#' different compression filter. }{ \itemize{ \item\code{"BLOSC_BLOSCLZ"}
-#' \item\code{"BLOSC_LZ4"} \item\code{"BLOSC_LZ4HC"} \item\code{"BLOSC_SNAPPY"}
-#' \item\code{"BLOSC_ZLIB"} \item\code{"BLOSC_ZSTD"} } } \item{lzf}{ \itemize{
-#' \item\code{"LZF"} } } \item{Disable: It is possible to write chunks without
-#' any compression applied.}{ \itemize{ \item\code{"NONE"} } } }
+#' different compression filter. }{ \itemize{ \item`"BLOSC_BLOSCLZ"`
+#' \item`"BLOSC_LZ4"` \item`"BLOSC_LZ4HC"` \item`"BLOSC_SNAPPY"`
+#' \item`"BLOSC_ZLIB"` \item`"BLOSC_ZSTD"` } } \item{lzf}{ \itemize{
+#' \item`"LZF"` } } \item{Disable: It is possible to write chunks without
+#' any compression applied.}{ \itemize{ \item`"NONE"` } } }
 #'
 #' @param file The filename (character) of the file in which the dataset will be
 #'   located. For advanced programmers it is possible to provide an object of
@@ -339,22 +339,22 @@ h5createGroup <- function(file, group) {
 #'   with a C-programm (e.g. HDFView), because the fastest changing dimension in
 #'   R is the first one, whereas the fastest changing dimension in C is the last
 #'   one.
-#' @param maxdims The maximum extension of the array. Use \code{H5Sunlimited()}
+#' @param maxdims The maximum extension of the array. Use `H5Sunlimited()`
 #'   to indicate an extensible dimension.
 #' @param storage.mode The storage mode of the data to be written. Can be
-#'   obtained by \code{storage.mode(mydata)}.
+#'   obtained by `storage.mode(mydata)`.
 #' @param H5type Advanced programmers can specify the datatype of the dataset
-#'   within the file. See \code{h5const("H5T")} for a list of available
-#'   datatypes. If \code{H5type} is specified the argument \code{storage.mode}
-#'   is ignored. It is recommended to use \code{storage.mode}
+#'   within the file. See `h5const("H5T")` for a list of available
+#'   datatypes. If `H5type` is specified the argument `storage.mode`
+#'   is ignored. It is recommended to use `storage.mode`
 #' @param size For `storage.mode='character'` the maximum string length to use.
 #'   The default value of `NULL` will result in using variable length strings.
 #'   See the details for more information on this option.
 #' @param encoding The encoding of the string data type. Valid options are
 #'   "ASCII" or "UTF-8".
 #' @param chunk The chunk size used to store the dataset. It is an integer
-#'   vector of the same length as \code{dims}. This argument is usually set
-#'   together with a compression property (argument \code{level}).
+#'   vector of the same length as `dims`. This argument is usually set
+#'   together with a compression property (argument `level`).
 #' @param fillValue Standard value for filling the dataset. The storage.mode of
 #'   value has to be convertible to the dataset type by HDF5.
 #' @param level The compression level used. An integer value between 0 (no
@@ -364,11 +364,11 @@ h5createGroup <- function(file, group) {
 #'   on the options that can be provided here.
 #' @param shuffle Logical defining whether the byte-shuffle algorithm should be
 #'   applied to data prior to compression.
-#' @param native An object of class \code{logical}. If TRUE, array-like objects
+#' @param native An object of class `logical`. If TRUE, array-like objects
 #'   are treated as stored in HDF5 row-major rather than R column-major
-#'   orientation. Using \code{native = TRUE} increases HDF5 file portability
-#'   between programming languages. A file written with \code{native = TRUE}
-#'   should also be read with \code{native = TRUE}
+#'   orientation. Using `native = TRUE` increases HDF5 file portability
+#'   between programming languages. A file written with `native = TRUE`
+#'   should also be read with `native = TRUE`
 #' @return Returns (invisibly) `TRUE` if dataset was created successfully and `FALSE` otherwise.
 #' @author Bernd Fischer, Mike L. Smith
 #' @seealso [h5createFile()], [h5createGroup()], [h5read()], [h5write()]
@@ -551,38 +551,38 @@ h5createDataset <- function(
 #'   located. For advanced programmers it is possible to provide an object of
 #'   class [H5IdComponent-class] representing an H5 location identifier. See
 #'   [H5Fcreate()], [H5Fopen()], [H5Gcreate()], [H5Gopen()] to create an object
-#'   of this kind. The \code{file} argument is not required, if the argument
-#'   \code{obj} is of type \code{H5IdComponent}.
+#'   of this kind. The `file` argument is not required, if the argument
+#'   `obj` is of type `H5IdComponent`.
 #' @param attr Name of the attribute to be created.
 #' @param dims The dimensions of the attribute as a numeric vector. If
-#'   \code{NULL}, a scalar dataspace will be created instead.
+#'   `NULL`, a scalar dataspace will be created instead.
 #' @param maxdims The maximum extension of the attribute.
 #' @param storage.mode The storage mode of the data to be written. Can be
-#'   obtained by \code{storage.mode(mydata)}.
+#'   obtained by `storage.mode(mydata)`.
 #' @param H5type Advanced programmers can specify the datatype of the dataset
-#'   within the file. See \code{h5const("H5T")} for a list of available
-#'   datatypes. If \code{H5type} is specified the argument \code{storage.mode}
-#'   is ignored. It is recommended to use \code{storage.mode}
-#' @param size The maximum string length when \code{storage.mode='character'}.
-#'   If this is specified, HDF5 stores each string of \code{attr} as fixed
+#'   within the file. See `h5const("H5T")` for a list of available
+#'   datatypes. If `H5type` is specified the argument `storage.mode`
+#'   is ignored. It is recommended to use `storage.mode`
+#' @param size The maximum string length when `storage.mode='character'`.
+#'   If this is specified, HDF5 stores each string of `attr` as fixed
 #'   length character arrays. Together with compression, this should be
 #'   efficient.
 #'
-#'   If this argument is set to \code{NULL}, HDF5 will instead store
+#'   If this argument is set to `NULL`, HDF5 will instead store
 #'   variable-length strings.
 #' @param encoding The encoding of the string data type i.e. when `storage.mode
 #'   = 'character'`. Valid options are "ASCII" and "UTF-8".
-#' @param native An object of class \code{logical}. If TRUE, array-like objects
+#' @param native An object of class `logical`. If TRUE, array-like objects
 #'   are treated as stored in HDF5 row-major rather than R column-major
-#'   orientation. Using \code{native = TRUE} increases HDF5 file portability
-#'   between programming languages. A file written with \code{native = TRUE}
-#'   should also be read with \code{native = TRUE}
+#'   orientation. Using `native = TRUE` increases HDF5 file portability
+#'   between programming languages. A file written with `native = TRUE`
+#'   should also be read with `native = TRUE`
 #' @return Returns TRUE is attribute was created successfully and FALSE
 #'   otherwise.
 #' @author Bernd Fischer
 #' @seealso [h5createFile()], [h5createGroup()], [h5createDataset()],
-#'   [h5read()], [h5write()], \link{rhdf5}
-#' @references \url{https://portal.hdfgroup.org/display/HDF5}
+#'   [h5read()], [h5write()], [rhdf5]
+#' @references <https://portal.hdfgroup.org/display/HDF5>
 #' @keywords programming interface IO file
 #' @examples
 #'

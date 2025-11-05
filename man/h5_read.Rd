@@ -27,8 +27,8 @@ h5read(
 \item{file}{The file name (character) of the file in which the dataset is
 be located. It is possible to provide an object of
 class \linkS4class{H5IdComponent} representing a H5 location identifier
-(file or group). See \code{\link{H5Fcreate}}, \code{\link{H5Fopen}},
-\code{\link{H5Gcreate}}, \code{\link{H5Gopen}} to create an object of this
+(file or group). See \code{\link[=H5Fcreate]{H5Fcreate()}}, \code{\link[=H5Fopen]{H5Fopen()}},
+\code{\link[=H5Gcreate]{H5Gcreate()}}, \code{\link[=H5Gopen]{H5Gopen()}} to create an object of this
 kind.}
 
 \item{name}{The name of the dataset in the HDF5 file.}
@@ -73,7 +73,7 @@ attached to the respective R object.}
 \item{drop}{(logical) If TRUE, the HDF5 object is read as a vector with \code{NULL}
 dim attributes.}
 
-\item{\dots}{Further arguments passed to \code{\link{H5Dread}}.}
+\item{\dots}{Further arguments passed to \code{\link[=H5Dread]{H5Dread()}}.}
 
 \item{native}{An object of class \code{logical}. If TRUE, array-like objects
 are treated as stored in HDF5 row-major rather than R column-major
@@ -97,10 +97,10 @@ existing dataset.
 }
 \details{
 Read an R object from an HDF5 file. If none of the arguments
-\code{start, stride, block, count} are specified, the dataset has the same
+\verb{start, stride, block, count} are specified, the dataset has the same
 dimension in the HDF5 file and in memory. If the dataset already exists in
 the HDF5 file, one can read subarrays, so called hyperslabs from
-the HDF5 file. The arguments \code{start, stride, block, count} define the
+the HDF5 file. The arguments \verb{start, stride, block, count} define the
 subset of the dataset in the HDF5 file that is to be read/written. See these
 introductions to hyperslabs:
 \url{https://support.hdfgroup.org/HDF5/Tutor/selectsimple.html},
@@ -147,7 +147,7 @@ h5read("https://rhdf5-public.s3.eu-central-1.amazonaws.com/rhdf5ex_t_float_3d.h5
 
 }
 \seealso{
-\code{\link{h5ls}}
+\code{\link[=h5ls]{h5ls()}}
 }
 \author{
 Bernd Fischer, Mike Smith

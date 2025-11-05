@@ -150,12 +150,12 @@ setMethod(`$<-`, signature = c("H5IdComponent"), function(x, name, value) {
 #' @param x Object of class `H5IdComponent` representing the HDF5 dataset from
 #'   which to extract element(s) or in which to replace element(s).
 #' @param i,j,\dots Indices specifying elements to extract or replace. Indices
-#'   are \code{numeric} vectors or empty (missing) or \code{NULL}.  Numeric
-#'   values are coerced to integer as by \code{\link[base]{as.integer}} (and
+#'   are `numeric` vectors or empty (missing) or `NULL`.  Numeric
+#'   values are coerced to integer as by [base::as.integer()] (and
 #'   hence truncated towards zero).
 #' @param drop If `TRUE` the result is coerced to the lowest possible dimension
 #'   (see the examples).  This only works for extracting elements, not for the
-#'   replacement.  See \code{\link[base]{drop}} for further details.
+#'   replacement.  See [base::drop()] for further details.
 #'
 #' @export
 setMethod(

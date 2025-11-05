@@ -3,8 +3,8 @@
 #' Access to HDF5 constants.
 #'
 #' These functions provide a list of HDF5 constants that are defined in the R
-#' package. \code{h5constType} provides a list of group names and
-#' \code{h5const} gives the constants defined within a group. \code{h5default}
+#' package. `h5constType` provides a list of group names and
+#' `h5const` gives the constants defined within a group. `h5default`
 #' gives the default choice for each group.
 #'
 #' @param type A character name of a group of constants.
