@@ -22,8 +22,8 @@
 #' environment variable.
 #'
 #' More discussion of HDF5's use of file locking can be found online e.g.
-#' https://forum.hdfgroup.org/t/hdf5-1-10-0-and-flock/3761/4 or
-#' https://forum.hdfgroup.org/t/hdf5-files-on-nfs/3985/5
+#' <https://forum.hdfgroup.org/t/hdf5-1-10-0-and-flock/3761/4> or
+#' <https://forum.hdfgroup.org/t/hdf5-files-on-nfs/3985/5>
 #'
 #' @aliases h5testFileLocking h5enableFileLocking h5disableFileLocking
 #' @param location The name of a directory or file to test.  If an existing

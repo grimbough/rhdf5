@@ -97,10 +97,10 @@ existing dataset.
 }
 \details{
 Read an R object from an HDF5 file. If none of the arguments
-\verb{start, stride, block, count} are specified, the dataset has the same
+\code{start}, \code{stride}, \code{block}, \code{count} are specified, the dataset has the same
 dimension in the HDF5 file and in memory. If the dataset already exists in
 the HDF5 file, one can read subarrays, so called hyperslabs from
-the HDF5 file. The arguments \verb{start, stride, block, count} define the
+the HDF5 file. The arguments \code{start}, \code{stride}, \code{block}, \code{count} define the
 subset of the dataset in the HDF5 file that is to be read/written. See these
 introductions to hyperslabs:
 \url{https://support.hdfgroup.org/HDF5/Tutor/selectsimple.html},
@@ -118,7 +118,7 @@ complex numbers.  If your datasets is a compound datatype, has only two
 columns, and these are named 'r' and 'i' rhdf5 will assume the data is
 intended to be complex numbers and will read this into R's complex type.  If
 that is not the case, you will need to extract the two values separately
-using the \code{Re()} and \code{Im()} accessors manually.
+using the \code{\link[=Re]{Re()}} and \code{\link[=Im]{Im()}} accessors manually.
 }
 \examples{
 

@@ -39,7 +39,7 @@ with a C-programm (e.g. HDFView), because the fastest changing dimension in
 R is the first one, whereas the fastest changing dimension in C is the last
 one.}
 
-\item{maxdims}{The maximum extension of the array. Use \code{H5Sunlimited()}
+\item{maxdims}{The maximum extension of the array. Use \code{\link[=H5Sunlimited]{H5Sunlimited()}}
 to indicate an extensible dimension.}
 
 \item{storage.mode}{The storage mode of the data to be written. Can be

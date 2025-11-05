@@ -339,7 +339,7 @@ h5createGroup <- function(file, group) {
 #'   with a C-programm (e.g. HDFView), because the fastest changing dimension in
 #'   R is the first one, whereas the fastest changing dimension in C is the last
 #'   one.
-#' @param maxdims The maximum extension of the array. Use `H5Sunlimited()`
+#' @param maxdims The maximum extension of the array. Use [H5Sunlimited()]
 #'   to indicate an extensible dimension.
 #' @param storage.mode The storage mode of the data to be written. Can be
 #'   obtained by `storage.mode(mydata)`.

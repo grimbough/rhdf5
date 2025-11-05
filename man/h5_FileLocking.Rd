@@ -52,8 +52,8 @@ of R if this is a more general issue on your system.
 environment variable.
 
 More discussion of HDF5's use of file locking can be found online e.g.
-https://forum.hdfgroup.org/t/hdf5-1-10-0-and-flock/3761/4 or
-https://forum.hdfgroup.org/t/hdf5-files-on-nfs/3985/5
+\url{https://forum.hdfgroup.org/t/hdf5-1-10-0-and-flock/3761/4} or
+\url{https://forum.hdfgroup.org/t/hdf5-files-on-nfs/3985/5}
 }
 \examples{
 

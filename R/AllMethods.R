@@ -77,7 +77,7 @@ setMethod(`&`, signature = c("H5IdComponent", "character"), function(e1, e2) {
 })
 
 #' @describeIn H5IdComponent Reads the HDF5 object `name` in the HDF5 location `x`. `x` can either be
-#'   a file handle as returned by [H5Fopen] or a group handle as e.g. returned by
+#'   a file handle as returned by [H5Fopen()] or a group handle as e.g. returned by
 #'   `h5f$g1` or `h5f$'/g1/g2'`.
 #'
 #' @param x An `H5IdComponent` object representing an H5 file or group.
@@ -116,13 +116,13 @@ setMethod(`$`, signature = c("H5IdComponent"), function(x, name) {
 })
 
 #' @describeIn H5IdComponent Writes the assigned object to to the HDF5 file at
-#'   location e1. e1 can either be a file handle as returned by [H5Fopen] or a
+#'   location e1. e1 can either be a file handle as returned by [H5Fopen()] or a
 #'   group handle as e.g. returned by h5f$g1 or h5f$'/g1/g2's. The storage.mode
 #'   of the assigned object has to be compatible to the datatype of the HDF5
 #'   dataset. The dimension of the assigned object have to be identical the
 #'   dimensions of the HDF5 dataset. To create a new HDF5 dataset with specific
 #'   properties (e.g. compression level or chunk size), please use the function
-#'   [h5createDataset] first.
+#'   [h5createDataset()] first.
 #'
 #' @export
 setMethod(`$<-`, signature = c("H5IdComponent"), function(x, name, value) {
@@ -196,7 +196,7 @@ setMethod(
 #' @describeIn H5IdComponent Subsetting of an HDF5 dataset. The function writes
 #'   an R data object to a subset of an HDF5 dataset. The given dimensions have
 #'   to fit the dimensions of the HDF5 dataset. The HDF5 dataset has to be
-#'   created beforehand, e.g. by [h5createDataset].
+#'   created beforehand, e.g. by [h5createDataset()].
 #'
 #' @param value Array-like \R object containing value to be inserted into
 #' the HDF5 dataset.

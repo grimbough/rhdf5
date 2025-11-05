@@ -151,10 +151,10 @@ h5readDataset <- function(
 #' existing dataset.
 #'
 #' Read an R object from an HDF5 file. If none of the arguments
-#' `start, stride, block, count` are specified, the dataset has the same
+#' `start`, `stride`, `block`, `count` are specified, the dataset has the same
 #' dimension in the HDF5 file and in memory. If the dataset already exists in
 #' the HDF5 file, one can read subarrays, so called hyperslabs from
-#' the HDF5 file. The arguments `start, stride, block, count` define the
+#' the HDF5 file. The arguments `start`, `stride`, `block`, `count` define the
 #' subset of the dataset in the HDF5 file that is to be read/written. See these
 #' introductions to hyperslabs:
 #' <https://support.hdfgroup.org/HDF5/Tutor/selectsimple.html>,
@@ -172,7 +172,7 @@ h5readDataset <- function(
 #' columns, and these are named 'r' and 'i' rhdf5 will assume the data is
 #' intended to be complex numbers and will read this into R's complex type.  If
 #' that is not the case, you will need to extract the two values separately
-#' using the `Re()` and `Im()` accessors manually.
+#' using the [Re()] and [Im()] accessors manually.
 #'
 #' @param file The file name (character) of the file in which the dataset is
 #' be located. It is possible to provide an object of
