@@ -31,7 +31,7 @@
 #' non-existent location is provided a file with the name will be created,
 #' tested for file locking, and then removed.  Providing an existing file will
 #' result in an error.
-#' @return `h5testFileLocking` returns `TRUE` if a file can be
+#' @returns `h5testFileLocking` returns `TRUE` if a file can be
 #' successfully locked at the specified location, or `FALSE` otherwise.
 #'
 #' `h5disableFileLocking` and `h5enableFileLocking` set are called

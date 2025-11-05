@@ -6,7 +6,7 @@
 #'
 #' @param file The filename of the HDF5 file.
 #'
-#' @return Returns (invisibly) `TRUE` is file was created successfully and `FALSE` otherwise.
+#' @returns Returns (invisibly) `TRUE` is file was created successfully and `FALSE` otherwise.
 #'
 #' @author Bernd Fischer
 #' @seealso [h5createGroup()], [h5createDataset()],
@@ -61,7 +61,7 @@ h5createFile <- function(file) {
 #' groupnames, e.g. `"/group1/group2/newgroup"`, but the function will fail if the
 #' top level groups do not exists.
 #'
-#' @return Returns TRUE is group was created successfully and FALSE otherwise.
+#' @returns Returns TRUE is group was created successfully and FALSE otherwise.
 #' @author Bernd Fischer
 #' @seealso [h5createFile()], [h5createDataset()],
 #' [h5read()], [h5write()]
@@ -369,7 +369,7 @@ h5createGroup <- function(file, group) {
 #'   orientation. Using `native = TRUE` increases HDF5 file portability
 #'   between programming languages. A file written with `native = TRUE`
 #'   should also be read with `native = TRUE`
-#' @return Returns (invisibly) `TRUE` if dataset was created successfully and `FALSE` otherwise.
+#' @returns Returns (invisibly) `TRUE` if dataset was created successfully and `FALSE` otherwise.
 #' @author Bernd Fischer, Mike L. Smith
 #' @seealso [h5createFile()], [h5createGroup()], [h5read()], [h5write()]
 #' @examples
@@ -577,7 +577,7 @@ h5createDataset <- function(
 #'   orientation. Using `native = TRUE` increases HDF5 file portability
 #'   between programming languages. A file written with `native = TRUE`
 #'   should also be read with `native = TRUE`
-#' @return Returns TRUE is attribute was created successfully and FALSE
+#' @returns Returns TRUE is attribute was created successfully and FALSE
 #'   otherwise.
 #' @author Bernd Fischer
 #' @seealso [h5createFile()], [h5createGroup()], [h5createDataset()],

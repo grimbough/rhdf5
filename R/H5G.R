@@ -26,7 +26,7 @@ H5Gcreate <- function(h5loc, name) {
 #' @param h5loc An object of class [H5IdComponent-class] specifying the file in
 #' which the new group is to be created.
 #'
-#' @return `H5Gcreate_anon` returns an object of class [H5IdComponent-class]
+#' @returns `H5Gcreate_anon` returns an object of class [H5IdComponent-class]
 #' representing the newly created group.  However at this point is is still
 #' anonymous, and must be linked into the file structure via [H5Olink()].
 #' If this is not done, the group will be deleted from the file when it
@@ -52,7 +52,7 @@ H5Gcreate_anon <- function(h5loc) {
 #' file or group that contains the group to be opened.
 #' @param name Name of the group to open.
 #'
-#' @return An object of class [H5IdComponent-class] representing the opened
+#' @returns An object of class [H5IdComponent-class] representing the opened
 #' group.  When access to the group is no longer needed this should be released
 #' with [H5Gclose()] to prevent resource leakage.
 #'
@@ -96,7 +96,7 @@ H5Gclose <- function(h5group) {
 #' @param index_type See `h5const("H5_INDEX")` for possible arguments.
 #' @param order See `h5const("H5_ITER")` for possible arguments.
 #'
-#' @return A list with group information
+#' @returns A list with group information
 #'
 #' @examples
 #' h5file <- system.file("testfiles", "multiple_dtypes.h5", package = "rhdf5")

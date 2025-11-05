@@ -63,7 +63,7 @@ h5loadData <- function(h5loc, L, all = FALSE, ..., native) {
 #' should also be read with `native = TRUE`
 #' @param \dots Arguments passed to [h5read()]
 #'
-#' @return Returns a hierarchical list structure representing the HDF5
+#' @returns Returns a hierarchical list structure representing the HDF5
 #' group hierarchy. It either returns the datasets within the list structure
 #' (`load=TRUE`) or it returns a `data.frame` for each dataset with the
 #' dataset header information (`load=FALSE`).

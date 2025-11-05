@@ -23,7 +23,7 @@
 #' between programming languages. A file written with `native = TRUE`
 #' should also be read with `native = TRUE`
 #'
-#' @return Returns `TRUE` if the dimension of the dataset was changed successfully
+#' @returns Returns `TRUE` if the dimension of the dataset was changed successfully
 #' and `FALSE` otherwise.
 #'
 #' @author Bernd Fischer, Mike Smith

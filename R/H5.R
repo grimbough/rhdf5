@@ -2,7 +2,7 @@
 #'
 #' @description These low level functions provide general library functions for HDF5.
 #'
-#' @return
+#' @returns
 #' * `H5open` initializes the HDF5 library.
 #' * `H5close` flushes all data to disk, closes all open identifiers, and cleans up memory.
 #' * `H5garbage_collect` cleans up memory.
@@ -60,7 +60,7 @@ H5get_libversion <- function() {
 #'   closed.  If nothing is provided to the function, all open handles will be
 #'   closed.
 #'
-#' @return Doesn't return anything. Called for the side-effect of closing open
+#' @returns Doesn't return anything. Called for the side-effect of closing open
 #'   HDF5 handles.
 #'
 #' @author Mike Smith

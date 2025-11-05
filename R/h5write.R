@@ -175,7 +175,7 @@ h5writeDatasetHelper <- function(
 #'   object `obj` are written to the HDF5 file.
 #' @param \dots Further arguments passed to [H5Dwrite()].
 #'
-#' @return `h5write` returns 0 if successful.
+#' @returns `h5write` returns 0 if successful.
 #'
 #' @author Bernd Fischer, Mike Smith
 #'

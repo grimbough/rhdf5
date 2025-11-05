@@ -6,7 +6,7 @@
 #' @param h5loc An object of class [H5IdComponent-class] representing a H5 location identifier (file or group).
 #' @param name The name of the object to be checked.
 #'
-#' @return Returns a vector of length 1 containing the number of attributes
+#' @returns Returns a vector of length 1 containing the number of attributes
 #' the specified object has.
 #'
 #' @name H5Oget_num_attrs
