@@ -20,7 +20,7 @@ H5Iget_name <- function(h5obj) {
 #' * `H5I_DATASET`
 #' * `H5I_ATTR`
 #'
-#' @return Returns a character vector of length 1 containing the HDF5 type
+#' @returns Returns a character vector of length 1 containing the HDF5 type
 #' for the supplied identifier.
 #'
 #' @param h5identifier Object of class [H5IdComponent-class].
@@ -51,7 +51,7 @@ H5Iget_type <- function(h5identifier) {
 #'
 #' @param h5identifier Object of class [H5IdComponent-class].
 #'
-#' @return A logical of length 1.  `TRUE` is the identifier is valid,
+#' @returns A logical of length 1.  `TRUE` is the identifier is valid,
 #' `FALSE` if not.
 #'
 #' @examples

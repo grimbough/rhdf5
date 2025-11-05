@@ -5,7 +5,7 @@
 #' @param type 'normal' (default) shows a one line error message in R.
 #' 'verbose' shows the whole HDF5 error message. 'suppress' suppresses the HDF5
 #' error messages completely.
-#' @return Returns 0 if options are set successfully.
+#' @returns Returns 0 if options are set successfully.
 #' @author Bernd Fischer
 #' @seealso [rhdf5]
 #' @examples

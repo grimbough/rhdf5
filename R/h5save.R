@@ -21,7 +21,7 @@
 #' orientation. Using `native = TRUE` increases HDF5 file portability
 #' between programming languages. A file written with `native = TRUE`
 #' should also be read with `native = TRUE`
-#' @return Nothing returned.
+#' @returns Nothing returned.
 #' @author Bernd Fischer
 #' @seealso [h5ls()], [h5write()]
 #' @examples

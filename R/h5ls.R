@@ -38,7 +38,7 @@ h5lsConvertToDataframe <- function(L, all = FALSE, native) {
 #' between programming languages. A file written with `native = TRUE`
 #' should also be read with `native = TRUE`
 #'
-#' @return `h5ls` returns a `data.frame` with the file content.
+#' @returns `h5ls` returns a `data.frame` with the file content.
 #'
 #' @author Bernd Fischer, Mike L. Smith
 #' @seealso [h5dump()]

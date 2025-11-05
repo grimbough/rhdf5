@@ -13,7 +13,7 @@
 #' HDF5 property lists.  Specially these should respectively be: a link creation
 #' property list, a dataset creation property list, a dataset access property list
 #'
-#' @return An object of class `H5IdComponent` representing the opened dataset.
+#' @returns An object of class `H5IdComponent` representing the opened dataset.
 #'
 #' @export
 H5Dcreate <- function(
@@ -64,7 +64,7 @@ H5Dcreate <- function(
 #' @param name Name of the dataset to open.
 #' @param dapl An object of class [H5IdComponent-class] representing a H5 dataset access property list.
 #'
-#' @return An object of class `H5IdComponent` representing the opened dataset.
+#' @returns An object of class `H5IdComponent` representing the opened dataset.
 #' To prevent memory leaks this must be closed with a call to [H5Dclose()]
 #' when no longer needed.
 #'
@@ -145,7 +145,7 @@ H5Dget_create_plist <- function(h5dataset) {
 #' @param h5dataset Object of class [H5IdComponent-class] representing an open HDF5
 #' dataset
 #'
-#' @return Returns an object of class `H5IdComponent` representing a HDF5
+#' @returns Returns an object of class `H5IdComponent` representing a HDF5
 #' dataspace identifier
 #'
 #' @export
@@ -171,7 +171,7 @@ H5Dget_space <- function(h5dataset) {
 #' @param h5dataset Object of class [H5IdComponent-class] representing an open HDF5
 #' dataset
 #'
-#' @return Returns an integer giving the number of bytes allocated in the file
+#' @returns Returns an integer giving the number of bytes allocated in the file
 #' to the dataset.
 #'
 #' @export
@@ -390,7 +390,7 @@ H5Dset_extent <- function(h5dataset, size) {
 #'
 #' @param h5dataset An object of class [H5IdComponent-class] representing the dataset from which chunks will be counted.
 #'
-#' @return An integer value indicating the number of chunks present in the dataset or selected region.
+#' @returns An integer value indicating the number of chunks present in the dataset or selected region.
 #'
 #' @examples
 #' file <- tempfile(fileext = ".h5")

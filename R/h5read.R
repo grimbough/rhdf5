@@ -223,7 +223,7 @@ h5readDataset <- function(
 #' accessing files in a private Amazon S3 bucket.
 #' @param \dots Further arguments passed to [H5Dread()].
 #'
-#' @return `h5read` returns an array with the data read.
+#' @returns `h5read` returns an array with the data read.
 #'
 #' @author Bernd Fischer, Mike Smith
 #' @seealso [h5ls()]

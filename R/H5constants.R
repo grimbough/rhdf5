@@ -8,7 +8,7 @@
 #' gives the default choice for each group.
 #'
 #' @param type A character name of a group of constants.
-#' @return A character vector with names of HDF5 constants or groups.
+#' @returns A character vector with names of HDF5 constants or groups.
 #' @author Bernd Fischer
 #' @examples
 #'

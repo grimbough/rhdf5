@@ -8,7 +8,7 @@
 #'   programming languages. A file written with `native = TRUE` should also be
 #'   read with `native = TRUE`.
 #'
-#' @return Returns an object of class [H5IdComponent-class] representing a
+#' @returns Returns an object of class [H5IdComponent-class] representing a
 #'   dataspace.
 #'
 #' @seealso [H5Screate_simple]
@@ -40,7 +40,7 @@ H5Screate <- function(type = h5default("H5S"), native = FALSE) {
 #'   programming languages. A file written with `native = TRUE` should also be
 #'   read with `native = TRUE`.
 #'
-#' @return Returns an object of class [H5IdComponent-class] representing a
+#' @returns Returns an object of class [H5IdComponent-class] representing a
 #'   dataspace.
 #'
 #' @seealso [H5Screate]
@@ -87,7 +87,7 @@ H5Sclose <- function(h5space) {
 #' @param h5space Object of class [H5IdComponent-class] representing the
 #' dataspace to be copied.
 #'
-#' @return If the copying is successful returns an object of class
+#' @returns If the copying is successful returns an object of class
 #' [H5IdComponent-class] representing the new dataspace.  Otherwise returns
 #' `FALSE`.
 #'
@@ -525,7 +525,7 @@ H5Scombine_hyperslab <- function(
 #' @param op Character string defined the operation used to join the two
 #' dataspaces.  See `h5const("H5S_SELECT")` for the list of available options.
 #'
-#' @return Returns an [H5IdComponent-class] object representing a new dataspace.
+#' @returns Returns an [H5IdComponent-class] object representing a new dataspace.
 #' The new dataspace will have the same extent as `h5space1` with the
 #' hyperslab selection being the result of combining the selections of
 #' `h5space1` and `h5space2`.

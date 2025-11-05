@@ -14,7 +14,7 @@
 #' dataspace. See [H5Dget_space()], [H5Screate_simple()], [H5Screate()] to create an object
 #' of this kind.
 #'
-#' @return An object of class [H5IdComponent-class] representing a H5 attribute identifier.
+#' @returns An object of class [H5IdComponent-class] representing a H5 attribute identifier.
 #'
 #' @export
 H5Acreate <- function(h5obj, name, dtype_id, h5space) {
@@ -56,7 +56,7 @@ H5Acreate <- function(h5obj, name, dtype_id, h5space) {
 #' @param index_type See `h5const("H5_INDEX")` for possible arguments.
 #' @param order See `h5const("H5_ITER")` for possible arguments.
 #'
-#' @return An object of class [H5IdComponent-class] representing a H5 attribute identifier.
+#' @returns An object of class [H5IdComponent-class] representing a H5 attribute identifier.
 #'
 #' @name H5Aopen
 NULL
@@ -192,7 +192,7 @@ H5Adelete <- function(h5obj, name) {
 #' @param h5attribute An object of class [H5IdComponent-class] representing an
 #' attribute.  Normally created by [H5Aopen()] or similar.
 #'
-#' @return A character vector of length 1 containing the name of the attribute.
+#' @returns A character vector of length 1 containing the name of the attribute.
 #'
 #' @export
 H5Aget_name <- function(h5attribute) {
@@ -206,7 +206,7 @@ H5Aget_name <- function(h5attribute) {
 #' @param h5attribute An object of class [H5IdComponent-class] representing an
 #' attribute.  Normally created by [H5Aopen()] or similar.
 #'
-#' @return Returns an object of class [H5IdComponent-class] representing a H5
+#' @returns Returns an object of class [H5IdComponent-class] representing a H5
 #' dataspace identifier
 #'
 #' @export
@@ -258,7 +258,7 @@ H5Aget_type <- function(h5attribute) {
 #' @param bit64conversion Defines how 64-bit integers are converted. (See
 #' the details section for more information on these options.)
 #'
-#' @return If `buf=NULL` returns the contents of the attribute.  Otherwise
+#' @returns If `buf=NULL` returns the contents of the attribute.  Otherwise
 #' return 0 if attribute is read successfully.
 #'
 #' @export

@@ -8,7 +8,7 @@
 #' orientation. Using `native = TRUE` increases HDF5 file portability
 #' between programming languages. A file written with `native = TRUE`
 #' should also be read with `native = TRUE`
-#' @return `h5validObjects` returns a list of [H5IdComponent-class]
+#' @returns `h5validObjects` returns a list of [H5IdComponent-class]
 #' objects. `h5listIdentifier` prints the valid identifiers on screen and
 #' returns NULL.
 #' @author Bernd Fischer, Mike Smith
@@ -66,7 +66,7 @@ getDatatypeClass <- function(type) {
 #' C-library libhdf5.
 #'
 #'
-#' @return A list of major, minor and release number.
+#' @returns A list of major, minor and release number.
 #' @author Bernd Fischer, Mike L. Smith
 #' @examples
 #'

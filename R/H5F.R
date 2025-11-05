@@ -136,7 +136,7 @@ H5Fflush <- function(h5file, scope = h5default("H5F_SCOPE")) {
 #' @param showWarnings If the file doesn't exist an warning is generated.
 #' Setting this argument to `FALSE` will suppress the warning.
 #'
-#' @return Returns `TRUE`, if the file is an HDF5 file, or `FALSE` otherwise.
+#' @returns Returns `TRUE`, if the file is an HDF5 file, or `FALSE` otherwise.
 #' In the case the file doesn't exist, `NA` is returned
 #'
 #' @export
@@ -210,7 +210,7 @@ H5Fget_access_plist <- function(h5file) {
 #' @param h5file An object of class [H5IdComponent-class] representing a H5
 #' file identifier.  Typically produced by [H5Fopen()] or [H5Fcreate()].
 #'
-#' @return Returns a character vector of length 1.  This will either be `H5F_ACC_RDWR` (read / write)
+#' @returns Returns a character vector of length 1.  This will either be `H5F_ACC_RDWR` (read / write)
 #' or `H5F_ACC_READONLY` (read only).
 #'
 #' @details The native `H5Fget_intent()` function can in theory also return the values `H5F_ACC_SWMR_WRITE`

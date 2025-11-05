@@ -50,7 +50,7 @@ NULL
 #' with a selection set.  This argument is only used if creating a
 #' reference to a dataset region, and will be ignored otherwise.
 #'
-#' @return An [H5Ref-class] object storing the reference.
+#' @returns An [H5Ref-class] object storing the reference.
 #'
 #' @export
 H5Rcreate <- function(h5loc, name, ref_type = "H5R_OBJECT", h5space = NULL) {
@@ -92,7 +92,7 @@ H5Rcreate <- function(h5loc, name, ref_type = "H5R_OBJECT", h5space = NULL) {
 #' @param h5loc An `H5IdComponent` object representing the file containing the
 #'   referenced object.
 #'
-#' @return An object of class `H5IdComponent` representing the opened object
+#' @returns An object of class `H5IdComponent` representing the opened object
 #'   referenced by `ref`.  This should be closed with the appropriate function
 #'   e.g. [H5Dclose()], [H5Oclose()], etc. when no longer needed.
 #'
@@ -115,7 +115,7 @@ H5Rdereference <- function(ref, h5loc) {
 #' @param h5loc An `H5IdComponent` object representing the file containing the
 #'   referenced object.
 #'
-#' @return Character string of length 1 giving the name of the referenced
+#' @returns Character string of length 1 giving the name of the referenced
 #'   object.
 #'
 #' @export
@@ -130,7 +130,7 @@ H5Rget_name <- function(ref, h5loc) {
 #' @param h5loc An `H5IdComponent` object representing the file containing the
 #'   referenced object.
 #'
-#' @return Character string of length 1 identifying the object type.  Valid return
+#' @returns Character string of length 1 identifying the object type.  Valid return
 #' values are: `"GROUP"`, `"DATASET"`, and `"NAMED_DATATYPE"`.
 #'
 #' @export
@@ -155,7 +155,7 @@ H5Rget_obj_type <- function(ref, h5loc) {
 #' @param h5loc An `H5IdComponent` object representing the file containing the
 #'   referenced object.
 #'
-#' @return An object of class `H5IdComponent` representing the dataspace of the
+#' @returns An object of class `H5IdComponent` representing the dataspace of the
 #'   dataset that `ref` points to.  The dataspace will have the selection set
 #'   that matches the selection pointed to by `ref`. This should be closed using
 #'   [H5Sclose()] when no longer required.

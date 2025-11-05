@@ -4,7 +4,7 @@
 #' @param name Path to the object to be opened.  This should be relative to
 #' `h5loc` rather than the file.
 #'
-#' @return An object of class [H5IdComponent-class] if the open operation was
+#' @returns An object of class [H5IdComponent-class] if the open operation was
 #' successful. `FALSE` otherwise.
 #'
 #' @examples
