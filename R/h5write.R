@@ -96,13 +96,13 @@ h5writeDatasetHelper <- function(
 #' Writes an R object to an HDF5 file. This function can be used to write either
 #' full arrays/vectors or subarrays (hyperslabs) within an existing dataset.
 #'
-#' Writes an R object to an HDF5 file. If none of the arguments `start,
-#' stride, block, count` is specified, the dataset has the same dimension in the
-#' HDF5 file and in memory. If the dataset already exists in the HDF5 file, one
-#' can write subarrays, (so called hyperslabs) to the HDF5 file. The arguments
-#' `start, stride, block, count` define the subset of the dataset in the
-#' HDF5 file that is to be written to. See these introductions to hyperslabs:
-#' <https://support.hdfgroup.org/HDF5/Tutor/selectsimple.html>,
+#' Writes an R object to an HDF5 file. If none of the arguments `start`,
+#' `stride`, `block`, `count` is specified, the dataset has the same dimension
+#' in the HDF5 file and in memory. If the dataset already exists in the HDF5
+#' file, one can write subarrays, (so called hyperslabs) to the HDF5 file. The
+#' arguments `start`, `stride`, `block`, `count` define the subset of the
+#' dataset in the HDF5 file that is to be written to. See these introductions to
+#' hyperslabs: <https://support.hdfgroup.org/HDF5/Tutor/selectsimple.html>,
 #' <https://support.hdfgroup.org/HDF5/Tutor/select.html> and
 #' <http://ftp.hdfgroup.org/HDF5/Tutor/phypecont.html>. Please note that in
 #' R the first dimension is the fastest changing dimension.

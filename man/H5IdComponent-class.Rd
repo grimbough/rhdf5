@@ -61,17 +61,17 @@ as returned by \link{H5Fopen} or a group handle as e.g. returned by \code{h5f$g1
 \code{h5f$'/g1/g2'}.
 
 \item \code{$}: Reads the HDF5 object \code{name} in the HDF5 location \code{x}. \code{x} can either be
-a file handle as returned by \link{H5Fopen} or a group handle as e.g. returned by
+a file handle as returned by \code{\link[=H5Fopen]{H5Fopen()}} or a group handle as e.g. returned by
 \code{h5f$g1} or \code{h5f$'/g1/g2'}.
 
 \item \code{`$`(H5IdComponent) <- value}: Writes the assigned object to to the HDF5 file at
-location e1. e1 can either be a file handle as returned by \link{H5Fopen} or a
+location e1. e1 can either be a file handle as returned by \code{\link[=H5Fopen]{H5Fopen()}} or a
 group handle as e.g. returned by h5f$g1 or h5f$'/g1/g2's. The storage.mode
 of the assigned object has to be compatible to the datatype of the HDF5
 dataset. The dimension of the assigned object have to be identical the
 dimensions of the HDF5 dataset. To create a new HDF5 dataset with specific
 properties (e.g. compression level or chunk size), please use the function
-\link{h5createDataset} first.
+\code{\link[=h5createDataset]{h5createDataset()}} first.
 
 \item \code{[}: Subsetting of an HDF5 dataset. The function reads a
 subset of an HDF5 dataset. The given dimensions have to fit the dimensions
@@ -80,7 +80,7 @@ of the HDF5 dataset.
 \item \code{`[`(H5IdComponent) <- value}: Subsetting of an HDF5 dataset. The function writes
 an R data object to a subset of an HDF5 dataset. The given dimensions have
 to fit the dimensions of the HDF5 dataset. The HDF5 dataset has to be
-created beforehand, e.g. by \link{h5createDataset}.
+created beforehand, e.g. by \code{\link[=h5createDataset]{h5createDataset()}}.
 
 }}
 \section{Slots}{
