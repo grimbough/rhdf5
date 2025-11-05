@@ -37,7 +37,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rhdf5</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.55.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.55.6</span>
       </span>
     </div>
 
@@ -145,7 +145,7 @@ groups and list the file content afterwards.</p>
 </h3>
 <p>Objects can be written to the HDF5 file. Attributes attached to an
 object are written as well, if <code>write.attributes=TRUE</code> is
-given as argument to <code>h5write</code>. Note that not all
+given as argument to <code><a href="../reference/h5_write.html">h5write()</a></code>. Note that not all
 <strong>R</strong>-attributes can be written as HDF5 attributes.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">A</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, nrow <span class="op">=</span> <span class="fl">5</span>, ncol <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
@@ -191,7 +191,7 @@ handles<a class="anchor" aria-label="anchor" href="#writing-and-reading-objects-
 </h3>
 <p>File, group and dataset handles are a simpler way to read (and
 partially to write) HDF5 files. A file is opened by
-<code>H5Fopen</code>.</p>
+<code><a href="../reference/H5Fopen.html">H5Fopen()</a></code>.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">h5f</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/H5Fopen.html">H5Fopen</a></span><span class="op">(</span><span class="st">"myhdf5file.h5"</span><span class="op">)</span></span>
 <span><span class="va">h5f</span></span></code></pre></div>
@@ -655,10 +655,11 @@ dataset by providing the file name and the name of the dataset, e.g.</p>
 <span><span class="co">## 5  /foo      S H5I_DATASET INTEGER     5 x 8</span></span>
 <span><span class="co">## 6  /foo foobaa   H5I_GROUP</span></span></code></pre>
 <p>We can see that the <strong>df</strong> entry has now disappeared
-from the listing. In most cases, if you have a heirachy within the file,
-<code><a href="../reference/h5_delete.html">h5delete()</a></code> will remove children of the deleted entry too.
-In this example we remove <strong>foo</strong> and the datasets below it
-are deleted too. Notice too that the size of the file as decreased.</p>
+from the listing. In most cases, if you have a hierarchy within the
+file, <code><a href="../reference/h5_delete.html">h5delete()</a></code> will remove children of the deleted entry
+too. In this example we remove <strong>foo</strong> and the datasets
+below it are deleted too. Notice too that the size of the file as
+decreased.</p>
 <div class="sourceCode" id="cb76"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/h5_delete.html">h5delete</a></span><span class="op">(</span>file <span class="op">=</span> <span class="st">"myhdf5file.h5"</span>, name <span class="op">=</span> <span class="st">"foo"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/h5ls.html">h5ls</a></span><span class="op">(</span><span class="st">"myhdf5file.h5"</span>, recursive <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
@@ -890,7 +891,7 @@ functions to close datasets, dataspaces, groups, and files.</p>
 <span><span class="co">## [1] stats     graphics  grDevices utils     datasets  methods   base     </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## other attached packages:</span></span>
-<span><span class="co">## [1] rhdf5_2.55.5     BiocStyle_2.38.0</span></span>
+<span><span class="co">## [1] rhdf5_2.55.6     BiocStyle_2.38.0</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## loaded via a namespace (and not attached):</span></span>
 <span><span class="co">##  [1] cli_3.6.5           knitr_1.50          rlang_1.1.6        </span></span>

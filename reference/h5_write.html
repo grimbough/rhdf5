@@ -18,7 +18,7 @@ full arrays/vectors or subarrays (hyperslabs) within an existing dataset."><meta
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rhdf5</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.55.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.55.6</span>
       </span>
     </div>
 
@@ -124,8 +124,8 @@ full arrays/vectors or subarrays (hyperslabs) within an existing dataset.</p>
 <dd><p>The filename (character) of the file in which the dataset will be
 located. For advanced programmers it is possible to provide an object of
 class <a href="H5IdComponent-class.html">H5IdComponent</a> representing a H5 location identifier (file or
-group). See <code><a href="H5Fcreate.html">H5Fcreate</a></code>, <code><a href="H5Fopen.html">H5Fopen</a></code>,
-<code><a href="H5Gcreate.html">H5Gcreate</a></code>, <code><a href="H5Gopen.html">H5Gopen</a></code> to create an object of this
+group). See <code><a href="H5Fcreate.html">H5Fcreate()</a></code>, <code><a href="H5Fopen.html">H5Fopen()</a></code>,
+<code><a href="H5Gcreate.html">H5Gcreate()</a></code>, <code><a href="H5Gopen.html">H5Gopen()</a></code> to create an object of this
 kind.</p></dd>
 
 
@@ -134,7 +134,7 @@ kind.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
-<dd><p>Further arguments passed to <code><a href="H5Dwrite.html">H5Dwrite</a></code>.</p></dd>
+<dd><p>Further arguments passed to <code><a href="H5Dwrite.html">H5Dwrite()</a></code>.</p></dd>
 
 
 <dt id="arg-createnewfile">createnewfile<a class="anchor" aria-label="anchor" href="#arg-createnewfile"></a></dt>
@@ -156,8 +156,8 @@ should also be read with <code>native = TRUE</code></p></dd>
 
 <dt id="arg-h-loc">h5loc<a class="anchor" aria-label="anchor" href="#arg-h-loc"></a></dt>
 <dd><p>An object of class <a href="H5IdComponent-class.html">H5IdComponent</a> representing a H5
-location identifier (file or group). See <code><a href="H5Fcreate.html">H5Fcreate</a></code>,
-<code><a href="H5Fopen.html">H5Fopen</a></code>, <code><a href="H5Gcreate.html">H5Gcreate</a></code>, <code><a href="H5Gopen.html">H5Gopen</a></code> to
+location identifier (file or group). See <code><a href="H5Fcreate.html">H5Fcreate()</a></code>,
+<code><a href="H5Fopen.html">H5Fopen()</a></code>, <code><a href="H5Gcreate.html">H5Gcreate()</a></code>, <code><a href="H5Gopen.html">H5Gopen()</a></code> to
 create an object of this kind.</p></dd>
 
 
@@ -238,13 +238,13 @@ variable-length strings into the attributes. If <code>TRUE</code>, <code>size</c
     </div>
     <div id="details">
     <h2>Details</h2>
-    <p>Writes an R object to an HDF5 file. If none of the arguments <code>start,
-stride, block, count</code> is specified, the dataset has the same dimension in the
-HDF5 file and in memory. If the dataset already exists in the HDF5 file, one
-can write subarrays, (so called hyperslabs) to the HDF5 file. The arguments
-<code>start, stride, block, count</code> define the subset of the dataset in the
-HDF5 file that is to be written to. See these introductions to hyperslabs:
-<a href="https://support.hdfgroup.org/HDF5/Tutor/selectsimple.html" class="external-link">https://support.hdfgroup.org/HDF5/Tutor/selectsimple.html</a>,
+    <p>Writes an R object to an HDF5 file. If none of the arguments <code>start</code>,
+<code>stride</code>, <code>block</code>, <code>count</code> is specified, the dataset has the same dimension
+in the HDF5 file and in memory. If the dataset already exists in the HDF5
+file, one can write subarrays, (so called hyperslabs) to the HDF5 file. The
+arguments <code>start</code>, <code>stride</code>, <code>block</code>, <code>count</code> define the subset of the
+dataset in the HDF5 file that is to be written to. See these introductions to
+hyperslabs: <a href="https://support.hdfgroup.org/HDF5/Tutor/selectsimple.html" class="external-link">https://support.hdfgroup.org/HDF5/Tutor/selectsimple.html</a>,
 <a href="https://support.hdfgroup.org/HDF5/Tutor/select.html" class="external-link">https://support.hdfgroup.org/HDF5/Tutor/select.html</a> and
 <a href="http://ftp.hdfgroup.org/HDF5/Tutor/phypecont.html" class="external-link">http://ftp.hdfgroup.org/HDF5/Tutor/phypecont.html</a>. Please note that in
 R the first dimension is the fastest changing dimension.</p>
@@ -261,8 +261,8 @@ imaginary parts respectively.</p>
     </div>
     <div id="see-also">
     <h2>See also</h2>
-    <div class="dont-index"><p><code><a href="h5ls.html">h5ls</a></code>, <code><a href="h5_createFile.html">h5createFile</a></code>,
-<code><a href="h5_createDataset.html">h5createDataset</a></code>, <a href="rhdf5.html">rhdf5</a></p></div>
+    <div class="dont-index"><p><code><a href="h5ls.html">h5ls()</a></code>, <code><a href="h5_createFile.html">h5createFile()</a></code>,
+<code><a href="h5_createDataset.html">h5createDataset()</a></code>, <a href="rhdf5.html">rhdf5</a></p></div>
     </div>
     <div id="author">
     <h2>Author</h2>

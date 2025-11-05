@@ -19,7 +19,7 @@ existing dataset."><meta property="og:image" content="https://huber-group-embl.g
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rhdf5</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.55.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.55.6</span>
       </span>
     </div>
 
@@ -97,8 +97,8 @@ existing dataset.</p>
 <dd><p>The file name (character) of the file in which the dataset is
 be located. It is possible to provide an object of
 class <a href="H5IdComponent-class.html">H5IdComponent</a> representing a H5 location identifier
-(file or group). See <code><a href="H5Fcreate.html">H5Fcreate</a></code>, <code><a href="H5Fopen.html">H5Fopen</a></code>,
-<code><a href="H5Gcreate.html">H5Gcreate</a></code>, <code><a href="H5Gopen.html">H5Gopen</a></code> to create an object of this
+(file or group). See <code><a href="H5Fcreate.html">H5Fcreate()</a></code>, <code><a href="H5Fopen.html">H5Fopen()</a></code>,
+<code><a href="H5Gcreate.html">H5Gcreate()</a></code>, <code><a href="H5Gopen.html">H5Gopen()</a></code> to create an object of this
 kind.</p></dd>
 
 
@@ -165,7 +165,7 @@ dim attributes.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
-<dd><p>Further arguments passed to <code><a href="H5Dread.html">H5Dread</a></code>.</p></dd>
+<dd><p>Further arguments passed to <code><a href="H5Dread.html">H5Dread()</a></code>.</p></dd>
 
 
 <dt id="arg-native">native<a class="anchor" aria-label="anchor" href="#arg-native"></a></dt>
@@ -193,10 +193,10 @@ accessing files in a private Amazon S3 bucket.</p></dd>
     <div id="details">
     <h2>Details</h2>
     <p>Read an R object from an HDF5 file. If none of the arguments
-<code>start, stride, block, count</code> are specified, the dataset has the same
+<code>start</code>, <code>stride</code>, <code>block</code>, <code>count</code> are specified, the dataset has the same
 dimension in the HDF5 file and in memory. If the dataset already exists in
 the HDF5 file, one can read subarrays, so called hyperslabs from
-the HDF5 file. The arguments <code>start, stride, block, count</code> define the
+the HDF5 file. The arguments <code>start</code>, <code>stride</code>, <code>block</code>, <code>count</code> define the
 subset of the dataset in the HDF5 file that is to be read/written. See these
 introductions to hyperslabs:
 <a href="https://support.hdfgroup.org/HDF5/Tutor/selectsimple.html" class="external-link">https://support.hdfgroup.org/HDF5/Tutor/selectsimple.html</a>,
@@ -216,7 +216,7 @@ using the <code><a href="https://rdrr.io/r/base/complex.html" class="external-li
     </div>
     <div id="see-also">
     <h2>See also</h2>
-    <div class="dont-index"><p><code><a href="h5ls.html">h5ls</a></code></p></div>
+    <div class="dont-index"><p><code><a href="h5ls.html">h5ls()</a></code></p></div>
     </div>
     <div id="author">
     <h2>Author</h2>

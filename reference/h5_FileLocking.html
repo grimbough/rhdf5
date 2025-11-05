@@ -21,7 +21,7 @@ the locking to be disabled for the duration of the R session if needed."><meta p
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rhdf5</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.55.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.55.6</span>
       </span>
     </div>
 
@@ -88,7 +88,7 @@ the locking to be disabled for the duration of the R session if needed.</p>
 <dl><dt id="arg-location">location<a class="anchor" aria-label="anchor" href="#arg-location"></a></dt>
 <dd><p>The name of a directory or file to test.  If an existing
 directory is provided a temporary file will be created in this folder.  If
-non-existant location is provided a file with the name will be created,
+non-existent location is provided a file with the name will be created,
 tested for file locking, and then removed.  Providing an existing file will
 result in an error.</p></dd>
 
@@ -107,7 +107,7 @@ for the side effect of setting or unsetting the environment variable
 apply a file lock using the appropriate function within the HDF5 library.
 The success or failure of the locking is then recorded and the temporary
 file removed.  Even relatively low level functions such as
-<code><a href="H5Fcreate.html">H5Fcreate</a></code> will fail inelegantly if file locking fails.</p>
+<code><a href="H5Fcreate.html">H5Fcreate()</a></code> will fail inelegantly if file locking fails.</p>
 <p><code>h5disableFileLocking</code> will set the environment variable
 <code>RHDF5_USE_FILE_LOCKING=FALSE</code>, which is the recommended was to disable
 this behaviour if file locking is not supported.  This will only persist
@@ -116,8 +116,8 @@ of R if this is a more general issue on your system.</p>
 <p><code>h5enableFileLocking</code> will unset the <code>RHDF5_USE_FILE_LOCKING</code>
 environment variable.</p>
 <p>More discussion of HDF5's use of file locking can be found online e.g.
-https://forum.hdfgroup.org/t/hdf5-1-10-0-and-flock/3761/4 or
-https://forum.hdfgroup.org/t/hdf5-files-on-nfs/3985/5</p>
+<a href="https://forum.hdfgroup.org/t/hdf5-1-10-0-and-flock/3761/4" class="external-link">https://forum.hdfgroup.org/t/hdf5-1-10-0-and-flock/3761/4</a> or
+<a href="https://forum.hdfgroup.org/t/hdf5-files-on-nfs/3985/5" class="external-link">https://forum.hdfgroup.org/t/hdf5-files-on-nfs/3985/5</a></p>
     </div>
     <div id="author">
     <h2>Author</h2>
