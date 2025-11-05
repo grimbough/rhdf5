@@ -145,7 +145,7 @@ system.time(res5 <- vapply(
 ))
 ```
 
-This is still quite slow, and the remaining time is being spent on the overheads associated with multiple calls to `h5read()`.  To reduce these the function `f2()`^[This is not the greatest function ever, things like the file name are hardcoded out of sight, but it illustrates the technique.] defined below splits the list of columns we want to return into sets grouped by the parameter `block_size`.  In the default case this means any columns between 1 & 100 will be placed together, then any between 101 & 200, etc.  We then `lapply` our previous `f1()` function over these groups.  The effect here is to reduce the number of calls to `h5read()`, while keeping the number of hyperslab unions down by not having too many columns in any one call.
+This is still quite slow, and the remaining time is being spent on the overheads associated with multiple calls to `h5read()`.  To reduce these the function `f2()`^[This is not the greatest function ever, things like the file name are hardcoded out of sight, but it illustrates the technique.] defined below splits the list of columns we want to return into sets grouped by the parameter `block_size`.  In the default case this means any columns between 1 & 100 will be placed together, then any between 101 & 200, etc.  We then `lapply()` our previous `f1()` function over these groups.  The effect here is to reduce the number of calls to `h5read()`, while keeping the number of hyperslab unions down by not having too many columns in any one call.
 
 ```{r}
 f2 <- function(block_size = 100) {
