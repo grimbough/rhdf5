@@ -134,7 +134,7 @@ h5d[]
 h5d[3, , ]
 ```
 
-The same works as well for writing to datasets. \warning{Remind that it is only guarenteed that the data is written on disk after a call to `H5Fflush` or after closing of the file.}
+The same works as well for writing to datasets. \warning{Remind that it is only guaranteed that the data is written on disk after a call to `H5Fflush` or after closing of the file.}
 ```{r accessorB2}
 h5d[3, , ] <- 1:4
 H5Fflush(h5f)
@@ -336,7 +336,7 @@ h5delete(file = "myhdf5file.h5", name = "df")
 h5ls("myhdf5file.h5", recursive = 2)
 ```
 
-We can see that the **df** entry has now disappeared from the listing.  In most cases, if you have a heirachy within the file, `h5delete()`  will remove children of the deleted entry too.  In this example we remove **foo** and the datasets below it are deleted too.  Notice too that the size of the file as decreased.
+We can see that the **df** entry has now disappeared from the listing.  In most cases, if you have a hierarchy within the file, `h5delete()`  will remove children of the deleted entry too.  In this example we remove **foo** and the datasets below it are deleted too.  Notice too that the size of the file as decreased.
 
 ```{r h5delete3}
 h5delete(file = "myhdf5file.h5", name = "foo")
