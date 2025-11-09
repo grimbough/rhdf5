@@ -16,7 +16,7 @@ h5enableFileLocking()
 \arguments{
 \item{location}{The name of a directory or file to test.  If an existing
 directory is provided a temporary file will be created in this folder.  If
-non-existant location is provided a file with the name will be created,
+non-existent location is provided a file with the name will be created,
 tested for file locking, and then removed.  Providing an existing file will
 result in an error.}
 }
@@ -40,7 +40,7 @@ the locking to be disabled for the duration of the R session if needed.
 apply a file lock using the appropriate function within the HDF5 library.
 The success or failure of the locking is then recorded and the temporary
 file removed.  Even relatively low level functions such as
-\code{\link{H5Fcreate}} will fail inelegantly if file locking fails.
+\code{\link[=H5Fcreate]{H5Fcreate()}} will fail inelegantly if file locking fails.
 
 \code{h5disableFileLocking} will set the environment variable
 \code{RHDF5_USE_FILE_LOCKING=FALSE}, which is the recommended was to disable
@@ -52,8 +52,8 @@ of R if this is a more general issue on your system.
 environment variable.
 
 More discussion of HDF5's use of file locking can be found online e.g.
-https://forum.hdfgroup.org/t/hdf5-1-10-0-and-flock/3761/4 or
-https://forum.hdfgroup.org/t/hdf5-files-on-nfs/3985/5
+\url{https://forum.hdfgroup.org/t/hdf5-1-10-0-and-flock/3761/4} or
+\url{https://forum.hdfgroup.org/t/hdf5-files-on-nfs/3985/5}
 }
 \examples{
 
@@ -65,7 +65,7 @@ h5testFileLocking(dir)
 h5testFileLocking(file)
 
 ## we can check for file locking, and disable if needed
-if( !h5testFileLocking(dir) ) {
+if (!h5testFileLocking(dir)) {
   h5disableFileLocking()
 }
 

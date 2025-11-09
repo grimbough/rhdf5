@@ -23,7 +23,15 @@ h5write(obj, file, name, ...)
 
 h5writeDataset(obj, h5loc, name, ...)
 
-\method{h5writeDataset}{data.frame}(obj, h5loc, name, level = 6, chunk, DataFrameAsCompound = TRUE)
+\method{h5writeDataset}{data.frame}(
+  obj,
+  h5loc,
+  name,
+  level = 6,
+  chunk,
+  DataFrameAsCompound = TRUE,
+  ...
+)
 
 \method{h5writeDataset}{array}(
   obj,
@@ -37,7 +45,8 @@ h5writeDataset(obj, h5loc, name, ...)
   size = NULL,
   variableLengthString = FALSE,
   encoding = NULL,
-  level = 6
+  level = 6,
+  ...
 )
 }
 \arguments{
@@ -46,13 +55,13 @@ h5writeDataset(obj, h5loc, name, ...)
 \item{file}{The filename (character) of the file in which the dataset will be
 located. For advanced programmers it is possible to provide an object of
 class \linkS4class{H5IdComponent} representing a H5 location identifier (file or
-group). See \code{\link{H5Fcreate}}, \code{\link{H5Fopen}},
-\code{\link{H5Gcreate}}, \code{\link{H5Gopen}} to create an object of this
+group). See \code{\link[=H5Fcreate]{H5Fcreate()}}, \code{\link[=H5Fopen]{H5Fopen()}},
+\code{\link[=H5Gcreate]{H5Gcreate()}}, \code{\link[=H5Gopen]{H5Gopen()}} to create an object of this
 kind.}
 
 \item{name}{The name of the dataset in the HDF5 file.}
 
-\item{\dots}{Further arguments passed to \code{\link{H5Dwrite}}.}
+\item{\dots}{Further arguments passed to \code{\link[=H5Dwrite]{H5Dwrite()}}.}
 
 \item{createnewfile}{If \code{TRUE}, a new file will be created if necessary.}
 
@@ -66,8 +75,8 @@ between programming languages. A file written with \code{native = TRUE}
 should also be read with \code{native = TRUE}}
 
 \item{h5loc}{An object of class \linkS4class{H5IdComponent} representing a H5
-location identifier (file or group). See \code{\link{H5Fcreate}},
-\code{\link{H5Fopen}}, \code{\link{H5Gcreate}}, \code{\link{H5Gopen}} to
+location identifier (file or group). See \code{\link[=H5Fcreate]{H5Fcreate()}},
+\code{\link[=H5Fopen]{H5Fopen()}}, \code{\link[=H5Gcreate]{H5Gcreate()}}, \code{\link[=H5Gopen]{H5Gopen()}} to
 create an object of this kind.}
 
 \item{level}{The compression level. An integer value between 0 (no
@@ -76,9 +85,9 @@ dataset does not yet exist. See \code{\link[=h5createDataset]{h5createDataset()}
 
 \item{chunk}{Specifies the number of items to be include in an HDF5 chunk. If
 left unspecified the defaults is the smaller of: the total number of
-elements or the number of elements that fit within 4GB of memory. If
+cols or the number of cols that fit within 4GB of memory. If
 \code{DataFrameAsCompound=FALSE} each row of the \code{data.frame} can be consider an
-"element".}
+"col".}
 
 \item{DataFrameAsCompound}{If true, a \code{data.frame} will be saved as a
 compound data type. Otherwise it is saved like a list. The advantage of
@@ -88,8 +97,8 @@ the data has to be rearranged on disk and thus can slow down I/O. If fast
 reading is required, \code{DataFrameAsCompound=FALSE} is recommended.}
 
 \item{index}{List of indices for subsetting. The length of the list has to
-agree with the dimensional extension of the HDF5 array. Each list element
-is an integer vector of indices. A list element equal to \code{NULL} chooses all
+agree with the dimensional extension of the HDF5 array. Each list col
+is an integer vector of indices. A list col equal to \code{NULL} chooses all
 indices in this dimension. Counting is R-style 1-based.}
 
 \item{start}{The start coordinate of a hyperslab (similar to subsetting in
@@ -127,13 +136,13 @@ Writes an R object to an HDF5 file. This function can be used to write either
 full arrays/vectors or subarrays (hyperslabs) within an existing dataset.
 }
 \details{
-Writes an R object to an HDF5 file. If none of the arguments \code{start,
-stride, block, count} is specified, the dataset has the same dimension in the
-HDF5 file and in memory. If the dataset already exists in the HDF5 file, one
-can write subarrays, (so called hyperslabs) to the HDF5 file. The arguments
-\code{start, stride, block, count} define the subset of the dataset in the
-HDF5 file that is to be written to. See these introductions to hyperslabs:
-\url{https://support.hdfgroup.org/HDF5/Tutor/selectsimple.html},
+Writes an R object to an HDF5 file. If none of the arguments \code{start},
+\code{stride}, \code{block}, \code{count} is specified, the dataset has the same dimension
+in the HDF5 file and in memory. If the dataset already exists in the HDF5
+file, one can write subarrays, (so called hyperslabs) to the HDF5 file. The
+arguments \code{start}, \code{stride}, \code{block}, \code{count} define the subset of the
+dataset in the HDF5 file that is to be written to. See these introductions to
+hyperslabs: \url{https://support.hdfgroup.org/HDF5/Tutor/selectsimple.html},
 \url{https://support.hdfgroup.org/HDF5/Tutor/select.html} and
 \url{http://ftp.hdfgroup.org/HDF5/Tutor/phypecont.html}. Please note that in
 R the first dimension is the fastest changing dimension.
@@ -143,30 +152,30 @@ of dimensions is inverted. In the R interface counting starts with 1, whereas
 in the C-programs (e.g. HDFView) counting starts with 0.
 
 If code \code{obj} is of type 'complex' then it will be written as a compound
-datatype to the HDF5, with elements named 'r' and 'i' for the real and
+datatype to the HDF5, with cols named 'r' and 'i' for the real and
 imaginary parts respectively.
 }
 \examples{
 
 h5File <- tempfile(fileext = ".h5")
-h5createFile( h5File )
+h5createFile(h5File)
 
 # write a matrix
-B = array(seq(0.1,2.0,by=0.1),dim=c(5,2,2))
+B <- array(seq(0.1, 2.0, by = 0.1), dim = c(5, 2, 2))
 attr(B, "scale") <- "liter"
-h5write(B, h5File,"B")
+h5write(B, h5File, "B")
 
 # write a submatrix
-h5createDataset(h5File, "S", c(5,8), storage.mode = "integer", chunk=c(5,1), level=7)
-h5write(matrix(1:5,nr=5,nc=1), file=h5File, name="S", index=list(NULL,1))
+h5createDataset(h5File, "S", c(5, 8), storage.mode = "integer", chunk = c(5, 1), level = 7)
+h5write(matrix(1:5, nr = 5, nc = 1), file = h5File, name = "S", index = list(NULL, 1))
 
 }
 \references{
 \url{https://portal.hdfgroup.org/display/HDF5}
 }
 \seealso{
-\code{\link{h5ls}}, \code{\link{h5createFile}},
-\code{\link{h5createDataset}}, \link{rhdf5}
+\code{\link[=h5ls]{h5ls()}}, \code{\link[=h5createFile]{h5createFile()}},
+\code{\link[=h5createDataset]{h5createDataset()}}, \link{rhdf5}
 }
 \author{
 Bernd Fischer, Mike Smith

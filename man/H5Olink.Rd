@@ -23,10 +23,10 @@ Create a hard link to an object in an HDF5 file
 }
 \examples{
 ## Create a temporary copy of an example file, and open it
-example_file <- system.file("testfiles", "h5ex_t_array.h5", package="rhdf5")
+example_file <- system.file("testfiles", "h5ex_t_array.h5", package = "rhdf5")
 file.copy(example_file, tempdir())
 h5_file <- file.path(tempdir(), "h5ex_t_array.h5")
-fid <- H5Fopen( h5_file )
+fid <- H5Fopen(h5_file)
 
 ## create a new group without a location in the file
 gid <- H5Gcreate_anon(fid)
@@ -40,7 +40,7 @@ H5Gclose(gid)
 H5Fclose(fid)
 
 ## Check we now have a "/foo" group
-h5ls( h5_file )
+h5ls(h5_file)
 
 }
 \seealso{

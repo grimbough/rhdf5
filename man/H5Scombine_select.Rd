@@ -30,13 +30,17 @@ sid_2 <- H5Screate_simple(dims = 10)
 
 ## select a single block of 5 points in sid_1
 ## this is equivalent to [11:16] in R syntax
-H5Sselect_hyperslab(sid_1, start = 11, stride = 1, 
-                    block = 5, count = 1)
+H5Sselect_hyperslab(sid_1,
+  start = 11, stride = 1,
+  block = 5, count = 1
+)
 
 ## select 2 blocks of 1 point from sid_2
 ## equivalent to [c(3,5)] in R syntax
-H5Sselect_hyperslab(sid_2, start = 3, stride = 2, 
-                    block = 1, count = 2)
+H5Sselect_hyperslab(sid_2,
+  start = 3, stride = 2,
+  block = 1, count = 2
+)
 
 ## confirm we have select 5 and 2 points resepectively
 H5Sget_select_npoints(sid_1)

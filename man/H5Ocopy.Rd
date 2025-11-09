@@ -28,15 +28,15 @@ Copies an HDF5 object
 \examples{
 
 ## Create a temporary copy of an example file check the contents
-example_file <- system.file("testfiles", "h5ex_t_array.h5", package="rhdf5")
+example_file <- system.file("testfiles", "h5ex_t_array.h5", package = "rhdf5")
 file.copy(example_file, tempdir())
 h5_file <- file.path(tempdir(), "h5ex_t_array.h5")
 h5ls(h5_file)
 
 ## open the example file and create a new, empty, file
-fid1 <- H5Fopen( h5_file )
+fid1 <- H5Fopen(h5_file)
 h5_file2 <- tempfile(fileext = ".h5")
-fid2 <- H5Fcreate( h5_file2 )
+fid2 <- H5Fcreate(h5_file2)
 
 ## We can copy a dataset inside the same file
 H5Ocopy(h5loc = fid1, name = "DS1", h5loc_dest = fid1, name_dest = "DS2")
@@ -45,9 +45,11 @@ H5Ocopy(h5loc = fid1, name = "DS1", h5loc_dest = fid2, name_dest = "DS1_copy")
 
 ## if we want to create a new group hierarchy we can use a link creation property list
 lcpl <- H5Pcreate("H5P_LINK_CREATE")
-H5Pset_create_intermediate_group( lcpl, create_groups = TRUE )
-H5Ocopy(h5loc = fid1, name = "DS1", h5loc_dest = fid2, 
-        name_dest = "/foo/baa/DS1_nested", lcpl = lcpl)
+H5Pset_create_intermediate_group(lcpl, create_groups = TRUE)
+H5Ocopy(
+  h5loc = fid1, name = "DS1", h5loc_dest = fid2,
+  name_dest = "/foo/baa/DS1_nested", lcpl = lcpl
+)
 
 ## tidy up
 H5Pclose(lcpl)
@@ -55,8 +57,8 @@ H5Fclose(fid1)
 H5Fclose(fid2)
 
 ## Check we now have groups DS1 and DS2 in the original file
-h5ls( h5_file )
+h5ls(h5_file)
 ## Check we have a copy of DS1 at the root and nests in the new file
-h5ls( h5_file2 )
+h5ls(h5_file2)
 
 }

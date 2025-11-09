@@ -26,8 +26,8 @@ h5File <- tempfile(pattern = "ex_createFile.h5")
 h5createFile(h5File)
 
 # create groups
-h5createGroup(h5File,"foo")
-h5createGroup(h5File,"foo/foobaa")
+h5createGroup(h5File, "foo")
+h5createGroup(h5File, "foo/foobaa")
 
 h5ls(h5File)
 

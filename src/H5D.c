@@ -330,6 +330,8 @@ SEXP H5Dread_helper_INTEGER(hid_t dataset_id, hid_t file_space_id, hid_t mem_spa
                 } else if (b == 8) { 
                     int64_to_int32(intbuf, n, buf, sgn);
                 }
+                if (native)
+                    PERMUTE(Rval, INTEGER, mem_space_id);
             } else {
                 void * buf;
                 if (length(_buf) == 0) {
@@ -1207,4 +1209,20 @@ SEXP _H5Dset_extent( SEXP _dataset_id, SEXP _size ) {
     INTEGER(Rval)[0] = herr;
     UNPROTECT(1);
     return Rval;
+}
+
+SEXP _H5Dget_num_chunks( SEXP _dataset_id, SEXP _dataspace_id ) {
+    hid_t dataset_id = STRSXP_2_HID( _dataset_id );
+    hid_t dataspace_id = STRSXP_2_HID( _dataspace_id );
+    hsize_t nchunks = 0;
+
+    herr_t herr = H5Dget_num_chunks(dataset_id, dataspace_id, &nchunks);
+    if(herr < 0) {
+        error("Unable to determine the number of chunks\n");
+    }
+
+    SEXP Rval;
+    PROTECT(Rval = ScalarInteger(nchunks));
+    UNPROTECT(1);
+    return(Rval);
 }

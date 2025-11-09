@@ -22,7 +22,7 @@ SEXP _H5Fget_filesize( SEXP _file_id );
 SEXP _H5Fget_create_plist( SEXP _file_id );
 SEXP _H5Fget_access_plist( SEXP _file_id );
 /* _H5Fget_info */
-/* _H5Fget_intent */
+SEXP _H5Fget_intent( SEXP _file_id );
 SEXP _H5Fget_name( SEXP _obj_id );
 /* SEXP _H5Fget_obj_count( SEXP _file_id, unsigned int types ); */
       	

@@ -37,7 +37,7 @@ SEXP _H5Rcreate(SEXP _loc_id, SEXP _name, SEXP _ref_type, SEXP _space_id) {
     memcpy(Rptr, &ref[0], sizeof(hdset_reg_ref_t));
     
   } else {
-    error("Uknown reference type");
+    error("Unknown reference type");
     return(R_NilValue);
   }
 

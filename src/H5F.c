@@ -148,3 +148,18 @@ SEXP _H5Fget_access_plist( SEXP _file_id ) {
   return Rval;
 }
 
+SEXP _H5Fget_intent( SEXP _file_id ) {
+
+  SEXP Rval;
+  unsigned intent = 0;
+  hid_t file_id = STRSXP_2_HID( _file_id );
+  herr_t err = H5Fget_intent(file_id, &intent);
+  if(err < 0) {
+    error("Unable to determine file status");
+  }
+
+  PROTECT(Rval = ScalarInteger(intent));
+  UNPROTECT(1);
+  return Rval;
+}
+

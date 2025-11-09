@@ -8,6 +8,7 @@
 #include "myhdf5.h"
 #include "HandleList.h"
 #include "H5constants.h"
+#include <H5Opublic.h>
 
 hsize_t H5Oget_num_attrs ( hid_t obj_id );
 
@@ -24,7 +25,7 @@ SEXP _H5Ocopy( SEXP _src_loc_id, SEXP _src_name, SEXP _dst_loc_id, SEXP _dst_nam
 /* H5Oset_comment_by_name */
 /* H5Oget_comment */
 /* H5Oget_comment_by_name */
-// SEXP _H5Oget_info( SEXP _object_id );
+SEXP _H5Oget_info( SEXP _object_id );
 // SEXP _H5Oget_info_by_name( SEXP _loc_id, SEXP _object_name );
 /* H5Oget_info_by_idx */
       	

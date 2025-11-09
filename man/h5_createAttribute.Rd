@@ -15,7 +15,6 @@ h5createAttribute(
   H5type = NULL,
   size = NULL,
   encoding = NULL,
-  cset = NULL,
   native = FALSE
 )
 }
@@ -58,8 +57,6 @@ variable-length strings.}
 
 \item{encoding}{The encoding of the string data type i.e. when \code{storage.mode = 'character'}. Valid options are "ASCII" and "UTF-8".}
 
-\item{cset}{\emph{Deprecated in favour of the \code{encoding} argument.}}
-
 \item{native}{An object of class \code{logical}. If TRUE, array-like objects
 are treated as stored in HDF5 row-major rather than R column-major
 orientation. Using \code{native = TRUE} increases HDF5 file portability
@@ -88,7 +85,7 @@ h5createFile(h5File)
 h5write(1:1, h5File, "A")
 fid <- H5Fopen(h5File)
 did <- H5Dopen(fid, "A")
-h5createAttribute (did, "time", c(1,10))
+h5createAttribute(did, "time", c(1, 10))
 H5Dclose(did)
 H5Fclose(fid)
 

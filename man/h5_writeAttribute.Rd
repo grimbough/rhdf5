@@ -33,8 +33,8 @@ h5writeAttribute(
 
 \item{h5obj}{Normally an object of class \linkS4class{H5IdComponent} representing a
 H5 object identifier (file, group, or dataset). See
-\code{\link{H5Fcreate}}, \code{\link{H5Fopen}}, \code{\link{H5Gcreate}},
-\code{\link{H5Gopen}}, \code{\link{H5Dcreate}}, or \code{\link{H5Dopen}} to
+\code{\link[=H5Fcreate]{H5Fcreate()}}, \code{\link[=H5Fopen]{H5Fopen()}}, \code{\link[=H5Gcreate]{H5Gcreate()}},
+\code{\link[=H5Gopen]{H5Gopen()}}, \code{\link[=H5Dcreate]{H5Dcreate()}}, or \code{\link[=H5Dopen]{H5Dopen()}} to
 create an object of this kind.  This argument can also be given the path to
 an HDF5 file.}
 

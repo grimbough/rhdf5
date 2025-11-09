@@ -18,7 +18,7 @@ An identifier is no longer valid after it has been closed.
 }
 \examples{
 
-h5file <- system.file("testfiles", "h5ex_t_array.h5", package="rhdf5")
+h5file <- system.file("testfiles", "h5ex_t_array.h5", package = "rhdf5")
 fid <- H5Fopen(h5file)
 
 ## test whether the identifer to the opened file is valid

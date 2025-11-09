@@ -25,8 +25,8 @@ jobs:
         - { os: windows-2022, bioc-version: 'devel', bioc-mirror: 'https://bioconductor.posit.co/',  Ncpus: 2}
         - { os: macOS-14,     bioc-version: 'devel', bioc-mirror: 'https://bioconductor.posit.co/',  Ncpus: 3}
         - { os: macOS-13,     bioc-version: 'devel', bioc-mirror: 'https://bioconductor.posit.co/',  Ncpus: 3}
-        - { os: ubuntu-22.04, bioc-version: 'devel', bioc-mirror: 'https://bioconductor.posit.co/',  Ncpus: 4}
-        - { os: ubuntu-22.04, bioc-version: 'release',  bioc-mirror: 'https://packagemanager.posit.co/bioconductor',  Ncpus: 4}
+        - { os: ubuntu-24.04, bioc-version: 'devel', bioc-mirror: 'https://bioconductor.posit.co/',  Ncpus: 4}
+        - { os: ubuntu-24.04, bioc-version: 'release',  bioc-mirror: 'https://packagemanager.posit.co/bioconductor',  Ncpus: 4}
     steps:
     
       ## R CMD check complains about Windows line endings without this
@@ -49,18 +49,12 @@ jobs:
           
       - uses: r-lib/actions/setup-pandoc@v2
       
-      - name: temp rhdf5filters install
+      ## this step has to come after R is installed since R is not on the GitHub runner by default any more.
+      - name: Install openssl
         if: matrix.config.os == 'macOS-14'
         run: |
           sudo R -e 'source("https://mac.R-project.org/bin/install.R")' -e 'install.libs("openssl")'
       
-      - name: temp rhdf5filters install
-        if: matrix.config.os == 'macOS-14'
-        run: |
-          install.packages("remotes")
-          BiocManager::install("grimbough/rhdf5filters")
-        shell: Rscript {0}
-        
       - name: Install dependencies
         uses: r-lib/actions/setup-r-dependencies@v2
         with:

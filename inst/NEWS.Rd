@@ -1,6 +1,49 @@
 \name{NEWS}
 \title{News for Package 'rhdf5'}
 
+\section{Changes in version 2.56.0}{
+
+  \subsection{Breaking changes}{
+    \itemize{
+      \item The default value for the `bit64conversion` argument in `H5Aread()`
+      and `H5Dread()` has been set explicitly to `"int"`.
+      Relying on a missing value or `"default"` results in a warning and will be
+      disallowed in the next release cycle.
+      Users should either specify `bit64conversion="int"` explicitly, or omit
+      this argument entirely if they wish to use the provided default.
+    }
+  }
+
+  \subsection{Bug fixes}{
+    \itemize{
+      \item The value ordering (row-major vs column-major) is not correct when
+      reading unsigned integers with `native=TRUE`. Thanks to Jared Lumpe for
+      the report and detailed reproducible example:
+      https://github.com/Huber-group-EMBL/rhdf5/issues/157.
+    }
+  }
+}
+
+\section{Changes in version 2.54.0}{
+
+  \subsection{CHANGES}{
+    \itemize{
+      \item Disabled dataset timestamps, which were applied for compound 
+      datasets but not other types.  Back ported to 2.52.1.
+      (Thanks to Luke Zappia for reporting this 
+      https://github.com/Huber-group-EMBL/rhdf5/issues/160)
+      \item Exposed HDF5 API functions \code{H5Oget_info()}, \code{H5Fget_intent()}
+      \code{H5Dget_num_chunks()}.
+      \item Added function \code{h5readTimestamps} to extract object timestamp
+      metadata.
+      \item The previously deprecated `cset` argument in
+      \code{h5createAttribute()} has been removed entirely. Please use the
+      `encoding` argument instead.
+    }
+  }
+
+}
+
 \section{Changes in version 2.52.0}{
 
   \subsection{CHANGES}{
@@ -18,7 +61,7 @@
       https://github.com/grimbough/rhdf5/issues/151).
       \item Addressed potential issued caused by undefined compiler behaviour
       when arrays of length zero were being created in C code.  Backported to
-      2.50.2 (Thanks to Prof B. Ripley for reporing this.)
+      2.50.2 (Thanks to Prof B. Ripley for reporting this.)
     }
   }
 }

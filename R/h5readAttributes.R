@@ -3,10 +3,10 @@
 #' @param file Character vector of length 1, giving the path to the HDF5
 #' @param name Path within the HDF5 file to the object whose attributes should
 #'   be read.
-#' @param native An object of class \code{logical}. If TRUE, array-like objects
+#' @param native An object of class `logical`. If TRUE, array-like objects
 #'   are treated as stored in HDF5 row-major rather than R column-major
 #'   orientation.
-#' @param \dots Further arguments passed to \code{\link{H5Aread}}.
+#' @param \dots Further arguments passed to [H5Aread()].
 #'
 #' @returns A named list of the same length as the number of attributes attached
 #'   to the specific object.  The names of the list entries correspond to the
@@ -15,33 +15,35 @@
 #' @name h5_readAttributes
 #' @export
 h5readAttributes <- function(file, name, native = FALSE, ...) {
-  loc = h5checktypeOrOpenLoc(file, readonly=TRUE, native = native)
+  loc <- h5checktypeOrOpenLoc(file, readonly = TRUE, native = native)
   on.exit(h5closeitLoc(loc))
   if (!H5Lexists(loc$H5Identifier, name)) {
     stop("Object ", name, " does not exist in this HDF5 file.")
   } else {
-    oid = H5Oopen(loc$H5Identifier, name)
+    oid <- H5Oopen(loc$H5Identifier, name)
     on.exit(H5Oclose(oid), add = TRUE)
-    type = H5Iget_type(oid)
-    num_attrs = H5Oget_num_attrs(oid)
-    if (is.na(num_attrs)) { num_attrs = 0 }
-    res = list()
+    num_attrs <- H5Oget_num_attrs(oid)
+    if (is.na(num_attrs)) {
+      num_attrs <- 0
+    }
+    res <- list()
     if (num_attrs > 0) {
       for (i in seq_len(num_attrs)) {
-        A = H5Aopen_by_idx(loc$H5Identifier, n = i-1, objname = name)
+        A <- H5Aopen_by_idx(loc$H5Identifier, n = i - 1, objname = name)
         attrname <- H5Aget_name(A)
-        res[[attrname]] = H5Aread(A, ...)
+        res[[attrname]] <- H5Aread(A, ...)
         tid <- H5Aget_type(A)
         ## if we have an enum type where the levels are only TRUE,FALSE,NA
         ## convert the result to an R logical.  This is consistent with h5py
-        if(H5Tget_class(tid) == "H5T_ENUM") {
+        if (H5Tget_class(tid) == "H5T_ENUM") {
           enumNames <- h5getEnumNames(tid)
-          if(all(enumNames %in% c("TRUE", "FALSE", "NA")))
+          if (all(enumNames %in% c("TRUE", "FALSE", "NA"))) {
             res[[attrname]] <- as.logical(res[[attrname]])
+          }
         }
         H5Aclose(A)
       }
     }
-  } 
+  }
   res
 }

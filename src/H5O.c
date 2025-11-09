@@ -132,6 +132,80 @@ SEXP _H5Oget_info( SEXP _object_id ) {
 }
 */
 
+SEXP _H5Oget_info( SEXP _object_id ) {
+  
+  hid_t object_id = STRSXP_2_HID( _object_id );
+  H5O_info_t info;
+  SEXP Rval, class, tz_attr;
+  
+  herr_t herr = H5Oget_info2( object_id, &info, H5O_INFO_ALL );
+  if(herr < 0) {
+    error("Unable to obtain object info\n");
+  }
+
+  // create names for our list that will be returned
+  const char *names[] = {"file_num", "type", "reference_count", 
+                         "access_time", "modification_time", "change_time",
+                         "birth_time", "num_attrs", ""};
+  Rval = PROTECT(Rf_mkNamed(VECSXP, names));
+  
+  // timestamps
+  SEXP atime = PROTECT(Rf_ScalarReal(info.atime));
+  SEXP mtime = PROTECT(Rf_ScalarReal(info.mtime));
+  SEXP ctime = PROTECT(Rf_ScalarReal(info.ctime));
+  SEXP btime = PROTECT(Rf_ScalarReal(info.btime));
+  
+  // add POSIXct class
+  class = PROTECT(allocVector(STRSXP, 2));
+  SET_STRING_ELT(class, 0, mkChar("POSIXct"));
+  SET_STRING_ELT(class, 1, mkChar("POSIXt"));
+  classgets(atime, class);
+  classgets(mtime, class);
+  classgets(ctime, class);
+  classgets(btime, class);
+  
+  // set timezone
+  tz_attr = PROTECT(allocVector(STRSXP, 1));
+  SET_STRING_ELT(tz_attr, 0, mkChar("UTC"));
+  setAttrib(atime, install("tzone"), tz_attr);
+  setAttrib(mtime, install("tzone"), tz_attr);
+  setAttrib(ctime, install("tzone"), tz_attr);
+  setAttrib(btime, install("tzone"), tz_attr);
+  
+  //object type
+  SEXP obj_type = PROTECT(allocVector(STRSXP, 1));
+  switch(info.type) {
+  case H5O_TYPE_GROUP :
+    obj_type = mkString("GROUP");
+    break;
+  case H5O_TYPE_DATASET :
+    obj_type = mkString("DATASET");
+    break;
+  case H5O_TYPE_NAMED_DATATYPE :
+    obj_type = mkString("NAMED_DATATYPE");
+    break;
+  default :
+    obj_type = mkString("UNKNOWN TYPE");
+    break;
+  }
+  
+  // add elements to the list
+  SET_VECTOR_ELT(Rval, 0, Rf_ScalarInteger(info.fileno)); 
+  SET_VECTOR_ELT(Rval, 1, obj_type); 
+  SET_VECTOR_ELT(Rval, 2, Rf_ScalarInteger(info.rc)); 
+  SET_VECTOR_ELT(Rval, 3, atime); 
+  SET_VECTOR_ELT(Rval, 4, mtime); 
+  SET_VECTOR_ELT(Rval, 5, ctime); 
+  SET_VECTOR_ELT(Rval, 6, btime); 
+  SET_VECTOR_ELT(Rval, 7, Rf_ScalarInteger(info.num_attrs)); 
+
+  
+  UNPROTECT(8);
+
+  return Rval;
+}
+  
+
 /* herr_t H5Oget_info_by_name( hid_t loc_id, const char *object_name, H5O_info_t *object_info, hid_t lapl_id ) */
 /*
 SEXP _H5Oget_info_by_name( SEXP _loc_id, SEXP _object_name ) {
