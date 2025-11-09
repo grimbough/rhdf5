@@ -28,7 +28,8 @@ SEXP _h5createDataFrame(SEXP _obj, SEXP _loc_id, SEXP _name, SEXP _level, SEXP _
     }
     hid_t tid = H5Tcreate (H5T_COMPOUND, size);
     hsize_t offset = 0;
-    SEXP aa = getAttrib(_obj, mkString("names"));
+    SEXP nms = PROTECT(mkString("names"));
+    SEXP aa = PROTECT(getAttrib(_obj, nms));
     for (R_xlen_t i=0; i< LENGTH(_obj); i++) {
         const char *nn = CHAR(STRING_ELT(aa, i));
         if (TYPEOF(VECTOR_ELT(_obj,i)) == INTSXP) {
@@ -78,9 +79,8 @@ SEXP _h5createDataFrame(SEXP _obj, SEXP _loc_id, SEXP _name, SEXP _level, SEXP _
     H5Sclose(space);
     
     addHandle(dset_id);
-    SEXP Rval;
-    PROTECT(Rval = HID_2_STRSXP(dset_id));
-    UNPROTECT(1);
+    SEXP Rval = PROTECT(HID_2_STRSXP(dset_id));
+    UNPROTECT(3);
     return Rval;
 }
 
@@ -92,7 +92,8 @@ SEXP _h5writeDataFrame(SEXP _obj, SEXP _dset_id) {
     hsize_t n = LENGTH(VECTOR_ELT(_obj,0));
     hid_t space = H5Screate_simple (1, &n, &n);
     
-    SEXP aa = getAttrib(_obj, mkString("names"));
+    SEXP nms = PROTECT(mkString("names"));
+    SEXP aa = PROTECT(getAttrib(_obj, nms));
     
     size_t strsize[LENGTH(_obj)];
     for (R_xlen_t i=0; i< LENGTH(_obj); i++) {
@@ -149,6 +150,7 @@ SEXP _h5writeDataFrame(SEXP _obj, SEXP _dset_id) {
     H5Sclose(space);
     
     SEXP Rval = R_NilValue;
+    UNPROTECT(2);
     return Rval;
 }
 

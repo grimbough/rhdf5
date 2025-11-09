@@ -292,9 +292,11 @@ SEXP H5Aread_helper_REFERENCE(hid_t attr_id, hsize_t n, SEXP Rdim, SEXP _buf, hi
   }
   
   Rval = PROTECT(R_do_new_object(R_getClassDef("H5Ref")));
-  R_do_slot_assign(Rval, mkString("val"), Rrefs);
-  R_do_slot_assign(Rval, mkString("type"), Rtype);
-  UNPROTECT(3);
+  SEXP val = PROTECT(mkString("val"));
+  SEXP type = PROTECT(mkString("type"));
+  R_do_slot_assign(Rval, val, Rrefs);
+  R_do_slot_assign(Rval, type, Rtype);
+  UNPROTECT(5);
   return Rval;
 }
 
@@ -457,17 +459,20 @@ SEXP _H5Awrite( SEXP _attr_id, SEXP _buf) {
         buf = LOGICAL(_buf);
         break;
     case S4SXP : 
-      if(R_check_class_etc(_buf, H5Ref) >= 0) {
-        if(INTEGER(R_do_slot(_buf, mkString("type")))[0] == H5R_OBJECT) {
+        SEXP typeSlot = PROTECT(mkString("type"));
+        SEXP valSlot = PROTECT(mkString("val"));
+        if(R_check_class_etc(_buf, H5Ref) >= 0) {
+          if(INTEGER(R_do_slot(_buf, typeSlot))[0] == H5R_OBJECT) {
             mem_type_id = H5T_STD_REF_OBJ;
-        } else if (INTEGER(R_do_slot(_buf, mkString("type")))[0] == H5R_DATASET_REGION) {
+          } else if (INTEGER(R_do_slot(_buf, typeSlot))[0] == H5R_DATASET_REGION) {
             mem_type_id = H5T_STD_REF_DSETREG;
-        } else {
+          } else {
             mem_type_id = -1;
             Rf_error("Error writing references");
+          }
         }
-        }
-        buf = RAW(R_do_slot(_buf, mkString("val")));
+        buf = RAW(R_do_slot(_buf, valSlot));
+        UNPROTECT(2);
         break;
     default :
         mem_type_id = -1;
