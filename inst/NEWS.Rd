@@ -20,6 +20,7 @@
       reading unsigned integers with `native=TRUE`. Thanks to Jared Lumpe for
       the report and detailed reproducible example:
       https://github.com/Huber-group-EMBL/rhdf5/issues/157.
+    }
   }
 }
 
