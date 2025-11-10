@@ -460,9 +460,8 @@ SEXP _H5Awrite( SEXP _attr_id, SEXP _buf) {
         buf = LOGICAL(_buf);
         break;
     case S4SXP : 
-        SEXP typeSlot = PROTECT(mkString("type"));
-        SEXP valSlot = PROTECT(mkString("val"));
         if(R_check_class_etc(_buf, H5Ref) >= 0) {
+          SEXP typeSlot = PROTECT(mkString("type"));
           if(INTEGER(R_do_slot(_buf, typeSlot))[0] == H5R_OBJECT) {
             mem_type_id = H5T_STD_REF_OBJ;
           } else if (INTEGER(R_do_slot(_buf, typeSlot))[0] == H5R_DATASET_REGION) {
@@ -472,6 +471,7 @@ SEXP _H5Awrite( SEXP _attr_id, SEXP _buf) {
             Rf_error("Error writing references");
           }
         }
+        SEXP valSlot = PROTECT(mkString("val"));
         buf = RAW(R_do_slot(_buf, valSlot));
         UNPROTECT(2);
         break;
