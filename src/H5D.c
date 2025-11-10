@@ -837,7 +837,7 @@ SEXP H5Dread_helper_REFERENCE(hid_t dataset_id, hid_t file_space_id, hid_t mem_s
                           hid_t dtype_id, int native) {
   
   void *references;
-  SEXP Rrefs, Rtype, Rval; 
+  SEXP Rrefs, Rtype; 
   
   if(H5Tequal(dtype_id, H5T_STD_REF_OBJ)) {
     Rrefs = PROTECT(allocVector(RAWSXP, sizeof(hobj_ref_t) * n ));
@@ -858,12 +858,13 @@ SEXP H5Dread_helper_REFERENCE(hid_t dataset_id, hid_t file_space_id, hid_t mem_s
     return R_NilValue;
   }
 
-  Rval = PROTECT(R_do_new_object(R_getClassDef("H5Ref")));
+  SEXP Rclass = PROTECT(R_getClassDef("H5Ref"));
+  SEXP Rval = PROTECT(R_do_new_object(Rclass));
   SEXP valSlot = PROTECT(mkString("val"));
   SEXP typeSlot = PROTECT(mkString("type"));
   R_do_slot_assign(Rval, valSlot, Rrefs);
   R_do_slot_assign(Rval, typeSlot, Rtype);
-  UNPROTECT(5);
+  UNPROTECT(6);
   return Rval;
 }
 
