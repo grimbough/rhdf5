@@ -19,7 +19,7 @@ h5createAttribute(
 )
 }
 \arguments{
-\item{obj}{The name (character) of the object the attribute will be attatched
+\item{obj}{The name (character) of the object the attribute will be attached
 to. For advanced programmers it is possible to provide an object of class
 \linkS4class{H5IdComponent} representing a H5 object identifier (file, group,
 dataset). See \code{\link[=H5Fcreate]{H5Fcreate()}}, \code{\link[=H5Fopen]{H5Fopen()}}, \code{\link[=H5Gcreate]{H5Gcreate()}}, \code{\link[=H5Gopen]{H5Gopen()}},

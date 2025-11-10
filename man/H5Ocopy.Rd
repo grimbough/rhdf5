@@ -8,7 +8,7 @@ H5Ocopy(h5loc, name, h5loc_dest, name_dest, obj_cpy_pl = NULL, lcpl = NULL)
 }
 \arguments{
 \item{h5loc}{An object of class \linkS4class{H5IdComponent} representing an open
-HDF5 object where the source obiect should be copied from.}
+HDF5 object where the source object should be copied from.}
 
 \item{name}{Character vector of length 1, giving the name of the source object
 to be copied.}

@@ -35,7 +35,7 @@ not yet exist.}
 
 \item{dims}{The dimensions of the array as they will appear in the file.
 Note, the dimensions will appear in inverted order when viewing the file
-with a C-programm (e.g. HDFView), because the fastest changing dimension in
+with a C-program (e.g. HDFView), because the fastest changing dimension in
 R is the first one, whereas the fastest changing dimension in C is the last
 one.}
 
