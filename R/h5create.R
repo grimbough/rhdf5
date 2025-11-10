@@ -336,7 +336,7 @@ h5createGroup <- function(file, group) {
 #'   not yet exist.
 #' @param dims The dimensions of the array as they will appear in the file.
 #'   Note, the dimensions will appear in inverted order when viewing the file
-#'   with a C-programm (e.g. HDFView), because the fastest changing dimension in
+#'   with a C-program (e.g. HDFView), because the fastest changing dimension in
 #'   R is the first one, whereas the fastest changing dimension in C is the last
 #'   one.
 #' @param maxdims The maximum extension of the array. Use [H5Sunlimited()]
@@ -542,7 +542,7 @@ h5createDataset <- function(
 #' You can use [h5writeAttribute()] immediately. It will create the attribute
 #' for you.
 #'
-#' @param obj The name (character) of the object the attribute will be attatched
+#' @param obj The name (character) of the object the attribute will be attached
 #'   to. For advanced programmers it is possible to provide an object of class
 #'   [H5IdComponent-class] representing a H5 object identifier (file, group,
 #'   dataset). See [H5Fcreate()], [H5Fopen()], [H5Gcreate()], [H5Gopen()],

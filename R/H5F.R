@@ -205,7 +205,7 @@ H5Fget_access_plist <- function(h5file) {
   invisible(h5plist)
 }
 
-#' Retermine the read only or read/write status of an open file handle.
+#' Determine the read only or read/write status of an open file handle.
 #'
 #' @param h5file An object of class [H5IdComponent-class] representing a H5
 #' file identifier.  Typically produced by [H5Fopen()] or [H5Fcreate()].

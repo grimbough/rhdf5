@@ -58,7 +58,7 @@ H5Oclose <- function(h5obj) {
 #' Copies an HDF5 object
 #'
 #' @param h5loc An object of class [H5IdComponent-class] representing an open
-#' HDF5 object where the source obiect should be copied from.
+#' HDF5 object where the source object should be copied from.
 #' @param name Character vector of length 1, giving the name of the source object
 #' to be copied.
 #' @param h5loc_dest An object of class [H5IdComponent-class] representing an open
