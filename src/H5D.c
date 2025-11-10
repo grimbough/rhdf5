@@ -1130,9 +1130,8 @@ SEXP _H5Dwrite( SEXP _dataset_id, SEXP _buf, SEXP _file_space_id, SEXP _mem_spac
         buf = COMPLEX(_buf);
         break;
     case S4SXP :
-        SEXP typeSlot = PROTECT(mkString("type"));
-        SEXP valSlot = PROTECT(mkString("val"));
         if(R_check_class_etc(_buf, H5Ref) >= 0) {
+          SEXP typeSlot = PROTECT(mkString("type"));
           if(INTEGER(R_do_slot(_buf, typeSlot))[0] == H5R_OBJECT) {
             mem_type_id = H5T_STD_REF_OBJ;
           } else if (INTEGER(R_do_slot(_buf, typeSlot))[0] == H5R_DATASET_REGION) {
@@ -1141,6 +1140,7 @@ SEXP _H5Dwrite( SEXP _dataset_id, SEXP _buf, SEXP _file_space_id, SEXP _mem_spac
             mem_type_id = -1;
             Rf_error("Error writing references");
           }
+          SEXP valSlot = PROTECT(mkString("val"));
           buf = RAW(R_do_slot(_buf, valSlot));
         } else {
           Rf_error("Class check failed\n");
