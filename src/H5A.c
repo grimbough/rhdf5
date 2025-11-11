@@ -311,16 +311,17 @@ SEXP H5Aread_helper_ENUM(hid_t attr_id, hsize_t n, SEXP Rdim, SEXP _buf, hid_t d
   
   SEXP Rval = PROTECT(allocVector(STRSXP, (int) n));
   
-  void *buf = R_alloc(H5Tget_size(dtype_id), n);
+  size_t el_size = H5Tget_size(dtype_id);
+  void *buf = R_alloc(el_size, n);
   H5Aread(attr_id, dtype_id, buf);
-  
+
   size_t max_string_length = 1024;
   char *st = H5allocate_memory(max_string_length, FALSE);
   for (hsize_t i=0; i < n; i++) {
     memset(st, 0, max_string_length);
-    H5Tenum_nameof	(	dtype_id, buf, st, max_string_length);
+    H5Tenum_nameof(dtype_id, buf, st, max_string_length);
     SET_STRING_ELT(Rval, i, mkChar(st));
-    buf += H5Tget_size(dtype_id);
+    buf += el_size;
   }
   H5free_memory(st);
   
