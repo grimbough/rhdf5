@@ -312,7 +312,8 @@ SEXP H5Aread_helper_ENUM(hid_t attr_id, hsize_t n, SEXP Rdim, SEXP _buf, hid_t d
   SEXP Rval = PROTECT(allocVector(STRSXP, (int) n));
   
   size_t el_size = H5Tget_size(dtype_id);
-  void *buf = R_alloc(el_size, n);
+  // We need a pointer to a single byte data type for pointer arithmetic.
+  unsigned char *buf = (unsigned char *) R_alloc(el_size, n);
   H5Aread(attr_id, dtype_id, buf);
 
   size_t max_string_length = 1024;
