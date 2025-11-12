@@ -27,11 +27,21 @@
 #' @name h5readTimestamps
 #' @export
 h5readTimestamps <- function(file, name) {
+  if (missing(name)) {
+    stop(
+      "Please provide the name of the object to read timestamps from ",
+      "using the 'name' argument. You can use `h5ls()` to list the objects in ",
+      "the file",
+      call. = FALSE
+    )
+  }
   loc <- h5checktypeOrOpenLoc(file, readonly = TRUE, native = FALSE)
   on.exit(h5closeitLoc(loc))
   if (!H5Lexists(loc$H5Identifier, name)) {
     stop(
-      "Object ", name, " does not exist in this HDF5 file.\n",
+      "Object ",
+      name,
+      " does not exist in this HDF5 file.\n",
       "Use `h5ls()` to list the objects in the file."
     )
   }
