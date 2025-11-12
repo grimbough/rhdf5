@@ -25,6 +25,13 @@
     }
   }
 
+  \subsection{Internal changes}{
+    \itemize{
+      \item Code coverage reports via codecov have been restored.
+      \item The pkgdown documentation website for this package have been restored.
+    }
+  }
+
 }
 
 \section{Changes in version 2.54.0}{
