@@ -272,6 +272,14 @@ h5read <- function(
   s3 = FALSE,
   s3credentials = NULL
 ) {
+  if (missing(name)) {
+    stop(
+      "Please provide the name of the object to read using the 'name' argument. ",
+      "You can use `h5ls()` to list the objects in the file.",
+      call. = FALSE
+    )
+  }
+
   if (isTRUE(s3)) {
     fapl <- H5Pcreate("H5P_FILE_ACCESS")
     on.exit(H5Pclose(fapl))
@@ -294,7 +302,9 @@ h5read <- function(
 
   if (!H5Lexists(loc$H5Identifier, name)) {
     stop(
-      "Object '", name, "' does not exist in this HDF5 file.\n",
+      "Object '",
+      name,
+      "' does not exist in this HDF5 file.\n",
       "Use `h5ls()` to list the objects in the file."
     )
   }

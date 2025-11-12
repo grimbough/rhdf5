@@ -39,13 +39,22 @@
 #' @name h5_set_extent
 #' @export h5set_extent
 h5set_extent <- function(file, dataset, dims, native = FALSE) {
+  if (missing(dataset)) {
+    stop(
+      "Please provide the name of the dataset using the 'dataset' argument. ",
+      "You can use `h5ls()` to list the objects in the file",
+      call. = FALSE
+    )
+  }
   loc <- h5checktypeOrOpenLoc(file, native = native)
   on.exit(h5closeitLoc(loc))
 
   if (is.character(dataset)) {
     if (!H5Lexists(loc$H5Identifier, dataset)) {
       stop(
-        "Object ", dataset, " does not exist in this HDF5 file.\n",
+        "Object ",
+        dataset,
+        " does not exist in this HDF5 file.\n",
         "Use `h5ls()` to list the objects in the file."
       )
     } else {

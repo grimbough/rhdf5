@@ -30,6 +30,14 @@ h5delete <- function(file, name) {
 #' @name h5_deleteAttribute
 #' @export h5deleteAttribute
 h5deleteAttribute <- function(file, name, attribute) {
+  if (missing(name)) {
+    stop(
+      "Please provide the name of the object to which the attribute belongs ",
+      "using the 'name' argument. You can use `h5ls()` to list the objects in ",
+      "the file",
+      call. = FALSE
+    )
+  }
   loc <- h5checktypeOrOpenLoc(file, native = FALSE)
   on.exit(h5closeitLoc(loc))
 
@@ -44,7 +52,11 @@ h5deleteAttribute <- function(file, name, attribute) {
     }
   } else {
     message(
-      "Object '", name, "' not found in ", file, ".\n",
+      "Object '",
+      name,
+      "' not found in ",
+      file,
+      ".\n",
       "Use `h5ls()` to list the objects in the file."
     )
   }

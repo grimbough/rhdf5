@@ -16,6 +16,14 @@
 #' @name h5_readAttributes
 #' @export
 h5readAttributes <- function(file, name, native = FALSE, ...) {
+  if (missing(name)) {
+    stop(
+      "Please provide the name of the object to which the attribute belongs ",
+      "using the 'name' argument. You can use `h5ls()` to list the objects in ",
+      "the file",
+      call. = FALSE
+    )
+  }
   loc <- h5checktypeOrOpenLoc(file, readonly = TRUE, native = native)
   on.exit(h5closeitLoc(loc))
   if (!H5Lexists(loc$H5Identifier, name)) {
