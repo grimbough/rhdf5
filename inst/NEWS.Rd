@@ -25,6 +25,15 @@
     }
   }
 
+  \subsection{Minor changes}{
+    \itemize{
+      \item Documentation for the `name` argument as well as the error message
+      when trying to work on a non-existing object now include a hint to use
+      `h5ls()` to list the objects in a file. Inspired from a suggestion from
+      Frederik Ziebell.
+    }
+  }
+
   \subsection{Internal changes}{
     \itemize{
       \item Code coverage reports via codecov have been restored.
