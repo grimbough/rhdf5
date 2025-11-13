@@ -31,6 +31,9 @@
       when trying to work on a non-existing object now include a hint to use
       `h5ls()` to list the objects in a file. Inspired from a suggestion from
       Frederik Ziebell.
+      \item A warning about void pointer arithmetic in H5Aread_helper_ENUM 
+      (C code) has been resolved. This increases portability across different 
+      compilers.
     }
   }
 
