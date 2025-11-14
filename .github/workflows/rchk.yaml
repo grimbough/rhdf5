@@ -8,11 +8,13 @@ on:
       - devel
     paths:
       - 'src/**'
+      - '.github/workflows/rchk.yaml'
   pull_request:
     branches:
       - devel
     paths:
       - 'src/**'
+      - '.github/workflows/rchk.yaml'
 
 jobs:
   setup:
