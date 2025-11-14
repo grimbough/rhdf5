@@ -109,11 +109,11 @@ The success or failure of the locking is then recorded and the temporary
 file removed.  Even relatively low level functions such as
 <code><a href="H5Fcreate.html">H5Fcreate()</a></code> will fail inelegantly if file locking fails.</p>
 <p><code>h5disableFileLocking</code> will set the environment variable
-<code>RHDF5_USE_FILE_LOCKING=FALSE</code>, which is the recommended was to disable
+<code>HDF5_USE_FILE_LOCKING=FALSE</code>, which is the recommended was to disable
 this behaviour if file locking is not supported.  This will only persist
 within the current R session.  You can set the environment variable outside
 of R if this is a more general issue on your system.</p>
-<p><code>h5enableFileLocking</code> will unset the <code>RHDF5_USE_FILE_LOCKING</code>
+<p><code>h5enableFileLocking</code> will unset the <code>HDF5_USE_FILE_LOCKING</code>
 environment variable.</p>
 <p>More discussion of HDF5's use of file locking can be found online e.g.
 <a href="https://forum.hdfgroup.org/t/hdf5-1-10-0-and-flock/3761/4" class="external-link">https://forum.hdfgroup.org/t/hdf5-1-10-0-and-flock/3761/4</a> or
