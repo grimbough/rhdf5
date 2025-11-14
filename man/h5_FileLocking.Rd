@@ -43,12 +43,12 @@ file removed.  Even relatively low level functions such as
 \code{\link[=H5Fcreate]{H5Fcreate()}} will fail inelegantly if file locking fails.
 
 \code{h5disableFileLocking} will set the environment variable
-\code{RHDF5_USE_FILE_LOCKING=FALSE}, which is the recommended was to disable
+\code{HDF5_USE_FILE_LOCKING=FALSE}, which is the recommended was to disable
 this behaviour if file locking is not supported.  This will only persist
 within the current R session.  You can set the environment variable outside
 of R if this is a more general issue on your system.
 
-\code{h5enableFileLocking} will unset the \code{RHDF5_USE_FILE_LOCKING}
+\code{h5enableFileLocking} will unset the \code{HDF5_USE_FILE_LOCKING}
 environment variable.
 
 More discussion of HDF5's use of file locking can be found online e.g.

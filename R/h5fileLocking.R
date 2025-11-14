@@ -13,12 +13,12 @@
 #' [H5Fcreate()] will fail inelegantly if file locking fails.
 #'
 #' `h5disableFileLocking` will set the environment variable
-#' `RHDF5_USE_FILE_LOCKING=FALSE`, which is the recommended was to disable
+#' `HDF5_USE_FILE_LOCKING=FALSE`, which is the recommended was to disable
 #' this behaviour if file locking is not supported.  This will only persist
 #' within the current R session.  You can set the environment variable outside
 #' of R if this is a more general issue on your system.
 #'
-#' `h5enableFileLocking` will unset the `RHDF5_USE_FILE_LOCKING`
+#' `h5enableFileLocking` will unset the `HDF5_USE_FILE_LOCKING`
 #' environment variable.
 #'
 #' More discussion of HDF5's use of file locking can be found online e.g.
