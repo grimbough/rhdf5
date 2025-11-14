@@ -38,7 +38,7 @@ jobs:
       matrix:
         config: ${{ fromJson(needs.setup.outputs.containers) }}
     container:
-      image: rchk
+      image: ${{ matrix.config.container }}
     steps:
       - uses: r-hub/actions/checkout@v1
       - uses: r-hub/actions/platform-info@v1
