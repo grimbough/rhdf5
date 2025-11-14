@@ -109,6 +109,7 @@ SEXP H5Aread_helper_INTEGER(hid_t attr_id, hsize_t n, SEXP Rdim, SEXP _buf, hid_
   int b = H5Tget_size(dtype_id);
   H5T_sign_t sgn = H5Tget_sign(dtype_id);
   herr_t herr;
+  int protected = 0;
   
   if((b < 4) | ((b == 4) & (sgn == H5T_SGN_2))) {
       mem_type_id = H5T_NATIVE_INT;
@@ -116,6 +117,7 @@ SEXP H5Aread_helper_INTEGER(hid_t attr_id, hsize_t n, SEXP Rdim, SEXP _buf, hid_
       void * buf;
       if (length(_buf) == 0) {
         Rval = PROTECT(allocVector(INTSXP, n));
+        protected++;
         buf = INTEGER(Rval);
       } else {
         buf = INTEGER(_buf);
@@ -124,7 +126,6 @@ SEXP H5Aread_helper_INTEGER(hid_t attr_id, hsize_t n, SEXP Rdim, SEXP _buf, hid_
       herr = H5Aread(attr_id, mem_type_id, buf );
       if (length(_buf) == 0) {
         setAttrib(Rval, R_DimSymbol, Rdim);
-        UNPROTECT(1);
       }
   } else if ( ((b == 4) & (sgn == H5T_SGN_NONE)) | (b == 8) ) { 
       // unsigned32-bit or 64-bit integer
@@ -155,6 +156,7 @@ SEXP H5Aread_helper_INTEGER(hid_t attr_id, hsize_t n, SEXP Rdim, SEXP _buf, hid_
 
           if (length(_buf) == 0) {
               Rval = PROTECT(allocVector(INTSXP, n));
+              protected++;
               buf = (int *) INTEGER(Rval);
           } else {
               buf = INTEGER(_buf);
@@ -169,6 +171,7 @@ SEXP H5Aread_helper_INTEGER(hid_t attr_id, hsize_t n, SEXP Rdim, SEXP _buf, hid_
 
           if (length(_buf) == 0) {
               Rval = PROTECT(allocVector(REALSXP, n));
+              protected++;
               buf = (long long *) REAL(Rval);
           } else {
               buf = REAL(_buf);
@@ -194,24 +197,26 @@ SEXP H5Aread_helper_INTEGER(hid_t attr_id, hsize_t n, SEXP Rdim, SEXP _buf, hid_
       
       if (length(_buf) == 0) {
           setAttrib(Rval, R_DimSymbol, Rdim);
-          UNPROTECT(1);
       }
   } else {
       error("Unknown integer type\n");
   }
 
+  UNPROTECT(protected);
   return(Rval);
 }
 
 
 SEXP H5Aread_helper_FLOAT(hid_t attr_id, hsize_t n, SEXP Rdim, SEXP _buf, hid_t dtype_id) {
   hid_t mem_type_id = -1;
+  int protected = 0;
 
   SEXP Rval;
   mem_type_id = H5T_NATIVE_DOUBLE;
   void * buf;
   if (length(_buf) == 0) {
     Rval = PROTECT(allocVector(REALSXP, n));
+    protected++;
     buf = REAL(Rval);
   } else {
     buf = REAL(_buf);
@@ -225,8 +230,9 @@ SEXP H5Aread_helper_FLOAT(hid_t attr_id, hsize_t n, SEXP Rdim, SEXP _buf, hid_t 
   
   if (length(_buf) == 0) {
     setAttrib(Rval, R_DimSymbol, Rdim);
-    UNPROTECT(1);
   }
+
+  UNPROTECT(protected);
   return(Rval);
 }
 
@@ -374,6 +380,7 @@ SEXP _H5Aread( SEXP _attr_id, SEXP _buf, SEXP _bit64conversion ) {
   hsize_t n = 1;
   SEXP Rdim;
   int bit64conversion = INTEGER(_bit64conversion)[0];
+  int protected = 0;
 
   /***********************************************************************/
   /* attr_id                                                          */
@@ -399,6 +406,7 @@ SEXP _H5Aread( SEXP _attr_id, SEXP _buf, SEXP _bit64conversion ) {
     }
     
     Rdim = PROTECT(allocVector(INTSXP, rank));
+    protected++;
     for (int i = 0; i < rank; i++) {
       INTEGER(Rdim)[i] = dims[i];
     }
@@ -412,9 +420,7 @@ SEXP _H5Aread( SEXP _attr_id, SEXP _buf, SEXP _bit64conversion ) {
   /***********************************************************************/
   SEXP Rval = H5Aread_helper(attr_id, n, Rdim, _buf, bit64conversion);
 
-  if (rank > 0) {
-    UNPROTECT(1);
-  }
+  UNPROTECT(protected);
 
   // close file space
   H5Sclose(file_space_id);
@@ -429,8 +435,6 @@ SEXP _H5Awrite( SEXP _attr_id, SEXP _buf) {
     const void * buf;
     static const char* H5Ref[] = {"H5Ref", ""};
     int values[3] = {1, 0, NA_LOGICAL};
-    
-    int n_unprotect = 0;
     
     switch(TYPEOF(_buf)) {
     case INTSXP :
@@ -485,10 +489,9 @@ SEXP _H5Awrite( SEXP _attr_id, SEXP _buf) {
     herr_t herr = H5Awrite(attr_id, mem_type_id, buf );
     if(herr < 0) { error("Error writing attribute"); }
     SEXP Rval;
-    PROTECT(Rval = allocVector(INTSXP, 1));
-    n_unprotect++;
+    Rval = PROTECT(allocVector(INTSXP, 1));
     INTEGER(Rval)[0] = herr;
-    UNPROTECT(n_unprotect);
+    UNPROTECT(1);
     return Rval;
 }
 
