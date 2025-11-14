@@ -474,10 +474,11 @@ SEXP _H5Awrite( SEXP _attr_id, SEXP _buf) {
             mem_type_id = -1;
             Rf_error("Error writing references");
           }
+          UNPROTECT(1);
         }
         SEXP valSlot = PROTECT(mkString("val"));
         buf = RAW(R_do_slot(_buf, valSlot));
-        UNPROTECT(2);
+        UNPROTECT(1);
         break;
     default :
         mem_type_id = -1;

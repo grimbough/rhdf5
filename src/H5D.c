@@ -680,8 +680,8 @@ SEXP H5Dread_helper_ARRAY(hid_t dataset_id, hid_t file_space_id, hid_t mem_space
                 INTEGER(buffer)[li] = INTEGER(Rval)[lj];
                 CLICKJ;
             }
-            UNPROTECT(1);
             Rval = buffer;
+            UNPROTECT(1);
         }
         
         if (length(_buf) == 0) {
@@ -704,6 +704,7 @@ SEXP H5Dread_helper_ARRAY(hid_t dataset_id, hid_t file_space_id, hid_t mem_space
                 }
             }
             setAttrib(Rval, R_DimSymbol, Rdima);
+            UNPROTECT(1);
         }
         UNPROTECT(protected);
     } else {
@@ -1091,6 +1092,7 @@ SEXP _H5Dwrite( SEXP _dataset_id, SEXP _buf, SEXP _file_space_id, SEXP _mem_spac
     
     const void * buf;
     static const char* H5Ref[] = {"H5Ref", ""};
+    int protected = 0;
     
     hid_t dim_space_id = mem_space_id == H5S_ALL ? dataset_id : mem_space_id;
     
@@ -1130,10 +1132,12 @@ SEXP _H5Dwrite( SEXP _dataset_id, SEXP _buf, SEXP _file_space_id, SEXP _mem_spac
         break;
     case STRSXP :
         mem_type_id = H5Dget_type(dataset_id);
-        if (native)
-            _buf = PERMUTE_STRSXP(_buf, dim_space_id);
-
+        if (native) {
+            _buf = PROTECT(PERMUTE_STRSXP(_buf, dim_space_id));
+            protected++;
+        }
         buf = read_string_datatype(mem_type_id, _buf);
+        UNPROTECT(protected++);
 
         break;
     case CPLXSXP :
