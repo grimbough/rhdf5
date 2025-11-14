@@ -44,7 +44,7 @@ H5Sselect_index <- function(h5space, index) {
 
   start <- list()
   count <- list()
-  for (i in seq_len(length(index))) {
+  for (i in seq_along(index)) {
     if (is.null(index[[i]])) {
       start[[i]] <- 0
       count[[i]] <- as.numeric(dim[i])
@@ -95,7 +95,7 @@ H5Sselect_index <- function(h5space, index) {
 
   start <- list()
   count <- list()
-  for (i in seq_len(length(index))) {
+  for (i in seq_along(index)) {
     ## no need to do these things if we're sure it's already sorted & unique
     if (!index_null[i]) {
       if (any(index[[i]] > dim[i])) {
