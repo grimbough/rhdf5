@@ -273,7 +273,7 @@ h5writeDataset.data.frame <- function(
       )
     }
     if (!is.null(level)) {
-      level = as.integer(level)
+      level <- as.integer(level)
       if (missing(chunk)) {
         chunk <- nrow(obj)
       }
@@ -293,11 +293,11 @@ h5writeDataset.data.frame <- function(
   } else {
     a <- attr(obj, "names")
     if (is.null(a)) {
-      attr(obj, "names") = sprintf("col%d", seq_len(ncol(obj)))
+      attr(obj, "names") <- sprintf("col%d", seq_len(ncol(obj)))
     } else {
       if (anyDuplicated(a) > 0) {
-        a[duplicated(a)] = sprintf("col%d", seq_len(ncol(obj)))[duplicated(a)]
-        attr(obj, "names") = a
+        a[duplicated(a)] <- sprintf("col%d", seq_len(ncol(obj)))[duplicated(a)]
+        attr(obj, "names") <- a
       }
     }
     ## we can't write out factors, so convert any to character
@@ -333,7 +333,7 @@ h5writeDataset.list <- function(obj, h5loc, name, level = 6, ...) {
     N <- names(obj)
     newnames <- is.null(N) || !all(nzchar(N)) || length(N) != length(obj)
     if (newnames) {
-      N = sprintf("ELT%d", seq_along(obj))
+      N <- sprintf("ELT%d", seq_along(obj))
     }
     h5createGroup(h5loc, name)
     gid <- H5Gopen(h5loc, name)
