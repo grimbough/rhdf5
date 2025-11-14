@@ -80,7 +80,6 @@ SEXP PERMUTE_STRSXP(SEXP FROM, hid_t DIM_SPACE_ID) {
       lj += iip[itmp] * stride[itmp];
   }
   
-  UNPROTECT(1);
   return(to);
 }
   
@@ -495,7 +494,7 @@ SEXP H5Dread_helper_STRING(hid_t dataset_id, hid_t file_space_id, hid_t mem_spac
       }
       setAttrib(Rval, R_DimSymbol, Rdim);
     }
-    UNPROTECT(1);
+    UNPROTECT( 1 + native );
     return(Rval);
 }
 
@@ -1138,6 +1137,7 @@ SEXP _H5Dwrite( SEXP _dataset_id, SEXP _buf, SEXP _file_space_id, SEXP _mem_spac
             mem_type_id = H5T_STD_REF_DSETREG;
           } else {
             mem_type_id = -1;
+            UNPROTECT(native);
             Rf_error("Error writing references");
           }
           SEXP valSlot = PROTECT(mkString("val"));
@@ -1149,6 +1149,7 @@ SEXP _H5Dwrite( SEXP _dataset_id, SEXP _buf, SEXP _file_space_id, SEXP _mem_spac
         break;
     default :
         mem_type_id = -1;
+        UNPROTECT(native);
         error("Writing '%s' not supported.", Rf_type2char(TYPEOF(_buf)));
         break;
     }
@@ -1157,7 +1158,7 @@ SEXP _H5Dwrite( SEXP _dataset_id, SEXP _buf, SEXP _file_space_id, SEXP _mem_spac
     SEXP Rval;
     PROTECT(Rval = allocVector(INTSXP, 1));
     INTEGER(Rval)[0] = herr;
-    UNPROTECT(1);
+    UNPROTECT( 1 + native );
     return Rval;
 }
 
