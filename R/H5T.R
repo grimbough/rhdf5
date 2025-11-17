@@ -234,7 +234,7 @@ NULL
 #' @export
 H5Tenum_create <- function(dtype_id = "H5T_NATIVE_INT") {
   dtype_id <- h5checkConstants("H5T", dtype_id)
-  tid <- .Call("_H5Tenum_create", dtype_id, PACKAGE = "rhdf5")
+  .Call("_H5Tenum_create", dtype_id, PACKAGE = "rhdf5")
 }
 
 #' @rdname H5T_enum
