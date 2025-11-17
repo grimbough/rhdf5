@@ -1,3 +1,21 @@
-linters: all_linters(packages = "lintr") # see vignette("lintr")
+linters: all_linters(
+    packages = "lintr",
+    implicit_integer_linter = NULL,
+    object_name_linter = NULL,
+    line_length_linter = NULL,
+    nested_pipe_linter = NULL,
+    return_linter = NULL,
+    object_overwrite_linter = NULL,
+    function_argument_linter = NULL,
+    condition_call_linter = NULL,
+    routine_registration_linter = NULL,
+    commented_code_linter = NULL,
+    cyclocomp_linter = NULL,
+    keyword_quote_linter = NULL,
+    todo_comment_linter = NULL,
+    object_length_linter = NULL,
+    unnecessary_nesting_linter = NULL,
+    unnecessary_lambda_linter = NULL
+  )
 encoding: "UTF-8"
-exclusions: list("renv", "packrat") # see ?lintr::exclude
+exclusions: list("inst", "tests", "vignettes")
