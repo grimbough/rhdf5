@@ -38,6 +38,8 @@
     \itemize{
       \item Code coverage reports via codecov have been restored.
       \item The pkgdown documentation website for this package have been restored.
+      \item Static analysis via the lintr package is now continuously changed on 
+      every changes via GitHub Actions.
     }
   }
 
