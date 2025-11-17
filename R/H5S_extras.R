@@ -97,7 +97,10 @@ H5Sselect_index <- function(h5space, index) {
   count <- list()
   for (i in seq_along(index)) {
     ## no need to do these things if we're sure it's already sorted & unique
-    if (!index_null[i]) {
+    if (index_null[i]) {
+      ind <- index[[i]]
+      I <- 1
+    } else {
       if (any(index[[i]] > dim[i])) {
         stop("index exceeds HDF5-array dimension.")
       }
@@ -107,9 +110,6 @@ H5Sselect_index <- function(h5space, index) {
       ind <- sort(unique(index[[i]]))
       test <- diff(ind) > 1
       I <- c(1, which(test) + 1)
-    } else {
-      ind <- index[[i]]
-      I <- 1
     }
     start[[i]] <- ind[I] - 1
     I <- c(I, length(ind) + 1)

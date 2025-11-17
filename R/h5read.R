@@ -123,15 +123,15 @@ h5readDataset <- function(
   if (!is.null(index)) {
     I <- list()
     for (i in seq_along(index)) {
-      if (!index_null[i]) {
+      if (index_null[i]) {
+        I[[i]] <- seq_len(s[i])
+      } else {
         ## skip if the index was generated inside this function
         tmp <- unique(index[[i]])
         if (is.unsorted(tmp)) {
           tmp <- sort.int(tmp)
         }
         I[[i]] <- match(index[[i]], tmp)
-      } else {
-        I[[i]] <- seq_len(s[i])
       }
     }
     obj.dim <- lapply(dim(obj), FUN = seq_len)
