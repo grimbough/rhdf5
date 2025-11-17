@@ -121,7 +121,7 @@ h5ls <- function(
   } else {
     stop("'recursive' must be number or a logical")
   }
-  di <- ifelse(datasetinfo, 1L, 0L)
+  di <- as.integer(datasetinfo)
   L <- .Call(
     "_h5ls",
     loc$H5Identifier@ID,
