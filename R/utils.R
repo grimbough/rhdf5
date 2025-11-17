@@ -10,7 +10,7 @@ fix_missing <- function(x, default) {
         deparse(substitute(x)),
         default
       ),
-      ' Passing a missing value  will be disallowed in the next release cycle.',
+      " Passing a missing value  will be disallowed in the next release cycle.",
       call. = FALSE
     )
     x <- "int"
