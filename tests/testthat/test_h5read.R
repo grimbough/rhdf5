@@ -14,7 +14,7 @@ attr(D, "scale") <- "centimeters"
 G <- data.frame("col_A" = 1:10, "col_B" = letters[1:10], "col_C" = as.raw(1:10))
 
 ## output file name
-h5File <- tempfile(pattern = "ex_read", fileext = ".h5")
+h5File <- withr::local_tempfile(pattern = "ex_read", fileext = ".h5")
 if (file.exists(h5File)) {
   file.remove(h5File)
 }
@@ -100,7 +100,7 @@ test_that("Error if asking for something that isn't there", {
 
 
 test_that("writing & reading empty vectors", {
-  h5File <- tempfile(pattern = "ex_read", fileext = ".h5")
+  h5File <- withr::local_tempfile(pattern = "ex_read", fileext = ".h5")
   expect_true(h5createFile(h5File))
   expect_silent(h5write(obj = character(0), file = h5File, name = "char"))
   expect_silent(h5write(obj = integer(0), file = h5File, name = "int"))
@@ -162,7 +162,7 @@ test_that("writing & reading empty vectors", {
 })
 
 test_that("writing & reading empty arrays", {
-  h5File <- tempfile(pattern = "ex_read", fileext = ".h5")
+  h5File <- withr::local_tempfile(pattern = "ex_read", fileext = ".h5")
   expect_true(h5createFile(h5File))
   expect_silent(h5write(
     obj = matrix(nrow = 0, ncol = 0),
@@ -176,7 +176,7 @@ test_that("writing & reading empty arrays", {
 })
 
 test_that("reading & writing scalar dataspaces", {
-  h5File <- tempfile(pattern = "ex_read", fileext = ".h5")
+  h5File <- withr::local_tempfile(pattern = "ex_read", fileext = ".h5")
   expect_silent(fid <- H5Fcreate(h5File))
   expect_silent(sid <- H5Screate(type = "H5S_SCALAR"))
   expect_silent(tid <- H5Tcopy("H5T_C_S1"))
@@ -206,7 +206,7 @@ context("NA values")
 ############################################################
 
 ## output file name
-h5File <- tempfile(pattern = "ex_read", fileext = ".h5")
+h5File <- withr::local_tempfile(pattern = "ex_read", fileext = ".h5")
 if (file.exists(h5File)) {
   file.remove(h5File)
 }
@@ -251,7 +251,7 @@ A <- matrix(1:100, ncol = 10)
 B <- array(1:1000, dim = c(10, 10, 10))
 
 ## output file name
-h5File <- tempfile(pattern = "ex_read", fileext = ".h5")
+h5File <- withr::local_tempfile(pattern = "ex_read", fileext = ".h5")
 
 # create file with group hierarchy
 h5createFile(h5File)
@@ -351,7 +351,7 @@ context("64-bit conversion")
 ############################################################
 
 ## output file name
-h5File <- tempfile(pattern = "ex_read", fileext = ".h5")
+h5File <- withr::local_tempfile(pattern = "ex_read", fileext = ".h5")
 if (file.exists(h5File)) {
   file.remove(h5File)
 }

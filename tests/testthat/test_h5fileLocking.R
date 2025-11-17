@@ -5,7 +5,7 @@ context("Testing file locking")
 ############################################################
 
 test_that("File or directory can be passed", {
-  file <- tempfile()
+  file <- withr::local_tempfile()
   dir <- tempdir()
   expect_silent(h5testFileLocking(file)) %>%
     expect_is("logical")
@@ -17,7 +17,7 @@ test_that("File or directory can be passed", {
 })
 
 test_that("Error when using existing file", {
-  tf <- tempfile()
+  tf <- withr::local_tempfile()
   file.create(tf)
   expect_error(
     h5testFileLocking(location = tf),

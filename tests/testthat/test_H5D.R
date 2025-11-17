@@ -1,6 +1,6 @@
 library(rhdf5)
 
-h5File <- tempfile(pattern = "H5D_", fileext = ".h5")
+h5File <- withr::local_tempfile(pattern = "H5D_", fileext = ".h5")
 
 expect_true(h5createFile(h5File))
 expect_silent(h5write(matrix(1:200, ncol = 2), file = h5File, name = "foo"))

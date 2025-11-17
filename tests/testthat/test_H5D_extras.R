@@ -1,6 +1,6 @@
 library(rhdf5)
 
-h5File <- tempfile(pattern = "H5D_extras_", fileext = ".h5")
+h5File <- withr::local_tempfile(pattern = "H5D_extras_", fileext = ".h5")
 h5createFile(h5File)
 
 test_that("we can determine dataset chunk properties", {

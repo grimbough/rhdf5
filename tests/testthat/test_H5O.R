@@ -1,7 +1,7 @@
 library(rhdf5)
 
-h5File <- tempfile(pattern = "H5O_", fileext = ".h5")
-h5File2 <- tempfile(pattern = "H5O_", fileext = ".h5")
+h5File <- withr::local_tempfile(pattern = "H5O_", fileext = ".h5")
+h5File2 <- withr::local_tempfile(pattern = "H5O_", fileext = ".h5")
 h5createFile(h5File)
 h5createFile(h5File2)
 h5write(1:10, file = h5File, name = "DS1")

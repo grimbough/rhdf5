@@ -8,7 +8,7 @@ A <- 1:7
 B <- 1:18
 D <- seq(0, 1, by = 0.1)
 ## output file name
-h5File <- tempfile(pattern = "ex_h5ls_", fileext = ".h5")
+h5File <- withr::local_tempfile(pattern = "ex_h5ls_", fileext = ".h5")
 if (file.exists(h5File)) {
   file.remove(h5File)
 }
@@ -91,14 +91,14 @@ test_that("h5ls warns if identical groups are detected", {
     H5Fclose(fid)
   }
 
-  h5file <- tempfile()
+  h5file <- withr::local_tempfile()
   createFileWithCopiedGroup(h5file)
   expect_warning(h5ls(h5file), regexp = "Identical objects found")
 })
 
 test_that("h5ls doesn't report false positives with external links to groups", {
-  f1 <- tempfile()
-  f2 <- tempfile()
+  f1 <- withr::local_tempfile()
+  f2 <- withr::local_tempfile()
   h5createFile(f1)
   h5createFile(f2)
   h5createGroup(f1, group = "/test/")
@@ -106,7 +106,7 @@ test_that("h5ls doesn't report false positives with external links to groups", {
   h5write(1:10, file = f1, name = "/test/A")
   h5write(1:10, file = f2, name = "/test/B")
 
-  f3 <- tempfile()
+  f3 <- withr::local_tempfile()
   fid <- H5Fcreate(name = f3)
   H5Lcreate_external(
     link_loc = fid,

@@ -4,7 +4,7 @@ library(rhdf5)
 context("h5ls supports native functionality")
 ############################################################
 
-h5File <- tempfile(fileext = ".h5")
+h5File <- withr::local_tempfile(fileext = ".h5")
 if (file.exists(h5File)) {
   file.remove(h5File)
 }
