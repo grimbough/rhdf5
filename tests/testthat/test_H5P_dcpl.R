@@ -28,7 +28,7 @@ test_that("Filter information can be retrieved", {
 test_that("UTF8 strings can be used for fill values", {
   fill_value <- "αααα-test"
 
-  tf <- tempfile(fileext = ".h5")
+  tf <- withr::local_tempfile(fileext = ".h5")
   fid <- H5Fcreate(tf)
   sid <- H5Screate_simple(dims = 1)
   tid <- H5Tcopy("H5T_C_S1")

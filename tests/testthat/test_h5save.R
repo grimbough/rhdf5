@@ -7,7 +7,7 @@ A <- 1:7
 B <- 1:18
 D <- seq(0, 1, by = 0.1)
 ## output file name
-h5File <- tempfile(pattern = "ex_save", fileext = ".h5")
+h5File <- withr::local_tempfile(pattern = "ex_save", fileext = ".h5")
 
 test_that("Default arguments", {
   expect_silent(h5save(A, B, D, file = h5File))

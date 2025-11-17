@@ -5,7 +5,7 @@
 
 library(rhdf5)
 
-h5file <- tempfile(pattern = "h5_roundtrip_", fileext = ".h5")
+h5file <- withr::local_tempfile(pattern = "h5_roundtrip_", fileext = ".h5")
 
 test_that("data.frame columns survive a round trip", {
   set.seed(1234)
@@ -67,7 +67,7 @@ test_that("UTF-8 strings are preserved", {
 })
 
 test_that("Complex numbers are writen to a compound datatype", {
-  h5file <- tempfile(pattern = "h5_roundtrip_", fileext = ".h5")
+  h5file <- withr::local_tempfile(pattern = "h5_roundtrip_", fileext = ".h5")
 
   mat <- matrix(
     complex(length.out = 30, real = 1:30, imaginary = 30:1),

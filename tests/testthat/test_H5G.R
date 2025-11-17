@@ -1,7 +1,7 @@
 library(rhdf5)
 
 ## output file name
-h5File <- tempfile(pattern = "ex_save", fileext = ".h5")
+h5File <- withr::local_tempfile(pattern = "ex_save", fileext = ".h5")
 if (file.exists(h5File)) {
   file.remove(h5File)
 }

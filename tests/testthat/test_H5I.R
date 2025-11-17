@@ -4,7 +4,7 @@ library(rhdf5)
 context("H5I methods")
 ############################################################
 
-h5File <- tempfile(pattern = "H5_methods", fileext = ".h5")
+h5File <- withr::local_tempfile(pattern = "H5_methods", fileext = ".h5")
 if (file.exists(h5File)) {
   file.remove(h5File)
 }

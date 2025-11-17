@@ -5,7 +5,7 @@ context("h5createFile")
 ############################################################
 
 ## output file name
-h5File <- tempfile(pattern = "ex_save", fileext = ".h5")
+h5File <- withr::local_tempfile(pattern = "ex_save", fileext = ".h5")
 if (file.exists(h5File)) {
   file.remove(h5File)
 }
@@ -46,7 +46,7 @@ test_that("Fail if toplevel group missing", {
 context("h5createDataset")
 ############################################################
 
-h5File <- tempfile(pattern = "ex_createDS", fileext = ".h5")
+h5File <- withr::local_tempfile(pattern = "ex_createDS", fileext = ".h5")
 if (file.exists(h5File)) {
   file.remove(h5File)
 }
@@ -210,7 +210,7 @@ test_that("Invalid storage mode arguments", {
 test_that("Datasets with different compression levels", {
   dataMatrix <- matrix(runif(n = 1e5), nrow = 10000, ncol = 10)
 
-  h5File_0 <- tempfile(pattern = "level0_", fileext = ".h5")
+  h5File_0 <- withr::local_tempfile(pattern = "level0_", fileext = ".h5")
   if (file.exists(h5File_0)) {
     file.remove(h5File_0)
   }
@@ -223,7 +223,7 @@ test_that("Datasets with different compression levels", {
   ))
   h5write(dataMatrix, file = h5File_0, name = "A")
 
-  h5File_9 <- tempfile(pattern = "level9_", fileext = ".h5")
+  h5File_9 <- withr::local_tempfile(pattern = "level9_", fileext = ".h5")
   if (file.exists(h5File_9)) {
     file.remove(h5File_9)
   }
@@ -374,7 +374,7 @@ test_that("Using chunks greater than 4GB", {
 context("h5createAttribute")
 ############################################################
 
-h5File <- tempfile(pattern = "ex_createAttr", fileext = ".h5")
+h5File <- withr::local_tempfile(pattern = "ex_createAttr", fileext = ".h5")
 if (file.exists(h5File)) {
   file.remove(h5File)
 }

@@ -12,7 +12,7 @@ test_that("Printing library versions", {
 })
 
 test_that("We can list created objects", {
-  fid <- H5Fcreate(name = tempfile())
+  fid <- H5Fcreate(name = withr::local_tempfile())
 
   expect_is(objects_frame <- h5listIdentifier(), "data.frame")
   expect_is(valid_objects <- h5validObjects(), "list")

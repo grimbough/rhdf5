@@ -1,6 +1,6 @@
 library(rhdf5)
 
-h5File <- tempfile(pattern = "ex_save", fileext = ".h5")
+h5File <- withr::local_tempfile(pattern = "ex_save", fileext = ".h5")
 vec <- as.integer(rexp(2000, rate = 1.5))
 
 ############################################################

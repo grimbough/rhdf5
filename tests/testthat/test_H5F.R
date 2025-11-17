@@ -15,7 +15,7 @@ test_that("Invalid file names", {
   )
 })
 
-h5File <- tempfile(pattern = "H5F_", fileext = ".h5")
+h5File <- withr::local_tempfile(pattern = "H5F_", fileext = ".h5")
 if (file.exists(h5File)) {
   file.remove(h5File)
 }
@@ -40,7 +40,7 @@ test_that("Non-ASCII filename", {
     dir.create(tmp_dir, showWarnings = FALSE)
     ## this gives a UTF-8 encoded file path on windows
     h5File <- normalizePath(
-      tempfile(pattern = "H5F", fileext = ".h5", tmpdir = tmp_dir),
+      withr::local_tempfile(pattern = "H5F", fileext = ".h5", tmpdir = tmp_dir),
       mustWork = FALSE
     )
 
@@ -58,7 +58,7 @@ test_that("Non-ASCII filename", {
 context("H5Fis_hdf5")
 ############################################################
 
-h5File <- tempfile(pattern = "H5F_", fileext = ".h5")
+h5File <- withr::local_tempfile(pattern = "H5F_", fileext = ".h5")
 if (file.exists(h5File)) {
   file.remove(h5File)
 }
@@ -90,7 +90,7 @@ test_that("Check if HDF5", {
   expect_silent(fid <- H5Fcreate(name = h5File))
   H5Fclose(fid)
   ## write a non HDF5 file
-  txtFile <- tempfile(fileext = "txt")
+  txtFile <- withr::local_tempfile(fileext = "txt")
   writeLines(text = "foo\nbaa", con = txtFile)
 
   expect_true(H5Fis_hdf5(name = h5File))
