@@ -155,12 +155,20 @@ h5checktypeOrNULL <- function(h5id, type, fctname = deparse(match.call()[1])) {
 h5FileIsOpen <- function(filename) {
   filename <- normalizePath(filename, mustWork = FALSE)
   L <- h5validObjects()
-  isobject <- vapply(L, function(x) {
-    H5Iget_type(x) %in% c("H5I_FILE", "H5I_GROUP", "H5I_DATASET")
-  }, logical(1))
-  isopen <- any(vapply(L[isobject], function(x) {
-    H5Fget_name(x) == filename
-  }, logical(1)))
+  isobject <- vapply(
+    L,
+    function(x) {
+      H5Iget_type(x) %in% c("H5I_FILE", "H5I_GROUP", "H5I_DATASET")
+    },
+    logical(1)
+  )
+  isopen <- any(vapply(
+    L[isobject],
+    function(x) {
+      H5Fget_name(x) == filename
+    },
+    logical(1)
+  ))
   isopen
 }
 
@@ -199,14 +207,7 @@ h5checktypeOrOpenLoc <- function(
       res$H5Identifier <- h5loc
       res$closeit <- TRUE
     } else {
-      if (createnewfile) {
-        h5loc <- H5Fcreate(file, native = native)
-        if (!is(h5loc, "H5IdComponent")) {
-          stop("Error in ", fctname, ". Cannot create file.")
-        }
-        res$H5Identifier <- h5loc
-        res$closeit <- TRUE
-      } else {
+      if (!createnewfile) {
         stop(
           "Error in ",
           fctname,
@@ -215,6 +216,12 @@ h5checktypeOrOpenLoc <- function(
           "' does not exist."
         )
       }
+      h5loc <- H5Fcreate(file, native = native)
+      if (!is(h5loc, "H5IdComponent")) {
+        stop("Error in ", fctname, ". Cannot create file.")
+      }
+      res$H5Identifier <- h5loc
+      res$closeit <- TRUE
     }
   } else {
     ## We have passed an H5IdComponent, so it should not be closed after
@@ -291,14 +298,13 @@ h5checktypeOrOpenObj <- function(
 
     if (!H5Lexists(loc$H5Identifier, obj)) {
       stop("Error in ", fctname, ". Object '", obj, "' not found in file.")
-    } else {
-      h5obj <- H5Oopen(loc$H5Identifier, obj)
-      if (!is(h5obj, "H5IdComponent")) {
-        stop("Error in ", fctname, ". Cannot open object.")
-      }
-      res$H5Identifier <- h5obj
-      res$closeit <- TRUE
     }
+    h5obj <- H5Oopen(loc$H5Identifier, obj)
+    if (!is(h5obj, "H5IdComponent")) {
+      stop("Error in ", fctname, ". Cannot open object.")
+    }
+    res$H5Identifier <- h5obj
+    res$closeit <- TRUE
     h5closeitLoc(loc)
   } else {
     h5checktype(obj, "object", fctname = fctname, allow.character = TRUE)

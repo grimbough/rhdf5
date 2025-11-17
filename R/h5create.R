@@ -673,19 +673,20 @@ h5createAttribute <- function(
     message(
       "Can not create attribute. H5type unknown. Check h5const('H5T') for valid types."
     )
+    return(FALSE)
+  }
+
+  if (H5Aexists(obj$H5Identifier, attr)) {
+    message(
+      "Can not create attribute. Attribute with name '",
+      attr,
+      "' already exists."
+    )
   } else {
-    if (H5Aexists(obj$H5Identifier, attr)) {
-      message(
-        "Can not create attribute. Attribute with name '",
-        attr,
-        "' already exists."
-      )
-    } else {
-      aid <- H5Acreate(obj$H5Identifier, attr, tid, sid)
-      if (is(aid, "H5IdComponent")) {
-        H5Aclose(aid)
-        res <- TRUE
-      }
+    aid <- H5Acreate(obj$H5Identifier, attr, tid, sid)
+    if (is(aid, "H5IdComponent")) {
+      H5Aclose(aid)
+      res <- TRUE
     }
   }
 
