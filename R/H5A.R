@@ -273,7 +273,7 @@ H5Aread <- function(
   if (identical(bit64conversion, "default")) {
     bit64conversion <- "int"
     warning(
-      'To rely on the `bit64conversion` argument default, ',
+      "To rely on the `bit64conversion` argument default, ",
       'you should omit it or explicitly set it to its default value (`"int"`).',
       ' Passing `"default"` will be disallowed in the next release cycle.'
     )
