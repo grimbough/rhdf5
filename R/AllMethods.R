@@ -84,7 +84,7 @@ setMethod(`&`, signature = c("H5IdComponent", "character"), function(e1, e2) {
 #' @param name Character giving the path to an HDF5 group or dataset relative to `x`.
 #'
 #' @export
-setMethod(`$`, signature = c("H5IdComponent"), function(x, name) {
+setMethod(`$`, signature = "H5IdComponent", function(x, name) {
   h5id <- x
   isvalid <- H5Iis_valid(h5id)
   if (!isvalid) {
@@ -125,7 +125,7 @@ setMethod(`$`, signature = c("H5IdComponent"), function(x, name) {
 #'   [h5createDataset()] first.
 #'
 #' @export
-setMethod(`$<-`, signature = c("H5IdComponent"), function(x, name, value) {
+setMethod(`$<-`, signature = "H5IdComponent", function(x, name, value) {
   h5id <- x
   isvalid <- H5Iis_valid(h5id)
   if (!isvalid) {
@@ -166,7 +166,7 @@ setMethod(
     index <- as.list(sys.call())[-c(1, 2)]
     for (i in seq_along(index)) {
       if (index[[i]] == "") {
-        index[i] <- list(c())
+        index[i] <- list(NULL)
       }
     }
     if (length(index) == 1) {
@@ -211,7 +211,7 @@ setMethod(
     index <- index[-c(1, 2, length(index))]
     for (i in seq_along(index)) {
       if (index[[i]] == "") {
-        index[i] <- list(c())
+        index[i] <- list(NULL)
       }
     }
     if (length(index) == 1) {
