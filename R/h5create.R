@@ -207,7 +207,7 @@ h5createGroup <- function(file, group) {
     }
 
     ## only use this shuffle if not using blosc filter
-    if (shuffle && !grepl("BLOSC", x = filter)) {
+    if (shuffle && !grepl("BLOSC", x = filter, fixed = TRUE)) {
       H5Pset_shuffle(dcpl)
     }
 
@@ -218,7 +218,7 @@ h5createGroup <- function(file, group) {
       H5Pset_szip(dcpl, 1L, 32L)
     } else if (filter == "BZIP2") {
       H5Pset_bzip2(dcpl, level = level)
-    } else if (grepl(pattern = "BLOSC", x = filter)) {
+    } else if (grepl(pattern = "BLOSC", x = filter, fixed = TRUE)) {
       method <- which(
         c(
           "BLOSC_BLOSCLZ",
