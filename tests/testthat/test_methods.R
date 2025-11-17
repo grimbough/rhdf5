@@ -72,7 +72,7 @@ test_that("Subsetting datasets", {
 
   expect_silent(col15 <- did[, 1:5])
   expect_is(col15, "matrix")
-  expect_equal(dim(col15), c(10, 5))
+  expect_identical(dim(col15), c(10L, 5L))
   expect_silent(H5Dclose(did))
 
   expect_error(did[], regexp = "Bad HDF5 ID")
@@ -98,9 +98,9 @@ test_that("Subsetting assignment", {
   ## close dataset and check the values are permanent
   expect_silent(H5Dclose(did))
   expect_silent(did <- H5Dopen(h5loc = fid, name = "A"))
-  expect_equal(did[, 1], 1001:1010)
-  expect_equal(did[10, ], seq(10, 200, 10) + 1000)
-  expect_equal(did[1:3, 5:7], matrix(0, ncol = 3, nrow = 3))
+  expect_identical(did[, 1], 1001:1010)
+  expect_identical(did[10, ], seq(10L, 200L, 10L) + 1000L)
+  expect_identical(did[1:3, 5:7], matrix(0L, ncol = 3, nrow = 3))
   expect_silent(H5Dclose(did))
 
   expect_error(did[, 1] <- 10:1, regexp = "Bad HDF5 ID")
@@ -117,5 +117,5 @@ context("Methods cleanup")
 ##########################################################
 
 test_that("No open HDF5 objects are left", {
-  expect_equal(length(h5validObjects()), 0)
+  expect_identical(length(h5validObjects()), 0L)
 })

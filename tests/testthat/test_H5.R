@@ -45,10 +45,10 @@ test_that("h5closeAll closed everything", {
   aid <- H5Acreate(did, "volume", "H5T_NATIVE_INT8", sid)
   ## object
 
-  expect_equal(nrow(h5listIdentifier()), 5)
+  expect_identical(nrow(h5listIdentifier()), 5L)
 
   expect_silent(h5closeAll())
 
   ## should be nothing left open
-  expect_equal(nrow(h5listIdentifier()), 0)
+  expect_identical(nrow(h5listIdentifier()), 0L)
 })

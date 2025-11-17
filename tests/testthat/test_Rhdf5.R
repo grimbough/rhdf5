@@ -17,20 +17,20 @@ test_that("We can list created objects", {
   expect_is(objects_frame <- h5listIdentifier(), "data.frame")
   expect_is(valid_objects <- h5validObjects(), "list")
 
-  expect_equal(dim(objects_frame), c(1, 2))
-  expect_length(valid_objects, 1)
+  expect_identical(dim(objects_frame), c(1L, 2L))
+  expect_length(valid_objects, 1L)
 
   ## create another objects
   sid <- H5Screate()
 
-  expect_equal(dim(h5listIdentifier()), c(2, 2))
-  expect_length(h5validObjects(), 2)
+  expect_identical(dim(h5listIdentifier()), c(2L, 2L))
+  expect_length(h5validObjects(), 2L)
 
   ## now close them
   H5Sclose(sid)
   H5Fclose(fid)
 
-  expect_equal(dim(h5listIdentifier()), c(0, 2))
+  expect_identical(dim(h5listIdentifier()), c(0L, 2L))
   expect_length(h5validObjects(), 0)
 })
 

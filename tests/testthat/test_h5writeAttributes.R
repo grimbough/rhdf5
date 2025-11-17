@@ -234,5 +234,5 @@ test_that("Overwrite exisiting attribute", {
 })
 
 test_that("No open HDF5 objects are left", {
-  expect_equal(length(h5validObjects()), 0)
+  expect_identical(length(h5validObjects()), 0L)
 })

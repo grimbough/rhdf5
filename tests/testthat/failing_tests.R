@@ -41,10 +41,7 @@ test_that("Work with dataset identifier", {
   did <- H5Dopen(fid, name = "foo")
   H5Fclose(fid)
 
-  expect_equal(
-    h5set_extent(file = h5File, dataset = did, dims = c(1, length(D))),
-    0
-  )
+  expect_identical(h5set_extent(file = h5File, dataset = did, dims = c(1, length(D))), 0)
 
   H5Dclose(did)
 })

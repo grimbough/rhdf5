@@ -39,12 +39,12 @@ curr <- Sys.getenv("HDF5_USE_FILE_LOCKING")
 
 test_that("Disabling sets value", {
   h5disableFileLocking()
-  expect_equal(Sys.getenv("HDF5_USE_FILE_LOCKING"), "FALSE")
+  expect_identical(Sys.getenv("HDF5_USE_FILE_LOCKING"), "FALSE")
 })
 
 test_that("Enabling removes value", {
   h5enableFileLocking()
-  expect_equal(Sys.getenv("HDF5_USE_FILE_LOCKING"), "")
+  expect_identical(Sys.getenv("HDF5_USE_FILE_LOCKING"), "")
 })
 
 ## set original value for environment variable

@@ -23,7 +23,7 @@ test_that("Error if file doesn't exist", {
 test_that("Writing works", {
   ## writing to a file name
   expect_silent(h5write(obj = A, file = h5File, name = "A"))
-  expect_equal(as.integer(h5read(file = h5File, name = "A")), A)
+  expect_identical(as.integer(h5read(file = h5File, name = "A")), A)
 
   fid <- H5Fopen(name = h5File)
   ## writing to a group
@@ -46,7 +46,7 @@ test_that("Attributes are written too", {
 })
 
 test_that("No open HDF5 objects are left", {
-  expect_equal(length(h5validObjects()), 0)
+  expect_identical(length(h5validObjects()), 0L)
 })
 
 test_that("Write by index and hyperslab works.", {
@@ -67,7 +67,10 @@ test_that("Write by index and hyperslab works.", {
     count = c(4, 3),
     block = NULL
   )
-  expect_equal(h5read(h5File, "D")[2:5, 2:4], matrix(1:12, nrow = 4, ncol = 3))
+  expect_equal(
+    h5read(h5File, "D")[2:5, 2:4],
+    matrix(1:12, nrow = 4, ncol = 3)
+  )
   res <- h5read(
     file = h5File,
     name = "D",
@@ -199,7 +202,7 @@ if (.Platform$r_arch != "i386") {
         )
       )
       expect_gt(as.numeric(did), 0)
-      expect_equal(.Call("_H5Dclose", did, PACKAGE = "rhdf5"), 0)
+      expect_identical(.Call("_H5Dclose", did, PACKAGE = "rhdf5"), 0L)
       H5Fclose(fid)
     })
   }
@@ -283,5 +286,5 @@ test_that("Overwriting a subset", {
 })
 
 test_that("No open HDF5 objects are left", {
-  expect_equal(length(h5validObjects()), 0)
+  expect_identical(length(h5validObjects()), 0L)
 })

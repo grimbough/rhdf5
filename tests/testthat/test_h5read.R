@@ -56,32 +56,32 @@ test_that("Reading a dataset", {
 test_that("Reading a group", {
   foo <- h5read(h5File, name = "foo")
   expect_is(foo, "list")
-  expect_equal(length(foo), 2)
+  expect_identical(length(foo), 2L)
   expect_true(all(c("A", "B") %in% names(foo)))
 })
 
 test_that("Reading a nested dataset", {
   fooA <- h5read(h5File, name = "foo/A")
   expect_is(fooA, "matrix")
-  expect_equal(dim(fooA), c(1, length(A)))
+  expect_identical(dim(fooA), c(1L, length(A)))
 })
 
 test_that("Dropping dimensions", {
   fooA <- h5read(h5File, name = "foo/A", drop = TRUE)
   expect_is(fooA, "integer")
   expect_null(dim(fooA))
-  expect_equal(fooA, A)
+  expect_identical(fooA, A)
 
   ## this drops for matrices too
   fooB <- h5read(h5File, name = "foo/B", drop = TRUE)
   expect_is(fooB, "numeric")
   expect_null(dim(fooB))
-  expect_equal(fooB, as.numeric(B))
+  expect_identical(fooB, as.numeric(B))
 })
 
 test_that("Reading attributes too", {
   baa <- h5read(h5File, name = "baa", read.attributes = TRUE)
-  expect_equal(as.character(attributes(baa)$scale), attributes(D)$scale)
+  expect_identical(as.character(attributes(baa)$scale), attributes(D)$scale)
 })
 
 test_that("Error if file doesn't exist", {
@@ -261,8 +261,8 @@ h5write(obj = B, file = h5File, name = "B")
 test_that("Works with a dimension of length 1", {
   expect_silent(A2 <- h5read(h5File, name = "A", index = list(NULL, 5)))
   expect_is(A2, "matrix")
-  expect_equal(ncol(A2), 1L)
-  expect_equal(nrow(A2), 10L)
+  expect_identical(ncol(A2), 1L)
+  expect_identical(nrow(A2), 10L)
   expect_identical(A2[, 1], A[, 5])
 })
 
@@ -272,8 +272,8 @@ test_that("indices that resolve to a single hyperslab are ok", {
     A2 <- h5read(h5File, name = "A", index = list(2:3, c(1, 2, 4, 5)))
   )
   expect_is(A2, "matrix")
-  expect_equal(ncol(A2), 4)
-  expect_equal(nrow(A2), 2)
+  expect_identical(ncol(A2), 4L)
+  expect_identical(nrow(A2), 2L)
   expect_identical(A2, A[2:3, c(1, 2, 4, 5)])
 })
 
@@ -281,8 +281,8 @@ test_that("Columns specified multiple times", {
   expect_silent(
     A2 <- h5read(h5File, name = "A", index = list(NULL, c(9, 1, 1, 5)))
   )
-  expect_equal(ncol(A2), 4L)
-  expect_equal(nrow(A2), 10L)
+  expect_identical(ncol(A2), 4L)
+  expect_identical(nrow(A2), 10L)
   expect_identical(A2[, 2], A[, 1])
 })
 
@@ -291,19 +291,19 @@ test_that("Indexing multiple dimensions works", {
   expect_silent(
     A2 <- h5read(h5File, name = "A", index = list(c(1, 3), c(1, 5, 10)))
   )
-  expect_equal(ncol(A2), 3L)
-  expect_equal(nrow(A2), 2L)
-  expect_equal(A2[2, 3], A[3, 10])
+  expect_identical(ncol(A2), 3L)
+  expect_identical(nrow(A2), 2L)
+  expect_identical(A2[2, 3], A[3, 10])
 
   expect_silent(
     B2 <- h5read(h5File, name = "B", index = list(c(1, 8, 10), NULL, NULL))
   )
-  expect_equal(dim(B2), c(3, 10, 10))
+  expect_identical(dim(B2), c(3L, 10L, 10L))
   expect_identical(B2[3, , ], B[10, , ])
   expect_silent(
     B2 <- h5read(h5File, name = "B", index = list(c(8), NULL, c(4, 6)))
   )
-  expect_equal(dim(B2), c(1, 10, 2))
+  expect_identical(dim(B2), c(1L, 10L, 2L))
   expect_identical(B2[1, 6, ], B[8, 6, c(4, 6)])
 })
 
@@ -313,28 +313,28 @@ test_that("Empty index retain dimensionality", {
     A2 <- h5read(h5File, name = "A", index = list(integer(0), 5))
   ) %>%
     expect_is("matrix")
-  expect_equal(dim(A2), c(0, 1))
+  expect_identical(dim(A2), c(0L, 1L))
   expect_silent(
     A2 <- h5read(h5File, name = "A", index = list(integer(0), 1:5))
   ) %>%
     expect_is("matrix")
-  expect_equal(dim(A2), c(0, 5))
+  expect_identical(dim(A2), c(0L, 5L))
   expect_silent(
     A2 <- h5read(h5File, name = "A", index = list(integer(0), integer(0)))
   ) %>%
     expect_is("matrix")
-  expect_equal(dim(A2), c(0, 0))
+  expect_identical(dim(A2), c(0L, 0L))
 
   expect_silent(
     B2 <- h5read(h5File, name = "B", index = list(integer(0), integer(0), 5))
   ) %>%
     expect_is("array")
-  expect_equal(dim(B2), c(0, 0, 1))
+  expect_identical(dim(B2), c(0L, 0L, 1L))
   expect_silent(
     B2 <- h5read(h5File, name = "B", index = list(integer(0), 1:5, 6))
   ) %>%
     expect_is("array")
-  expect_equal(dim(B2), c(0, 5, 1))
+  expect_identical(dim(B2), c(0L, 5L, 1L))
   expect_silent(
     B2 <- h5read(
       h5File,
@@ -343,7 +343,7 @@ test_that("Empty index retain dimensionality", {
     )
   ) %>%
     expect_is("array")
-  expect_equal(dim(B2), c(0, 0, 0))
+  expect_identical(dim(B2), c(0L, 0L, 0L))
 })
 
 ############################################################
@@ -370,17 +370,17 @@ test_that("Signed 32bit integers are unchanged for all conversion arguments", {
     x1 <- h5read(h5File, name = "int32", bit64conversion = "int"),
     "array"
   )
-  expect_equal(storage.mode(x1), "integer")
+  expect_identical(storage.mode(x1), "integer")
   expect_is(
     x2 <- h5read(h5File, name = "int32", bit64conversion = "double"),
     "array"
   )
-  expect_equal(storage.mode(x2), "integer")
+  expect_identical(storage.mode(x2), "integer")
   expect_is(
     x3 <- h5read(h5File, name = "int32", bit64conversion = "bit64"),
     "array"
   )
-  expect_equal(storage.mode(x3), "integer")
+  expect_identical(storage.mode(x3), "integer")
 
   expect_identical(x1, x2)
   expect_identical(x1, x3)
@@ -393,21 +393,21 @@ test_that("signed 64-bit integers are converted", {
   ) %>%
     expect_warning()
   expect_identical(x1[51], NA_integer_)
-  expect_equal(storage.mode(x1), "integer")
+  expect_identical(storage.mode(x1), "integer")
 
   expect_is(
     x2 <- h5read(h5File, name = "int64", bit64conversion = "double"),
     "array"
   )
   expect_identical(x2, array(c(1:50, 2^32)))
-  expect_equal(storage.mode(x2), "double")
+  expect_identical(storage.mode(x2), "double")
 
   expect_is(
     x3 <- h5read(h5File, name = "int64", bit64conversion = "bit64"),
     "integer64"
   )
   expect_identical(x3, as.array(bit64::as.integer64(c(1:50, 2^32))))
-  expect_equal(storage.mode(x3), "double")
+  expect_identical(storage.mode(x3), "double")
 })
 
 test_that("Unsigned 32bit integers are converted to NA out of range", {
@@ -420,15 +420,15 @@ test_that("Unsigned 32bit integers are converted properly to double/bit64", {
     x2 <- h5read(h5File, name = "uint32", bit64conversion = "double"),
     "array"
   )
-  expect_equal(storage.mode(x2), "double")
+  expect_identical(storage.mode(x2), "double")
   expect_equivalent(x2, 2^31 + 1:50)
 
   expect_is(
     x3 <- h5read(h5File, name = "uint32", bit64conversion = "bit64"),
     "integer64"
   )
-  expect_equal(storage.mode(x3), "double")
-  expect_equal(class(x3), "integer64")
+  expect_identical(storage.mode(x3), "double")
+  expect_identical(class(x3), "integer64")
   expect_true(all(x3 > 2^31))
 })
 
@@ -450,7 +450,11 @@ test_that("Failing to read BLOSC", {
 })
 
 test_that("unsigned native read matches expected ordering (issue #157)", {
-  test_file_157 <- system.file("testfiles", "test_issue157.h5", package = "rhdf5")
+  test_file_157 <- system.file(
+    "testfiles",
+    "test_issue157.h5",
+    package = "rhdf5"
+  )
   signed_read <- h5read(test_file_157, "signed")
   signed_native <- h5read(test_file_157, "signed", native = TRUE)
   unsigned_read <- h5read(test_file_157, "unsigned")
@@ -463,6 +467,5 @@ test_that("unsigned native read matches expected ordering (issue #157)", {
 ############################################################
 
 test_that("No open HDF5 objects are left", {
-  expect_equal(length(h5validObjects()), 0)
+  expect_identical(length(h5validObjects()), 0L)
 })
-

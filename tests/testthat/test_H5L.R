@@ -77,7 +77,7 @@ test_that("links can be deleted", {
 
   ## check there are now no entries left
   expect_is(res <- h5ls(h5File), "data.frame")
-  expect_equal(nrow(res), 0)
+  expect_identical(nrow(res), 0L)
 })
 
 ############################################################
@@ -86,7 +86,7 @@ context("Moving Links: H5Lmove")
 
 test_that("links can be moved within a file at the same level", {
   expect_silent(h5write(matrix(1:100, ncol = 10), file = h5File, name = "pos1"))
-  expect_equal(h5ls(h5File)$name, "pos1")
+  expect_identical(h5ls(h5File)$name, "pos1")
   expect_silent(fid <- H5Fopen(h5File))
   expect_silent(H5Lmove(
     h5loc = fid,
@@ -95,7 +95,7 @@ test_that("links can be moved within a file at the same level", {
     name_dest = "pos2"
   ))
   expect_silent(H5Fclose(fid))
-  expect_equal(h5ls(h5File)$name, "pos2")
+  expect_identical(h5ls(h5File)$name, "pos2")
 })
 
 
@@ -118,7 +118,7 @@ test_that("links can be moved to a new group", {
   ))
   expect_silent(H5Gclose(gid))
   expect_silent(H5Fclose(fid))
-  expect_equal(h5ls(h5File)$name, c("foo", "pos2"))
+  expect_identical(h5ls(h5File)$name, c("foo", "pos2"))
 
   ## we can also pass group ids
   fid <- H5Fopen(h5File)
@@ -131,7 +131,7 @@ test_that("links can be moved to a new group", {
   ))
   H5Gclose(gid)
   H5Fclose(fid)
-  expect_equal(h5ls(h5File)$name, c("foo", "pos3"))
+  expect_identical(h5ls(h5File)$name, c("foo", "pos3"))
 })
 
 
@@ -155,9 +155,9 @@ test_that("links can be copied", {
   ))
   H5Fclose(fid)
   contents <- h5ls(h5File)
-  expect_equal(contents$group, c("/", "/foo", "/foo", "/"))
-  expect_equal(contents$name, c("foo", "pos3", "pos4", "pos5"))
-  expect_equal(h5read(h5File, "/foo/pos3"), h5read(h5File, "pos5"))
+  expect_identical(contents$group, c("/", "/foo", "/foo", "/"))
+  expect_identical(contents$name, c("foo", "pos3", "pos4", "pos5"))
+  expect_identical(h5read(h5File, "/foo/pos3"), h5read(h5File, "pos5"))
 })
 
 
@@ -166,5 +166,5 @@ context("H5L cleanup")
 ##########################################################
 
 test_that("no open HDF5 objects are left", {
-  expect_equal(length(h5validObjects()), 0)
+  expect_identical(length(h5validObjects()), 0L)
 })

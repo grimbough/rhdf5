@@ -22,7 +22,7 @@ h5createDataset(
 h5write(obj = D, file = h5File, name = "foo")
 
 test_that("Dimensions as expected", {
-  expect_equal(dim(h5read(h5File, name = "foo")), c(1, length(D)))
+  expect_identical(dim(h5read(h5File, name = "foo")), c(1L, length(D)))
 })
 
 test_that("Changing dataset dimensions", {
@@ -31,7 +31,7 @@ test_that("Changing dataset dimensions", {
     dataset = "foo",
     dims = c(2, length(D))
   ))
-  expect_equal(dim(h5read(h5File, name = "foo")), c(2, length(D)))
+  expect_identical(dim(h5read(h5File, name = "foo")), c(2L, length(D)))
 })
 
 test_that("Fail if given a group", {
@@ -50,5 +50,5 @@ test_that("Fail if missing", {
 })
 
 test_that("No open HDF5 objects are left", {
-  expect_equal(length(h5validObjects()), 0)
+  expect_identical(length(h5validObjects()), 0L)
 })

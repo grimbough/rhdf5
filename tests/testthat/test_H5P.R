@@ -66,7 +66,7 @@ test_that("Dataset creation properties can be set", {
   ## seting chunk sizes
   expect_null(H5Pget_chunk(pid))
   H5Pset_chunk(pid, dim = c(100, 100))
-  expect_equal(H5Pget_chunk(pid), c(100, 100))
+  expect_identical(H5Pget_chunk(pid), c(100L, 100L))
 
   ## default fill values
   ## I think this is defined by default
@@ -88,5 +88,5 @@ test_that("Dataset creation properties can be set", {
 
 
 test_that("No open HDF5 objects are left", {
-  expect_equal(length(h5validObjects()), 0)
+  expect_identical(length(h5validObjects()), 0L)
 })

@@ -32,23 +32,23 @@ test_that("Default arguments", {
   ls_output <- h5ls(file = h5File)
   expect_is(ls_output, "data.frame")
   expect_identical(ls_output$name, c("baa", "foo", "A", "B"))
-  expect_equal(dim(ls_output), c(4, 5))
+  expect_identical(dim(ls_output), c(4L, 5L))
 })
 
 test_that("Expanded information", {
   ls_output <- h5ls(file = h5File, all = TRUE)
-  expect_equal(dim(ls_output), c(4, 12))
+  expect_identical(dim(ls_output), c(4L, 12L))
 })
 
 test_that("h5ls reads dimensions correctly", {
   ls_output <- h5ls(file = h5File, all = TRUE)
-  expect_equal(ls_output[3, "dim"], "1 x 7")
-  expect_equal(ls_output[3, "maxdim"], "2 x 50")
+  expect_identical(ls_output[3, "dim"], "1 x 7")
+  expect_identical(ls_output[3, "maxdim"], "2 x 50")
 })
 
 test_that("Changing recursion depth", {
   expect_silent(ls_output <- h5ls(file = h5File, recursive = FALSE))
-  expect_equal(dim(ls_output), c(2, 5))
+  expect_identical(dim(ls_output), c(2L, 5L))
   expect_identical(ls_output$name, c("baa", "foo"))
 
   expect_identical(h5ls(h5File, recursive = 1), ls_output)
@@ -130,5 +130,5 @@ context("h5ls cleanup")
 ##########################################################
 
 test_that("No open HDF5 objects are left", {
-  expect_equal(length(h5validObjects()), 0)
+  expect_identical(length(h5validObjects()), 0L)
 })

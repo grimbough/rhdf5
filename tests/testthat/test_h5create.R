@@ -171,8 +171,8 @@ test_that("Encoding of string datasets can be set", {
   did_utf8 <- H5Dopen(fid, name = "utf-8")
   tid_utf8 <- H5Dget_type(did_utf8)
 
-  expect_equal(H5Tget_cset(tid_ascii), 0L)
-  expect_equal(H5Tget_cset(tid_utf8), 1L)
+  expect_identical(H5Tget_cset(tid_ascii), 0L)
+  expect_identical(H5Tget_cset(tid_utf8), 1L)
 
   sapply(c(did_ascii, did_utf8), FUN = H5Dclose)
   H5Fclose(fid)
@@ -252,7 +252,7 @@ test_that("Extendible datasets", {
     maxdims = c(extendible, extendible)
   )
   h5write(mtx4x3, file = h5File, name = "extend")
-  expect_equal(h5read(h5File, "extend"), mtx4x3)
+  expect_identical(h5read(h5File, "extend"), mtx4x3)
 
   ## now extend in first dimension:
   ## [ mtx4x3 ]
@@ -260,14 +260,17 @@ test_that("Extendible datasets", {
 
   h5set_extent(h5File, "extend", c(7, 3))
   h5write(mtx3x3, file = h5File, name = "extend", index = list(5:7, 1:3))
-  expect_equal(h5read(h5File, "extend"), rbind(mtx4x3, mtx3x3))
+  expect_identical(h5read(h5File, "extend"), rbind(mtx4x3, mtx3x3))
 
   ## now extend in the other dimension:
   ## [ mtx4x3 mtx7x2 ]
   ## [ mtx3x3 mtx7x2 ]
   h5set_extent(h5File, "extend", c(7, 5))
   h5write(mtx7x2, file = h5File, name = "extend", index = list(1:7, 4:5))
-  expect_equal(h5read(h5File, "extend"), cbind(rbind(mtx4x3, mtx3x3), mtx7x2))
+  expect_identical(
+    h5read(h5File, "extend"),
+    cbind(rbind(mtx4x3, mtx3x3), mtx7x2)
+  )
 
   ## This case, level = 0, used to lead to an error because the chunking, which is required for
   ## H5Sunlimited, was within a if(level > 0) branch. Mostly we are just checking here that
@@ -282,7 +285,7 @@ test_that("Extendible datasets", {
   h5write(mtx4x3, file = h5File, name = "nonCompressed")
   h5set_extent(h5File, "nonCompressed", c(7, 3))
   h5write(mtx3x3, file = h5File, name = "nonCompressed", index = list(5:7, 1:3))
-  expect_equal(h5read(h5File, "nonCompressed"), rbind(mtx4x3, mtx3x3))
+  expect_identical(h5read(h5File, "nonCompressed"), rbind(mtx4x3, mtx3x3))
 })
 
 test_that("Invalid inputs", {
@@ -561,5 +564,5 @@ test_that("scalar dataspaces are created properly", {
 })
 
 test_that("No open HDF5 objects are left", {
-  expect_equal(length(h5validObjects()), 0)
+  expect_identical(length(h5validObjects()), 0L)
 })
