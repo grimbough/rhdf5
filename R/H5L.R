@@ -78,7 +78,7 @@ H5Lexists <- function(h5loc, name) {
     stop("'name' must be a character string of length 1")
   }
 
-  name <- strsplit(name, split = "/")[[1]]
+  name <- strsplit(name, split = "/", fixed = TRUE)[[1]]
   name <- name[nzchar(name)]
   Lexists <- TRUE
   i <- 1
