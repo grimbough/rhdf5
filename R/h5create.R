@@ -278,7 +278,9 @@ h5createGroup <- function(file, group) {
       "One or more chunk dimensions exceeded the maximum for the dataset.\n",
       "These have been automatically set to the maximum.\n",
       "The new chunk dimensions are: ",
-      paste0("c(", paste(chunk, collapse = ","), ")"),
+      "c(",
+      paste(chunk, collapse = ","),
+      ")",
       call. = FALSE
     )
   }
