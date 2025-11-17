@@ -5,9 +5,6 @@ context("Print methods")
 ############################################################
 
 h5File <- withr::local_tempfile(pattern = "H5_methods", fileext = ".h5")
-if (file.exists(h5File)) {
-  file.remove(h5File)
-}
 
 test_that("Printing various object types", {
   ## file
@@ -56,9 +53,6 @@ context("Subsetting methods")
 ############################################################
 
 h5File <- withr::local_tempfile(pattern = "H5_methods", fileext = ".h5")
-if (file.exists(h5File)) {
-  file.remove(h5File)
-}
 
 test_that("Subsetting datasets", {
   A <- matrix(data = 1:200, nrow = 10)

@@ -6,9 +6,6 @@ context("h5set_extent")
 
 ## output file name
 h5File <- withr::local_tempfile(pattern = "ex_set_extent_", fileext = ".h5")
-if (file.exists(h5File)) {
-  file.remove(h5File)
-}
 
 ## populate an example file
 D <- 1:20

@@ -6,9 +6,6 @@ context("h5createFile")
 
 ## output file name
 h5File <- withr::local_tempfile(pattern = "ex_save", fileext = ".h5")
-if (file.exists(h5File)) {
-  file.remove(h5File)
-}
 
 test_that("Default arguments", {
   expect_true(h5createFile(file = h5File))
@@ -22,10 +19,6 @@ test_that("Don't overwrite existing file", {
 ############################################################
 context("h5createGroup")
 ############################################################
-
-if (!file.exists(h5File)) {
-  h5createFile(file = h5File)
-}
 
 test_that("Create simple group", {
   expect_true(h5createGroup(file = h5File, group = "foo"))
@@ -47,9 +40,7 @@ context("h5createDataset")
 ############################################################
 
 h5File <- withr::local_tempfile(pattern = "ex_createDS", fileext = ".h5")
-if (file.exists(h5File)) {
-  file.remove(h5File)
-}
+
 ## create empty file
 h5createFile(file = h5File)
 
@@ -375,9 +366,6 @@ context("h5createAttribute")
 ############################################################
 
 h5File <- withr::local_tempfile(pattern = "ex_createAttr", fileext = ".h5")
-if (file.exists(h5File)) {
-  file.remove(h5File)
-}
 ## create a new file with a single dataset
 h5createFile(h5File)
 h5write(1:1, h5File, "foo")

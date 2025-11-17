@@ -21,9 +21,6 @@ context("h5set_extent")
 ############################################################
 
 h5File <- withr::local_tempfile(pattern = "ex_set_extent_", fileext = ".h5")
-if (file.exists(h5File)) {
-  file.remove(h5File)
-}
 D <- 1:20
 h5createFile(h5File)
 h5createDataset(

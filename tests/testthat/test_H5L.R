@@ -1,9 +1,6 @@
 library(rhdf5)
 
 h5File <- withr::local_tempfile(pattern = "H5L_", fileext = ".h5")
-if (file.exists(h5File)) {
-  file.remove(h5File)
-}
 
 expect_true(h5createFile(h5File))
 expect_silent(h5write(matrix(1:20, ncol = 2), file = h5File, name = "foo"))
@@ -34,9 +31,6 @@ context("H5Lcreate_external")
 ############################################################
 
 h5File2 <- withr::local_tempfile(pattern = "H5L_2_", fileext = ".h5")
-if (file.exists(h5File2)) {
-  file.remove(h5File2)
-}
 
 test_that("links can be created between files", {
   expect_true(h5createFile(h5File2))

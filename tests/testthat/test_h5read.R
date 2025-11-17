@@ -15,9 +15,6 @@ G <- data.frame("col_A" = 1:10, "col_B" = letters[1:10], "col_C" = as.raw(1:10))
 
 ## output file name
 h5File <- withr::local_tempfile(pattern = "ex_read", fileext = ".h5")
-if (file.exists(h5File)) {
-  file.remove(h5File)
-}
 
 # create file with group hierarchy
 h5createFile(h5File)
@@ -207,9 +204,6 @@ context("NA values")
 
 ## output file name
 h5File <- withr::local_tempfile(pattern = "ex_read", fileext = ".h5")
-if (file.exists(h5File)) {
-  file.remove(h5File)
-}
 
 h5createFile(h5File)
 
@@ -352,9 +346,6 @@ context("64-bit conversion")
 
 ## output file name
 h5File <- withr::local_tempfile(pattern = "ex_read", fileext = ".h5")
-if (file.exists(h5File)) {
-  file.remove(h5File)
-}
 
 # create file with integers of different types
 h5createFile(h5File)

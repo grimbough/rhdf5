@@ -7,9 +7,6 @@ context("h5write")
 A <- 1:7
 ## output file name
 h5File <- withr::local_tempfile(pattern = "ex_save", fileext = ".h5")
-if (file.exists(h5File)) {
-  file.remove(h5File)
-}
 
 test_that("Error if file doesn't exist", {
   expect_error(h5write(
@@ -108,9 +105,6 @@ context("h5writeDataset")
 
 ## output file name
 h5File <- withr::local_tempfile(pattern = "ex_writeDataset_", fileext = ".h5")
-if (file.exists(h5File)) {
-  file.remove(h5File)
-}
 
 test_that("Writing to file handle", {
   fid <- H5Fcreate(name = h5File)
@@ -258,9 +252,6 @@ context("Writing a datset subset")
 
 ## output file name
 h5File <- withr::local_tempfile(pattern = "ex_writeDataset_", fileext = ".h5")
-if (file.exists(h5File)) {
-  file.remove(h5File)
-}
 
 test_that("Overwriting a subset", {
   fid <- H5Fcreate(name = h5File)

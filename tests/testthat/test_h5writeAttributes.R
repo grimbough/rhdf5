@@ -6,9 +6,6 @@ context("h5writeAttributes")
 
 ## output file name
 h5File <- withr::local_tempfile(pattern = "ex_attr_", fileext = ".h5")
-if (file.exists(h5File)) {
-  file.remove(h5File)
-}
 
 h5createFile(file = h5File)
 
