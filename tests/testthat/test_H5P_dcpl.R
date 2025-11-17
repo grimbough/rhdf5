@@ -15,14 +15,14 @@ test_that("Filters can be set", {
       (!is.null(R.version$crt) && R.version$crt == "ucrt")
   ) {
     expect_gte(H5Pset_szip(dcpl, options_mask = 1L, pixels_per_block = 8L), 0)
-    expect_equal(H5Pget_nfilters(dcpl), 3L)
+    expect_identical(H5Pget_nfilters(dcpl), 3L)
   }
 })
 
 test_that("Filter information can be retrieved", {
   expect_is(filter_info <- H5Pget_filter(dcpl, 1L), "list") |>
     expect_length(2L)
-  expect_equal(filter_info[[2]], "nbit")
+  expect_identical(filter_info[[2]], "nbit")
 })
 
 test_that("UTF8 strings can be used for fill values", {

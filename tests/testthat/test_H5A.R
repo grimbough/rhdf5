@@ -122,11 +122,11 @@ test_that("attributes can be deleted", {
 
   ## deleting existing attribute
   expect_true(H5Aexists(did, "volume"))
-  expect_equal(H5Adelete(did, "volume"), 0)
+  expect_identical(H5Adelete(did, "volume"), 0L)
   expect_false(H5Aexists(did, "volume"))
 
   ## trying to delete non-existant attribute
-  expect_equal(H5Adelete(did, "foobaa"), -1)
+  expect_identical(H5Adelete(did, "foobaa"), -1L)
 
   expect_silent(H5Dclose(did))
   expect_silent(H5Fclose(fid))
@@ -166,8 +166,8 @@ test_that("fixed length string attributes are correct", {
 
   attr <- h5readAttributes(h5File, "/")
   expect_is(attr, class = "list")
-  expect_equal(names(attr), attr_name)
-  expect_equal(attr$name, attr_value)
+  expect_identical(names(attr), attr_name)
+  expect_identical(attr$name, attr_value)
 })
 
 expect_length(h5validObjects(), 0)

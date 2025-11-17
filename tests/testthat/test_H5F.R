@@ -79,7 +79,7 @@ test_that("Missing file", {
     res <- H5Fis_hdf5(name = "/foo/baa.h5"),
     regexp = "File does not exist."
   )
-  expect_equal(res, NA)
+  expect_identical(res, NA)
 })
 
 test_that("Check if HDF5", {
@@ -125,13 +125,13 @@ context("H5F intent")
 
 fid <- H5Fopen(name = h5File, flags = "H5F_ACC_RDONLY")
 test_that("H5Fget_intent reports read only", {
-  expect_equal(H5Fget_intent(h5file = fid), "H5F_ACC_RDONLY")
+  expect_identical(H5Fget_intent(h5file = fid), "H5F_ACC_RDONLY")
 })
 H5Fclose(fid)
 
 fid <- H5Fopen(name = h5File, flags = "H5F_ACC_RDWR")
 test_that("H5Fget_intent reports read only", {
-  expect_equal(H5Fget_intent(h5file = fid), "H5F_ACC_RDWR")
+  expect_identical(H5Fget_intent(h5file = fid), "H5F_ACC_RDWR")
 })
 H5Fclose(fid)
 
@@ -158,5 +158,5 @@ test_that("Property list getters", {
 ############################################################
 
 test_that("No open HDF5 objects are left", {
-  expect_equal(length(h5validObjects()), 0)
+  expect_identical(length(h5validObjects()), 0L)
 })

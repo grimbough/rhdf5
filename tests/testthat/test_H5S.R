@@ -49,13 +49,13 @@ test_that("We can create a simple dataspace", {
 
   expect_is(dspace_dims <- H5Sget_simple_extent_dims(sid), "list")
   expect_named(dspace_dims, c("rank", "size", "maxsize"))
-  expect_equal(dspace_dims$size, dspace_dims$maxsize)
-  expect_equal(dspace_dims$rank, 2)
+  expect_identical(dspace_dims$size, dspace_dims$maxsize)
+  expect_identical(dspace_dims$rank, 2L)
 
   ## if maxdims isn't supplied, it just matches dims
   expect_silent(H5Sset_extent_simple(sid, dims = c(1, 1, 1)))
   dspace_dims <- H5Sget_simple_extent_dims(sid)
-  expect_equal(dspace_dims$size, dspace_dims$maxsize)
+  expect_identical(dspace_dims$size, dspace_dims$maxsize)
 
   expect_silent(H5Sset_extent_simple(
     sid,
@@ -64,7 +64,7 @@ test_that("We can create a simple dataspace", {
   ))
   expect_is(dspace_dims <- H5Sget_simple_extent_dims(sid), "list")
   expect_false(identical(dspace_dims$size, dspace_dims$maxsize))
-  expect_equal(dspace_dims$rank, 3)
+  expect_identical(dspace_dims$rank, 3L)
 
   expect_silent(H5Sclose(sid))
 })
@@ -73,7 +73,7 @@ test_that("We can create a dataspace with unlimited or non 32-bit integer dims",
   expect_silent(sid <- H5Screate_simple(dims = c(10, 2), maxdims = c(10, 3e9)))
   dspace_dims <- H5Sget_simple_extent_dims(sid)
   expect_is(dspace_dims$maxsize, "numeric")
-  expect_equal(dspace_dims$maxsize, c(10, 3e9))
+  expect_identical(dspace_dims$maxsize, c(10, 3e9))
 
   expect_silent(H5Sset_extent_simple(
     sid,
@@ -82,7 +82,7 @@ test_that("We can create a dataspace with unlimited or non 32-bit integer dims",
   ))
   dspace_dims <- H5Sget_simple_extent_dims(sid)
   expect_is(dspace_dims$maxsize, "integer")
-  expect_equal(dspace_dims$maxsize, c(10, -1))
+  expect_identical(dspace_dims$maxsize, c(10L, -1L))
 
   expect_silent(H5Sclose(sid))
 })
@@ -164,8 +164,8 @@ test_that("Combining selections", {
   H5Sselect_hyperslab(sid_2, start = 3, stride = 2, block = 1, count = 2)
 
   ## confirm we have select 5 and 2 points resepectively
-  expect_equal(H5Sget_select_npoints(sid_1), 5)
-  expect_equal(H5Sget_select_npoints(sid_2), 2)
+  expect_identical(H5Sget_select_npoints(sid_1), 5)
+  expect_identical(H5Sget_select_npoints(sid_2), 2)
 
   ## combine the two dataset selections keeping points that
   ## are in one or both of the selections
@@ -174,7 +174,7 @@ test_that("Combining selections", {
   ## extent of the new dataset is the same as sid_1
   sid_3
   ## confirm the selection contains 7 points
-  expect_equal(H5Sget_select_npoints(sid_3), 7)
+  expect_identical(H5Sget_select_npoints(sid_3), 7)
 
   ## tidy up
   H5Sclose(sid_1)
@@ -187,5 +187,5 @@ context("H5S cleanup")
 ##########################################################
 
 test_that("No open HDF5 objects are left", {
-  expect_equal(length(h5validObjects()), 0)
+  expect_identical(length(h5validObjects()), 0L)
 })

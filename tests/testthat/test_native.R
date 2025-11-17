@@ -19,15 +19,15 @@ test_that("h5ls supports native", {
 
   xx <- h5ls(h5File)
   object <- subset(xx, group == "/test" & name == "nonnative", "dim")[[1]]
-  expect_equal(object, "3 x 4")
+  expect_identical(object, "3 x 4")
   object <- subset(xx, group == "/test" & name == "native", "dim")[[1]]
-  expect_equal(object, "4 x 3")
+  expect_identical(object, "4 x 3")
 
   xx <- h5ls(h5File, native = TRUE)
   object <- subset(xx, group == "/test" & name == "nonnative", "dim")[[1]]
-  expect_equal(object, "4 x 3")
+  expect_identical(object, "4 x 3")
   object <- subset(xx, group == "/test" & name == "native", "dim")[[1]]
-  expect_equal(object, "3 x 4")
+  expect_identical(object, "3 x 4")
 
   m0 <- array(1:24, c(2, 3, 4))
   h5write(m0, file = h5File, name = "test/native-array", native = TRUE)
@@ -36,18 +36,18 @@ test_that("h5ls supports native", {
   xx <- h5ls(h5File)
   object <-
     subset(xx, group == "/test" & name == "nonnative-array", "dim")[[1]]
-  expect_equal(object, "2 x 3 x 4")
+  expect_identical(object, "2 x 3 x 4")
   object <-
     subset(xx, group == "/test" & name == "native-array", "dim")[[1]]
-  expect_equal(object, "4 x 3 x 2")
+  expect_identical(object, "4 x 3 x 2")
 
   xx <- h5ls(h5File, native = TRUE)
   object <-
     subset(xx, group == "/test" & name == "nonnative-array", "dim")[[1]]
-  expect_equal(object, "4 x 3 x 2")
+  expect_identical(object, "4 x 3 x 2")
   object <-
     subset(xx, group == "/test" & name == "native-array", "dim")[[1]]
-  expect_equal(object, "2 x 3 x 4")
+  expect_identical(object, "2 x 3 x 4")
 })
 
 ############################################################

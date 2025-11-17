@@ -14,11 +14,14 @@ test_that("object references can be created", {
   expect_is(ref_to_group, "H5Ref")
   expect_is(ref_to_dataset, "H5Ref")
 
-  expect_equal(H5Rget_name(ref = ref_to_group, h5loc = fid), "/foo")
-  expect_equal(H5Rget_name(ref = ref_to_dataset, h5loc = fid), "/foo/baa")
+  expect_identical(H5Rget_name(ref = ref_to_group, h5loc = fid), "/foo")
+  expect_identical(H5Rget_name(ref = ref_to_dataset, h5loc = fid), "/foo/baa")
 
-  expect_equal(H5Rget_obj_type(ref = ref_to_group, h5loc = fid), "GROUP")
-  expect_equal(H5Rget_obj_type(ref = ref_to_dataset, h5loc = fid), "DATASET")
+  expect_identical(H5Rget_obj_type(ref = ref_to_group, h5loc = fid), "GROUP")
+  expect_identical(
+    H5Rget_obj_type(ref = ref_to_dataset, h5loc = fid),
+    "DATASET"
+  )
 
   expect_silent(gid <- H5Rdereference(ref = ref_to_group, h5loc = fid)) |>
     expect_is("H5IdComponent")
@@ -48,13 +51,13 @@ test_that("dataset region references can be created", {
 
   expect_is(ref_to_region, "H5Ref")
 
-  expect_equal(H5Rget_name(ref = ref_to_region, h5loc = fid), "/foo/baa")
+  expect_identical(H5Rget_name(ref = ref_to_region, h5loc = fid), "/foo/baa")
 
   expect_silent(sid <- H5Rget_region(ref = ref_to_region, h5loc = fid)) |>
     expect_is("H5IdComponent")
-  expect_equal(H5Sget_select_npoints(sid), 3L)
+  expect_identical(H5Sget_select_npoints(sid), 3)
 
-  expect_equal(H5Rget_obj_type(ref = ref_to_region, h5loc = fid), "DATASET")
+  expect_identical(H5Rget_obj_type(ref = ref_to_region, h5loc = fid), "DATASET")
 
   expect_silent(did <- H5Rdereference(ref = ref_to_region, h5loc = fid)) |>
     expect_is("H5IdComponent")
@@ -97,12 +100,12 @@ test_that("H5Ref methods work", {
   expect_error(c(object_ref, 1:10), "All objects must be of class 'H5Ref'")
 
   ## object and region references are different internally but not externally
-  expect_equal(length(object_ref), 1)
-  expect_equal(length(object_ref2), 2)
-  expect_equal(length(region_ref), 1)
-  expect_equal(length(region_ref2), 2)
+  expect_identical(length(object_ref), 1L)
+  expect_identical(length(object_ref2), 2L)
+  expect_identical(length(region_ref), 1L)
+  expect_identical(length(region_ref2), 2L)
 
-  expect_equal(length(object_ref[2]), 1)
+  expect_identical(length(object_ref[2]), 1L)
   expect_equivalent(object_ref[1], object_ref[2])
 })
 
@@ -111,5 +114,5 @@ H5Fclose(fid)
 
 
 test_that("No open HDF5 objects are left", {
-  expect_equal(length(h5validObjects()), 0)
+  expect_identical(length(h5validObjects()), 0L)
 })

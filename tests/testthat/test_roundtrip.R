@@ -63,7 +63,7 @@ test_that("UTF-8 strings are preserved", {
   expect_silent(h5write(obj = input, file = h5file, name = "utf8"))
   expect_silent(output <- h5read(file = h5file, name = "utf8"))
   expect_equivalent(input, output)
-  expect_equal(Encoding(output), "UTF-8")
+  expect_identical(Encoding(output), "UTF-8")
 })
 
 test_that("Complex numbers are writen to a compound datatype", {

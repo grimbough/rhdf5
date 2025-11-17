@@ -46,15 +46,15 @@ test_that("we can change the size of a dataset", {
   on.exit(h5closeAll(did, fid))
 
   sid <- H5Dget_space(did)
-  expect_equal(H5Sget_simple_extent_dims(sid)$size, c(0, 0))
+  expect_identical(H5Sget_simple_extent_dims(sid)$size, c(0L, 0L))
   H5Sclose(sid)
 
   ## change both i and j a few times
-  for (i in seq(100, 1000, by = 200)) {
-    for (j in seq(0, 1000, by = 500)) {
+  for (i in seq(100L, 1000L, by = 200L)) {
+    for (j in seq(0L, 1000L, by = 500L)) {
       expect_true(H5Dset_extent(did, size = c(i, j)))
       sid <- H5Dget_space(did)
-      expect_equal(H5Sget_simple_extent_dims(sid)$size, c(i, j))
+      expect_identical(H5Sget_simple_extent_dims(sid)$size, c(i, j))
       H5Sclose(sid)
     }
   }
@@ -63,7 +63,7 @@ test_that("we can change the size of a dataset", {
   expect_false(H5Dset_extent(did, size = c(2000, 2000)))
   ## size remain where we set it last
   sid <- H5Dget_space(did)
-  expect_equal(H5Sget_simple_extent_dims(sid)$size, c(i, j))
+  expect_identical(H5Sget_simple_extent_dims(sid)$size, c(i, j))
   H5Sclose(sid)
 })
 
@@ -80,7 +80,7 @@ test_that("we can find the number of chunks used by a dataset", {
   fid <- H5Fopen(h5File)
   did <- H5Dopen(fid, "/data")
   ## Here we return 0 chunks as no values have been written
-  expect_equal(H5Dget_num_chunks(did), 0L)
+  expect_identical(H5Dget_num_chunks(did), 0L)
 
   ## Now write data to half the dataset
   h5writeDataset(
@@ -90,7 +90,7 @@ test_that("we can find the number of chunks used by a dataset", {
     index = list(1:10, 1:5)
   )
   ## We now see it contains 2 chunks
-  expect_equal(H5Dget_num_chunks(did), 2L)
+  expect_identical(H5Dget_num_chunks(did), 2L)
 
   ## Now writing the complte dataset, overwriting the existing values
   h5writeDataset(
@@ -100,7 +100,7 @@ test_that("we can find the number of chunks used by a dataset", {
     index = NULL
   )
   ## We now see it contains 4 chunks
-  expect_equal(H5Dget_num_chunks(did), 4L)
+  expect_identical(H5Dget_num_chunks(did), 4L)
 
   ## Tidy up op handles
   h5closeAll(did, fid)
