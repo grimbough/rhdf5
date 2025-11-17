@@ -89,7 +89,7 @@ h5testFileLocking <- function(location) {
 #' @rdname h5_FileLocking
 #' @export
 h5disableFileLocking <- function() {
-  Sys.setenv(HDF5_USE_FILE_LOCKING = "FALSE")
+  Sys.setenv(HDF5_USE_FILE_LOCKING = "FALSE") # nolint: undesirable_function_linter.
 }
 
 #' @rdname h5_FileLocking
