@@ -169,10 +169,8 @@ setMethod(
         index[i] <- list(NULL)
       }
     }
-    if (length(index) == 1) {
-      if (is.null(index[[1]])) {
-        index <- NULL
-      }
+    if (length(index) == 1 && is.null(index[[1]])) {
+      index <- NULL
     }
     isvalid <- H5Iis_valid(h5id)
     if (!isvalid) {
@@ -214,10 +212,8 @@ setMethod(
         index[i] <- list(NULL)
       }
     }
-    if (length(index) == 1) {
-      if (is.null(index[[1]])) {
-        index <- NULL
-      }
+    if (length(index) == 1 && is.null(index[[1]])) {
+      index <- NULL
     }
     isvalid <- H5Iis_valid(h5id)
     if (!isvalid) {
