@@ -2,7 +2,7 @@
 #'
 #' @param file Character vector of length 1, giving the path to the HDF5
 #' @param name Path within the HDF5 file to the object whose attributes should
-#'   be read. The datasets present in `file`` can be listed with the
+#'   be read. The datasets present in `file` can be listed with the
 #'   function [h5ls()].
 #' @param native An object of class `logical`. If TRUE, array-like objects
 #'   are treated as stored in HDF5 row-major rather than R column-major
