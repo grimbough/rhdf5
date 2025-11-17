@@ -16,9 +16,6 @@ test_that("Invalid file names", {
 })
 
 h5File <- withr::local_tempfile(pattern = "H5F_", fileext = ".h5")
-if (file.exists(h5File)) {
-  file.remove(h5File)
-}
 
 test_that("Default arguments", {
   expect_silent(fid <- H5Fcreate(name = h5File))
@@ -46,11 +43,6 @@ test_that("Non-ASCII filename", {
 
     fid <- H5Fcreate(h5File)
     expect_true(file.exists(h5File))
-
-    if (file.exists(h5File)) {
-      H5Fclose(fid)
-      file.remove(h5File)
-    }
   }
 })
 
@@ -59,9 +51,7 @@ context("H5Fis_hdf5")
 ############################################################
 
 h5File <- withr::local_tempfile(pattern = "H5F_", fileext = ".h5")
-if (file.exists(h5File)) {
-  file.remove(h5File)
-}
+
 
 test_that("Invalid file names", {
   expect_error(

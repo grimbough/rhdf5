@@ -9,9 +9,6 @@ B <- 1:18
 D <- seq(0, 1, by = 0.1)
 ## output file name
 h5File <- withr::local_tempfile(pattern = "ex_dump", fileext = ".h5")
-if (file.exists(h5File)) {
-  file.remove(h5File)
-}
 
 # create file with group heirachy
 h5createFile(h5File)

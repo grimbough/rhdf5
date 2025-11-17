@@ -5,9 +5,7 @@ context("h5ls supports native functionality")
 ############################################################
 
 h5File <- withr::local_tempfile(fileext = ".h5")
-if (file.exists(h5File)) {
-  file.remove(h5File)
-}
+
 h5createFile(file = h5File)
 
 test_that("h5ls supports native", {

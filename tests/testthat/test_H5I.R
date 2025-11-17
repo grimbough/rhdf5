@@ -5,9 +5,6 @@ context("H5I methods")
 ############################################################
 
 h5File <- withr::local_tempfile(pattern = "H5_methods", fileext = ".h5")
-if (file.exists(h5File)) {
-  file.remove(h5File)
-}
 
 fid <- H5Fcreate(name = h5File)
 gid <- H5Gcreate(fid, name = "foo")

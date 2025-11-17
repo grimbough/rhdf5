@@ -22,9 +22,6 @@ context("H5: closing everything")
 ############################################################
 
 h5File <- withr::local_tempfile(pattern = "H5_", fileext = ".h5")
-if (file.exists(h5File)) {
-  file.remove(h5File)
-}
 
 test_that("h5closeAll closed everything", {
   ## file

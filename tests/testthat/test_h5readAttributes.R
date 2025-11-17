@@ -2,9 +2,6 @@ library(rhdf5)
 
 ## output file name
 h5File <- withr::local_tempfile(pattern = "ex_read_attr_", fileext = ".h5")
-if (file.exists(h5File)) {
-  file.remove(h5File)
-}
 
 h5createFile(file = h5File)
 A <- as.double(1:10)
