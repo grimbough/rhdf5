@@ -148,10 +148,8 @@ H5Fis_hdf5 <- function(name, showWarnings = TRUE) {
   res <- NA
   if (file.exists(name)) {
     res <- .Call("_H5Fis_hdf5", name, PACKAGE = "rhdf5")
-  } else {
-    if (showWarnings) {
-      warning("File does not exist.")
-    }
+  } else if (showWarnings) {
+    warning("File does not exist.")
   }
   res
 }
