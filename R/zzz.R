@@ -1,5 +1,5 @@
 .onLoad <- function(libname, pkgname) {
-  h5constants <<- H5loadConstants()
+  h5constants <<- H5loadConstants() # nolint: undesirable_operator_linter.
   h5errorHandling()
 
   if (requireNamespace("rhdf5filters")) {
