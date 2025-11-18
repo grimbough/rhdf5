@@ -469,6 +469,7 @@ h5createDataset <- function(
   loc <- h5checktypeOrOpenLoc(file, native = native)
   on.exit(h5closeitLoc(loc))
 
+  encoding <- match.arg(encoding, choices = c("ASCII", "UTF-8", "UTF8"))
   dims <- as.numeric(dims)
   maxdims <- as.numeric(maxdims)
 
@@ -503,7 +504,7 @@ h5createDataset <- function(
     H5type,
     storage.mode,
     size,
-    encoding = match.arg(encoding, choices = c("ASCII", "UTF-8", "UTF8"))
+    encoding = encoding
   )
 
   dcpl <- .createDCPL(
@@ -614,6 +615,7 @@ h5createAttribute <- function(
   obj <- h5checktypeOrOpenObj(obj, file, native = native)
   on.exit(h5closeitObj(obj))
 
+  encoding <- match.arg(encoding, choices = c("ASCII", "UTF-8", "UTF8"))
   res <- FALSE
 
   if (is.null(dims)) {
@@ -640,7 +642,7 @@ h5createAttribute <- function(
         tid <- H5Tcopy("H5T_C_S1")
         H5Tset_cset(
           tid,
-          cset = match.arg(encoding, choices = c("ASCII", "UTF-8", "UTF8"))
+          cset = encoding
         )
         if (!is.null(size) && !is.numeric(size)) {
           stop(
