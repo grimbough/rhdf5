@@ -43,6 +43,8 @@
       \item The pkgdown documentation website for this package have been restored.
       \item Static analysis via the lintr package is now continuously changed on 
       every changes via GitHub Actions.
+      \item Number of skipped tests (when testing, e.g., features only available
+      in certain situations) is now explicitly reported.
     }
   }
 
