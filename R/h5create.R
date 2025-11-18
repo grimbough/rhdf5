@@ -136,7 +136,11 @@ h5createGroup <- function(file, group) {
       }
     )
   } else {
-    tid <- h5checkConstants("H5T", H5type)
+    if (grepl(pattern = "^[[:digit:]]+$", H5type)) {
+      tid <- H5type
+    } else {
+      tid <- h5checkConstants("H5T", H5type)
+    }
   }
   if (is.na(tid)) {
     stop(
@@ -676,9 +680,11 @@ h5createAttribute <- function(
   } else {
     if (grepl(pattern = "^[[:digit:]]+$", H5type)) {
       tid <- H5type
+    } else {
+      tid <- h5checkConstants("H5T", H5type)
     }
   }
-  if (!grepl(pattern = "^[[:digit:]]+$", tid)) {
+  if (is.na(tid)) {
     message(
       "Can not create attribute. H5type unknown. Check h5const('H5T') for valid types."
     )
