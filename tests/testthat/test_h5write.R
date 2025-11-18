@@ -173,30 +173,31 @@ test_that("Changing chunk size works", {
 })
 
 ## only run this test on 64bit OS with space to allocate more than 4GB RAM
-if (.Platform$r_arch != "i386") {
-  counts_1 <- tryCatch(rep(0, 500000000), error = function(e) NULL)
+test_that("Very large data.frames are limited to chunk size < 4GB", {
+  skip_if_not(.Platform$r_arch != "i386")
 
-  if (!is.null(counts_1)) {
-    d1 <- data.frame(counts_1, counts_1, counts_1, counts_1)
-    test_that("Very large data.frames are limited to chunk size < 4GB", {
-      fid <- H5Fcreate(name = h5File)
-      expect_silent(
-        did <- .Call(
-          "_h5createDataFrame",
-          d1,
-          fid@ID,
-          "test",
-          7L,
-          nrow(d1),
-          PACKAGE = "rhdf5"
-        )
-      )
-      expect_gt(as.numeric(did), 0)
-      expect_identical(.Call("_H5Dclose", did, PACKAGE = "rhdf5"), 0L)
-      H5Fclose(fid)
-    })
-  }
-}
+  counts_1 <- tryCatch(rep(0, 500000000), error = function(e) NULL)
+  skip_if(is.null(counts_1), "Not enough memory to run this test")
+
+  d1 <- data.frame(counts_1, counts_1, counts_1, counts_1)
+
+  fid <- H5Fcreate(name = h5File)
+  expect_silent(
+    did <- .Call(
+      "_h5createDataFrame",
+      d1,
+      fid@ID,
+      "test",
+      7L,
+      nrow(d1),
+      PACKAGE = "rhdf5"
+    )
+  )
+  expect_gt(as.numeric(did), 0)
+  expect_identical(.Call("_H5Dclose", did, PACKAGE = "rhdf5"), 0L)
+  H5Fclose(fid)
+})
+
 
 test_that("We can write a data.frame with multiple factor columns", {
   if (file.exists(h5f1)) {
