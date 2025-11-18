@@ -630,6 +630,11 @@ h5createAttribute <- function(
   }
   on.exit(H5Sclose(sid), add = TRUE)
 
+  # FIXME: Ultimately, this should be replaced by a call to .setDataType()
+  # but this would be a breaking change as .setDataType() and the code here
+  # treat logical differently.
+  # See https://github.com/Huber-group-EMBL/rhdf5/issues/162 for some
+  # discussion on this.
   if (is.null(H5type)) {
     if (!is.character(storage.mode)) {
       stop("Can not create dataset. 'storage.mode' has to be a character.")
