@@ -9,30 +9,27 @@ if (file.exists(HDF5_conf_file)) {
     "H5_HAVE_ROS3_VFD[[:blank:]]+1"
   ))
 }
+skip_if_not(run_test, "S3 VFD not configured in Rhdf5lib")
 
-if (run_test) {
-  library(rhdf5)
+public_S3_url <- "https://rhdf5-public.s3.eu-central-1.amazonaws.com/h5ex_t_array.h5"
 
-  public_S3_url <- "https://rhdf5-public.s3.eu-central-1.amazonaws.com/h5ex_t_array.h5"
+test_that("h5ls() works for files in public S3 buckets", {
+  skip_on_ci()
+  skip_on_bioc()
+  skip_if_offline("rhdf5-public.s3.eu-central-1.amazonaws.com")
 
-  test_that("h5ls() works for files in public S3 buckets", {
-    skip_on_ci()
-    skip_on_bioc()
-    skip_if_offline("rhdf5-public.s3.eu-central-1.amazonaws.com")
+  expect_silent(h5ls_out <- h5ls(public_S3_url, s3 = TRUE))
+  expect_is(h5ls_out, "data.frame")
+  expect_true("DS1" %in% h5ls_out$name)
+})
 
-    expect_silent(h5ls_out <- h5ls(public_S3_url, s3 = TRUE))
-    expect_is(h5ls_out, "data.frame")
-    expect_true("DS1" %in% h5ls_out$name)
-  })
+test_that("h5dump() works for files in public S3 buckets", {
+  skip_on_ci()
+  skip_on_bioc()
+  skip_if_offline("rhdf5-public.s3.eu-central-1.amazonaws.com")
 
-  test_that("h5dump() works for files in public S3 buckets", {
-    skip_on_ci()
-    skip_on_bioc()
-    skip_if_offline("rhdf5-public.s3.eu-central-1.amazonaws.com")
-
-    expect_silent(h5dump_out <- h5dump(public_S3_url, s3 = TRUE))
-    expect_is(h5dump_out, "list")
-    expect_equivalent(length(h5dump_out), 1)
-    expect_equivalent(dim(h5dump_out$DS1), c(5, 3, 4))
-  })
-}
+  expect_silent(h5dump_out <- h5dump(public_S3_url, s3 = TRUE))
+  expect_is(h5dump_out, "list")
+  expect_equivalent(length(h5dump_out), 1)
+  expect_equivalent(dim(h5dump_out$DS1), c(5, 3, 4))
+})

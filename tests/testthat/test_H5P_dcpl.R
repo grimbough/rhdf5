@@ -10,13 +10,12 @@ test_that("Filters can be set", {
     expect_equal(2L)
 
   ## we can only set szip for writing with Windows versions built after switching to ucrt
-  if (
-    (.Platform$OS.type != "windows") ||
-      (!is.null(R.version$crt) && R.version$crt == "ucrt")
-  ) {
-    expect_gte(H5Pset_szip(dcpl, options_mask = 1L, pixels_per_block = 8L), 0)
-    expect_identical(H5Pget_nfilters(dcpl), 3L)
-  }
+  skip_if_not(
+    .Platform$OS.type != "windows" || identical(R.version$crt, "ucrt"),
+    message = "Skipping szip filter test on non-ucrt Windows builds"
+  )
+  expect_gte(H5Pset_szip(dcpl, options_mask = 1L, pixels_per_block = 8L), 0)
+  expect_identical(H5Pget_nfilters(dcpl), 3L)
 })
 
 test_that("Filter information can be retrieved", {
