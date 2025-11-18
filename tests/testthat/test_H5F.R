@@ -43,6 +43,7 @@ test_that("Non-ASCII filename", {
 
     fid <- H5Fcreate(h5File)
     expect_true(file.exists(h5File))
+    H5Fclose(fid)
   }
 })
 
