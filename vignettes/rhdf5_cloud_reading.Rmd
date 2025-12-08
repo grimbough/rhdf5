@@ -30,27 +30,32 @@ To access a file in a public Amazon S3 bucket you provide the file's URL to the 
 
 ```{r, public-h5ls, error = TRUE, purl = FALSE}
 public_S3_url <- "https://rhdf5-public.s3.eu-central-1.amazonaws.com/h5ex_t_array.h5"
-h5ls(file = public_S3_url,
-     s3 = TRUE)
+h5ls(
+  file = public_S3_url,
+  s3 = TRUE
+)
 ```
 
 The same arguments are also valid for using `h5dump()` to retrieve the contents of a file.
 
 ```{r, public-h5dump, error = TRUE, purl = FALSE}
 public_S3_url <- "https://rhdf5-public.s3.eu-central-1.amazonaws.com/h5ex_t_cmpd.h5"
-h5dump(file = public_S3_url,
-     s3 = TRUE)
+h5dump(
+  file = public_S3_url,
+  s3 = TRUE
+)
 ```
 
 In addition to examining and reading whole files, we can also extract just a subset, without needed to read or download the entire file.  In the example below we use `h5ls()` to examine a file in an S3 bucket and identify the name of a dataset within it (`a1`) and the number of dimensions for that dataset (3).  We can then use `h5read()` along with the `name` and `index` arguments to read only a subset of the dataset into our R session.
 
 ```{r, public-h5read, error = TRUE, purl = FALSE}
-public_S3_url <- 'https://rhdf5-public.s3.eu-central-1.amazonaws.com/rhdf5ex_t_float_3d.h5'
+public_S3_url <- "https://rhdf5-public.s3.eu-central-1.amazonaws.com/rhdf5ex_t_float_3d.h5"
 h5ls(file = public_S3_url, s3 = TRUE)
-h5read(public_S3_url, 
-       name = "a1", 
-       index = list(1:2, 3, NULL),
-       s3 = TRUE)
+h5read(public_S3_url,
+  name = "a1",
+  index = list(1:2, 3, NULL),
+  s3 = TRUE
+)
 ```
 
 # Private S3 Buckets
@@ -62,9 +67,9 @@ These three values need to be stored in a list like below.  *Important note: for
 ```{r, private-mock-credentials}
 ## these are example credentials and will not work
 s3_cred <- list(
-    aws_region = "eu-central-1",
-    access_key_id = "AKIAIOSFODNN7EXAMPLE",
-    secret_access_key = "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
+  aws_region = "eu-central-1",
+  access_key_id = "AKIAIOSFODNN7EXAMPLE",
+  secret_access_key = "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
 )
 ```
 
@@ -72,9 +77,11 @@ Finally we pass this list to `h5ls()` via the `s3credentials` argument.
 
 ```{r, private-h5ls, eval = FALSE}
 public_S3_url <- "https://rhdf5-private.s3.eu-central-1.amazonaws.com/h5ex_t_array.h5"
-h5ls(file = public_S3_url,
-     s3 = TRUE,
-     s3credentials = s3_cred)
+h5ls(
+  file = public_S3_url,
+  s3 = TRUE,
+  s3credentials = s3_cred
+)
 ```
 
 The `s3credentials` arguments is used in exactly the same way for `h5dump()` and `h5read()`.

@@ -1,76 +1,92 @@
 #' Set a new dataset extension
-#' 
+#'
 #' Set a new dataset extension to an existing dataset in an HDF5 file
-#'  
+#'
 #' @param file The filename (character) of the file in which the dataset will
 #' be located. For advanced programmers it is possible to provide an object of
 #' class [H5IdComponent-class] representing a H5 location identifier
-#' (file or group). See \code{\link{H5Fcreate}}, \code{\link{H5Fopen}},
-#' \code{\link{H5Gcreate}}, \code{\link{H5Gopen}} to create an object of this
+#' (file or group). See [H5Fcreate()], [H5Fopen()],
+#' [H5Gcreate()], [H5Gopen()] to create an object of this
 #' kind.
 #' @param dataset The name of the dataset in the HDF5 file, or an object of
 #' class [H5IdComponent-class] representing a H5 dataset identifier. See
-#' \code{\link{H5Dcreate}}, or \code{\link{H5Dopen}} to create an object of
+#' [H5Dcreate()], or [H5Dopen()] to create an object of
 #' this kind.
 #' @param dims The dimensions of the array as they will appear in the file.
 #' Note, the dimensions will appear in inverted order when viewing the file
 #' with a C program (e.g. HDFView), because the fastest changing dimension in
 #' R is the first one, whereas the fastest changing dimension in C is the last
 #' one.
-#' @param native An object of class \code{logical}. If `TRUE`, array-like objects
+#' @param native An object of class `logical`. If `TRUE`, array-like objects
 #' are treated as stored in HDF5 row-major rather than R column-major
-#' orientation. Using \code{native = TRUE} increases HDF5 file portability
-#' between programming languages. A file written with \code{native = TRUE}
-#' should also be read with \code{native = TRUE}
-#' 
-#' @return Returns `TRUE` if the dimension of the dataset was changed successfully
+#' orientation. Using `native = TRUE` increases HDF5 file portability
+#' between programming languages. A file written with `native = TRUE`
+#' should also be read with `native = TRUE`
+#'
+#' @returns Returns `TRUE` if the dimension of the dataset was changed successfully
 #' and `FALSE` otherwise.
-#' 
+#'
 #' @author Bernd Fischer, Mike Smith
 #' @examples
-#' 
+#'
 #' tmpfile <- tempfile()
-#' h5createFile(file=tmpfile)
-#' h5createDataset(tmpfile, "A", c(10,12), c(20,24))
-#' h5ls(tmpfile, all=TRUE)[c("dim", "maxdim")]
-#' h5set_extent(tmpfile, "A", c(20,24))
-#' h5ls(tmpfile, all=TRUE)[c("dim", "maxdim")]
-#' 
+#' h5createFile(file = tmpfile)
+#' h5createDataset(tmpfile, "A", c(10, 12), c(20, 24))
+#' h5ls(tmpfile, all = TRUE)[c("dim", "maxdim")]
+#' h5set_extent(tmpfile, "A", c(20, 24))
+#' h5ls(tmpfile, all = TRUE)[c("dim", "maxdim")]
+#'
 #' @name h5_set_extent
 #' @export h5set_extent
 h5set_extent <- function(file, dataset, dims, native = FALSE) {
+  if (missing(dataset)) {
+    stop(
+      "Please provide the name of the dataset using the 'dataset' argument. ",
+      "You can use `h5ls()` to list the objects in the file",
+      call. = FALSE
+    )
+  }
+  loc <- h5checktypeOrOpenLoc(file, native = native)
+  on.exit(h5closeitLoc(loc))
 
-    loc <- h5checktypeOrOpenLoc(file, native = native)
-    on.exit( h5closeitLoc(loc) )
-    
-    if (is.character(dataset)) {
-        if (!H5Lexists(loc$H5Identifier, dataset)) {
-            stop("Object ", dataset, " does not exist in this HDF5 file.")
-        } else {
-            did <- H5Oopen(loc$H5Identifier, dataset)
-            type <- H5Iget_type(did)
-            if (type != "H5I_DATASET") {
-                H5Oclose(did)
-                stop("'", dataset, "' is not a dataset.")
-            }
-            
-            if(!H5Dis_chunked(did)) {
-              stop("Only chunked datasets can have their extent changed.\n'",
-                   dataset, "' is not chunked.")
-            }
-            
-            res <- H5Dset_extent(did, dims)
-            H5Oclose(did)
-        }
-    } else {
-        h5checktype(dataset, "dataset")
-        ## Only valid for chunked datasets, so we should check for them
-        if(!H5Dis_chunked(did)) {
-          stop("Only chunked datasets can have their extent changed.\n'",
-            dataset, "' is not chunked.")
-        }
-        res <- H5Dset_extent(dataset, dims)
+  if (is.character(dataset)) {
+    if (!H5Lexists(loc$H5Identifier, dataset)) {
+      stop(
+        "Object ",
+        dataset,
+        " does not exist in this HDF5 file.\n",
+        "Use `h5ls()` to list the objects in the file."
+      )
     }
-    
-    invisible(res)
+    did <- H5Oopen(loc$H5Identifier, dataset)
+    type <- H5Iget_type(did)
+    if (type != "H5I_DATASET") {
+      H5Oclose(did)
+      stop("'", dataset, "' is not a dataset.")
+    }
+
+    if (!H5Dis_chunked(did)) {
+      stop(
+        "Only chunked datasets can have their extent changed.\n'",
+        dataset,
+        "' is not chunked."
+      )
+    }
+
+    res <- H5Dset_extent(did, dims)
+    H5Oclose(did)
+  } else {
+    h5checktype(dataset, "dataset")
+    ## Only valid for chunked datasets, so we should check for them
+    if (!H5Dis_chunked(did)) {
+      stop(
+        "Only chunked datasets can have their extent changed.\n'",
+        dataset,
+        "' is not chunked."
+      )
+    }
+    res <- H5Dset_extent(dataset, dims)
+  }
+
+  invisible(res)
 }

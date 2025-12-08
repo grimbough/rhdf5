@@ -27,11 +27,12 @@ h5read(
 \item{file}{The file name (character) of the file in which the dataset is
 be located. It is possible to provide an object of
 class \linkS4class{H5IdComponent} representing a H5 location identifier
-(file or group). See \code{\link{H5Fcreate}}, \code{\link{H5Fopen}},
-\code{\link{H5Gcreate}}, \code{\link{H5Gopen}} to create an object of this
+(file or group). See \code{\link[=H5Fcreate]{H5Fcreate()}}, \code{\link[=H5Fopen]{H5Fopen()}},
+\code{\link[=H5Gcreate]{H5Gcreate()}}, \code{\link[=H5Gopen]{H5Gopen()}} to create an object of this
 kind.}
 
-\item{name}{The name of the dataset in the HDF5 file.}
+\item{name}{The name of the dataset in the HDF5 file. The datasets present
+in \code{file} can be listed with the function \code{\link{h5ls}}.}
 
 \item{index}{List of indices for subsetting. The length of the list has to
 agree with the dimensional extension of the HDF5 array. Each list element is
@@ -73,7 +74,7 @@ attached to the respective R object.}
 \item{drop}{(logical) If TRUE, the HDF5 object is read as a vector with \code{NULL}
 dim attributes.}
 
-\item{\dots}{Further arguments passed to \code{\link{H5Dread}}.}
+\item{\dots}{Further arguments passed to \code{\link[=H5Dread]{H5Dread()}}.}
 
 \item{native}{An object of class \code{logical}. If TRUE, array-like objects
 are treated as stored in HDF5 row-major rather than R column-major
@@ -97,10 +98,10 @@ existing dataset.
 }
 \details{
 Read an R object from an HDF5 file. If none of the arguments
-\code{start, stride, block, count} are specified, the dataset has the same
+\code{start}, \code{stride}, \code{block}, \code{count} are specified, the dataset has the same
 dimension in the HDF5 file and in memory. If the dataset already exists in
 the HDF5 file, one can read subarrays, so called hyperslabs from
-the HDF5 file. The arguments \code{start, stride, block, count} define the
+the HDF5 file. The arguments \code{start}, \code{stride}, \code{block}, \code{count} define the
 subset of the dataset in the HDF5 file that is to be read/written. See these
 introductions to hyperslabs:
 \url{https://support.hdfgroup.org/HDF5/Tutor/selectsimple.html},
@@ -118,7 +119,7 @@ complex numbers.  If your datasets is a compound datatype, has only two
 columns, and these are named 'r' and 'i' rhdf5 will assume the data is
 intended to be complex numbers and will read this into R's complex type.  If
 that is not the case, you will need to extract the two values separately
-using the \code{Re()} and \code{Im()} accessors manually.
+using the \code{\link[=Re]{Re()}} and \code{\link[=Im]{Im()}} accessors manually.
 }
 \examples{
 
@@ -126,27 +127,28 @@ h5File <- tempfile(pattern = "ex_hdf5file.h5")
 h5createFile(h5File)
 
 # write a matrix
-B = array(seq(0.1,2.0,by=0.1),dim=c(5,2,2))
+B <- array(seq(0.1, 2.0, by = 0.1), dim = c(5, 2, 2))
 h5write(B, h5File, "B")
 
 # read a matrix
-E = h5read(h5File,"B")
+E <- h5read(h5File, "B")
 
 # write and read submatrix
-h5createDataset(h5File, "S", c(5,8), storage.mode = "integer", chunk=c(5,1), level=7)
-h5write(matrix(1:5,nr=5,nc=1), file=h5File, name="S", index=list(NULL,1))
+h5createDataset(h5File, "S", c(5, 8), storage.mode = "integer", chunk = c(5, 1), level = 7)
+h5write(matrix(1:5, nr = 5, nc = 1), file = h5File, name = "S", index = list(NULL, 1))
 h5read(h5File, "S")
-h5read(h5File, "S", index=list(NULL,2:3))
+h5read(h5File, "S", index = list(NULL, 2:3))
 
 # Read a subset of an hdf5 file in a public S3 bucket
 \donttest{
-h5read('https://rhdf5-public.s3.eu-central-1.amazonaws.com/rhdf5ex_t_float_3d.h5', 
-      s3 = TRUE, name = "a1", index = list(NULL, 3, NULL))
+h5read("https://rhdf5-public.s3.eu-central-1.amazonaws.com/rhdf5ex_t_float_3d.h5",
+  s3 = TRUE, name = "a1", index = list(NULL, 3, NULL)
+)
 }
 
 }
 \seealso{
-\code{\link{h5ls}}
+\code{\link[=h5ls]{h5ls()}}
 }
 \author{
 Bernd Fischer, Mike Smith

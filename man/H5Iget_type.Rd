@@ -25,7 +25,7 @@ Possible types returned by the function are:
 }
 }
 \examples{
-h5file <- system.file("testfiles", "h5ex_t_array.h5", package="rhdf5")
+h5file <- system.file("testfiles", "h5ex_t_array.h5", package = "rhdf5")
 fid <- H5Fopen(h5file)
 gid <- H5Gopen(fid, "/")
 

@@ -4,7 +4,7 @@
 \alias{H5Aread}
 \title{Read data from an HDF5 attribute}
 \usage{
-H5Aread(h5attribute, buf = NULL, bit64conversion)
+H5Aread(h5attribute, buf = NULL, bit64conversion = c("int", "double", "bit64"))
 }
 \arguments{
 \item{h5attribute}{An object of class \linkS4class{H5IdComponent} representing an

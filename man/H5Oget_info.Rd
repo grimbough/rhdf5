@@ -16,12 +16,12 @@ Retrieves the metadata for an HDF5 object specified by an identifier.
 \examples{
 
 ## Create a temporary copy of an example file check the contents
-example_file <- system.file("testfiles", "h5ex_t_array.h5", package="rhdf5")
+example_file <- system.file("testfiles", "h5ex_t_array.h5", package = "rhdf5")
 
 ## open the example file, root group, and DS1 dataset
-fid <- H5Fopen( example_file )
-gid <- H5Gopen( fid, "/" )
-did <- H5Dopen( fid, "/DS1" )
+fid <- H5Fopen(example_file)
+gid <- H5Gopen(fid, "/")
+did <- H5Dopen(fid, "/DS1")
 
 ## List the available object information for both groups and datasets
 H5Oget_info(h5loc = gid)

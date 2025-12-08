@@ -1,6 +1,55 @@
 \name{NEWS}
 \title{News for Package 'rhdf5'}
 
+\section{Changes in version 2.56.0}{
+
+  \subsection{Breaking changes}{
+    \itemize{
+      \item The default value for the `bit64conversion` argument in `H5Aread()`
+      and `H5Dread()` has been set explicitly to `"int"`.
+      Relying on a missing value or `"default"` results in a warning and will be
+      disallowed in the next release cycle.
+      Users should either specify `bit64conversion="int"` explicitly, or omit
+      this argument entirely if they wish to use the provided default.
+    }
+  }
+
+  \subsection{Bug fixes}{
+    \itemize{
+      \item The value ordering (row-major vs column-major) is not correct when
+      reading unsigned integers with \code{native=TRUE}. Thanks to Jared Lumpe 
+      for the report and detailed reproducible example:
+      https://github.com/Huber-group-EMBL/rhdf5/issues/157.
+      \item Minor memory protection issuues identified by rchk has been resolved.
+      This might prevent some rare crashes.
+    }
+  }
+
+  \subsection{Minor changes}{
+    \itemize{
+      \item Documentation for the `name` argument as well as the error message
+      when trying to work on a non-existing object now include a hint to use
+      `h5ls()` to list the objects in a file. Inspired from a suggestion from
+      Frederik Ziebell.
+      \item A warning about void pointer arithmetic in H5Aread_helper_ENUM 
+      (C code) has been resolved. This increases portability across different 
+      compilers.
+    }
+  }
+
+  \subsection{Internal changes}{
+    \itemize{
+      \item Code coverage reports via codecov have been restored.
+      \item The pkgdown documentation website for this package have been restored.
+      \item Static analysis via the lintr package is now continuously changed on 
+      every changes via GitHub Actions.
+      \item Number of skipped tests (when testing, e.g., features only available
+      in certain situations) is now explicitly reported.
+    }
+  }
+
+}
+
 \section{Changes in version 2.54.0}{
 
   \subsection{CHANGES}{
@@ -13,6 +62,9 @@
       \code{H5Dget_num_chunks()}.
       \item Added function \code{h5readTimestamps} to extract object timestamp
       metadata.
+      \item The previously deprecated `cset` argument in
+      \code{h5createAttribute()} has been removed entirely. Please use the
+      `encoding` argument instead.
     }
   }
 

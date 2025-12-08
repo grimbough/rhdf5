@@ -39,7 +39,7 @@ A list with group information
 Retrieve information about a group
 }
 \examples{
-h5file <- system.file("testfiles", "multiple_dtypes.h5", package="rhdf5")
+h5file <- system.file("testfiles", "multiple_dtypes.h5", package = "rhdf5")
 fid <- H5Fopen(h5file)
 gid <- H5Gopen(fid, "/foo")
 gid
@@ -49,7 +49,7 @@ H5Gclose(gid)
 ## the "get_info_by" functions take the H5 object that contains the
 ## group(s) of interest.  We can retrieve information by index or by name
 H5Gget_info_by_idx(fid, 3)
-H5Gget_info_by_name(fid,"/foo")
+H5Gget_info_by_name(fid, "/foo")
 
 H5Fclose(fid)
 

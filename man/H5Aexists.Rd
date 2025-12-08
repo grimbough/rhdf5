@@ -13,6 +13,10 @@ identifier (file, group, or dataset). See \code{\link[=H5Fcreate]{H5Fcreate()}},
 
 \item{name}{The name of the attribute (character).}
 }
+\value{
+A logical value indicating whether an attribute with name \code{name}
+exists for the object specified by \code{h5obj}.
+}
 \description{
 Check whether an specific attribute exists for an HDF5 object
 }

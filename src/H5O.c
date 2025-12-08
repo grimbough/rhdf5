@@ -176,16 +176,16 @@ SEXP _H5Oget_info( SEXP _object_id ) {
   SEXP obj_type = PROTECT(allocVector(STRSXP, 1));
   switch(info.type) {
   case H5O_TYPE_GROUP :
-    obj_type = mkString("GROUP");
+    obj_type = PROTECT(mkString("GROUP"));
     break;
   case H5O_TYPE_DATASET :
-    obj_type = mkString("DATASET");
+    obj_type = PROTECT(mkString("DATASET"));
     break;
   case H5O_TYPE_NAMED_DATATYPE :
-    obj_type = mkString("NAMED_DATATYPE");
+    obj_type = PROTECT(mkString("NAMED_DATATYPE"));
     break;
   default :
-    obj_type = mkString("UNKNOWN TYPE");
+    obj_type = PROTECT(mkString("UNKNOWN TYPE"));
     break;
   }
   
@@ -200,7 +200,7 @@ SEXP _H5Oget_info( SEXP _object_id ) {
   SET_VECTOR_ELT(Rval, 7, Rf_ScalarInteger(info.num_attrs)); 
 
   
-  UNPROTECT(8);
+  UNPROTECT(9);
 
   return Rval;
 }

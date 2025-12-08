@@ -16,7 +16,7 @@ An integer value indicating the number of chunks present in the dataset or selec
 Retrieves the number of chunks used by an HDF5 dataset.
 }
 \details{
-Note, this function only returns the nubmer of chunks that actually have data written to them.
+Note, this function only returns the number of chunks that actually have data written to them.
 It does not return the theoretical number of chunks in a dataset or intersection with a
 dataspace.  For example, if an empty dataset is created and but no values have been written
 to it \code{H5Dget_num_chunks()} will return 0.  This can be seen in the examples below.

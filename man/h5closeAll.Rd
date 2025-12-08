@@ -22,7 +22,7 @@ regardless of the whether they represent a file, group, dataset etc.  This
 can be easier than making multiple calls to \code{\link[=H5Fclose]{H5Fclose()}}, \code{\link[=H5Gclose]{H5Gclose()}}, etc.
 }
 \details{
-Secondly, cccasionally references to HDF5 files, groups, datasets etc can be
+Secondly, occasionally references to HDF5 files, groups, datasets etc can be
 created and not closed correctly.  Maybe because a function stopped before
 getting to the close statement, or the open handle was not assigned to an R
 variable.  If no arguments are provide this function identifies all open

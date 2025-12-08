@@ -2,7 +2,7 @@
 % Please edit documentation in R/H5F.R
 \name{H5Fget_intent}
 \alias{H5Fget_intent}
-\title{Retermine the read only or read/write status of an open file handle.}
+\title{Determine the read only or read/write status of an open file handle.}
 \usage{
 H5Fget_intent(h5file)
 }
@@ -15,7 +15,7 @@ Returns a character vector of length 1.  This will either be \code{H5F_ACC_RDWR}
 or \code{H5F_ACC_READONLY} (read only).
 }
 \description{
-Retermine the read only or read/write status of an open file handle.
+Determine the read only or read/write status of an open file handle.
 }
 \details{
 The native \code{H5Fget_intent()} function can in theory also return the values \code{H5F_ACC_SWMR_WRITE}

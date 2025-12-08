@@ -5,29 +5,28 @@ context("Testing file locking")
 ############################################################
 
 test_that("File or directory can be passed", {
-  file <- tempfile()
+  file <- withr::local_tempfile()
   dir <- tempdir()
   expect_silent(h5testFileLocking(file)) %>%
-    expect_is('logical')
+    expect_is("logical")
   expect_silent(h5testFileLocking(dir)) %>%
-    expect_is('logical')
-  
+    expect_is("logical")
+
   ## Temporary file removed
   expect_false(file.exists(file))
 })
 
 test_that("Error when using existing file", {
-  
-  tf <- tempfile()
+  tf <- withr::local_tempfile()
   file.create(tf)
-  expect_error(h5testFileLocking(location = tf),
-               "Testing file locking will remove")
-  
+  expect_error(
+    h5testFileLocking(location = tf),
+    "Testing file locking will remove"
+  )
 })
 
 test_that("Error when missing argument", {
-  expect_error(h5testFileLocking(),
-               "You must provide a location to test")
+  expect_error(h5testFileLocking(), "You must provide a location to test")
 })
 
 
@@ -40,12 +39,12 @@ curr <- Sys.getenv("HDF5_USE_FILE_LOCKING")
 
 test_that("Disabling sets value", {
   h5disableFileLocking()
-  expect_equal(Sys.getenv("HDF5_USE_FILE_LOCKING"), "FALSE")
+  expect_identical(Sys.getenv("HDF5_USE_FILE_LOCKING"), "FALSE")
 })
 
 test_that("Enabling removes value", {
   h5enableFileLocking()
-  expect_equal(Sys.getenv("HDF5_USE_FILE_LOCKING"), "")
+  expect_identical(Sys.getenv("HDF5_USE_FILE_LOCKING"), "")
 })
 
 ## set original value for environment variable

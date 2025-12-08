@@ -1,70 +1,49 @@
+url: https://huber-group-embl.github.io/rhdf5/
 reference:
-- title: "About rhdf5"
-- contents:
-  - rhdf5
-  
-- title: "High level functions"
-  desc: >
+- title: About rhdf5
+- contents: rhdf5
+- title: High level functions
+  desc: |
     Wrappers around several low-level functions
-- contents: 
-  - starts_with("h5")
-  
-- title: "HDF5 Files"
-  desc: >
+- contents: starts_with("h5")
+- title: HDF5 Files
+  desc: |
     Functions for working with HDF5 Files
-- contents: 
-  - starts_with("H5F")
-  
-- title: "HDF5 Groups"
-  desc: >
+- contents: starts_with("H5F")
+- title: HDF5 Groups
+  desc: |
     Functions for working with HDF5 Groups
-- contents: 
-  - starts_with("H5G")
-  
-- title: "HDF5 Datasets"
-  desc: >
+- contents: starts_with("H5G")
+- title: HDF5 Datasets
+  desc: |
     Functions for working with HDF5 Datasets
-- contents: 
-  - starts_with("H5D")
-  
-- title: "HDF5 Dataspaces"
-  desc: >
+- contents: starts_with("H5D")
+- title: HDF5 Dataspaces
+  desc: |
     Functions for working with HDF5 Dataspaces
-- contents: 
-  - starts_with("H5S")
-  
-- title: "HDF5 Attributes"
-  desc: >
+- contents: starts_with("H5S")
+- title: HDF5 Attributes
+  desc: |
     Functions for working with HDF5 Attributes
-- contents: 
-  - starts_with("H5A")
-
-- title: "HDF5 Objects"
-  desc: >
+- contents: starts_with("H5A")
+- title: HDF5 Objects
+  desc: |
     Functions for working with HDF5 Objects
-- contents: 
-  - starts_with("H5O")
-  
-- title: "HDF5 Links"
-  desc: >
+- contents: starts_with("H5O")
+- title: HDF5 Links
+  desc: |
     Functions for working with HDF5 Links
-- contents: 
-  - starts_with("H5L")
-  
-- title: "HDF5 Identifiers"
-  desc: >
+- contents: starts_with("H5L")
+- title: HDF5 Identifiers
+  desc: |
     Functions for working with HDF5 Identifiers
-- contents: 
-  - starts_with("H5I")
-  
-- title: "HDF5 Datatypes"
-  desc: >
+- contents: starts_with("H5I")
+- title: HDF5 Datatypes
+  desc: |
     Functions for working with HDF5 Datatypes
-- contents: 
-  - starts_with("H5T")
-  
-- title: "HDF5 Property Lists"
-- subtitle: "File Creation Properties"
+- contents: starts_with("H5T")
+- title: HDF5 Property Lists
+- subtitle: File Creation Properties
 - contents:
   - H5Pget_version
   - H5Pset_shared_mesg_nindexes
@@ -74,16 +53,15 @@ reference:
   - H5Pset_sizes
   - H5Pset_sym_k
   - H5Pset_userblock
-- subtitle: "File Access Properties"
+- subtitle: File Access Properties
 - contents:
   - H5P_libver_bounds
   - H5Pset_fapl_ros3
-- subtitle: "Group Creation Properties"
-  - H5P_create_intermediate_group
-- subtitle: "Object Creation Properties"
-- contents:
-  - H5Pobject_track_times
-- subtitle: "Dataset Creation Properties"
+- subtitle: Group Creation Properties
+- contents: H5P_create_intermediate_group
+- subtitle: Object Creation Properties
+- contents: H5Pobject_track_times
+- subtitle: Dataset Creation Properties
 - contents:
   - H5Pall_filters_avail
   - H5Pset_shuffle
@@ -93,6 +71,7 @@ reference:
   - H5Pset_bzip2
   - H5Pset_blosc
   - H5Pset_lzf
+  - H5Pset_filter
   - H5P_chunk
   - H5P_chunk_cache
   - H5P_layout
@@ -104,15 +83,9 @@ reference:
   - H5P_fill_time
   - H5Pfill_value_defined
   - H5Pset_fapl_ros3
-  
-- title: "HDF5 References"
-- contents: 
-  - starts_with("H5R")
-
-- title: "HDF5 Filters"
-- contents: 
-  - starts_with("H5Z")
-
-- title: "H5 Library Functions"
-- contents: 
-  - H5functions
+- title: HDF5 References
+- contents: starts_with("H5R")
+- title: HDF5 Filters
+- contents: starts_with("H5Z")
+- title: H5 Library Functions
+- contents: H5functions

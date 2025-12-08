@@ -70,9 +70,3 @@ jobs:
         with:
           error-on: 'never'
           arguments: '--no-check-bioc-help' 
-
-      - name: Test coverage
-        if: runner.os == 'Windows'
-        run: |
-          covr::codecov()
-        shell: Rscript {0}

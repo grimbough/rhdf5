@@ -11,13 +11,14 @@ h5readAttributes(file, name, native = FALSE, ...)
 \item{file}{Character vector of length 1, giving the path to the HDF5}
 
 \item{name}{Path within the HDF5 file to the object whose attributes should
-be read.}
+be read. The datasets present in \code{file} can be listed with the
+function \code{\link[=h5ls]{h5ls()}}.}
 
 \item{native}{An object of class \code{logical}. If TRUE, array-like objects
 are treated as stored in HDF5 row-major rather than R column-major
 orientation.}
 
-\item{\dots}{Further arguments passed to \code{\link{H5Aread}}.}
+\item{\dots}{Further arguments passed to \code{\link[=H5Aread]{H5Aread()}}.}
 }
 \value{
 A named list of the same length as the number of attributes attached
