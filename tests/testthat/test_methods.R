@@ -67,6 +67,11 @@ test_that("Subsetting datasets", {
   expect_silent(col15 <- did[, 1:5])
   expect_is(col15, "matrix")
   expect_identical(dim(col15), c(10L, 5L))
+
+  myidx <- 1:5
+  expect_no_condition(col15_fromvar <- did[, myidx])
+  expect_identical(col15, col15_fromvar)
+
   expect_silent(H5Dclose(did))
 
   expect_error(did[], regexp = "Bad HDF5 ID")
