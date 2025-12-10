@@ -37,7 +37,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rhdf5</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.55.11</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.55.12</span>
       </span>
     </div>
 
@@ -148,7 +148,7 @@ the first 10,000 columns and time how long this takes.</p>
 <span>  <span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##    user  system elapsed </span></span>
-<span><span class="co">##   0.026   0.005   0.032</span></span></code></pre>
+<span><span class="co">##   0.026   0.006   0.032</span></span></code></pre>
 <p>Next, instead of selecting 10,000 consecutive columns we’ll ask for
 every other column. This should still return the same amount of data and
 since our dataset is not chunked involves reading the same volume from
@@ -162,7 +162,7 @@ disk.</p>
 <span>  <span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##    user  system elapsed </span></span>
-<span><span class="co">##   0.064   0.002   0.067</span></span></code></pre>
+<span><span class="co">##   0.068   0.000   0.068</span></span></code></pre>
 <p>We can see this is marginally slower, because there’s a small
 overhead in selecting this disjoint set of columns, but it’s only
 marginal and using the <code>index</code> argument looks sufficient.</p>
@@ -233,9 +233,9 @@ choose a random selection of columns<a href="#fn2" class="footnote-ref" id="fnre
 <span>  name <span class="op">=</span> <span class="st">"counts"</span></span>
 <span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##    user  system elapsed </span></span>
-<span><span class="co">##  19.217   0.045  19.264</span></span></code></pre>
+<span><span class="co">##  19.856   0.056  19.914</span></span></code></pre>
 <p>This is clearly a terrible idea, it takes ages! For reference, using
-the <code>index</code> argument with this set of columns takes 0.086
+the <code>index</code> argument with this set of columns takes 0.087
 seconds. This poor performance is driven by two things:</p>
 <ol style="list-style-type: decimal">
 <li>Our dataset was created as a single chunk. This means for each
@@ -275,7 +275,7 @@ over and over.</p>
 <span>  name <span class="op">=</span> <span class="st">"counts_chunked"</span></span>
 <span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##    user  system elapsed </span></span>
-<span><span class="co">##   2.385   0.033   2.417</span></span></code></pre>
+<span><span class="co">##   2.478   0.048   2.526</span></span></code></pre>
 <p>This is still quite slow, and the remaining time is being spent on
 the overheads associated with multiple calls to <code><a href="../reference/h5_read.html">h5read()</a></code>.
 To reduce these the function <code>f2()</code><a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a> defined below splits
@@ -293,7 +293,7 @@ unions down by not having too many columns in any one call.</p>
 <span><span class="op">}</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="fu">f2</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##    user  system elapsed </span></span>
-<span><span class="co">##   0.569   0.007   0.576</span></span></code></pre>
+<span><span class="co">##   0.593   0.010   0.603</span></span></code></pre>
 <p>We can see this has a significant effect, although it’s still an
 order of magnitude slower than when we were dealing with regularly
 spaced subsets. The efficiency here will vary based on a number of
@@ -498,14 +498,14 @@ is:</p>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 4 × 3</span></span></span>
 <span><span class="co">##   expression               min median</span></span>
 <span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;bch:expr&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">1</span> simple writer           28.8   28.8</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">2</span> split/gather - 1 core   29.2   29.2</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">3</span> split/gather - 2 cores  15.0   15.1</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">4</span> split/gather - 4 cores  11.4   11.5</span></span></code></pre>
+<span><span class="co">## <span style="color: #BCBCBC;">1</span> simple writer           29.2   29.2</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">2</span> split/gather - 1 core   29.6   29.6</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">3</span> split/gather - 2 cores  15.2   15.3</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">4</span> split/gather - 4 cores  11.6   11.7</span></span></code></pre>
 <p>We can see from our benchmark results that there is some performance
 improvement to be achieved by using the parallel approach. Based on the
 median times of out three iterations using two cores sees an speedup of
-1.91 and 2.5 with 4 cores. This isn’t quite linear, presumably because
+1.92 and 2.5 with 4 cores. This isn’t quite linear, presumably because
 there are overheads involved both in using a two-step process and
 initialising the parallel workers, but it is a noticeable
 improvement.</p>
@@ -536,7 +536,7 @@ improvement.</p>
 <span><span class="co">## </span></span>
 <span><span class="co">## other attached packages:</span></span>
 <span><span class="co">## [1] BiocParallel_1.44.0 ggplot2_4.0.1       dplyr_1.1.4        </span></span>
-<span><span class="co">## [4] rhdf5_2.55.11       BiocStyle_2.38.0   </span></span>
+<span><span class="co">## [4] rhdf5_2.55.12       BiocStyle_2.38.0   </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## loaded via a namespace (and not attached):</span></span>
 <span><span class="co">##  [1] gtable_0.3.6        jsonlite_2.0.0      compiler_4.5.2     </span></span>
