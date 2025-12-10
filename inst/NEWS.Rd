@@ -20,8 +20,13 @@
       reading unsigned integers with \code{native=TRUE}. Thanks to Jared Lumpe 
       for the report and detailed reproducible example:
       https://github.com/Huber-group-EMBL/rhdf5/issues/157.
-      \item Minor memory protection issuues identified by rchk has been resolved.
+      \item Minor memory protection issues identified by rchk has been resolved.
       This might prevent some rare crashes.
+      \item Subsetting and assignment via `[` and `[`<-` operators using a variable
+      to define the indices now works as expected. This was due to an issue in the 
+      timing of evaluation of the index arguments. Thanks to Michael Schubert and
+      Malcolm Perry for the report and reproducible example:
+      https://github.com/Huber-group-EMBL/rhdf5/issues/69.
     }
   }
 
