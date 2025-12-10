@@ -1,4 +1,5 @@
 # Copied from S4Arrays
+#' @importFrom utils tail
 extract_Nindex_from_syscall <- function(call, eframe) {
   Nindex <- lapply(seq_len(length(call) - 2L), function(i) {
     subscript <- call[[2L + i]]
