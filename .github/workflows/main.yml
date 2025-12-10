@@ -28,40 +28,22 @@ jobs:
         - { os: ubuntu-latest,  bioc-version: 'devel', bioc-mirror: 'https://bioconductor.posit.co/',  Ncpus: 4}
         - { os: ubuntu-latest,  bioc-version: 'release',  bioc-mirror: 'https://packagemanager.posit.co/bioconductor',  Ncpus: 4}
     steps:
-    
-      ## R CMD check complains about Windows line endings without this
-      - name: Configure git
-        run: |
-          git config --global core.autocrlf false
-    
-      - name: Install system libraries
-        if: runner.os == 'Linux'
-        run: |
-          sudo apt-get update && sudo apt-get install libcurl4-openssl-dev
-          
-      - uses: actions/checkout@v4
-          
+      - uses: actions/checkout@v6
+
       - name: Setup R and Bioconductor
         uses: grimbough/bioc-actions/setup-bioc@v1
         with:
           bioc-version: ${{ matrix.config.bioc-version }}
           bioc-mirror: ${{ matrix.config.bioc-mirror }}
-          
+
       - uses: r-lib/actions/setup-pandoc@v2
-      
-      ## this step has to come after R is installed since R is not on the GitHub runner by default any more.
-      - name: Install openssl
-        if: matrix.config.os == 'macOS-14'
-        run: |
-          sudo R -e 'source("https://mac.R-project.org/bin/install.R")' -e 'install.libs("openssl")'
-      
+
       - name: Install dependencies
         uses: r-lib/actions/setup-r-dependencies@v2
         with:
           extra-packages: |
-            covr
             rcmdcheck
-            
+
       - name: Bioc - Build, Install, Check
         uses: grimbough/bioc-actions/build-install-check@v1
 
