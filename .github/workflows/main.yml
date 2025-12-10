@@ -36,6 +36,11 @@ jobs:
           bioc-version: ${{ matrix.config.bioc-version }}
           bioc-mirror: ${{ matrix.config.bioc-mirror }}
 
+      - name: Install openssl
+        if: runner.os == 'macOS'
+        run: |
+          sudo R -e 'source("https://mac.R-project.org/bin/install.R")' -e 'install.libs("openssl")'
+
       - uses: r-lib/actions/setup-pandoc@v2
 
       - name: Install dependencies
