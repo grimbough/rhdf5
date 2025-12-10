@@ -18,5 +18,9 @@ extract_Nindex_from_syscall <- function(call, eframe) {
   if (length(Nindex) == 1L && is.null(Nindex[[1L]])) {
     Nindex <- Nindex[0L]
   }
+  # Custom patch to allow x[]
+  if (length(Nindex) == 0L) {
+    Nindex <- NULL
+  }
   Nindex
 }
