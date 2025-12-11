@@ -68,9 +68,12 @@ test_that("Subsetting datasets", {
   expect_is(col15, "matrix")
   expect_identical(dim(col15), c(10L, 5L))
 
+  # https://github.com/Huber-group-EMBL/rhdf5/issues/69
   myidx <- 1:5
   expect_no_condition(col15_fromvar <- did[, myidx])
   expect_identical(col15, col15_fromvar)
+
+  expect_identical(did[], A)
 
   expect_silent(H5Dclose(did))
 
@@ -91,6 +94,9 @@ test_that("Subsetting assignment", {
   expect_silent(did[10, ] <- did[10, ] + 1000)
   expect_silent(did[, 1] <- 1001:1010)
   expect_silent(did[1:3, 5:7] <- rep(0, 9))
+  # https://github.com/Huber-group-EMBL/rhdf5/issues/69
+  ind <- 2
+  expect_silent(did[ind, ind] <- 12L)
   ## in native R the 0 would be repeated to fill the space
   # expect_silent( did[1:3,5:7] <- 0 )
 
@@ -100,6 +106,7 @@ test_that("Subsetting assignment", {
   expect_identical(did[, 1], 1001:1010)
   expect_identical(did[10, ], seq(10L, 200L, 10L) + 1000L)
   expect_identical(did[1:3, 5:7], matrix(0L, ncol = 3, nrow = 3))
+  expect_identical(did[2, 2], 12L)
   expect_silent(H5Dclose(did))
 
   expect_error(did[, 1] <- 10:1, regexp = "Bad HDF5 ID")
