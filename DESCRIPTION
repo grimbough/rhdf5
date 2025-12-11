@@ -41,7 +41,8 @@ Suggests:
     knitr,
     mockery,
     rmarkdown,
-    testthat
+    testthat,
+    withr
 LinkingTo: 
     Rhdf5lib
 VignetteBuilder: 
