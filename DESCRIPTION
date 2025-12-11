@@ -1,48 +1,54 @@
-Package: rhdf5
 Type: Package
+Package: rhdf5
 Title: R Interface to HDF5
 Version: 2.55.12
 Authors@R: c(
     person("Bernd", "Fischer", role = "aut"),
-    person(
-      "Mike", "Smith",
-      role= "aut",
-      comment = c(ORCID = "0000-0002-7800-3848",
-                  "Maintainer from 2017 to 2025")
-    ),
-    person("Gregoire", "Pau", role="aut"),
+    person("Mike", "Smith", role = "aut",
+           comment = c(ORCID = "0000-0002-7800-3848", "Maintainer from 2017 to 2025")),
+    person("Gregoire", "Pau", role = "aut"),
     person("Martin", "Morgan", role = "ctb"),
     person("Daniel", "van Twisk", role = "ctb"),
-    person(
-      "Hugo", "Gruson", role = "cre",
-      email = "hugo.gruson@embl.de",
-      comment = c(ORCID = "0000-0002-4094-1476")
-    ),
-    person(
-      "German Network for Bioinformatics Infrastructure - de.NBI",
-      role = "fnd"
-    )
+    person("Hugo", "Gruson", , "hugo.gruson@embl.de", role = "cre",
+           comment = c(ORCID = "0000-0002-4094-1476")),
+    person("German Network for Bioinformatics Infrastructure - de.NBI", role = "fnd")
   )
 Description: This package provides an interface between HDF5 and R.
-    HDF5's main features are the ability to store and access very large and/or
-    complex datasets and a wide variety of metadata on mass storage (disk)
-    through a completely portable file format. The rhdf5 package is thus suited
-    for the exchange of large and/or complex datasets between R and other
-    software package, and for letting R applications work on datasets that are
-    larger than the available RAM.
+    HDF5's main features are the ability to store and access very large
+    and/or complex datasets and a wide variety of metadata on mass storage
+    (disk) through a completely portable file format. The rhdf5 package is
+    thus suited for the exchange of large and/or complex datasets between
+    R and other software package, and for letting R applications work on
+    datasets that are larger than the available RAM.
 License: Artistic-2.0
-URL: https://huber-group-embl.github.io/rhdf5/, https://github.com/Huber-group-EMBL/rhdf5
+URL: https://huber-group-embl.github.io/rhdf5/,
+    https://github.com/Huber-group-EMBL/rhdf5
 BugReports: https://github.com/Huber-group-EMBL/rhdf5/issues
-LazyLoad: true
-VignetteBuilder: knitr
-Imports: Rhdf5lib (>= 1.13.4),
-  rhdf5filters (>= 1.15.5)
-Depends: R (>= 4.0.0), methods
-Suggests: bit64, BiocStyle, knitr, rmarkdown, testthat,
-  bench, dplyr, ggplot2, mockery, BiocParallel, curl
-LinkingTo: Rhdf5lib
-SystemRequirements: GNU make
+Depends: 
+    methods,
+    R (>= 4.0.0)
+Imports: 
+    rhdf5filters (>= 1.15.5),
+    Rhdf5lib (>= 1.13.4)
+Suggests: 
+    bench,
+    BiocParallel,
+    BiocStyle,
+    bit64,
+    curl,
+    dplyr,
+    ggplot2,
+    knitr,
+    mockery,
+    rmarkdown,
+    testthat
+LinkingTo: 
+    Rhdf5lib
+VignetteBuilder: 
+    knitr
 biocViews: Infrastructure, DataImport
 Encoding: UTF-8
+LazyLoad: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.3
+SystemRequirements: GNU make
