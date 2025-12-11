@@ -27,6 +27,9 @@
       timing of evaluation of the index arguments. Thanks to Michael Schubert and
       Malcolm Perry for the report and reproducible example:
       https://github.com/Huber-group-EMBL/rhdf5/issues/69.
+      \item Subsetting with `drop=FALSE` no longer errors. Thanks to Michael
+      Schubert for the report:
+      https://github.com/Huber-group-EMBL/rhdf5/issues/68.
     }
   }
 
