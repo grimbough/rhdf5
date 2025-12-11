@@ -75,6 +75,10 @@ test_that("Subsetting datasets", {
 
   expect_identical(did[], A)
 
+  # https://github.com/Huber-group-EMBL/rhdf5/issues/68
+  expect_no_condition(nodrop <- did[1, 1:5, drop = FALSE])
+  expect_shape(nodrop, dim = c(1L, 5L))
+
   expect_silent(H5Dclose(did))
 
   expect_error(did[], regexp = "Bad HDF5 ID")
