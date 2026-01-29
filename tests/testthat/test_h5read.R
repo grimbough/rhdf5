@@ -198,6 +198,21 @@ test_that("we can read anndata nullable arrays", {
   )
 })
 
+test_that("we can read list arrays", {
+  h5file <- system.file("testfiles", "anndata_testfile.h5ad", package = "rhdf5")
+  expect_silent(
+    res <- h5read(
+      h5file,
+      name = "uns/rank_genes_groups/logfoldchanges",
+      compoundAsDataFrame = FALSE
+    )
+  )
+  expect_type(res, "list")
+  expect_length(res, 100L)
+  expect_type(res[[1]], "double")
+  expect_length(res[[1]], 6L)
+})
+
 ############################################################
 context("NA values")
 ############################################################
