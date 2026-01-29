@@ -84,6 +84,62 @@ SEXP PERMUTE_STRSXP(SEXP FROM, hid_t DIM_SPACE_ID) {
   UNPROTECT(1);
   return(to);
 }
+
+/*
+ * Transpose a list-of-vectors structure
+ * FROM: list where each element is a vector with n_cols elements
+ * Returns: list with length equal to the length of FROM[[1]],
+ *          where each element is a vector with length(FROM) elements
+ */
+SEXP PERMUTE_LIST(SEXP FROM) {
+  int n_external = LENGTH(FROM);
+  
+  if (n_external == 0) {
+    return FROM;
+  }
+  
+  int n_internal = LENGTH(VECTOR_ELT(FROM, 0));
+  
+  SEXP to = PROTECT(allocVector(VECSXP, n_internal));
+
+  for (int i = 0; i < n_internal; i++) {
+    SEXP out_vec = PROTECT(allocVector(TYPEOF(VECTOR_ELT(FROM, 0)), n_external));
+    
+    for (int j = 0; j < n_external; j++) {
+      SEXP from_vec = VECTOR_ELT(FROM, j);
+      
+      switch(TYPEOF(from_vec)) {
+      case INTSXP:
+        INTEGER(out_vec)[j] = INTEGER(from_vec)[i];
+        break;
+      case REALSXP:
+        REAL(out_vec)[j] = REAL(from_vec)[i];
+        break;
+      case RAWSXP:
+        RAW(out_vec)[j] = RAW(from_vec)[i];
+        break;
+      case LGLSXP:
+        LOGICAL(out_vec)[j] = LOGICAL(from_vec)[i];
+        break;
+      case STRSXP:
+        SET_STRING_ELT(out_vec, j, STRING_ELT(from_vec, i));
+        break;
+      case CPLXSXP:
+        COMPLEX(out_vec)[j] = COMPLEX(from_vec)[i];
+        break;
+      default:
+        SET_VECTOR_ELT(out_vec, j, VECTOR_ELT(from_vec, i));
+        break;
+      }
+    }
+    
+    SET_VECTOR_ELT(to, i, out_vec);
+    UNPROTECT(1);  // out_vec
+  }
+  
+  UNPROTECT(1);  // to
+  return to;
+}
   
 /* hid_t H5Dcreate( hid_t loc_id, const char *name, hid_t dtype_id, hid_t space_id, hid_t lcpl_id, hid_t dcpl_id, hid_t dapl_id ) */
 SEXP _H5Dcreate( SEXP _loc_id, SEXP _name, SEXP _dtype_id, SEXP _space_id, SEXP _lcpl_id, SEXP _dcpl_id, SEXP _dapl_id ) {
@@ -807,6 +863,9 @@ SEXP H5Dread_helper_COMPOUND(hid_t dataset_id, hid_t file_space_id, hid_t mem_sp
             UNPROTECT(1);
             setAttrib(Rval, R_RowNamesSymbol, rn);
             setAttrib(Rval, R_ClassSymbol, mkString("data.frame"));
+        } else {
+            // The output needs to be transposed
+            Rval = PERMUTE_LIST(Rval);
         }
         UNPROTECT(2);
     } else {
