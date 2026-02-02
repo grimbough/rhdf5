@@ -38,6 +38,22 @@ H5Tcopy <- function(dtype_id = h5default(type = "H5T")) {
   invisible(.Call("_H5Tcopy", dtype_id, PACKAGE = "rhdf5"))
 }
 
+#' Close an open HDF5 datatype
+#'
+#' @param dtype_id ID of the datatype to close. This should be a datatype
+#' created with functions like `H5Tcopy()`, `H5Tcreate()`, or `H5Tenum_create()`.
+#'
+#' @examples
+#' tid <- H5Tenum_create(dtype_id = "H5T_NATIVE_UCHAR")
+#' H5Tenum_insert(tid, name = "TRUE", value = 1L)
+#' H5Tenum_insert(tid, name = "FALSE", value = 0L)
+#' H5Tclose(tid)
+#'
+#' @export
+H5Tclose <- function(dtype_id) {
+  invisible(.Call("_H5Tclose", dtype_id, PACKAGE = "rhdf5"))
+}
+
 #' Retrieve or set the type of padding used by string datatype
 #'
 #' @param dtype_id ID of HDF5 datatype to query or modify.

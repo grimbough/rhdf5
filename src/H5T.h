@@ -7,10 +7,12 @@
 #include <R_ext/Error.h>
 #include "myhdf5.h"
 #include "H5constants.h"
+#include "HandleList.h"
 
 SEXP _H5Tcreate( SEXP _type, SEXP _size );
 SEXP _H5Tget_class( SEXP _dtype_id );
 SEXP _H5Tcopy( SEXP _dtype_id );
+SEXP _H5Tclose( SEXP _dtype_id );
 SEXP _H5Tset_size( SEXP _dtype_id, SEXP _size );
 SEXP _H5Tget_size( SEXP _dtype_id );
 SEXP _H5Tset_strpad( SEXP _dtype_id, SEXP _strpad );

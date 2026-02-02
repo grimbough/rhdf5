@@ -545,6 +545,7 @@ H5Pset_fill_value <- function(h5plist, value) {
     logical = h5constants$H5T["H5T_STD_I8LE"],
     character = {
       tid <- H5Tcopy("H5T_C_S1")
+      on.exit(H5Tclose(tid))
       size <- nchar(value, type = "bytes")
       H5Tset_size(tid, size)
       H5Tset_strpad(tid, strpad = "NULLPAD")
@@ -565,6 +566,7 @@ H5Pset_fill_value <- function(h5plist, value) {
     }
   )
   res <- .Call("_H5Pset_fill_value", h5plist@ID, tid, value, PACKAGE = "rhdf5")
+
   invisible(res)
 }
 
