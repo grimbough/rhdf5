@@ -42,6 +42,11 @@
       \item A warning about void pointer arithmetic in H5Aread_helper_ENUM 
       (C code) has been resolved. This increases portability across different 
       compilers.
+      \item The \code{H5type} argument in \code{h5createAttribute()}  and 
+      \code{h5createDataset()} now behaves more consistently across both 
+      functions. Both functions now accept either a HDF5 data type id as a 
+      string, or the output of \code{H5Tcopy()}. Thanks to Luke Zappia for
+      the report: \url{https://github.com/Huber-group-EMBL/rhdf5/issues/162}.
     }
   }
 
