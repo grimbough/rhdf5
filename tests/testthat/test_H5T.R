@@ -1,27 +1,34 @@
 library(rhdf5)
 
-tid <- H5Tcopy("H5T_C_S1")
-integer_tid <- H5Tcopy("H5T_STD_U32LE")
-
 test_that("String padding can be read and changed", {
+  tid <- H5Tcopy("H5T_C_S1")
+
   expect_silent(tid2 <- H5Tset_strpad(dtype_id = tid, strpad = "NULLTERM"))
   expect_identical(H5Tget_strpad(tid), 0L)
   expect_silent(tid2 <- H5Tset_strpad(dtype_id = tid, strpad = "NULLPAD"))
   expect_identical(H5Tget_strpad(tid), 1L)
   expect_silent(tid2 <- H5Tset_strpad(dtype_id = tid, strpad = "SPACEPAD"))
   expect_identical(H5Tget_strpad(tid), 2L)
+
+  expect_silent(H5Tclose(tid))
 })
 
 test_that("String character set can be read and changed", {
+  tid <- H5Tcopy("H5T_C_S1")
+
   expect_identical(H5Tget_cset(tid), 0L)
 
   expect_silent(H5Tset_cset(tid, cset = "UTF-8")) |>
     expect_gte(0)
 
   expect_identical(H5Tget_cset(tid), 1L)
+
+  expect_silent(H5Tclose(tid))
 })
 
 test_that("H5T error handling works", {
+  tid <- H5Tcopy("H5T_C_S1")
+
   expect_error(H5Tget_strpad())
   expect_error(H5Tset_strpad(dtype_id = tid, strpad = "FOOBAA"))
 
@@ -30,9 +37,13 @@ test_that("H5T error handling works", {
 
   expect_error(H5Tget_cset())
   expect_error(H5Tget_cset(dtype_id = tid, cset = "FOOBAA"))
+
+  expect_silent(H5Tclose(tid))
 })
 
 test_that("Precision can be modified", {
+  integer_tid <- H5Tcopy("H5T_STD_U32LE")
+
   expect_identical(H5Tget_precision(integer_tid), 32L)
   expect_true(H5Tset_precision(integer_tid, precision = 8))
   expect_identical(H5Tget_precision(integer_tid), 8L)
@@ -52,6 +63,8 @@ test_that("Precision can be modified", {
     regexp = "'precision' argument must be greater than 0",
     fixed = TRUE
   )
+
+  expect_silent(H5Tclose(integer_tid))
 })
 
 test_that("Enum datatypes can be created and modified", {
@@ -60,4 +73,6 @@ test_that("Enum datatypes can be created and modified", {
 
   expect_true(H5Tenum_insert(tid, name = "TRUE", value = 1L))
   expect_true(H5Tenum_insert(tid, name = "FALSE", value = 0L))
+
+  expect_silent(H5Tclose(tid))
 })

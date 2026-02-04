@@ -178,6 +178,7 @@ test_that("reading & writing scalar dataspaces", {
   expect_silent(H5Dclose(did))
   expect_silent(H5Sclose(sid))
   expect_silent(H5Fclose(fid))
+  expect_silent(H5Tclose(tid))
 })
 
 test_that("we can read anndata nullable arrays", {

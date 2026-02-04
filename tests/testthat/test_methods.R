@@ -46,6 +46,7 @@ test_that("Printing various object types", {
   expect_silent(H5Sclose(sid))
   expect_silent(H5Dclose(did))
   expect_silent(H5Fclose(fid))
+  expect_silent(H5Tclose(tid))
 })
 
 ############################################################

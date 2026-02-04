@@ -49,6 +49,7 @@ test_that("UTF8 strings can be used for fill values", {
   H5Pclose(pid)
   H5Sclose(sid)
   H5Fclose(fid)
+  H5Tclose(tid)
 
   expect_equivalent(h5read(tf, name = "/strings"), fill_value)
 })

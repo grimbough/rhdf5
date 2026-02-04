@@ -36,6 +36,7 @@ test_that("writing attributes is silent", {
   expect_silent(H5Sclose(sid2))
   expect_silent(H5Dclose(did))
   expect_silent(H5Fclose(fid))
+  expect_silent(H5Tclose(tid))
 })
 
 
@@ -146,7 +147,7 @@ test_that("fixed length string attributes are correct", {
 
   H5Awrite(aid, attr_value) # string of length 7
 
-  h5closeAll(aid, sid, fid)
+  h5closeAll(aid, sid, fid, tid)
 
   attr <- h5readAttributes(h5File, "/")
   expect_type(attr, "list")
