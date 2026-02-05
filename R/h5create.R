@@ -453,7 +453,6 @@ h5createGroup <- function(file, group) {
 #' file.size(f1)
 #' file.size(f2)
 #'
-#' @name h5_createDataset
 #' @export h5createDataset
 h5createDataset <- function(
   file,
@@ -565,12 +564,6 @@ h5createDataset <- function(
 #' @param dims The dimensions of the attribute as a numeric vector. If
 #'   `NULL`, a scalar dataspace will be created instead.
 #' @param maxdims The maximum extension of the attribute.
-#' @param storage.mode The storage mode of the data to be written. Can be
-#'   obtained by `storage.mode(mydata)`.
-#' @param H5type Advanced programmers can specify the datatype of the dataset
-#'   within the file. See `h5const("H5T")` for a list of available
-#'   datatypes. If `H5type` is specified the argument `storage.mode`
-#'   is ignored. It is recommended to use `storage.mode`
 #' @param size The maximum string length when `storage.mode='character'`.
 #'   If this is specified, HDF5 stores each string of `attr` as fixed
 #'   length character arrays. Together with compression, this should be
@@ -578,13 +571,8 @@ h5createDataset <- function(
 #'
 #'   If this argument is set to `NULL`, HDF5 will instead store
 #'   variable-length strings.
-#' @param encoding The encoding of the string data type i.e. when `storage.mode
-#'   = 'character'`. Valid options are "ASCII" and "UTF-8".
-#' @param native An object of class `logical`. If TRUE, array-like objects
-#'   are treated as stored in HDF5 row-major rather than R column-major
-#'   orientation. Using `native = TRUE` increases HDF5 file portability
-#'   between programming languages. A file written with `native = TRUE`
-#'   should also be read with `native = TRUE`
+#' @inheritParams h5createDataset
+#'
 #' @returns Returns TRUE is attribute was created successfully and FALSE
 #'   otherwise.
 #' @author Bernd Fischer
@@ -603,7 +591,6 @@ h5createDataset <- function(
 #' H5Dclose(did)
 #' H5Fclose(fid)
 #'
-#' @name h5_createAttribute
 #' @export h5createAttribute
 h5createAttribute <- function(
   obj,
