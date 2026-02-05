@@ -350,9 +350,10 @@ h5createGroup <- function(file, group) {
 #' @param storage.mode The storage mode of the data to be written. Can be
 #'   obtained by `storage.mode(mydata)`.
 #' @param H5type Advanced programmers can specify the datatype of the dataset
-#'   within the file. See `h5const("H5T")` for a list of available
-#'   datatypes. If `H5type` is specified the argument `storage.mode`
-#'   is ignored. It is recommended to use `storage.mode`
+#'   within the file, either as a string with one of the available datatypes
+#'   listed in `h5const("H5T")`, or as the output of [H5Tcopy()]. If `H5type`
+#'   is specified the argument `storage.mode` is ignored. It is recommended
+#'   to use `storage.mode`.
 #' @param size For `storage.mode='character'` the maximum string length to use.
 #'   The default value of `NULL` will result in using variable length strings.
 #'   See the details for more information on this option.

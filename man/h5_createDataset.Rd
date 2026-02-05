@@ -46,9 +46,10 @@ to indicate an extensible dimension.}
 obtained by \code{storage.mode(mydata)}.}
 
 \item{H5type}{Advanced programmers can specify the datatype of the dataset
-within the file. See \code{h5const("H5T")} for a list of available
-datatypes. If \code{H5type} is specified the argument \code{storage.mode}
-is ignored. It is recommended to use \code{storage.mode}}
+within the file, either as a string with one of the available datatypes
+listed in \code{h5const("H5T")}, or as the output of \code{\link[=H5Tcopy]{H5Tcopy()}}. If \code{H5type}
+is specified the argument \code{storage.mode} is ignored. It is recommended
+to use \code{storage.mode}.}
 
 \item{size}{For \code{storage.mode='character'} the maximum string length to use.
 The default value of \code{NULL} will result in using variable length strings.
