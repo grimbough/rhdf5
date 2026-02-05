@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rhdf5</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.55.12</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.55.13</span>
       </span>
     </div>
 
@@ -97,7 +97,7 @@ selection.  However this argument is not currently used at the C level and so is
 <span class="r-in"><span><span class="va">fid</span> <span class="op">&lt;-</span> <span class="fu"><a href="H5Fcreate.html">H5Fcreate</a></span><span class="op">(</span><span class="va">file</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Create a dataset that will be represented by 4 chunks if complete</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="h5_createDataset.html">h5createDataset</a></span><span class="op">(</span><span class="va">file</span>, <span class="st">"data"</span>, dims <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">10</span><span class="op">)</span>, chunk <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">5</span><span class="op">)</span>, storage.mode <span class="op">=</span> <span class="st">"integer"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="h5createDataset.html">h5createDataset</a></span><span class="op">(</span><span class="va">file</span>, <span class="st">"data"</span>, dims <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">10</span><span class="op">)</span>, chunk <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">5</span><span class="op">)</span>, storage.mode <span class="op">=</span> <span class="st">"integer"</span><span class="op">)</span></span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>An open HDF5 file handle exists. If the file has changed on disk meanwhile, the function may not work properly. Run 'h5closeAll()' to close all open HDF5 object handles.</span>
 <span class="r-in"><span><span class="va">did</span> <span class="op">&lt;-</span> <span class="fu"><a href="H5Dopen.html">H5Dopen</a></span><span class="op">(</span><span class="va">fid</span>, <span class="st">"data"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co">## Here we return 0 chunks as no values have been written</span></span></span>

@@ -37,7 +37,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rhdf5</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.55.12</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.55.13</span>
       </span>
     </div>
 
@@ -148,7 +148,7 @@ the first 10,000 columns and time how long this takes.</p>
 <span>  <span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##    user  system elapsed </span></span>
-<span><span class="co">##   0.029   0.003   0.032</span></span></code></pre>
+<span><span class="co">##   0.025   0.007   0.032</span></span></code></pre>
 <p>Next, instead of selecting 10,000 consecutive columns we’ll ask for
 every other column. This should still return the same amount of data and
 since our dataset is not chunked involves reading the same volume from
@@ -162,7 +162,7 @@ disk.</p>
 <span>  <span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##    user  system elapsed </span></span>
-<span><span class="co">##   0.064   0.004   0.068</span></span></code></pre>
+<span><span class="co">##   0.065   0.004   0.069</span></span></code></pre>
 <p>We can see this is marginally slower, because there’s a small
 overhead in selecting this disjoint set of columns, but it’s only
 marginal and using the <code>index</code> argument looks sufficient.</p>
@@ -190,7 +190,7 @@ the same as in our previous example.</p>
 <span>  <span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##    user  system elapsed </span></span>
-<span><span class="co">##   0.060   0.000   0.061</span></span></code></pre>
+<span><span class="co">##   0.062   0.000   0.062</span></span></code></pre>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/identical.html" class="external-link">identical</a></span><span class="op">(</span><span class="va">res2</span>, <span class="va">res3</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] TRUE</span></span></code></pre>
@@ -233,7 +233,7 @@ choose a random selection of columns<a href="#fn2" class="footnote-ref" id="fnre
 <span>  name <span class="op">=</span> <span class="st">"counts"</span></span>
 <span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##    user  system elapsed </span></span>
-<span><span class="co">##  19.480   0.068  19.552</span></span></code></pre>
+<span><span class="co">##  20.043   0.089  20.135</span></span></code></pre>
 <p>This is clearly a terrible idea, it takes ages! For reference, using
 the <code>index</code> argument with this set of columns takes 0.088
 seconds. This poor performance is driven by two things:</p>
@@ -259,7 +259,7 @@ matrix but this time split into 100
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mo>×</mo><annotation encoding="application/x-tex">\times</annotation></semantics></math>
 100 chunks.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/h5_createDataset.html">h5createDataset</a></span><span class="op">(</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/h5createDataset.html">h5createDataset</a></span><span class="op">(</span></span>
 <span>  file <span class="op">=</span> <span class="va">ex_file</span>, dataset <span class="op">=</span> <span class="st">"counts_chunked"</span>,</span>
 <span>  dims <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">m1</span><span class="op">)</span>, storage.mode <span class="op">=</span> <span class="st">"integer"</span>,</span>
 <span>  chunk <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">100</span><span class="op">)</span>, level <span class="op">=</span> <span class="fl">6</span></span>
@@ -275,7 +275,7 @@ over and over.</p>
 <span>  name <span class="op">=</span> <span class="st">"counts_chunked"</span></span>
 <span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##    user  system elapsed </span></span>
-<span><span class="co">##   2.453   0.032   2.486</span></span></code></pre>
+<span><span class="co">##   2.486   0.029   2.515</span></span></code></pre>
 <p>This is still quite slow, and the remaining time is being spent on
 the overheads associated with multiple calls to <code><a href="../reference/h5_read.html">h5read()</a></code>.
 To reduce these the function <code>f2()</code><a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a> defined below splits
@@ -293,7 +293,7 @@ unions down by not having too many columns in any one call.</p>
 <span><span class="op">}</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="fu">f2</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##    user  system elapsed </span></span>
-<span><span class="co">##   0.585   0.006   0.592</span></span></code></pre>
+<span><span class="co">##   0.587   0.013   0.600</span></span></code></pre>
 <p>We can see this has a significant effect, although it’s still an
 order of magnitude slower than when we were dealing with regularly
 spaced subsets. The efficiency here will vary based on a number of
@@ -302,9 +302,9 @@ column index, and you varying the <code>block_size</code> argument will
 produce differing performances. The plot below shows the timings
 achieved by providing a selection of values to <code>block_size</code>.
 It suggests the optimal parameter in this case is probably a block size
-of 10000, which took 0.09 seconds - noticeably faster than when passing
+of 10000, which took 0.1 seconds - noticeably faster than when passing
 all columns to the <code>index</code> argument in a single call.</p>
-<p><img src="practical_tips_files/figure-html/unnamed-chunk-2-1.png" class="r-plt" width="576"></p>
+<p><img src="practical_tips_files/figure-html/unnamed-chunk-2-1.png" class="r-plt" alt="" width="576"></p>
 <div class="section level4">
 <h4 id="using-hyperslab-selection-tools">Using hyperslab selection tools<a class="anchor" aria-label="anchor" href="#using-hyperslab-selection-tools"></a>
 </h4>
@@ -386,7 +386,7 @@ all of them to a single HDF5 file.</p>
 <span></span>
 <span>  <span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_along</a></span><span class="op">(</span><span class="va">dsets</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>    <span class="va">dset_name</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"dset_"</span>, <span class="va">i</span><span class="op">)</span></span>
-<span>    <span class="fu"><a href="../reference/h5_createDataset.html">h5createDataset</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="../reference/h5createDataset.html">h5createDataset</a></span><span class="op">(</span></span>
 <span>      file <span class="op">=</span> <span class="va">fid</span>, dataset <span class="op">=</span> <span class="va">dset_name</span>,</span>
 <span>      dims <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">dsets</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>, chunk <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10000</span>, <span class="fl">10</span><span class="op">)</span></span>
 <span>    <span class="op">)</span></span>
@@ -422,7 +422,7 @@ file.</p>
 <span></span>
 <span>  <span class="co">## create and write the dataset</span></span>
 <span>  <span class="co">## we use some predefined chunk sizes</span></span>
-<span>  <span class="fu"><a href="../reference/h5_createDataset.html">h5createDataset</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="../reference/h5createDataset.html">h5createDataset</a></span><span class="op">(</span></span>
 <span>    file <span class="op">=</span> <span class="va">fid</span>, dataset <span class="op">=</span> <span class="va">dset_name</span>,</span>
 <span>    dims <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">dset</span><span class="op">)</span>, chunk <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10000</span>, <span class="fl">10</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span>
@@ -498,14 +498,14 @@ is:</p>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 4 × 3</span></span></span>
 <span><span class="co">##   expression               min median</span></span>
 <span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;bch:expr&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">1</span> simple writer           28.9   28.9</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">2</span> split/gather - 1 core   29.4   29.4</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">3</span> split/gather - 2 cores  15.1   15.2</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">4</span> split/gather - 4 cores  11.4   11.5</span></span></code></pre>
+<span><span class="co">## <span style="color: #BCBCBC;">1</span> simple writer           29.1   29.1</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">2</span> split/gather - 1 core   29.5   29.6</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">3</span> split/gather - 2 cores  15.2   15.2</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">4</span> split/gather - 4 cores  11.5   11.5</span></span></code></pre>
 <p>We can see from our benchmark results that there is some performance
 improvement to be achieved by using the parallel approach. Based on the
 median times of out three iterations using two cores sees an speedup of
-1.9 and 2.5 with 4 cores. This isn’t quite linear, presumably because
+1.91 and 2.5 with 4 cores. This isn’t quite linear, presumably because
 there are overheads involved both in using a two-step process and
 initialising the parallel workers, but it is a noticeable
 improvement.</p>
@@ -535,8 +535,8 @@ improvement.</p>
 <span><span class="co">## [1] stats     graphics  grDevices utils     datasets  methods   base     </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## other attached packages:</span></span>
-<span><span class="co">## [1] BiocParallel_1.44.0 ggplot2_4.0.1       dplyr_1.1.4        </span></span>
-<span><span class="co">## [4] rhdf5_2.55.12       BiocStyle_2.38.0   </span></span>
+<span><span class="co">## [1] BiocParallel_1.44.0 ggplot2_4.0.2       dplyr_1.2.0        </span></span>
+<span><span class="co">## [4] rhdf5_2.55.13       BiocStyle_2.38.0   </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## loaded via a namespace (and not attached):</span></span>
 <span><span class="co">##  [1] gtable_0.3.6        jsonlite_2.0.0      compiler_4.5.2     </span></span>
@@ -544,14 +544,14 @@ improvement.</p>
 <span><span class="co">##  [7] parallel_4.5.2      jquerylib_0.1.4     systemfonts_1.3.1  </span></span>
 <span><span class="co">## [10] scales_1.4.0        textshaping_1.0.4   yaml_2.3.12        </span></span>
 <span><span class="co">## [13] fastmap_1.2.0       R6_2.6.1            labeling_0.4.3     </span></span>
-<span><span class="co">## [16] generics_0.1.4      knitr_1.50          tibble_3.3.0       </span></span>
-<span><span class="co">## [19] bookdown_0.46       desc_1.4.3          bslib_0.9.0        </span></span>
-<span><span class="co">## [22] pillar_1.11.1       RColorBrewer_1.1-3  rlang_1.1.6        </span></span>
-<span><span class="co">## [25] utf8_1.2.6          cachem_1.1.0        xfun_0.54          </span></span>
+<span><span class="co">## [16] generics_0.1.4      knitr_1.51          tibble_3.3.1       </span></span>
+<span><span class="co">## [19] bookdown_0.46       desc_1.4.3          bslib_0.10.0       </span></span>
+<span><span class="co">## [22] pillar_1.11.1       RColorBrewer_1.1-3  rlang_1.1.7        </span></span>
+<span><span class="co">## [25] utf8_1.2.6          cachem_1.1.0        xfun_0.56          </span></span>
 <span><span class="co">## [28] S7_0.2.1            fs_1.6.6            sass_0.4.10        </span></span>
 <span><span class="co">## [31] cli_3.6.5           withr_3.0.2         pkgdown_2.2.0      </span></span>
 <span><span class="co">## [34] magrittr_2.0.4      Rhdf5lib_1.32.0     digest_0.6.39      </span></span>
-<span><span class="co">## [37] grid_4.5.2          lifecycle_1.0.4     vctrs_0.6.5        </span></span>
+<span><span class="co">## [37] grid_4.5.2          lifecycle_1.0.5     vctrs_0.7.1        </span></span>
 <span><span class="co">## [40] bench_1.1.4         evaluate_1.0.5      glue_1.8.0         </span></span>
 <span><span class="co">## [43] farver_2.1.2        codetools_0.2-20    ragg_1.5.0         </span></span>
 <span><span class="co">## [46] rmarkdown_2.30      tools_4.5.2         pkgconfig_2.0.3    </span></span>

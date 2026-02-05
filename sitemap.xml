@@ -123,8 +123,6 @@
 <url><loc>https://huber-group-embl.github.io/rhdf5/reference/H5Zfilter_avail.html</loc></url>
 <url><loc>https://huber-group-embl.github.io/rhdf5/reference/H5functions.html</loc></url>
 <url><loc>https://huber-group-embl.github.io/rhdf5/reference/h5_FileLocking.html</loc></url>
-<url><loc>https://huber-group-embl.github.io/rhdf5/reference/h5_createAttribute.html</loc></url>
-<url><loc>https://huber-group-embl.github.io/rhdf5/reference/h5_createDataset.html</loc></url>
 <url><loc>https://huber-group-embl.github.io/rhdf5/reference/h5_createFile.html</loc></url>
 <url><loc>https://huber-group-embl.github.io/rhdf5/reference/h5_createGroup.html</loc></url>
 <url><loc>https://huber-group-embl.github.io/rhdf5/reference/h5_delete.html</loc></url>
@@ -140,6 +138,8 @@
 <url><loc>https://huber-group-embl.github.io/rhdf5/reference/h5checkFilters.html</loc></url>
 <url><loc>https://huber-group-embl.github.io/rhdf5/reference/h5closeAll.html</loc></url>
 <url><loc>https://huber-group-embl.github.io/rhdf5/reference/h5constants.html</loc></url>
+<url><loc>https://huber-group-embl.github.io/rhdf5/reference/h5createAttribute.html</loc></url>
+<url><loc>https://huber-group-embl.github.io/rhdf5/reference/h5createDataset.html</loc></url>
 <url><loc>https://huber-group-embl.github.io/rhdf5/reference/h5listObjects.html</loc></url>
 <url><loc>https://huber-group-embl.github.io/rhdf5/reference/h5ls.html</loc></url>
 <url><loc>https://huber-group-embl.github.io/rhdf5/reference/h5readTimestamps.html</loc></url>
