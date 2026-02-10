@@ -199,18 +199,27 @@ test_that("we can read anndata nullable arrays", {
 })
 
 test_that("we can read list arrays", {
-  h5file <- system.file("testfiles", "anndata_testfile.h5ad", package = "rhdf5")
+  h5file <- system.file("testfiles", "compound_examples.h5", package = "rhdf5")
   expect_silent(
-    res <- h5read(
+    res_homogeneous_compound <- h5read(
       h5file,
-      name = "uns/rank_genes_groups/logfoldchanges",
+      name = "homogeneous_compound_array",
       compoundAsDataFrame = FALSE
     )
   )
-  expect_type(res, "list")
-  expect_length(res, 100L)
-  expect_type(res[[1]], "double")
-  expect_length(res[[1]], 6L)
+  expect_type(res_homogeneous_compound, "list")
+  expect_length(res_homogeneous_compound, 2L)
+  expect_type(res_homogeneous_compound[[1]], "integer")
+  expect_length(res_homogeneous_compound[[1]], 3L)
+
+  expect_silent(
+    res_heterogeneous_compound <- h5read(
+      h5file,
+      name = "heterogeneous_compound_array",
+      compoundAsDataFrame = FALSE
+    )
+  )
+  expect_type(res_heterogeneous_compound, "list")
 })
 
 ############################################################
