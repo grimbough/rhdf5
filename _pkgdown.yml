@@ -1,4 +1,8 @@
 url: https://huber-group-embl.github.io/rhdf5/
+
+template:
+  bootstrap: 5
+
 reference:
 - title: About rhdf5
 - contents: rhdf5
