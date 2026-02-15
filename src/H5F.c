@@ -63,10 +63,10 @@ SEXP _H5Fflush(SEXP _object_id, SEXP _scope ) {
   return(Rval);
 }
 
-/* htri_t H5Fis_hdf5(const char *name ) */
+/* htri_t H5Fis_accessible(const char *container_name, hid_t fapl_id) */
 SEXP _H5Fis_hdf5( SEXP _name ) {
   const char *name = CHAR(STRING_ELT(_name, 0));
-  htri_t htri = H5Fis_hdf5( name );
+  htri_t htri = H5Fis_accessible( name, H5P_DEFAULT );
   SEXP Rval = allocVector(LGLSXP, 1);
   if (htri >= 0) {
     LOGICAL(Rval)[0] = htri;

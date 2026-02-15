@@ -472,7 +472,7 @@ SEXP H5Dread_helper_STRING(hid_t dataset_id, hid_t file_space_id, hid_t mem_spac
           for (hsize_t i=0; i<n; i++) {
               SET_STRING_ELT(Rval, i, mkChar(bufSTR[i]));
           }
-          herr = H5Dvlen_reclaim(mem_type_id, file_space_id, H5P_DEFAULT, bufSTR);
+          herr = H5Treclaim(mem_type_id, file_space_id, H5P_DEFAULT, bufSTR);
           if(herr < 0) {
               error("Unable to reclaim variable length buffer\n");
           }

@@ -34,7 +34,7 @@ SEXP _H5Dget_create_plist( SEXP _dataset_id );
 SEXP _H5Dget_storage_size( SEXP _dataset_id );
 
 /* H5Dvlen_get_buf_size */
-/* H5Dvlen_reclaim */
+/* H5Treclaim (was H5Dvlen_reclaim) */
 
 SEXP H5Dread_helper_INTEGER(hid_t dataset_id, hid_t file_space_id, hid_t mem_space_id, hsize_t n, SEXP Rdim, SEXP _buf, 
 			    hid_t dtype_id, hid_t cpdType, int cpdNField, char ** cpdField, int compoundAsDataFrame,
