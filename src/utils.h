@@ -16,13 +16,13 @@ typedef struct opObjListElement {
     int rank;
     char dim[1000];
     char maxdim[1000];
-    H5L_info_t info;
+    H5L_info2_t info;
     H5I_type_t type;
     hsize_t num_attrs;
     struct opObjListElement *prev; /* Pointer to previous element */
     struct opObjListElement *next; /* Pointer to previous element */
     struct opObjListElement *child;
-    haddr_t addr;                  /* Group address */
+    H5O_token_t token;             /* Object token */
     unsigned long fileno;          /* File the object is found in */
 } opObjListElement;
 
@@ -58,7 +58,7 @@ typedef struct {
 void concatdim(char *s1, hsize_t next_dim, int index);
 void concatdim_native(char *s1, hsize_t next_dim, int index);
 void format_dimensions(H5S_class_t space_type, opObjListElement *newElement, hsize_t *size, hsize_t *maxsize, int native);
-int  group_check(struct opObjListElement *od, haddr_t target_addr, unsigned long target_fileno);
+int  group_check(struct opObjListElement *od, H5O_token_t target_token, unsigned long target_fileno, hid_t loc_id);
 
 void * read_string_datatype(hid_t mem_type_id, SEXP _buf);
 

@@ -21,7 +21,7 @@ SEXP _H5Lexists( SEXP _loc_id, SEXP _name ) {
     return Rval;
 }
 
-SEXP H5L_info_t2SEXP (H5L_info_t *link_buff) {
+SEXP H5L_info_t2SEXP (H5L_info2_t *link_buff) {
     SEXP Rval = PROTECT(allocVector(VECSXP, 4));
     SET_VECTOR_ELT(Rval,0,ScalarInteger(link_buff->type));
     SET_VECTOR_ELT(Rval,1,ScalarLogical(link_buff->corder_valid));
@@ -37,13 +37,13 @@ SEXP H5L_info_t2SEXP (H5L_info_t *link_buff) {
     return(Rval);
 }
 
-/* herr_t H5Lget_info( hid_t link_loc_id, const char *link_name, H5L_info_t *link_buff, hid_t lapl_id ) */
+/* herr_t H5Lget_info2( hid_t link_loc_id, const char *link_name, H5L_info2_t *link_buff, hid_t lapl_id ) */
 SEXP _H5Lget_info( SEXP _loc_id, SEXP _name ) {
     //hid_t loc_id = INTEGER(_loc_id)[0];
     hid_t loc_id = STRSXP_2_HID( _loc_id );
     const char *name = CHAR(STRING_ELT(_name, 0));
-    H5L_info_t link_buff;
-    herr_t herr = H5Lget_info( loc_id, name, &link_buff, H5P_DEFAULT);
+    H5L_info2_t link_buff;
+    herr_t herr = H5Lget_info2( loc_id, name, &link_buff, H5P_DEFAULT);
     SEXP Rval;
     if (herr < 0) {
         Rval = R_NilValue;

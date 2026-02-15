@@ -53,6 +53,14 @@ SEXP _H5Pclose( SEXP _plist ) {
 
 
 /* /\* herr_t H5Pget_version(hid_t plist, unsigned * super, unsigned * freelist, unsigned * stab, unsigned * shhdr) *\/ */
+/* H5Pget_version was deprecated in HDF5 1.12 and removed in 1.14. */
+/* Use H5Fget_info2 instead for file version info. */
+#if H5_VERSION_GE(1,12,0)
+SEXP _H5Pget_version(SEXP _plist) {
+    warning("H5Pget_version is deprecated in HDF5 >= 1.12. Returning NULL.");
+    return R_NilValue;
+}
+#else
 SEXP _H5Pget_version(SEXP _plist) {
     hid_t plist = STRSXP_2_HID(_plist);
     unsigned super, freelist, stab, shhdr;
@@ -70,6 +78,7 @@ SEXP _H5Pget_version(SEXP _plist) {
         Rval = R_NilValue;
     return Rval;
 }
+#endif
 
 /* /\* herr_t H5Pset_userblock(hid_t plist, hsize_t size) *\/ */
 SEXP _H5Pset_userblock(SEXP _plist, SEXP _size) {

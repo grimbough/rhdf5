@@ -121,10 +121,10 @@ SEXP _H5Oget_info( SEXP _object_id ) {
 SEXP _H5Oget_info( SEXP _object_id ) {
   
   hid_t object_id = STRSXP_2_HID( _object_id );
-  H5O_info_t info;
+  H5O_info2_t info;
   SEXP Rval, class, tz_attr;
   
-  herr_t herr = H5Oget_info2( object_id, &info, H5O_INFO_ALL );
+  herr_t herr = H5Oget_info3( object_id, &info, H5O_INFO_ALL );
   if(herr < 0) {
     error("Unable to obtain object info\n");
   }

@@ -78,14 +78,16 @@ void format_dimensions (H5S_class_t space_type, opObjListElement *newElement, hs
  otherwise.
  
  ************************************************************/
-int group_check (struct opObjListElement *od, haddr_t target_addr, unsigned long target_fileno)
+int group_check (struct opObjListElement *od, H5O_token_t target_token, unsigned long target_fileno, hid_t loc_id)
 {
-    if (od->addr == target_addr && od->fileno == target_fileno) {  /* Addresses match */
+    int cmp_result;
+    H5Otoken_cmp(loc_id, &od->token, &target_token, &cmp_result);
+    if (cmp_result == 0 && od->fileno == target_fileno) {  /* Tokens match */
       return 1;
     } else if (!od->prev) {            /* Root group reached with no matches */
       return 0;       
     } else {                          /* Recursively examine the next node */
-      return group_check (od->prev, target_addr, target_fileno);
+      return group_check (od->prev, target_token, target_fileno, loc_id);
     }
 }
 
