@@ -1,20 +1,20 @@
 #include "h5dump.h"
 
-herr_t opAddToDumpTree( hid_t g_id, const char *name, const H5L_info_t *info, void *op_data) {
+herr_t opAddToDumpTree( hid_t g_id, const char *name, const H5L_info2_t *info, void *op_data) {
     
-    H5O_info_t infobuf;
-    H5L_info_t Linfobuf;
+    H5O_info2_t infobuf;
+    H5L_info2_t Linfobuf;
     opDumpTree *data = (opDumpTree *) op_data;
     herr_t herr = 0;
 
     /* we skip soft links */
-    herr = H5Lget_info(g_id, name, &Linfobuf, H5P_DEFAULT);
+    herr = H5Lget_info2(g_id, name, &Linfobuf, H5P_DEFAULT);
     if(Linfobuf.type == H5L_TYPE_SOFT) {
         char *linkVal = (char *) R_alloc(Linfobuf.u.val_size, sizeof(char));
         H5Lget_val(g_id, name, linkVal, Linfobuf.u.val_size, H5P_DEFAULT);
         return herr;
     }
-    herr = H5Oget_info_by_name (g_id, name, &infobuf, H5P_DEFAULT);
+    herr = H5Oget_info_by_name3 (g_id, name, &infobuf, H5O_INFO_ALL, H5P_DEFAULT);
 
     opObjListElement *newElement = (opObjListElement *) R_alloc(1, sizeof(struct opObjListElement) );
     newElement->idx = data->n;
@@ -23,7 +23,7 @@ herr_t opAddToDumpTree( hid_t g_id, const char *name, const H5L_info_t *info, vo
     newElement->group = (char *) R_alloc((strlen(data->group)+1), sizeof(char));
     strcpy(newElement->group, data->group);
     newElement->info = (*info);
-    newElement->addr = infobuf.addr;
+    newElement->token = infobuf.token;
     newElement->fileno = infobuf.fileno;
 
     hid_t oid = H5Oopen( g_id, name, H5P_DEFAULT );
@@ -34,7 +34,7 @@ herr_t opAddToDumpTree( hid_t g_id, const char *name, const H5L_info_t *info, vo
     switch (infobuf.type) {
         case H5O_TYPE_GROUP: {
             /* check if we have an recursive loop in the hierarchy */
-            if ( data->n > 0 && group_check (data->last, infobuf.addr, infobuf.fileno) ) {
+            if ( data->n > 0 && group_check (data->last, infobuf.token, infobuf.fileno, g_id) ) {
                 warning ("Identical objects found\n");
             } else { /* otherwise create a new element in our linked list */
             
@@ -76,7 +76,7 @@ herr_t opAddToDumpTree( hid_t g_id, const char *name, const H5L_info_t *info, vo
                     data->insertAsChild = 1;
                     opObjListElement *last = data->last;
                     data->depth = data->depth + 1;
-                    herr = H5Literate_by_name (g_id, name, H5_INDEX_NAME,
+                    herr = H5Literate_by_name2 (g_id, name, H5_INDEX_NAME,
                                            data->order, NULL, opAddToDumpTree, (void *) data,
                                            H5P_DEFAULT);
                     data->depth = data->depth - 1;
@@ -244,7 +244,7 @@ SEXP _h5dump( SEXP _loc_id, SEXP _depth, SEXP _index_type, SEXP _order ) {
     // set native to false here.  It will be converted later during h5dump()
     data.native = 0;
 
-    herr_t herr = H5Literate( loc_id, data.index_type, data.order, &idx, &opAddToDumpTree, &data );
+    herr_t herr = H5Literate2( loc_id, data.index_type, data.order, &idx, &opAddToDumpTree, &data );
     if(herr < 0) {
       error("Error iterating through file");
     }
