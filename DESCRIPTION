@@ -29,7 +29,7 @@ Depends:
     R (>= 4.0.0)
 Imports: 
     rhdf5filters (>= 1.15.5),
-    Rhdf5lib (>= 1.13.4)
+    Rhdf5lib (>= 1.33.3)
 Suggests: 
     bench,
     BiocParallel,
@@ -47,6 +47,8 @@ LinkingTo:
 VignetteBuilder: 
     knitr
 biocViews: Infrastructure, DataImport
+Remotes: 
+    Huber-group-EMBL/Rhdf5lib#69
 Encoding: UTF-8
 LazyLoad: true
 Roxygen: list(markdown = TRUE)
