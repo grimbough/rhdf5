@@ -28,7 +28,8 @@ library(dplyr)
 library(ggplot2)
 library(BiocParallel)
 
-run_on_platform <- (Sys.info()["sysname"] == "Linux")
+# R CMD check asks we use no more than 2 cores
+run_on_platform <- .Platform$OS.type == "unix" && !nzchar(Sys.getenv("_R_CHECK_LIMIT_CORES_"))
 ```
 
 # Introduction
