@@ -86,16 +86,6 @@ H5Pclose <- function(h5plist) {
 ## File Creation Properties
 ####################################################
 
-#' Get version information for objects in a file creation property list
-#'
-#' @param h5plist [H5IdComponent-class] object representing the file creation property list
-#' @returns Named integer vector
-#' @export
-H5Pget_version <- function(h5plist) {
-  h5checktype(h5plist, "plist")
-  .Call("_H5Pget_version", h5plist@ID, PACKAGE = "rhdf5")
-}
-
 #' Get and set the user block size
 #' @param h5plist [H5IdComponent-class] object representing the file creation property list
 #' @param size of the user block in bytes

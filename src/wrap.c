@@ -143,7 +143,6 @@ static R_CallMethodDef libraryRCalls[] = {
   {"_H5Pcopy", (DL_FUNC) &_H5Pcopy, 1},
   {"_H5Pclose", (DL_FUNC) &_H5Pclose, 1},
   {"_H5Pclose_class", (DL_FUNC) &_H5Pclose_class, 1},
-  {"_H5Pget_version", (DL_FUNC) &_H5Pget_version, 1},
   {"_H5Pset_userblock", (DL_FUNC) &_H5Pset_userblock, 2},
   {"_H5Pget_userblock", (DL_FUNC) &_H5Pget_userblock, 1},
   {"_H5Pset_sizes", (DL_FUNC) &_H5Pset_sizes, 3},
