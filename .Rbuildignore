@@ -17,3 +17,4 @@ vignettes/practical_tips_cache
 ^pkgdown$
 ^\.lintr$
 ^\.git-blame-ignore-revs$
+^\.venv$
