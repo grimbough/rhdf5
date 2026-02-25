@@ -104,9 +104,7 @@ SEXP _H5Dcreate( SEXP _loc_id, SEXP _name, SEXP _dtype_id, SEXP _space_id, SEXP 
                            lcpl_id, dcpl_id, dapl_id );
     
     addHandle(hid);
-    SEXP Rval;
-    PROTECT(Rval = HID_2_STRSXP(hid));
-    UNPROTECT(1);
+    SEXP Rval = HID_2_STRSXP(hid);
     return Rval;
 }
 
@@ -119,9 +117,7 @@ SEXP _H5Dopen( SEXP _loc_id, SEXP _name, SEXP _dapl_id ) {
     hid_t hid = H5Dopen( loc_id, name, dapl_id );
     addHandle(hid);
     
-    SEXP Rval;
-    PROTECT(Rval = HID_2_STRSXP(hid));
-    UNPROTECT(1);
+    SEXP Rval = HID_2_STRSXP(hid);
     return Rval;
 }
 
@@ -134,10 +130,8 @@ SEXP _H5Dclose( SEXP _dataset_id ) {
         removeHandle(dataset_id);
     }
     
-    SEXP Rval;
-    PROTECT(Rval = allocVector(INTSXP, 1));
+    SEXP Rval = allocVector(INTSXP, 1);
     INTEGER(Rval)[0] = herr;
-    UNPROTECT(1);
     return Rval;
 }
 
@@ -1175,10 +1169,8 @@ SEXP _H5Dwrite( SEXP _dataset_id, SEXP _buf, SEXP _file_space_id, SEXP _mem_spac
     }
     
     herr_t herr = H5Dwrite(dataset_id, mem_type_id, mem_space_id, file_space_id, H5P_DEFAULT, buf );
-    SEXP Rval;
-    Rval = PROTECT(allocVector(INTSXP, 1));
+    SEXP Rval = allocVector(INTSXP, 1);
     INTEGER(Rval)[0] = herr;
-    UNPROTECT(1);
     return Rval;
 }
 
@@ -1188,9 +1180,7 @@ SEXP _H5Dget_space(SEXP _dataset_id ) {
     hid_t sid = H5Dget_space( dataset_id );
     addHandle(sid);
     
-    SEXP Rval;
-    PROTECT(Rval = HID_2_STRSXP(sid));
-    UNPROTECT(1);
+    SEXP Rval = HID_2_STRSXP(sid);
     return Rval;
 }
 
@@ -1199,9 +1189,7 @@ SEXP _H5Dget_type( SEXP _dataset_id ) {
     hid_t dataset_id = STRSXP_2_HID( _dataset_id );
     hid_t hid = H5Dget_type( dataset_id );
     
-    SEXP Rval;
-    PROTECT(Rval = HID_2_STRSXP(hid));
-    UNPROTECT(1);
+    SEXP Rval = HID_2_STRSXP(hid);
     return Rval;
 }
 
@@ -1210,9 +1198,7 @@ SEXP _H5Dget_create_plist( SEXP _dataset_id ) {
     hid_t dataset_id = STRSXP_2_HID( _dataset_id );
     hid_t hid = H5Dget_create_plist( dataset_id );
     
-    SEXP Rval;
-    PROTECT(Rval = HID_2_STRSXP(hid));
-    UNPROTECT(1);
+    SEXP Rval = HID_2_STRSXP(hid);
     return Rval;
 }
 
@@ -1230,10 +1216,8 @@ SEXP _H5Dset_extent( SEXP _dataset_id, SEXP _size ) {
     } else {
         error("size parameter in H5Dset_extend has to be a vector of length > 0.");
     }
-    SEXP Rval;
-    PROTECT(Rval = allocVector(INTSXP, 1));
+    SEXP Rval = allocVector(INTSXP, 1);
     INTEGER(Rval)[0] = herr;
-    UNPROTECT(1);
     return Rval;
 }
 
@@ -1247,8 +1231,6 @@ SEXP _H5Dget_num_chunks( SEXP _dataset_id, SEXP _dataspace_id ) {
         error("Unable to determine the number of chunks\n");
     }
 
-    SEXP Rval;
-    PROTECT(Rval = ScalarInteger(nchunks));
-    UNPROTECT(1);
+    SEXP Rval = ScalarInteger(nchunks);
     return(Rval);
 }

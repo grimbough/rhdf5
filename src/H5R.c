@@ -21,7 +21,7 @@ SEXP _H5Rcreate(SEXP _loc_id, SEXP _name, SEXP _ref_type, SEXP _space_id) {
     if(status < 0) {
       error("Problem creating reference");
     }
-    PROTECT(Rval = allocVector(RAWSXP, sizeof(haddr_t)));
+    Rval = allocVector(RAWSXP, sizeof(haddr_t));
     unsigned char *Rptr = RAW(Rval);
     memcpy(Rptr, &ref[0], sizeof(haddr_t));
     
@@ -32,7 +32,7 @@ SEXP _H5Rcreate(SEXP _loc_id, SEXP _name, SEXP _ref_type, SEXP _space_id) {
     if(status < 0) {
       error("Problem creating reference");
     }
-    PROTECT(Rval = allocVector(RAWSXP, sizeof(hdset_reg_ref_t)));
+    Rval = allocVector(RAWSXP, sizeof(hdset_reg_ref_t));
     unsigned char *Rptr = RAW(Rval);
     memcpy(Rptr, &ref[0], sizeof(hdset_reg_ref_t));
     
@@ -43,7 +43,6 @@ SEXP _H5Rcreate(SEXP _loc_id, SEXP _name, SEXP _ref_type, SEXP _space_id) {
 
   /* this works for now.  haddr_t is 64-bit, so maybe we need some checks */
 
-  UNPROTECT(1);
   return(Rval);
 }
 
@@ -60,7 +59,7 @@ SEXP _H5Rget_obj_type(SEXP _loc_id, SEXP _ref_type, SEXP _ref) {
     return R_NilValue;
   }
 
-  SEXP Rval = PROTECT(allocVector(STRSXP, 1));
+  SEXP Rval;
   switch(obj_type) {
   case H5O_TYPE_GROUP :
     Rval = mkString("GROUP");
@@ -77,7 +76,6 @@ SEXP _H5Rget_obj_type(SEXP _loc_id, SEXP _ref_type, SEXP _ref) {
     break;
   }
   
-  UNPROTECT(1);
   return(Rval);
 }
 
@@ -89,9 +87,7 @@ SEXP _H5Rdereference(SEXP _obj_id, SEXP _ref_type, SEXP _ref) {
 
   hid_t obj = H5Rdereference(obj_id, H5P_DEFAULT, ref_type, ref);
   
-  SEXP Rval;
-  PROTECT(Rval = HID_2_STRSXP(obj));
-  UNPROTECT(1);
+  SEXP Rval = HID_2_STRSXP(obj);
   return Rval;
 }
 
@@ -108,9 +104,7 @@ SEXP _H5Rget_name(SEXP _loc_id, SEXP _ref_type, SEXP _ref) {
   char *buf = (char*) R_alloc(sizeof(char), size + 1);
   H5Rget_name(loc_id, ref_type, ref, buf, size + 1);
   
-  SEXP Rval;
-  PROTECT(Rval = mkString(buf));
-  UNPROTECT(1);
+  SEXP Rval = mkString(buf);
   return Rval;
 }
 
@@ -123,8 +117,6 @@ SEXP _H5Rget_region(SEXP _loc_id, SEXP _ref_type, SEXP _ref) {
   
   hid_t space_id = H5Rget_region(loc_id, ref_type, ref);
   
-  SEXP Rval;
-  PROTECT(Rval = HID_2_STRSXP(space_id));
-  UNPROTECT(1);
+  SEXP Rval = HID_2_STRSXP(space_id);
   return Rval;
 }

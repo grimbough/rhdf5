@@ -79,8 +79,8 @@ SEXP _h5createDataFrame(SEXP _obj, SEXP _loc_id, SEXP _name, SEXP _level, SEXP _
     H5Sclose(space);
     
     addHandle(dset_id);
-    SEXP Rval = PROTECT(HID_2_STRSXP(dset_id));
-    UNPROTECT(3);
+    SEXP Rval = HID_2_STRSXP(dset_id);
+    UNPROTECT(2);
     return Rval;
 }
 

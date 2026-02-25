@@ -59,9 +59,7 @@ SEXP _H5Oopen( SEXP _loc_id, SEXP _name) {
   hid_t hid = H5Oopen( loc_id, name, H5P_DEFAULT );
   addHandle(hid);
 
-  SEXP Rval;
-  PROTECT(Rval = HID_2_STRSXP(hid));
-  UNPROTECT(1);
+  SEXP Rval = HID_2_STRSXP(hid);
   return Rval;
 }
 
@@ -72,10 +70,8 @@ SEXP _H5Oclose( SEXP _object_id ) {
     removeHandle(object_id);
   }
 
-  SEXP Rval;
-  PROTECT(Rval = allocVector(INTSXP, 1));
+  SEXP Rval = allocVector(INTSXP, 1);
   INTEGER(Rval)[0] = herr;
-  UNPROTECT(1);
   return Rval;
 }
 
@@ -88,10 +84,8 @@ SEXP _H5Olink( SEXP _object_id, SEXP _new_loc_id, SEXP _new_link_name, SEXP _lcp
   
   herr_t herr = H5Olink(object_id, new_loc_id, new_link_name, lcpl_id, lapl_id );
   
-  SEXP Rval;
-  PROTECT(Rval = allocVector(INTSXP, 1));
+  SEXP Rval = allocVector(INTSXP, 1);
   INTEGER(Rval)[0] = herr;
-  UNPROTECT(1);
   return Rval;
 }
 
@@ -109,10 +103,8 @@ SEXP _H5Ocopy( SEXP _src_loc_id, SEXP _src_name, SEXP _dest_loc_id, SEXP _dest_n
   
   herr_t herr = H5Ocopy(src_loc_id, src_name, dest_loc_id, dest_name, ocpypl_id, lcpl_id);
   
-  SEXP Rval;
-  PROTECT(Rval = allocVector(INTSXP, 1));
+  SEXP Rval = allocVector(INTSXP, 1);
   INTEGER(Rval)[0] = herr;
-  UNPROTECT(1);
   return Rval;
 }
 
@@ -173,7 +165,7 @@ SEXP _H5Oget_info( SEXP _object_id ) {
   setAttrib(btime, install("tzone"), tz_attr);
   
   //object type
-  SEXP obj_type = PROTECT(allocVector(STRSXP, 1));
+  SEXP obj_type;
   switch(info.type) {
   case H5O_TYPE_GROUP :
     obj_type = PROTECT(mkString("GROUP"));
@@ -200,7 +192,7 @@ SEXP _H5Oget_info( SEXP _object_id ) {
   SET_VECTOR_ELT(Rval, 7, Rf_ScalarInteger(info.num_attrs)); 
 
   
-  UNPROTECT(9);
+  UNPROTECT(8);
 
   return Rval;
 }

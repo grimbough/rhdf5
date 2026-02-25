@@ -11,9 +11,7 @@ SEXP _H5Pcreate( SEXP _cls_id ) {
     hid_t hid = H5Pcreate( cls_id );
     addHandle(hid);
     
-    SEXP Rval;
-    PROTECT(Rval = HID_2_STRSXP(hid));
-    UNPROTECT(1);
+    SEXP Rval = HID_2_STRSXP(hid);
     return Rval;
 }
 
@@ -23,9 +21,7 @@ SEXP _H5Pget_class( SEXP _plist ) {
     hid_t hid = H5Pget_class( plist );
     addHandle(hid);
     
-    SEXP Rval;
-    PROTECT(Rval = HID_2_STRSXP(hid));
-    UNPROTECT(1);
+    SEXP Rval = HID_2_STRSXP(hid);
     return Rval;
 }
 
@@ -35,9 +31,7 @@ SEXP _H5Pcopy( SEXP _plist ) {
     hid_t hid = H5Pcopy( plist );
     addHandle(hid);
     
-    SEXP Rval;
-    PROTECT(Rval = HID_2_STRSXP(hid));
-    UNPROTECT(1);
+    SEXP Rval = HID_2_STRSXP(hid);
     return Rval;
 }
 
@@ -66,13 +60,12 @@ SEXP _H5Pget_version(SEXP _plist) {
     SEXP Rval;
     if (herr >= 0) {
         static const char *names[] = {"superblock", "freelist", "symboltable", "shobjheader", ""};
-        Rval = PROTECT(Rf_mkNamed(INTSXP, names));
+        Rval = Rf_mkNamed(INTSXP, names);
         int *rval = INTEGER(Rval);
         rval[0] = super;
         rval[1] = freelist;
         rval[2] = stab;
         rval[3] = shhdr;
-        UNPROTECT(1);
     } else
         Rval = R_NilValue;
     return Rval;
@@ -114,11 +107,10 @@ SEXP _H5Pget_sizes(SEXP _plist) {
     SEXP Rval;
     if (herr >= 0) {
         static const char *names[] = {"offset", "length", ""};
-        Rval = PROTECT(Rf_mkNamed(INTSXP, names));
+        Rval = Rf_mkNamed(INTSXP, names);
         int *rval = INTEGER(Rval);
         rval[0] = sizeof_addr;
         rval[1] = sizeof_size;
-        UNPROTECT(1);
     } else
         Rval = ScalarInteger(herr);
   return Rval;
@@ -142,11 +134,10 @@ SEXP _H5Pget_sym_k(SEXP _plist) {
     SEXP Rval;
     if (herr >= 0) {
         static const char *names[] = {"ik", "lk", ""};
-        Rval = PROTECT(Rf_mkNamed(INTSXP, names));
+        Rval = Rf_mkNamed(INTSXP, names);
         int *rval = INTEGER(Rval);
         rval[0] = ik;
         rval[1] = lk;
-        UNPROTECT(1);
     } else
         Rval = ScalarInteger(herr);
     return Rval;
@@ -207,11 +198,10 @@ SEXP _H5Pget_shared_mesg_index(SEXP _plist, SEXP _index_num) {
     SEXP Rval;
     if (herr >= 0) {
         static const char *names[] = {"type_flags", "size", ""};
-        Rval = PROTECT(Rf_mkNamed(INTSXP, names));
+        Rval = Rf_mkNamed(INTSXP, names);
         int *rval = INTEGER(Rval);
         rval[0] = mesg_type_flags;
         rval[1] = min_mesg_size;
-        UNPROTECT(1);
     } else
         Rval = ScalarInteger(herr);
     return Rval;
@@ -235,11 +225,10 @@ SEXP _H5Pget_shared_mesg_phase_change(SEXP _plist) {
     SEXP Rval;
     if (herr >= 0) {
         static const char *names[] = {"max_list", "min_btree", ""};
-        Rval = PROTECT(Rf_mkNamed(INTSXP, names));
+        Rval = Rf_mkNamed(INTSXP, names);
         int *rval = INTEGER(Rval);
         rval[0] = max_list;
         rval[1] = min_btree;
-        UNPROTECT(1);
     } else
         Rval = ScalarInteger(herr);
     return Rval;
@@ -736,11 +725,9 @@ SEXP _H5Pget_libver_bounds( SEXP _fapl_id ) {
         error("Error while calling H5Pget_libver_bounds");
     }
     Rprintf("low: %d high: %d\n", libver_low, libver_high);
-    SEXP Rval;
-    PROTECT(Rval = allocVector(INTSXP, 2));
+    SEXP Rval = allocVector(INTSXP, 2);
     INTEGER(Rval)[0] = libver_low;
     INTEGER(Rval)[1] = libver_high;
-    UNPROTECT(1);
     return Rval;
 }
 
@@ -1057,11 +1044,10 @@ SEXP _H5Pget_chunk( SEXP _plist ) {
     int rank = H5Pget_chunk(plist, H5S_MAX_RANK, dims);
     SEXP Rval = R_NilValue;
     if (rank > 0) {
-        Rval = PROTECT(allocVector(INTSXP, rank));
+        Rval = allocVector(INTSXP, rank);
         for (int i=0; i < rank; i++) {
             INTEGER(Rval)[i] = dims[i];
         }
-        UNPROTECT(1);
     }
     return Rval;
 }
@@ -2052,10 +2038,8 @@ SEXP _H5Pclose_class( SEXP _class ) {
         removeHandle(class);
     }
     
-    SEXP Rval;
-    PROTECT(Rval = allocVector(INTSXP, 1));
+    SEXP Rval = allocVector(INTSXP, 1);
     INTEGER(Rval)[0] = herr;
-    UNPROTECT(1);
     return Rval;
 }
 
