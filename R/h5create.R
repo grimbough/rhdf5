@@ -179,7 +179,7 @@ h5createGroup <- function(file, group) {
       message(
         "You created a large dataset with compression and chunking.\n",
         "The chunk size is equal to the dataset dimensions.\n",
-        "If you want to read subsets of the dataset, you should test",
+        "If you want to read subsets of the dataset, you should test ",
         "smaller chunk sizes to improve read times."
       )
     }
