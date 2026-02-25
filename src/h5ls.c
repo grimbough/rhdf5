@@ -155,9 +155,8 @@ SEXP _h5ls( SEXP _loc_id, SEXP _depth, SEXP _datasetinfo, SEXP _index_type, SEXP
         SEXP Rval;
         
         if (herr < 0) {
-            PROTECT(Rval = allocVector(INTSXP, 1));
+            Rval = allocVector(INTSXP, 1);
             INTEGER(Rval)[0] = herr;
-            UNPROTECT(1);
         } else {
             PROTECT(Rval= allocVector(VECSXP, 12));
             SEXP group = PROTECT(allocVector(STRSXP, data.n));

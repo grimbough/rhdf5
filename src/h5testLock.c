@@ -20,9 +20,8 @@ SEXP _h5fileLock(SEXP _file_name) {
   HDclose(fd);
   
   /* return value of lock attempt */
-  PROTECT(Rval = allocVector(INTSXP, 1));
+  Rval = allocVector(INTSXP, 1);
   INTEGER(Rval)[0] = lk;
-  UNPROTECT(1);
   
   return(Rval);
 }

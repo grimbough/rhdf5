@@ -6,9 +6,7 @@ SEXP _H5Screate( SEXP _type ) {
     hid_t hid = H5Screate( type );
     addHandle(hid);
     
-    SEXP Rval;
-    PROTECT(Rval = HID_2_STRSXP(hid));
-    UNPROTECT(1);
+    SEXP Rval = HID_2_STRSXP(hid);
     return Rval;
 }
 
@@ -18,9 +16,7 @@ SEXP _H5Scopy( SEXP _space_id ) {
     hid_t hid = H5Scopy( space_id );
     addHandle(hid);
     
-    SEXP Rval;
-    PROTECT(Rval = HID_2_STRSXP(hid));
-    UNPROTECT(1);
+    SEXP Rval = HID_2_STRSXP(hid);
     return Rval;
 }
 
@@ -32,10 +28,8 @@ SEXP _H5Sclose( SEXP _space_id ) {
         removeHandle(space_id);
     }
     
-    SEXP Rval;
-    PROTECT(Rval = allocVector(INTSXP, 1));
+    SEXP Rval = allocVector(INTSXP, 1);
     INTEGER(Rval)[0] = herr;
-    UNPROTECT(1);
     return Rval;
 }
 
@@ -67,9 +61,7 @@ SEXP _H5Screate_simple( SEXP _dims, SEXP _maxdims ) {
         }
     }
     
-    SEXP Rval;
-    PROTECT(Rval = HID_2_STRSXP(hid));
-    UNPROTECT(1);
+    SEXP Rval = HID_2_STRSXP(hid);
     return Rval;
 }
 
@@ -78,10 +70,8 @@ SEXP _H5Sis_simple( SEXP _space_id ) {
     hid_t space_id = STRSXP_2_HID( _space_id );
     htri_t htri = H5Sis_simple( space_id );
     
-    SEXP Rval;
-    PROTECT(Rval = allocVector(INTSXP, 1));
+    SEXP Rval = allocVector(INTSXP, 1);
     INTEGER(Rval)[0] = htri;
-    UNPROTECT(1);
     return Rval;
 }
 
@@ -199,12 +189,11 @@ SEXP _H5Sget_select_hyper_blocklist( SEXP _space_id, SEXP _startblock, SEXP _num
       error("Error selecting blocklist");
   }
   
-  SEXP Rval = PROTECT(allocVector(INTSXP, bufferlength));
+  SEXP Rval = allocVector(INTSXP, bufferlength);
   for(int i=0; i < bufferlength; i++) {
     /* C to R coordinate conversion applied here */
     INTEGER(Rval)[i] = (int) buf[i] + 1;
   }
-  UNPROTECT(1);
   
   return Rval;
 }
@@ -298,9 +287,7 @@ SEXP _H5Scombine_hyperslab( SEXP _space_id, SEXP _op, SEXP _start, SEXP _stride,
   hid_t new_space_id = H5Scombine_hyperslab( space_id, op, start, stride, count, block );
   addHandle(new_space_id);
 
-  SEXP Rval;
-  PROTECT(Rval = HID_2_STRSXP(new_space_id));
-  UNPROTECT(1);
+  SEXP Rval = HID_2_STRSXP(new_space_id);
   return Rval;
   
 }
@@ -315,9 +302,7 @@ SEXP _H5Scombine_select( SEXP _space1_id, SEXP _op, SEXP _space2_id) {
   hid_t space_id = H5Scombine_select(space1_id, op, space2_id);
   addHandle( space_id );
   
-  SEXP Rval;
-  PROTECT(Rval = HID_2_STRSXP(space_id));
-  UNPROTECT(1);
+  SEXP Rval = HID_2_STRSXP(space_id);
   return Rval;
 }
 

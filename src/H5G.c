@@ -9,9 +9,7 @@ SEXP _H5Gcreate( SEXP _loc_id, SEXP _name ) {
   hid_t hid = H5Gcreate( loc_id, name, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT );
   addHandle(hid);
   
-  SEXP Rval;
-  PROTECT(Rval = HID_2_STRSXP(hid));
-  UNPROTECT(1);
+  SEXP Rval = HID_2_STRSXP(hid);
   return Rval;
 }
 
@@ -23,9 +21,7 @@ SEXP _H5Gcreate_anon( SEXP _loc_id ) {
   hid_t hid = H5Gcreate_anon( loc_id, H5P_DEFAULT, H5P_DEFAULT );
   addHandle(hid);
 
-  SEXP Rval;
-  PROTECT(Rval = HID_2_STRSXP(hid));
-  UNPROTECT(1);
+  SEXP Rval = HID_2_STRSXP(hid);
   return Rval;
 }
 
@@ -38,9 +34,7 @@ SEXP _H5Gopen( SEXP _loc_id, SEXP _name ) {
   hid_t hid = H5Gopen( loc_id, name, H5P_DEFAULT );
   addHandle(hid);
 
-  SEXP Rval;
-  PROTECT(Rval = HID_2_STRSXP(hid));
-  UNPROTECT(1);
+  SEXP Rval = HID_2_STRSXP(hid);
   return Rval;
 }
 
@@ -53,10 +47,8 @@ SEXP _H5Gclose( SEXP _group_id ) {
     removeHandle(group_id);
   }
 
-  SEXP Rval;
-  PROTECT(Rval = allocVector(INTSXP, 1));
+  SEXP Rval = allocVector(INTSXP, 1);
   INTEGER(Rval)[0] = herr;
-  UNPROTECT(1);
   return Rval;
 }
 

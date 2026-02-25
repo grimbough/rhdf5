@@ -30,14 +30,12 @@ SEXP _h5getEnumValues( SEXP _dtype_id ) {
   }
   
   int nmembers = H5Tget_nmembers( dtype_id );
-  SEXP Rval = PROTECT(allocVector(INTSXP, nmembers));
+  SEXP Rval = allocVector(INTSXP, nmembers);
   void *buf = INTEGER(Rval);
   for (int i=0; i<nmembers; i++) {
     H5Tget_member_value(dtype_id, i, buf);
     buf = (int*)buf + 1;
   }
-  
-  UNPROTECT(1);
   return Rval;
 }
 
@@ -48,8 +46,6 @@ SEXP _h5createComplexDataType( void ) {
   H5Tinsert(dtype_id, "r", 0, H5T_IEEE_F64LE);
   H5Tinsert(dtype_id, "i", H5Tget_size(H5T_IEEE_F64LE), H5T_IEEE_F64LE);
   
-  SEXP Rval;
-  PROTECT(Rval = HID_2_STRSXP(dtype_id));
-  UNPROTECT(1);
+  SEXP Rval = HID_2_STRSXP(dtype_id);
   return Rval;
 }

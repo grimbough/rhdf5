@@ -9,10 +9,8 @@ SEXP _H5get_libversion(void);
 SEXP _H5open(void) {
   herr_t herr = H5open();
 
-  SEXP Rval;
-  PROTECT(Rval = allocVector(INTSXP, 1));
+  SEXP Rval = allocVector(INTSXP, 1);
   INTEGER(Rval)[0] = herr;
-  UNPROTECT(1);
   return Rval;
 }
 
@@ -20,10 +18,8 @@ SEXP _H5open(void) {
 SEXP _H5close(void) {
   herr_t herr = H5close();
 
-  SEXP Rval;
-  PROTECT(Rval = allocVector(INTSXP, 1));
+  SEXP Rval = allocVector(INTSXP, 1);
   INTEGER(Rval)[0] = herr;
-  UNPROTECT(1);
   return Rval;
 }
 
@@ -31,10 +27,8 @@ SEXP _H5close(void) {
 SEXP _H5garbage_collect(void) {
   herr_t herr = H5garbage_collect();
 
-  SEXP Rval;
-  PROTECT(Rval = allocVector(INTSXP, 3));
+  SEXP Rval = allocVector(INTSXP, 3);
   INTEGER(Rval)[0] = herr;
-  UNPROTECT(1);
   return Rval;
 }
 

@@ -7,9 +7,7 @@ SEXP _H5Tcreate( SEXP _type, SEXP _size ) {
     
     hid_t tid = H5Tcreate(type, size);
     
-    SEXP Rval;
-    PROTECT(Rval = HID_2_STRSXP(tid));
-    UNPROTECT(1);
+    SEXP Rval = HID_2_STRSXP(tid);
     return Rval;
 }
 
@@ -19,9 +17,7 @@ SEXP _H5Tcopy( SEXP _dtype_id ) {
   hid_t dtype_id = STRSXP_2_HID( _dtype_id );
   hid_t tid = H5Tcopy(dtype_id);
 
-  SEXP Rval;
-  PROTECT(Rval = HID_2_STRSXP(tid));
-  UNPROTECT(1);
+  SEXP Rval = HID_2_STRSXP(tid);
   return Rval;
 }
 
@@ -38,10 +34,8 @@ SEXP _H5Tset_size( SEXP _dtype_id, SEXP _size ) {
     herr = H5Tset_size(dtype_id, H5T_VARIABLE);
   }
 
-  SEXP Rval;
-  PROTECT(Rval = allocVector(INTSXP, 1));
+  SEXP Rval = allocVector(INTSXP, 1);
   INTEGER(Rval)[0] = herr;
-  UNPROTECT(1);
   return Rval;
 }
 
@@ -53,9 +47,8 @@ SEXP _H5Tget_size( SEXP _dtype_id ) {
 
   if (!H5Tis_variable_str(dtype_id)) {
     size_t size = H5Tget_size( dtype_id );
-    PROTECT(Rval = allocVector(INTSXP, 1));
+    Rval = allocVector(INTSXP, 1);
     INTEGER(Rval)[0] = size;
-    UNPROTECT(1);
   }
 
   return Rval;
@@ -84,10 +77,8 @@ SEXP _H5Tset_strpad( SEXP _dtype_id, SEXP _strpad ) {
   
   herr_t herr = H5Tset_strpad(dtype_id, strpad);
   
-  SEXP Rval;
-  PROTECT(Rval = allocVector(INTSXP, 1));
+  SEXP Rval = allocVector(INTSXP, 1);
   INTEGER(Rval)[0] = herr;
-  UNPROTECT(1);
   return Rval;
 }
 
@@ -97,10 +88,8 @@ SEXP _H5Tget_strpad( SEXP _dtype_id ) {
   hid_t dtype_id = STRSXP_2_HID( _dtype_id );
   H5T_str_t strpad = H5Tget_strpad( dtype_id );
   
-  SEXP Rval;
-  PROTECT(Rval = allocVector(INTSXP, 1));
+  SEXP Rval = allocVector(INTSXP, 1);
   INTEGER(Rval)[0] = strpad;
-  UNPROTECT(1);
   return Rval;
 }
 
@@ -124,10 +113,8 @@ SEXP _H5Tset_cset( SEXP _dtype_id, SEXP _cset ) {
 
   herr_t herr = H5Tset_cset(dtype_id, cset);
 
-  SEXP Rval;
-  PROTECT(Rval = allocVector(INTSXP, 1));
+  SEXP Rval = allocVector(INTSXP, 1);
   INTEGER(Rval)[0] = herr;
-  UNPROTECT(1);
   return Rval;
 }
 
@@ -137,10 +124,8 @@ SEXP _H5Tget_cset( SEXP _dtype_id ) {
   hid_t dtype_id = STRSXP_2_HID( _dtype_id );
   H5T_cset_t cset = H5Tget_cset( dtype_id );
 
-  SEXP Rval;
-  PROTECT(Rval = allocVector(INTSXP, 1));
+  SEXP Rval = allocVector(INTSXP, 1);
   INTEGER(Rval)[0] = cset;
-  UNPROTECT(1);
   return Rval;
 }
 
@@ -150,10 +135,8 @@ SEXP _H5Tis_variable_str( SEXP _dtype_id ) {
   hid_t dtype_id = STRSXP_2_HID( _dtype_id );
   htri_t res = H5Tis_variable_str( dtype_id );
   
-  SEXP Rval;
-  PROTECT(Rval = allocVector(INTSXP, 1));
+  SEXP Rval = allocVector(INTSXP, 1);
   INTEGER(Rval)[0] = res;
-  UNPROTECT(1);
   return Rval;
 }
 
@@ -165,9 +148,7 @@ SEXP _H5Tset_precision( SEXP _dtype_id, SEXP _precision ) {
   
   herr_t herr = H5Tset_precision(dtype_id, precision);
   
-  SEXP Rval;
-  PROTECT(Rval = ScalarInteger(herr));
-  UNPROTECT(1);
+  SEXP Rval = ScalarInteger(herr);
   return Rval;
 }
 
@@ -178,9 +159,7 @@ SEXP _H5Tget_precision( SEXP _dtype_id ) {
   
   size_t precision = H5Tget_precision(dtype_id);
   
-  SEXP Rval;
-  PROTECT(Rval = ScalarInteger(precision));
-  UNPROTECT(1);
+  SEXP Rval = ScalarInteger(precision);
   return Rval;
 }
 
@@ -192,9 +171,7 @@ SEXP _H5Tset_offset( SEXP _dtype_id, SEXP _offset ) {
   
   herr_t herr = H5Tset_precision(dtype_id, offset);
   
-  SEXP Rval;
-  PROTECT(Rval = ScalarInteger(herr));
-  UNPROTECT(1);
+  SEXP Rval = ScalarInteger(herr);
   return Rval;
 }
 
@@ -205,9 +182,7 @@ SEXP _H5Tget_offset( SEXP _dtype_id ) {
 
   int offset = H5Tget_precision(dtype_id);
   
-  SEXP Rval;
-  PROTECT(Rval = ScalarInteger(offset));
-  UNPROTECT(1);
+  SEXP Rval = ScalarInteger(offset);
   return Rval;
 }
 
@@ -217,9 +192,7 @@ SEXP _H5Tenum_create( SEXP _base_id ) {
   
   hid_t tid = H5Tenum_create(base_id);
   
-  SEXP Rval;
-  PROTECT(Rval = HID_2_STRSXP(tid));
-  UNPROTECT(1);
+  SEXP Rval = HID_2_STRSXP(tid);
   return Rval;
 }
 
@@ -231,9 +204,7 @@ SEXP _H5Tenum_insert( SEXP _type, SEXP _name, SEXP _value ) {
 
   herr_t herr = H5Tenum_insert(type, name, value);
   
-  SEXP Rval;
-  PROTECT(Rval = ScalarInteger(herr));
-  UNPROTECT(1);
+  SEXP Rval = ScalarInteger(herr);
   return Rval;
 }
 
@@ -244,9 +215,7 @@ SEXP _H5Tget_nmembers( SEXP _dtype_id ) {
   
   int nmembers = H5Tget_nmembers(dtype_id);
   
-  SEXP Rval;
-  PROTECT(Rval = ScalarInteger(nmembers));
-  UNPROTECT(1);
+  SEXP Rval = ScalarInteger(nmembers);
   return Rval;
 }
  

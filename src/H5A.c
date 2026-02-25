@@ -17,9 +17,7 @@ SEXP _H5Acreate( SEXP _obj_id, SEXP _attr_name, SEXP _type_id, SEXP _space_id ) 
 			 H5P_DEFAULT, H5P_DEFAULT );
   addHandle(hid);
 
-  SEXP Rval;
-  PROTECT(Rval = HID_2_STRSXP(hid));
-  UNPROTECT(1);
+  SEXP Rval = HID_2_STRSXP(hid);
   return Rval;
 }
 
@@ -30,9 +28,7 @@ SEXP _H5Aopen( SEXP _obj_id, SEXP _attr_name ) {
   hid_t hid = H5Aopen( obj_id, attr_name, H5P_DEFAULT );
   addHandle( hid );
 
-  SEXP Rval;
-  PROTECT(Rval = HID_2_STRSXP(hid));
-  UNPROTECT(1);
+  SEXP Rval = HID_2_STRSXP(hid);
   return Rval;
 }
 
@@ -44,9 +40,7 @@ SEXP _H5Aopen_by_name( SEXP _obj_id, SEXP _obj_name, SEXP _attr_name ) {
   hid_t hid = H5Aopen_by_name( obj_id, obj_name, attr_name, H5P_DEFAULT, H5P_DEFAULT );
   addHandle( hid );
 
-  SEXP Rval;
-  PROTECT(Rval = HID_2_STRSXP(hid));
-  UNPROTECT(1);
+  SEXP Rval = HID_2_STRSXP(hid);
   return Rval;
 }
 
@@ -60,9 +54,7 @@ SEXP _H5Aopen_by_idx( SEXP _obj_id, SEXP _obj_name, SEXP _idx_type, SEXP _order,
   hid_t hid = H5Aopen_by_idx( obj_id, obj_name, idx_type, order, n, H5P_DEFAULT, H5P_DEFAULT );
   addHandle( hid );
 
-  SEXP Rval;
-  PROTECT(Rval = HID_2_STRSXP(hid));
-  UNPROTECT(1);
+  SEXP Rval = HID_2_STRSXP(hid);
   return Rval;
 }
 
@@ -83,10 +75,8 @@ SEXP _H5Aclose( SEXP _attr_id ) {
     removeHandle(attr_id);
   }
 
-  SEXP Rval;
-  PROTECT(Rval = allocVector(INTSXP, 1));
+  SEXP Rval = allocVector(INTSXP, 1);
   INTEGER(Rval)[0] = herr;
-  UNPROTECT(1);
   return Rval;
 }
 
@@ -491,10 +481,8 @@ SEXP _H5Awrite( SEXP _attr_id, SEXP _buf) {
 
     herr_t herr = H5Awrite(attr_id, mem_type_id, buf );
     if(herr < 0) { error("Error writing attribute"); }
-    SEXP Rval;
-    Rval = PROTECT(allocVector(INTSXP, 1));
+    SEXP Rval = allocVector(INTSXP, 1);
     INTEGER(Rval)[0] = herr;
-    UNPROTECT(1);
     return Rval;
 }
 
@@ -515,9 +503,7 @@ SEXP _H5Aget_space(SEXP _attr_id ) {
   hid_t attr_id = STRSXP_2_HID( _attr_id );
   hid_t sid = H5Aget_space( attr_id );
   addHandle(sid);
-  SEXP Rval;
-  PROTECT(Rval = HID_2_STRSXP(sid));
-  UNPROTECT(1);
+  SEXP Rval = HID_2_STRSXP(sid);
   return Rval;
 }
 
@@ -525,9 +511,7 @@ SEXP _H5Aget_space(SEXP _attr_id ) {
 SEXP _H5Aget_type( SEXP _attr_id ) {
   hid_t attr_id = STRSXP_2_HID( _attr_id );
   hid_t hid = H5Aget_type( attr_id );
-  SEXP Rval;
-  PROTECT(Rval = HID_2_STRSXP(hid));
-  UNPROTECT(1);
+  SEXP Rval = HID_2_STRSXP(hid);
   return Rval;
 }
 

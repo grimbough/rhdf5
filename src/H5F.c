@@ -14,9 +14,7 @@ SEXP _H5Fcreate( SEXP _name, SEXP _flags, SEXP _fcpl_id, SEXP _fapl_id ) {
   hid_t hid = H5Fcreate( name, flags, fcpl_id, fapl_id );
   addHandle(hid);
 
-  SEXP Rval;
-  PROTECT(Rval = HID_2_STRSXP(hid));
-  UNPROTECT(1);
+  SEXP Rval = HID_2_STRSXP(hid);
   return Rval;
 }
 
@@ -30,9 +28,7 @@ SEXP _H5Fopen( SEXP _name, SEXP _flags, SEXP _fapl_id ) {
   hid_t hid = H5Fopen( name, flags, fapl_id );
   addHandle(hid);
 
-  SEXP Rval;
-  PROTECT(Rval = HID_2_STRSXP(hid));
-  UNPROTECT(1);
+  SEXP Rval = HID_2_STRSXP(hid);
   return Rval;
 }
 
@@ -42,10 +38,7 @@ SEXP _H5Freopen( SEXP _file_id ) {
   hid_t hid = H5Freopen( file_id );
   addHandle(file_id);
 
-  SEXP Rval;
-  PROTECT(Rval = HID_2_STRSXP(hid));
-  UNPROTECT(1);
-  return Rval;
+  return HID_2_STRSXP(hid);
 }
 
 /* herr_t H5Fclose( hid_t file_id ) */
@@ -74,14 +67,12 @@ SEXP _H5Fflush(SEXP _object_id, SEXP _scope ) {
 SEXP _H5Fis_hdf5( SEXP _name ) {
   const char *name = CHAR(STRING_ELT(_name, 0));
   htri_t htri = H5Fis_hdf5( name );
-  SEXP Rval;
-  PROTECT(Rval = allocVector(LGLSXP, 1));
+  SEXP Rval = allocVector(LGLSXP, 1);
   if (htri >= 0) {
     LOGICAL(Rval)[0] = htri;
   } else {
     LOGICAL(Rval)[0] = NA_LOGICAL;
   }
-  UNPROTECT(1);
   return Rval;
 }
 
@@ -91,14 +82,12 @@ SEXP _H5Fget_filesize( SEXP _file_id ) {
   hid_t file_id = STRSXP_2_HID( _file_id );    
   hsize_t size;
   herr_t herr = H5Fget_filesize( file_id, &size );
-  SEXP Rval;
-  PROTECT(Rval = allocVector(REALSXP, 1));
+  SEXP Rval = allocVector(REALSXP, 1);
   if (herr >= 0) {
     REAL(Rval)[0] = size;
   } else {
     REAL(Rval)[0] = NA_REAL;
   }
-  UNPROTECT(1);
   return Rval;  
 }
 
@@ -131,9 +120,7 @@ SEXP _H5Fget_create_plist( SEXP _file_id ) {
 
   hid_t file_id = STRSXP_2_HID( _file_id );
   hid_t plist_id = H5Fget_create_plist( file_id );
-  SEXP Rval;
-  PROTECT(Rval = HID_2_STRSXP(plist_id));
-  UNPROTECT(1);
+  SEXP Rval = HID_2_STRSXP(plist_id);
   return Rval;
 }
 
@@ -142,9 +129,7 @@ SEXP _H5Fget_access_plist( SEXP _file_id ) {
 
   hid_t file_id = STRSXP_2_HID( _file_id );
   hid_t plist_id = H5Fget_access_plist( file_id );
-  SEXP Rval;
-  PROTECT(Rval = HID_2_STRSXP(plist_id));
-  UNPROTECT(1);
+  SEXP Rval = HID_2_STRSXP(plist_id);
   return Rval;
 }
 
@@ -158,8 +143,7 @@ SEXP _H5Fget_intent( SEXP _file_id ) {
     error("Unable to determine file status");
   }
 
-  PROTECT(Rval = ScalarInteger(intent));
-  UNPROTECT(1);
+  Rval = ScalarInteger(intent);
   return Rval;
 }
 

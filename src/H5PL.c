@@ -32,8 +32,7 @@ SEXP _H5PLget( SEXP index ) {
     error("Unable to read plugin path position\n");
   }
   
-  PROTECT(Rval = mkString(buf));
-  UNPROTECT(1);
+  Rval = mkString(buf);
   return Rval;
 }
 
@@ -49,14 +48,12 @@ SEXP _H5PLsize(void) {
   }
   
   if(nvals <= INT32_MAX) {
-    Rval = PROTECT(allocVector(INTSXP, 1));
+    Rval = allocVector(INTSXP, 1);
     INTEGER(Rval)[0] = (int) nvals;
   } else {
-    Rval = PROTECT(allocVector(REALSXP, 1));
+    Rval = allocVector(REALSXP, 1);
     REAL(Rval)[0] = (double) nvals;
   }
-  
-  UNPROTECT(1);
   return Rval;
 }
 
