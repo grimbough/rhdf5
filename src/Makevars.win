@@ -1,4 +1,6 @@
 RHDF5_LIBS = $(shell "$(R_HOME)/bin${R_ARCH_BIN}/Rscript" -e 'Rhdf5lib::pkgconfig("PKG_C_LIBS")')    
 PKG_LIBS=$(RHDF5_LIBS)
-PKG_CPPFLAGS=-D__USE_MINGW_ANSI_STDIO
+
+RHDF5_CPPFLAGS = $(shell "$(R_HOME)/bin${R_ARCH_BIN}/Rscript" -e 'Rhdf5lib::pkgconfig("PKG_CPP_FLAGS")')
+PKG_CPPFLAGS=$(RHDF5_CPPFLAGS) -D__USE_MINGW_ANSI_STDIO
 #PKG_CFLAGS=-w

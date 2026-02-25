@@ -1,6 +1,6 @@
 #' Test and set file locking for HDF5
-#'
-#' HDF5 1.10 uses file locking by default.  On some file systems this is not
+#' 
+#' HDF5 2.0.0 uses file locking by default.  On some file systems this is not
 #' available, and the HDF5 library will throw an error if the user attempts to
 #' create or access a file located on such a file system.  These functions help
 #' identify if file locking is available without throwing an error, and allow
@@ -82,7 +82,6 @@ h5testFileLocking <- function(location) {
   lock_status <- .Call("_h5fileLock", file, PACKAGE = "rhdf5")
 
   file.remove(file)
-
   return(lock_status >= 0)
 }
 

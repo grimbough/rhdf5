@@ -24,28 +24,26 @@ test_that("Property list creation & closure", {
 test_that("setting and getting libhdf5 version bounds", {
   expect_silent(pid1 <- H5Pcreate("H5P_FILE_ACCESS"))
 
-  expect_output(version_bounds <- H5Pget_libver_bounds(pid1), regexp = "^low")
-  expect_is(version_bounds, "character")
-  expect_equivalent(
-    version_bounds,
-    c("H5F_LIBVER_EARLIEST", "H5F_LIBVER_LATEST")
-  )
-  ## V18 is different from both EARLIEST and LATEST
-  expect_silent(H5Pset_libver_bounds(
-    pid1,
-    libver_low = "H5F_LIBVER_EARLIEST",
-    libver_high = "H5F_LIBVER_V18"
-  ))
-  expect_output(version_bounds <- H5Pget_libver_bounds(pid1), regexp = "^low")
-  expect_equivalent(version_bounds, c("H5F_LIBVER_EARLIEST", "H5F_LIBVER_V18"))
-  ## V110 is the same as using LATEST
+  expect_output(default_version_bounds <- H5Pget_libver_bounds(pid1), regexp = "^low")
+  expect_is(default_version_bounds, "character")
+
+  ## Setters work as expected.
   expect_silent(H5Pset_libver_bounds(
     pid1,
     libver_low = "H5F_LIBVER_V110",
-    libver_high = "H5F_LIBVER_LATEST"
+    libver_high = "H5F_LIBVER_V114"
   ))
   expect_output(version_bounds <- H5Pget_libver_bounds(pid1), regexp = "^low")
-  expect_equivalent(version_bounds, c("H5F_LIBVER_LATEST", "H5F_LIBVER_LATEST"))
+  expect_equivalent(version_bounds, c("H5F_LIBVER_V110", "H5F_LIBVER_V114"))
+
+  # Restoring the bounds to their original values.
+  expect_silent(H5Pset_libver_bounds(
+    pid1,
+    libver_low = default_version_bounds[1],
+    libver_high = default_version_bounds[2]
+  ))
+  expect_output(version_bounds <- H5Pget_libver_bounds(pid1), regexp = "^low")
+  expect_identical(version_bounds, default_version_bounds)
 
   expect_silent(H5Pclose(pid1))
 })

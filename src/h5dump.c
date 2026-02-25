@@ -2,7 +2,7 @@
 
 herr_t opAddToDumpTree( hid_t g_id, const char *name, const H5L_info_t *info, void *op_data) {
     
-    H5O_info_t infobuf;
+    H5O_info1_t infobuf;
     H5L_info_t Linfobuf;
     opDumpTree *data = (opDumpTree *) op_data;
     herr_t herr = 0;
@@ -14,7 +14,7 @@ herr_t opAddToDumpTree( hid_t g_id, const char *name, const H5L_info_t *info, vo
         H5Lget_val(g_id, name, linkVal, Linfobuf.u.val_size, H5P_DEFAULT);
         return herr;
     }
-    herr = H5Oget_info_by_name (g_id, name, &infobuf, H5P_DEFAULT);
+    herr = H5Oget_info_by_name2 (g_id, name, &infobuf, H5O_INFO_BASIC, H5P_DEFAULT);
 
     opObjListElement *newElement = (opObjListElement *) R_alloc(1, sizeof(struct opObjListElement) );
     newElement->idx = data->n;
