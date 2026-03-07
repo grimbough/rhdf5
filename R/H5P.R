@@ -9,11 +9,20 @@
 #' @param native Defunct! Doesn't achieve anything for property lists.
 #'
 #' @export
-H5Pcreate <- function(type = h5default("H5P"), native = FALSE) {
+H5Pcreate <- function(type = h5default("H5P"), native) {
   type <- h5checkConstants("H5P", type)
   pid <- .Call("_H5Pcreate", type, PACKAGE = "rhdf5")
+  if (!missing(native)) {
+    warning(
+      "The 'native' argument to H5Pcreate() has no effect and is defunct. ",
+      "It will be removed in a the next version of rhdf5. ",
+      "Please remove this argument."
+    )
+  }
   if (pid > 0) {
-    h5plist <- new("H5IdComponent", ID = pid, native = native)
+    # The native argument has no effect in this case. So we set it to FALSE
+    # but the actual value doesn't really matter.
+    h5plist <- new("H5IdComponent", ID = pid, native = FALSE)
   } else {
     message("HDF5: unable to create property list")
     h5plist <- FALSE
