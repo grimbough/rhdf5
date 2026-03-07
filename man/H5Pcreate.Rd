@@ -4,7 +4,7 @@
 \alias{H5Pcreate}
 \title{Create a new HDF5 property list}
 \usage{
-H5Pcreate(type = h5default("H5P"), native = FALSE)
+H5Pcreate(type = h5default("H5P"), native)
 }
 \arguments{
 \item{type}{A character name of a property list type. See \code{h5const("H5P")}
