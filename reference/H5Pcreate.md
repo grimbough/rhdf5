@@ -5,7 +5,7 @@ Create a new HDF5 property list
 ## Usage
 
 ``` r
-H5Pcreate(type = h5default("H5P"), native = FALSE)
+H5Pcreate(type = h5default("H5P"), native)
 ```
 
 ## Arguments

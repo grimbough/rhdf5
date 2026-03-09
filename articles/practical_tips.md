@@ -54,7 +54,7 @@ system.time(
 ```
 
     ##    user  system elapsed 
-    ##   0.029   0.003   0.032
+    ##   0.027   0.006   0.033
 
 Next, instead of selecting 10,000 consecutive columns we’ll ask for
 every other column. This should still return the same amount of data and
@@ -72,7 +72,7 @@ system.time(
 ```
 
     ##    user  system elapsed 
-    ##   0.064   0.003   0.066
+    ##   0.065   0.001   0.067
 
 We can see this is marginally slower, because there’s a small overhead
 in selecting this disjoint set of columns, but it’s only marginal and
@@ -103,7 +103,7 @@ system.time(
 ```
 
     ##    user  system elapsed 
-    ##   0.059   0.000   0.060
+    ##   0.061   0.000   0.061
 
 ``` r
 identical(res2, res3)
@@ -154,10 +154,10 @@ system.time(res4 <- vapply(
 ```
 
     ##    user  system elapsed 
-    ##  19.485   0.060  19.547
+    ##  19.991   0.064  20.058
 
 This is clearly a terrible idea, it takes ages! For reference, using the
-`index` argument with this set of columns takes 0.086 seconds. This poor
+`index` argument with this set of columns takes 0.088 seconds. This poor
 performance is driven by two things:
 
 1.  Our dataset was created as a single chunk. This means for each
@@ -203,7 +203,7 @@ system.time(res5 <- vapply(
 ```
 
     ##    user  system elapsed 
-    ##   2.441   0.040   2.481
+    ##   2.472   0.046   2.519
 
 This is still quite slow, and the remaining time is being spent on the
 overheads associated with multiple calls to
@@ -228,7 +228,7 @@ system.time(f2())
 ```
 
     ##    user  system elapsed 
-    ##   0.586   0.004   0.590
+    ##   0.589   0.008   0.597
 
 We can see this has a significant effect, although it’s still an order
 of magnitude slower than when we were dealing with regularly spaced
@@ -448,15 +448,15 @@ Below we can see some timings comparing calling `simple_writer()` with
     ## # A tibble: 4 × 3
     ##   expression               min median
     ##   <bch:expr>             <dbl>  <dbl>
-    ## 1 simple writer           29.1   29.1
+    ## 1 simple writer           28.9   29.0
     ## 2 split/gather - 1 core   29.5   29.5
-    ## 3 split/gather - 2 cores  15.2   15.4
-    ## 4 split/gather - 4 cores  11.3   11.6
+    ## 3 split/gather - 2 cores  15.2   15.3
+    ## 4 split/gather - 4 cores  11.6   11.6
 
 We can see from our benchmark results that there is some performance
 improvement to be achieved by using the parallel approach. Based on the
 median times of out three iterations using two cores sees an speedup of
-1.9 and 2.5 with 4 cores. This isn’t quite linear, presumably because
+1.89 and 2.5 with 4 cores. This isn’t quite linear, presumably because
 there are overheads involved both in using a two-step process and
 initialising the parallel workers, but it is a noticeable improvement.
 
@@ -484,24 +484,24 @@ initialising the parallel workers, but it is a noticeable improvement.
     ## 
     ## other attached packages:
     ## [1] BiocParallel_1.44.0 ggplot2_4.0.2       dplyr_1.2.0        
-    ## [4] rhdf5_2.55.13       BiocStyle_2.38.0   
+    ## [4] rhdf5_2.55.14       BiocStyle_2.38.0   
     ## 
     ## loaded via a namespace (and not attached):
     ##  [1] gtable_0.3.6        jsonlite_2.0.0      compiler_4.5.2     
     ##  [4] BiocManager_1.30.27 tidyselect_1.2.1    rhdf5filters_1.22.0
-    ##  [7] parallel_4.5.2      jquerylib_0.1.4     systemfonts_1.3.1  
-    ## [10] scales_1.4.0        textshaping_1.0.4   yaml_2.3.12        
+    ##  [7] parallel_4.5.2      jquerylib_0.1.4     systemfonts_1.3.2  
+    ## [10] scales_1.4.0        textshaping_1.0.5   yaml_2.3.12        
     ## [13] fastmap_1.2.0       R6_2.6.1            labeling_0.4.3     
     ## [16] generics_0.1.4      knitr_1.51          tibble_3.3.1       
     ## [19] bookdown_0.46       desc_1.4.3          bslib_0.10.0       
     ## [22] pillar_1.11.1       RColorBrewer_1.1-3  rlang_1.1.7        
     ## [25] utf8_1.2.6          cachem_1.1.0        xfun_0.56          
-    ## [28] S7_0.2.1            fs_1.6.6            sass_0.4.10        
+    ## [28] S7_0.2.1            fs_1.6.7            sass_0.4.10        
     ## [31] cli_3.6.5           withr_3.0.2         pkgdown_2.2.0      
     ## [34] magrittr_2.0.4      Rhdf5lib_1.32.0     digest_0.6.39      
     ## [37] grid_4.5.2          lifecycle_1.0.5     vctrs_0.7.1        
     ## [40] bench_1.1.4         evaluate_1.0.5      glue_1.8.0         
-    ## [43] farver_2.1.2        codetools_0.2-20    ragg_1.5.0         
+    ## [43] farver_2.1.2        codetools_0.2-20    ragg_1.5.1         
     ## [46] rmarkdown_2.30      tools_4.5.2         pkgconfig_2.0.3    
     ## [49] htmltools_0.5.9
 
