@@ -29,7 +29,7 @@ Depends:
     R (>= 4.0.0)
 Imports: 
     rhdf5filters (>= 1.15.5),
-    Rhdf5lib (>= 1.13.4)
+    Rhdf5lib (>= 1.33.1)
 Suggests: 
     bench,
     BiocParallel,
