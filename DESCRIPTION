@@ -46,6 +46,8 @@ LinkingTo:
     Rhdf5lib
 VignetteBuilder: 
     knitr
+Remotes:
+    Huber-group-EMBL/Rhdf5lib#68
 biocViews: Infrastructure, DataImport
 Encoding: UTF-8
 LazyLoad: true
