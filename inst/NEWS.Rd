@@ -11,6 +11,10 @@
       disallowed in the next release cycle.
       Users should either specify `bit64conversion="int"` explicitly, or omit
       this argument entirely if they wish to use the provided default.
+      \item The `native` argument to `H5Pcreate()` now triggers an explicit
+      deprecation warning and will be removed in the next release cycle. This
+      argument was already documented as defunct (without warning) in Bioconductor
+      3.10.
     }
   }
 
