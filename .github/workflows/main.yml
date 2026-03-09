@@ -22,11 +22,14 @@ jobs:
       fail-fast: false
       matrix:
         config:
-        - { os: windows-latest, bioc-version: 'devel', bioc-mirror: 'https://bioconductor.posit.co/',  Ncpus: 2, cache: 1}
-        - { os: macOS-latest,   bioc-version: 'devel', bioc-mirror: 'https://bioconductor.posit.co/',  Ncpus: 3, cache: 1}
-        - { os: macos-15-intel, bioc-version: 'devel', bioc-mirror: 'https://bioconductor.posit.co/',  Ncpus: 3, cache: 2}
-        - { os: ubuntu-latest,  bioc-version: 'devel', bioc-mirror: 'https://bioconductor.posit.co/',  Ncpus: 4, cache: 1}
-        - { os: ubuntu-latest,  bioc-version: 'release',  bioc-mirror: 'https://packagemanager.posit.co/bioconductor',  Ncpus: 4, cache: 1}
+        - { os: windows-latest,   bioc-version: 'devel',   bioc-mirror: 'https://bioconductor.posit.co/',  Ncpus: 4, cache: 1}
+        - { os: windows-11-arm,   bioc-version: 'devel',   bioc-mirror: 'https://bioconductor.posit.co/',  Ncpus: 4, cache: 2}
+        - { os: macOS-latest,     bioc-version: 'devel',   bioc-mirror: 'https://bioconductor.posit.co/',  Ncpus: 3, cache: 1}
+        - { os: macos-15-intel,   bioc-version: 'devel',   bioc-mirror: 'https://bioconductor.posit.co/',  Ncpus: 3, cache: 2}
+        - { os: ubuntu-latest,    bioc-version: 'devel',   bioc-mirror: 'https://bioconductor.posit.co/',  Ncpus: 4, cache: 1}
+        - { os: ubuntu-latest,    bioc-version: 'release', bioc-mirror: 'https://packagemanager.posit.co/bioconductor',  Ncpus: 4, cache: 1}
+        - { os: ubuntu-24.04-arm, bioc-version: 'devel',   bioc-mirror: 'https://bioconductor.posit.co/',  Ncpus: 4, cache: 2}
+
     steps:
       - uses: actions/checkout@v6
 
@@ -51,6 +54,9 @@ jobs:
           cache-version: ${{ matrix.config.cache }}
           extra-packages: |
             rcmdcheck
+
+      - name: Work around https://github.com/grimbough/bioc-actions/issues/18
+        uses: r-lib/actions/setup-tinytex@v2
 
       - name: Bioc - Build, Install, Check
         uses: grimbough/bioc-actions/build-install-check@v1
