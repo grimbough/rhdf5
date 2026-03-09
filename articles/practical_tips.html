@@ -123,7 +123,7 @@ the first 10,000 columns and time how long this takes.</p>
 <span>  <span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##    user  system elapsed </span></span>
-<span><span class="co">##   0.027   0.006   0.033</span></span></code></pre>
+<span><span class="co">##   0.028   0.007   0.034</span></span></code></pre>
 <p>Next, instead of selecting 10,000 consecutive columns we’ll ask for
 every other column. This should still return the same amount of data and
 since our dataset is not chunked involves reading the same volume from
@@ -137,7 +137,7 @@ disk.</p>
 <span>  <span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##    user  system elapsed </span></span>
-<span><span class="co">##   0.065   0.001   0.067</span></span></code></pre>
+<span><span class="co">##   0.066   0.002   0.068</span></span></code></pre>
 <p>We can see this is marginally slower, because there’s a small
 overhead in selecting this disjoint set of columns, but it’s only
 marginal and using the <code>index</code> argument looks sufficient.</p>
@@ -165,7 +165,7 @@ the same as in our previous example.</p>
 <span>  <span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##    user  system elapsed </span></span>
-<span><span class="co">##   0.061   0.000   0.061</span></span></code></pre>
+<span><span class="co">##   0.061   0.000   0.062</span></span></code></pre>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/identical.html" class="external-link">identical</a></span><span class="op">(</span><span class="va">res2</span>, <span class="va">res3</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] TRUE</span></span></code></pre>
@@ -209,9 +209,9 @@ columns here&lt;/p&gt;"><sup>2</sup></a> and then apply the function
 <span>  name <span class="op">=</span> <span class="st">"counts"</span></span>
 <span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##    user  system elapsed </span></span>
-<span><span class="co">##  19.991   0.064  20.058</span></span></code></pre>
+<span><span class="co">##  20.374   0.079  20.456</span></span></code></pre>
 <p>This is clearly a terrible idea, it takes ages! For reference, using
-the <code>index</code> argument with this set of columns takes 0.088
+the <code>index</code> argument with this set of columns takes 0.095
 seconds. This poor performance is driven by two things:</p>
 <ol style="list-style-type: decimal">
 <li>Our dataset was created as a single chunk. This means for each
@@ -251,7 +251,7 @@ over and over.</p>
 <span>  name <span class="op">=</span> <span class="st">"counts_chunked"</span></span>
 <span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##    user  system elapsed </span></span>
-<span><span class="co">##   2.472   0.046   2.519</span></span></code></pre>
+<span><span class="co">##   2.582   0.046   2.628</span></span></code></pre>
 <p>This is still quite slow, and the remaining time is being spent on
 the overheads associated with multiple calls to <code><a href="../reference/h5_read.html">h5read()</a></code>.
 To reduce these the function <code>f2()</code><a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content="&lt;p&gt;This is not the greatest function ever, things like the
@@ -271,7 +271,7 @@ unions down by not having too many columns in any one call.</p>
 <span><span class="op">}</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="fu">f2</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##    user  system elapsed </span></span>
-<span><span class="co">##   0.589   0.008   0.597</span></span></code></pre>
+<span><span class="co">##   0.619   0.004   0.623</span></span></code></pre>
 <p>We can see this has a significant effect, although it’s still an
 order of magnitude slower than when we were dealing with regularly
 spaced subsets. The efficiency here will vary based on a number of
@@ -280,7 +280,7 @@ column index, and you varying the <code>block_size</code> argument will
 produce differing performances. The plot below shows the timings
 achieved by providing a selection of values to <code>block_size</code>.
 It suggests the optimal parameter in this case is probably a block size
-of 10000, which took 0.09 seconds - noticeably faster than when passing
+of 10000, which took 0.1 seconds - noticeably faster than when passing
 all columns to the <code>index</code> argument in a single call.</p>
 <p><img src="practical_tips_files/figure-html/unnamed-chunk-2-1.png" class="r-plt" alt="" width="576"></p>
 <div class="section level4">
@@ -476,14 +476,14 @@ is:</p>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 4 × 3</span></span></span>
 <span><span class="co">##   expression               min median</span></span>
 <span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;bch:expr&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">1</span> simple writer           28.9   29.0</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">2</span> split/gather - 1 core   29.5   29.5</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">3</span> split/gather - 2 cores  15.2   15.3</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">1</span> simple writer           29.5   29.5</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">2</span> split/gather - 1 core   29.8   29.8</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">3</span> split/gather - 2 cores  15.4   15.5</span></span>
 <span><span class="co">## <span style="color: #BCBCBC;">4</span> split/gather - 4 cores  11.6   11.6</span></span></code></pre>
 <p>We can see from our benchmark results that there is some performance
 improvement to be achieved by using the parallel approach. Based on the
 median times of out three iterations using two cores sees an speedup of
-1.89 and 2.5 with 4 cores. This isn’t quite linear, presumably because
+1.91 and 2.5 with 4 cores. This isn’t quite linear, presumably because
 there are overheads involved both in using a two-step process and
 initialising the parallel workers, but it is a noticeable
 improvement.</p>
