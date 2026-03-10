@@ -28,9 +28,7 @@ SEXP _H5Sclose( SEXP _space_id ) {
         removeHandle(space_id);
     }
     
-    SEXP Rval = allocVector(INTSXP, 1);
-    INTEGER(Rval)[0] = herr;
-    return Rval;
+    return ScalarInteger(herr);
 }
 
 /* hid_t H5Screate_simple( int rank, const hsize_t * dims, const hsize_t * maxdims ) */
@@ -70,9 +68,7 @@ SEXP _H5Sis_simple( SEXP _space_id ) {
     hid_t space_id = STRSXP_2_HID( _space_id );
     htri_t htri = H5Sis_simple( space_id );
     
-    SEXP Rval = allocVector(INTSXP, 1);
-    INTEGER(Rval)[0] = htri;
-    return Rval;
+    return ScalarInteger(htri);
 }
 
 /* int H5Sget_simple_extent_dims(hid_t space_id, hsize_t *dims, hsize_t *maxdims ) */

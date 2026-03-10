@@ -34,9 +34,7 @@ SEXP _H5Tset_size( SEXP _dtype_id, SEXP _size ) {
     herr = H5Tset_size(dtype_id, H5T_VARIABLE);
   }
 
-  SEXP Rval = allocVector(INTSXP, 1);
-  INTEGER(Rval)[0] = herr;
-  return Rval;
+  return ScalarInteger(herr);
 }
 
 /* size_t H5Tget_size(hid_t type_id); */
@@ -47,8 +45,7 @@ SEXP _H5Tget_size( SEXP _dtype_id ) {
 
   if (!H5Tis_variable_str(dtype_id)) {
     size_t size = H5Tget_size( dtype_id );
-    Rval = allocVector(INTSXP, 1);
-    INTEGER(Rval)[0] = size;
+    Rval = ScalarInteger(size);
   }
 
   return Rval;
@@ -77,9 +74,7 @@ SEXP _H5Tset_strpad( SEXP _dtype_id, SEXP _strpad ) {
   
   herr_t herr = H5Tset_strpad(dtype_id, strpad);
   
-  SEXP Rval = allocVector(INTSXP, 1);
-  INTEGER(Rval)[0] = herr;
-  return Rval;
+  return ScalarInteger(herr);
 }
 
 /* size_t H5Tget_strpad(hid_t type_id); */
@@ -87,10 +82,8 @@ SEXP _H5Tget_strpad( SEXP _dtype_id ) {
   
   hid_t dtype_id = STRSXP_2_HID( _dtype_id );
   H5T_str_t strpad = H5Tget_strpad( dtype_id );
-  
-  SEXP Rval = allocVector(INTSXP, 1);
-  INTEGER(Rval)[0] = strpad;
-  return Rval;
+
+  return ScalarInteger(strpad);
 }
 
 /* herr_t H5Tset_cset( hid_t dtype_id, H5T_cset_t csetpad ) */
@@ -113,9 +106,7 @@ SEXP _H5Tset_cset( SEXP _dtype_id, SEXP _cset ) {
 
   herr_t herr = H5Tset_cset(dtype_id, cset);
 
-  SEXP Rval = allocVector(INTSXP, 1);
-  INTEGER(Rval)[0] = herr;
-  return Rval;
+  return ScalarInteger(herr);
 }
 
 /* size_t H5Tget_cset(hid_t type_id); */
@@ -124,9 +115,7 @@ SEXP _H5Tget_cset( SEXP _dtype_id ) {
   hid_t dtype_id = STRSXP_2_HID( _dtype_id );
   H5T_cset_t cset = H5Tget_cset( dtype_id );
 
-  SEXP Rval = allocVector(INTSXP, 1);
-  INTEGER(Rval)[0] = cset;
-  return Rval;
+  return ScalarInteger(cset);
 }
 
 /* htri_t H5Tis_variable_str( hid_t dtype_id ) */
@@ -135,9 +124,7 @@ SEXP _H5Tis_variable_str( SEXP _dtype_id ) {
   hid_t dtype_id = STRSXP_2_HID( _dtype_id );
   htri_t res = H5Tis_variable_str( dtype_id );
   
-  SEXP Rval = allocVector(INTSXP, 1);
-  INTEGER(Rval)[0] = res;
-  return Rval;
+  return ScalarInteger(res);
 }
 
 /* herr_t H5Tset_precision( hid_t dtype_id, size_t precision ) */

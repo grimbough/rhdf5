@@ -48,11 +48,9 @@ SEXP _H5PLsize(void) {
   }
   
   if(nvals <= INT32_MAX) {
-    Rval = allocVector(INTSXP, 1);
-    INTEGER(Rval)[0] = (int) nvals;
+    Rval = ScalarInteger((int) nvals);
   } else {
-    Rval = allocVector(REALSXP, 1);
-    REAL(Rval)[0] = (double) nvals;
+    Rval = ScalarReal((double) nvals);
   }
   return Rval;
 }

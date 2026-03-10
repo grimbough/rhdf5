@@ -20,8 +20,5 @@ SEXP _h5fileLock(SEXP _file_name) {
   HDclose(fd);
   
   /* return value of lock attempt */
-  Rval = allocVector(INTSXP, 1);
-  INTEGER(Rval)[0] = lk;
-  
-  return(Rval);
+  return ScalarInteger(lk);
 }

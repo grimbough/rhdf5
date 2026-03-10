@@ -130,9 +130,7 @@ SEXP _H5Dclose( SEXP _dataset_id ) {
         removeHandle(dataset_id);
     }
     
-    SEXP Rval = allocVector(INTSXP, 1);
-    INTEGER(Rval)[0] = herr;
-    return Rval;
+    return ScalarInteger(herr);
 }
 
 /* hsize_t H5Dget_storage_size( hid_t dataset_id ) */
@@ -1169,9 +1167,7 @@ SEXP _H5Dwrite( SEXP _dataset_id, SEXP _buf, SEXP _file_space_id, SEXP _mem_spac
     }
     
     herr_t herr = H5Dwrite(dataset_id, mem_type_id, mem_space_id, file_space_id, H5P_DEFAULT, buf );
-    SEXP Rval = allocVector(INTSXP, 1);
-    INTEGER(Rval)[0] = herr;
-    return Rval;
+    return ScalarInteger(herr);
 }
 
 /* hid_t H5Dget_space(hid_t dataset_id ) */
@@ -1216,9 +1212,7 @@ SEXP _H5Dset_extent( SEXP _dataset_id, SEXP _size ) {
     } else {
         error("size parameter in H5Dset_extend has to be a vector of length > 0.");
     }
-    SEXP Rval = allocVector(INTSXP, 1);
-    INTEGER(Rval)[0] = herr;
-    return Rval;
+    return ScalarInteger(herr);
 }
 
 SEXP _H5Dget_num_chunks( SEXP _dataset_id, SEXP _dataspace_id ) {
@@ -1231,6 +1225,5 @@ SEXP _H5Dget_num_chunks( SEXP _dataset_id, SEXP _dataspace_id ) {
         error("Unable to determine the number of chunks\n");
     }
 
-    SEXP Rval = ScalarInteger(nchunks);
-    return(Rval);
+    return ScalarInteger(nchunks);
 }
