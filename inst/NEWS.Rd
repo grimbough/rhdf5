@@ -51,6 +51,8 @@
       functions. Both functions now accept either a HDF5 data type id as a 
       string, or the output of \code{H5Tcopy()}. Thanks to Luke Zappia for
       the report: \url{https://github.com/Huber-group-EMBL/rhdf5/issues/162}.
+      \item \code{h5version()} now also reports the version of the Rhdf5lib
+      package.
     }
   }
 
