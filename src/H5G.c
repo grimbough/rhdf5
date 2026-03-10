@@ -47,9 +47,7 @@ SEXP _H5Gclose( SEXP _group_id ) {
     removeHandle(group_id);
   }
 
-  SEXP Rval = allocVector(INTSXP, 1);
-  INTEGER(Rval)[0] = herr;
-  return Rval;
+  return ScalarInteger(herr);
 }
 
 /* herr_t H5Gget_info( hid_t group_id, H5G_info_t *group_info ) */

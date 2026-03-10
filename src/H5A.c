@@ -75,9 +75,7 @@ SEXP _H5Aclose( SEXP _attr_id ) {
     removeHandle(attr_id);
   }
 
-  SEXP Rval = allocVector(INTSXP, 1);
-  INTEGER(Rval)[0] = herr;
-  return Rval;
+  return ScalarInteger(herr);
 }
 
 /* herr_t H5Adelete( hid_t loc_id, const char *attr_name ) */
@@ -481,9 +479,7 @@ SEXP _H5Awrite( SEXP _attr_id, SEXP _buf) {
 
     herr_t herr = H5Awrite(attr_id, mem_type_id, buf );
     if(herr < 0) { error("Error writing attribute"); }
-    SEXP Rval = allocVector(INTSXP, 1);
-    INTEGER(Rval)[0] = herr;
-    return Rval;
+    return ScalarInteger(herr);
 }
 
 /* ssize_t H5Aget_name(hid_t attr_id, size_t buf_size, char *buf ) */

@@ -2038,9 +2038,7 @@ SEXP _H5Pclose_class( SEXP _class ) {
         removeHandle(class);
     }
     
-    SEXP Rval = allocVector(INTSXP, 1);
-    INTEGER(Rval)[0] = herr;
-    return Rval;
+    return ScalarInteger(herr);
 }
 
 

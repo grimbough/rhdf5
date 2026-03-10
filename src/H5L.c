@@ -8,9 +8,7 @@ SEXP _H5Lcreate_external( SEXP _target_file_name, SEXP _target_obj_name, SEXP _l
     hid_t link_loc_id = STRSXP_2_HID( _link_loc_id );
     const char *link_name = CHAR(STRING_ELT(_link_name, 0));
     herr_t herr = H5Lcreate_external( target_file_name, target_obj_name, link_loc_id, link_name, H5P_DEFAULT, H5P_DEFAULT );
-    SEXP Rval = allocVector(INTSXP, 1);
-    INTEGER(Rval)[0] = herr;
-    return Rval;
+    return ScalarInteger(herr);
 }
 
 /* htri_t H5Lexists( hid_t loc_id, const char *name, hid_t lapl_id ); */

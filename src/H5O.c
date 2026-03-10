@@ -70,9 +70,7 @@ SEXP _H5Oclose( SEXP _object_id ) {
     removeHandle(object_id);
   }
 
-  SEXP Rval = allocVector(INTSXP, 1);
-  INTEGER(Rval)[0] = herr;
-  return Rval;
+  return ScalarInteger(herr);
 }
 
 SEXP _H5Olink( SEXP _object_id, SEXP _new_loc_id, SEXP _new_link_name, SEXP _lcpl_id, SEXP _lapl_id) {
@@ -84,9 +82,7 @@ SEXP _H5Olink( SEXP _object_id, SEXP _new_loc_id, SEXP _new_link_name, SEXP _lcp
   
   herr_t herr = H5Olink(object_id, new_loc_id, new_link_name, lcpl_id, lapl_id );
   
-  SEXP Rval = allocVector(INTSXP, 1);
-  INTEGER(Rval)[0] = herr;
-  return Rval;
+  return ScalarInteger(herr);
 }
 
 /* herr_t H5Ocopy	(hid_t src_loc_id, const char *src_name, hid_t dst_loc_id, const char *dst_name, hid_t ocpypl_id, hid_t lcpl_id) */
@@ -103,9 +99,7 @@ SEXP _H5Ocopy( SEXP _src_loc_id, SEXP _src_name, SEXP _dest_loc_id, SEXP _dest_n
   
   herr_t herr = H5Ocopy(src_loc_id, src_name, dest_loc_id, dest_name, ocpypl_id, lcpl_id);
   
-  SEXP Rval = allocVector(INTSXP, 1);
-  INTEGER(Rval)[0] = herr;
-  return Rval;
+  return ScalarInteger(herr);
 }
 
 /* herr_t H5Oget_info( hid_t object_id, H5O_info_t *object_info ) */
@@ -157,8 +151,7 @@ SEXP _H5Oget_info( SEXP _object_id ) {
   classgets(btime, class);
   
   // set timezone
-  tz_attr = PROTECT(allocVector(STRSXP, 1));
-  SET_STRING_ELT(tz_attr, 0, mkChar("UTC"));
+  tz_attr = PROTECT(Rf_ScalarString(mkChar("UTC")));
   setAttrib(atime, install("tzone"), tz_attr);
   setAttrib(mtime, install("tzone"), tz_attr);
   setAttrib(ctime, install("tzone"), tz_attr);
