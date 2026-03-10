@@ -62,6 +62,9 @@
       every changes via GitHub Actions.
       \item Number of skipped tests (when testing, e.g., features only available
       in certain situations) is now explicitly reported.
+      \item GitHub Actions now run on ARM64 versions of all operating systems.
+      \item rchk is now part of our continuous integration setup to detect potential
+      memory issues in the C code.
     }
   }
 
