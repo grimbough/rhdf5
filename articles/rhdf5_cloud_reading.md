@@ -160,7 +160,7 @@ sessionInfo()
     ## [1] stats     graphics  grDevices utils     datasets  methods   base     
     ## 
     ## other attached packages:
-    ## [1] rhdf5_2.55.14    BiocStyle_2.38.0
+    ## [1] rhdf5_2.55.15    BiocStyle_2.38.0
     ## 
     ## loaded via a namespace (and not attached):
     ##  [1] cli_3.6.5           knitr_1.51          rlang_1.1.7        

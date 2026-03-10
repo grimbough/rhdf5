@@ -23,12 +23,12 @@ Source:
 [`DESCRIPTION`](https://github.com/Huber-group-EMBL/rhdf5/blob/devel/DESCRIPTION)
 
 Fischer B, Smith M, Pau G (2026). *rhdf5: R Interface to HDF5*. R
-package version 2.55.14, <https://huber-group-embl.github.io/rhdf5/>.
+package version 2.55.15, <https://huber-group-embl.github.io/rhdf5/>.
 
     @Manual{,
       title = {rhdf5: R Interface to HDF5},
       author = {Bernd Fischer and Mike Smith and Gregoire Pau},
       year = {2026},
-      note = {R package version 2.55.14},
+      note = {R package version 2.55.15},
       url = {https://huber-group-embl.github.io/rhdf5/},
     }

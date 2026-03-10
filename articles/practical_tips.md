@@ -54,7 +54,7 @@ system.time(
 ```
 
     ##    user  system elapsed 
-    ##   0.028   0.004   0.032
+    ##   0.025   0.006   0.032
 
 Next, instead of selecting 10,000 consecutive columns we’ll ask for
 every other column. This should still return the same amount of data and
@@ -72,7 +72,7 @@ system.time(
 ```
 
     ##    user  system elapsed 
-    ##   0.066   0.002   0.067
+    ##   0.064   0.002   0.067
 
 We can see this is marginally slower, because there’s a small overhead
 in selecting this disjoint set of columns, but it’s only marginal and
@@ -103,7 +103,7 @@ system.time(
 ```
 
     ##    user  system elapsed 
-    ##   0.060   0.000   0.061
+    ##   0.060   0.000   0.059
 
 ``` r
 identical(res2, res3)
@@ -154,7 +154,7 @@ system.time(res4 <- vapply(
 ```
 
     ##    user  system elapsed 
-    ##  19.536   0.051  19.589
+    ##  19.399   0.063  19.465
 
 This is clearly a terrible idea, it takes ages! For reference, using the
 `index` argument with this set of columns takes 0.087 seconds. This poor
@@ -203,7 +203,7 @@ system.time(res5 <- vapply(
 ```
 
     ##    user  system elapsed 
-    ##   2.460   0.043   2.503
+    ##   2.422   0.037   2.459
 
 This is still quite slow, and the remaining time is being spent on the
 overheads associated with multiple calls to
@@ -228,7 +228,7 @@ system.time(f2())
 ```
 
     ##    user  system elapsed 
-    ##   0.588   0.004   0.592
+    ##   0.580   0.005   0.585
 
 We can see this has a significant effect, although it’s still an order
 of magnitude slower than when we were dealing with regularly spaced
@@ -448,15 +448,15 @@ Below we can see some timings comparing calling `simple_writer()` with
     ## # A tibble: 4 × 3
     ##   expression               min median
     ##   <bch:expr>             <dbl>  <dbl>
-    ## 1 simple writer           29.1   29.2
-    ## 2 split/gather - 1 core   29.5   29.6
-    ## 3 split/gather - 2 cores  15.1   15.3
-    ## 4 split/gather - 4 cores  11.4   11.5
+    ## 1 simple writer           29.0   29.0
+    ## 2 split/gather - 1 core   29.3   29.3
+    ## 3 split/gather - 2 cores  15.2   15.2
+    ## 4 split/gather - 4 cores  11.5   11.5
 
 We can see from our benchmark results that there is some performance
 improvement to be achieved by using the parallel approach. Based on the
 median times of out three iterations using two cores sees an speedup of
-1.9 and 2.5 with 4 cores. This isn’t quite linear, presumably because
+1.91 and 2.5 with 4 cores. This isn’t quite linear, presumably because
 there are overheads involved both in using a two-step process and
 initialising the parallel workers, but it is a noticeable improvement.
 
@@ -484,7 +484,7 @@ initialising the parallel workers, but it is a noticeable improvement.
     ## 
     ## other attached packages:
     ## [1] BiocParallel_1.44.0 ggplot2_4.0.2       dplyr_1.2.0        
-    ## [4] rhdf5_2.55.14       BiocStyle_2.38.0   
+    ## [4] rhdf5_2.55.15       BiocStyle_2.38.0   
     ## 
     ## loaded via a namespace (and not attached):
     ##  [1] gtable_0.3.6        jsonlite_2.0.0      compiler_4.5.2     
