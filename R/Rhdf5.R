@@ -75,11 +75,11 @@ getDatatypeClass <- function(type) {
 #' @importFrom utils packageVersion
 #' @export h5version
 h5version <- function() {
-  part1 <- paste0(
-    "This is Bioconductor rhdf5 ",
+  part1 <- sprintf(
+    "This is Bioconductor rhdf5 %s linking to C-library HDF5 %s (Rhdf5lib version: %s)",
     as.character(packageVersion("rhdf5")),
-    " linking to C-library HDF5 ",
-    paste(H5get_libversion(), collapse = ".")
+    paste(H5get_libversion(), collapse = "."),
+    as.character(packageVersion("Rhdf5lib"))
   )
 
   part2 <- ifelse(
