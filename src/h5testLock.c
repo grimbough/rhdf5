@@ -2,7 +2,6 @@
 
 SEXP _h5fileLock(SEXP _file_name) {
   
-  SEXP Rval;
   const char *file_name = CHAR(STRING_ELT(_file_name, 0));
   int fd = -1;
   int lk = -1;
