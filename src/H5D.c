@@ -486,9 +486,10 @@ SEXP H5Dread_helper_STRING(hid_t dataset_id, hid_t file_space_id, hid_t mem_spac
           bufSTR2[size] = '\0';
           char* bufSTR3 = ((char* )bufSTR);
           for (hsize_t i=0; i<n; i++) {
-              for (size_t j=0; j<size; j++) {
-                  bufSTR2[j] = bufSTR3[i*sizeof(char)*size+j];
-              }
+              memcpy(bufSTR2, bufSTR3 + i * size, size);
+              // We would like to use the dedicated mkCharLen function here, but it doesn't handle embedded nulls, 
+              // which occur on strings shorter than the allocated size,so we use mkChar and ensure the string is 
+              // null-terminated.
               SET_STRING_ELT(Rval, i, mkChar(bufSTR2));
           }
       }
