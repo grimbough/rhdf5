@@ -15,7 +15,7 @@
       deprecation warning and will be removed in the next release cycle. This
       argument was already documented as defunct (without warning) in Bioconductor
       3.10.
-      \item This package now uses HDF5 version 1.14.6.
+      \item This package now uses HDF5 version 1.14.6 via Rhdf5lib 1.33.3.
     }
   }
 
