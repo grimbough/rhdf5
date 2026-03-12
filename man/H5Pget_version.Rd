@@ -6,6 +6,9 @@
 \usage{
 H5Pget_version(...)
 }
+\arguments{
+\item{...}{ignored}
+}
 \value{
 NULL (invisibly)
 }

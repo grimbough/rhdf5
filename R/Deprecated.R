@@ -3,6 +3,8 @@
 #' Deprecated in line with changes in the upstream HDF5 library.
 #' It will be removed in the next version of rhdf5.
 #'
+#' @param ... ignored
+#'
 #' @returns NULL (invisibly)
 #'
 #' @export
