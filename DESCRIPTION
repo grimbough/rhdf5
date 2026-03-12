@@ -47,8 +47,6 @@ LinkingTo:
 VignetteBuilder: 
     knitr
 biocViews: Infrastructure, DataImport
-Remotes: 
-    Huber-group-EMBL/Rhdf5lib#69
 Encoding: UTF-8
 LazyLoad: true
 Roxygen: list(markdown = TRUE)
