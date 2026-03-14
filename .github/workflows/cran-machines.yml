@@ -32,7 +32,7 @@ jobs:
         with:
           extra-packages:
             any::rcmdcheck
-            Huber-group-EMBL/Rhdf5lib # for tests before pushing to Bioconductor
+            Huber-group-EMBL/Rhdf5lib#75 # for tests before pushing to Bioconductor
           needs: check
 
       - uses: r-lib/actions/check-r-package@v2
