@@ -1,0 +1,44 @@
+name: CRAN extra distros
+
+# We had in the past issues on CRAN test machines that didn't show up on our own CI.defaults:
+# In particular, this happened with machines hosted at Oxford.
+on:
+  workflow_dispatch:
+  push:
+    branches: devel
+  pull_request:
+    branches: devel
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  rhel:
+    runs-on: ubuntu-24.04${{matrix.arch=='arm64' && '-arm' || ''}}
+    name: ${{ matrix.distro }} ${{ matrix.arch }}
+    strategy:
+      fail-fast: false
+      matrix:
+        # See https://github.com/r-devel/containers for full list of available images.
+        distro: [ 'fedora']
+        arch: [ 'amd64' ]
+    container:
+      image: ghcr.io/r-devel/${{ matrix.distro }}:latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          extra-packages:
+            any::rcmdcheck
+            Huber-group-EMBL/Rhdf5lib # for tests before pushing to Bioconductor
+          needs: check
+
+      - uses: r-lib/actions/check-r-package@v2
+        with:
+          args: '"--no-manual"'
+        env:
+          NOT_CRAN: false
+          _R_CHECK_DOC_SIZES_: FALSE
+          LANG: en_US.UTF-8
