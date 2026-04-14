@@ -20,13 +20,6 @@
       }
     }
   } else if (storage.mode(obj) == "character") {
-    ## coerce the string "NA" to NA if required
-    if (H5Aexists(h5dataset, name = "as.na")) {
-      na_char_idx <- (obj == "NA")
-      if (any(na_char_idx)) {
-        obj[na_char_idx] <- NA_character_
-      }
-    }
     ## determine if this is ASCII or UTF-8 encoding
     h5type <- H5Dget_type(h5dataset)
     if (H5Tget_cset(h5type) == 1L) {

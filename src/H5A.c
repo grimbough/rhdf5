@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <string.h>
 #include "H5A.h"
 
 /*################################*/
@@ -254,6 +255,15 @@ SEXP H5Aread_helper_STRING(hid_t attr_id, hsize_t n, SEXP Rdim, SEXP _buf, hid_t
     }
 
     for (hsize_t i=0; i<n; i++) {
+      // Check for NA_INTEGER written by read_string_datatype() for NA_character_.
+      if (size >= 4) {
+        int sentinel;
+        memcpy(&sentinel, bufSTR2[i], 4);
+        if (sentinel == NA_INTEGER) {
+          SET_STRING_ELT(Rval, i, NA_STRING);
+          continue;
+        }
+      }
       SET_STRING_ELT(Rval, i, mkChar(bufSTR2[i]));
     }
   }

@@ -399,9 +399,9 @@ h5writeDataset.array <- function(
       if (!variableLengthString && is.null(size)) {
         if (length(obj) > 0) {
           size <- max(nchar(obj, type = "bytes"), na.rm = TRUE)
-          ## if any NA, the minimum string length is 2
-          if (anyNA(obj) && size < 2) {
-            size <- 2
+          ## if any NA, minimum size must be 4 to accommodate NA_INTEGER_
+          if (anyNA(obj) && size < 4) {
+            size <- 4
           }
           ## empty string gives size 0, and errors
           if (size == 0) {

@@ -487,6 +487,15 @@ SEXP H5Dread_helper_STRING(hid_t dataset_id, hid_t file_space_id, hid_t mem_spac
           char* bufSTR3 = ((char* )bufSTR);
           for (hsize_t i=0; i<n; i++) {
               memcpy(bufSTR2, bufSTR3 + i * size, size);
+              // Check for NA_INTEGER written by read_string_datatype() for NA_character_.
+              if (size >= 4) {
+                  int sentinel;
+                  memcpy(&sentinel, bufSTR2, 4);
+                  if (sentinel == NA_INTEGER) {
+                      SET_STRING_ELT(Rval, i, NA_STRING);
+                      continue;
+                  }
+              }
               // We would like to use the dedicated mkCharLen function here, but it doesn't handle embedded nulls, 
               // which occur on strings shorter than the allocated size,so we use mkChar and ensure the string is 
               // null-terminated.

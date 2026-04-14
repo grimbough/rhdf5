@@ -95,15 +95,26 @@ int group_check (struct opObjListElement *od, H5O_token_t target_token, unsigned
 void * read_string_datatype(hid_t mem_type_id, SEXP _buf) {
     if (!H5Tis_variable_str(mem_type_id)) {
         size_t stsize = H5Tget_size( mem_type_id );
-        char * strbuf = (char *)R_alloc(LENGTH(_buf),stsize);
+        char * strbuf = (char *)R_alloc(LENGTH(_buf), stsize);
         size_t i, j, z=0;
 
         for (i=0; i < LENGTH(_buf); i++) {
-            for (j=0; (j < LENGTH(STRING_ELT(_buf,i))) & (j < stsize); j++) {
-                strbuf[z++] = CHAR(STRING_ELT(_buf,i))[j];
-            }
-            for (; j < stsize; j++) {
-                strbuf[z++] = '\0';
+            if (STRING_ELT(_buf, i) == NA_STRING && stsize >= 4) {
+                /* Write NA_INTEGER_ bytes for NA_character_.
+                 * Using memcpy to be endian-agnostic. */
+                int na_int_val = NA_INTEGER;
+                memcpy(strbuf + z, &na_int_val, 4);
+                for (j = 4; j < stsize; j++) {
+                    strbuf[z + j] = '\0';
+                }
+                z += stsize;
+            } else {
+                for (j=0; (j < (size_t)LENGTH(STRING_ELT(_buf,i))) & (j < stsize); j++) {
+                    strbuf[z++] = CHAR(STRING_ELT(_buf,i))[j];
+                }
+                for (; j < stsize; j++) {
+                    strbuf[z++] = '\0';
+                }
             }
         }
         return(strbuf);
