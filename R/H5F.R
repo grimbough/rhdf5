@@ -52,6 +52,10 @@ H5Fcreate <- function(
   invisible(h5file)
 }
 
+
+
+
+
 #' Open an existing HDF5 file
 #'
 #' @details Possible values for the `flags` argument are `H5F_ACC_RDWR` and `H5F_ACC_RDONLY`.
@@ -67,14 +71,20 @@ H5Fcreate <- function(
 #' orientation. Using `native = TRUE` increases HDF5 file portability
 #' between programming languages. A file written with `native = TRUE`
 #' should also be opened for reading with `native = TRUE`.
+#' @param s3 Logical. If `TRUE`, the file specified in `name` is read using
+#' the HDF5 Read-Only S3 virtual file driver. Requires that **Rhdf5lib** was
+#' compiled with S3 support, and that `name` is an `http://` or `https://` URL.
+#' @param s3credentials A list of length three containing the AWS region, access
+#' key ID, and secret access key for accessing files in a private S3 bucket.
+#' Leave as `NULL` for anonymous access to public data.
 #'
 #' @export
-H5Fopen <- function(
-  name,
-  flags = h5default("H5F_ACC_RD"),
-  fapl = NULL,
-  native = FALSE
-) {
+H5Fopen <- function(name,
+                    flags = h5default("H5F_ACC_RD"),
+                    fapl = NULL,
+                    native = FALSE,
+                    s3 = FALSE,
+                    s3credentials = NULL) {
   if (length(name) != 1 || !is.character(name)) {
     stop("'name' must be a character string of length 1")
   }
@@ -82,15 +92,18 @@ H5Fopen <- function(
     name <- normalizePath(name, mustWork = FALSE)
   }
   flags <- h5checkConstants("H5F_ACC_RD", flags)
-
   if (is.null(fapl)) {
-    ## create a new file access property list
     fapl <- H5Pcreate("H5P_FILE_ACCESS")
     on.exit(H5Pclose(fapl))
+    if (isTRUE(s3)) {
+      H5Pset_fapl_ros3(fapl, s3credentials)
+    }
   } else {
     fapl <- h5checktypeAndPLC(fapl, "H5P_FILE_ACCESS", allowNULL = FALSE)
+    if (isTRUE(s3)) {
+      warning("Ignoring s3 = TRUE because an explicit fapl was supplied")
+    }
   }
-
   fid <- .Call("_H5Fopen", name, flags, fapl@ID, PACKAGE = "rhdf5")
   if (fid > 0) {
     h5file <- new("H5IdComponent", ID = fid, native = native)
@@ -100,6 +113,7 @@ H5Fopen <- function(
   }
   invisible(h5file)
 }
+
 
 #' Close access to an HDF5 file
 #'
