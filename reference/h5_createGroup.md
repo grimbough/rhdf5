@@ -51,6 +51,7 @@ Bernd Fischer
 ## Examples
 
 ``` r
+
 h5File <- tempfile(pattern = "ex_createGroup.h5")
 h5createFile(h5File)
 

@@ -23,6 +23,7 @@ not.
 ## Examples
 
 ``` r
+
 h5file <- system.file("testfiles", "h5ex_t_array.h5", package = "rhdf5")
 fid <- H5Fopen(h5file)
 

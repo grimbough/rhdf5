@@ -36,6 +36,7 @@ possible.
 ## Examples
 
 ``` r
+
 ## use an example file and show its location
 h5file <- system.file("testfiles", "h5ex_t_array.h5", package = "rhdf5")
 ## open the file as read only and check this

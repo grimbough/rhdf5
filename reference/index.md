@@ -298,7 +298,7 @@ Functions for working with HDF5 Datatypes
 ### File Creation Properties
 
 - [`H5Pget_version()`](https://huber-group-embl.github.io/rhdf5/reference/H5Pget_version.md)
-  : Get version information for objects in a file creation property list
+  : Deprecated
 - [`H5Pset_shared_mesg_nindexes()`](https://huber-group-embl.github.io/rhdf5/reference/H5P_shared_mesg_nindexes.md)
   [`H5Pget_shared_mesg_nindexes()`](https://huber-group-embl.github.io/rhdf5/reference/H5P_shared_mesg_nindexes.md)
   : Get and set the number of object header message indexes

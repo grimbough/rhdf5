@@ -225,6 +225,7 @@ Bernd Fischer, Mike Smith
 ## Examples
 
 ``` r
+
 h5File <- tempfile(fileext = ".h5")
 h5createFile(h5File)
 

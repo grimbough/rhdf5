@@ -12,8 +12,8 @@
 <link rel="icon" sizes="any" href="../favicon.ico">
 <link rel="manifest" href="../site.webmanifest">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="rhdf5 - HDF5 interface for R">
 </head>
@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">rhdf5</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.55.15</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.57.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -84,11 +84,11 @@ L. Smith</h4>
 the C interface. On the other hand it provides high level convenience
 functions on <strong>R</strong> level to make a usage of HDF5 files more
 easy.</p>
-<p>#Installation of the HDF5 package To install the <em><a href="https://bioconductor.org/packages/3.22/rhdf5" class="external-link">rhdf5</a></em>
+<p>#Installation of the HDF5 package To install the <em><a href="https://bioconductor.org/packages/3.23/rhdf5" class="external-link">rhdf5</a></em>
 package, you need a current version (&gt;3.5.0) of <strong>R</strong>
 (www.r-project.org). After installing <strong>R</strong> you can run the
 following commands from the <strong>R</strong> command shell to install
-<em><a href="https://bioconductor.org/packages/3.22/rhdf5" class="external-link">rhdf5</a></em>.</p>
+<em><a href="https://bioconductor.org/packages/3.23/rhdf5" class="external-link">rhdf5</a></em>.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"BiocManager"</span><span class="op">)</span></span>
 <span><span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://bioconductor.github.io/BiocManager/reference/install.html" class="external-link">install</a></span><span class="op">(</span><span class="st">"rhdf5"</span><span class="op">)</span></span></code></pre></div>
@@ -272,7 +272,7 @@ not used anymore</p>
 <p>or close all open HDF5 handles in the environment by</p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/h5closeAll.html">h5closeAll</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p>The <em><a href="https://bioconductor.org/packages/3.22/rhdf5" class="external-link">rhdf5</a></em>
+<p>The <em><a href="https://bioconductor.org/packages/3.23/rhdf5" class="external-link">rhdf5</a></em>
 package provides two ways of subsetting. One can specify the submatrix
 with the <strong>R</strong>-style index lists or with the HDF5 style
 hyperslabs. Note, that the two next examples below show two alternative
@@ -656,7 +656,7 @@ node has multiple parents and only one of these is removed.</em></p>
 <p><strong>R</strong> does not support a native datatype for 64-bit
 integers. All integers in <strong>R</strong> are 32-bit integers. When
 reading 64-bit integers from a HDF5-file, you may run into troubles.
-<em><a href="https://bioconductor.org/packages/3.22/rhdf5" class="external-link">rhdf5</a></em> is
+<em><a href="https://bioconductor.org/packages/3.23/rhdf5" class="external-link">rhdf5</a></em> is
 able to deal with 64-bit integers, but you still should pay
 attention.</p>
 <p>As an example, we create an HDF5 file that contains 64-bit
@@ -845,9 +845,9 @@ functions to close datasets, dataspaces, groups, and files.</p>
 </h2>
 <div class="sourceCode" id="cb105"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html" class="external-link">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## R version 4.5.2 (2025-10-31)</span></span>
+<pre><code><span><span class="co">## R version 4.6.0 (2026-04-24)</span></span>
 <span><span class="co">## Platform: x86_64-pc-linux-gnu</span></span>
-<span><span class="co">## Running under: Ubuntu 24.04.3 LTS</span></span>
+<span><span class="co">## Running under: Ubuntu 24.04.4 LTS</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Matrix products: default</span></span>
 <span><span class="co">## BLAS:   /usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3 </span></span>
@@ -866,19 +866,19 @@ functions to close datasets, dataspaces, groups, and files.</p>
 <span><span class="co">## [1] stats     graphics  grDevices utils     datasets  methods   base     </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## other attached packages:</span></span>
-<span><span class="co">## [1] rhdf5_2.55.15    BiocStyle_2.38.0</span></span>
+<span><span class="co">## [1] rhdf5_2.57.0     BiocStyle_2.40.0</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## loaded via a namespace (and not attached):</span></span>
-<span><span class="co">##  [1] cli_3.6.5           knitr_1.51          rlang_1.1.7        </span></span>
-<span><span class="co">##  [4] xfun_0.56           textshaping_1.0.5   jsonlite_2.0.0     </span></span>
-<span><span class="co">##  [7] bit_4.6.0           htmltools_0.5.9     ragg_1.5.1         </span></span>
-<span><span class="co">## [10] sass_0.4.10         rmarkdown_2.30      evaluate_1.0.5     </span></span>
+<span><span class="co">##  [1] cli_3.6.6           knitr_1.51          rlang_1.2.0        </span></span>
+<span><span class="co">##  [4] xfun_0.57           textshaping_1.0.5   jsonlite_2.0.0     </span></span>
+<span><span class="co">##  [7] bit_4.6.0           htmltools_0.5.9     ragg_1.5.2         </span></span>
+<span><span class="co">## [10] sass_0.4.10         rmarkdown_2.31      evaluate_1.0.5     </span></span>
 <span><span class="co">## [13] jquerylib_0.1.4     fastmap_1.2.0       yaml_2.3.12        </span></span>
-<span><span class="co">## [16] lifecycle_1.0.5     Rhdf5lib_1.32.0     bookdown_0.46      </span></span>
-<span><span class="co">## [19] BiocManager_1.30.27 compiler_4.5.2      fs_1.6.7           </span></span>
-<span><span class="co">## [22] rhdf5filters_1.22.0 systemfonts_1.3.2   digest_0.6.39      </span></span>
-<span><span class="co">## [25] R6_2.6.1            bslib_0.10.0        bit64_4.6.0-1      </span></span>
-<span><span class="co">## [28] tools_4.5.2         pkgdown_2.2.0       cachem_1.1.0       </span></span>
+<span><span class="co">## [16] lifecycle_1.0.5     Rhdf5lib_2.0.0      bookdown_0.46      </span></span>
+<span><span class="co">## [19] BiocManager_1.30.27 compiler_4.6.0      fs_2.1.0           </span></span>
+<span><span class="co">## [22] rhdf5filters_1.24.0 systemfonts_1.3.2   digest_0.6.39      </span></span>
+<span><span class="co">## [25] R6_2.6.1            bslib_0.11.0        bit64_4.8.2        </span></span>
+<span><span class="co">## [28] tools_4.6.0         pkgdown_2.2.0       cachem_1.1.0       </span></span>
 <span><span class="co">## [31] desc_1.4.3</span></span></code></pre>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

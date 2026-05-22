@@ -31,5 +31,6 @@ Bernd Fischer
 ## Examples
 
 ``` r
+
 h5errorHandling("normal")
 ```

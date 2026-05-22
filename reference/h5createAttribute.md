@@ -132,6 +132,7 @@ Bernd Fischer
 ## Examples
 
 ``` r
+
 h5File <- tempfile(pattern = "ex_createAttribute.h5")
 h5createFile(h5File)
 h5write(1:1, h5File, "A")

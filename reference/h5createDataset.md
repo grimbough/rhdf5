@@ -204,6 +204,7 @@ Bernd Fischer, Mike L. Smith
 ## Examples
 
 ``` r
+
 h5File <- tempfile(pattern = "_ex_createDataset.h5")
 h5createFile(h5File)
 

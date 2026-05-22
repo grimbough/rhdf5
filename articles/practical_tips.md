@@ -27,9 +27,10 @@ matrix with 100 rows and 20,000 columns, where the content of each
 column is the index of the column i.e. column 10 contains the value 10
 repeated, column 20 contains 20 repeated etc. This is just so we can
 easily check we’ve extracted the correct columns. We then write this
-matrix to an HDF5 file, calling the dataset ‘counts’. [¹](#fn1)
+matrix to an HDF5 file, calling the dataset ‘counts’. [^1]
 
 ``` r
+
 m1 <- matrix(rep(1:20000, each = 100), ncol = 20000, byrow = FALSE)
 ex_file <- tempfile(fileext = ".h5")
 h5write(m1, file = ex_file, name = "counts", level = 6)
@@ -45,6 +46,7 @@ Now we’ll use the `index` argument to selectively extract the first
 10,000 columns and time how long this takes.
 
 ``` r
+
 system.time(
   res1 <- h5read(
     file = ex_file, name = "counts",
@@ -54,7 +56,7 @@ system.time(
 ```
 
     ##    user  system elapsed 
-    ##   0.028   0.004   0.033
+    ##   0.028   0.005   0.034
 
 Next, instead of selecting 10,000 consecutive columns we’ll ask for
 every other column. This should still return the same amount of data and
@@ -62,6 +64,7 @@ since our dataset is not chunked involves reading the same volume from
 disk.
 
 ``` r
+
 index <- list(NULL, seq(from = 1, to = 20000, by = 2))
 system.time(
   res2 <- h5read(
@@ -72,7 +75,7 @@ system.time(
 ```
 
     ##    user  system elapsed 
-    ##   0.065   0.002   0.067
+    ##   0.076   0.002   0.078
 
 We can see this is marginally slower, because there’s a small overhead
 in selecting this disjoint set of columns, but it’s only marginal and
@@ -90,6 +93,7 @@ The following code defines the parameters to select every other column,
 the same as in our previous example.
 
 ``` r
+
 start <- c(1, 1)
 stride <- c(1, 2)
 block <- c(100, 1)
@@ -103,9 +107,10 @@ system.time(
 ```
 
     ##    user  system elapsed 
-    ##    0.06    0.00    0.06
+    ##   0.069   0.002   0.072
 
 ``` r
+
 identical(res2, res3)
 ```
 
@@ -131,10 +136,11 @@ data. If there isn’t a regular pattern to the columns you want to
 select, what are the options? Perhaps the most obvious thing we can try
 is to skip the use of either `index` or the hyperslab parameters and use
 10,000 separate read operations instead. Below we choose a random
-selection of columns[²](#fn2) and then apply the function `f1()` to each
-in turn.
+selection of columns[^2] and then apply the function `f1()` to each in
+turn.
 
 ``` r
+
 columns <- sample(x = seq_len(20000), size = 1000, replace = FALSE) %>%
   sort()
 f1 <- function(cols, name) {
@@ -146,6 +152,7 @@ f1 <- function(cols, name) {
 ```
 
 ``` r
+
 system.time(res4 <- vapply(
   X = columns, FUN = f1,
   FUN.VALUE = integer(length = 100),
@@ -154,10 +161,10 @@ system.time(res4 <- vapply(
 ```
 
     ##    user  system elapsed 
-    ##  19.475   0.049  19.526
+    ##  22.013   0.078  22.093
 
 This is clearly a terrible idea, it takes ages! For reference, using the
-`index` argument with this set of columns takes 0.086 seconds. This poor
+`index` argument with this set of columns takes 0.083 seconds. This poor
 performance is driven by two things:
 
 1.  Our dataset was created as a single chunk. This means for each
@@ -179,9 +186,10 @@ storing data in this format defeats one of HDF5’s key utilities, namely
 rapid random access. As such it’s probably fairly rare to encounter
 datasets that aren’t chunked in a more meaningful manner. With this in
 mind we’ll create a new dataset in our file, based on the same matrix
-but this time split into 100 $\times$ 100 chunks.
+but this time split into 100 $`\times`$ 100 chunks.
 
 ``` r
+
 h5createDataset(
   file = ex_file, dataset = "counts_chunked",
   dims = dim(m1), storage.mode = "integer",
@@ -195,6 +203,7 @@ an idea for how much time is wasted extracting the entire dataset over
 and over.
 
 ``` r
+
 system.time(res5 <- vapply(
   X = columns, FUN = f1,
   FUN.VALUE = integer(length = 100),
@@ -203,13 +212,13 @@ system.time(res5 <- vapply(
 ```
 
     ##    user  system elapsed 
-    ##   2.424   0.041   2.465
+    ##   2.195   0.049   2.245
 
 This is still quite slow, and the remaining time is being spent on the
 overheads associated with multiple calls to
 [`h5read()`](https://huber-group-embl.github.io/rhdf5/reference/h5_read.md).
-To reduce these the function `f2()`[³](#fn3) defined below splits the
-list of columns we want to return into sets grouped by the parameter
+To reduce these the function `f2()`[^3] defined below splits the list of
+columns we want to return into sets grouped by the parameter
 `block_size`. In the default case this means any columns between 1 & 100
 will be placed together, then any between 101 & 200, etc. We then
 [`lapply()`](https://rdrr.io/r/base/lapply.html) our previous `f1()`
@@ -220,6 +229,7 @@ while keeping the number of hyperslab unions down by not having too many
 columns in any one call.
 
 ``` r
+
 f2 <- function(block_size = 100) {
   cols_grouped <- split(columns, (columns - 1) %/% block_size)
   do.call(cbind, lapply(cols_grouped, f1, name = "counts_chunked"))
@@ -228,7 +238,7 @@ system.time(f2())
 ```
 
     ##    user  system elapsed 
-    ##   0.581   0.010   0.591
+    ##   0.534   0.003   0.537
 
 We can see this has a significant effect, although it’s still an order
 of magnitude slower than when we were dealing with regularly spaced
@@ -294,7 +304,7 @@ requested data.
 
 ## Writing in parallel
 
-Using *[rhdf5](https://bioconductor.org/packages/3.22/rhdf5)* it isn’t
+Using *[rhdf5](https://bioconductor.org/packages/3.23/rhdf5)* it isn’t
 possible to open an HDF5 file and write multiple datasets in parallel.
 However we can try to mimic this behaviour by writing each dataset to
 it’s own HDF5 file in parallel and then using the function
@@ -309,6 +319,7 @@ code below creates a list of 10 matrices, filled with random values
 between 0 and 1. We then name the entries in the list `dset_1` etc.
 
 ``` r
+
 dsets <- lapply(1:10, FUN = \(i) {
   matrix(runif(10000000), ncol = 100)
 })
@@ -321,6 +332,7 @@ Now lets define a function that takes our list of datasets and writes
 all of them to a single HDF5 file.
 
 ``` r
+
 simple_writer <- function(file_name, dsets) {
   fid <- H5Fcreate(name = file_name)
   on.exit(H5Fclose(fid))
@@ -353,6 +365,7 @@ and the name of the dataset they contain. It will then use
 to write each of these into a single output file.
 
 ``` r
+
 ## Write a single dataset to a temporary file
 ## Arguments:
 ## - dset_name: The name of the dataset to be created
@@ -398,11 +411,12 @@ gather functions together. Like the `simple_writer()` function we
 created earlier, this takes the name of an output file and the list of
 datasets to be written as input. We can also provide a
 `BiocParallelParam` instance from
-*[BiocParallel](https://bioconductor.org/packages/3.22/BiocParallel)* to
+*[BiocParallel](https://bioconductor.org/packages/3.23/BiocParallel)* to
 trial writing the temporary file in parallel. If the `BPPARAM` argument
 isn’t provided then they will be written in serial.
 
 ``` r
+
 split_and_gather <- function(output_file, input_dsets, BPPARAM = NULL) {
   if (is.null(BPPARAM)) {
     BPPARAM <- BiocParallel::SerialParam()
@@ -436,6 +450,7 @@ split_and_gather <- function(output_file, input_dsets, BPPARAM = NULL) {
 An example of calling this using two cores on your local machine is:
 
 ``` r
+
 split_and_gather(tempfile(),
   input_dsets = dsets,
   BPPARAM = MulticoreParam(workers = 2)
@@ -448,23 +463,23 @@ Below we can see some timings comparing calling `simple_writer()` with
     ## # A tibble: 4 × 3
     ##   expression               min median
     ##   <bch:expr>             <dbl>  <dbl>
-    ## 1 simple writer           29.3   29.3
-    ## 2 split/gather - 1 core   29.7   29.7
-    ## 3 split/gather - 2 cores  15.3   15.4
-    ## 4 split/gather - 4 cores  11.6   11.7
+    ## 1 simple writer           34.1   34.1
+    ## 2 split/gather - 1 core   34.3   34.3
+    ## 3 split/gather - 2 cores  17.5   17.5
+    ## 4 split/gather - 4 cores  12.7   12.8
 
 We can see from our benchmark results that there is some performance
 improvement to be achieved by using the parallel approach. Based on the
 median times of out three iterations using two cores sees an speedup of
-1.9 and 2.5 with 4 cores. This isn’t quite linear, presumably because
+1.95 and 2.7 with 4 cores. This isn’t quite linear, presumably because
 there are overheads involved both in using a two-step process and
 initialising the parallel workers, but it is a noticeable improvement.
 
 ## Session info
 
-    ## R version 4.5.2 (2025-10-31)
+    ## R version 4.6.0 (2026-04-24)
     ## Platform: x86_64-pc-linux-gnu
-    ## Running under: Ubuntu 24.04.3 LTS
+    ## Running under: Ubuntu 24.04.4 LTS
     ## 
     ## Matrix products: default
     ## BLAS:   /usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3 
@@ -483,34 +498,33 @@ initialising the parallel workers, but it is a noticeable improvement.
     ## [1] stats     graphics  grDevices utils     datasets  methods   base     
     ## 
     ## other attached packages:
-    ## [1] BiocParallel_1.44.0 ggplot2_4.0.2       dplyr_1.2.0        
-    ## [4] rhdf5_2.55.15       BiocStyle_2.38.0   
+    ## [1] BiocParallel_1.46.0 ggplot2_4.0.3       dplyr_1.2.1        
+    ## [4] rhdf5_2.57.0        BiocStyle_2.40.0   
     ## 
     ## loaded via a namespace (and not attached):
-    ##  [1] gtable_0.3.6        jsonlite_2.0.0      compiler_4.5.2     
-    ##  [4] BiocManager_1.30.27 tidyselect_1.2.1    rhdf5filters_1.22.0
-    ##  [7] parallel_4.5.2      jquerylib_0.1.4     systemfonts_1.3.2  
+    ##  [1] gtable_0.3.6        jsonlite_2.0.0      compiler_4.6.0     
+    ##  [4] BiocManager_1.30.27 tidyselect_1.2.1    rhdf5filters_1.24.0
+    ##  [7] parallel_4.6.0      jquerylib_0.1.4     systemfonts_1.3.2  
     ## [10] scales_1.4.0        textshaping_1.0.5   yaml_2.3.12        
     ## [13] fastmap_1.2.0       R6_2.6.1            labeling_0.4.3     
     ## [16] generics_0.1.4      knitr_1.51          tibble_3.3.1       
-    ## [19] bookdown_0.46       desc_1.4.3          bslib_0.10.0       
-    ## [22] pillar_1.11.1       RColorBrewer_1.1-3  rlang_1.1.7        
-    ## [25] utf8_1.2.6          cachem_1.1.0        xfun_0.56          
-    ## [28] S7_0.2.1            fs_1.6.7            sass_0.4.10        
-    ## [31] cli_3.6.5           withr_3.0.2         pkgdown_2.2.0      
-    ## [34] magrittr_2.0.4      Rhdf5lib_1.32.0     digest_0.6.39      
-    ## [37] grid_4.5.2          lifecycle_1.0.5     vctrs_0.7.1        
-    ## [40] bench_1.1.4         evaluate_1.0.5      glue_1.8.0         
-    ## [43] farver_2.1.2        codetools_0.2-20    ragg_1.5.1         
-    ## [46] rmarkdown_2.30      tools_4.5.2         pkgconfig_2.0.3    
+    ## [19] bookdown_0.46       desc_1.4.3          bslib_0.11.0       
+    ## [22] pillar_1.11.1       RColorBrewer_1.1-3  rlang_1.2.0        
+    ## [25] utf8_1.2.6          cachem_1.1.0        xfun_0.57          
+    ## [28] S7_0.2.2            fs_2.1.0            sass_0.4.10        
+    ## [31] cli_3.6.6           withr_3.0.2         pkgdown_2.2.0      
+    ## [34] magrittr_2.0.5      Rhdf5lib_2.0.0      digest_0.6.39      
+    ## [37] grid_4.6.0          lifecycle_1.0.5     vctrs_0.7.3        
+    ## [40] bench_1.1.4         evaluate_1.0.5      glue_1.8.1         
+    ## [43] farver_2.1.2        codetools_0.2-20    ragg_1.5.2         
+    ## [46] rmarkdown_2.31      tools_4.6.0         pkgconfig_2.0.3    
     ## [49] htmltools_0.5.9
 
-------------------------------------------------------------------------
-
-1.  You’ll probably see a warning here regarding chunking, something
+[^1]: You’ll probably see a warning here regarding chunking, something
     we’ll touch on later
 
-2.  in the interested of time we actually select only 1,000 columns here
+[^2]: in the interested of time we actually select only 1,000 columns
+    here
 
-3.  This is not the greatest function ever, things like the file name
+[^3]: This is not the greatest function ever, things like the file name
     are hardcoded out of sight, but it illustrates the technique.

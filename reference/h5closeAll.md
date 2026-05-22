@@ -46,6 +46,7 @@ Mike Smith
 
 ``` r
 
+
 ## create an empty file and then re-open it
 h5File <- tempfile(pattern = "ex_h5closeAll.h5")
 h5createFile(h5File)

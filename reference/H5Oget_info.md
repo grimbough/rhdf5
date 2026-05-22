@@ -19,6 +19,7 @@ H5Oget_info(h5loc)
 ## Examples
 
 ``` r
+
 ## Create a temporary copy of an example file check the contents
 example_file <- system.file("testfiles", "h5ex_t_array.h5", package = "rhdf5")
 

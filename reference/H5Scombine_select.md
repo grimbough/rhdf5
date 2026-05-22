@@ -36,6 +36,7 @@ of combining the selections of `h5space1` and `h5space2`.
 ## Examples
 
 ``` r
+
 ## create two 1 dimensional dataspaces
 ## of different sizes
 sid_1 <- H5Screate_simple(dims = 20)

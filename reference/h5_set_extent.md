@@ -61,6 +61,7 @@ Bernd Fischer, Mike Smith
 ## Examples
 
 ``` r
+
 tmpfile <- tempfile()
 h5createFile(file = tmpfile)
 h5createDataset(tmpfile, "A", c(10, 12), c(20, 24))

@@ -23,6 +23,7 @@ H5Ldelete(h5loc, name)
 ## Examples
 
 ``` r
+
 h5file <- tempfile(pattern = "_ex_H5L.h5")
 
 # create an hdf5 file and a group

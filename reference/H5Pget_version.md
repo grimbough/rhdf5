@@ -1,20 +1,20 @@
-# Get version information for objects in a file creation property list
+# Deprecated
 
-Get version information for objects in a file creation property list
+Deprecated in line with changes in the upstream HDF5 library. It will be
+removed in the next version of rhdf5.
 
 ## Usage
 
 ``` r
-H5Pget_version(h5plist)
+H5Pget_version(...)
 ```
 
 ## Arguments
 
-- h5plist:
+- ...:
 
-  [H5IdComponent](https://huber-group-embl.github.io/rhdf5/reference/H5IdComponent-class.md)
-  object representing the file creation property list
+  ignored
 
 ## Value
 
-Named integer vector
+NULL (invisibly)

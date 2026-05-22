@@ -12,8 +12,8 @@
 <link rel="icon" sizes="any" href="../favicon.ico">
 <link rel="manifest" href="../site.webmanifest">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="**rhdf5** Practical Tips">
 </head>
@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">rhdf5</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.55.15</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.57.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -123,7 +123,7 @@ the first 10,000 columns and time how long this takes.</p>
 <span>  <span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##    user  system elapsed </span></span>
-<span><span class="co">##   0.028   0.004   0.033</span></span></code></pre>
+<span><span class="co">##   0.028   0.005   0.034</span></span></code></pre>
 <p>Next, instead of selecting 10,000 consecutive columns we’ll ask for
 every other column. This should still return the same amount of data and
 since our dataset is not chunked involves reading the same volume from
@@ -137,7 +137,7 @@ disk.</p>
 <span>  <span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##    user  system elapsed </span></span>
-<span><span class="co">##   0.065   0.002   0.067</span></span></code></pre>
+<span><span class="co">##   0.076   0.002   0.078</span></span></code></pre>
 <p>We can see this is marginally slower, because there’s a small
 overhead in selecting this disjoint set of columns, but it’s only
 marginal and using the <code>index</code> argument looks sufficient.</p>
@@ -165,7 +165,7 @@ the same as in our previous example.</p>
 <span>  <span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##    user  system elapsed </span></span>
-<span><span class="co">##    0.06    0.00    0.06</span></span></code></pre>
+<span><span class="co">##   0.069   0.002   0.072</span></span></code></pre>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/identical.html" class="external-link">identical</a></span><span class="op">(</span><span class="va">res2</span>, <span class="va">res3</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] TRUE</span></span></code></pre>
@@ -209,9 +209,9 @@ columns here&lt;/p&gt;"><sup>2</sup></a> and then apply the function
 <span>  name <span class="op">=</span> <span class="st">"counts"</span></span>
 <span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##    user  system elapsed </span></span>
-<span><span class="co">##  19.475   0.049  19.526</span></span></code></pre>
+<span><span class="co">##  22.013   0.078  22.093</span></span></code></pre>
 <p>This is clearly a terrible idea, it takes ages! For reference, using
-the <code>index</code> argument with this set of columns takes 0.086
+the <code>index</code> argument with this set of columns takes 0.083
 seconds. This poor performance is driven by two things:</p>
 <ol style="list-style-type: decimal">
 <li>Our dataset was created as a single chunk. This means for each
@@ -232,7 +232,7 @@ namely rapid random access. As such it’s probably fairly rare to
 encounter datasets that aren’t chunked in a more meaningful manner. With
 this in mind we’ll create a new dataset in our file, based on the same
 matrix but this time split into 100
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mo>×</mo><annotation encoding="application/x-tex">\times</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>×</mi><annotation encoding="application/x-tex">\times</annotation></semantics></math>
 100 chunks.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/h5createDataset.html">h5createDataset</a></span><span class="op">(</span></span>
@@ -251,7 +251,7 @@ over and over.</p>
 <span>  name <span class="op">=</span> <span class="st">"counts_chunked"</span></span>
 <span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##    user  system elapsed </span></span>
-<span><span class="co">##   2.424   0.041   2.465</span></span></code></pre>
+<span><span class="co">##   2.195   0.049   2.245</span></span></code></pre>
 <p>This is still quite slow, and the remaining time is being spent on
 the overheads associated with multiple calls to <code><a href="../reference/h5_read.html">h5read()</a></code>.
 To reduce these the function <code>f2()</code><a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content="&lt;p&gt;This is not the greatest function ever, things like the
@@ -271,7 +271,7 @@ unions down by not having too many columns in any one call.</p>
 <span><span class="op">}</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="fu">f2</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##    user  system elapsed </span></span>
-<span><span class="co">##   0.581   0.010   0.591</span></span></code></pre>
+<span><span class="co">##   0.534   0.003   0.537</span></span></code></pre>
 <p>We can see this has a significant effect, although it’s still an
 order of magnitude slower than when we were dealing with regularly
 spaced subsets. The efficiency here will vary based on a number of
@@ -333,7 +333,7 @@ data.</p>
 <div class="section level2">
 <h2 id="writing-in-parallel">Writing in parallel<a class="anchor" aria-label="anchor" href="#writing-in-parallel"></a>
 </h2>
-<p>Using <em><a href="https://bioconductor.org/packages/3.22/rhdf5" class="external-link">rhdf5</a></em> it
+<p>Using <em><a href="https://bioconductor.org/packages/3.23/rhdf5" class="external-link">rhdf5</a></em> it
 isn’t possible to open an HDF5 file and write multiple datasets in
 parallel. However we can try to mimic this behaviour by writing each
 dataset to it’s own HDF5 file in parallel and then using the function
@@ -430,7 +430,7 @@ file.</p>
 and gather functions together. Like the <code>simple_writer()</code>
 function we created earlier, this takes the name of an output file and
 the list of datasets to be written as input. We can also provide a
-<code>BiocParallelParam</code> instance from <em><a href="https://bioconductor.org/packages/3.22/BiocParallel" class="external-link">BiocParallel</a></em>
+<code>BiocParallelParam</code> instance from <em><a href="https://bioconductor.org/packages/3.23/BiocParallel" class="external-link">BiocParallel</a></em>
 to trial writing the temporary file in parallel. If the
 <code>BPPARAM</code> argument isn’t provided then they will be written
 in serial.</p>
@@ -476,14 +476,14 @@ is:</p>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 4 × 3</span></span></span>
 <span><span class="co">##   expression               min median</span></span>
 <span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;bch:expr&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">1</span> simple writer           29.3   29.3</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">2</span> split/gather - 1 core   29.7   29.7</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">3</span> split/gather - 2 cores  15.3   15.4</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">4</span> split/gather - 4 cores  11.6   11.7</span></span></code></pre>
+<span><span class="co">## <span style="color: #BCBCBC;">1</span> simple writer           34.1   34.1</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">2</span> split/gather - 1 core   34.3   34.3</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">3</span> split/gather - 2 cores  17.5   17.5</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">4</span> split/gather - 4 cores  12.7   12.8</span></span></code></pre>
 <p>We can see from our benchmark results that there is some performance
 improvement to be achieved by using the parallel approach. Based on the
 median times of out three iterations using two cores sees an speedup of
-1.9 and 2.5 with 4 cores. This isn’t quite linear, presumably because
+1.95 and 2.7 with 4 cores. This isn’t quite linear, presumably because
 there are overheads involved both in using a two-step process and
 initialising the parallel workers, but it is a noticeable
 improvement.</p>
@@ -492,9 +492,9 @@ improvement.</p>
 <div class="section level2">
 <h2 class="unnumbered" id="session-info">Session info<a class="anchor" aria-label="anchor" href="#session-info"></a>
 </h2>
-<pre><code><span><span class="co">## R version 4.5.2 (2025-10-31)</span></span>
+<pre><code><span><span class="co">## R version 4.6.0 (2026-04-24)</span></span>
 <span><span class="co">## Platform: x86_64-pc-linux-gnu</span></span>
-<span><span class="co">## Running under: Ubuntu 24.04.3 LTS</span></span>
+<span><span class="co">## Running under: Ubuntu 24.04.4 LTS</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Matrix products: default</span></span>
 <span><span class="co">## BLAS:   /usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3 </span></span>
@@ -513,26 +513,26 @@ improvement.</p>
 <span><span class="co">## [1] stats     graphics  grDevices utils     datasets  methods   base     </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## other attached packages:</span></span>
-<span><span class="co">## [1] BiocParallel_1.44.0 ggplot2_4.0.2       dplyr_1.2.0        </span></span>
-<span><span class="co">## [4] rhdf5_2.55.15       BiocStyle_2.38.0   </span></span>
+<span><span class="co">## [1] BiocParallel_1.46.0 ggplot2_4.0.3       dplyr_1.2.1        </span></span>
+<span><span class="co">## [4] rhdf5_2.57.0        BiocStyle_2.40.0   </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## loaded via a namespace (and not attached):</span></span>
-<span><span class="co">##  [1] gtable_0.3.6        jsonlite_2.0.0      compiler_4.5.2     </span></span>
-<span><span class="co">##  [4] BiocManager_1.30.27 tidyselect_1.2.1    rhdf5filters_1.22.0</span></span>
-<span><span class="co">##  [7] parallel_4.5.2      jquerylib_0.1.4     systemfonts_1.3.2  </span></span>
+<span><span class="co">##  [1] gtable_0.3.6        jsonlite_2.0.0      compiler_4.6.0     </span></span>
+<span><span class="co">##  [4] BiocManager_1.30.27 tidyselect_1.2.1    rhdf5filters_1.24.0</span></span>
+<span><span class="co">##  [7] parallel_4.6.0      jquerylib_0.1.4     systemfonts_1.3.2  </span></span>
 <span><span class="co">## [10] scales_1.4.0        textshaping_1.0.5   yaml_2.3.12        </span></span>
 <span><span class="co">## [13] fastmap_1.2.0       R6_2.6.1            labeling_0.4.3     </span></span>
 <span><span class="co">## [16] generics_0.1.4      knitr_1.51          tibble_3.3.1       </span></span>
-<span><span class="co">## [19] bookdown_0.46       desc_1.4.3          bslib_0.10.0       </span></span>
-<span><span class="co">## [22] pillar_1.11.1       RColorBrewer_1.1-3  rlang_1.1.7        </span></span>
-<span><span class="co">## [25] utf8_1.2.6          cachem_1.1.0        xfun_0.56          </span></span>
-<span><span class="co">## [28] S7_0.2.1            fs_1.6.7            sass_0.4.10        </span></span>
-<span><span class="co">## [31] cli_3.6.5           withr_3.0.2         pkgdown_2.2.0      </span></span>
-<span><span class="co">## [34] magrittr_2.0.4      Rhdf5lib_1.32.0     digest_0.6.39      </span></span>
-<span><span class="co">## [37] grid_4.5.2          lifecycle_1.0.5     vctrs_0.7.1        </span></span>
-<span><span class="co">## [40] bench_1.1.4         evaluate_1.0.5      glue_1.8.0         </span></span>
-<span><span class="co">## [43] farver_2.1.2        codetools_0.2-20    ragg_1.5.1         </span></span>
-<span><span class="co">## [46] rmarkdown_2.30      tools_4.5.2         pkgconfig_2.0.3    </span></span>
+<span><span class="co">## [19] bookdown_0.46       desc_1.4.3          bslib_0.11.0       </span></span>
+<span><span class="co">## [22] pillar_1.11.1       RColorBrewer_1.1-3  rlang_1.2.0        </span></span>
+<span><span class="co">## [25] utf8_1.2.6          cachem_1.1.0        xfun_0.57          </span></span>
+<span><span class="co">## [28] S7_0.2.2            fs_2.1.0            sass_0.4.10        </span></span>
+<span><span class="co">## [31] cli_3.6.6           withr_3.0.2         pkgdown_2.2.0      </span></span>
+<span><span class="co">## [34] magrittr_2.0.5      Rhdf5lib_2.0.0      digest_0.6.39      </span></span>
+<span><span class="co">## [37] grid_4.6.0          lifecycle_1.0.5     vctrs_0.7.3        </span></span>
+<span><span class="co">## [40] bench_1.1.4         evaluate_1.0.5      glue_1.8.1         </span></span>
+<span><span class="co">## [43] farver_2.1.2        codetools_0.2-20    ragg_1.5.2         </span></span>
+<span><span class="co">## [46] rmarkdown_2.31      tools_4.6.0         pkgconfig_2.0.3    </span></span>
 <span><span class="co">## [49] htmltools_0.5.9</span></span></code></pre>
 </div>
 

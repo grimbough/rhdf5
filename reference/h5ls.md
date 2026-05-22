@@ -93,6 +93,7 @@ Bernd Fischer, Mike L. Smith
 ## Examples
 
 ``` r
+
 h5File <- tempfile(pattern = "ex_dump.h5")
 h5createFile(h5File)
 

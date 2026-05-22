@@ -1,6 +1,6 @@
 # Reading HDF5 Files In The Cloud
 
-The *[rhdf5](https://bioconductor.org/packages/3.22/rhdf5)* provides
+The *[rhdf5](https://bioconductor.org/packages/3.23/rhdf5)* provides
 limited support for read-only access to HDF5 files stored in Amazon S3
 buckets. This is implemented via the [HDF5 S3 Virtual File
 Driver](https://portal.hdfgroup.org/display/HDF5/Virtual+File+Drivers+-+S3+and+HDFS)
@@ -15,6 +15,7 @@ and
 are supported.
 
 ``` r
+
 library(rhdf5)
 ```
 
@@ -27,6 +28,7 @@ otherwise
 will treat the URL as a path on the local disk fail.
 
 ``` r
+
 public_S3_url <- "https://rhdf5-public.s3.eu-central-1.amazonaws.com/h5ex_t_array.h5"
 h5ls(
   file = public_S3_url,
@@ -42,6 +44,7 @@ The same arguments are also valid for using
 to retrieve the contents of a file.
 
 ``` r
+
 public_S3_url <- "https://rhdf5-public.s3.eu-central-1.amazonaws.com/h5ex_t_cmpd.h5"
 h5dump(
   file = public_S3_url,
@@ -68,6 +71,7 @@ along with the `name` and `index` arguments to read only a subset of the
 dataset into our R session.
 
 ``` r
+
 public_S3_url <- "https://rhdf5-public.s3.eu-central-1.amazonaws.com/rhdf5ex_t_float_3d.h5"
 h5ls(file = public_S3_url, s3 = TRUE)
 ```
@@ -76,6 +80,7 @@ h5ls(file = public_S3_url, s3 = TRUE)
     ## 0     /   a1 H5I_DATASET  FLOAT 5 x 10 x 2
 
 ``` r
+
 h5read(public_S3_url,
   name = "a1",
   index = list(1:2, 3, NULL),
@@ -107,6 +112,7 @@ These three values need to be stored in a list like below. *Important
 note: for now they must be in this specific order.*
 
 ``` r
+
 ## these are example credentials and will not work
 s3_cred <- list(
   aws_region = "eu-central-1",
@@ -120,6 +126,7 @@ Finally we pass this list to
 via the `s3credentials` argument.
 
 ``` r
+
 public_S3_url <- "https://rhdf5-private.s3.eu-central-1.amazonaws.com/h5ex_t_array.h5"
 h5ls(
   file = public_S3_url,
@@ -136,12 +143,13 @@ and
 ## Session Info
 
 ``` r
+
 sessionInfo()
 ```
 
-    ## R version 4.5.2 (2025-10-31)
+    ## R version 4.6.0 (2026-04-24)
     ## Platform: x86_64-pc-linux-gnu
-    ## Running under: Ubuntu 24.04.3 LTS
+    ## Running under: Ubuntu 24.04.4 LTS
     ## 
     ## Matrix products: default
     ## BLAS:   /usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3 
@@ -160,16 +168,16 @@ sessionInfo()
     ## [1] stats     graphics  grDevices utils     datasets  methods   base     
     ## 
     ## other attached packages:
-    ## [1] rhdf5_2.55.15    BiocStyle_2.38.0
+    ## [1] rhdf5_2.57.0     BiocStyle_2.40.0
     ## 
     ## loaded via a namespace (and not attached):
-    ##  [1] cli_3.6.5           knitr_1.51          rlang_1.1.7        
-    ##  [4] xfun_0.56           textshaping_1.0.5   jsonlite_2.0.0     
-    ##  [7] htmltools_0.5.9     ragg_1.5.1          sass_0.4.10        
-    ## [10] rmarkdown_2.30      evaluate_1.0.5      jquerylib_0.1.4    
+    ##  [1] cli_3.6.6           knitr_1.51          rlang_1.2.0        
+    ##  [4] xfun_0.57           textshaping_1.0.5   jsonlite_2.0.0     
+    ##  [7] htmltools_0.5.9     ragg_1.5.2          sass_0.4.10        
+    ## [10] rmarkdown_2.31      evaluate_1.0.5      jquerylib_0.1.4    
     ## [13] fastmap_1.2.0       yaml_2.3.12         lifecycle_1.0.5    
-    ## [16] Rhdf5lib_1.32.0     bookdown_0.46       BiocManager_1.30.27
-    ## [19] compiler_4.5.2      fs_1.6.7            rhdf5filters_1.22.0
+    ## [16] Rhdf5lib_2.0.0      bookdown_0.46       BiocManager_1.30.27
+    ## [19] compiler_4.6.0      fs_2.1.0            rhdf5filters_1.24.0
     ## [22] systemfonts_1.3.2   digest_0.6.39       R6_2.6.1           
-    ## [25] bslib_0.10.0        tools_4.5.2         pkgdown_2.2.0      
+    ## [25] bslib_0.11.0        tools_4.6.0         pkgdown_2.2.0      
     ## [28] cachem_1.1.0        desc_1.4.3

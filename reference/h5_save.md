@@ -67,6 +67,7 @@ Bernd Fischer
 ## Examples
 
 ``` r
+
 A <- 1:7
 B <- 1:18
 D <- seq(0, 1, by = 0.1)

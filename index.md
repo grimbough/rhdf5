@@ -12,8 +12,8 @@ datasets that are larger than the available RAM.
 
 ## Current Status
 
-| GitHub Actions                                                                                                                                              | Bioconductor Build Sysytem                                                                                                                   | Test Coverage                                                                                                   |
-|-------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------|
+| GitHub Actions | Bioconductor Build Sysytem | Test Coverage |
+|----|----|----|
 | [![Package Checks](https://github.com/grimbough/rhdf5/actions/workflows/main.yml/badge.svg)](https://github.com/grimbough/rhdf5/actions/workflows/main.yml) | [![BioC Status](https://bioconductor.org/shields/build/devel/bioc/rhdf5.svg)](http://bioconductor.org/checkResults/devel/bioc-LATEST/rhdf5/) | [![Codecov](http://img.shields.io/codecov/c/github/grimbough/rhdf5.svg)](https://codecov.io/gh/grimbough/rhdf5) |
 
 ## Contact
@@ -29,6 +29,6 @@ Funding for continued development and maintenance of this package has
 been provided by the German Network for Bioinformatics Infrastructure &
 the Chan Zuckerberg Initiative.
 
-|                                                                                                                                    |                                                                                                  |
-|:-----------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------:|
+|  |  |
+|:---|---:|
 | [![](https://tess.elixir-europe.org/system/content_providers/images/000/000/063/original/deNBI_Logo_rgb.jpg)](http://www.denbi.de) | ![](https://image4.owler.com/logo/chan-zuckerberg-initiative_owler_20160616_114930_original.png) |

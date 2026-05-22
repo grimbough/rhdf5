@@ -36,6 +36,7 @@ Bernd Fischer
 ## Examples
 
 ``` r
+
 h5constType()[1]
 #> [1] "H5F_ACC"
 h5const(h5constType()[1])

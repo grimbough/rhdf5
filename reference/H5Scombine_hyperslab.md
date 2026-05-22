@@ -49,6 +49,7 @@ object representing a new dataspace with the generated selection.
 ## Examples
 
 ``` r
+
 ## create a 1 dimensional dataspace
 sid_1 <- H5Screate_simple(dims = 20)
 

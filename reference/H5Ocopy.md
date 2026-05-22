@@ -43,6 +43,7 @@ H5Ocopy(h5loc, name, h5loc_dest, name_dest, obj_cpy_pl = NULL, lcpl = NULL)
 ## Examples
 
 ``` r
+
 ## Create a temporary copy of an example file check the contents
 example_file <- system.file("testfiles", "h5ex_t_array.h5", package = "rhdf5")
 file.copy(example_file, tempdir())

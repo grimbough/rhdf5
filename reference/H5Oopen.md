@@ -33,6 +33,7 @@ if the open operation was successful. `FALSE` otherwise.
 ## Examples
 
 ``` r
+
 h5File <- tempfile(pattern = "ex_H5O.h5")
 
 # create an hdf5 file and write something

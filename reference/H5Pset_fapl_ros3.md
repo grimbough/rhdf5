@@ -34,6 +34,7 @@ accessing public data this argument should be `NULL`.
 ## Examples
 
 ``` r
+
 ## this doesn't work on the Bioconductor Mac build machine
 if (FALSE) { # \dontrun{
 pid <- H5Pcreate("H5P_FILE_ACCESS")
