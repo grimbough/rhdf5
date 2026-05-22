@@ -23,47 +23,33 @@ jobs:
       fail-fast: false
       matrix:
         config:
-        - { os: windows-latest,   bioc-version: 'devel',   bioc-mirror: 'https://bioconductor.posit.co/',  Ncpus: 4, cache: 1}
-        - { os: windows-11-arm,   bioc-version: 'devel',   bioc-mirror: 'https://bioconductor.posit.co/',  Ncpus: 4, cache: 2}
-        - { os: macOS-latest,     bioc-version: 'devel',   bioc-mirror: 'https://bioconductor.posit.co/',  Ncpus: 3, cache: 1}
-        - { os: macos-15-intel,   bioc-version: 'devel',   bioc-mirror: 'https://bioconductor.posit.co/',  Ncpus: 3, cache: 2}
-        - { os: ubuntu-latest,    bioc-version: 'devel',   bioc-mirror: 'https://bioconductor.posit.co/',  Ncpus: 4, cache: 1}
-        - { os: ubuntu-latest,    bioc-version: 'release', bioc-mirror: 'https://packagemanager.posit.co/bioconductor',  Ncpus: 4, cache: 1}
-        - { os: ubuntu-24.04-arm, bioc-version: 'devel',   bioc-mirror: 'https://bioconductor.posit.co/',  Ncpus: 4, cache: 2}
-
+        - { os: windows-latest,   r-version: 'devel',   Ncpus: 4 }
+        - { os: windows-11-arm,   r-version: 'devel',   Ncpus: 4 }
+        - { os: macOS-latest,     r-version: 'devel',   Ncpus: 3 }
+        - { os: macos-15-intel,   r-version: 'devel',   Ncpus: 3 }
+        - { os: ubuntu-latest,    r-version: 'devel',   Ncpus: 4 }
+        - { os: ubuntu-latest,    r-version: 'release', Ncpus: 4 }
+        - { os: ubuntu-24.04-arm, r-version: 'devel',   Ncpus: 4 }
     steps:
       - uses: actions/checkout@v6
-
-      - name: Setup R and Bioconductor
-        uses: grimbough/bioc-actions/setup-bioc@v1
+      
+      - uses: r-lib/actions/setup-pandoc@v2
+      
+      - uses: r-lib/actions/setup-r@v2
         with:
-          bioc-version: ${{ matrix.config.bioc-version }}
-          bioc-mirror: ${{ matrix.config.bioc-mirror }}
+          r-version: ${{ matrix.config.r-version }}
 
       - name: Install openssl
         if: runner.os == 'macOS'
         run: |
           sudo R -e 'source("https://mac.R-project.org/bin/install.R")' -e 'install.libs("openssl")'
-
-      - uses: r-lib/actions/setup-pandoc@v2
-
-      - name: Install dependencies
-        uses: r-lib/actions/setup-r-dependencies@v2
+        
+      - uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          # We use cache versioning to differentiate between Intel and ARM macOS builds
-          # https://github.com/r-lib/actions/issues/1035
-          cache-version: ${{ matrix.config.cache }}
-          extra-packages: |
-            rcmdcheck
+          extra-packages: any::rcmdcheck
+          needs: check
 
-      - name: Work around https://github.com/grimbough/bioc-actions/issues/18
-        uses: r-lib/actions/setup-tinytex@v2
-
-      - name: Bioc - Build, Install, Check
-        uses: grimbough/bioc-actions/build-install-check@v1
-
-      - name: Run BiocCheck
-        uses: grimbough/bioc-actions/run-BiocCheck@v1
+      - uses: r-lib/actions/check-r-package@v2
         with:
-          error-on: 'never'
-          arguments: '--no-check-bioc-help' 
+          upload-snapshots: true
+          build_args: 'c("--no-manual","--compact-vignettes=gs+qpdf")'
