@@ -113,8 +113,6 @@ h5checktypeOrOpenLoc <- function(
           "' is not a valid HDF5 file."
         )
       }
-      res$H5Identifier <- h5loc
-      res$closeit <- TRUE
     } else {
       if (!createnewfile) {
         stop(
@@ -129,9 +127,9 @@ h5checktypeOrOpenLoc <- function(
       if (!is(h5loc, "H5IdComponent")) {
         stop("Error in ", fctname, ". Cannot create file.")
       }
-      res$H5Identifier <- h5loc
-      res$closeit <- TRUE
     }
+    res$H5Identifier <- h5loc
+    res$closeit <- TRUE
   } else {
     ## We have passed an H5IdComponent, so it should not be closed after
     h5checktype(file, "loc", fctname = fctname, allow.character = TRUE)

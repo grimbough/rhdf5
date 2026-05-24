@@ -298,13 +298,12 @@ H5Pset_fapl_ros3 <- function(h5plist, s3credentials = NULL) {
   h5checktype(h5plist, "plist")
 
   ## only do authentication if s3credentials are provided
-  if (!is.null(s3credentials)) {
-    auth <- TRUE
+  auth <- !is.null(s3credentials)
+  if (auth) {
     aws_region <- s3credentials[[1]]
     access_key_id <- s3credentials[[2]]
     secret_access_key <- s3credentials[[3]]
   } else {
-    auth <- FALSE
     aws_region <- access_key_id <- secret_access_key <- ""
   }
 

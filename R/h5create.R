@@ -477,7 +477,6 @@ h5createDataset <- function(
   dims <- as.numeric(dims)
   maxdims <- as.numeric(maxdims)
 
-  res <- FALSE
   if (!is.character(dataset)) {
     stop('"dataset" argument must be a character vector of length one.')
   }
@@ -533,9 +532,9 @@ h5createDataset <- function(
       h5writeAttribute(attr = x, h5obj = did, name = "storage.mode")
     }
     H5Dclose(did)
-    res <- TRUE
+    return(invisible(TRUE))
   }
-  invisible(res)
+  return(invisible(FALSE))
 }
 
 #' Create HDF5 attribute
