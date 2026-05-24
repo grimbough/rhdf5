@@ -11,7 +11,8 @@ Authors@R: c(
     person("Daniel", "van Twisk", role = "ctb"),
     person("Hugo", "Gruson", , "hugo.gruson@embl.de", role = "cre",
            comment = c(ORCID = "0000-0002-4094-1476")),
-    person("German Network for Bioinformatics Infrastructure - de.NBI", role = "fnd")
+    person("German Network for Bioinformatics Infrastructure - de.NBI", role = "fnd",
+           comment = c(ROR = "01vmpm840"))
   )
 Description: This package provides an interface between HDF5 and R.
     HDF5's main features are the ability to store and access very large
