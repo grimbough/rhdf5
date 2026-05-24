@@ -7,7 +7,7 @@
 H5Gclose(h5group)
 }
 \arguments{
-\item{h5group}{An object of class \linkS4class{H5IdComponent} representing a H5
+\item{h5group}{An object of class \link[=H5IdComponent-class]{H5IdComponent} representing a H5
 group.  Typically created via \code{\link[=H5Gopen]{H5Gopen()}} or \code{\link[=H5Gcreate]{H5Gcreate()}}.}
 }
 \description{

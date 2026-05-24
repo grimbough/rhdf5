@@ -7,7 +7,7 @@
 H5Pclose(h5plist)
 }
 \arguments{
-\item{h5plist}{\linkS4class{H5IdComponent} object representing the property list
+\item{h5plist}{\link[=H5IdComponent-class]{H5IdComponent} object representing the property list
 to close.}
 }
 \description{

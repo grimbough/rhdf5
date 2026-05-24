@@ -7,7 +7,7 @@
 H5Aexists(h5obj, name)
 }
 \arguments{
-\item{h5obj}{An object of class \linkS4class{H5IdComponent} representing a H5 object
+\item{h5obj}{An object of class \link[=H5IdComponent-class]{H5IdComponent} representing a H5 object
 identifier (file, group, or dataset). See \code{\link[=H5Fcreate]{H5Fcreate()}}, \code{\link[=H5Fopen]{H5Fopen()}},
 \code{\link[=H5Gcreate]{H5Gcreate()}}, \code{\link[=H5Gopen]{H5Gopen()}}, \code{\link[=H5Dcreate]{H5Dcreate()}}, or \code{\link[=H5Dopen]{H5Dopen()}} to create an object of this kind.}
 

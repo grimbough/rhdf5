@@ -7,7 +7,7 @@
 H5Fflush(h5file, scope = h5default("H5F_SCOPE"))
 }
 \arguments{
-\item{h5file}{\linkS4class{H5IdComponent} representing any object associated with
+\item{h5file}{\link[=H5IdComponent-class]{H5IdComponent} representing any object associated with
 the file to be flushed.}
 
 \item{scope}{Specifies whether the scope of the flushing action is global

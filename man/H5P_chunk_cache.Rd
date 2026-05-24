@@ -8,7 +8,7 @@
 H5Pset_chunk_cache(h5plist, rdcc_nslots, rdcc_nbytes, rdcc_w0)
 }
 \arguments{
-\item{h5plist}{Object of class \linkS4class{H5IdComponent} representing a dataset
+\item{h5plist}{Object of class \link[=H5IdComponent-class]{H5IdComponent} representing a dataset
 access property list.}
 
 \item{rdcc_nslots}{Integer defining the number of chunk slots in the raw data

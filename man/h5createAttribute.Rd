@@ -20,7 +20,7 @@ h5createAttribute(
 \arguments{
 \item{obj}{The name (character) of the object the attribute will be attached
 to. For advanced programmers it is possible to provide an object of class
-\linkS4class{H5IdComponent} representing a H5 object identifier (file, group,
+\link[=H5IdComponent-class]{H5IdComponent} representing a H5 object identifier (file, group,
 dataset). See \code{\link[=H5Fcreate]{H5Fcreate()}}, \code{\link[=H5Fopen]{H5Fopen()}}, \code{\link[=H5Gcreate]{H5Gcreate()}}, \code{\link[=H5Gopen]{H5Gopen()}},
 \code{\link[=H5Dcreate]{H5Dcreate()}}, \code{\link[=H5Dopen]{H5Dopen()}} to create an object of this kind.}
 
@@ -33,7 +33,7 @@ dataset). See \code{\link[=H5Fcreate]{H5Fcreate()}}, \code{\link[=H5Fopen]{H5Fop
 
 \item{file}{The filename (character) of the file in which the dataset will be
 located. For advanced programmers it is possible to provide an object of
-class \linkS4class{H5IdComponent} representing an H5 location identifier. See
+class \link[=H5IdComponent-class]{H5IdComponent} representing an H5 location identifier. See
 \code{\link[=H5Fcreate]{H5Fcreate()}}, \code{\link[=H5Fopen]{H5Fopen()}}, \code{\link[=H5Gcreate]{H5Gcreate()}}, \code{\link[=H5Gopen]{H5Gopen()}} to create an object
 of this kind. The \code{file} argument is not required, if the argument
 \code{obj} is of type \code{H5IdComponent}.}

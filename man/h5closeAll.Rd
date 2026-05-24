@@ -7,7 +7,7 @@
 h5closeAll(...)
 }
 \arguments{
-\item{...}{One or more objects of class \linkS4class{H5IdComponent} which should be
+\item{...}{One or more objects of class \link[=H5IdComponent-class]{H5IdComponent} which should be
 closed.  If nothing is provided to the function, all open handles will be
 closed.}
 }
@@ -17,7 +17,7 @@ HDF5 handles.
 }
 \description{
 This functions can be used in two ways.  Firstly, it can be passed one or
-more \linkS4class{H5IdComponent} objects and it'll will try to close all of them
+more \link[=H5IdComponent-class]{H5IdComponent} objects and it'll will try to close all of them
 regardless of the whether they represent a file, group, dataset etc.  This
 can be easier than making multiple calls to \code{\link[=H5Fclose]{H5Fclose()}}, \code{\link[=H5Gclose]{H5Gclose()}}, etc.
 }

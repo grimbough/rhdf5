@@ -7,11 +7,11 @@
 H5Aget_space(h5attribute)
 }
 \arguments{
-\item{h5attribute}{An object of class \linkS4class{H5IdComponent} representing an
+\item{h5attribute}{An object of class \link[=H5IdComponent-class]{H5IdComponent} representing an
 attribute.  Normally created by \code{\link[=H5Aopen]{H5Aopen()}} or similar.}
 }
 \value{
-Returns an object of class \linkS4class{H5IdComponent} representing a H5
+Returns an object of class \link[=H5IdComponent-class]{H5IdComponent} representing a H5
 dataspace identifier
 }
 \description{

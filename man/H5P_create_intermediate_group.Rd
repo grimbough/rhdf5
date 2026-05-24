@@ -11,7 +11,7 @@ H5Pset_create_intermediate_group(h5plist, create_groups = TRUE)
 H5Pget_create_intermediate_group(h5plist)
 }
 \arguments{
-\item{h5plist}{An object of class \linkS4class{H5IdComponent} representing a link
+\item{h5plist}{An object of class \link[=H5IdComponent-class]{H5IdComponent} representing a link
 creation property list.}
 
 \item{create_groups}{A logical of length 1 specifying whether missing

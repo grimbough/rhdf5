@@ -1,7 +1,7 @@
 Type: Package
 Package: rhdf5
 Title: R Interface to HDF5
-Version: 2.55.16
+Version: 2.57.0
 Authors@R: c(
     person("Bernd", "Fischer", role = "aut"),
     person("Mike", "Smith", role = "aut",
@@ -11,7 +11,8 @@ Authors@R: c(
     person("Daniel", "van Twisk", role = "ctb"),
     person("Hugo", "Gruson", , "hugo.gruson@embl.de", role = "cre",
            comment = c(ORCID = "0000-0002-4094-1476")),
-    person("German Network for Bioinformatics Infrastructure - de.NBI", role = "fnd")
+    person("German Network for Bioinformatics Infrastructure - de.NBI", role = "fnd",
+           comment = c(ROR = "01vmpm840"))
   )
 Description: This package provides an interface between HDF5 and R.
     HDF5's main features are the ability to store and access very large
@@ -50,5 +51,5 @@ biocViews: Infrastructure, DataImport
 Encoding: UTF-8
 LazyLoad: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.3
 SystemRequirements: GNU make
+Config/roxygen2/version: 8.0.0

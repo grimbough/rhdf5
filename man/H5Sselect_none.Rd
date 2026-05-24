@@ -7,7 +7,7 @@
 H5Sselect_none(h5space)
 }
 \arguments{
-\item{h5space}{\linkS4class{H5IdComponent} object representing a dataspace.}
+\item{h5space}{\link[=H5IdComponent-class]{H5IdComponent} object representing a dataspace.}
 }
 \description{
 Set the selection region of a dataspace to include no elements

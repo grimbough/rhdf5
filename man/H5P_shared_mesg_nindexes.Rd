@@ -10,7 +10,7 @@ H5Pset_shared_mesg_nindexes(h5plist, nindexes)
 H5Pget_shared_mesg_nindexes(h5plist)
 }
 \arguments{
-\item{h5plist}{\linkS4class{H5IdComponent} object representing the file creation property list}
+\item{h5plist}{\link[=H5IdComponent-class]{H5IdComponent} object representing the file creation property list}
 
 \item{nindexes}{Number of shared object header message indexes to be available in files}
 }

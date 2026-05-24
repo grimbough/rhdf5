@@ -10,7 +10,7 @@ H5Pset_shared_mesg_phase_change(h5plist, max_list, min_btree)
 H5Pget_shared_mesg_phase_change(h5plist)
 }
 \arguments{
-\item{h5plist}{\linkS4class{H5IdComponent} object representing the file creation property list}
+\item{h5plist}{\link[=H5IdComponent-class]{H5IdComponent} object representing the file creation property list}
 
 \item{max_list}{Threshold above which storage shifts from list to B-tree}
 

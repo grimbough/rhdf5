@@ -11,7 +11,7 @@ H5Fopen(name, flags = h5default("H5F_ACC_RD"), fapl = NULL, native = FALSE)
 
 \item{flags}{Character string defining the access mode for opening the file.}
 
-\item{fapl}{\linkS4class{H5IdComponent} object representing a file access property list.
+\item{fapl}{\link[=H5IdComponent-class]{H5IdComponent} object representing a file access property list.
 Leaving this argument as \code{NULL} will use the default HDF5 properties.}
 
 \item{native}{An object of class \code{logical}. If \code{TRUE}, array-like

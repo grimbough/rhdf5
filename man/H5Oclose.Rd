@@ -7,7 +7,7 @@
 H5Oclose(h5obj)
 }
 \arguments{
-\item{h5obj}{An object of class \linkS4class{H5IdComponent} representing an open
+\item{h5obj}{An object of class \link[=H5IdComponent-class]{H5IdComponent} representing an open
 HDF5 object.}
 }
 \description{

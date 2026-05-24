@@ -7,7 +7,7 @@
 H5Aclose(h5attribute)
 }
 \arguments{
-\item{h5attribute}{An object of class \linkS4class{H5IdComponent} representing a
+\item{h5attribute}{An object of class \link[=H5IdComponent-class]{H5IdComponent} representing a
 the attribute to be closed.  Normally created by \code{\link[=H5Aopen]{H5Aopen()}} or similar.}
 }
 \description{

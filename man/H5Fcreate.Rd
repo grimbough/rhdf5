@@ -17,7 +17,7 @@ H5Fcreate(
 
 \item{flags}{See \code{h5const("H5F_ACC")} for possible arguments.}
 
-\item{fcpl, fapl}{Object object of class \linkS4class{H5IdComponent}.  This should
+\item{fcpl, fapl}{Object object of class \link[=H5IdComponent-class]{H5IdComponent}.  This should
 representing a file creation property list and a file access property list
 respectively. See \code{\link[=H5Pcreate]{H5Pcreate()}} or  \code{\link[=H5Pcopy]{H5Pcopy()}} to create objects of this
 kind.  Leaving as \code{NULL} will use the default HDF5 settings which are often

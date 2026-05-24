@@ -7,7 +7,7 @@
 H5Awrite(h5attribute, buf)
 }
 \arguments{
-\item{h5attribute}{An object of class \linkS4class{H5IdComponent} representing an
+\item{h5attribute}{An object of class \link[=H5IdComponent-class]{H5IdComponent} representing an
 attribute.  Normally created by \code{\link[=H5Aopen]{H5Aopen()}} or similar.}
 
 \item{buf}{The data to be written.}

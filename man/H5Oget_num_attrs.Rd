@@ -10,9 +10,9 @@ H5Oget_num_attrs(h5obj)
 H5Oget_num_attrs_by_name(h5loc, name)
 }
 \arguments{
-\item{h5obj}{An object of class \linkS4class{H5IdComponent} representing a H5 object identifier (file, group, or dataset).}
+\item{h5obj}{An object of class \link[=H5IdComponent-class]{H5IdComponent} representing a H5 object identifier (file, group, or dataset).}
 
-\item{h5loc}{An object of class \linkS4class{H5IdComponent} representing a H5 location identifier (file or group).}
+\item{h5loc}{An object of class \link[=H5IdComponent-class]{H5IdComponent} representing a H5 location identifier (file or group).}
 
 \item{name}{The name of the object to be checked.}
 }

@@ -7,7 +7,7 @@
 H5Sset_extent_simple(h5space, dims, maxdims)
 }
 \arguments{
-\item{h5space}{\linkS4class{H5IdComponent} object representing a dataspace.}
+\item{h5space}{\link[=H5IdComponent-class]{H5IdComponent} object representing a dataspace.}
 
 \item{dims}{Dimension of the dataspace. This argument is similar to the dim
 attribute of an array.}

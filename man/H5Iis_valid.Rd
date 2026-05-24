@@ -7,7 +7,7 @@
 H5Iis_valid(h5identifier)
 }
 \arguments{
-\item{h5identifier}{Object of class \linkS4class{H5IdComponent}.}
+\item{h5identifier}{Object of class \link[=H5IdComponent-class]{H5IdComponent}.}
 }
 \value{
 A logical of length 1.  \code{TRUE} is the identifier is valid,

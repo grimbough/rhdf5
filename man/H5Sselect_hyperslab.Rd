@@ -15,7 +15,7 @@ H5Sselect_hyperslab(
 )
 }
 \arguments{
-\item{h5space}{\linkS4class{H5IdComponent} object representing a dataspace.}
+\item{h5space}{\link[=H5IdComponent-class]{H5IdComponent} object representing a dataspace.}
 
 \item{op}{Character string defined the operation used to join the two
 dataspaces.  See \code{h5const("H5S_SELECT")} for the list of available options.}

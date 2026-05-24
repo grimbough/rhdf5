@@ -7,19 +7,19 @@
 H5Ocopy(h5loc, name, h5loc_dest, name_dest, obj_cpy_pl = NULL, lcpl = NULL)
 }
 \arguments{
-\item{h5loc}{An object of class \linkS4class{H5IdComponent} representing an open
+\item{h5loc}{An object of class \link[=H5IdComponent-class]{H5IdComponent} representing an open
 HDF5 object where the source object should be copied from.}
 
 \item{name}{Character vector of length 1, giving the name of the source object
 to be copied.}
 
-\item{h5loc_dest}{An object of class \linkS4class{H5IdComponent} representing an open
+\item{h5loc_dest}{An object of class \link[=H5IdComponent-class]{H5IdComponent} representing an open
 HDF5 object where the new copy should be created.}
 
 \item{name_dest}{Character vector of length 1, giving the name of the new object
 to be created.}
 
-\item{obj_cpy_pl, lcpl}{\linkS4class{H5IdComponent} objects representing object copy and link creation property lists
+\item{obj_cpy_pl, lcpl}{\link[=H5IdComponent-class]{H5IdComponent} objects representing object copy and link creation property lists
 respectively.  If left as \code{NULL} the default values for these will be used.}
 }
 \description{

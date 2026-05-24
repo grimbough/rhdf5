@@ -7,7 +7,7 @@
 H5Dget_num_chunks(h5dataset)
 }
 \arguments{
-\item{h5dataset}{An object of class \linkS4class{H5IdComponent} representing the dataset from which chunks will be counted.}
+\item{h5dataset}{An object of class \link[=H5IdComponent-class]{H5IdComponent} representing the dataset from which chunks will be counted.}
 }
 \value{
 An integer value indicating the number of chunks present in the dataset or selected region.

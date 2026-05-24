@@ -16,7 +16,7 @@ H5Pset_libver_bounds(
 H5Pget_libver_bounds(h5plist)
 }
 \arguments{
-\item{h5plist}{\linkS4class{H5IdComponent} object representing a file access
+\item{h5plist}{\link[=H5IdComponent-class]{H5IdComponent} object representing a file access
 property list.}
 
 \item{libver_low, libver_high}{Define the earliest and latest versions of

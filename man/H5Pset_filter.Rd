@@ -7,7 +7,7 @@
 H5Pset_filter(h5plist, filter_id, is_mandatory = FALSE, cd_values)
 }
 \arguments{
-\item{h5plist}{Object of class \linkS4class{H5IdComponent} representing a dataset
+\item{h5plist}{Object of class \link[=H5IdComponent-class]{H5IdComponent} representing a dataset
 creation property list.}
 
 \item{filter_id}{Integer of length 1, giving the ID of the filter to be used.}

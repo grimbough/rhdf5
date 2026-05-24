@@ -7,15 +7,15 @@
 H5Olink(h5obj, h5loc, newLinkName, lcpl = NULL, lapl = NULL)
 }
 \arguments{
-\item{h5obj}{An object of class \linkS4class{H5IdComponent} representing the object to be linked to.}
+\item{h5obj}{An object of class \link[=H5IdComponent-class]{H5IdComponent} representing the object to be linked to.}
 
-\item{h5loc}{An object of class \linkS4class{H5IdComponent} representing the location at which the
+\item{h5loc}{An object of class \link[=H5IdComponent-class]{H5IdComponent} representing the location at which the
 object is to be linked.  Can represent a file, group, dataset, datatype or attribute.}
 
 \item{newLinkName}{Character string giving the name of the new link.  This should be relative to
 \code{h5loc}.}
 
-\item{lcpl, lapl}{\linkS4class{H5IdComponent} objects representing link creation and link access property lists
+\item{lcpl, lapl}{\link[=H5IdComponent-class]{H5IdComponent} objects representing link creation and link access property lists
 respectively.  If left as \code{NULL} the default values for these will be used.}
 }
 \description{

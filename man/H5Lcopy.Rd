@@ -7,12 +7,12 @@
 H5Lcopy(h5loc, name, h5loc_dest, name_dest, lcpl = NULL, lapl = NULL)
 }
 \arguments{
-\item{h5loc}{An object of class \linkS4class{H5IdComponent} representing a H5
+\item{h5loc}{An object of class \link[=H5IdComponent-class]{H5IdComponent} representing a H5
 location identifier (file or group) where the new link is placed.}
 
 \item{name}{The name of the link to be copied.}
 
-\item{h5loc_dest}{An object of class \linkS4class{H5IdComponent} representing
+\item{h5loc_dest}{An object of class \link[=H5IdComponent-class]{H5IdComponent} representing
 the destination file or group where a copied or moved link should be created.}
 
 \item{name_dest}{The name of the link to be created when copying or moving.}

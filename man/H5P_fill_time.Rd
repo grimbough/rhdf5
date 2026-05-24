@@ -11,7 +11,7 @@ H5Pset_fill_time(h5plist, fill_time = h5default("H5D_FILL_TIME"))
 H5Pget_fill_time(h5plist)
 }
 \arguments{
-\item{h5plist}{An object of class \linkS4class{H5IdComponent} representing a
+\item{h5plist}{An object of class \link[=H5IdComponent-class]{H5IdComponent} representing a
 dataset creation property list.}
 
 \item{fill_time}{When the fill values should be written.  Possible options

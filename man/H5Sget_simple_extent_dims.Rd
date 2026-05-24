@@ -7,7 +7,7 @@
 H5Sget_simple_extent_dims(h5space)
 }
 \arguments{
-\item{h5space}{\linkS4class{H5IdComponent} object representing a dataspace.}
+\item{h5space}{\link[=H5IdComponent-class]{H5IdComponent} object representing a dataspace.}
 }
 \description{
 Find the size of a dataspace

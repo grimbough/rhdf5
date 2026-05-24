@@ -7,7 +7,7 @@
 H5Acreate(h5obj, name, dtype_id, h5space)
 }
 \arguments{
-\item{h5obj}{An object of class \linkS4class{H5IdComponent} representing a H5 object
+\item{h5obj}{An object of class \link[=H5IdComponent-class]{H5IdComponent} representing a H5 object
 identifier (file, group, or dataset). See \code{\link[=H5Fcreate]{H5Fcreate()}}, \code{\link[=H5Fopen]{H5Fopen()}},
 \code{\link[=H5Gcreate]{H5Gcreate()}}, \code{\link[=H5Gopen]{H5Gopen()}}, \code{\link[=H5Dcreate]{H5Dcreate()}}, or \code{\link[=H5Dopen]{H5Dopen()}} to create an object of this kind.}
 
@@ -17,12 +17,12 @@ identifier (file, group, or dataset). See \code{\link[=H5Fcreate]{H5Fcreate()}},
 possible datatypes. Can also be an integer representing an HDF5 datatype.
 Only simple datatypes are allowed for attributes.}
 
-\item{h5space}{An object of class \linkS4class{H5IdComponent} representing a H5
+\item{h5space}{An object of class \link[=H5IdComponent-class]{H5IdComponent} representing a H5
 dataspace. See \code{\link[=H5Dget_space]{H5Dget_space()}}, \code{\link[=H5Screate_simple]{H5Screate_simple()}}, \code{\link[=H5Screate]{H5Screate()}} to create an object
 of this kind.}
 }
 \value{
-An object of class \linkS4class{H5IdComponent} representing a H5 attribute identifier.
+An object of class \link[=H5IdComponent-class]{H5IdComponent} representing a H5 attribute identifier.
 }
 \description{
 Creates an attribute, \code{name}, which is attached to the object specified

@@ -19,7 +19,7 @@ H5Gget_info_by_idx(
 )
 }
 \arguments{
-\item{h5loc}{An object of class \linkS4class{H5IdComponent} representing a H5
+\item{h5loc}{An object of class \link[=H5IdComponent-class]{H5IdComponent} representing a H5
 group.}
 
 \item{group_name}{An additional group name specifying the group for which

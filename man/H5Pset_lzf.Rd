@@ -7,7 +7,7 @@
 H5Pset_lzf(h5plist, h5tid)
 }
 \arguments{
-\item{h5plist}{Object of class \linkS4class{H5IdComponent} representing a dataset
+\item{h5plist}{Object of class \link[=H5IdComponent-class]{H5IdComponent} representing a dataset
 creation property list.}
 
 \item{h5tid}{HDF5 data type id}

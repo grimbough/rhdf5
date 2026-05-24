@@ -7,7 +7,7 @@
 H5Iget_type(h5identifier)
 }
 \arguments{
-\item{h5identifier}{Object of class \linkS4class{H5IdComponent}.}
+\item{h5identifier}{Object of class \link[=H5IdComponent-class]{H5IdComponent}.}
 }
 \value{
 Returns a character vector of length 1 containing the HDF5 type
