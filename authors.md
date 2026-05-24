@@ -16,6 +16,7 @@
 - **Hugo Gruson**. Maintainer. [](https://orcid.org/0000-0002-4094-1476)
 
 - **German Network for Bioinformatics Infrastructure - de.NBI**. Funder.
+  [![ROR](https://raw.githubusercontent.com/ror-community/ror-logos/main/ror-icon-rgb.svg)](https://ror.org/01vmpm840)
 
 ## Citation
 
