@@ -26,122 +26,31 @@ h5checktype <- function(
     stop("Error in ", fctname, ". H5Identifier not valid.", call. = FALSE)
   }
   truetype <- H5Iget_type(h5id)
-  switch(
+  match_truetype_type <- switch(
     type,
-    file = {
-      if (truetype != "H5I_FILE") {
-        stop(
-          "Error in ",
-          fctname,
-          ". The provided H5Identifier is not a file identifier.",
-          call. = FALSE
-        )
-      }
-      0
-    },
-    group = {
-      if (truetype != "H5I_GROUP") {
-        stop(
-          "Error in ",
-          fctname,
-          ". The provided H5Identifier is not a group identifier.",
-          call. = FALSE
-        )
-      }
-      0
-    },
-    loc = {
-      if (!truetype %in% c("H5I_FILE", "H5I_GROUP")) {
-        stop(
-          "Error in ",
-          fctname,
-          ". The provided H5Identifier is not a location identifier.",
-          call. = FALSE
-        )
-      }
-      0
-    },
-    dataset = {
-      if (truetype != "H5I_DATASET") {
-        stop(
-          "Error in ",
-          fctname,
-          ". The provided H5Identifier is not a dataset identifier.",
-          call. = FALSE
-        )
-      }
-      0
-    },
-    object = {
-      if (!truetype %in% c("H5I_FILE", "H5I_GROUP", "H5I_DATASET")) {
-        stop(
-          "Error in ",
-          fctname,
-          ". The provided H5Identifier is not an object identifier.",
-          call. = FALSE
-        )
-      }
-      0
-    },
-    dataspace = {
-      if (truetype != "H5I_DATASPACE") {
-        stop(
-          "Error in ",
-          fctname,
-          ". The provided H5Identifier is not a dataspace identifier.",
-          call. = FALSE
-        )
-      }
-      0
-    },
-    attribute = {
-      if (truetype != "H5I_ATTR") {
-        stop(
-          "Error in ",
-          fctname,
-          ". The provided H5Identifier is not an attribute identifier.",
-          call. = FALSE
-        )
-      }
-      0
-    },
-    type = {
-      if (truetype != "H5I_DATATYPE") {
-        stop(
-          "Error in ",
-          fctname,
-          ". The provided H5Identifier is not a type identifier.",
-          call. = FALSE
-        )
-      }
-      0
-    },
-    plist = {
-      if (truetype != "H5I_GENPROP_LST") {
-        stop(
-          "Error in ",
-          fctname,
-          ". The provided H5Identifier is not a property list.",
-          call. = FALSE
-        )
-      }
-      0
-    },
-    plistclass = {
-      if (truetype != "H5I_GENPROP_CLS") {
-        stop(
-          "Error in ",
-          fctname,
-          ". The provided H5Identifier is not a property list class.",
-          call. = FALSE
-        )
-      }
-      0
-    },
-    {
-      stop("argument for type unknown")
-    }
+    file = truetype == "H5I_FILE",
+    group = truetype == "H5I_GROUP",
+    loc = truetype %in% c("H5I_FILE", "H5I_GROUP"),
+    dataset = truetype == "H5I_DATASET",
+    object = truetype %in% c("H5I_FILE", "H5I_GROUP", "H5I_DATASET"),
+    dataspace = truetype == "H5I_DATASPACE",
+    attribute = truetype == "H5I_ATTR",
+    type = truetype == "H5I_DATATYPE",
+    plist = truetype == "H5I_GENPROP_LST",
+    plistclass = truetype == "H5I_GENPROP_CLS",
+    stop("argument for type unknown")
   )
+
+  if (!match_truetype_type) {
+    stop(
+      sprintf(
+        "Error in %s. The provided H5Identifier is not an identifier for '%s' types.",
+        fctname,
+        type
+      ),
+      call. = FALSE
+    )
+  }
   return(invisible(NULL))
 }
 
