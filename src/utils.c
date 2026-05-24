@@ -1,4 +1,5 @@
 /* General utility functions used by multiple other functions */
+#include <inttypes.h>
 #include "utils.h"
 
 void concatdim(char *s1, hsize_t next_dim, int index)
@@ -8,7 +9,7 @@ void concatdim(char *s1, hsize_t next_dim, int index)
     memset(tmp, '\0',1000);
     strncpy(tmp, s1, 999);
 
-    snprintf(s1, 1000, "%.977s%llu%.3s", tmp, next_dim, index ? " x " : "");
+    snprintf(s1, 1000, "%.977s%" PRIu64 "%.3s", tmp, (uint64_t)next_dim, index ? " x " : "");
 }
 
 void concatdim_native(char *s1, hsize_t next_dim, int index)
@@ -17,7 +18,7 @@ void concatdim_native(char *s1, hsize_t next_dim, int index)
     memset(tmp, '\0',1000);
     strncpy(tmp, s1, 999);
     
-    snprintf(s1, 1000, "%.977s%.3s%llu", tmp, index ? " x " : "", next_dim);
+    snprintf(s1, 1000, "%.977s%.3s%" PRIu64, tmp, index ? " x " : "", (uint64_t)next_dim);
 }
 
 
