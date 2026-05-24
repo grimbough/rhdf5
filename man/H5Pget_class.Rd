@@ -7,7 +7,7 @@
 H5Pget_class(h5plist)
 }
 \arguments{
-\item{h5plist}{\linkS4class{H5IdComponent} object representing any type of HDF5
+\item{h5plist}{\link[=H5IdComponent-class]{H5IdComponent} object representing any type of HDF5
 property list.}
 }
 \description{

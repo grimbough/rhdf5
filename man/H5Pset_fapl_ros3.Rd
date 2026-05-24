@@ -7,7 +7,7 @@
 H5Pset_fapl_ros3(h5plist, s3credentials = NULL)
 }
 \arguments{
-\item{h5plist}{\linkS4class{H5IdComponent} object representing a file access
+\item{h5plist}{\link[=H5IdComponent-class]{H5IdComponent} object representing a file access
 property list.}
 
 \item{s3credentials}{Either \code{NULL} or a list of length 3 specifying the AWS access credentials (see details).}

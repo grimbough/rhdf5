@@ -15,7 +15,7 @@ H5Pset_shared_mesg_index(
 H5Pget_shared_mesg_index(h5plist, index_num)
 }
 \arguments{
-\item{h5plist}{\linkS4class{H5IdComponent} object representing the file creation
+\item{h5plist}{\link[=H5IdComponent-class]{H5IdComponent} object representing the file creation
 property list}
 
 \item{index_num}{Index being configured.  Indices use C-style 0-based counting,

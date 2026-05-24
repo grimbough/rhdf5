@@ -11,7 +11,7 @@ H5Pset_layout(h5plist, layout = h5default("H5D"))
 H5Pget_layout(h5plist)
 }
 \arguments{
-\item{h5plist}{An object of class \linkS4class{H5IdComponent} representing a dataset creation property list.}
+\item{h5plist}{An object of class \link[=H5IdComponent-class]{H5IdComponent} representing a dataset creation property list.}
 
 \item{layout}{A character giving the name of a dataset layout type.}
 }

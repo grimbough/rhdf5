@@ -10,7 +10,7 @@ H5Pset_istore_k(h5plist, ik)
 H5Pget_istore_k(h5plist)
 }
 \arguments{
-\item{h5plist}{\linkS4class{H5IdComponent} object representing the file creation property list}
+\item{h5plist}{\link[=H5IdComponent-class]{H5IdComponent} object representing the file creation property list}
 
 \item{ik}{chunked Storage B-tree 1/2 rank}
 }

@@ -13,7 +13,7 @@ H5Pget_nfilters(h5plist)
 H5Pget_filter(h5plist, idx)
 }
 \arguments{
-\item{h5plist}{Object of class \linkS4class{H5IdComponent} representing a dataset
+\item{h5plist}{Object of class \link[=H5IdComponent-class]{H5IdComponent} representing a dataset
 creation property list.}
 
 \item{idx}{Integer of length 1.  This argument selects which filter to return

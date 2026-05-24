@@ -7,7 +7,7 @@
 H5Pset_szip(h5plist, options_mask, pixels_per_block)
 }
 \arguments{
-\item{h5plist}{Object of class \linkS4class{H5IdComponent} representing a dataset
+\item{h5plist}{Object of class \link[=H5IdComponent-class]{H5IdComponent} representing a dataset
 creation property list.}
 
 \item{options_mask, pixels_per_block}{Integer vectors of length 1, setting parameters

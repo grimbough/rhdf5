@@ -10,13 +10,13 @@ h5set_extent(file, dataset, dims, native = FALSE)
 \arguments{
 \item{file}{The filename (character) of the file in which the dataset will
 be located. For advanced programmers it is possible to provide an object of
-class \linkS4class{H5IdComponent} representing a H5 location identifier
+class \link[=H5IdComponent-class]{H5IdComponent} representing a H5 location identifier
 (file or group). See \code{\link[=H5Fcreate]{H5Fcreate()}}, \code{\link[=H5Fopen]{H5Fopen()}},
 \code{\link[=H5Gcreate]{H5Gcreate()}}, \code{\link[=H5Gopen]{H5Gopen()}} to create an object of this
 kind.}
 
 \item{dataset}{The name of the dataset in the HDF5 file, or an object of
-class \linkS4class{H5IdComponent} representing a H5 dataset identifier. See
+class \link[=H5IdComponent-class]{H5IdComponent} representing a H5 dataset identifier. See
 \code{\link[=H5Dcreate]{H5Dcreate()}}, or \code{\link[=H5Dopen]{H5Dopen()}} to create an object of
 this kind.}
 

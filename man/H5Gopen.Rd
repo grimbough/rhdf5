@@ -7,13 +7,13 @@
 H5Gopen(h5loc, name)
 }
 \arguments{
-\item{h5loc}{An object of class \linkS4class{H5IdComponent} representing a H5
+\item{h5loc}{An object of class \link[=H5IdComponent-class]{H5IdComponent} representing a H5
 file or group that contains the group to be opened.}
 
 \item{name}{Name of the group to open.}
 }
 \value{
-An object of class \linkS4class{H5IdComponent} representing the opened
+An object of class \link[=H5IdComponent-class]{H5IdComponent} representing the opened
 group.  When access to the group is no longer needed this should be released
 with \code{\link[=H5Gclose]{H5Gclose()}} to prevent resource leakage.
 }

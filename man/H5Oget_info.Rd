@@ -7,7 +7,7 @@
 H5Oget_info(h5loc)
 }
 \arguments{
-\item{h5loc}{An object of class \linkS4class{H5IdComponent} representing an open
+\item{h5loc}{An object of class \link[=H5IdComponent-class]{H5IdComponent} representing an open
 HDF5 dataset or group.}
 }
 \description{

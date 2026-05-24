@@ -21,7 +21,7 @@ with a selection set.  This argument is only used if creating a
 reference to a dataset region, and will be ignored otherwise.}
 }
 \value{
-An \linkS4class{H5Ref} object storing the reference.
+An \link[=H5Ref-class]{H5Ref} object storing the reference.
 }
 \description{
 Creates a reference to an object or dataset selection inside an HDF5 file.

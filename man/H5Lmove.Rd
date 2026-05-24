@@ -7,12 +7,12 @@
 H5Lmove(h5loc, name, h5loc_dest, name_dest, lcpl = NULL, lapl = NULL)
 }
 \arguments{
-\item{h5loc}{An object of class \linkS4class{H5IdComponent} representing a H5
+\item{h5loc}{An object of class \link[=H5IdComponent-class]{H5IdComponent} representing a H5
 location identifier (file or group) where the new link is placed.}
 
 \item{name}{The name of the link to be moved.}
 
-\item{h5loc_dest}{\linkS4class{H5IdComponent} object representing the H5 location
+\item{h5loc_dest}{\link[=H5IdComponent-class]{H5IdComponent} object representing the H5 location
 where the new link should be created.}
 
 \item{name_dest}{Name of the new link to be created}

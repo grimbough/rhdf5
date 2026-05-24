@@ -11,7 +11,7 @@ H5Fget_create_plist(h5file)
 H5Fget_access_plist(h5file)
 }
 \arguments{
-\item{h5file}{An object of class \linkS4class{H5IdComponent} representing a H5
+\item{h5file}{An object of class \link[=H5IdComponent-class]{H5IdComponent} representing a H5
 file identifier.  Typically produced by \code{\link[=H5Fopen]{H5Fopen()}} or \code{\link[=H5Fcreate]{H5Fcreate()}}.}
 }
 \description{

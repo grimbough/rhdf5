@@ -7,7 +7,7 @@
 H5Gcreate(h5loc, name)
 }
 \arguments{
-\item{h5loc}{An object of class \linkS4class{H5IdComponent}}
+\item{h5loc}{An object of class \link[=H5IdComponent-class]{H5IdComponent}}
 
 \item{name}{Name of the new group to be created.}
 }

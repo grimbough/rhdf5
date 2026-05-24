@@ -7,7 +7,7 @@
 H5Sselect_index(h5space, index)
 }
 \arguments{
-\item{h5space}{\linkS4class{H5IdComponent} object representing a dataspace.}
+\item{h5space}{\link[=H5IdComponent-class]{H5IdComponent} object representing a dataspace.}
 
 \item{index}{A list of integer indices. The length of the list corresponds to
 the number of dimensions of the HDF5 array. If a list element is \code{NULL},

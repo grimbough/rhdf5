@@ -15,7 +15,7 @@ H5Dcreate(
 )
 }
 \arguments{
-\item{h5loc}{An object of class \linkS4class{H5IdComponent} representing a H5
+\item{h5loc}{An object of class \link[=H5IdComponent-class]{H5IdComponent} representing a H5
 location identifier (file or group). See \code{\link[=H5Fcreate]{H5Fcreate()}}, \code{\link[=H5Fopen]{H5Fopen()}},
 \code{\link[=H5Gcreate]{H5Gcreate()}}, \code{\link[=H5Gopen]{H5Gopen()}} to create an object of this kind.}
 
@@ -24,11 +24,11 @@ location identifier (file or group). See \code{\link[=H5Fcreate]{H5Fcreate()}}, 
 \item{dtype_id}{A character name of a datatype. See \code{h5const("H5T")}
 for possible datatypes. Can also be an integer representing an HDF5 datatype.}
 
-\item{h5space}{An object of class \linkS4class{H5IdComponent} representing a H5 dataspace.
+\item{h5space}{An object of class \link[=H5IdComponent-class]{H5IdComponent} representing a H5 dataspace.
 See \code{\link[=H5Dget_space]{H5Dget_space()}}, \code{\link[=H5Screate_simple]{H5Screate_simple()}}, \code{\link[=H5Screate]{H5Screate()}} to create an object
 of this kind}
 
-\item{lcpl, dcpl, dapl}{An objects of class \linkS4class{H5IdComponent} representing
+\item{lcpl, dcpl, dapl}{An objects of class \link[=H5IdComponent-class]{H5IdComponent} representing
 HDF5 property lists.  Specially these should respectively be: a link creation
 property list, a dataset creation property list, a dataset access property list}
 }

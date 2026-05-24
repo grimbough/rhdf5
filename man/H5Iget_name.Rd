@@ -7,7 +7,7 @@
 H5Iget_name(h5obj)
 }
 \arguments{
-\item{h5obj}{An object of class \linkS4class{H5IdComponent}.  Can represent a
+\item{h5obj}{An object of class \link[=H5IdComponent-class]{H5IdComponent}.  Can represent a
 file, group, dataset or attribute.}
 }
 \description{

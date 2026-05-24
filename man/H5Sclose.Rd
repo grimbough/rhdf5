@@ -7,7 +7,7 @@
 H5Sclose(h5space)
 }
 \arguments{
-\item{h5space}{Object of class \linkS4class{H5IdComponent} representing the
+\item{h5space}{Object of class \link[=H5IdComponent-class]{H5IdComponent} representing the
 dataspace to be closed.}
 }
 \description{

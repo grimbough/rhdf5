@@ -54,7 +54,7 @@ h5writeDataset(obj, h5loc, name, ...)
 
 \item{file}{The filename (character) of the file in which the dataset will be
 located. For advanced programmers it is possible to provide an object of
-class \linkS4class{H5IdComponent} representing a H5 location identifier (file or
+class \link[=H5IdComponent-class]{H5IdComponent} representing a H5 location identifier (file or
 group). See \code{\link[=H5Fcreate]{H5Fcreate()}}, \code{\link[=H5Fopen]{H5Fopen()}},
 \code{\link[=H5Gcreate]{H5Gcreate()}}, \code{\link[=H5Gopen]{H5Gopen()}} to create an object of this
 kind.}
@@ -74,7 +74,7 @@ orientation. Using \code{native = TRUE} increases HDF5 file portability
 between programming languages. A file written with \code{native = TRUE}
 should also be read with \code{native = TRUE}}
 
-\item{h5loc}{An object of class \linkS4class{H5IdComponent} representing a H5
+\item{h5loc}{An object of class \link[=H5IdComponent-class]{H5IdComponent} representing a H5
 location identifier (file or group). See \code{\link[=H5Fcreate]{H5Fcreate()}},
 \code{\link[=H5Fopen]{H5Fopen()}}, \code{\link[=H5Gcreate]{H5Gcreate()}}, \code{\link[=H5Gopen]{H5Gopen()}} to
 create an object of this kind.}

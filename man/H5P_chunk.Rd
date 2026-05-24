@@ -11,7 +11,7 @@ H5Pset_chunk(h5plist, dim)
 H5Pget_chunk(h5plist)
 }
 \arguments{
-\item{h5plist}{An object of class \linkS4class{H5IdComponent} representing a dataset creation property list.}
+\item{h5plist}{An object of class \link[=H5IdComponent-class]{H5IdComponent} representing a dataset creation property list.}
 
 \item{dim}{The chunk size used to store the dataset. This argument should be an integer vector of the same length as
 the number of dimensions of the dataset the dataset creation property list will be applied to.}

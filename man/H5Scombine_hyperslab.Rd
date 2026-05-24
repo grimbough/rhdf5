@@ -15,7 +15,7 @@ H5Scombine_hyperslab(
 )
 }
 \arguments{
-\item{h5space}{\linkS4class{H5IdComponent} object representing a dataspace.}
+\item{h5space}{\link[=H5IdComponent-class]{H5IdComponent} object representing a dataspace.}
 
 \item{op}{Character string defined the operation used to join the two
 dataspaces.  See \code{h5const("H5S_SELECT")} for the list of available options.}
@@ -25,7 +25,7 @@ to the rank of the dataspace.  These parameters define the new hyperslab
 to select.}
 }
 \value{
-An \linkS4class{H5IdComponent} object representing a new dataspace
+An \link[=H5IdComponent-class]{H5IdComponent} object representing a new dataspace
 with the generated selection.
 }
 \description{

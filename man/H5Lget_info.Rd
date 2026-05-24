@@ -7,7 +7,7 @@
 H5Lget_info(h5loc, name)
 }
 \arguments{
-\item{h5loc}{An object of class \linkS4class{H5IdComponent} representing a H5
+\item{h5loc}{An object of class \link[=H5IdComponent-class]{H5IdComponent} representing a H5
 location identifier (file or group).}
 
 \item{name}{The name of the link to be queried.}

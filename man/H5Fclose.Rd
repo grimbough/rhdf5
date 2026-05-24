@@ -7,7 +7,7 @@
 H5Fclose(h5file)
 }
 \arguments{
-\item{h5file}{\linkS4class{H5IdComponent} representing an HDF5 file ID.  Typically
+\item{h5file}{\link[=H5IdComponent-class]{H5IdComponent} representing an HDF5 file ID.  Typically
 created via \code{\link[=H5Fcreate]{H5Fcreate()}} or \code{\link[=H5Fopen]{H5Fopen()}}.}
 }
 \description{

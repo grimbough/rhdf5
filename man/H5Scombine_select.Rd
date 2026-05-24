@@ -7,13 +7,13 @@
 H5Scombine_select(h5space1, op = h5default("H5S_SELECT"), h5space2)
 }
 \arguments{
-\item{h5space1, h5space2}{\linkS4class{H5IdComponent} objects representing a dataspaces.}
+\item{h5space1, h5space2}{\link[=H5IdComponent-class]{H5IdComponent} objects representing a dataspaces.}
 
 \item{op}{Character string defined the operation used to join the two
 dataspaces.  See \code{h5const("H5S_SELECT")} for the list of available options.}
 }
 \value{
-Returns an \linkS4class{H5IdComponent} object representing a new dataspace.
+Returns an \link[=H5IdComponent-class]{H5IdComponent} object representing a new dataspace.
 The new dataspace will have the same extent as \code{h5space1} with the
 hyperslab selection being the result of combining the selections of
 \code{h5space1} and \code{h5space2}.

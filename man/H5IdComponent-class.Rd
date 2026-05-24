@@ -40,7 +40,7 @@ the HDF5 dataset.}
 
 \item{i, j, \dots}{Indices specifying elements to extract or replace. Indices
 are \code{numeric} vectors or empty (missing) or \code{NULL}.  Numeric
-values are coerced to integer as by \code{\link[base:integer]{base::as.integer()}} (and
+values are coerced to integer as by \code{\link[base:as.integer]{base::as.integer()}} (and
 hence truncated towards zero).}
 
 \item{drop}{If \code{TRUE} the result is coerced to the lowest possible dimension

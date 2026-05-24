@@ -12,7 +12,7 @@ H5Lcreate_external(target_file_name, target_obj_name, link_loc, link_name)
 \item{target_obj_name}{Path to the object in the file specified by
 \code{target_file_name} to link to.}
 
-\item{link_loc}{\linkS4class{H5IdComponent} object giving the location where the
+\item{link_loc}{\link[=H5IdComponent-class]{H5IdComponent} object giving the location where the
 new link should be created. Can represent an HDF5 file or group.}
 
 \item{link_name}{Name (path) of the new link, relative to the location of

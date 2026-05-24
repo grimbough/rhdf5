@@ -7,7 +7,7 @@
 H5Fget_name(h5obj)
 }
 \arguments{
-\item{h5obj}{An object of class \linkS4class{H5IdComponent}.  Despite this being
+\item{h5obj}{An object of class \link[=H5IdComponent-class]{H5IdComponent}.  Despite this being
 an H5F function, it works equally well on H5 file, group, dataset and
 attribute datatypes.}
 }

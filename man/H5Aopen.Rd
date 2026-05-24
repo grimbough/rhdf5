@@ -19,7 +19,7 @@ H5Aopen_by_idx(
 )
 }
 \arguments{
-\item{h5obj}{An object of class \linkS4class{H5IdComponent} representing a H5 object
+\item{h5obj}{An object of class \link[=H5IdComponent-class]{H5IdComponent} representing a H5 object
 identifier (file, group, or dataset). See \code{\link[=H5Fcreate]{H5Fcreate()}}, \code{\link[=H5Fopen]{H5Fopen()}},
 \code{\link[=H5Gcreate]{H5Gcreate()}}, \code{\link[=H5Gopen]{H5Gopen()}}, \code{\link[=H5Dcreate]{H5Dcreate()}}, or \code{\link[=H5Dopen]{H5Dopen()}} to create an object of this kind.}
 
@@ -35,7 +35,7 @@ so the first attribute is opened with \code{n=0}.}
 \item{order}{See \code{h5const("H5_ITER")} for possible arguments.}
 }
 \value{
-An object of class \linkS4class{H5IdComponent} representing a H5 attribute identifier.
+An object of class \link[=H5IdComponent-class]{H5IdComponent} representing a H5 attribute identifier.
 }
 \description{
 Open an attribute for an HDF5 object

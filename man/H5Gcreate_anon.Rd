@@ -7,11 +7,11 @@
 H5Gcreate_anon(h5loc)
 }
 \arguments{
-\item{h5loc}{An object of class \linkS4class{H5IdComponent} specifying the file in
+\item{h5loc}{An object of class \link[=H5IdComponent-class]{H5IdComponent} specifying the file in
 which the new group is to be created.}
 }
 \value{
-\code{H5Gcreate_anon} returns an object of class \linkS4class{H5IdComponent}
+\code{H5Gcreate_anon} returns an object of class \link[=H5IdComponent-class]{H5IdComponent}
 representing the newly created group.  However at this point is is still
 anonymous, and must be linked into the file structure via \code{\link[=H5Olink]{H5Olink()}}.
 If this is not done, the group will be deleted from the file when it

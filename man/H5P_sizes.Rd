@@ -10,7 +10,7 @@ H5Pset_sizes(h5plist, sizeof_addr, sizeof_size)
 H5Pget_sizes(h5plist)
 }
 \arguments{
-\item{h5plist}{\linkS4class{H5IdComponent} object representing the file creation property list}
+\item{h5plist}{\link[=H5IdComponent-class]{H5IdComponent} object representing the file creation property list}
 
 \item{sizeof_addr}{Offset size in bytes}
 

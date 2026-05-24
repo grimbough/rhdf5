@@ -7,13 +7,13 @@
 H5Oopen(h5loc, name)
 }
 \arguments{
-\item{h5loc}{An object of class \linkS4class{H5IdComponent}}
+\item{h5loc}{An object of class \link[=H5IdComponent-class]{H5IdComponent}}
 
 \item{name}{Path to the object to be opened.  This should be relative to
 \code{h5loc} rather than the file.}
 }
 \value{
-An object of class \linkS4class{H5IdComponent} if the open operation was
+An object of class \link[=H5IdComponent-class]{H5IdComponent} if the open operation was
 successful. \code{FALSE} otherwise.
 }
 \description{

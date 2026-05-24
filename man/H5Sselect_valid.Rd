@@ -7,7 +7,7 @@
 H5Sselect_valid(h5space)
 }
 \arguments{
-\item{h5space}{\linkS4class{H5IdComponent} object representing a dataspace.}
+\item{h5space}{\link[=H5IdComponent-class]{H5IdComponent} object representing a dataspace.}
 }
 \description{
 Check that a selection is valid

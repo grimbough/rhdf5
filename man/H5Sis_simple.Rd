@@ -7,7 +7,7 @@
 H5Sis_simple(h5space)
 }
 \arguments{
-\item{h5space}{\linkS4class{H5IdComponent} object representing a dataspace.}
+\item{h5space}{\link[=H5IdComponent-class]{H5IdComponent} object representing a dataspace.}
 }
 \description{
 In HDF5 a dataspace is considered "simple" if it represents a regular

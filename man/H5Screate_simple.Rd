@@ -21,7 +21,7 @@ programming languages. A file written with \code{native = TRUE} should also be
 read with \code{native = TRUE}.}
 }
 \value{
-Returns an object of class \linkS4class{H5IdComponent} representing a
+Returns an object of class \link[=H5IdComponent-class]{H5IdComponent} representing a
 dataspace.
 }
 \description{

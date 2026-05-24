@@ -11,7 +11,7 @@ H5Pset_obj_track_times(h5plist, track_times = TRUE)
 H5Pget_obj_track_times(h5plist)
 }
 \arguments{
-\item{h5plist}{An \linkS4class{H5IdComponent} object representing an object
+\item{h5plist}{An \link[=H5IdComponent-class]{H5IdComponent} object representing an object
 creation property list.}
 
 \item{track_times}{\code{logical} specifying whether times associated with an
