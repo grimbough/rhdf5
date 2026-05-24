@@ -23,7 +23,7 @@ test_that("getting names", {
 
   expect_error(
     H5Iget_name(sid),
-    "The provided H5Identifier is not an object identifier"
+    "The provided H5Identifier is not an identifier for 'object' types."
   )
   expect_error(H5Iget_name("test"), "Argument not of class H5IdComponent")
 })
