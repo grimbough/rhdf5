@@ -4,7 +4,14 @@
 \alias{H5Fopen}
 \title{Open an existing HDF5 file}
 \usage{
-H5Fopen(name, flags = h5default("H5F_ACC_RD"), fapl = NULL, native = FALSE)
+H5Fopen(
+  name,
+  flags = h5default("H5F_ACC_RD"),
+  fapl = NULL,
+  native = FALSE,
+  s3 = FALSE,
+  s3credentials = NULL
+)
 }
 \arguments{
 \item{name}{The name (or path) of the HDF5 file to be opened.}
@@ -19,6 +26,14 @@ objects are treated as stored in HDF5 row-major rather than R column-major
 orientation. Using \code{native = TRUE} increases HDF5 file portability
 between programming languages. A file written with \code{native = TRUE}
 should also be opened for reading with \code{native = TRUE}.}
+
+\item{s3}{Logical. If \code{TRUE}, the file specified in \code{name} is read using
+the HDF5 Read-Only S3 virtual file driver. Requires that \strong{Rhdf5lib} was
+compiled with S3 support, and that \code{name} is an \verb{http://} or \verb{https://} URL.}
+
+\item{s3credentials}{A list of length three containing the AWS region, access
+key ID, and secret access key for accessing files in a private S3 bucket.
+Leave as \code{NULL} for anonymous access to public data.}
 }
 \description{
 Open an existing HDF5 file
