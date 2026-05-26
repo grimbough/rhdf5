@@ -13,7 +13,7 @@ test_that("General library functions", {
   expect_silent(H5open())
   expect_silent(H5garbage_collect())
   # expect_silent( H5close() )
-  expect_is(H5get_libversion(), "integer") %>%
+  expect_type(H5get_libversion(), "integer") |>
     expect_named(c("majnum", "minnum", "relnum"))
 })
 
@@ -42,10 +42,10 @@ test_that("h5closeAll closed everything", {
   aid <- H5Acreate(did, "volume", "H5T_NATIVE_INT8", sid)
   ## object
 
-  expect_identical(nrow(h5listIdentifier()), 5L)
+  expect_shape(h5listIdentifier(), nrow = 5L)
 
   expect_silent(h5closeAll())
 
   ## should be nothing left open
-  expect_identical(nrow(h5listIdentifier()), 0L)
+  expect_shape(h5listIdentifier(), nrow = 0L)
 })

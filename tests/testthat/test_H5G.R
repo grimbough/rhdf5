@@ -26,7 +26,7 @@ test_that("Group creation & closure", {
   ## writing to a group
   expect_silent(gid <- H5Gopen(h5loc = fid, name = "test_group"))
   expect_silent(info <- H5Gget_info(gid))
-  expect_is(info, "list")
+  expect_type(info, "list")
   expect_named(info, c("storage_type", "nlink", "max_corder", "mounted"))
 
   expect_silent(H5Gclose(gid))
@@ -41,12 +41,18 @@ test_that("Group creation & closure", {
   ## some input errors are caught
   expect_error(
     H5Gget_info_by_idx(fid, n = 1:10),
-    regexp = "integer of length 1"
+    regexp = "integer of length 1",
+    fixed = TRUE
   )
-  expect_error(H5Gget_info_by_idx(fid, n = 0), regexp = "larger than 1")
+  expect_error(
+    H5Gget_info_by_idx(fid, n = 0),
+    regexp = "larger than 1",
+    fixed = TRUE
+  )
   expect_error(
     H5Gget_info_by_idx(fid, n = 1, group_name = NULL),
-    regexp = "character string of length 1"
+    regexp = "character string of length 1",
+    fixed = TRUE
   )
 
   H5Fclose(fid)
@@ -57,7 +63,7 @@ test_that("Group creation & closure", {
   ## writing to a group
   expect_silent(gid <- H5Gopen(h5loc = fid, name = "test_group"))
   expect_silent(info <- H5Gget_info(gid))
-  expect_is(info, "list")
+  expect_type(info, "list")
   expect_named(info, c("storage_type", "nlink", "max_corder", "mounted"))
 
   expect_silent(H5Gclose(gid))

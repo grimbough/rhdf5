@@ -6,7 +6,7 @@ test_that("Filters can be set", {
   expect_gte(H5Pset_nbit(dcpl), 0)
   expect_gte(H5Pset_shuffle(dcpl), 0)
 
-  expect_is(H5Pget_nfilters(dcpl), "integer") |>
+  expect_type(H5Pget_nfilters(dcpl), "integer") |>
     expect_equal(2L)
 
   ## we can only set szip for writing with Windows versions built after switching to ucrt
@@ -19,7 +19,7 @@ test_that("Filters can be set", {
 })
 
 test_that("Filter information can be retrieved", {
-  expect_is(filter_info <- H5Pget_filter(dcpl, 1L), "list") |>
+  expect_type(filter_info <- H5Pget_filter(dcpl, 1L), "list") |>
     expect_length(2L)
   expect_identical(filter_info[[2]], "nbit")
 })

@@ -69,13 +69,15 @@ test_that("dataset region references can be created", {
 test_that("H5R error checking works", {
   expect_error(
     H5Rcreate(fid, name = "/foo/baa", ref_type = "H5R_DATASET_REGION"),
-    regexp = "H5R_DATASET_REGION references must be accompanied by a H5 dataspace"
+    "H5R_DATASET_REGION references must be accompanied by a H5 dataspace",
+    fixed = TRUE
   )
 
   ref_to_dataset <- H5Rcreate(fid, name = "/foo/baa")
   expect_error(
     H5Rget_region(ref = ref_to_dataset, h5loc = fid),
-    "Only references of type H5R_DATASET_REGION can be used"
+    "Only references of type H5R_DATASET_REGION can be used",
+    fixed = TRUE
   )
 })
 
@@ -95,17 +97,22 @@ test_that("H5Ref methods work", {
 
   expect_error(
     c(object_ref, region_ref),
-    "All references must be of the same type"
+    "All references must be of the same type",
+    fixed = TRUE
   )
-  expect_error(c(object_ref, 1:10), "All objects must be of class 'H5Ref'")
+  expect_error(
+    c(object_ref, 1:10),
+    "All objects must be of class 'H5Ref'",
+    fixed = TRUE
+  )
 
   ## object and region references are different internally but not externally
-  expect_identical(length(object_ref), 1L)
-  expect_identical(length(object_ref2), 2L)
-  expect_identical(length(region_ref), 1L)
-  expect_identical(length(region_ref2), 2L)
+  expect_length(object_ref, 1L)
+  expect_length(object_ref2, 2L)
+  expect_length(region_ref, 1L)
+  expect_length(region_ref2, 2L)
 
-  expect_identical(length(object_ref[2]), 1L)
+  expect_length(object_ref[2], 1L)
   expect_equivalent(object_ref[1], object_ref[2])
 })
 

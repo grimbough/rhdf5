@@ -26,7 +26,7 @@ H5Fclose(fid)
 
 test_that("64-bit integer attributes are read correctly", {
   expect_warning(x1 <- h5readAttributes(h5File, "A", bit64conversion = "int"))
-  expect_true("int64" %in% names(x1) && "uint32" %in% names(x1))
+  expect_in(c("int64", "uint32"), names(x1))
   expect_equivalent(x1$int64, c(1:9, NA))
   expect_equivalent(x1$uint32, c(1:9, NA))
 

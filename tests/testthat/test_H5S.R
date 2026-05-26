@@ -62,7 +62,7 @@ test_that("We can create a simple dataspace", {
     dims = c(1, 2, 3),
     maxdims = c(10, 20, 30)
   ))
-  expect_is(dspace_dims <- H5Sget_simple_extent_dims(sid), "list")
+  expect_type(dspace_dims <- H5Sget_simple_extent_dims(sid), "list")
   expect_false(identical(dspace_dims$size, dspace_dims$maxsize))
   expect_identical(dspace_dims$rank, 3L)
 
@@ -81,7 +81,7 @@ test_that("We can create a dataspace with unlimited or non 32-bit integer dims",
     maxdims = c(10, H5Sunlimited())
   ))
   dspace_dims <- H5Sget_simple_extent_dims(sid)
-  expect_is(dspace_dims$maxsize, "integer")
+  expect_type(dspace_dims$maxsize, "integer")
   expect_identical(dspace_dims$maxsize, c(10L, -1L))
 
   expect_silent(H5Sclose(sid))
@@ -124,15 +124,18 @@ test_that("Selecting using an index", {
   ## errors when not providing enough dimensions or incorrect dimensions
   expect_error(
     H5Sselect_index(sid, index = list(10)),
-    regexp = "length of list index not equal to h5space dimensional extension"
+    regexp = "length of list index not equal to h5space dimensional extension",
+    fixed = TRUE
   )
   expect_error(
     H5Sselect_index(sid, index = list(1:5, 1:5, 0:5)),
-    regexp = "negative indices and 0 not supported"
+    regexp = "negative indices and 0 not supported",
+    fixed = TRUE
   )
   expect_error(
     H5Sselect_index(sid, index = list(1:15, 1:5, 1:5)),
-    regexp = "index exceeds HDF5-array dimension"
+    regexp = "index exceeds HDF5-array dimension",
+    fixed = TRUE
   )
 
   expect_silent(H5Sclose(sid))

@@ -44,20 +44,20 @@ test_that("Adding attribute to file", {
 
   attr_back <- h5readAttributes(h5File, name = "/")
   expect_length(attr_back, n = 5)
-  expect_true(all(
+  expect_setequal(
     c(
       "char_attr",
       "int_attr",
       "numeric_attr",
       "matrix_attr",
       "logical_attr"
-    ) %in%
-      names(attr_back)
-  ))
-  expect_is(attr_back$char_attr[1], "character")
-  expect_is(attr_back$int_attr[1], "integer")
-  expect_is(attr_back$numeric_attr[1], "numeric")
-  expect_is(attr_back$logical_attr[1], "logical")
+    ),
+    names(attr_back)
+  )
+  expect_type(attr_back$char_attr[1], "character")
+  expect_type(attr_back$int_attr[1], "integer")
+  expect_type(attr_back$numeric_attr[1], "double")
+  expect_type(attr_back$logical_attr[1], "logical")
 })
 
 test_that("Adding attribute to group", {
@@ -98,20 +98,20 @@ test_that("Adding attribute to group", {
 
   attr_back <- h5readAttributes(h5File, name = "foo_group")
   expect_length(attr_back, n = 5)
-  expect_true(all(
+  expect_setequal(
     c(
       "char_attr",
       "int_attr",
       "numeric_attr",
       "matrix_attr",
       "logical_attr"
-    ) %in%
-      names(attr_back)
-  ))
-  expect_is(attr_back$char_attr[1], "character")
-  expect_is(attr_back$int_attr[1], "integer")
-  expect_is(attr_back$numeric_attr[1], "numeric")
-  expect_is(attr_back$logical_attr[1], "logical")
+    ),
+    names(attr_back)
+  )
+  expect_type(attr_back$char_attr[1], "character")
+  expect_type(attr_back$int_attr[1], "integer")
+  expect_type(attr_back$numeric_attr[1], "double")
+  expect_type(attr_back$logical_attr[1], "logical")
 })
 
 test_that("Adding attribute to dataset", {
@@ -144,14 +144,14 @@ test_that("Adding attribute to dataset", {
 
   attr_back <- h5readAttributes(h5File, name = "baa_dataset")
   expect_length(attr_back, n = 5)
-  expect_true(all(
-    names(attr_back) %in%
-      c("char_attr", "int_attr", "numeric_attr", "matrix_attr", "logical_attr")
-  ))
-  expect_is(attr_back$char_attr[1], "character")
-  expect_is(attr_back$int_attr[1], "integer")
-  expect_is(attr_back$numeric_attr[1], "numeric")
-  expect_is(attr_back$logical_attr[1], "logical")
+  expect_setequal(
+    names(attr_back),
+    c("char_attr", "int_attr", "numeric_attr", "matrix_attr", "logical_attr")
+  )
+  expect_type(attr_back$char_attr[1], "character")
+  expect_type(attr_back$int_attr[1], "integer")
+  expect_type(attr_back$numeric_attr[1], "double")
+  expect_type(attr_back$logical_attr[1], "logical")
 })
 
 test_that("Checking other string options when adding attributes", {
@@ -194,7 +194,8 @@ test_that("Checking other string options when adding attributes", {
       encoding = "UTF-8",
       asScalar = TRUE
     ),
-    "cannot use"
+    "cannot use",
+    fixed = TRUE
   )
 
   H5Gclose(gid)

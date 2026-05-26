@@ -9,16 +9,16 @@ h5File <- withr::local_tempfile(pattern = "H5_methods", fileext = ".h5")
 test_that("Printing various object types", {
   ## file
   expect_silent(fid <- H5Fcreate(name = h5File))
-  expect_output(print(fid), regexp = "HDF5 FILE")
+  expect_output(print(fid), regexp = "HDF5 FILE", fixed = TRUE)
 
   ## group
   expect_silent(gid <- H5Gcreate(fid, name = "foo"))
-  expect_output(print(gid), regexp = "HDF5 GROUP")
+  expect_output(print(gid), regexp = "HDF5 GROUP", fixed = TRUE)
   expect_silent(H5Gclose(gid))
 
   ## dataspace
   expect_silent(sid <- H5Screate_simple(dims = c(5, 5)))
-  expect_output(print(sid), regexp = "HDF5 DATASPACE")
+  expect_output(print(sid), regexp = "HDF5 DATASPACE", fixed = TRUE)
 
   ## dataset
   expect_silent(
@@ -29,7 +29,7 @@ test_that("Printing various object types", {
       h5space = sid
     )
   )
-  expect_output(print(did), regexp = "HDF5 DATASET")
+  expect_output(print(did), regexp = "HDF5 DATASET", fixed = TRUE)
 
   ## datatype
   expect_silent(tid <- H5Tcopy("H5T_NATIVE_INT32"))
@@ -39,7 +39,7 @@ test_that("Printing various object types", {
   expect_silent(
     aid <- H5Acreate(did, name = "bang", dtype_id = tid, h5space = sid)
   )
-  expect_output(print(aid), regexp = "HDF5 ATTR")
+  expect_output(print(aid), regexp = "HDF5 ATTR", fixed = TRUE)
 
   ## close everything
   expect_silent(H5Aclose(aid))
@@ -62,11 +62,11 @@ test_that("Subsetting datasets", {
   expect_silent(did <- H5Dopen(h5loc = fid, name = "A"))
 
   expect_silent(col1 <- did[, 1])
-  expect_is(col1, "integer")
+  expect_type(col1, "integer")
 
   expect_silent(col15 <- did[, 1:5])
   expect_is(col15, "matrix")
-  expect_identical(dim(col15), c(10L, 5L))
+  expect_shape(col15, dim = c(10L, 5L))
 
   # https://github.com/Huber-group-EMBL/rhdf5/issues/69
   myidx <- 1:5
@@ -84,7 +84,8 @@ test_that("Subsetting datasets", {
   expect_error(did[], regexp = "Bad HDF5 ID")
   expect_error(
     fid[, 3],
-    regexp = "The provided H5Identifier is not a dataset identifier"
+    regexp = "The provided H5Identifier is not a dataset identifier",
+    fixed = TRUE
   )
 
   expect_silent(H5Fclose(fid))
@@ -113,10 +114,11 @@ test_that("Subsetting assignment", {
   expect_identical(did[2, 2], 12L)
   expect_silent(H5Dclose(did))
 
-  expect_error(did[, 1] <- 10:1, regexp = "Bad HDF5 ID")
+  expect_error(did[, 1] <- 10:1, regexp = "Bad HDF5 ID", fixed = TRUE)
   expect_error(
     fid[, 3] <- 10,
-    regexp = "The provided H5Identifier is not a dataset identifier"
+    regexp = "The provided H5Identifier is not a dataset identifier",
+    fixed = TRUE
   )
 
   expect_silent(H5Fclose(fid))

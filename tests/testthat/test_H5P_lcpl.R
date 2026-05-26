@@ -22,6 +22,7 @@ test_that("LPCL function error handling works", {
 
   expect_error(
     H5Pset_create_intermediate_group(pid, create_groups = 1),
-    regexp = "The 'create_groups' argument should be either TRUE or FALSE"
+    regexp = "The 'create_groups' argument should be either TRUE or FALSE",
+    fixed = TRUE
   )
 })

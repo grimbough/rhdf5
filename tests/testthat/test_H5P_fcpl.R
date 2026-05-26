@@ -11,8 +11,8 @@ pid <- H5Pcreate(type = "H5P_FILE_CREATE")
 
 test_that("Sizes of symbol table tree can be retrieved", {
   expect_silent(sym_k <- H5Pget_sym_k(pid))
-  expect_is(sym_k, "integer")
-  expect_identical(names(sym_k), c("ik", "lk"))
+  expect_type(sym_k, "integer")
+  expect_named(sym_k, c("ik", "lk"))
 })
 
 test_that("Sizes of symbol table tree can be set", {
@@ -23,8 +23,8 @@ test_that("Sizes of symbol table tree can be set", {
 
 test_that("Sizes of offsets and lengths can be retrieved", {
   expect_silent(h5_sizes <- H5Pget_sizes(pid))
-  expect_is(h5_sizes, "integer")
-  expect_identical(names(h5_sizes), c("offset", "length"))
+  expect_type(h5_sizes, "integer")
+  expect_named(h5_sizes, c("offset", "length"))
 })
 
 test_that("Sizes of offsets and lengths can be set", {
@@ -35,7 +35,7 @@ test_that("Sizes of offsets and lengths can be set", {
 
 test_that("Size of userblock can be retrieved", {
   expect_silent(userblock <- H5Pget_userblock(pid))
-  expect_is(userblock, "integer")
+  expect_type(userblock, "integer")
   expect_identical(userblock, 0L)
 })
 
@@ -50,7 +50,7 @@ test_that("Size of userblock can be set", {
 
 test_that("Sizes of istore can be retrieved", {
   expect_silent(istore <- H5Pget_istore_k(pid))
-  expect_is(istore, "integer")
+  expect_type(istore, "integer")
   expect_identical(istore, 32L)
 })
 
@@ -65,7 +65,7 @@ test_that("Sizes of istore can be set", {
 
 test_that("Phase change information can be retrieved", {
   expect_silent(p_change <- H5Pget_shared_mesg_phase_change(pid))
-  expect_is(p_change, "integer")
+  expect_type(p_change, "integer")
   expect_equivalent(p_change, c(50L, 40L))
 })
 
@@ -81,7 +81,7 @@ test_that("Phase change information can be set", {
 
 test_that("Number of object header message indexes can be retrieved", {
   expect_silent(nindexes <- H5Pget_shared_mesg_nindexes(pid))
-  expect_is(nindexes, "integer")
+  expect_type(nindexes, "integer")
   expect_identical(nindexes, 0L)
 })
 
@@ -94,8 +94,8 @@ test_that("Number of object header message indexes can be set", {
 test_that("shared object header mesage index properties can be retrieved", {
   ## this can only be run after H5Pset_shared_mesg_nindexes() has been called
   expect_silent(shd_msg_idx <- H5Pget_shared_mesg_index(pid, index_num = 0L))
-  expect_is(shd_msg_idx, "list")
-  expect_identical(names(shd_msg_idx), c("type_flags", "size"))
+  expect_type(shd_msg_idx, "list")
+  expect_named(shd_msg_idx, c("type_flags", "size"))
   expect_equivalent(shd_msg_idx$type_flags, "H5O_SHMESG_NONE_FLAG")
   expect_equivalent(shd_msg_idx$size, 250)
 })

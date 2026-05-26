@@ -25,7 +25,7 @@ test_that("Changing dataset names", {
   expect_silent(h5save(A, B, D, file = h5File, name = dsetNames))
   h5closeAll()
   expect_true(file.exists(h5File))
-  expect_identical(names(h5dump(h5File)), dsetNames)
+  expect_named(h5dump(h5File), dsetNames)
 })
 
 test_that("Error on wrong number of names", {
@@ -48,11 +48,11 @@ test_that("Fail if file doesn't exist", {
 test_that("Adding to existing file", {
   h5save(A, file = h5File)
   h5closeAll()
-  expect_identical(names(h5dump(h5File)), "A")
+  expect_named(h5dump(h5File), "A")
 
   h5save(B, D, file = h5File)
   h5closeAll()
-  expect_identical(names(h5dump(h5File)), c("A", "B", "D"))
+  expect_named(h5dump(h5File), c("A", "B", "D"))
 })
 
 test_that("Try to overwrite existing data set with same name", {

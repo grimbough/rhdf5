@@ -39,21 +39,24 @@ test_that("Precision can be modified", {
 
   expect_error(
     H5Tget_precision(),
-    regexp = "Argument 'dtype_id' must be supplied"
+    regexp = "Argument 'dtype_id' must be supplied",
+    fixed = TRUE
   )
   expect_error(
     H5Tset_precision(),
-    regexp = "Argument 'dtype_id' must be supplied"
+    regexp = "Argument 'dtype_id' must be supplied",
+    fixed = TRUE
   )
   expect_error(
     H5Tset_precision(integer_tid, 0),
-    regexp = "'precision' argument must be greater than 0"
+    regexp = "'precision' argument must be greater than 0",
+    fixed = TRUE
   )
 })
 
 test_that("Enum datatypes can be created and modified", {
   expect_silent(tid <- H5Tenum_create(dtype_id = "H5T_NATIVE_UCHAR"))
-  expect_is(tid, "character")
+  expect_type(tid, "character")
 
   expect_true(H5Tenum_insert(tid, name = "TRUE", value = 1L))
   expect_true(H5Tenum_insert(tid, name = "FALSE", value = 0L))

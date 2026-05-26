@@ -19,7 +19,7 @@ test_that("orphan objects can be linked into a file", {
 
   ## check new group is in the file
   ls_out <- h5ls(h5File)
-  expect_identical(nrow(ls_out), 2L)
+  expect_shape(ls_out, dim = c(2L, 5L))
   expect_identical(ls_out$name, c("DS1", "foo"))
 })
 
@@ -37,7 +37,7 @@ test_that("Objects can be copied in the same file", {
 
   ## check new group is in the file
   ls_out <- h5ls(h5File)
-  expect_identical(nrow(ls_out), 3L)
+  expect_shape(ls_out, nrow = 3L)
   expect_identical(ls_out$name, c("DS1", "DS2", "foo"))
 })
 
@@ -70,6 +70,6 @@ test_that("Objects can be copied in a different file", {
 
   ## check new group is in the file
   ls_out <- h5ls(h5File2)
-  expect_identical(nrow(ls_out), 4L)
+  expect_shape(ls_out, nrow = 4L)
   expect_identical(ls_out$name, c("DS1", "foo", "baa", "DS1_nested"))
 })

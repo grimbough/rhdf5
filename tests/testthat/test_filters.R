@@ -24,10 +24,11 @@ test_that("Missing filters are identified", {
     H5Zfilter_avail = function(filter_id) FALSE
   )
 
-  expect_true(grepl(
-    pattern = "Missing filters: foo_filter",
-    x = h5checkFilters(dcpl)
-  ))
+  expect_match(
+    h5checkFilters(dcpl),
+    "Missing filters: foo_filter",
+    fixed = TRUE
+  )
 
   H5Pclose(dcpl)
 })

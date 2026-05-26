@@ -79,14 +79,14 @@ test_that("64-bit integer attributes are read correctly", {
   did <- H5Dopen(fid, name = "A")
   aid <- H5Aopen(did, name = "int64")
 
-  expect_warning(H5Aread(aid, bit64conversion = "int")) %>%
-    is.na() %>%
+  expect_warning(H5Aread(aid, bit64conversion = "int")) |>
+    is.na() |>
     expect_true()
 
-  expect_silent(H5Aread(aid, bit64conversion = "double")) %>%
+  expect_silent(H5Aread(aid, bit64conversion = "double")) |>
     expect_equivalent(2^32)
 
-  expect_silent(H5Aread(aid, bit64conversion = "bit64")) %>%
+  expect_silent(H5Aread(aid, bit64conversion = "bit64")) |>
     expect_equivalent(bit64::as.integer64(2^32))
 
   H5Aclose(aid)
@@ -100,8 +100,7 @@ test_that("unsigned 32-bit integer attributes are read correctly", {
   aid <- H5Aopen(did, name = "uint32")
 
   expect_warning(H5Aread(aid, bit64conversion = "int")) |>
-    is.na() |>
-    any() |>
+    anyNA() |>
     expect_true()
 
   expect_silent(H5Aread(aid, bit64conversion = "double")) |>
@@ -109,7 +108,7 @@ test_that("unsigned 32-bit integer attributes are read correctly", {
 
   expect_silent(x3 <- H5Aread(aid, bit64conversion = "bit64"))
   expect_equivalent(x3, bit64::as.integer64(c(1:9, 2^31)))
-  expect_is(x3, "integer64")
+  expect_s3_class(x3, "integer64")
 
   H5Aclose(aid)
   H5Dclose(did)
@@ -165,7 +164,7 @@ test_that("fixed length string attributes are correct", {
   h5closeAll(aid, sid, fid)
 
   attr <- h5readAttributes(h5File, "/")
-  expect_is(attr, class = "list")
-  expect_identical(names(attr), attr_name)
+  expect_type(attr, "list")
+  expect_named(attr, attr_name)
   expect_identical(attr$name, attr_value)
 })
