@@ -17,22 +17,27 @@ did <- H5Dcreate(
 )
 
 test_that("getting names", {
-  expect_match(H5Iget_name(fid), "/")
-  expect_match(H5Iget_name(gid), "/foo")
-  expect_match(H5Iget_name(did), "/baa")
+  expect_match(H5Iget_name(fid), "/", fixed = TRUE)
+  expect_match(H5Iget_name(gid), "/foo", fixed = TRUE)
+  expect_match(H5Iget_name(did), "/baa", fixed = TRUE)
 
   expect_error(
     H5Iget_name(sid),
-    "The provided H5Identifier is not an identifier for 'object' types."
+    "The provided H5Identifier is not an identifier for 'object' types.",
+    fixed = TRUE
   )
-  expect_error(H5Iget_name("test"), "Argument not of class H5IdComponent")
+  expect_error(
+    H5Iget_name("test"),
+    "Argument not of class H5IdComponent",
+    fixed = TRUE
+  )
 })
 
 test_that("getting types", {
-  expect_match(as.character(H5Iget_type(fid)), "H5I_FILE")
-  expect_match(as.character(H5Iget_type(gid)), "H5I_GROUP")
-  expect_match(as.character(H5Iget_type(did)), "H5I_DATASET")
-  expect_match(as.character(H5Iget_type(sid)), "H5I_DATASPACE")
+  expect_match(as.character(H5Iget_type(fid)), "H5I_FILE", fixed = TRUE)
+  expect_match(as.character(H5Iget_type(gid)), "H5I_GROUP", fixed = TRUE)
+  expect_match(as.character(H5Iget_type(did)), "H5I_DATASET", fixed = TRUE)
+  expect_match(as.character(H5Iget_type(sid)), "H5I_DATASPACE", fixed = TRUE)
 
   expect_error(H5Iget_type("test"))
 })

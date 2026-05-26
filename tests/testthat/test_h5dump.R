@@ -23,14 +23,14 @@ h5write(obj = D, file = h5File, name = "baa")
 test_that("Default arguments", {
   dump_output <- h5dump(file = h5File)
   expect_is(dump_output, "list")
-  expect_true(all(c("baa", "foo") %in% names(dump_output)))
+  expect_setequal(c("baa", "foo"), names(dump_output))
 
   expect_is(dump_output$baa, "matrix")
 })
 
 test_that("Check reading only dataset headers", {
   dump_output <- h5dump(file = h5File, load = FALSE)
-  expect_is(dump_output$baa, "data.frame")
+  expect_s3_class(dump_output$baa, "data.frame")
 })
 
 test_that("Changing recursion depth", {
@@ -47,12 +47,12 @@ test_that("Changing recursion depth", {
 })
 
 test_that("Changing traversal order", {
-  expect_identical(
-    names(h5dump(h5File, order = "H5_ITER_DEC")),
+  expect_named(
+    h5dump(h5File, order = "H5_ITER_DEC"),
     c("foo", "baa")
   )
-  expect_identical(
-    names(h5dump(h5File, order = "H5_ITER_INC")),
+  expect_named(
+    h5dump(h5File, order = "H5_ITER_INC"),
     c("baa", "foo")
   )
 })

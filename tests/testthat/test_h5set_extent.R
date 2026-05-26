@@ -19,7 +19,7 @@ h5createDataset(
 h5write(obj = D, file = h5File, name = "foo")
 
 test_that("Dimensions as expected", {
-  expect_identical(dim(h5read(h5File, name = "foo")), c(1L, length(D)))
+  expect_shape(h5read(h5File, name = "foo"), dim = c(1L, length(D)))
 })
 
 test_that("Changing dataset dimensions", {
@@ -28,7 +28,7 @@ test_that("Changing dataset dimensions", {
     dataset = "foo",
     dims = c(2, length(D))
   ))
-  expect_identical(dim(h5read(h5File, name = "foo")), c(2L, length(D)))
+  expect_shape(h5read(h5File, name = "foo"), dim = c(2L, length(D)))
 })
 
 test_that("Fail if given a group", {
@@ -42,6 +42,7 @@ test_that("Fail if given a group", {
 test_that("Fail if missing", {
   expect_error(
     h5set_extent(file = h5File, dataset = "missing", dims = c(1, 1)),
-    regexp = "does not exist in this HDF5 file."
+    regexp = "does not exist in this HDF5 file.",
+    fixed = TRUE
   )
 })

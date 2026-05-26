@@ -24,7 +24,7 @@ test_that("dataset size is reported", {
   expect_silent(did <- H5Dopen(fid, name = "foo"))
 
   expect_silent(dset_size <- H5Dget_storage_size(did))
-  expect_is(dset_size, "integer")
+  expect_type(dset_size, "integer")
   expect_gt(dset_size, 0)
 
   expect_silent(H5Dclose(did))

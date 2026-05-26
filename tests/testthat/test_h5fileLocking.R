@@ -7,10 +7,10 @@ context("Testing file locking")
 test_that("File or directory can be passed", {
   file <- withr::local_tempfile()
   dir <- tempdir()
-  expect_silent(h5testFileLocking(file)) %>%
-    expect_is("logical")
-  expect_silent(h5testFileLocking(dir)) %>%
-    expect_is("logical")
+  expect_silent(h5testFileLocking(file)) |>
+    expect_type("logical")
+  expect_silent(h5testFileLocking(dir)) |>
+    expect_type("logical")
 
   ## Temporary file removed
   expect_false(file.exists(file))
@@ -21,12 +21,17 @@ test_that("Error when using existing file", {
   file.create(tf)
   expect_error(
     h5testFileLocking(location = tf),
-    "Testing file locking will remove"
+    "Testing file locking will remove",
+    fixed = TRUE
   )
 })
 
 test_that("Error when missing argument", {
-  expect_error(h5testFileLocking(), "You must provide a location to test")
+  expect_error(
+    h5testFileLocking(),
+    "You must provide a location to test",
+    fixed = TRUE
+  )
 })
 
 

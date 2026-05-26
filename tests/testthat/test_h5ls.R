@@ -27,14 +27,14 @@ h5write(obj = D, file = h5File, name = "baa")
 
 test_that("Default arguments", {
   ls_output <- h5ls(file = h5File)
-  expect_is(ls_output, "data.frame")
+  expect_s3_class(ls_output, "data.frame")
   expect_identical(ls_output$name, c("baa", "foo", "A", "B"))
-  expect_identical(dim(ls_output), c(4L, 5L))
+  expect_shape(ls_output, dim = c(4L, 5L))
 })
 
 test_that("Expanded information", {
   ls_output <- h5ls(file = h5File, all = TRUE)
-  expect_identical(dim(ls_output), c(4L, 12L))
+  expect_shape(ls_output, dim = c(4L, 12L))
 })
 
 test_that("h5ls reads dimensions correctly", {
@@ -45,7 +45,7 @@ test_that("h5ls reads dimensions correctly", {
 
 test_that("Changing recursion depth", {
   expect_silent(ls_output <- h5ls(file = h5File, recursive = FALSE))
-  expect_identical(dim(ls_output), c(2L, 5L))
+  expect_shape(ls_output, dim = c(2L, 5L))
   expect_identical(ls_output$name, c("baa", "foo"))
 
   expect_identical(h5ls(h5File, recursive = 1), ls_output)
@@ -54,7 +54,8 @@ test_that("Changing recursion depth", {
   expect_error(h5ls(h5File, recursive = 0))
   expect_warning(
     h5ls(h5File, recursive = 1:3),
-    regexp = "'recursive' must be of length 1"
+    regexp = "'recursive' must be of length 1",
+    fixed = TRUE
   )
   expect_error(h5ls(h5File, recursive = "TRUE"))
 })
@@ -72,7 +73,7 @@ test_that("Changing traversal order", {
 
 test_that("Passing H5Identifier does not close it", {
   fid <- H5Fopen(h5File)
-  expect_is(h5ls(file = fid), class = "data.frame")
+  expect_s3_class(h5ls(file = fid), "data.frame")
   expect_silent(H5Fclose(fid))
 })
 
@@ -90,7 +91,7 @@ test_that("h5ls warns if identical groups are detected", {
 
   h5file <- withr::local_tempfile()
   createFileWithCopiedGroup(h5file)
-  expect_warning(h5ls(h5file), regexp = "Identical objects found")
+  expect_warning(h5ls(h5file), regexp = "Identical objects found", fixed = TRUE)
 })
 
 test_that("h5ls doesn't report false positives with external links to groups", {

@@ -12,21 +12,23 @@ h5write(obj = A, file = h5File, name = "A")
 test_that("Error if file doesn't exist", {
   expect_error(
     h5delete(file = "foo", name = "baa"),
-    regexp = "Cannot open file"
+    regexp = "Cannot open file",
+    fixed = TRUE
   )
 })
 
 test_that("Error if link doesn't exist", {
   expect_error(
     h5delete(file = h5File, name = "baa"),
-    regexp = "Specified link doesn't exist"
+    regexp = "Specified link doesn't exist",
+    fixed = TRUE
   )
 })
 
 test_that("Deletion works for vector", {
-  expect_true("A" %in% h5ls(h5File)$name)
+  expect_in("A", h5ls(h5File)$name)
   expect_silent(h5delete(file = h5File, name = "A"))
-  expect_false("A" %in% h5ls(h5File)$name)
+  expect_disjoint("A", h5ls(h5File)$name)
 })
 
 ## add several datatypes including a list with subgroups
@@ -52,17 +54,17 @@ H5Fclose(fid)
 original_filesize <- file.size(h5File)
 
 test_that("Deletion is selective", {
-  expect_true("data.frame" %in% h5ls(h5File)$name)
+  expect_in("data.frame", h5ls(h5File)$name)
   expect_silent(h5delete(file = h5File, name = "data.frame"))
   ## 'data.frame' has been removed
-  expect_false("data.frame" %in% h5ls(h5File)$name)
+  expect_disjoint("data.frame", h5ls(h5File)$name)
   ## 'list' is still present
-  expect_true("list" %in% h5ls(h5File)$name)
+  expect_in("list", h5ls(h5File)$name)
 })
 
 test_that("Deletion removes subgroups", {
   expect_silent(h5delete(file = h5File, name = "list"))
-  expect_false("a" %in% h5ls(h5File)$name)
+  expect_disjoint("a", h5ls(h5File)$name)
 })
 
 test_that("Deletion reduces filesize", {
@@ -81,8 +83,8 @@ test_that("Attributes can be deleted", {
 })
 
 test_that("Attribute deletion error handling works", {
-  expect_false(h5deleteAttribute(h5File, name = "B", attribute = "test")) %>%
-    expect_message(regexp = "Object 'B' not found in")
-  expect_false(h5deleteAttribute(h5File, name = "A", attribute = "test")) %>%
-    expect_message(regexp = "Attribute 'test' not found")
+  expect_false(h5deleteAttribute(h5File, name = "B", attribute = "test")) |>
+    expect_message(regexp = "Object 'B' not found in", fixed = TRUE)
+  expect_false(h5deleteAttribute(h5File, name = "A", attribute = "test")) |>
+    expect_message(regexp = "Attribute 'test' not found", fixed = TRUE)
 })

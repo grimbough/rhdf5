@@ -39,7 +39,7 @@ test_that("Attributes are written too", {
   ## note that attributes aren't retrieved here
   expect_equivalent(as.numeric(h5read(file = h5File, name = "B")), B)
   # expect_equal( h5read(file = h5File, name = "B", read.attributes = TRUE), B )
-  expect_true("scale" %in% names(h5readAttributes(file = h5File, name = "B")))
+  expect_in("scale", names(h5readAttributes(file = h5File, name = "B")))
 })
 
 test_that("Write by index and hyperslab works.", {
@@ -174,7 +174,7 @@ test_that("Changing chunk size works", {
 
 ## only run this test on 64bit OS with space to allocate more than 4GB RAM
 test_that("Very large data.frames are limited to chunk size < 4GB", {
-  skip_if_not(.Platform$r_arch != "i386")
+  skip_if(.Platform$r_arch == "i386")
 
   counts_1 <- tryCatch(rep(0, 500000000), error = function(e) NULL)
   skip_if(is.null(counts_1), "Not enough memory to run this test")
@@ -270,5 +270,5 @@ test_that("Overwriting a subset", {
   H5Fclose(fid)
 
   expect_is(mat <- h5read(h5File, name = "matrix"), "matrix")
-  expect_true(all(mat[, 2] == 0))
+  expect_all_true(mat[, 2] == 0)
 })

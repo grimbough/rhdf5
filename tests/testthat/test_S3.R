@@ -19,8 +19,8 @@ test_that("h5ls() works for files in public S3 buckets", {
   skip_if_offline("rhdf5-public.s3.eu-central-1.amazonaws.com")
 
   expect_silent(h5ls_out <- h5ls(public_S3_url, s3 = TRUE))
-  expect_is(h5ls_out, "data.frame")
-  expect_true("DS1" %in% h5ls_out$name)
+  expect_s3_class(h5ls_out, "data.frame")
+  expect_in("DS1", h5ls_out$name)
 })
 
 test_that("h5dump() works for files in public S3 buckets", {
@@ -29,7 +29,7 @@ test_that("h5dump() works for files in public S3 buckets", {
   skip_if_offline("rhdf5-public.s3.eu-central-1.amazonaws.com")
 
   expect_silent(h5dump_out <- h5dump(public_S3_url, s3 = TRUE))
-  expect_is(h5dump_out, "list")
-  expect_equivalent(length(h5dump_out), 1)
-  expect_equivalent(dim(h5dump_out$DS1), c(5, 3, 4))
+  expect_type(h5dump_out, "list")
+  expect_length(h5dump_out, 1)
+  expect_shape(h5dump_out$DS1, dim = c(5, 3, 4))
 })

@@ -14,23 +14,23 @@ test_that("Printing library versions", {
 test_that("We can list created objects", {
   fid <- H5Fcreate(name = withr::local_tempfile())
 
-  expect_is(objects_frame <- h5listIdentifier(), "data.frame")
-  expect_is(valid_objects <- h5validObjects(), "list")
+  expect_s3_class(objects_frame <- h5listIdentifier(), "data.frame")
+  expect_type(valid_objects <- h5validObjects(), "list")
 
-  expect_identical(dim(objects_frame), c(1L, 2L))
+  expect_shape(objects_frame, dim = c(1L, 2L))
   expect_length(valid_objects, 1L)
 
   ## create another objects
   sid <- H5Screate()
 
-  expect_identical(dim(h5listIdentifier()), c(2L, 2L))
+  expect_shape(h5listIdentifier(), dim = c(2L, 2L))
   expect_length(h5validObjects(), 2L)
 
   ## now close them
   H5Sclose(sid)
   H5Fclose(fid)
 
-  expect_identical(dim(h5listIdentifier()), c(0L, 2L))
+  expect_shape(h5listIdentifier(), dim = c(0L, 2L))
   expect_length(h5validObjects(), 0)
 })
 

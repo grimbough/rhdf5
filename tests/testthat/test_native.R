@@ -267,15 +267,18 @@ test_that("Selecting using an index", {
   ## errors when not providing enough dimensions or incorrect dimensions
   expect_error(
     H5Sselect_index(sid, index = list(10)),
-    regexp = "length of list index not equal to h5space dimensional extension"
+    regexp = "length of list index not equal to h5space dimensional extension",
+    fixed = TRUE
   )
   expect_error(
     H5Sselect_index(sid, index = list(1:5, 1:5, 0:5)),
-    regexp = "negative indices and 0 not supported"
+    regexp = "negative indices and 0 not supported",
+    fixed = TRUE
   )
   expect_error(
     H5Sselect_index(sid, index = list(1:15, 1:5, 1:5)),
-    regexp = "index exceeds HDF5-array dimension"
+    regexp = "index exceeds HDF5-array dimension",
+    fixed = TRUE
   )
 
   expect_silent(H5Sclose(sid))

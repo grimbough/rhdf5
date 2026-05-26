@@ -50,9 +50,8 @@ test_that("Create single dataset", {
   A <- h5read(file = h5File, name = "A")
 
   expect_is(A, "matrix")
-  expect_true(nrow(A) == 2)
-  expect_true(ncol(A) == 1)
-  expect_is(A[1, 1], "numeric")
+  expect_shape(A, dim = c(2, 1))
+  expect_type(A[1, 1], "double")
 })
 
 test_that("Create more datasets with different data types", {
@@ -78,15 +77,14 @@ test_that("Create more datasets with different data types", {
 
   contents <- h5dump(file = h5File)
 
-  expect_true(all(c("int", "bool", "char") %in% names(contents)))
+  expect_contains(names(contents), c("int", "bool", "char"))
 
   expect_is(contents$int, "matrix")
-  expect_true(nrow(contents$int) == 4)
-  expect_true(ncol(contents$int) == 5)
+  expect_shape(contents$int, dim = c(4, 5))
 
-  expect_is(contents$int[1, 1], "integer")
-  expect_is(contents$bool[1, 1], "logical")
-  expect_is(contents$char[1, 1], "character")
+  expect_type(contents$int[1, 1], "integer")
+  expect_type(contents$bool[1, 1], "logical")
+  expect_type(contents$char[1, 1], "character")
 })
 
 test_that("datasets of fixed and variable length characters can be created", {
@@ -286,13 +284,14 @@ test_that("Invalid inputs", {
       dataset = "fail",
       dims = "twenty"
     )),
-    regexp = "Can not create dataset. 'dims' and 'maxdims' must be numeric"
+    regexp = "Can not create dataset. 'dims' and 'maxdims' must be numeric",
+    fixed = TRUE
   )
   expect_message(h5createDataset(
     file = h5File,
     dataset = "A",
     dims = c(20, 10)
-  )) %>%
+  )) |>
     expect_false()
   expect_error(h5createDataset(
     file = h5File,
@@ -333,7 +332,8 @@ test_that("Invalid inputs", {
       dims = c(10, 20),
       chunk = c(10, 50)
     ),
-    regexp = "One or more chunk dimensions exceeded the maximum for the dataset"
+    regexp = "One or more chunk dimensions exceeded the maximum for the dataset",
+    fixed = TRUE
   )
 })
 
@@ -343,21 +343,21 @@ test_that("Using chunks greater than 4GB", {
     dataset = "large_double",
     dims = c(25000, 25000),
     storage.mode = "double"
-  )) %>%
+  )) |>
     expect_true()
   expect_message(h5createDataset(
     file = h5File,
     dataset = "large_int",
     dims = c(50000, 50000),
     storage.mode = "integer"
-  )) %>%
+  )) |>
     expect_true()
   expect_silent(h5createDataset(
     file = h5File,
     dataset = "small_int",
     dims = c(500, 500),
     storage.mode = "integer"
-  )) %>%
+  )) |>
     expect_true()
 })
 
@@ -377,8 +377,9 @@ test_that("attributes can be added using file name", {
     attr = "foo_attr",
     dims = c(1, 1)
   ))
-  expect_true(
-    "foo_attr" %in% names(h5readAttributes(file = h5File, name = "foo"))
+  expect_in(
+    "foo_attr",
+    names(h5readAttributes(file = h5File, name = "foo"))
   )
 })
 

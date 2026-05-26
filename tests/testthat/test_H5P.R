@@ -28,7 +28,7 @@ test_that("setting and getting libhdf5 version bounds", {
     default_version_bounds <- H5Pget_libver_bounds(pid1),
     regexp = "^low"
   )
-  expect_is(default_version_bounds, "character")
+  expect_type(default_version_bounds, "character")
 
   ## Setters work as expected.
   expect_silent(H5Pset_libver_bounds(
@@ -56,13 +56,13 @@ test_that("Dataset creation properties can be set", {
 
   ## use default layout
   expect_silent(layout <- H5Pget_layout(pid))
-  expect_is(layout, "character")
-  expect_match(as.character(layout), "H5D_CONTIGUOUS")
+  expect_type(layout, "character")
+  expect_match(as.character(layout), "H5D_CONTIGUOUS", fixed = TRUE)
   ## change to chunked
   expect_silent(H5Pset_layout(pid, layout = "H5D_CHUNKED"))
   ## check changes
-  expect_silent(H5Pget_layout(pid)) %>%
-    expect_match("H5D_CHUNKED")
+  expect_silent(H5Pget_layout(pid)) |>
+    expect_match("H5D_CHUNKED", fixed = TRUE)
 
   ## seting chunk sizes
   expect_null(H5Pget_chunk(pid))

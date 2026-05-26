@@ -16,8 +16,8 @@ test_that("Links exist", {
   expect_false(H5Lexists(fid, "baa"))
   expect_error(H5Lexists(fid, 1))
 
-  expect_is(H5Lget_info(fid, "foo"), "list") %>%
-    expect_length(n = 4) %>%
+  expect_type(H5Lget_info(fid, "foo"), "list") |>
+    expect_length(n = 4) |>
     expect_named(expected = c("type", "corder_valid", "corder", "cset"))
 
   ## this doesn't produce a nice error
@@ -44,7 +44,8 @@ test_that("links can be created between files", {
   ))
   expect_silent(H5Fclose(fid))
 
-  expect_is(h5read(file = h5File2, name = "external_link"), "matrix") %>%
+  h5read(file = h5File2, name = "external_link") |>
+    expect_is("matrix") |>
     expect_length(20)
 })
 
@@ -54,15 +55,21 @@ context("H5Ldelete")
 
 test_that("links can be deleted", {
   expect_silent(fid <- H5Fopen(h5File))
-  expect_error(H5Ldelete(fid, name = "not_here"), regexp = "link doesn't exist")
+  expect_error(
+    H5Ldelete(fid, name = "not_here"),
+    regexp = "link doesn't exist",
+    fixed = TRUE
+  )
 
   expect_error(
     H5Ldelete(fid, name = 1L),
-    regexp = "'name' must be a character string of length 1"
+    regexp = "'name' must be a character string of length 1",
+    fixed = TRUE
   )
   expect_error(
     H5Ldelete(fid, name = c("foo", "baa")),
-    regexp = "'name' must be a character string of length 1"
+    regexp = "'name' must be a character string of length 1",
+    fixed = TRUE
   )
 
   ## delete 'foo'
@@ -70,7 +77,7 @@ test_that("links can be deleted", {
   expect_silent(H5Fclose(fid))
 
   ## check there are now no entries left
-  expect_is(res <- h5ls(h5File), "data.frame")
+  expect_s3_class(res <- h5ls(h5File), "data.frame")
   expect_identical(nrow(res), 0L)
 })
 
