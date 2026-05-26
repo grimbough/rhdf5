@@ -9,9 +9,10 @@ buckets.
 
 Currently only the functions
 [`h5ls()`](https://huber-group-embl.github.io/rhdf5/reference/h5ls.md),
-[`h5dump()`](https://huber-group-embl.github.io/rhdf5/reference/h5_dump.md)
-and
+[`h5dump()`](https://huber-group-embl.github.io/rhdf5/reference/h5_dump.md),
 [`h5read()`](https://huber-group-embl.github.io/rhdf5/reference/h5_read.md)
+and
+[`H5Fopen()`](https://huber-group-embl.github.io/rhdf5/reference/H5Fopen.md)
 are supported.
 
 ``` r
@@ -81,11 +82,7 @@ h5ls(file = public_S3_url, s3 = TRUE)
 
 ``` r
 
-h5read(public_S3_url,
-  name = "a1",
-  index = list(1:2, 3, NULL),
-  s3 = TRUE
-)
+h5read(public_S3_url, name = "a1", index = list(1:2, 3, NULL), s3 = TRUE)
 ```
 
     ## , , 1
@@ -168,7 +165,7 @@ sessionInfo()
     ## [1] stats     graphics  grDevices utils     datasets  methods   base     
     ## 
     ## other attached packages:
-    ## [1] rhdf5_2.57.0     BiocStyle_2.40.0
+    ## [1] rhdf5_2.57.1     BiocStyle_2.40.0
     ## 
     ## loaded via a namespace (and not attached):
     ##  [1] cli_3.6.6           knitr_1.51          rlang_1.2.0        
