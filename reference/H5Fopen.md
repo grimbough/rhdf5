@@ -5,7 +5,14 @@ Open an existing HDF5 file
 ## Usage
 
 ``` r
-H5Fopen(name, flags = h5default("H5F_ACC_RD"), fapl = NULL, native = FALSE)
+H5Fopen(
+  name,
+  flags = h5default("H5F_ACC_RD"),
+  fapl = NULL,
+  native = FALSE,
+  s3 = FALSE,
+  s3credentials = NULL
+)
 ```
 
 ## Arguments
@@ -31,6 +38,19 @@ H5Fopen(name, flags = h5default("H5F_ACC_RD"), fapl = NULL, native = FALSE)
   orientation. Using `native = TRUE` increases HDF5 file portability
   between programming languages. A file written with `native = TRUE`
   should also be opened for reading with `native = TRUE`.
+
+- s3:
+
+  Logical. If `TRUE`, the file specified in `name` is read using the
+  HDF5 Read-Only S3 virtual file driver. Requires that **Rhdf5lib** was
+  compiled with S3 support, and that `name` is an `http://` or
+  `https://` URL.
+
+- s3credentials:
+
+  A list of length three containing the AWS region, access key ID, and
+  secret access key for accessing files in a private S3 bucket. Leave as
+  `NULL` for anonymous access to public data.
 
 ## Details
 
