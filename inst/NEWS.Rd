@@ -1,6 +1,17 @@
 \name{NEWS}
 \title{News for Package 'rhdf5'}
 
+\section{Changes in version 2.58.0}{
+
+  \subsection{CHANGES}{
+    \itemize{
+      \item `H5Fopen()` now supports opening remote files on S3. Thanks to
+      a PR contribution from Michael Sumner (https://github.com/mdsumner).
+    }
+  }
+
+}
+
 \section{Changes in version 2.56.0}{
 
   \subsection{Breaking changes}{
