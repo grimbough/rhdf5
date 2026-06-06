@@ -67,6 +67,8 @@ SEXP _H5Dset_extent( SEXP _dataset_id, SEXP _size );
 
 SEXP _H5Dget_num_chunks( SEXP _dataset_id, SEXP _dataspace_id );
 
+SEXP _H5Dchunk_iter( SEXP _dataset_id );
+
 /* H5Dfill */
 
 #endif

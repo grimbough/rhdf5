@@ -340,6 +340,7 @@ static R_CallMethodDef libraryRCalls[] = {
   {"_H5PLprepend", (DL_FUNC) &_H5PLprepend, 1},
   {"_H5PLsize", (DL_FUNC) &_H5PLsize, 0},
   {"_H5PLget", (DL_FUNC) &_H5PLget, 1},
+  {"_H5Dchunk_iter", (DL_FUNC) &_H5Dchunk_iter, 1},
 #ifdef _H5P_filters
   {"_H5Pset_lzf", (DL_FUNC) &_H5Pset_lzf, 2},
   {"_H5Pset_bzip2", (DL_FUNC) &_H5Pset_bzip2, 2},
