@@ -56,7 +56,7 @@ system.time(
 ```
 
     ##    user  system elapsed 
-    ##   0.026   0.006   0.032
+    ##   0.028   0.003   0.033
 
 Next, instead of selecting 10,000 consecutive columns we’ll ask for
 every other column. This should still return the same amount of data and
@@ -75,7 +75,7 @@ system.time(
 ```
 
     ##    user  system elapsed 
-    ##   0.071   0.005   0.076
+    ##   0.074   0.000   0.075
 
 We can see this is marginally slower, because there’s a small overhead
 in selecting this disjoint set of columns, but it’s only marginal and
@@ -107,7 +107,7 @@ system.time(
 ```
 
     ##    user  system elapsed 
-    ##   0.072   0.000   0.072
+    ##   0.070   0.000   0.071
 
 ``` r
 
@@ -161,10 +161,10 @@ system.time(res4 <- vapply(
 ```
 
     ##    user  system elapsed 
-    ##  20.415   0.094  20.511
+    ##  21.941   0.071  22.016
 
 This is clearly a terrible idea, it takes ages! For reference, using the
-`index` argument with this set of columns takes 0.091 seconds. This poor
+`index` argument with this set of columns takes 0.082 seconds. This poor
 performance is driven by two things:
 
 1.  Our dataset was created as a single chunk. This means for each
@@ -212,7 +212,7 @@ system.time(res5 <- vapply(
 ```
 
     ##    user  system elapsed 
-    ##   2.686   0.050   2.737
+    ##   2.166   0.044   2.210
 
 This is still quite slow, and the remaining time is being spent on the
 overheads associated with multiple calls to
@@ -238,7 +238,7 @@ system.time(f2())
 ```
 
     ##    user  system elapsed 
-    ##   0.638   0.010   0.648
+    ##   0.524   0.005   0.529
 
 We can see this has a significant effect, although it’s still an order
 of magnitude slower than when we were dealing with regularly spaced
@@ -247,9 +247,9 @@ including the size of the dataset chunks and the sparsity of the column
 index, and you varying the `block_size` argument will produce differing
 performances. The plot below shows the timings achieved by providing a
 selection of values to `block_size`. It suggests the optimal parameter
-in this case is probably a block size of 10000, which took 0.1 seconds -
-noticeably faster than when passing all columns to the `index` argument
-in a single call.
+in this case is probably a block size of 10000, which took 0.09
+seconds - noticeably faster than when passing all columns to the `index`
+argument in a single call.
 
 ![](practical_tips_files/figure-html/unnamed-chunk-2-1.png)
 
@@ -463,21 +463,21 @@ Below we can see some timings comparing calling `simple_writer()` with
     ## # A tibble: 4 × 3
     ##   expression               min median
     ##   <bch:expr>             <dbl>  <dbl>
-    ## 1 simple writer           30.7   30.8
-    ## 2 split/gather - 1 core   31.0   31.0
-    ## 3 split/gather - 2 cores  15.8   15.8
-    ## 4 split/gather - 4 cores  11.7   11.8
+    ## 1 simple writer           34.1   34.2
+    ## 2 split/gather - 1 core   34.2   34.2
+    ## 3 split/gather - 2 cores  17.4   17.4
+    ## 4 split/gather - 4 cores  12.8   12.9
 
 We can see from our benchmark results that there is some performance
 improvement to be achieved by using the parallel approach. Based on the
 median times of out three iterations using two cores sees an speedup of
-1.95 and 2.6 with 4 cores. This isn’t quite linear, presumably because
+1.96 and 2.7 with 4 cores. This isn’t quite linear, presumably because
 there are overheads involved both in using a two-step process and
 initialising the parallel workers, but it is a noticeable improvement.
 
 ## Session info
 
-    ## R version 4.6.0 (2026-04-24)
+    ## R version 4.6.1 (2026-06-24)
     ## Platform: x86_64-pc-linux-gnu
     ## Running under: Ubuntu 24.04.4 LTS
     ## 
@@ -502,23 +502,23 @@ initialising the parallel workers, but it is a noticeable improvement.
     ## [4] rhdf5_2.57.1        BiocStyle_2.40.0   
     ## 
     ## loaded via a namespace (and not attached):
-    ##  [1] gtable_0.3.6        jsonlite_2.0.0      compiler_4.6.0     
+    ##  [1] gtable_0.3.6        jsonlite_2.0.0      compiler_4.6.1     
     ##  [4] BiocManager_1.30.27 tidyselect_1.2.1    rhdf5filters_1.24.0
-    ##  [7] parallel_4.6.0      jquerylib_0.1.4     systemfonts_1.3.2  
+    ##  [7] parallel_4.6.1      jquerylib_0.1.4     systemfonts_1.3.2  
     ## [10] scales_1.4.0        textshaping_1.0.5   yaml_2.3.12        
     ## [13] fastmap_1.2.0       R6_2.6.1            labeling_0.4.3     
     ## [16] generics_0.1.4      knitr_1.51          tibble_3.3.1       
-    ## [19] bookdown_0.46       desc_1.4.3          bslib_0.11.0       
-    ## [22] pillar_1.11.1       RColorBrewer_1.1-3  rlang_1.2.0        
-    ## [25] utf8_1.2.6          cachem_1.1.0        xfun_0.57          
+    ## [19] bookdown_0.47       desc_1.4.3          RColorBrewer_1.1-3 
+    ## [22] bslib_0.11.0        pillar_1.11.1       rlang_1.2.0        
+    ## [25] utf8_1.2.6          cachem_1.1.0        xfun_0.59          
     ## [28] S7_0.2.2            fs_2.1.0            sass_0.4.10        
-    ## [31] cli_3.6.6           withr_3.0.2         pkgdown_2.2.0      
-    ## [34] magrittr_2.0.5      Rhdf5lib_2.0.0      digest_0.6.39      
-    ## [37] grid_4.6.0          lifecycle_1.0.5     vctrs_0.7.3        
-    ## [40] bench_1.1.4         evaluate_1.0.5      glue_1.8.1         
-    ## [43] farver_2.1.2        codetools_0.2-20    ragg_1.5.2         
-    ## [46] rmarkdown_2.31      tools_4.6.0         pkgconfig_2.0.3    
-    ## [49] htmltools_0.5.9
+    ## [31] otel_0.2.0          cli_3.6.6           withr_3.0.3        
+    ## [34] pkgdown_2.2.0       magrittr_2.0.5      Rhdf5lib_2.0.0     
+    ## [37] digest_0.6.39       grid_4.6.1          lifecycle_1.0.5    
+    ## [40] vctrs_0.7.3         bench_1.1.4         evaluate_1.0.5     
+    ## [43] glue_1.8.1          farver_2.1.2        codetools_0.2-20   
+    ## [46] ragg_1.5.2          rmarkdown_2.31      tools_4.6.1        
+    ## [49] pkgconfig_2.0.3     htmltools_0.5.9
 
 [^1]: You’ll probably see a warning here regarding chunking, something
     we’ll touch on later

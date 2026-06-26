@@ -40,9 +40,10 @@ the Chan Zuckerberg Initiative.
 - [`rhdf5`](https://huber-group-embl.github.io/rhdf5/reference/rhdf5.md)
   : rhdf5: An interface between HDF5 and R
 
-## High level functions
+## High-level functions
 
-Wrappers around several low-level functions
+Wrappers around several low-level functions. All functions in this
+section start with `h5`.
 
 - [`h5testFileLocking()`](https://huber-group-embl.github.io/rhdf5/reference/h5_FileLocking.md)
   [`h5disableFileLocking()`](https://huber-group-embl.github.io/rhdf5/reference/h5_FileLocking.md)

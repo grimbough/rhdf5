@@ -1005,7 +1005,7 @@ H5Fclose(h5file)
 sessionInfo()
 ```
 
-    ## R version 4.6.0 (2026-04-24)
+    ## R version 4.6.1 (2026-06-24)
     ## Platform: x86_64-pc-linux-gnu
     ## Running under: Ubuntu 24.04.4 LTS
     ## 
@@ -1030,13 +1030,13 @@ sessionInfo()
     ## 
     ## loaded via a namespace (and not attached):
     ##  [1] cli_3.6.6           knitr_1.51          rlang_1.2.0        
-    ##  [4] xfun_0.57           textshaping_1.0.5   jsonlite_2.0.0     
-    ##  [7] bit_4.6.0           htmltools_0.5.9     ragg_1.5.2         
-    ## [10] sass_0.4.10         rmarkdown_2.31      evaluate_1.0.5     
-    ## [13] jquerylib_0.1.4     fastmap_1.2.0       yaml_2.3.12        
-    ## [16] lifecycle_1.0.5     Rhdf5lib_2.0.0      bookdown_0.46      
-    ## [19] BiocManager_1.30.27 compiler_4.6.0      fs_2.1.0           
-    ## [22] rhdf5filters_1.24.0 systemfonts_1.3.2   digest_0.6.39      
-    ## [25] R6_2.6.1            bslib_0.11.0        bit64_4.8.2        
-    ## [28] tools_4.6.0         pkgdown_2.2.0       cachem_1.1.0       
-    ## [31] desc_1.4.3
+    ##  [4] xfun_0.59           otel_0.2.0          textshaping_1.0.5  
+    ##  [7] jsonlite_2.0.0      bit_4.6.0           htmltools_0.5.9    
+    ## [10] ragg_1.5.2          sass_0.4.10         rmarkdown_2.31     
+    ## [13] evaluate_1.0.5      jquerylib_0.1.4     fastmap_1.2.0      
+    ## [16] Rhdf5lib_2.0.0      yaml_2.3.12         lifecycle_1.0.5    
+    ## [19] bookdown_0.47       BiocManager_1.30.27 compiler_4.6.1     
+    ## [22] fs_2.1.0            rhdf5filters_1.24.0 systemfonts_1.3.2  
+    ## [25] digest_0.6.39       R6_2.6.1            bslib_0.11.0       
+    ## [28] bit64_4.8.2         tools_4.6.1         pkgdown_2.2.0      
+    ## [31] cachem_1.1.0        desc_1.4.3
