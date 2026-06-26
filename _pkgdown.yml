@@ -6,9 +6,9 @@ template:
 reference:
 - title: About rhdf5
 - contents: rhdf5
-- title: High level functions
+- title: High-level functions
   desc: |
-    Wrappers around several low-level functions
+    Wrappers around several low-level functions. All functions in this section start with `h5`.
 - contents: starts_with("h5")
 - title: HDF5 Files
   desc: |
