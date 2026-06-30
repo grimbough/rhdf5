@@ -4,6 +4,8 @@
 #' file, group, dataset or attribute.
 #'
 #' @export
+#'
+#'
 H5Iget_name <- function(h5obj) {
   h5checktype(h5obj, "object")
   name <- .Call("_H5Iget_name", h5obj@ID, PACKAGE = "rhdf5")

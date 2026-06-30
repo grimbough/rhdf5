@@ -20,3 +20,12 @@ an HDF5 file to hold a given dataset.  This is the amount of space required
 on-disk, which not typically a good indicator of the amount of memory
 that will be required to read the complete dataset.
 }
+\examples{
+f <- system.file("testfiles", "h5ex_t_array.h5", package = "rhdf5")
+fid <- H5Fopen(f)
+did <- H5Dopen(fid, "DS1")
+H5Dget_storage_size(did)
+H5Dclose(did)
+H5Fclose(fid)
+
+}
