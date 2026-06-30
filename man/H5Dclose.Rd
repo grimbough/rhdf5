@@ -13,3 +13,17 @@ dataset}
 \description{
 Close an open HDF5 dataset
 }
+\examples{
+h5file <- tempfile(fileext = ".h5")
+h5createFile(h5file)
+h5createDataset(h5file, dataset = "A", dims = 10)
+
+fid <- H5Fopen(h5file)
+did <- H5Dopen(h5loc = fid, name = "A")
+did
+
+## remember to close open handles
+H5Dclose(did)
+H5Fclose(fid)
+
+}

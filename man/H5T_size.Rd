@@ -18,3 +18,11 @@ H5Tget_size(dtype_id)
 \description{
 Retrieve or set the type of padding used by string datatype
 }
+\examples{
+tid <- H5Tcopy("H5T_C_S1")
+H5Tset_size(tid, 3)
+H5Tget_size(tid)
+tid <- H5Tcopy("H5T_C_S1")
+H5Tset_size(tid, 3)
+H5Tget_size(tid)
+}

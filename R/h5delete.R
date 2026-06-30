@@ -10,6 +10,17 @@
 #' @author Mike Smith
 #' @name h5_delete
 #' @export h5delete
+#' @examples
+#' h5File <- tempfile(pattern = "ex_createFile.h5")
+#'
+#' h5createFile(h5File)
+#' h5createGroup(h5File, "foo")
+#'
+#' h5ls(h5File)
+#'
+#' h5delete(h5File, "foo")
+#' h5ls(h5File)
+#'
 h5delete <- function(file, name) {
   loc <- h5checktypeOrOpenLoc(file, native = FALSE)
   on.exit(h5closeitLoc(loc))
@@ -29,6 +40,19 @@ h5delete <- function(file, name) {
 #' @author Mike Smith
 #' @name h5_deleteAttribute
 #' @export h5deleteAttribute
+#' @examples
+#' h5File <- tempfile(pattern = "ex_createAttribute.h5")
+#' h5createFile(h5File)
+#' h5write(1:1, h5File, "A")
+#' fid <- H5Fopen(h5File)
+#' did <- H5Dopen(fid, "A")
+#' h5createAttribute(did, "time", c(1, 10))
+#' h5readAttributes(h5File, "A")
+#' h5deleteAttribute(h5File, "A", "time")
+#' h5readAttributes(h5File, "A")
+#' H5Dclose(did)
+#' H5Fclose(fid)
+#'
 h5deleteAttribute <- function(file, name, attribute) {
   if (missing(name)) {
     stop(

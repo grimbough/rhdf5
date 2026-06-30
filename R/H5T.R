@@ -24,6 +24,11 @@ H5Tcreate <- function(type, size) {
 #' options) or the ID of an already created datatype.
 #'
 #' @export
+#'
+#' @examples
+#' h5const("H5T")
+#' tid <- H5Tcopy("H5T_C_S1")
+#'
 H5Tcopy <- function(dtype_id = h5default(type = "H5T")) {
   if (is.numeric(dtype_id)) {
     dtype_id <- as.integer(dtype_id)
@@ -43,6 +48,11 @@ NULL
 
 #' @rdname H5T_size
 #' @export
+#'
+#' @examples
+#' tid <- H5Tcopy("H5T_C_S1")
+#' H5Tset_size(tid, 3)
+#' H5Tget_size(tid)
 H5Tset_size <- function(dtype_id = h5default(type = "H5T"), size) {
   # string constant type_id do not make sense, because they are not allowed to be changed
   if (!grepl(pattern = "^[[:digit:]]+$", dtype_id)) {
@@ -54,6 +64,10 @@ H5Tset_size <- function(dtype_id = h5default(type = "H5T"), size) {
 
 #' @rdname H5T_size
 #' @export
+#' @examples
+#' tid <- H5Tcopy("H5T_C_S1")
+#' H5Tset_size(tid, 3)
+#' H5Tget_size(tid)
 H5Tget_size <- function(dtype_id) {
   if (missing(dtype_id)) {
     stop("Argument 'dtype_id' must be supplied")
@@ -69,6 +83,7 @@ H5Tget_size <- function(dtype_id) {
 #' to use.  Valid options are `NULLTERM`, `NULLPAD` and `SPACEPAD`.
 #'
 #' @name H5T_strpad
+#'
 NULL
 
 #' @rdname H5T_strpad
@@ -139,6 +154,11 @@ H5Tget_cset <- function(dtype_id) {
 #' @param dtype_id ID of HDF5 datatype to query.
 #'
 #' @export
+#'
+#' @examples
+#' tid <- H5Tcopy("H5T_C_S1")
+#' H5Tset_size(tid, 3)
+#' H5Tis_variable_str(tid)
 H5Tis_variable_str <- function(dtype_id) {
   if (missing(dtype_id)) {
     stop("Argument 'dtype_id' must be supplied")

@@ -31,7 +31,7 @@ fid <- H5Fopen(h5file)
 did <- H5Dopen(h5loc = fid, name = "A")
 did
 
-## rember to close open handles
+## remember to close open handles
 H5Dclose(did)
 H5Fclose(fid)
 

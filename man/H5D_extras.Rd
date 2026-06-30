@@ -33,6 +33,18 @@ included as potentially useful additions.
 \item \code{H5Dchunk_dims} will return the dimensions of the dataset chunks.
 }
 }
+\examples{
+file <- tempfile(fileext = ".h5")
+fid <- H5Fcreate(file)
+
+## Create a dataset that will be represented by 4 chunks if complete
+h5createDataset(file, "data", dims = c(10, 10), chunk = c(5, 5), storage.mode = "integer")
+did <- H5Dopen(fid, "data")
+
+H5Dis_chunked(did)
+H5Dchunk_dims(did)
+
+}
 \author{
 Mike Smith
 }

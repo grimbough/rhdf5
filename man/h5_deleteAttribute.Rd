@@ -18,6 +18,20 @@ located.}
 \description{
 Deletes an attribute associated with a group or dataset within an HDF5 file.
 }
+\examples{
+h5File <- tempfile(pattern = "ex_createAttribute.h5")
+h5createFile(h5File)
+h5write(1:1, h5File, "A")
+fid <- H5Fopen(h5File)
+did <- H5Dopen(fid, "A")
+h5createAttribute(did, "time", c(1, 10))
+h5readAttributes(h5File, "A")
+h5deleteAttribute(h5File, "A", "time")
+h5readAttributes(h5File, "A")
+H5Dclose(did)
+H5Fclose(fid)
+
+}
 \author{
 Mike Smith
 }
