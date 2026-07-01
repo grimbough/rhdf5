@@ -32,10 +32,10 @@ Bernd Fischer, Mike Smith
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
 H5open()
 H5close()
 H5garbage_collect()
 H5get_libversion()
-} # }
+#> majnum minnum relnum 
+#>      1     14      6 
 ```
