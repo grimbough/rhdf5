@@ -31,7 +31,7 @@ did <- H5Dopen(fid, "/DS1")
 ## List the available object information for both groups and datasets
 H5Oget_info(h5loc = gid)
 #> $file_num
-#> [1] 34
+#> [1] 43
 #> 
 #> $type
 #> [1] "GROUP"
@@ -57,7 +57,7 @@ H5Oget_info(h5loc = gid)
 
 H5Oget_info(h5loc = did)
 #> $file_num
-#> [1] 34
+#> [1] 43
 #> 
 #> $type
 #> [1] "DATASET"

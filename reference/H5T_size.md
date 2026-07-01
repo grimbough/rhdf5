@@ -19,3 +19,16 @@ H5Tget_size(dtype_id)
 - size:
 
   The new datatype size in bytes.
+
+## Examples
+
+``` r
+tid <- H5Tcopy("H5T_C_S1")
+H5Tset_size(tid, 3)
+H5Tget_size(tid)
+#> [1] 3
+tid <- H5Tcopy("H5T_C_S1")
+H5Tset_size(tid, 3)
+H5Tget_size(tid)
+#> [1] 3
+```

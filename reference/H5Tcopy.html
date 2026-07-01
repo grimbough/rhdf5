@@ -57,6 +57,54 @@ options) or the ID of an already created datatype.</p></dd>
 
 </dl></div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="h5constants.html">h5const</a></span><span class="op">(</span><span class="st">"H5T"</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] "H5T_IEEE_F32BE"          "H5T_IEEE_F32LE"         </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [3] "H5T_IEEE_F64BE"          "H5T_IEEE_F64LE"         </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [5] "H5T_STD_I8BE"            "H5T_STD_I8LE"           </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] "H5T_STD_I16BE"           "H5T_STD_I16LE"          </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [9] "H5T_STD_I32BE"           "H5T_STD_I32LE"          </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [11] "H5T_STD_I64BE"           "H5T_STD_I64LE"          </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [13] "H5T_STD_U8BE"            "H5T_STD_U8LE"           </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [15] "H5T_STD_U16BE"           "H5T_STD_U16LE"          </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [17] "H5T_STD_U32BE"           "H5T_STD_U32LE"          </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [19] "H5T_STD_U64BE"           "H5T_STD_U64LE"          </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [21] "H5T_STD_B8BE"            "H5T_STD_B8LE"           </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [23] "H5T_STD_B16BE"           "H5T_STD_B16LE"          </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [25] "H5T_STD_B32BE"           "H5T_STD_B32LE"          </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [27] "H5T_STD_B64BE"           "H5T_STD_B64LE"          </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [29] "H5T_NATIVE_CHAR"         "H5T_NATIVE_SCHAR"       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [31] "H5T_NATIVE_UCHAR"        "H5T_NATIVE_SHORT"       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [33] "H5T_NATIVE_USHORT"       "H5T_NATIVE_INT"         </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [35] "H5T_NATIVE_UINT"         "H5T_NATIVE_LONG"        </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [37] "H5T_NATIVE_ULONG"        "H5T_NATIVE_LLONG"       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [39] "H5T_NATIVE_ULLONG"       "H5T_NATIVE_FLOAT"       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [41] "H5T_NATIVE_DOUBLE"       "H5T_NATIVE_LDOUBLE"     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [43] "H5T_NATIVE_B8"           "H5T_NATIVE_B16"         </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [45] "H5T_NATIVE_B32"          "H5T_NATIVE_B64"         </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [47] "H5T_NATIVE_OPAQUE"       "H5T_NATIVE_HADDR"       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [49] "H5T_NATIVE_HSIZE"        "H5T_NATIVE_HSSIZE"      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [51] "H5T_NATIVE_HERR"         "H5T_NATIVE_HBOOL"       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [53] "H5T_NATIVE_INT8"         "H5T_NATIVE_UINT8"       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [55] "H5T_NATIVE_INT_LEAST8"   "H5T_NATIVE_UINT_LEAST8" </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [57] "H5T_NATIVE_INT_FAST8"    "H5T_NATIVE_UINT_FAST8"  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [59] "H5T_NATIVE_INT16"        "H5T_NATIVE_UINT16"      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [61] "H5T_NATIVE_INT_LEAST16"  "H5T_NATIVE_UINT_LEAST16"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [63] "H5T_NATIVE_INT_FAST16"   "H5T_NATIVE_UINT_FAST16" </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [65] "H5T_NATIVE_INT32"        "H5T_NATIVE_UINT32"      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [67] "H5T_NATIVE_INT_LEAST32"  "H5T_NATIVE_UINT_LEAST32"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [69] "H5T_NATIVE_INT_FAST32"   "H5T_NATIVE_UINT_FAST32" </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [71] "H5T_NATIVE_INT64"        "H5T_NATIVE_UINT64"      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [73] "H5T_NATIVE_INT_LEAST64"  "H5T_NATIVE_UINT_LEAST64"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [75] "H5T_NATIVE_INT_FAST64"   "H5T_NATIVE_UINT_FAST64" </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [77] "H5T_NATIVE_DOUBLE"       "H5T_C_S1"               </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [79] "H5T_FORTRAN_S1"          "H5T_STD_REF_OBJ"        </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [81] "H5T_STD_REF_DSETREG"    </span>
+<span class="r-in"><span><span class="va">tid</span> <span class="op">&lt;-</span> <span class="fu">H5Tcopy</span><span class="op">(</span><span class="st">"H5T_C_S1"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
 

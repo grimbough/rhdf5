@@ -51,7 +51,7 @@ did
 #>         size 10
 #>      maxsize 10
 
-## rember to close open handles
+## remember to close open handles
 H5Dclose(did)
 H5Fclose(fid)
 ```

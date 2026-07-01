@@ -13,3 +13,11 @@ H5Zfilter_avail(filter_id)
 - filter_id:
 
   Integer representing the ID of the filter to be checked.
+
+## Examples
+
+``` r
+# bzip2 filter
+H5Zfilter_avail(307)
+#> [1] TRUE
+```

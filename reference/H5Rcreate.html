@@ -76,6 +76,37 @@ reference to a dataset region, and will be ignored otherwise.</p></dd>
     <p>An <a href="H5Ref-class.html">H5Ref</a> object storing the reference.</p>
     </div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co">## first we'll create a file with a group named "foo" and a</span></span></span>
+<span class="r-in"><span><span class="co">## 1-dimensional dataset named "baa" inside that group.</span></span></span>
+<span class="r-in"><span><span class="va">file_name</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span>fileext <span class="op">=</span> <span class="st">".h5"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="h5_createFile.html">h5createFile</a></span><span class="op">(</span><span class="va">file_name</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="h5_createGroup.html">h5createGroup</a></span><span class="op">(</span>file <span class="op">=</span> <span class="va">file_name</span>, group <span class="op">=</span> <span class="st">"/foo"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="h5_write.html">h5write</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">100</span>, file <span class="op">=</span> <span class="va">file_name</span>, name <span class="op">=</span> <span class="st">"/foo/baa"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">fid</span> <span class="op">&lt;-</span> <span class="fu"><a href="H5Fopen.html">H5Fopen</a></span><span class="op">(</span><span class="va">file_name</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">ref_to_group</span> <span class="op">&lt;-</span> <span class="fu">H5Rcreate</span><span class="op">(</span><span class="va">fid</span>, name <span class="op">=</span> <span class="st">"/foo"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">ref_to_dataset</span> <span class="op">&lt;-</span> <span class="fu">H5Rcreate</span><span class="op">(</span><span class="va">fid</span>, name <span class="op">=</span> <span class="st">"/foo/baa"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">two_refs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">ref_to_group</span>, <span class="va">ref_to_dataset</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">two_refs</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> HDF5 REFERENCE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Type: H5R_OBJECT </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Length: 2 </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## the size of this dataspace is the number of object references</span></span></span>
+<span class="r-in"><span><span class="co">## we want to store</span></span></span>
+<span class="r-in"><span><span class="va">sid</span> <span class="op">&lt;-</span> <span class="fu"><a href="H5Screate_simple.html">H5Screate_simple</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">tid</span> <span class="op">&lt;-</span> <span class="fu"><a href="H5Tcopy.html">H5Tcopy</a></span><span class="op">(</span>dtype_id <span class="op">=</span> <span class="st">"H5T_STD_REF_OBJ"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">did</span> <span class="op">&lt;-</span> <span class="fu"><a href="H5Dcreate.html">H5Dcreate</a></span><span class="op">(</span><span class="va">fid</span>, name <span class="op">=</span> <span class="st">"object_refs"</span>, dtype_id <span class="op">=</span> <span class="va">tid</span>, h5space <span class="op">=</span> <span class="va">sid</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="H5Dwrite.html">H5Dwrite</a></span><span class="op">(</span><span class="va">did</span>, <span class="va">two_refs</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="H5Dclose.html">H5Dclose</a></span><span class="op">(</span><span class="va">did</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="H5Sclose.html">H5Sclose</a></span><span class="op">(</span><span class="va">sid</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="H5Fclose.html">H5Fclose</a></span><span class="op">(</span><span class="va">fid</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
 

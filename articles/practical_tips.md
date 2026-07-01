@@ -56,7 +56,7 @@ system.time(
 ```
 
     ##    user  system elapsed 
-    ##   0.028   0.003   0.033
+    ##   0.026   0.006   0.032
 
 Next, instead of selecting 10,000 consecutive columns we’ll ask for
 every other column. This should still return the same amount of data and
@@ -75,7 +75,7 @@ system.time(
 ```
 
     ##    user  system elapsed 
-    ##   0.074   0.000   0.075
+    ##   0.075   0.001   0.075
 
 We can see this is marginally slower, because there’s a small overhead
 in selecting this disjoint set of columns, but it’s only marginal and
@@ -107,7 +107,7 @@ system.time(
 ```
 
     ##    user  system elapsed 
-    ##   0.070   0.000   0.071
+    ##   0.067   0.003   0.070
 
 ``` r
 
@@ -161,10 +161,10 @@ system.time(res4 <- vapply(
 ```
 
     ##    user  system elapsed 
-    ##  21.941   0.071  22.016
+    ##  19.960   0.070  20.032
 
 This is clearly a terrible idea, it takes ages! For reference, using the
-`index` argument with this set of columns takes 0.082 seconds. This poor
+`index` argument with this set of columns takes 0.088 seconds. This poor
 performance is driven by two things:
 
 1.  Our dataset was created as a single chunk. This means for each
@@ -212,7 +212,7 @@ system.time(res5 <- vapply(
 ```
 
     ##    user  system elapsed 
-    ##   2.166   0.044   2.210
+    ##   2.484   0.045   2.529
 
 This is still quite slow, and the remaining time is being spent on the
 overheads associated with multiple calls to
@@ -238,7 +238,7 @@ system.time(f2())
 ```
 
     ##    user  system elapsed 
-    ##   0.524   0.005   0.529
+    ##   0.600   0.011   0.611
 
 We can see this has a significant effect, although it’s still an order
 of magnitude slower than when we were dealing with regularly spaced
@@ -247,9 +247,9 @@ including the size of the dataset chunks and the sparsity of the column
 index, and you varying the `block_size` argument will produce differing
 performances. The plot below shows the timings achieved by providing a
 selection of values to `block_size`. It suggests the optimal parameter
-in this case is probably a block size of 10000, which took 0.09
-seconds - noticeably faster than when passing all columns to the `index`
-argument in a single call.
+in this case is probably a block size of 10000, which took 0.1 seconds -
+noticeably faster than when passing all columns to the `index` argument
+in a single call.
 
 ![](practical_tips_files/figure-html/unnamed-chunk-2-1.png)
 
@@ -463,15 +463,15 @@ Below we can see some timings comparing calling `simple_writer()` with
     ## # A tibble: 4 × 3
     ##   expression               min median
     ##   <bch:expr>             <dbl>  <dbl>
-    ## 1 simple writer           34.1   34.2
-    ## 2 split/gather - 1 core   34.2   34.2
-    ## 3 split/gather - 2 cores  17.4   17.4
-    ## 4 split/gather - 4 cores  12.8   12.9
+    ## 1 simple writer           30.5   30.5
+    ## 2 split/gather - 1 core   30.7   30.8
+    ## 3 split/gather - 2 cores  15.7   15.7
+    ## 4 split/gather - 4 cores  11.8   11.9
 
 We can see from our benchmark results that there is some performance
 improvement to be achieved by using the parallel approach. Based on the
 median times of out three iterations using two cores sees an speedup of
-1.96 and 2.7 with 4 cores. This isn’t quite linear, presumably because
+1.94 and 2.6 with 4 cores. This isn’t quite linear, presumably because
 there are overheads involved both in using a two-step process and
 initialising the parallel workers, but it is a noticeable improvement.
 

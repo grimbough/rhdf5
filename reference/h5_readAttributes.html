@@ -77,6 +77,28 @@ to the specific object.  The names of the list entries correspond to the
 attribute names.  If no attributes are found an empty list is returned.</p>
     </div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">h5File</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span>pattern <span class="op">=</span> <span class="st">"ex_createAttribute.h5"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="h5_createFile.html">h5createFile</a></span><span class="op">(</span><span class="va">h5File</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="h5_write.html">h5write</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">1</span>, <span class="va">h5File</span>, <span class="st">"A"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">fid</span> <span class="op">&lt;-</span> <span class="fu"><a href="H5Fopen.html">H5Fopen</a></span><span class="op">(</span><span class="va">h5File</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">did</span> <span class="op">&lt;-</span> <span class="fu"><a href="H5Dopen.html">H5Dopen</a></span><span class="op">(</span><span class="va">fid</span>, <span class="st">"A"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="h5createAttribute.html">h5createAttribute</a></span><span class="op">(</span><span class="va">did</span>, <span class="st">"time"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">10</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
+<span class="r-in"><span><span class="fu">h5readAttributes</span><span class="op">(</span><span class="va">h5File</span>, <span class="st">"A"</span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>An open HDF5 file handle exists. If the file has changed on disk meanwhile, the function may not work properly. Run 'h5closeAll()' to close all open HDF5 object handles.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $`rhdf5-NA.OK`</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $time</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1,]    0    0    0    0    0    0    0    0    0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span><span class="fu"><a href="H5Dclose.html">H5Dclose</a></span><span class="op">(</span><span class="va">did</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="H5Fclose.html">H5Fclose</a></span><span class="op">(</span><span class="va">fid</span><span class="op">)</span></span></span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
 

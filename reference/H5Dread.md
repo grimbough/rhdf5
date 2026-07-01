@@ -84,3 +84,50 @@ the 64-bit integers as objects of class 'integer64' as defined in the
 package 'bit64'. Make sure that you have installed 'bit64'. The datatype
 'integer64' is not part of base R, but defined in an external package.
 This can produce unexpected behaviour when working with the data.
+
+## Examples
+
+``` r
+f <- system.file("testfiles", "h5ex_t_array.h5", package = "rhdf5")
+fid <- H5Fopen(f)
+did <- H5Dopen(fid, "DS1")
+H5Dread(did)
+#> , , 1
+#> 
+#>      [,1] [,2] [,3]
+#> [1,]    0    0    0
+#> [2,]    0   -1   -2
+#> [3,]    0   -2   -4
+#> [4,]    0   -3   -6
+#> [5,]    0   -4   -8
+#> 
+#> , , 2
+#> 
+#>      [,1] [,2] [,3]
+#> [1,]    0    1    2
+#> [2,]    1    1    1
+#> [3,]    2    1    0
+#> [4,]    3    1   -1
+#> [5,]    4    1   -2
+#> 
+#> , , 3
+#> 
+#>      [,1] [,2] [,3]
+#> [1,]    0    2    4
+#> [2,]    2    3    4
+#> [3,]    4    4    4
+#> [4,]    6    5    4
+#> [5,]    8    6    4
+#> 
+#> , , 4
+#> 
+#>      [,1] [,2] [,3]
+#> [1,]    0    3    6
+#> [2,]    3    5    7
+#> [3,]    6    7    8
+#> [4,]    9    9    9
+#> [5,]   12   11   10
+#> 
+H5Dclose(did)
+H5Fclose(fid)
+```

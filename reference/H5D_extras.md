@@ -40,3 +40,20 @@ same style and are included as potentially useful additions.
 ## Author
 
 Mike Smith
+
+## Examples
+
+``` r
+file <- tempfile(fileext = ".h5")
+fid <- H5Fcreate(file)
+
+## Create a dataset that will be represented by 4 chunks if complete
+h5createDataset(file, "data", dims = c(10, 10), chunk = c(5, 5), storage.mode = "integer")
+#> Warning: An open HDF5 file handle exists. If the file has changed on disk meanwhile, the function may not work properly. Run 'h5closeAll()' to close all open HDF5 object handles.
+did <- H5Dopen(fid, "data")
+
+H5Dis_chunked(did)
+#> [1] TRUE
+H5Dchunk_dims(did)
+#> [1] 5 5
+```
