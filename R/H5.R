@@ -10,12 +10,10 @@
 #'
 #' @author Bernd Fischer, Mike Smith
 #' @examples
-#' \dontrun{
 #' H5open()
 #' H5close()
 #' H5garbage_collect()
 #' H5get_libversion()
-#' }
 #' @name H5functions
 NULL
 
@@ -80,7 +78,7 @@ H5get_libversion <- function() {
 #' h5closeAll()
 #' h5listIdentifier()
 #'
-#' @export h5closeAll
+#' @export
 h5closeAll <- function(...) {
   objects <- list(...)
   if (length(objects) == 0) {
