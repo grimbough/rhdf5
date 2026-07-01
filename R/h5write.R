@@ -198,7 +198,7 @@ h5writeDatasetHelper <- function(
 #' h5write(matrix(1:5, nr = 5, nc = 1), file = h5File, name = "S", index = list(NULL, 1))
 #'
 #' @name h5_write
-#' @export h5write
+#' @export
 h5write <- function(obj, file, name, ...) {
   res <- UseMethod("h5write")
   invisible(res)

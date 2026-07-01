@@ -35,7 +35,7 @@
 #' h5dump(h5File)
 #'
 #' @name h5_save
-#' @export h5save
+#' @export
 h5save <- function(
   ...,
   file,

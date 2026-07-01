@@ -13,7 +13,7 @@
 #' h5errorHandling("normal")
 #'
 #' @name h5_errorHandling
-#' @export h5errorHandling
+#' @export
 h5errorHandling <- function(type = "normal") {
   t <- switch(
     type,

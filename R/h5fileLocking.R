@@ -56,7 +56,7 @@
 #'
 #' @name h5_FileLocking
 #' @importFrom utils file_test
-#' @export h5testFileLocking
+#' @export
 h5testFileLocking <- function(location) {
   if (missing(location)) {
     stop("You must provide a location to test.")

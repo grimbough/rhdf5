@@ -18,7 +18,7 @@
 NULL
 
 #' @rdname h5constants
-#' @export h5const
+#' @export
 h5const <- function(type = "") {
   names(h5constants[[type]])
 }

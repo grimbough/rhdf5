@@ -28,7 +28,7 @@
 NULL
 
 #' @rdname h5listObjects
-#' @export h5listIdentifier
+#' @export
 h5listIdentifier <- function() {
   res <- .Call("_h5listIdentifier", PACKAGE = "rhdf5")
   res$type <- h5const2String("H5I_TYPE", res$type)
@@ -37,7 +37,7 @@ h5listIdentifier <- function() {
 }
 
 #' @rdname h5listObjects
-#' @export h5validObjects
+#' @export
 h5validObjects <- function(native = FALSE) {
   ids <- .Call("_h5validObjects", PACKAGE = "rhdf5")
   res <- list()
@@ -73,7 +73,7 @@ getDatatypeClass <- function(type) {
 #' h5version()
 #'
 #' @importFrom utils packageVersion
-#' @export h5version
+#' @export
 h5version <- function() {
   part1 <- sprintf(
     "This is Bioconductor rhdf5 %s linking to C-library HDF5 %s (Rhdf5lib version: %s)",

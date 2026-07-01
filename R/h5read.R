@@ -249,7 +249,7 @@ h5readDataset <- function(
 #' }
 #'
 #' @name h5_read
-#' @export h5read
+#' @export
 h5read <- function(
   file,
   name,

@@ -9,7 +9,7 @@
 #' belongs.
 #' @author Mike Smith
 #' @name h5_delete
-#' @export h5delete
+#' @export
 #' @examples
 #' h5File <- tempfile(pattern = "ex_createFile.h5")
 #'
@@ -39,7 +39,7 @@ h5delete <- function(file, name) {
 #'
 #' @author Mike Smith
 #' @name h5_deleteAttribute
-#' @export h5deleteAttribute
+#' @export
 #' @examples
 #' h5File <- tempfile(pattern = "ex_createAttribute.h5")
 #' h5createFile(h5File)
