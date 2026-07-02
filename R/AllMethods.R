@@ -299,11 +299,7 @@ setMethod(f = "[", signature = c("H5Ref", "ANY"), definition = function(x, i) {
   }
 
   i <- as.integer(i)
-  idx <- c(vapply(
-    i,
-    function(x) ((x - 1L) * div) + (1L:div),
-    FUN.VALUE = integer(length = div)
-  ))
+  idx <- (rep(i, each = div) - 1L) * div + seq_len(div)
 
   object <- new("H5Ref", val = x@val[idx], type = x@type)
   return(object)
