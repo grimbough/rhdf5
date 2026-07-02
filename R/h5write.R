@@ -37,7 +37,7 @@ h5writeDatasetHelper <- function(
     }
     I <- list()
     for (i in seq_along(index)) {
-      m <- match(index[[i]], unique(sort(index[[i]])))
+      m <- match(index[[i]], sort(unique(index[[i]])))
       I[[i]] <- order(m)
       I[[i]] <- I[[i]][!duplicated(m[I[[i]]], fromLast = TRUE)]
     }
