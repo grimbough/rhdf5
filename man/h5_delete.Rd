@@ -18,6 +18,18 @@ belongs.}
 \description{
 Deletes the specified group or dataset from within an HDF5 file.
 }
+\examples{
+h5File <- tempfile(pattern = "ex_createFile.h5")
+
+h5createFile(h5File)
+h5createGroup(h5File, "foo")
+
+h5ls(h5File)
+
+h5delete(h5File, "foo")
+h5ls(h5File)
+
+}
 \author{
 Mike Smith
 }

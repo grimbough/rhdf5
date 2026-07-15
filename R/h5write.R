@@ -37,7 +37,7 @@ h5writeDatasetHelper <- function(
     }
     I <- list()
     for (i in seq_along(index)) {
-      m <- match(index[[i]], unique(sort(index[[i]])))
+      m <- match(index[[i]], sort(unique(index[[i]])))
       I[[i]] <- order(m)
       I[[i]] <- I[[i]][!duplicated(m[I[[i]]], fromLast = TRUE)]
     }
@@ -198,7 +198,7 @@ h5writeDatasetHelper <- function(
 #' h5write(matrix(1:5, nr = 5, nc = 1), file = h5File, name = "S", index = list(NULL, 1))
 #'
 #' @name h5_write
-#' @export h5write
+#' @export
 h5write <- function(obj, file, name, ...) {
   res <- UseMethod("h5write")
   invisible(res)

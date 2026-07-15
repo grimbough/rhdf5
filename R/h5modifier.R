@@ -37,7 +37,7 @@
 #' h5ls(tmpfile, all = TRUE)[c("dim", "maxdim")]
 #'
 #' @name h5_set_extent
-#' @export h5set_extent
+#' @export
 h5set_extent <- function(file, dataset, dims, native = FALSE) {
   if (missing(dataset)) {
     stop(

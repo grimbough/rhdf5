@@ -24,7 +24,7 @@
 #' h5ls(h5File)
 #'
 #' @name h5_createFile
-#' @export h5createFile
+#' @export
 h5createFile <- function(file) {
   res <- FALSE
   if (!is.character(file)) {
@@ -77,7 +77,7 @@ h5createFile <- function(file) {
 #' h5ls(h5File)
 #'
 #' @name h5_createGroup
-#' @export h5createGroup
+#' @export
 h5createGroup <- function(file, group) {
   loc <- h5checktypeOrOpenLoc(file, native = FALSE)
   on.exit(h5closeitLoc(loc))
@@ -453,7 +453,7 @@ h5createGroup <- function(file, group) {
 #' file.size(f1)
 #' file.size(f2)
 #'
-#' @export h5createDataset
+#' @export
 h5createDataset <- function(
   file,
   dataset,
@@ -590,7 +590,7 @@ h5createDataset <- function(
 #' H5Dclose(did)
 #' H5Fclose(fid)
 #'
-#' @export h5createAttribute
+#' @export
 h5createAttribute <- function(
   obj,
   attr,

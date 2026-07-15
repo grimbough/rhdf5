@@ -10,7 +10,7 @@ H5PLsize <- function() {
 }
 
 H5PLget <- function(index) {
-  path <- .Call("_H5PLget", as.integer(index - 1), PACKAGE = "rhdf5")
+  path <- .Call("_H5PLget", as.integer(index) - 1L, PACKAGE = "rhdf5")
   return(path)
 }
 

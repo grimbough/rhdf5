@@ -28,12 +28,10 @@ H5get_libversion()
 These low level functions provide general library functions for HDF5.
 }
 \examples{
-\dontrun{
 H5open()
 H5close()
 H5garbage_collect()
 H5get_libversion()
-}
 }
 \author{
 Bernd Fischer, Mike Smith

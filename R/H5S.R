@@ -602,5 +602,5 @@ H5Scombine_select <- function(
 #' @export
 H5Sunlimited <- function() {
   # as.integer(h5checkConstants("H5S_UNLIMITED", "H5S_UNLIMITED"))
-  as.integer(-1)
+  -1L
 }

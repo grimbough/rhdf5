@@ -77,7 +77,7 @@ H5Dcreate <- function(
 #' did <- H5Dopen(h5loc = fid, name = "A")
 #' did
 #'
-#' ## rember to close open handles
+#' ## remember to close open handles
 #' H5Dclose(did)
 #' H5Fclose(fid)
 #'
@@ -103,6 +103,19 @@ H5Dopen <- function(h5loc, name, dapl = NULL) {
 #' @param h5dataset Object of class [H5IdComponent-class] representing an open HDF5
 #' dataset
 #'
+#' @examples
+#' h5file <- tempfile(fileext = ".h5")
+#' h5createFile(h5file)
+#' h5createDataset(h5file, dataset = "A", dims = 10)
+#'
+#' fid <- H5Fopen(h5file)
+#' did <- H5Dopen(h5loc = fid, name = "A")
+#' did
+#'
+#' ## remember to close open handles
+#' H5Dclose(did)
+#' H5Fclose(fid)
+#'
 #' @export
 H5Dclose <- function(h5dataset) {
   h5checktype(h5dataset, "dataset")
@@ -113,6 +126,15 @@ H5Dclose <- function(h5dataset) {
 #'
 #' @param h5dataset Object of class [H5IdComponent-class] representing an open HDF5
 #' dataset
+#'
+#' @examples
+#' f <- system.file("testfiles", "h5ex_t_array.h5", package = "rhdf5")
+#' fid <- H5Fopen(f)
+#' did <- H5Dopen(fid, "DS1")
+#' type <- H5Dget_type(did)
+#' type
+#' H5Dclose(did)
+#' H5Fclose(fid)
 #'
 #' @export
 H5Dget_type <- function(h5dataset) {
@@ -148,6 +170,15 @@ H5Dget_create_plist <- function(h5dataset) {
 #' @returns Returns an object of class `H5IdComponent` representing a HDF5
 #' dataspace identifier
 #'
+#' @examples
+#' f <- system.file("testfiles", "h5ex_t_array.h5", package = "rhdf5")
+#' fid <- H5Fopen(f)
+#' did <- H5Dopen(fid, "DS1")
+#' space <- H5Dget_space(did)
+#' space
+#' H5Dclose(did)
+#' H5Fclose(fid)
+#'
 #' @export
 H5Dget_space <- function(h5dataset) {
   h5checktype(h5dataset, "dataset")
@@ -173,6 +204,14 @@ H5Dget_space <- function(h5dataset) {
 #'
 #' @returns Returns an integer giving the number of bytes allocated in the file
 #' to the dataset.
+#'
+#' @examples
+#' f <- system.file("testfiles", "h5ex_t_array.h5", package = "rhdf5")
+#' fid <- H5Fopen(f)
+#' did <- H5Dopen(fid, "DS1")
+#' H5Dget_storage_size(did)
+#' H5Dclose(did)
+#' H5Fclose(fid)
 #'
 #' @export
 H5Dget_storage_size <- function(h5dataset) {
@@ -239,6 +278,14 @@ H5Dget_storage_size <- function(h5dataset) {
 #' the details section for more information on these options.)
 #' @param drop Logical vector of length 1.  If `TRUE`, the HDF5 object is read
 #' as a vector with NULL dim attributes. Default is `FALSE`.
+#'
+#' @examples
+#' f <- system.file("testfiles", "h5ex_t_array.h5", package = "rhdf5")
+#' fid <- H5Fopen(f)
+#' did <- H5Dopen(fid, "DS1")
+#' H5Dread(did)
+#' H5Dclose(did)
+#' H5Fclose(fid)
 #'
 #' @export
 H5Dread <- function(

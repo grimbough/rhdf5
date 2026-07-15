@@ -14,3 +14,8 @@ options) or the ID of an already created datatype.}
 \description{
 Copy an existing datatype
 }
+\examples{
+h5const("H5T")
+tid <- H5Tcopy("H5T_C_S1")
+
+}

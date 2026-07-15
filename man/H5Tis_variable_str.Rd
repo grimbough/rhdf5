@@ -12,3 +12,8 @@ H5Tis_variable_str(dtype_id)
 \description{
 Determine whether a datatype is a variable length string
 }
+\examples{
+tid <- H5Tcopy("H5T_C_S1")
+H5Tset_size(tid, 3)
+H5Tis_variable_str(tid)
+}

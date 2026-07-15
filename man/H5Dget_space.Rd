@@ -17,3 +17,13 @@ dataspace identifier
 \description{
 Return a copy of the HDF5 dataspace for a dataset
 }
+\examples{
+f <- system.file("testfiles", "h5ex_t_array.h5", package = "rhdf5")
+fid <- H5Fopen(f)
+did <- H5Dopen(fid, "DS1")
+space <- H5Dget_space(did)
+space
+H5Dclose(did)
+H5Fclose(fid)
+
+}

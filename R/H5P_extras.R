@@ -72,7 +72,7 @@ H5Pset_blosc <- function(
   res <- .Call(
     "_H5Pset_blosc",
     h5plist@ID,
-    as.integer(method - 1L),
+    as.integer(method) - 1L,
     as.integer(level),
     as.integer(as.logical(shuffle)),
     as.integer(typesize),

@@ -12,3 +12,8 @@ H5Zfilter_avail(filter_id)
 \description{
 Determine whether a filter is available on this system
 }
+\examples{
+# bzip2 filter
+H5Zfilter_avail(307)
+
+}
