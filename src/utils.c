@@ -94,25 +94,26 @@ int group_check (struct opObjListElement *od, H5O_token_t target_token, unsigned
 
 /* used in H5Dread and H5Aread when reading a string datatype */
 void * read_string_datatype(hid_t mem_type_id, SEXP _buf) {
-    if (!H5Tis_variable_str(mem_type_id)) {
-        size_t stsize = H5Tget_size( mem_type_id );
-        char * strbuf = (char *)R_alloc(LENGTH(_buf),stsize);
-        size_t i, j, z=0;
+    R_xlen_t n = XLENGTH(_buf);
 
-        for (i=0; i < LENGTH(_buf); i++) {
-            for (j=0; (j < LENGTH(STRING_ELT(_buf,i))) && (j < stsize); j++) {
-                strbuf[z++] = CHAR(STRING_ELT(_buf,i))[j];
-            }
-            for (; j < stsize; j++) {
-                strbuf[z++] = '\0';
-            }
+    if (!H5Tis_variable_str(mem_type_id)) {
+        size_t stsize = H5Tget_size(mem_type_id);
+        char *strbuf = (char *)R_alloc(n, stsize);
+
+        memset(strbuf, 0, n * stsize);  // zero-fill / pad everything at once
+
+        for (R_xlen_t i = 0; i < n; i++) {
+            size_t len = LENGTH(STRING_ELT(_buf, i));
+            if (len > stsize) len = stsize;
+            memcpy(strbuf + i * stsize, CHAR(STRING_ELT(_buf, i)), len);
         }
-        return(strbuf);
+
+        return strbuf;
     } else {
-        const char ** strbuf = (const char **)R_alloc(LENGTH(_buf), sizeof(char*));
-        for (int i=0; i < LENGTH(_buf); i++) {
+        const char **strbuf = (const char **)R_alloc(n, sizeof(char*));
+        for (R_xlen_t i = 0; i < n; i++) {
             strbuf[i] = CHAR(STRING_ELT(_buf, i));
         }
-        return(strbuf);
+        return strbuf;
     }
 }
