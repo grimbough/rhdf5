@@ -143,8 +143,7 @@ SEXP _H5Dget_storage_size( SEXP _dataset_id ) {
     if (size <= INT_MAX) {
         Rval = ScalarInteger(size);
     } else {
-        double dsize = size;
-        Rval = ScalarReal(dsize);
+        Rval = ScalarReal((double) size);
     }
     return Rval;
 }
