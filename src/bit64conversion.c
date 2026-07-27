@@ -113,9 +113,7 @@ void int64_to_integer64(void* intbuf, hsize_t n, void* buf, H5T_sign_t sign) {
     int warn_overflow_64bit = 0;
     
     if (sign == H5T_SGN_2) {
-        for (i=0; i<n; i++){
-            ((long long *)buf)[i] = ((long long *)intbuf)[i];
-        }
+        memcpy(buf, intbuf, n * sizeof(long long));
     } else if (sign == H5T_SGN_NONE) {
         for (i=0; i<n; i++){
             ((long long *)buf)[i] = ((unsigned long long *)intbuf)[i];
