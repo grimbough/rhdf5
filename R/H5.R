@@ -93,7 +93,7 @@ h5closeAll <- function(...) {
     stop("Error in h5closeAll(). H5Identifier not valid.", call. = FALSE)
   }
 
-  truetype <- as.character(H5Iget_type(h5id))
+  truetype <- H5Iget_type(h5id)
 
   closeFunc <- switch(
     truetype,

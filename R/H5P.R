@@ -869,7 +869,7 @@ H5Pequal <- function(h5plistclass1, h5plistclass2) {
     h5plistclass2@ID,
     PACKAGE = "rhdf5"
   )
-  as.logical(res)
+  res
 }
 
 H5Pclose_class <- function(h5plistclass) {

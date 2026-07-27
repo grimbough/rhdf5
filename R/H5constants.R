@@ -62,9 +62,8 @@ h5const2Factor <- function(group = "", values) {
   Levels <- unique(c(h5constants[[group]], values))
   f <- factor(values, levels = Levels)
   m <- match(Levels, h5constants[[group]])
-  LevelNames <- as.character(Levels)
-  LevelNames[is.finite(m)] <- names(h5constants[[group]])[which(is.finite(m))]
-  levels(f) <- LevelNames
+  Levels[is.finite(m)] <- names(h5constants[[group]])[which(is.finite(m))]
+  levels(f) <- Levels
   f
 }
 
