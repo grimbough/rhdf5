@@ -67,13 +67,10 @@ SEXP _H5Fflush(SEXP _object_id, SEXP _scope ) {
 SEXP _H5Fis_hdf5( SEXP _name ) {
   const char *name = CHAR(STRING_ELT(_name, 0));
   htri_t htri = H5Fis_accessible( name, H5P_DEFAULT );
-  SEXP Rval = allocVector(LGLSXP, 1);
-  if (htri >= 0) {
-    LOGICAL(Rval)[0] = htri;
-  } else {
-    LOGICAL(Rval)[0] = NA_LOGICAL;
+  if (htri < 0) {
+    return ScalarLogical(NA_LOGICAL);
   }
-  return Rval;
+  return ScalarLogical(htri);
 }
 
 /* herr_t H5Fget_filesize( hid_t file_id, hsize_t *size ) */
@@ -82,13 +79,10 @@ SEXP _H5Fget_filesize( SEXP _file_id ) {
   hid_t file_id = STRSXP_2_HID( _file_id );    
   hsize_t size;
   herr_t herr = H5Fget_filesize( file_id, &size );
-  SEXP Rval = allocVector(REALSXP, 1);
-  if (herr >= 0) {
-    REAL(Rval)[0] = size;
-  } else {
-    REAL(Rval)[0] = NA_REAL;
+  if (herr < 0) {
+    return ScalarReal(NA_REAL);
   }
-  return Rval;  
+  return ScalarReal((double)size);
 }
 
 /* ssize_t H5Fget_name(hid_t obj_id, char *name, size_t size ) */
@@ -96,21 +90,15 @@ SEXP _H5Fget_name( SEXP _obj_id ) {
 
   hid_t obj_id = STRSXP_2_HID( _obj_id );
   ssize_t size = H5Fget_name( obj_id, NULL, 0);
-  SEXP Rval;
-  PROTECT(Rval = allocVector(STRSXP, 1));
-  if (size >= 0) {
-    char *name = R_alloc(size+1, sizeof(char));
-    size = H5Fget_name( obj_id, name, size+1);
-    if (size >= 0) {
-      SET_STRING_ELT(Rval, 0, mkChar(name));
-    } else {
-      SET_STRING_ELT(Rval, 0, NA_STRING);
-    }
-  } else {
-    SET_STRING_ELT(Rval, 0, NA_STRING);
+  if (size < 0) {
+    return ScalarString(NA_STRING);
   }
-  UNPROTECT(1);
-  return Rval;  
+  char *name = R_alloc(size+1, sizeof(char));
+  size = H5Fget_name( obj_id, name, size+1);
+  if (size < 0) {
+    return ScalarString(NA_STRING);
+  }
+  return mkString(name);
 }
 
 /* ssize_t H5Fget_obj_count( hid_t file_id, unsigned int types ) */

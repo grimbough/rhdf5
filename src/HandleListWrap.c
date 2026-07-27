@@ -130,11 +130,8 @@ SEXP _h5listOpenObjects( SEXP _file_id ) {
     
     count = H5Fget_obj_count(file_id, H5F_OBJ_ALL);
     
-    SEXP Rval = PROTECT(allocVector(INTSXP, 1));
     if (count <= 0) {
-        INTEGER(Rval)[0] = 0;
-        UNPROTECT(1);
-        return(Rval);
+        return(ScalarLogical(FALSE));
     }
     
     Rprintf("%ld object(s) open\n", count);
@@ -152,11 +149,9 @@ SEXP _h5listOpenObjects( SEXP _file_id ) {
         if(status < 0) {
           error("Unable to get name\n");
         }
-        Rprintf(" %d: type %d, name %s\n",i,ot,name);
+        Rprintf(" %d: type %d, name %s\n", i, ot, name);
     }
-    
-    INTEGER(Rval)[0] = 1;
-    UNPROTECT(1);
-    return(Rval);
+
+    return(ScalarLogical(TRUE));
 }
 
