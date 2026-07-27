@@ -246,7 +246,7 @@ SEXP H5Dread_helper_INTEGER(hid_t dataset_id, hid_t file_space_id, hid_t mem_spa
                 setAttrib(Rval, R_DimSymbol, Rdim);
             }
             
-        } else if ( ((b >= 2) & (b < 4)) | ((b == 4) & (sgn == H5T_SGN_2))) {   // Read directly to R-integer without loss of data (short or signed int)
+        } else if ( ((b >= 2) && (b < 4)) || ((b == 4) && (sgn == H5T_SGN_2))) {   // Read directly to R-integer without loss of data (short or signed int)
             if (cpdType < 0) {
                 mem_type_id = H5T_NATIVE_INT32;
             } else {
@@ -282,16 +282,16 @@ SEXP H5Dread_helper_INTEGER(hid_t dataset_id, hid_t file_space_id, hid_t mem_spa
             
             hid_t dtypeNative;
             void* intbuf;
-            if ((b < 4) | ((b == 4) & (sgn == H5T_SGN_2))) {
+            if ((b < 4) || ((b == 4) && (sgn == H5T_SGN_2))) {
                 dtypeNative = H5T_NATIVE_INT;
                 intbuf = R_alloc(n, sizeof(int));
-            } else if ((b == 4) & (sgn == H5T_SGN_NONE)) {
+            } else if ((b == 4) && (sgn == H5T_SGN_NONE)) {
                 dtypeNative = H5T_NATIVE_UINT;
                 intbuf = R_alloc(n, sizeof(unsigned int));
-            } else if ((b == 8) & (sgn == H5T_SGN_2)) {
+            } else if ((b == 8) && (sgn == H5T_SGN_2)) {
                 dtypeNative = H5T_NATIVE_INT64;
                 intbuf = R_alloc(n, sizeof(long long));
-            } else if ((b == 8) & (sgn == H5T_SGN_NONE)) {
+            } else if ((b == 8) && (sgn == H5T_SGN_NONE)) {
                 dtypeNative = H5T_NATIVE_UINT64;
                 intbuf = R_alloc(n, sizeof(unsigned long long));
             } else {
@@ -325,7 +325,7 @@ SEXP H5Dread_helper_INTEGER(hid_t dataset_id, hid_t file_space_id, hid_t mem_spa
                     buf = INTEGER(_buf);
                     Rval = _buf;
                 }
-                if ((b == 4) & (sgn == H5T_SGN_NONE)) {
+                if ((b == 4) && (sgn == H5T_SGN_NONE)) {
                     uint32_to_int32(intbuf, n, buf);
                 } else if (b == 8) { 
                     int64_to_int32(intbuf, n, buf, sgn);
@@ -344,22 +344,22 @@ SEXP H5Dread_helper_INTEGER(hid_t dataset_id, hid_t file_space_id, hid_t mem_spa
                 }
                 if (bit64conversion == 1) {  //convert to double
                     long long i;
-                    if ((b < 4) | ((b == 4) & (sgn == H5T_SGN_2))) {
+                    if ((b < 4) || ((b == 4) && (sgn == H5T_SGN_2))) {
                         for (i=0; i<n; i++){
                             ((double *)buf)[i] = ((int *)intbuf)[i];
                         }
-                    } else if ((b == 4) & (sgn == H5T_SGN_NONE)) {
+                    } else if ((b == 4) && (sgn == H5T_SGN_NONE)) {
                         uint32_to_double(intbuf, n, buf);
                     } else if (b == 8) {
                         int64_to_double(intbuf, n, buf, sgn);
                     }
                 } else { // convert to integer64 class
                     long long i;
-                    if ((b < 4) | ((b == 4) & (sgn == H5T_SGN_2))) {
+                    if ((b < 4) || ((b == 4) && (sgn == H5T_SGN_2))) {
                         for (i=0; i<n; i++){
                             ((long long *)buf)[i] = ((int *)intbuf)[i];
                         }
-                    } else if ((b == 4) & (sgn == H5T_SGN_NONE)) {
+                    } else if ((b == 4) && (sgn == H5T_SGN_NONE)) {
                         uint32_to_integer64(intbuf, n, buf);
                     } else if (b == 8) {
                         int64_to_integer64(intbuf, n, buf, sgn);
@@ -585,7 +585,7 @@ SEXP H5Dread_helper_ARRAY(hid_t dataset_id, hid_t file_space_id, hid_t mem_space
     int protected = 0;
     
     hid_t superclass =  H5Tget_class(H5Tget_super( dtype_id ));
-    if (((superclass == H5T_INTEGER) | (superclass == H5T_FLOAT)) & (!((cpdNField > 0) & (compoundAsDataFrame > 0)))) {
+    if (((superclass == H5T_INTEGER) || (superclass == H5T_FLOAT)) && (!((cpdNField > 0) && (compoundAsDataFrame > 0)))) {
         int ndims = H5Tget_array_ndims (dtype_id);
         hsize_t na = 1;
         hsize_t adims[ndims];
@@ -705,7 +705,7 @@ SEXP H5Dread_helper_ARRAY(hid_t dataset_id, hid_t file_space_id, hid_t mem_space
         Rval = PROTECT(allocVector(REALSXP, n));
         for (int i=0; i<n; i++) { REAL(Rval)[i] = na; }
         setAttrib(Rval, R_DimSymbol, Rdim);
-        if ((cpdNField > 0) & (compoundAsDataFrame > 0)) {
+        if ((cpdNField > 0) && (compoundAsDataFrame > 0)) {
             warning("h5read cannot coerce COMPOUND dataset with element of type ARRAY to data.frame. Values replaced by NA's. Try h5read with argument compoundAsDataFrame=FALSE to read element of type ARRAY.");
         } else {
             warning("h5read for type ARRAY [%s] not yet implemented. Values replaced by NA's.", getDatatypeClass(H5Tget_super( dtype_id )));

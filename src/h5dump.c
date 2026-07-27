@@ -65,7 +65,7 @@ herr_t opAddToDumpTree( hid_t g_id, const char *name, const H5L_info2_t *info, v
                 }
                 data->last = newElement;
 
-                if ((data->maxdepth < 0) | (data->depth < data->maxdepth)) {
+                if ((data->maxdepth < 0) || (data->depth < data->maxdepth)) {
                     char* group = data->group;
                     data->group = (char *) R_alloc((strlen(name)+strlen(group)+2), sizeof(char));
                     strcpy(data->group, group);
