@@ -64,37 +64,10 @@ SEXP _H5Gget_info( SEXP _group_id ) {
   const char *nms[] = {"storage_type", "nlink", "max_corder", "mounted", ""};
   PROTECT(rv= Rf_mkNamed(VECSXP, nms));
 
-  SEXP storage_type;
-  PROTECT(storage_type=allocVector(INTSXP,1));
-  INTEGER(storage_type)[0] = group_info.storage_type;
-  SET_VECTOR_ELT(rv,0,storage_type);
-  UNPROTECT(1);
-
-  SEXP nlinks;
-  PROTECT(nlinks=allocVector(INTSXP,1));
-  INTEGER(nlinks)[0] = group_info.nlinks;
-  SET_VECTOR_ELT(rv,1,nlinks);
-  UNPROTECT(1);
-
-  SEXP max_corder;
-  PROTECT(max_corder=allocVector(INTSXP,1));
-  INTEGER(max_corder)[0] = group_info.max_corder;
-  SET_VECTOR_ELT(rv,2,max_corder);
-  UNPROTECT(1);
-
-  SEXP mounted;
-  PROTECT(mounted=allocVector(LGLSXP,1));
-  INTEGER(mounted)[0] = group_info.mounted;
-  SET_VECTOR_ELT(rv,3,mounted);
-  UNPROTECT(1);
-  
-  SEXP names = PROTECT(allocVector(STRSXP, 4));
-  SET_STRING_ELT(names, 0, mkChar("storage_type"));
-  SET_STRING_ELT(names, 1, mkChar("nlink"));
-  SET_STRING_ELT(names, 2, mkChar("max_corder"));
-  SET_STRING_ELT(names, 3, mkChar("mounted"));
-  SET_NAMES(rv, names);
-  UNPROTECT(1);
+  SET_VECTOR_ELT(rv, 0, ScalarInteger(group_info.storage_type));
+  SET_VECTOR_ELT(rv, 1, ScalarInteger(group_info.nlinks));
+  SET_VECTOR_ELT(rv, 2, ScalarInteger(group_info.max_corder));
+  SET_VECTOR_ELT(rv, 3, ScalarLogical(group_info.mounted));
 
   UNPROTECT(1);
   return(rv);
@@ -116,37 +89,10 @@ SEXP _H5Gget_info_by_name( SEXP _loc_id, SEXP _group_name ) {
   const char *nms[] = {"storage_type", "nlink", "max_corder", "mounted", ""};
   PROTECT(rv= Rf_mkNamed(VECSXP, nms));
 
-  SEXP storage_type;
-  PROTECT(storage_type=allocVector(INTSXP,1));
-  INTEGER(storage_type)[0] = group_info.storage_type;
-  SET_VECTOR_ELT(rv,0,storage_type);
-  UNPROTECT(1);
-
-  SEXP nlinks;
-  PROTECT(nlinks=allocVector(INTSXP,1));
-  INTEGER(nlinks)[0] = group_info.nlinks;
-  SET_VECTOR_ELT(rv,1,nlinks);
-  UNPROTECT(1);
-
-  SEXP max_corder;
-  PROTECT(max_corder=allocVector(INTSXP,1));
-  INTEGER(max_corder)[0] = group_info.max_corder;
-  SET_VECTOR_ELT(rv,2,max_corder);
-  UNPROTECT(1);
-
-  SEXP mounted;
-  PROTECT(mounted=allocVector(LGLSXP,1));
-  INTEGER(mounted)[0] = group_info.mounted;
-  SET_VECTOR_ELT(rv,3,mounted);
-  UNPROTECT(1);
-  
-  SEXP names = PROTECT(allocVector(STRSXP, 4));
-  SET_STRING_ELT(names, 0, mkChar("storage_type"));
-  SET_STRING_ELT(names, 1, mkChar("nlink"));
-  SET_STRING_ELT(names, 2, mkChar("max_corder"));
-  SET_STRING_ELT(names, 3, mkChar("mounted"));
-  SET_NAMES(rv, names);
-  UNPROTECT(1);
+  SET_VECTOR_ELT(rv, 0, ScalarInteger(group_info.storage_type));
+  SET_VECTOR_ELT(rv, 1, ScalarInteger(group_info.nlinks));
+  SET_VECTOR_ELT(rv, 2, ScalarInteger(group_info.max_corder));
+  SET_VECTOR_ELT(rv, 3, ScalarLogical(group_info.mounted));
 
   UNPROTECT(1);
   return(rv);
@@ -171,37 +117,10 @@ SEXP _H5Gget_info_by_idx( SEXP _loc_id, SEXP _group_name,  SEXP _index_type, SEX
   const char *nms[] = {"storage_type", "nlink", "max_corder", "mounted", ""};
   PROTECT(rv= Rf_mkNamed(VECSXP, nms));
 
-  SEXP storage_type;
-  PROTECT(storage_type=allocVector(INTSXP,1));
-  INTEGER(storage_type)[0] = group_info.storage_type;
-  SET_VECTOR_ELT(rv,0,storage_type);
-  UNPROTECT(1);
-
-  SEXP nlinks;
-  PROTECT(nlinks=allocVector(INTSXP,1));
-  INTEGER(nlinks)[0] = group_info.nlinks;
-  SET_VECTOR_ELT(rv,1,nlinks);
-  UNPROTECT(1);
-
-  SEXP max_corder;
-  PROTECT(max_corder=allocVector(INTSXP,1));
-  INTEGER(max_corder)[0] = group_info.max_corder;
-  SET_VECTOR_ELT(rv,2,max_corder);
-  UNPROTECT(1);
-
-  SEXP mounted;
-  PROTECT(mounted=allocVector(LGLSXP,1));
-  INTEGER(mounted)[0] = group_info.mounted;
-  SET_VECTOR_ELT(rv,3,mounted);
-  UNPROTECT(1);
-  
-  SEXP names = PROTECT(allocVector(STRSXP, 4));
-  SET_STRING_ELT(names, 0, mkChar("storage_type"));
-  SET_STRING_ELT(names, 1, mkChar("nlink"));
-  SET_STRING_ELT(names, 2, mkChar("max_corder"));
-  SET_STRING_ELT(names, 3, mkChar("mounted"));
-  SET_NAMES(rv, names);
-  UNPROTECT(1);
+  SET_VECTOR_ELT(rv, 0, ScalarInteger(group_info.storage_type));
+  SET_VECTOR_ELT(rv, 1, ScalarInteger(group_info.nlinks));
+  SET_VECTOR_ELT(rv, 2, ScalarInteger(group_info.max_corder));
+  SET_VECTOR_ELT(rv, 3, ScalarLogical(group_info.mounted));
 
   UNPROTECT(1);
   return(rv);

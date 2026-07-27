@@ -211,48 +211,46 @@ SEXP _H5Tget_class( SEXP _dtype_id ) {
 
   hid_t type = STRSXP_2_HID( _dtype_id );
   H5T_class_t tid_class = H5Tget_class(type);
-  SEXP Rval = PROTECT(allocVector(STRSXP, 1));
+  SEXP Rval;
 
   switch(tid_class) {
-  case H5T_INTEGER: {
-    SET_STRING_ELT(Rval, 0, mkChar("H5T_INTEGER"));
-  } break;
-  case H5T_FLOAT: {
-    SET_STRING_ELT(Rval, 0, mkChar("H5T_FLOAT"));
-  } break;
-  case H5T_TIME: {
-    SET_STRING_ELT(Rval, 0, mkChar("H5T_TIME"));
-  } break;
-  case H5T_STRING: {
-    SET_STRING_ELT(Rval, 0, mkChar("H5T_STRING"));
-  } break;
-  case H5T_BITFIELD: {
-    SET_STRING_ELT(Rval, 0, mkChar("H5T_BITFIELD"));
-  } break;
-  case H5T_OPAQUE: {
-    SET_STRING_ELT(Rval, 0, mkChar("H5T_OPAQUE"));
-  } break;
-  case H5T_COMPOUND: {
-    SET_STRING_ELT(Rval, 0, mkChar("H5T_COMPOUND"));
-  } break;
-  case H5T_REFERENCE: {
-    SET_STRING_ELT(Rval, 0, mkChar("H5T_REFERENCE"));
-  } break;
-  case H5T_ENUM: {
-    SET_STRING_ELT(Rval, 0, mkChar("H5T_ENUM"));
-  } break;
-  case H5T_VLEN: {
-    SET_STRING_ELT(Rval, 0, mkChar("H5T_VLEN"));
-  } break;
-  case H5T_ARRAY: {
-    SET_STRING_ELT(Rval, 0, mkChar("H5T_ARRAY"));
-  } break;
-  default: {
-    UNPROTECT(1);
-    error("Unknown class");
-  } break;
+    case H5T_INTEGER: {
+      Rval = mkString("H5T_INTEGER");
+    } break;
+    case H5T_FLOAT: {
+      Rval = mkString("H5T_FLOAT");
+    } break;
+    case H5T_TIME: {
+      Rval = mkString("H5T_TIME");
+    } break;
+    case H5T_STRING: {
+      Rval = mkString("H5T_STRING");
+    } break;
+    case H5T_BITFIELD: {
+      Rval = mkString("H5T_BITFIELD");
+    } break;
+    case H5T_OPAQUE: {
+      Rval = mkString("H5T_OPAQUE");
+    } break;
+    case H5T_COMPOUND: {
+      Rval = mkString("H5T_COMPOUND");
+    } break;
+    case H5T_REFERENCE: {
+      Rval = mkString("H5T_REFERENCE");
+    } break;
+    case H5T_ENUM: {
+      Rval = mkString("H5T_ENUM");
+    } break;
+    case H5T_VLEN: {
+      Rval = mkString("H5T_VLEN");
+    } break;
+    case H5T_ARRAY: {
+      Rval = mkString("H5T_ARRAY");
+    } break;
+    default: {
+      error("Unknown class");
+    } break;
   }
   
-  UNPROTECT(1);
   return Rval;
 }

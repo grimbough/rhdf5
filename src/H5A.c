@@ -488,10 +488,7 @@ SEXP _H5Aget_name(SEXP _attr_id ) {
   ssize_t s = H5Aget_name(attr_id, 0, NULL );
   char buf[s+1];
   H5Aget_name(attr_id, s+1, buf );
-  SEXP name = PROTECT(allocVector(STRSXP, 1));
-  SET_STRING_ELT(name, 0, mkChar(buf));
-  UNPROTECT(1);
-  return name;
+  return mkString(buf);
 }
 
 /* hid_t H5Aget_space(hid_t attr_id) */
