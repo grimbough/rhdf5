@@ -764,6 +764,8 @@ SEXP H5Dread_helper_COMPOUND(hid_t dataset_id, hid_t file_space_id, hid_t mem_sp
                              int bit64conversion, int native ) {
   
     SEXP Rval;
+    SEXP names;
+    SEXP col;
 
     if ((LENGTH(Rdim) > 1) && compoundAsDataFrame) {
         compoundAsDataFrame = 0;
@@ -773,12 +775,11 @@ SEXP H5Dread_helper_COMPOUND(hid_t dataset_id, hid_t file_space_id, hid_t mem_sp
     if (cpdType < 0) {
         int N = H5Tget_nmembers(dtype_id);
         PROTECT(Rval = allocVector(VECSXP, N));
-        SEXP names = PROTECT(allocVector(STRSXP, N));
+        names = PROTECT(allocVector(STRSXP, N));
         for (int i=0; i<N; i++) {
             SET_STRING_ELT(names, i, mkChar(H5Tget_member_name(dtype_id,i)));
             char* name[1];
             name[0] = H5Tget_member_name(dtype_id,i);
-            SEXP col;
             if (compoundAsDataFrame && (H5Tget_member_class(dtype_id,i) == H5T_COMPOUND)) {
                 warning("Cannot read hierarchical compound data types as data.frame. Use 'compoundAsDataFrame=FALSE' instead. Values replaced by NA's.");
                 double na = R_NaReal;
@@ -793,7 +794,6 @@ SEXP H5Dread_helper_COMPOUND(hid_t dataset_id, hid_t file_space_id, hid_t mem_sp
             }
             SET_VECTOR_ELT(Rval, i, col);
         }
-        SET_NAMES(Rval, names);
         if (compoundAsDataFrame) {
             SEXP rn = PROTECT(allocVector(INTSXP, INTEGER(Rdim)[0]));
             for (int i=0; i<INTEGER(Rdim)[0]; i++) { INTEGER(rn)[i] = i+1; }
@@ -801,11 +801,10 @@ SEXP H5Dread_helper_COMPOUND(hid_t dataset_id, hid_t file_space_id, hid_t mem_sp
             setAttrib(Rval, R_RowNamesSymbol, rn);
             setAttrib(Rval, R_ClassSymbol, mkString("data.frame"));
         }
-        UNPROTECT(2);
     } else {
         int N = H5Tget_nmembers(dtype_id);
         PROTECT(Rval = allocVector(VECSXP, N));
-        SEXP names = PROTECT(allocVector(STRSXP, N));
+        names = PROTECT(allocVector(STRSXP, N));
         for (int i=0; i<N; i++) {
             SET_STRING_ELT(names, i, mkChar(H5Tget_member_name(dtype_id,i)));
             char* name[cpdNField+1];
@@ -813,15 +812,15 @@ SEXP H5Dread_helper_COMPOUND(hid_t dataset_id, hid_t file_space_id, hid_t mem_sp
             for (int j=0; j<cpdNField; j++) {
                 name[j+1] = cpdField[j];
             }
-            SEXP col = H5Dread_helper(dataset_id, file_space_id, mem_space_id, n, Rdim, _buf,
-                                      H5Tget_member_type(dtype_id,i), cpdNField+1, name, compoundAsDataFrame,
-                                      bit64conversion, 0);
+            col = H5Dread_helper(dataset_id, file_space_id, mem_space_id, n, Rdim, _buf,
+                                 H5Tget_member_type(dtype_id,i), cpdNField+1, name, compoundAsDataFrame,
+                                 bit64conversion, 0);
             
             SET_VECTOR_ELT(Rval, i, col);
         }
-        SET_NAMES(Rval, names);
-        UNPROTECT(2);
     }
+    SET_NAMES(Rval, names);
+    UNPROTECT(2);
     return(Rval);
 }
 

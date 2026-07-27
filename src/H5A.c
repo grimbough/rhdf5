@@ -113,9 +113,6 @@ SEXP H5Aread_helper_INTEGER(hid_t attr_id, hsize_t n, SEXP Rdim, SEXP _buf, hid_
         Rval = _buf;
       }
       herr = H5Aread(attr_id, mem_type_id, buf );
-      if (length(_buf) == 0) {
-        setAttrib(Rval, R_DimSymbol, Rdim);
-      }
   } else if ( ((b == 4) && (sgn == H5T_SGN_NONE)) || (b == 8) ) { 
       // unsigned32-bit or 64-bit integer
       void* intbuf;
@@ -183,14 +180,13 @@ SEXP H5Aread_helper_INTEGER(hid_t attr_id, hsize_t n, SEXP Rdim, SEXP _buf, hid_
               UNPROTECT(1);
           }
       }
-      
-      if (length(_buf) == 0) {
-          setAttrib(Rval, R_DimSymbol, Rdim);
-      }
   } else {
       error("Unknown integer type\n");
   }
-
+    
+  if (length(_buf) == 0) {
+    setAttrib(Rval, R_DimSymbol, Rdim);
+  }
   UNPROTECT(protected);
   return(Rval);
 }
