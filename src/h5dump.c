@@ -178,7 +178,22 @@ SEXP getTree(opObjListElement* elstart, opDumpTree* data, hid_t loc_id, int dept
                 if (el->type == H5I_GROUP) {
                     SET_VECTOR_ELT(Rval,n,R_NilValue);
                 } else {
-                    SEXP info = PROTECT(allocVector(VECSXP, 12));
+                    const char *infonames[] = {
+                        "group",
+                        "name",
+                        "ltype",
+                        "cset",
+                        "otype",
+                        "num_attrs",
+                        "dclass",
+                        "dtype",
+                        "stype",
+                        "rank",
+                        "dim",
+                        "maxdim",
+                        ""
+                    };
+                    SEXP info = PROTECT(mkNamed(VECSXP, infonames));
                     SET_VECTOR_ELT(info,0,mkString("/"));  
                     SET_VECTOR_ELT(info,1,mkString(el->name));  
                     SET_VECTOR_ELT(info,2,ScalarInteger(el->info.type));  
@@ -191,24 +206,9 @@ SEXP getTree(opObjListElement* elstart, opDumpTree* data, hid_t loc_id, int dept
                     SET_VECTOR_ELT(info,9,ScalarInteger(el->rank));
                     SET_VECTOR_ELT(info,10,mkString(el->dim));
                     SET_VECTOR_ELT(info,11,mkString(el->maxdim));
-                    
-                    SEXP infonames = PROTECT(allocVector(STRSXP, 12));
-                    SET_STRING_ELT(infonames, 0, mkChar("group"));
-                    SET_STRING_ELT(infonames, 1, mkChar("name"));
-                    SET_STRING_ELT(infonames, 2, mkChar("ltype"));
-                    SET_STRING_ELT(infonames, 3, mkChar("cset"));
-                    SET_STRING_ELT(infonames, 4, mkChar("otype"));
-                    SET_STRING_ELT(infonames, 5, mkChar("num_attrs"));
-                    SET_STRING_ELT(infonames, 6, mkChar("dclass"));
-                    SET_STRING_ELT(infonames, 7, mkChar("dtype"));
-                    SET_STRING_ELT(infonames, 8, mkChar("stype"));
-                    SET_STRING_ELT(infonames, 9, mkChar("rank"));
-                    SET_STRING_ELT(infonames, 10, mkChar("dim"));
-                    SET_STRING_ELT(infonames, 11, mkChar("maxdim"));
-                    SET_NAMES(info, infonames);
+
                     setAttrib(info, R_ClassSymbol, mkString("data.frame"));
                     setAttrib(info, R_RowNamesSymbol, ScalarInteger(1));
-                    UNPROTECT(1);
                     
                     SET_VECTOR_ELT(Rval,n,info);
                     UNPROTECT(1);

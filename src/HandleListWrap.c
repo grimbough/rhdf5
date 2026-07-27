@@ -14,7 +14,8 @@ SEXP _h5listIdentifier( void ) {
     hid_t * validIDs = (hid_t *)R_alloc( n_max, sizeof(hid_t) );
     hsize_t n = validIdentifierCPP( validIDs, n_max );
     
-    SEXP Rval = PROTECT(allocVector(VECSXP, 2));
+    const char *nms[] = {"type", "name", ""};
+    SEXP Rval = PROTECT(mkNamed(VECSXP, nms));
     
     SEXP type = PROTECT(allocVector(INTSXP, n));
     SEXP name = PROTECT(allocVector(STRSXP, n));
@@ -44,12 +45,8 @@ SEXP _h5listIdentifier( void ) {
 
     SET_VECTOR_ELT(Rval,0,type);
     SET_VECTOR_ELT(Rval,1,name);
-    
-    SEXP names = PROTECT(allocVector(STRSXP, 2));
-    SET_STRING_ELT(names, 0, mkChar("type"));
-    SET_STRING_ELT(names, 1, mkChar("name"));
-    SET_NAMES(Rval, names);
-    UNPROTECT(4);
+
+    UNPROTECT(3);
     
     return(Rval);
 }
@@ -78,17 +75,14 @@ void
     }
 
 SEXP  handleInfoName( hid_t ID) {
-    SEXP Rval = PROTECT(allocVector(VECSXP, 2));
+    const char *nms[] = {"name", "filename", ""};
+    SEXP Rval = PROTECT(mkNamed(VECSXP, nms));
     ssize_t st = H5Iget_name( ID, NULL, 0 );
     char n1[st+1];
     H5Iget_name( ID, (char *)(&n1), st+1 );
     SET_VECTOR_ELT(Rval, 0, mkString(n1));
     SET_VECTOR_ELT(Rval, 1, mkString(""));
-    SEXP names = PROTECT(allocVector(STRSXP, 2));
-    SET_STRING_ELT(names, 0, mkChar("name"));
-    SET_STRING_ELT(names, 1, mkChar("filename"));
-    SET_NAMES(Rval, names);
-    UNPROTECT(2);
+    UNPROTECT(1);
     return(Rval);
 }
 
@@ -96,8 +90,9 @@ SEXP _handleInfo ( SEXP _ID ) {
 
     hid_t ID = STRSXP_2_HID(_ID);
     int isvalid = H5Iis_valid(ID);
-    
-    SEXP Rval = PROTECT(allocVector(VECSXP, 3));
+
+    const char *nms[] = {"isvalid", "type", "info", ""};
+    SEXP Rval = PROTECT(mkNamed(VECSXP, nms));
     SET_VECTOR_ELT(Rval,0,ScalarLogical(isvalid));
     H5I_type_t type = H5Iget_type(ID);
     SET_VECTOR_ELT(Rval,1,ScalarInteger(type));
@@ -113,12 +108,8 @@ SEXP _handleInfo ( SEXP _ID ) {
     } else {
         SET_VECTOR_ELT(Rval, 2, mkString(""));
     }
-    SEXP names = PROTECT(allocVector(STRSXP, 3));
-    SET_STRING_ELT(names, 0, mkChar("isvalid"));
-    SET_STRING_ELT(names, 1, mkChar("type"));
-    SET_STRING_ELT(names, 2, mkChar("info"));
-    SET_NAMES(Rval, names);
-    UNPROTECT(2);
+
+    UNPROTECT(1);
     return Rval;
 }
 

@@ -78,7 +78,8 @@ SEXP _H5Sget_simple_extent_dims( SEXP _space_id ) {
     hsize_t   maxsize[H5S_MAX_RANK];
     int rank = H5Sget_simple_extent_dims(space_id, size, maxsize);
     
-    SEXP Rval = PROTECT(allocVector(VECSXP, 3));
+    const char *nms[] = {"rank", "size", "maxsize", ""};
+    SEXP Rval = PROTECT(mkNamed(VECSXP, nms));
     SET_VECTOR_ELT(Rval,0,ScalarInteger(rank));
     
     SEXP Rsize;
@@ -111,12 +112,6 @@ SEXP _H5Sget_simple_extent_dims( SEXP _space_id ) {
     if (!maxsize_is_numeric)
         SET_VECTOR_ELT(Rval, 2, AS_INTEGER(VECTOR_ELT(Rval, 2)));
     
-    SEXP names = PROTECT(allocVector(STRSXP, 3));
-    SET_STRING_ELT(names, 0, mkChar("rank"));
-    SET_STRING_ELT(names, 1, mkChar("size"));
-    SET_STRING_ELT(names, 2, mkChar("maxsize"));
-    SET_NAMES(Rval, names);
-    UNPROTECT(1);
     UNPROTECT(1);
     return(Rval);
 }

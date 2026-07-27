@@ -61,7 +61,8 @@ SEXP _H5Gget_info( SEXP _group_id ) {
   }
 
   SEXP rv;
-  PROTECT(rv= allocVector(VECSXP, 4));
+  const char *nms[] = {"storage_type", "nlink", "max_corder", "mounted", ""};
+  PROTECT(rv= Rf_mkNamed(VECSXP, nms));
 
   SEXP storage_type;
   PROTECT(storage_type=allocVector(INTSXP,1));
@@ -112,7 +113,8 @@ SEXP _H5Gget_info_by_name( SEXP _loc_id, SEXP _group_name ) {
   }
 
   SEXP rv;
-  PROTECT(rv= allocVector(VECSXP, 4));
+  const char *nms[] = {"storage_type", "nlink", "max_corder", "mounted", ""};
+  PROTECT(rv= Rf_mkNamed(VECSXP, nms));
 
   SEXP storage_type;
   PROTECT(storage_type=allocVector(INTSXP,1));
@@ -166,7 +168,8 @@ SEXP _H5Gget_info_by_idx( SEXP _loc_id, SEXP _group_name,  SEXP _index_type, SEX
   }
 
   SEXP rv;
-  PROTECT(rv= allocVector(VECSXP, 4));
+  const char *nms[] = {"storage_type", "nlink", "max_corder", "mounted", ""};
+  PROTECT(rv= Rf_mkNamed(VECSXP, nms));
 
   SEXP storage_type;
   PROTECT(storage_type=allocVector(INTSXP,1));

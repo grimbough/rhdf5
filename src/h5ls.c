@@ -157,7 +157,22 @@ SEXP _h5ls( SEXP _loc_id, SEXP _depth, SEXP _datasetinfo, SEXP _index_type, SEXP
         if (herr < 0) {
             Rval = ScalarInteger(herr);
         } else {
-            PROTECT(Rval= allocVector(VECSXP, 12));
+            const char *nms[] = {
+                "group",
+                "name",
+                "ltype",
+                "cset",
+                "otype",
+                "num_attrs",
+                "dclass",
+                "dtype",
+                "stype",
+                "rank",
+                "dim",
+                "maxdim",
+                ""
+            };
+            PROTECT(Rval= mkNamed(VECSXP, nms));
             SEXP group = PROTECT(allocVector(STRSXP, data.n));
             SEXP elementnames = PROTECT(allocVector(STRSXP, data.n));
             SEXP ltype = PROTECT(allocVector(INTSXP, data.n));
@@ -204,22 +219,6 @@ SEXP _h5ls( SEXP _loc_id, SEXP _depth, SEXP _datasetinfo, SEXP _index_type, SEXP
             SET_VECTOR_ELT(Rval,9,rank);
             SET_VECTOR_ELT(Rval,10,dim);
             SET_VECTOR_ELT(Rval,11,maxdim);
-            
-            SEXP names = PROTECT(allocVector(STRSXP, 12));
-            SET_STRING_ELT(names, 0, mkChar("group"));
-            SET_STRING_ELT(names, 1, mkChar("name"));
-            SET_STRING_ELT(names, 2, mkChar("ltype"));
-            SET_STRING_ELT(names, 3, mkChar("cset"));
-            SET_STRING_ELT(names, 4, mkChar("otype"));
-            SET_STRING_ELT(names, 5, mkChar("num_attrs"));
-            SET_STRING_ELT(names, 6, mkChar("dclass"));
-            SET_STRING_ELT(names, 7, mkChar("dtype"));
-            SET_STRING_ELT(names, 8, mkChar("stype"));
-            SET_STRING_ELT(names, 9, mkChar("rank"));
-            SET_STRING_ELT(names, 10, mkChar("dim"));
-            SET_STRING_ELT(names, 11, mkChar("maxdim"));
-            SET_NAMES(Rval, names);
-            UNPROTECT(1);
             
             setAttrib(Rval, R_ClassSymbol, mkString("data.frame"));
             setAttrib(Rval, R_RowNamesSymbol, rowNames);

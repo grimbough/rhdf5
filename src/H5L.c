@@ -22,18 +22,13 @@ SEXP _H5Lexists( SEXP _loc_id, SEXP _name ) {
 }
 
 SEXP H5L_info_t2SEXP (H5L_info2_t *link_buff) {
-    SEXP Rval = PROTECT(allocVector(VECSXP, 4));
+    const char *nms[] = {"type", "corder_valid", "corder", "cset", ""};
+    SEXP Rval = PROTECT(mkNamed(VECSXP, nms));
     SET_VECTOR_ELT(Rval,0,ScalarInteger(link_buff->type));
     SET_VECTOR_ELT(Rval,1,ScalarLogical(link_buff->corder_valid));
     SET_VECTOR_ELT(Rval,2,ScalarInteger(link_buff->corder));
     SET_VECTOR_ELT(Rval,3,ScalarInteger(link_buff->cset));
-    SEXP names = PROTECT(allocVector(STRSXP, 4));
-    SET_STRING_ELT(names, 0, mkChar("type"));
-    SET_STRING_ELT(names, 1, mkChar("corder_valid"));
-    SET_STRING_ELT(names, 2, mkChar("corder"));
-    SET_STRING_ELT(names, 3, mkChar("cset"));
-    SET_NAMES(Rval, names);
-    UNPROTECT(2);
+    UNPROTECT(1);
     return(Rval);
 }
 
