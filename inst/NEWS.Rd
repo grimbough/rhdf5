@@ -3,10 +3,21 @@
 
 \section{Changes in version 2.58.0}{
 
-  \subsection{CHANGES}{
+  \subsection{New features}{
     \itemize{
       \item `H5Fopen()` now supports opening remote files on S3. Thanks to
       a PR contribution from Michael Sumner (https://github.com/mdsumner).
+    }
+  }
+
+  \subsection{Deprecations & breaking changes}{
+    \itemize{
+      \item The `H5Pget_version()` function was removed entirely after being 
+      deprecated in version 2.56.0.
+      \item It is no longer possible to pass a missing value or "default" to 
+      the `bit64conversion` argument in `H5Aread()` and `H5Dread()`.
+      \item The `native` argument to `H5Pcreate()` has been removed entirely 
+      after being deprecated in version 2.56.0.
     }
   }
 
