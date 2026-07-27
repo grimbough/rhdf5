@@ -303,7 +303,7 @@ SEXP _H5Sselect_elements( SEXP _space_id, SEXP _op, SEXP _num_elements, SEXP _co
   size_t num_elements = asInteger(_num_elements);
   hsize_t *coord = (hsize_t *) R_alloc(LENGTH(_coord), sizeof(hsize_t));
   
-  int *_coordp = INTEGER(_coord);
+  const int *_coordp = INTEGER(_coord);
   for(int i = 0; i < LENGTH(_coord); i++) {
     // do the conversion from R to C indices here
     coord[i] = _coordp[i] - 1;

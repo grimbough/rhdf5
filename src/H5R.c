@@ -1,6 +1,6 @@
 #include "H5R.h"
 
-void * RAWSXP_2_REF(void *raw_ref, H5R_type_t ref_type, R_xlen_t len) {
+void * RAWSXP_2_REF(const void *raw_ref, H5R_type_t ref_type, R_xlen_t len) {
   void *ref = R_alloc(len, 1);
   memcpy(ref, raw_ref, len);
   return(ref);
