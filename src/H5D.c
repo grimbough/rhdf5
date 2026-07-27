@@ -139,7 +139,7 @@ SEXP _H5Dget_storage_size( SEXP _dataset_id ) {
     hid_t dataset_id = STRSXP_2_HID( _dataset_id );
     hsize_t size = H5Dget_storage_size( dataset_id );
 
-    SEXP Rval = ScalarInteger(0);
+    SEXP Rval;
     if (size <= INT_MAX) {
         Rval = ScalarInteger(size);
     } else {
@@ -151,18 +151,12 @@ SEXP _H5Dget_storage_size( SEXP _dataset_id ) {
 SEXP H5Dread_helper_INTEGER(hid_t dataset_id, hid_t file_space_id, hid_t mem_space_id, hsize_t n, 
                             SEXP Rdim, SEXP _buf, hid_t dtype_id, hid_t cpdType, int cpdNField, 
                             char ** cpdField, int compoundAsDataFrame, int bit64conversion, int native ) {
-    hid_t mem_type_id = -1;
+    hid_t mem_type_id;
     herr_t herr = 0;
     SEXP Rval;
     
     int b = H5Tget_size(dtype_id);
     H5T_sign_t sgn = H5Tget_sign(dtype_id);
-    
-    int warn = 0;
-    int warn_overflow_64bit = 0;
-    int warn_double = 0;
-
-    int protected = 0;
     
     /* short cut if we're reading 0 elements */
     if(n == 0) {
@@ -175,8 +169,8 @@ SEXP H5Dread_helper_INTEGER(hid_t dataset_id, hid_t file_space_id, hid_t mem_spa
         UNPROTECT(1);
         return(Rval);
     } else {
-        
-        
+        int protected = 0;     
+
         /* 1-byte integers. Reading strategy is dependent on whether these 
          * are signed or unsigned (RAWSXP vs INTSXP) */
         if(b == 1) {
@@ -266,7 +260,7 @@ SEXP H5Dread_helper_INTEGER(hid_t dataset_id, hid_t file_space_id, hid_t mem_spa
                 buf = INTEGER(_buf);
                 Rval = _buf;
             }
-            herr_t herr = H5Dread(dataset_id, mem_type_id, mem_space_id, file_space_id, H5P_DEFAULT, buf );
+            herr = H5Dread(dataset_id, mem_type_id, mem_space_id, file_space_id, H5P_DEFAULT, buf );
             if(herr < 0) {
                 error("Error reading dataset");
             }
@@ -309,7 +303,7 @@ SEXP H5Dread_helper_INTEGER(hid_t dataset_id, hid_t file_space_id, hid_t mem_spa
                 }
             }
             
-            herr_t herr = H5Dread(dataset_id, mem_type_id, mem_space_id, file_space_id, H5P_DEFAULT, intbuf );
+            herr = H5Dread(dataset_id, mem_type_id, mem_space_id, file_space_id, H5P_DEFAULT, intbuf );
             if(herr < 0) {
                 error("Error reading dataset");
             }
@@ -375,14 +369,6 @@ SEXP H5Dread_helper_INTEGER(hid_t dataset_id, hid_t file_space_id, hid_t mem_spa
             }
         }
         
-        if (warn > 0) {
-            warning("NAs produced by integer overflow while converting 64-bit integer or unsigned 32-bit integer from HDF5 to a 32-bit integer in R.\nChoose bit64conversion='bit64' or bit64conversion='double' to avoid data loss and see the vignette 'rhdf5' for more details about 64-bit integers.");
-        } else if (warn_overflow_64bit > 0) {
-            warning("NAs produced by integer overflow while converting unsigned 64-bit integer from HDF5 to signed 64-bit integer in R.");
-        } else if (warn_double > 0) {
-            warning("integer precision lost while converting 64-bit integer or unsigned 32-bit integer from HDF5 to double in R.\nChoose bit64conversion='bit64' to avoid data loss and see the vignette 'rhdf5' for more details about 64-bit integers.");
-        }
-        
         UNPROTECT(protected);
         return(Rval);
     }
@@ -391,10 +377,6 @@ SEXP H5Dread_helper_INTEGER(hid_t dataset_id, hid_t file_space_id, hid_t mem_spa
 
 SEXP H5Dread_helper_FLOAT(hid_t dataset_id, hid_t file_space_id, hid_t mem_space_id, hsize_t n, SEXP Rdim, SEXP _buf, 
                           hid_t dtype_id, hid_t cpdType, int cpdNField, char ** cpdField, int compoundAsDataFrame, int native ) {
-    hid_t mem_type_id = -1;
-    herr_t herr = 0;
-    int protected = 0;
-    
     SEXP Rval;
 
     if(n == 0) {
@@ -402,7 +384,9 @@ SEXP H5Dread_helper_FLOAT(hid_t dataset_id, hid_t file_space_id, hid_t mem_space
         setAttrib(Rval, R_DimSymbol, Rdim);
         UNPROTECT(1);
     } else {
-
+        hid_t mem_type_id = -1;
+        herr_t herr = 0;
+        int protected = 0;
         if (cpdType < 0) {
             mem_type_id = H5T_NATIVE_DOUBLE;
         } else {
@@ -503,10 +487,9 @@ SEXP H5Dread_helper_STRING(hid_t dataset_id, hid_t file_space_id, hid_t mem_spac
 
 SEXP H5Dread_helper_ENUM(hid_t dataset_id, hid_t file_space_id, hid_t mem_space_id, hsize_t n, SEXP Rdim, SEXP _buf, 
                          hid_t dtype_id, hid_t cpdType, int cpdNField, char ** cpdField, int compoundAsDataFrame, int native ) {
-    hid_t mem_type_id = -1;
-    herr_t herr = 0;
+    hid_t mem_type_id;
+    herr_t herr;
     SEXP Rval;
-    int protected = 0;
     
     hid_t superclass =  H5Tget_class(H5Tget_super( dtype_id ));
     if (superclass == H5T_INTEGER) {
@@ -530,8 +513,8 @@ SEXP H5Dread_helper_ENUM(hid_t dataset_id, hid_t file_space_id, hid_t mem_space_
                 mem_type_id = mem_type_id2;
             }
         }
-        
-        
+
+        int protected = 0;
         void * buf;
         if (length(_buf) == 0) {
             Rval = PROTECT(allocVector(INTSXP, n));
@@ -578,10 +561,9 @@ SEXP H5Dread_helper_ENUM(hid_t dataset_id, hid_t file_space_id, hid_t mem_space_
 
 SEXP H5Dread_helper_ARRAY(hid_t dataset_id, hid_t file_space_id, hid_t mem_space_id, hsize_t n, SEXP Rdim, SEXP _buf,
                           hid_t dtype_id, hid_t cpdType, int cpdNField, char ** cpdField, int compoundAsDataFrame, int native ) {
-    hid_t mem_type_id = -1;
-    herr_t herr = 0;
+    hid_t mem_type_id;
+    herr_t herr;
     SEXP Rval;
-    int protected = 0;
     
     hid_t superclass =  H5Tget_class(H5Tget_super( dtype_id ));
     if (((superclass == H5T_INTEGER) || (superclass == H5T_FLOAT)) && (!((cpdNField > 0) && (compoundAsDataFrame > 0)))) {
@@ -611,6 +593,7 @@ SEXP H5Dread_helper_ARRAY(hid_t dataset_id, hid_t file_space_id, hid_t mem_space
                 mem_type_id = mem_type_id2;
             }
         }
+        int protected = 0;
         void * buf;
         if (length(_buf) == 0) {
             if (superclass == H5T_INTEGER) {
@@ -1016,10 +999,7 @@ SEXP _H5Dread( SEXP _dataset_id, SEXP _file_space_id, SEXP _mem_space_id, SEXP _
     if( rank == 0 ) {
     /* scalar with no dimensions */
         Rdim = NULL_USER_OBJECT;
-    } else if( dtypeclass_id == H5T_ENUM && rank == 0 ) {
-    /* do all ENUM have rank 0? */ 
-        Rdim = NULL_USER_OBJECT;
-    } else if( (dtypeclass_id == H5T_INTEGER || dtypeclass_id == H5T_FLOAT || dtypeclass_id == H5T_STRING) &&
+    } else if( (dtypeclass_id == H5T_INTEGER || dtypeclass_id == H5T_FLOAT || dtypeclass_id == H5T_STRING || dtypeclass_id == H5T_ENUM ) &&
         (drop || too_large) ) {
         Rdim = NULL_USER_OBJECT;
     } else {

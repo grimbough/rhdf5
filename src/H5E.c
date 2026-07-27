@@ -52,7 +52,7 @@ herr_t custom_print_cb(unsigned n, const H5E_error2_t *err_desc, void* client_da
         strcpy(cd->txt[cd->n]," ... [truncated]\n");
         cd->n = cd->n + 1;
     } else {
-        snprintf (cd->txt[cd->n], 1024, "%*serror #%03d: %s in %s(): line %u",
+        snprintf (cd->txt[cd->n], 1024, "%*serror #%03u: %s in %s(): line %u",
                  indent, "", n, err_desc->file_name,
                  err_desc->func_name, err_desc->line);
         snprintf (cd->txt[cd->n+1], 1024, "%*sclass: %s", indent*2, "", cls);
