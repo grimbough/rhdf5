@@ -57,12 +57,11 @@ SEXP _h5validObjects( void ) {
     hsize_t n = validIdentifierCPP( validIDs, n_max );
     
     SEXP Rval = PROTECT(allocVector(STRSXP, n));
-    if (n > 0) {
-        hsize_t i;
-        for (i=0; i < n; i++) {
-            SET_STRING_ELT(Rval, i, HID_2_CHARSXP(validIDs[i]));
-        }
+
+    for (hsize_t i=0; i < n; i++) {
+        SET_STRING_ELT(Rval, i, HID_2_CHARSXP(validIDs[i]));
     }
+    
     UNPROTECT(1);
     
     return(Rval);
