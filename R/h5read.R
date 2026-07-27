@@ -22,10 +22,7 @@
   } else if (storage.mode(obj) == "character") {
     ## coerce the string "NA" to NA if required
     if (H5Aexists(h5dataset, name = "as.na")) {
-      na_char_idx <- (obj == "NA")
-      if (any(na_char_idx)) {
-        obj[na_char_idx] <- NA_character_
-      }
+      obj[obj == "NA"] <- NA_character_
     }
     ## determine if this is ASCII or UTF-8 encoding
     h5type <- H5Dget_type(h5dataset)
@@ -397,7 +394,7 @@ h5read <- function(
   ## we do some casting as.logical here, but it'd be better elsewhere
   values <- h5read(gid, "values")
   mask <- h5read(gid, "mask")
-  values[which(as.logical(mask))] <- NA
+  values[as.logical(mask)] <- NA
 
   aid <- H5Aopen(gid, name = "encoding-type")
   on.exit(H5Aclose(aid))
