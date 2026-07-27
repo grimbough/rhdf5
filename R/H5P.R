@@ -6,19 +6,11 @@
 #'
 #' @param type A character name of a property list type. See `h5const("H5P")`
 #' for possible property list types.
-#' @param native Defunct! Doesn't achieve anything for property lists.
 #'
 #' @export
-H5Pcreate <- function(type = h5default("H5P"), native) {
+H5Pcreate <- function(type = h5default("H5P")) {
   type <- h5checkConstants("H5P", type)
   pid <- .Call("_H5Pcreate", type, PACKAGE = "rhdf5")
-  if (!missing(native)) {
-    warning(
-      "The 'native' argument to H5Pcreate() has no effect and is defunct. ",
-      "It will be removed in a the next version of rhdf5. ",
-      "Please remove this argument."
-    )
-  }
   if (pid > 0) {
     # The native argument has no effect in this case. So we set it to FALSE
     # but the actual value doesn't really matter.
