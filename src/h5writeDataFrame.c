@@ -128,7 +128,7 @@ SEXP _h5writeDataFrame(SEXP _obj, SEXP _dset_id) {
             size_t z=0;
             R_xlen_t j, k;
             for (k=0; k < LENGTH(VECTOR_ELT(_obj,i)); k++) {
-                for (j=0; (j < LENGTH(STRING_ELT(VECTOR_ELT(_obj,i),k))) & (j < (strsize[i])); j++) {
+                for (j=0; (j < LENGTH(STRING_ELT(VECTOR_ELT(_obj,i),k))) && (j < (strsize[i])); j++) {
                     strbuf[z++] = CHAR(STRING_ELT(VECTOR_ELT(_obj,i),k))[j];
                 }
                 for (; j < strsize[i]; j++) {

@@ -100,7 +100,7 @@ void * read_string_datatype(hid_t mem_type_id, SEXP _buf) {
         size_t i, j, z=0;
 
         for (i=0; i < LENGTH(_buf); i++) {
-            for (j=0; (j < LENGTH(STRING_ELT(_buf,i))) & (j < stsize); j++) {
+            for (j=0; (j < LENGTH(STRING_ELT(_buf,i))) && (j < stsize); j++) {
                 strbuf[z++] = CHAR(STRING_ELT(_buf,i))[j];
             }
             for (; j < stsize; j++) {

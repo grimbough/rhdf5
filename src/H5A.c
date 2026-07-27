@@ -100,7 +100,7 @@ SEXP H5Aread_helper_INTEGER(hid_t attr_id, hsize_t n, SEXP Rdim, SEXP _buf, hid_
   herr_t herr;
   int protected = 0;
   
-  if((b < 4) | ((b == 4) & (sgn == H5T_SGN_2))) {
+  if((b < 4) || ((b == 4) && (sgn == H5T_SGN_2))) {
       mem_type_id = H5T_NATIVE_INT;
     
       void * buf;
@@ -116,7 +116,7 @@ SEXP H5Aread_helper_INTEGER(hid_t attr_id, hsize_t n, SEXP Rdim, SEXP _buf, hid_
       if (length(_buf) == 0) {
         setAttrib(Rval, R_DimSymbol, Rdim);
       }
-  } else if ( ((b == 4) & (sgn == H5T_SGN_NONE)) | (b == 8) ) { 
+  } else if ( ((b == 4) && (sgn == H5T_SGN_NONE)) || (b == 8) ) { 
       // unsigned32-bit or 64-bit integer
       void* intbuf;
       void* buf;
@@ -124,7 +124,7 @@ SEXP H5Aread_helper_INTEGER(hid_t attr_id, hsize_t n, SEXP Rdim, SEXP _buf, hid_
       if(b == 4) {
           mem_type_id = H5T_STD_U32LE;
           intbuf = R_alloc(n, sizeof(unsigned int));
-      } else if((b == 8) & (sgn == H5T_SGN_NONE)) {
+      } else if((b == 8) && (sgn == H5T_SGN_NONE)) {
           mem_type_id = H5T_NATIVE_UINT64;
           intbuf = R_alloc(n, sizeof(unsigned long long));
       } else {
@@ -151,7 +151,7 @@ SEXP H5Aread_helper_INTEGER(hid_t attr_id, hsize_t n, SEXP Rdim, SEXP _buf, hid_
               buf = INTEGER(_buf);
               Rval = _buf;
           }
-          if ((b == 4) & (sgn == H5T_SGN_NONE)) {
+          if ((b == 4) && (sgn == H5T_SGN_NONE)) {
               uint32_to_int32(intbuf, n, buf);
           } else if (b == 8) { 
               int64_to_int32(intbuf, n, buf, sgn);
@@ -167,13 +167,13 @@ SEXP H5Aread_helper_INTEGER(hid_t attr_id, hsize_t n, SEXP Rdim, SEXP _buf, hid_
               Rval = _buf;
           }
           if (bit64conversion == 1) {  //convert to double
-              if ((b == 4) & (sgn == H5T_SGN_NONE)) {
+              if ((b == 4) && (sgn == H5T_SGN_NONE)) {
                   uint32_to_double(intbuf, n, buf);
               } else if (b == 8) {
                   int64_to_double(intbuf, n, buf, sgn);
               }
           } else { // convert to integer64
-              if((b == 4) & (sgn == H5T_SGN_NONE)) {
+              if((b == 4) && (sgn == H5T_SGN_NONE)) {
                   uint32_to_integer64(intbuf, n, buf);
               } else if (b == 8) {
                   int64_to_integer64(intbuf, n, buf, sgn);

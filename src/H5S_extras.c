@@ -41,7 +41,7 @@ SEXP _H5Sselect_index( SEXP _space_id, SEXP _start, SEXP _count) {
             if (index[k] >= LENGTH(VECTOR_ELT(_count,k))) {
                 carry = 1;
             }
-            while ((k >= 0) & (carry > 0)) {
+            while ((k >= 0) && (carry > 0)) {
                 index[k] = 0;
                 k--;
                 if (k >= 0) {
