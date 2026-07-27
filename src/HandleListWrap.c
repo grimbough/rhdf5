@@ -36,7 +36,7 @@ SEXP _h5listIdentifier( void ) {
                 H5Iget_name( id, (char *)(&n1), st );
                 SET_STRING_ELT(name, i, mkChar(n1));
             } else {
-                SET_STRING_ELT(name, i, mkChar(""));
+                SET_STRING_ELT(name, i, R_BlankString);
             }
         }
     }
@@ -81,7 +81,7 @@ SEXP  handleInfoName( hid_t ID) {
     char n1[st+1];
     H5Iget_name( ID, (char *)(&n1), st+1 );
     SET_VECTOR_ELT(Rval, 0, mkString(n1));
-    SET_VECTOR_ELT(Rval, 1, mkString(""));
+    SET_VECTOR_ELT(Rval, 1, R_BlankScalarString);
     UNPROTECT(1);
     return(Rval);
 }
@@ -106,7 +106,7 @@ SEXP _handleInfo ( SEXP _ID ) {
         }
         }
     } else {
-        SET_VECTOR_ELT(Rval, 2, mkString(""));
+        SET_VECTOR_ELT(Rval, 2, R_BlankScalarString);
     }
 
     UNPROTECT(1);
