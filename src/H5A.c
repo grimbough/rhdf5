@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <string.h>
 #include "H5A.h"
 
 /*################################*/
@@ -247,9 +248,7 @@ SEXP H5Aread_helper_STRING(hid_t attr_id, hsize_t n, SEXP Rdim, SEXP _buf, hid_t
     
     char bufSTR2[n][size+1];
     for (hsize_t i=0; i<n; i++) {
-      for (size_t j=0; j<size; j++) {
-        bufSTR2[i][j] = bufSTR[i][j];
-      }
+      memcpy(bufSTR2[i], bufSTR[i], size);
       bufSTR2[i][size] = '\0';
     }
 
