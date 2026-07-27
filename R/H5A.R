@@ -269,7 +269,6 @@ H5Aread <- function(
 ) {
   h5checktype(h5attribute, "attribute")
 
-  bit64conversion <- fix_missing(bit64conversion, "int")
   if (identical(bit64conversion, "default")) {
     bit64conversion <- "int"
     warning(
