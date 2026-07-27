@@ -1004,7 +1004,7 @@ SEXP _H5Dread( SEXP _dataset_id, SEXP _file_space_id, SEXP _mem_space_id, SEXP _
     int too_large = 0;
     for (int i=0; i < rank; i++) {
         n = n * size[i];
-        if(size[i] > 2147483647) {
+        if(size[i] > INT_MAX) {
             too_large = 1;
         }
     }
