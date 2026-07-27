@@ -74,6 +74,8 @@ h5writeAttribute.default <- function(attr, h5obj, name, ...) {
 }
 
 #' @rdname h5_writeAttribute
+#'
+#' @export
 h5writeAttribute.array <- function(
   attr,
   h5obj,
