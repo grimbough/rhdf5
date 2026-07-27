@@ -298,8 +298,8 @@ setMethod(f = "[", signature = c("H5Ref", "ANY"), definition = function(x, i) {
     div <- 12L
   }
 
-  i <- as.integer(i)
-  idx <- (rep(i, each = div) - 1L) * div + seq_len(div)
+  i0 <- as.integer(i) - 1L
+  idx <- rep(i0, each = div) * div + seq_len(div)
 
   object <- new("H5Ref", val = x@val[idx], type = x@type)
   return(object)
