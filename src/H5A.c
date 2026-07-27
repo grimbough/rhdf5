@@ -296,7 +296,7 @@ SEXP H5Aread_helper_REFERENCE(hid_t attr_id, hsize_t n, SEXP Rdim, SEXP _buf, hi
 
 SEXP H5Aread_helper_ENUM(hid_t attr_id, hsize_t n, SEXP Rdim, SEXP _buf, hid_t dtype_id) {
   
-  SEXP Rval = PROTECT(allocVector(STRSXP, (int) n));
+  SEXP Rval = PROTECT(allocVector(STRSXP, (R_xlen_t) n));
   
   size_t el_size = H5Tget_size(dtype_id);
   // We need a pointer to a single byte data type for pointer arithmetic.
