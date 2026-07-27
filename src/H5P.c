@@ -1967,8 +1967,7 @@ SEXP _H5Pequal( SEXP _id1, SEXP _id2 ) {
     hid_t id1 = STRSXP_2_HID( _id1 );
     hid_t id2 = STRSXP_2_HID( _id2 );
     htri_t htri = H5Pequal(id1, id2);
-    SEXP Rval = ScalarInteger(htri);
-    return Rval;
+    return ScalarLogical(htri);
 }
 
 /* /\* int H5Piterate(hid_t id, int * idx, H5P_iterate_t iter_func, void * iter_data) *\/ */
