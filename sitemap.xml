@@ -77,7 +77,6 @@
 <url><loc>https://huber-group-embl.github.io/rhdf5/reference/H5Pcreate.html</loc></url>
 <url><loc>https://huber-group-embl.github.io/rhdf5/reference/H5Pfill_value_defined.html</loc></url>
 <url><loc>https://huber-group-embl.github.io/rhdf5/reference/H5Pget_class.html</loc></url>
-<url><loc>https://huber-group-embl.github.io/rhdf5/reference/H5Pget_version.html</loc></url>
 <url><loc>https://huber-group-embl.github.io/rhdf5/reference/H5Pobject_track_times.html</loc></url>
 <url><loc>https://huber-group-embl.github.io/rhdf5/reference/H5Pset_blosc.html</loc></url>
 <url><loc>https://huber-group-embl.github.io/rhdf5/reference/H5Pset_bzip2.html</loc></url>

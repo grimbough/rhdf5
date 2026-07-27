@@ -56,7 +56,7 @@ system.time(
 ```
 
     ##    user  system elapsed 
-    ##   0.025   0.006   0.032
+    ##   0.027   0.004   0.031
 
 Next, instead of selecting 10,000 consecutive columns we’ll ask for
 every other column. This should still return the same amount of data and
@@ -75,7 +75,7 @@ system.time(
 ```
 
     ##    user  system elapsed 
-    ##   0.071   0.003   0.075
+    ##   0.074   0.001   0.075
 
 We can see this is marginally slower, because there’s a small overhead
 in selecting this disjoint set of columns, but it’s only marginal and
@@ -107,7 +107,7 @@ system.time(
 ```
 
     ##    user  system elapsed 
-    ##   0.068   0.001   0.069
+    ##   0.069   0.000   0.069
 
 ``` r
 
@@ -161,10 +161,10 @@ system.time(res4 <- vapply(
 ```
 
     ##    user  system elapsed 
-    ##  19.575   0.066  19.643
+    ##  19.970   0.074  20.046
 
 This is clearly a terrible idea, it takes ages! For reference, using the
-`index` argument with this set of columns takes 0.091 seconds. This poor
+`index` argument with this set of columns takes 0.088 seconds. This poor
 performance is driven by two things:
 
 1.  Our dataset was created as a single chunk. This means for each
@@ -212,7 +212,7 @@ system.time(res5 <- vapply(
 ```
 
     ##    user  system elapsed 
-    ##   2.470   0.034   2.504
+    ##   2.503   0.048   2.551
 
 This is still quite slow, and the remaining time is being spent on the
 overheads associated with multiple calls to
@@ -238,7 +238,7 @@ system.time(f2())
 ```
 
     ##    user  system elapsed 
-    ##   0.583   0.011   0.595
+    ##   0.599   0.007   0.606
 
 We can see this has a significant effect, although it’s still an order
 of magnitude slower than when we were dealing with regularly spaced
@@ -247,9 +247,9 @@ including the size of the dataset chunks and the sparsity of the column
 index, and you varying the `block_size` argument will produce differing
 performances. The plot below shows the timings achieved by providing a
 selection of values to `block_size`. It suggests the optimal parameter
-in this case is probably a block size of 10000, which took 0.09
-seconds - noticeably faster than when passing all columns to the `index`
-argument in a single call.
+in this case is probably a block size of 10000, which took 0.1 seconds -
+noticeably faster than when passing all columns to the `index` argument
+in a single call.
 
 ![](practical_tips_files/figure-html/unnamed-chunk-2-1.png)
 
@@ -464,14 +464,14 @@ Below we can see some timings comparing calling `simple_writer()` with
     ##   expression               min median
     ##   <bch:expr>             <dbl>  <dbl>
     ## 1 simple writer           30.5   30.5
-    ## 2 split/gather - 1 core   30.6   30.7
-    ## 3 split/gather - 2 cores  15.7   15.8
-    ## 4 split/gather - 4 cores  11.6   11.7
+    ## 2 split/gather - 1 core   30.7   30.7
+    ## 3 split/gather - 2 cores  15.6   15.7
+    ## 4 split/gather - 4 cores  11.6   11.8
 
 We can see from our benchmark results that there is some performance
 improvement to be achieved by using the parallel approach. Based on the
 median times of out three iterations using two cores sees an speedup of
-1.93 and 2.6 with 4 cores. This isn’t quite linear, presumably because
+1.95 and 2.6 with 4 cores. This isn’t quite linear, presumably because
 there are overheads involved both in using a two-step process and
 initialising the parallel workers, but it is a noticeable improvement.
 
@@ -499,7 +499,7 @@ initialising the parallel workers, but it is a noticeable improvement.
     ## 
     ## other attached packages:
     ## [1] BiocParallel_1.46.0 ggplot2_4.0.3       dplyr_1.2.1        
-    ## [4] rhdf5_2.57.1        BiocStyle_2.40.0   
+    ## [4] rhdf5_2.57.2        BiocStyle_2.40.0   
     ## 
     ## loaded via a namespace (and not attached):
     ##  [1] gtable_0.3.6        jsonlite_2.0.0      compiler_4.6.1     
@@ -509,11 +509,11 @@ initialising the parallel workers, but it is a noticeable improvement.
     ## [13] fastmap_1.2.0       R6_2.6.1            labeling_0.4.3     
     ## [16] generics_0.1.4      knitr_1.51          tibble_3.3.1       
     ## [19] bookdown_0.47       desc_1.4.3          RColorBrewer_1.1-3 
-    ## [22] bslib_0.11.0        pillar_1.11.1       rlang_1.2.0        
-    ## [25] utf8_1.2.6          cachem_1.1.0        xfun_0.59          
+    ## [22] bslib_0.11.0        pillar_1.11.1       rlang_1.3.0        
+    ## [25] utf8_1.2.6          cachem_1.1.0        xfun_0.60          
     ## [28] S7_0.2.2            fs_2.1.0            sass_0.4.10        
     ## [31] otel_0.2.0          cli_3.6.6           withr_3.0.3        
-    ## [34] pkgdown_2.2.0       magrittr_2.0.5      Rhdf5lib_2.0.0     
+    ## [34] pkgdown_2.2.1       magrittr_2.0.5      Rhdf5lib_2.0.0     
     ## [37] digest_0.6.39       grid_4.6.1          lifecycle_1.0.5    
     ## [40] vctrs_0.7.3         bench_1.1.4         evaluate_1.0.5     
     ## [43] glue_1.8.1          farver_2.1.2        codetools_0.2-20   
