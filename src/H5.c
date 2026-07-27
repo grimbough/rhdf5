@@ -40,18 +40,13 @@ SEXP _H5get_libversion(void) {
     return ScalarInteger(herr);
   }
   
-  SEXP Rval = PROTECT(allocVector(INTSXP, 3));
+  const char *nms[] = {"majnum", "minnum", "relnum", ""};
+  SEXP Rval = PROTECT(Rf_mkNamed(INTSXP, nms));
   INTEGER(Rval)[0] = majnum;
   INTEGER(Rval)[1] = minnum;
   INTEGER(Rval)[2] = relnum;
 
-  SEXP names = PROTECT(allocVector(STRSXP,3));
-  SET_STRING_ELT(names, 0, mkChar("majnum"));
-  SET_STRING_ELT(names, 1, mkChar("minnum"));
-  SET_STRING_ELT(names, 2, mkChar("relnum"));
-  SET_NAMES(Rval, names);
-
-  UNPROTECT(2);
+  UNPROTECT(1);
 
   return Rval;
 }
