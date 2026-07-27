@@ -49,7 +49,6 @@ reference:
 - title: HDF5 Property Lists
 - subtitle: File Creation Properties
 - contents:
-  - H5Pget_version
   - H5Pset_shared_mesg_nindexes
   - H5Pset_shared_mesg_phase_change
   - H5Pset_istore_k
