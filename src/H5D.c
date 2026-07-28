@@ -10,11 +10,9 @@ void permute_setup(hid_t dim_space_id, int *rank_p, hsize_t **dims_p,
     int *stride = (int *) R_alloc(rank, sizeof(int));
     H5Sget_simple_extent_dims(dim_space_id, dims, NULL);
     
-    for (int i = 0; i < rank; i++) {
-        if (i == 0)
-            iip[i] = 1;
-        else
-            iip[i] = iip[i-1] * dims[rank-i];
+    iip[0] = 1;
+    for (int i = 1; i < rank; i++) {
+        iip[i] = iip[i-1] * dims[rank-i];
     }
     
     for (int i = 0; i < rank; i++)
