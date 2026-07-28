@@ -1063,9 +1063,11 @@ SEXP _H5Dwrite( SEXP _dataset_id, SEXP _buf, SEXP _file_space_id, SEXP _mem_spac
     
     const void * buf;
     static const char* H5Ref[] = {"H5Ref", ""};
-    int protected = 0;
     
     hid_t dim_space_id = mem_space_id == H5S_ALL ? dataset_id : mem_space_id;
+
+    // Used in the STRSXP case but it's better practice to delcare it outside of the switch statement.
+    int protected = 0;
     
     switch(TYPEOF(_buf)) {
     case RAWSXP :
@@ -1101,15 +1103,14 @@ SEXP _H5Dwrite( SEXP _dataset_id, SEXP _buf, SEXP _file_space_id, SEXP _mem_spac
             PERMUTE(_buf, LOGICAL, dim_space_id);
         buf = LOGICAL(_buf);
         break;
-    case STRSXP :
+    case STRSXP : 
         mem_type_id = H5Dget_type(dataset_id);
         if (native) {
             _buf = PROTECT(PERMUTE_STRSXP(_buf, dim_space_id));
             protected++;
         }
         buf = read_string_datatype(mem_type_id, _buf);
-        UNPROTECT(protected++);
-
+        UNPROTECT(protected);
         break;
     case CPLXSXP :
         if(isNull(_mem_type_id)) {
@@ -1134,10 +1135,10 @@ SEXP _H5Dwrite( SEXP _dataset_id, SEXP _buf, SEXP _file_space_id, SEXP _mem_spac
           }
           SEXP valSlot = PROTECT(mkString("val"));
           buf = RAW(R_do_slot(_buf, valSlot));
+          UNPROTECT(2);
         } else {
           Rf_error("Class check failed\n");
         }
-        UNPROTECT(2);
         break;
     default :
         mem_type_id = -1;
