@@ -22,7 +22,7 @@ jobs:
           packages: local::.
           extra-packages: |
             any::gh
-            any::lintr
+            r-lib/lintr
             any::purrr
           needs: check
 
