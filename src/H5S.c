@@ -93,18 +93,29 @@ SEXP _H5Sget_simple_extent_dims( SEXP _space_id ) {
             size_is_numeric += size[i] > R_LEN_T_MAX;
             maxsize_is_numeric += (maxsize[i] > R_LEN_T_MAX) && (maxsize[i] != H5S_UNLIMITED);
         }
-        Rsize = PROTECT(allocVector(REALSXP, rank));
-        Rmaxsize = PROTECT(allocVector(REALSXP, rank));
-        for (int i=0; i < rank; i++) {
-            REAL(Rsize)[i] = (double) size[i];
-            REAL(Rmaxsize)[i] = (maxsize[i] == H5S_UNLIMITED) ? -1 : (double) maxsize[i];
+        if (size_is_numeric) {
+            Rsize = PROTECT(allocVector(REALSXP, rank));
+            for (int i=0; i < rank; i++) {
+                REAL(Rsize)[i] = (double) size[i];
+            }
+        } else {
+            Rsize = PROTECT(allocVector(INTSXP, rank));
+            for (int i=0; i < rank; i++) {
+                INTEGER(Rsize)[i] = (int) size[i];
+            }
+        }
+        if (maxsize_is_numeric) {
+            Rmaxsize = PROTECT(allocVector(REALSXP, rank));
+            for (int i=0; i < rank; i++) {
+                REAL(Rmaxsize)[i] = (maxsize[i] == H5S_UNLIMITED) ? -1 : (double) maxsize[i];
+            }
+        } else {
+            Rmaxsize = PROTECT(allocVector(INTSXP, rank));
+            for (int i=0; i < rank; i++) {
+                INTEGER(Rmaxsize)[i] = (maxsize[i] == H5S_UNLIMITED) ? -1 : (int) maxsize[i];
+            }
         }
     }
-    
-    if (!size_is_numeric)
-        Rsize = AS_INTEGER(Rsize);
-    if (!maxsize_is_numeric)
-        Rmaxsize = AS_INTEGER(Rmaxsize);
 
     SET_VECTOR_ELT(Rval,1, Rsize);
     SET_VECTOR_ELT(Rval,2, Rmaxsize);
