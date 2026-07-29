@@ -1313,18 +1313,13 @@ SEXP _h5getAllChunkInfo( SEXP _dataset_id ) {
     REAL(r_sizes)[k]        = (double) buf.sizes[k];
   }
   
-  SEXP Rval  = PROTECT(allocVector(VECSXP, 4));
-  SEXP names = PROTECT(allocVector(STRSXP, 4));
-  SET_STRING_ELT(names, 0, mkChar("offset"));
-  SET_STRING_ELT(names, 1, mkChar("filter_mask"));
-  SET_STRING_ELT(names, 2, mkChar("addr"));
-  SET_STRING_ELT(names, 3, mkChar("size"));
+  const char *nms[] = {"offset", "filter_mask", "addr", "size", ""};
+  SEXP Rval  = PROTECT(Rf_mkNamed(VECSXP, nms));
   SET_VECTOR_ELT(Rval, 0, r_offsets);
   SET_VECTOR_ELT(Rval, 1, r_filter_masks);
   SET_VECTOR_ELT(Rval, 2, r_addrs);
   SET_VECTOR_ELT(Rval, 3, r_sizes);
-  setAttrib(Rval, R_NamesSymbol, names);
   
-  UNPROTECT(6);
+  UNPROTECT(5);
   return Rval;
 }
