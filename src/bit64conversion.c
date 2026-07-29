@@ -16,7 +16,7 @@ void uint32_to_int32(void* intbuf, hsize_t n, void* buf) {
     }
     
     if(warn) {
-        warning("NAs produced by integer overflow while converting unisigned 32-bit integer from HDF5 to a signed 32-bit integer in R.\nChoose bit64conversion='bit64' or bit64conversion='double' to avoid data loss");
+        warning("NAs produced by integer overflow while converting unsigned 32-bit integer from HDF5 to a signed 32-bit integer in R.\nChoose bit64conversion='bit64' or bit64conversion='double' to avoid data loss");
     }
     
 }
