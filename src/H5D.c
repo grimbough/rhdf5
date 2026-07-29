@@ -1236,9 +1236,9 @@ typedef struct {
   hsize_t capacity;
   hsize_t count;
   hsize_t *offsets;      /* count × rank, row-major */
-unsigned *filter_masks;
-haddr_t  *addrs;
-uint32_t *sizes;
+  unsigned *filter_masks;
+  haddr_t  *addrs;
+  uint32_t *sizes;
 } chunk_iter_buf_t;
 
 static int chunk_iter_cb(const hsize_t *offset, unsigned int filter_mask, 
