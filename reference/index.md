@@ -49,6 +49,8 @@ section start with `h5`.
   : Create HDF5 attribute
 - [`h5createDataset()`](https://huber-group-embl.github.io/rhdf5/reference/h5createDataset.md)
   : Create HDF5 dataset
+- [`h5getAllChunkInfo()`](https://huber-group-embl.github.io/rhdf5/reference/h5getAllChunkInfo.md)
+  : Return detailed information on chunks of an HDF5 dataset
 - [`h5listIdentifier()`](https://huber-group-embl.github.io/rhdf5/reference/h5listObjects.md)
   [`h5validObjects()`](https://huber-group-embl.github.io/rhdf5/reference/h5listObjects.md)
   : List all open HDF5 objects.

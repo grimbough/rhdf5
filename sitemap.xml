@@ -139,6 +139,7 @@
 <url><loc>https://huber-group-embl.github.io/rhdf5/reference/h5constants.html</loc></url>
 <url><loc>https://huber-group-embl.github.io/rhdf5/reference/h5createAttribute.html</loc></url>
 <url><loc>https://huber-group-embl.github.io/rhdf5/reference/h5createDataset.html</loc></url>
+<url><loc>https://huber-group-embl.github.io/rhdf5/reference/h5getAllChunkInfo.html</loc></url>
 <url><loc>https://huber-group-embl.github.io/rhdf5/reference/h5listObjects.html</loc></url>
 <url><loc>https://huber-group-embl.github.io/rhdf5/reference/h5ls.html</loc></url>
 <url><loc>https://huber-group-embl.github.io/rhdf5/reference/h5readTimestamps.html</loc></url>
