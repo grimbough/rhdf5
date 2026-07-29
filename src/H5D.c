@@ -148,9 +148,9 @@ SEXP _H5Dget_storage_size( SEXP _dataset_id ) {
 
 SEXP H5Dread_helper_INTEGER(hid_t dataset_id, hid_t file_space_id, hid_t mem_space_id, hsize_t n, 
                             SEXP Rdim, SEXP _buf, hid_t dtype_id, hid_t cpdType, int cpdNField, 
-                            char ** cpdField, int compoundAsDataFrame, int bit64conversion, int native ) {
+                            char ** cpdField, bool compoundAsDataFrame, int bit64conversion, bool native ) {
     hid_t mem_type_id;
-    herr_t herr = 0;
+    herr_t herr;
     SEXP Rval;
     
     int b = H5Tget_size(dtype_id);
@@ -374,7 +374,7 @@ SEXP H5Dread_helper_INTEGER(hid_t dataset_id, hid_t file_space_id, hid_t mem_spa
 
 
 SEXP H5Dread_helper_FLOAT(hid_t dataset_id, hid_t file_space_id, hid_t mem_space_id, hsize_t n, SEXP Rdim, SEXP _buf, 
-                          hid_t dtype_id, hid_t cpdType, int cpdNField, char ** cpdField, int compoundAsDataFrame, int native ) {
+                          hid_t dtype_id, hid_t cpdType, int cpdNField, char ** cpdField, bool compoundAsDataFrame, bool native ) {
     SEXP Rval;
 
     if(n == 0) {
@@ -424,7 +424,7 @@ SEXP H5Dread_helper_FLOAT(hid_t dataset_id, hid_t file_space_id, hid_t mem_space
 }
 
 SEXP H5Dread_helper_STRING(hid_t dataset_id, hid_t file_space_id, hid_t mem_space_id, hsize_t n, SEXP Rdim, SEXP _buf, 
-                           hid_t dtype_id, hid_t cpdType, int cpdNField, char ** cpdField, int compoundAsDataFrame, int native ) {
+                           hid_t dtype_id, hid_t cpdType, int cpdNField, char ** cpdField, bool compoundAsDataFrame, bool native ) {
     hid_t mem_type_id = -1;
     herr_t herr;
     SEXP Rval;
@@ -484,7 +484,7 @@ SEXP H5Dread_helper_STRING(hid_t dataset_id, hid_t file_space_id, hid_t mem_spac
 }
 
 SEXP H5Dread_helper_ENUM(hid_t dataset_id, hid_t file_space_id, hid_t mem_space_id, hsize_t n, SEXP Rdim, SEXP _buf, 
-                         hid_t dtype_id, hid_t cpdType, int cpdNField, char ** cpdField, int compoundAsDataFrame, int native ) {
+                         hid_t dtype_id, hid_t cpdType, int cpdNField, char ** cpdField, bool compoundAsDataFrame, bool native ) {
     hid_t mem_type_id;
     herr_t herr;
     SEXP Rval;
@@ -558,7 +558,7 @@ SEXP H5Dread_helper_ENUM(hid_t dataset_id, hid_t file_space_id, hid_t mem_space_
 }
 
 SEXP H5Dread_helper_ARRAY(hid_t dataset_id, hid_t file_space_id, hid_t mem_space_id, hsize_t n, SEXP Rdim, SEXP _buf,
-                          hid_t dtype_id, hid_t cpdType, int cpdNField, char ** cpdField, int compoundAsDataFrame, int native ) {
+                          hid_t dtype_id, hid_t cpdType, int cpdNField, char ** cpdField, bool compoundAsDataFrame, bool native ) {
     hid_t mem_type_id;
     herr_t herr;
     SEXP Rval;
@@ -698,9 +698,9 @@ SEXP H5Dread_helper_ARRAY(hid_t dataset_id, hid_t file_space_id, hid_t mem_space
 }
 
 /* test whether this looks like it's storing a complex datatype as a compound */
-int is_complex(hid_t dtype_id) {
+bool is_complex(hid_t dtype_id) {
   
-  int res = 0;
+  bool res = FALSE;
 
   if(H5Tget_nmembers(dtype_id) == 2) {
     
@@ -708,7 +708,7 @@ int is_complex(hid_t dtype_id) {
     char *field2 = H5Tget_member_name(dtype_id, 1);
     
     if((strcmp(field1, "r") == 0) && (strcmp(field2, "i") == 0))
-      res = 1;
+      res = TRUE;
     
     H5free_memory(field1);
     H5free_memory(field2);
@@ -718,7 +718,7 @@ int is_complex(hid_t dtype_id) {
 }
 
 SEXP H5Dread_helper_COMPLEX(hid_t dataset_id, hid_t file_space_id, hid_t mem_space_id, hsize_t n, SEXP Rdim,
-                          hid_t dtype_id, int native) {
+                          hid_t dtype_id, bool native) {
 
   SEXP Rval;
   PROTECT(Rval = allocVector(CPLXSXP, n));
@@ -740,15 +740,15 @@ SEXP H5Dread_helper_COMPLEX(hid_t dataset_id, hid_t file_space_id, hid_t mem_spa
 }
 
 SEXP H5Dread_helper_COMPOUND(hid_t dataset_id, hid_t file_space_id, hid_t mem_space_id, hsize_t n, SEXP Rdim, SEXP _buf, 
-                             hid_t dtype_id, hid_t cpdType, int cpdNField, char ** cpdField, int compoundAsDataFrame,
-                             int bit64conversion, int native ) {
+                             hid_t dtype_id, hid_t cpdType, int cpdNField, char ** cpdField, bool compoundAsDataFrame,
+                             int bit64conversion, bool native ) {
   
     SEXP Rval;
     SEXP names;
     SEXP col;
 
     if ((LENGTH(Rdim) > 1) && compoundAsDataFrame) {
-        compoundAsDataFrame = 0;
+        compoundAsDataFrame = FALSE;
         warning("Cannot coerce multi-dimensional data to data.frame. Data returned as a list.");
     }
 
@@ -806,8 +806,8 @@ SEXP H5Dread_helper_COMPOUND(hid_t dataset_id, hid_t file_space_id, hid_t mem_sp
 
 SEXP H5Dread_helper_COMPOUND_OR_COMPLEX(
     hid_t dataset_id, hid_t file_space_id, hid_t mem_space_id, hsize_t n, SEXP Rdim, SEXP _buf, 
-    hid_t dtype_id, hid_t cpdType, int cpdNField, char ** cpdField, int compoundAsDataFrame,
-    int bit64conversion, int native ) {
+    hid_t dtype_id, hid_t cpdType, int cpdNField, char ** cpdField, bool compoundAsDataFrame,
+    int bit64conversion, bool native ) {
   
   SEXP Rval;
   
@@ -824,7 +824,7 @@ SEXP H5Dread_helper_COMPOUND_OR_COMPLEX(
 
 //SEXP H5Dread_helper_REFERENCE(hid_t attr_id, hsize_t n, SEXP Rdim, SEXP _buf, hid_t dtype_id) {
 SEXP H5Dread_helper_REFERENCE(hid_t dataset_id, hid_t file_space_id, hid_t mem_space_id, hsize_t n, SEXP Rdim, SEXP _buf,
-                          hid_t dtype_id, int native) {
+                          hid_t dtype_id, bool native) {
   
   void *references;
   SEXP Rrefs, Rtype; 
@@ -860,8 +860,8 @@ SEXP H5Dread_helper_REFERENCE(hid_t dataset_id, hid_t file_space_id, hid_t mem_s
 
 
 SEXP H5Dread_helper(hid_t dataset_id, hid_t file_space_id, hid_t mem_space_id, hsize_t n, SEXP Rdim,
-                    SEXP _buf, hid_t cpdType, int cpdNField, char ** cpdField, int compoundAsDataFrame,
-                    int bit64conversion, int native ) {
+                    SEXP _buf, hid_t cpdType, int cpdNField, char ** cpdField, bool compoundAsDataFrame,
+                    int bit64conversion, bool native ) {
     
     herr_t herr = 0;
     hid_t dtype_id;
@@ -930,9 +930,9 @@ SEXP H5Dread_helper(hid_t dataset_id, hid_t file_space_id, hid_t mem_space_id, h
 /* TODO: accept mem_type_id as parameter */
 SEXP _H5Dread( SEXP _dataset_id, SEXP _file_space_id, SEXP _mem_space_id, SEXP _buf, SEXP _compoundAsDataFrame,
                SEXP _bit64conversion, SEXP _drop, SEXP _native ) {
-    int compoundAsDataFrame = LOGICAL(_compoundAsDataFrame)[0];
-    int drop = LOGICAL(_drop)[0];
-    int native = LOGICAL(_native)[0];
+    bool compoundAsDataFrame = LOGICAL(_compoundAsDataFrame)[0];
+    bool drop = LOGICAL(_drop)[0];
+    bool native = LOGICAL(_native)[0];
     int bit64conversion = INTEGER(_bit64conversion)[0];
     
     /***********************************************************************/
@@ -981,18 +981,18 @@ SEXP _H5Dread( SEXP _dataset_id, SEXP _file_space_id, SEXP _mem_space_id, SEXP _
     hsize_t maxsize[rank];
     H5Sget_simple_extent_dims(mem_space_id, size, maxsize);
     hsize_t n = 1;
-    int too_large = 0;
+    bool too_large = FALSE;
     for (int i=0; i < rank; i++) {
         n = n * size[i];
         if(size[i] > INT_MAX) {
-            too_large = 1;
+            too_large = TRUE;
         }
     }
 
     hid_t dtype_id = H5Dget_type(dataset_id);
     hid_t dtypeclass_id = H5Tget_class(dtype_id);
     SEXP Rdim;
-    int protect_bool = 0;
+    int protected = 0;
     
     if( rank == 0 ) {
     /* scalar with no dimensions */
@@ -1001,8 +1001,8 @@ SEXP _H5Dread( SEXP _dataset_id, SEXP _file_space_id, SEXP _mem_space_id, SEXP _
         (drop || too_large) ) {
         Rdim = NULL_USER_OBJECT;
     } else {
-        protect_bool = 1;
         Rdim = PROTECT(allocVector(INTSXP, rank));
+        protected++;
         for (int i=0; i<rank; i++) {
             INTEGER(Rdim)[rank-i-1] = native ? size[rank-i-1] : size[i];
         }
@@ -1021,6 +1021,8 @@ SEXP _H5Dread( SEXP _dataset_id, SEXP _file_space_id, SEXP _mem_space_id, SEXP _
                                Rdim, _buf, 
                                -1, -1, NULL, compoundAsDataFrame, bit64conversion, native);
     
+    UNPROTECT(protected);
+
     // close data type
     H5Tclose(dtype_id);
     
@@ -1028,10 +1030,7 @@ SEXP _H5Dread( SEXP _dataset_id, SEXP _file_space_id, SEXP _mem_space_id, SEXP _
     if (length(_mem_space_id) == 0) {
         H5Sclose(mem_space_id);
     }
-    if(protect_bool) {
-        UNPROTECT(1);
-    }
-    
+
     // close file space 
     if (length(_file_space_id) == 0) {
         H5Sclose(file_space_id);
@@ -1043,7 +1042,7 @@ SEXP _H5Dread( SEXP _dataset_id, SEXP _file_space_id, SEXP _mem_space_id, SEXP _
 /* TODO more parameters: hid_t xfer_plist_id */
 SEXP _H5Dwrite( SEXP _dataset_id, SEXP _buf, SEXP _file_space_id, SEXP _mem_space_id, SEXP _mem_type_id, SEXP _native) {
     hid_t dataset_id = STRSXP_2_HID( _dataset_id );
-    int native = LOGICAL(_native)[0];
+    bool native = LOGICAL(_native)[0];
     hid_t mem_type_id;
     hid_t mem_space_id;
     
