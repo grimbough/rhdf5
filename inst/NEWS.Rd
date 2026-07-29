@@ -7,6 +7,12 @@
     \itemize{
       \item `H5Fopen()` now supports opening remote files on S3. Thanks to
       a PR contribution from Michael Sumner (https://github.com/mdsumner).
+      \item New \code{h5getAllChunkInfo()} function iterates over all stored 
+      chunks of a chunked HDF5 dataset, returning a list with elements 
+      \code{offset} (chunk origins as an integer matrix), \code{filter_mask},
+      \code{addr} (file byte offsets), and \code{size} (compressed chunk 
+      sizes). Requires chunked storage; contiguous datasets raise an error
+      Thanks to PR #217 from Michael Sumner (https://github.com/mdsumner).
     }
   }
 
