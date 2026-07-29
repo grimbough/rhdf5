@@ -5,8 +5,8 @@
 #' of the HDF5 `H5Dchunk_iter` function and requires that the dataset uses
 #' chunked storage; contiguous or compact datasets will raise an error.
 #'
-#' @param h5dataset An object of class [H5IdComponent] representing
-#'   an open HDF5 dataset, as returned by [H5Dopen()].
+#' @param h5dataset An object of class \linkS4class{H5IdComponent}
+#'   representing an open HDF5 dataset, as returned by [H5Dopen()].
 #'
 #' @return A named list with four elements, one entry per stored chunk:
 #' \describe{

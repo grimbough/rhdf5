@@ -7,8 +7,8 @@
 h5getAllChunkInfo(h5dataset)
 }
 \arguments{
-\item{h5dataset}{An object of class \link{H5IdComponent} representing
-an open HDF5 dataset, as returned by \code{\link[=H5Dopen]{H5Dopen()}}.}
+\item{h5dataset}{An object of class \linkS4class{H5IdComponent}
+representing an open HDF5 dataset, as returned by \code{\link[=H5Dopen]{H5Dopen()}}.}
 }
 \value{
 A named list with four elements, one entry per stored chunk:
