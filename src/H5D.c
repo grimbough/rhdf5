@@ -1297,7 +1297,11 @@ SEXP _h5getAllChunkInfo( SEXP _dataset_id ) {
     error("h5getAllChunkInfo failed\n");
   }
   
-  /* Package result as a list of vectors */
+  /* 
+     These are actually integers but can overflow R int32 so we store them as 
+     doubles for safety.
+     Revisit if int64 are supported natively at some point.
+  */
   SEXP r_offsets      = PROTECT(allocMatrix(REALSXP, buf.count, rank));
   SEXP r_filter_masks = PROTECT(allocVector(REALSXP, buf.count));
   SEXP r_addrs        = PROTECT(allocVector(REALSXP, buf.count));
