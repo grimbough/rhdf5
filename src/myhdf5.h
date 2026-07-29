@@ -1,6 +1,8 @@
 #ifndef _MYHDF5_H
 #define _MYHDF5_H
 
+#include <stdbool.h>
+
 #ifndef SEXP
 #include <Rdefines.h>
 #endif

@@ -33,7 +33,7 @@ typedef struct opObjList {
     char *group;
     long maxdepth;
     int showdatasetinfo;
-    int native;
+    bool native;
     H5_index_t index_type;
     H5_iter_order_t order;
     opObjListElement *first;
@@ -47,7 +47,7 @@ typedef struct {
     char *group;
     long maxdepth;
     int showdatasetinfo;
-    int native;
+    bool native;
     H5_index_t index_type;
     H5_iter_order_t order;
     opObjListElement *first;
@@ -57,7 +57,7 @@ typedef struct {
 
 void concatdim(char *s1, hsize_t next_dim, int index);
 void concatdim_native(char *s1, hsize_t next_dim, int index);
-void format_dimensions(H5S_class_t space_type, opObjListElement *newElement, hsize_t *size, hsize_t *maxsize, int native);
+void format_dimensions(H5S_class_t space_type, opObjListElement *newElement, hsize_t *size, hsize_t *maxsize, bool native);
 int  group_check(struct opObjListElement *od, H5O_token_t target_token, unsigned long target_fileno, hid_t loc_id);
 
 void * read_string_datatype(hid_t mem_type_id, SEXP _buf);

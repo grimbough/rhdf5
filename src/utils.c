@@ -22,7 +22,7 @@ void concatdim_native(char *s1, hsize_t next_dim, int index)
 }
 
 
-void format_dimensions (H5S_class_t space_type, opObjListElement *newElement, hsize_t *size, hsize_t *maxsize, int native) {
+void format_dimensions (H5S_class_t space_type, opObjListElement *newElement, hsize_t *size, hsize_t *maxsize, bool native) {
     
     switch(space_type) {
     case H5S_SCALAR: {
