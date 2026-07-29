@@ -310,16 +310,6 @@ H5Dread <- function(
   } else {
     sidFile <- h5spaceFile@ID
   }
-
-  bit64conversion <- fix_missing(bit64conversion, "int")
-  if (identical(bit64conversion, "default")) {
-    bit64conversion <- "int"
-    warning(
-      "To rely on the `bit64conversion` argument default, ",
-      'you should omit it or explicitly set it to its default value (`"int"`).',
-      ' Passing `"default"` will be disallowed in the next release cycle.'
-    )
-  }
   bit64conversion <- match.arg(bit64conversion)
   bit64conv <- switch(
     bit64conversion,
