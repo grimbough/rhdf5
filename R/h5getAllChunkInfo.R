@@ -1,12 +1,12 @@
-#' Iterate over chunks of an HDF5 dataset
+#' Return detailed information on chunks of an HDF5 dataset
 #'
 #' Returns the offset, filter mask, file address, and byte size of every
-#' stored chunk in a chunked HDF5 dataset.  This is a thin wrapper around
-#' the HDF5 C function \code{h5getAllChunkInfo} and requires that the dataset
-#' uses chunked storage; contiguous or compact datasets will raise an error.
+#' stored chunk in a chunked HDF5 dataset. This is a specific application
+#' of the HDF5 `H5Dchunk_iter` function and requires that the dataset uses
+#' chunked storage; contiguous or compact datasets will raise an error.
 #'
-#' @param h5dataset An object of class \linkS4class{H5IdComponent} representing
-#'   an open HDF5 dataset, as returned by \code{\link{H5Dopen}}.
+#' @param h5dataset An object of class [H5IdComponent] representing
+#'   an open HDF5 dataset, as returned by [H5Dopen()].
 #'
 #' @return A named list with four elements, one entry per stored chunk:
 #' \describe{
@@ -14,7 +14,7 @@
 #'     dataset dimension, giving the chunk's logical origin in element
 #'     coordinates.}
 #'   \item{filter_mask}{Integer vector of per-chunk filter pipeline bitmasks.
-#'     A value of \code{0} means all filters were applied.}
+#'     A value of `0` means all filters were applied.}
 #'   \item{addr}{Numeric vector of byte offsets within the HDF5 file at which
 #'     each chunk's data begins.}
 #'   \item{size}{Integer vector of compressed (on-disk) byte sizes for each
@@ -35,7 +35,7 @@
 #' H5Dclose(did)
 #' H5Fclose(fid)
 #'
-#' @seealso \code{\link{H5Dopen}}, \code{\link{H5Dget_num_chunks}}
+#' @seealso [H5Dopen()], [H5Dget_num_chunks()]
 #' @export
 h5getAllChunkInfo <- function(h5dataset) {
   h5checktype(h5dataset, "dataset")
