@@ -1228,3 +1228,102 @@ SEXP _H5Dget_num_chunks( SEXP _dataset_id, SEXP _dataspace_id ) {
 
     return ScalarInteger(nchunks);
 }
+
+
+/* Per-call accumulator */
+typedef struct {
+  int rank;
+  hsize_t capacity;
+  hsize_t count;
+  hsize_t *offsets;      /* count × rank, row-major */
+  unsigned *filter_masks;
+  haddr_t  *addrs;
+  uint32_t *sizes;
+} chunk_iter_buf_t;
+
+static int chunk_iter_cb(const hsize_t *offset, unsigned int filter_mask, 
+                         hsize_t addr, hsize_t size, void *op_data) {
+  chunk_iter_buf_t *b = (chunk_iter_buf_t *) op_data;
+  
+  /* grow if needed */
+  if (b->count >= b->capacity) {
+    hsize_t newcap = b->capacity * 2;
+    b->offsets      = (hsize_t  *) S_realloc((char *) b->offsets,
+                       newcap * b->rank, b->capacity * b->rank, sizeof(hsize_t));
+    b->filter_masks = (unsigned *) S_realloc((char *) b->filter_masks,
+                       newcap, b->capacity, sizeof(unsigned));
+    b->addrs        = (haddr_t  *) S_realloc((char *) b->addrs,
+                       newcap, b->capacity, sizeof(haddr_t));
+    b->sizes        = (uint32_t *) S_realloc((char *) b->sizes,
+                       newcap, b->capacity, sizeof(uint32_t));
+    b->capacity = newcap;
+  }
+  
+  for (int i = 0; i < b->rank; i++) {
+    b->offsets[b->count * b->rank + i] = offset[i];
+  }
+  b->filter_masks[b->count] = filter_mask;
+  b->addrs[b->count]        = addr;
+  b->sizes[b->count]        = size;
+  b->count++;
+  
+  return H5_ITER_CONT;  /* continue iteration */
+}
+
+SEXP _h5getAllChunkInfo( SEXP _dataset_id ) {
+  hid_t dataset_id = STRSXP_2_HID( _dataset_id );
+  
+  /* Need the rank to know how big each offset row is */
+  hid_t space_id = H5Dget_space(dataset_id);
+  if (space_id < 0) error("Could not get dataspace\n");
+  int rank = H5Sget_simple_extent_ndims(space_id);
+  H5Sclose(space_id);
+  if (rank < 0) error("Could not determine dataset rank\n");
+  
+  /* Start with a modest capacity; grow as needed */
+  hsize_t init_cap = 64;
+  chunk_iter_buf_t buf = {
+    .rank = rank,
+    .capacity = init_cap,
+    .count = 0,
+    .offsets      = (hsize_t  *) R_alloc(init_cap * rank, sizeof(hsize_t)),
+    .filter_masks = (unsigned *) R_alloc(init_cap, sizeof(unsigned)),
+    .addrs        = (haddr_t  *) R_alloc(init_cap, sizeof(haddr_t)),
+    .sizes        = (uint32_t *) R_alloc(init_cap, sizeof(uint32_t))
+  };
+  
+  herr_t herr = H5Dchunk_iter(dataset_id, H5P_DEFAULT, chunk_iter_cb, &buf);
+  if (herr < 0) {
+    error("h5getAllChunkInfo failed\n");
+  }
+  
+  /* 
+     These are actually integers but can overflow R int32 so we store them as 
+     doubles for safety.
+     Revisit if int64 are supported natively at some point.
+  */
+  SEXP r_offsets      = PROTECT(allocMatrix(REALSXP, buf.count, rank));
+  SEXP r_filter_masks = PROTECT(allocVector(REALSXP, buf.count));
+  SEXP r_addrs        = PROTECT(allocVector(REALSXP, buf.count));
+  SEXP r_sizes        = PROTECT(allocVector(REALSXP, buf.count));
+  
+  for (hsize_t k = 0; k < buf.count; k++) {
+    for (int i = 0; i < rank; i++) {
+      /* R matrix is column-major */
+      REAL(r_offsets)[i * buf.count + k] = (double) buf.offsets[k * rank + i];
+    }
+    REAL(r_filter_masks)[k] = (double) buf.filter_masks[k];
+    REAL(r_addrs)[k]        = (double) buf.addrs[k];
+    REAL(r_sizes)[k]        = (double) buf.sizes[k];
+  }
+  
+  const char *nms[] = {"offset", "filter_mask", "addr", "size", ""};
+  SEXP Rval  = PROTECT(Rf_mkNamed(VECSXP, nms));
+  SET_VECTOR_ELT(Rval, 0, r_offsets);
+  SET_VECTOR_ELT(Rval, 1, r_filter_masks);
+  SET_VECTOR_ELT(Rval, 2, r_addrs);
+  SET_VECTOR_ELT(Rval, 3, r_sizes);
+  
+  UNPROTECT(5);
+  return Rval;
+}
