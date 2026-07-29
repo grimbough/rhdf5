@@ -10,14 +10,14 @@
 #'
 #' @return A named list with four elements, one entry per stored chunk:
 #' \describe{
-#'   \item{offset}{Integer matrix with one row per chunk and one column per
+#'   \item{offset}{Numeric matrix with one row per chunk and one column per
 #'     dataset dimension, giving the chunk's logical origin in element
 #'     coordinates.}
-#'   \item{filter_mask}{Integer vector of per-chunk filter pipeline bitmasks.
+#'   \item{filter_mask}{Numeric vector of per-chunk filter pipeline bitmasks.
 #'     A value of `0` means all filters were applied.}
 #'   \item{addr}{Numeric vector of byte offsets within the HDF5 file at which
 #'     each chunk's data begins.}
-#'   \item{size}{Integer vector of compressed (on-disk) byte sizes for each
+#'   \item{size}{Numeric vector of compressed (on-disk) byte sizes for each
 #'     chunk.}
 #' }
 #'
