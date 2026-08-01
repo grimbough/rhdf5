@@ -1036,7 +1036,7 @@ sessionInfo()
     ## [13] evaluate_1.0.5      jquerylib_0.1.4     fastmap_1.2.0      
     ## [16] Rhdf5lib_2.0.0      yaml_2.3.12         lifecycle_1.0.5    
     ## [19] bookdown_0.47       BiocManager_1.30.27 compiler_4.6.1     
-    ## [22] fs_2.1.0            rhdf5filters_1.24.0 systemfonts_1.3.2  
+    ## [22] fs_2.1.0            rhdf5filters_1.24.1 systemfonts_1.3.2  
     ## [25] digest_0.6.39       R6_2.6.1            bslib_0.11.0       
     ## [28] bit64_4.8.2         tools_4.6.1         pkgdown_2.2.1      
     ## [31] cachem_1.1.0        desc_1.4.3
