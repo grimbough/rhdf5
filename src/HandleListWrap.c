@@ -133,7 +133,7 @@ SEXP _h5listOpenObjects( SEXP _file_id ) {
         return(ScalarLogical(FALSE));
     }
     
-    Rprintf("%ld object(s) open\n", count);
+    Rprintf("%zd object(s) open\n", count);
     
     objs = (hid_t *) R_alloc(count, sizeof(hid_t));
     
