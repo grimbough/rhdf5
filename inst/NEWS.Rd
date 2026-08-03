@@ -31,6 +31,8 @@
     \itemize{
       \item \code{H5T_enum} datatypes (factors in R) are now read correctly
       when the \code{drop} argument in \code{H5Dread()} is set to \code{TRUE}.
+      \item \code{native = TRUE} now works correctly on large arrays with more
+      than 2^31-1 elements.
     }
   }
 
