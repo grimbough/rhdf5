@@ -27,6 +27,18 @@
     }
   }
 
+  \subsection{Bug fixes}{
+    \itemize{
+      \item \code{H5T_enum} datatypes (factors in R) are now read correctly
+      when the \code{drop} argument in \code{H5Dread()} is set to \code{TRUE}.
+    }
+  }
+
+  \subsection{Internal changes}{
+    \itemize{
+      \item Compiler warnings and C linting issues have been resolved.
+    }
+  }
 }
 
 \section{Changes in version 2.56.0}{
