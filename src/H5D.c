@@ -6,6 +6,8 @@ void permute_setup(hid_t dim_space_id, int *rank_p, hsize_t **dims_p,
                    int **iip_p, int **stride_p) {
     int rank = H5Sget_simple_extent_ndims(dim_space_id);
     hsize_t *dims = (hsize_t *) R_alloc(rank, sizeof(hsize_t));
+    // iip and stride are still likely fine as ints as a single dimension of an
+    // array is still limited by INT_MAX.
     int *iip = (int *) R_alloc(rank, sizeof(int));
     int *stride = (int *) R_alloc(rank, sizeof(int));
     H5Sget_simple_extent_dims(dim_space_id, dims, NULL);
@@ -40,11 +42,11 @@ for (lj = 0, itmp = 0; itmp < rank; itmp++)                 \
     lj += iip[itmp] * stride[itmp];
 
 #define PERMUTE(FROM, ACCESSOR, DIM_SPACE_ID) do {                \
-SEXP to = PROTECT(allocVector(TYPEOF(FROM), LENGTH(FROM)));       \
+SEXP to = PROTECT(allocVector(TYPEOF(FROM), XLENGTH(FROM)));      \
 int rank, *iip, *stride;                                          \
 hsize_t *dims;                                                    \
 permute_setup(DIM_SPACE_ID, &rank, &dims, &iip, &stride);         \
-for (int li = 0, lj = 0; li < LENGTH(FROM); li++) {               \
+for (R_xlen_t li = 0, lj = 0; li < XLENGTH(FROM); li++) {         \
     ACCESSOR(to)[li] = ACCESSOR(FROM)[lj];                        \
     CLICKJ;                                                       \
 }                                                                 \
@@ -58,13 +60,13 @@ UNPROTECT(1);                                                    \
  * non-API function in R-4.5.0 
  */
 SEXP PERMUTE_STRSXP(SEXP FROM, hid_t DIM_SPACE_ID) {
-  SEXP to = PROTECT(allocVector(STRSXP, LENGTH(FROM))); 
+  SEXP to = PROTECT(allocVector(STRSXP, XLENGTH(FROM))); 
   int rank, *iip, *stride;  
   int itmp;                                                   
   hsize_t *dims;                                                    
   permute_setup(DIM_SPACE_ID, &rank, &dims, &iip, &stride);     
   
-  for (int li = 0, lj = 0; li < LENGTH(FROM); li++) {        
+  for (R_xlen_t li = 0, lj = 0; li < XLENGTH(FROM); li++) {        
     SET_STRING_ELT(to, li, STRING_ELT(FROM, lj));
     
     for (itmp = 0; itmp < rank; itmp++) {                       
@@ -648,8 +650,8 @@ SEXP H5Dread_helper_ARRAY(hid_t dataset_id, hid_t file_space_id, hid_t mem_space
             
             for (int i = 0; i < rank; iip[i++] = 0);
             
-            SEXP buffer = PROTECT(allocVector(TYPEOF(Rval), LENGTH(Rval)));
-            for (int li = 0, lj = 0; li < LENGTH(Rval); li++) {
+            SEXP buffer = PROTECT(allocVector(TYPEOF(Rval), XLENGTH(Rval)));
+            for (R_xlen_t li = 0, lj = 0; li < XLENGTH(Rval); li++) {
                 INTEGER(buffer)[li] = INTEGER(Rval)[lj];
                 CLICKJ;
             }

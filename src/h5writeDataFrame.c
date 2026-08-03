@@ -17,7 +17,7 @@ SEXP _h5createDataFrame(SEXP _obj, SEXP _loc_id, SEXP _name, SEXP _level, SEXP _
         } else if (TYPEOF(VECTOR_ELT(_obj,i)) == STRSXP) {
             strsize[i] = 0;
             size_t s2 = 0;
-            for (R_xlen_t j=0; j < LENGTH(VECTOR_ELT(_obj,i)); j++) {
+            for (R_xlen_t j=0; j < XLENGTH(VECTOR_ELT(_obj,i)); j++) {
                 s2 = LENGTH(STRING_ELT(VECTOR_ELT(_obj,i),j));
                 if (s2 > strsize[i]) { strsize[i] = s2; }
             }
@@ -48,7 +48,7 @@ SEXP _h5createDataFrame(SEXP _obj, SEXP _loc_id, SEXP _name, SEXP _level, SEXP _
             offset = offset + H5Tget_size(H5T_NATIVE_UCHAR);
         }
     }
-    hsize_t n = LENGTH(VECTOR_ELT(_obj,0));
+    hsize_t n = XLENGTH(VECTOR_ELT(_obj,0));
     hid_t space = H5Screate_simple (1, &n, &n);
     
     hid_t plist = H5Pcreate(H5P_DATASET_CREATE);
@@ -88,7 +88,7 @@ SEXP _h5writeDataFrame(SEXP _obj, SEXP _dset_id) {
 
     hid_t dset_id = STRSXP_2_HID( _dset_id );
     
-    hsize_t n = LENGTH(VECTOR_ELT(_obj,0));
+    hsize_t n = XLENGTH(VECTOR_ELT(_obj,0));
     hid_t space = H5Screate_simple (1, &n, &n);
     
     SEXP aa = PROTECT(getAttrib(_obj, R_NamesSymbol));
@@ -98,7 +98,7 @@ SEXP _h5writeDataFrame(SEXP _obj, SEXP _dset_id) {
         if (TYPEOF(VECTOR_ELT(_obj,i)) == STRSXP) {
             strsize[i] = 0;
             size_t s2 = 0;
-            for (R_xlen_t j=0; j < LENGTH(VECTOR_ELT(_obj,i)); j++) {
+            for (R_xlen_t j=0; j < XLENGTH(VECTOR_ELT(_obj,i)); j++) {
                 s2 = LENGTH(STRING_ELT(VECTOR_ELT(_obj,i),j));
                 if (s2 > strsize[i]) { strsize[i] = s2; }
             }
@@ -127,7 +127,7 @@ SEXP _h5writeDataFrame(SEXP _obj, SEXP _dset_id) {
             char * strbuf = (char *)R_alloc(n,strsize[i]);
             size_t z=0;
             R_xlen_t j, k;
-            for (k=0; k < LENGTH(VECTOR_ELT(_obj,i)); k++) {
+            for (k=0; k < XLENGTH(VECTOR_ELT(_obj,i)); k++) {
                 for (j=0; (j < LENGTH(STRING_ELT(VECTOR_ELT(_obj,i),k))) && (j < (strsize[i])); j++) {
                     strbuf[z++] = CHAR(STRING_ELT(VECTOR_ELT(_obj,i),k))[j];
                 }
