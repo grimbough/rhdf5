@@ -165,7 +165,7 @@ sessionInfo()
     ## [1] stats     graphics  grDevices utils     datasets  methods   base     
     ## 
     ## other attached packages:
-    ## [1] rhdf5_2.57.3     BiocStyle_2.40.0
+    ## [1] rhdf5_2.57.4     BiocStyle_2.40.0
     ## 
     ## loaded via a namespace (and not attached):
     ##  [1] cli_3.6.6           knitr_1.51          rlang_1.3.0        
@@ -176,5 +176,5 @@ sessionInfo()
     ## [16] yaml_2.3.12         lifecycle_1.0.5     bookdown_0.47      
     ## [19] BiocManager_1.30.27 compiler_4.6.1      fs_2.1.0           
     ## [22] rhdf5filters_1.24.1 systemfonts_1.3.2   digest_0.6.39      
-    ## [25] R6_2.6.1            bslib_0.11.0        tools_4.6.1        
+    ## [25] R6_2.6.1            bslib_0.12.0        tools_4.6.1        
     ## [28] pkgdown_2.2.1       cachem_1.1.0        desc_1.4.3
