@@ -600,6 +600,10 @@ H5Scombine_select <- function(
 #' @seealso [H5Screate_simple]
 #'
 #' @export
+#'
+#' @examples
+#' H5Sunlimited()
+#'
 H5Sunlimited <- function() {
   # as.integer(h5checkConstants("H5S_UNLIMITED", "H5S_UNLIMITED"))
   -1L
