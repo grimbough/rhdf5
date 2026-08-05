@@ -185,6 +185,12 @@ H5Tis_variable_str <- function(dtype_id) {
 #' successful and will stop with an error if the operation fails.
 #'
 #' @name H5T_precision
+#'
+#' @examples
+#' tid <- H5Tcopy("H5T_NATIVE_INT")
+#' H5Tget_precision(tid)
+#' H5Tset_precision(tid, 16L)
+#' H5Tget_precision(tid)
 NULL
 
 #' @rdname H5T_precision
