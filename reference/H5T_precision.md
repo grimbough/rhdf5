@@ -28,3 +28,14 @@ H5Tget_precision(dtype_id)
 - `H5Tset_precision()` is call for its side-effect of modifying the
   precision of a datatype. It will invisibly return `TRUE` if this is
   successful and will stop with an error if the operation fails.
+
+## Examples
+
+``` r
+tid <- H5Tcopy("H5T_NATIVE_INT")
+H5Tget_precision(tid)
+#> [1] 32
+H5Tset_precision(tid, 16L)
+H5Tget_precision(tid)
+#> [1] 16
+```

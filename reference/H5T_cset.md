@@ -20,3 +20,15 @@ H5Tget_cset(dtype_id)
 
   Encoding to use for string types. Valid options are 'ASCII' and
   'UTF-8'.
+
+## Examples
+
+``` r
+tid <- H5Tcopy("H5T_C_S1")
+H5Tget_cset(tid)
+#> [1] 0
+H5Tset_cset(tid, "UTF-8")
+#> [1] 0
+H5Tget_cset(tid)
+#> [1] 1
+```

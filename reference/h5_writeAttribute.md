@@ -81,3 +81,24 @@ h5writeAttribute(
   `NA` values can be slow if the object to be written is large, so if
   you are sure no such values will be present this argument can be used
   to disable the testing.
+
+## Examples
+
+``` r
+hdf5_file <- tempfile()
+h5createFile(hdf5_file)
+h5createGroup(hdf5_file, "group")
+
+values_to_be_written <- c(NA, FALSE, TRUE, FALSE, NA)
+h5writeAttribute(
+  values_to_be_written,
+  h5obj = hdf5_file,
+  name = "test",
+  h5loc = "/group"
+)
+
+h5readAttributes(hdf5_file, name = "/group")
+#> $test
+#> [1]    NA FALSE  TRUE FALSE    NA
+#> 
+```

@@ -15,3 +15,10 @@ H5Sunlimited()
 ## See also
 
 [H5Screate_simple](https://huber-group-embl.github.io/rhdf5/reference/H5Screate_simple.md)
+
+## Examples
+
+``` r
+H5Sunlimited()
+#> [1] -1
+```
