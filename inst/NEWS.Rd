@@ -36,9 +36,16 @@
     }
   }
 
+  \subsection{Other user-facing changes}{
+    \itemize{
+      \item More exported functions now include examples.
+    }
+  }
+
   \subsection{Internal changes}{
     \itemize{
       \item Compiler warnings and C linting issues have been resolved.
+      \item C code formatting has been standardized with clang-format
     }
   }
 }
