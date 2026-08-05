@@ -84,6 +84,12 @@ H5Tget_size <- function(dtype_id) {
 #'
 #' @name H5T_strpad
 #'
+#' @examples
+#' tid <- H5Tcopy("H5T_C_S1")
+#' H5Tget_strpad(tid)
+#' H5Tset_strpad(tid, "NULLPAD")
+#' H5Tget_strpad(tid)
+#'
 NULL
 
 #' @rdname H5T_strpad
