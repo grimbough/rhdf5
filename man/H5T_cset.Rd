@@ -19,3 +19,10 @@ H5Tget_cset(dtype_id)
 \description{
 Retrieve or set the character set to be used in a string datatype.
 }
+\examples{
+tid <- H5Tcopy("H5T_C_S1")
+H5Tget_cset(tid)
+H5Tset_cset(tid, "UTF-8")
+H5Tget_cset(tid)
+
+}

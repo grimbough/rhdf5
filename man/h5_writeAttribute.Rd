@@ -62,3 +62,18 @@ argument can be used to disable the testing.}
 \description{
 Write an R object as an HDF5 attribute
 }
+\examples{
+hdf5_file <- tempfile()
+h5createFile(hdf5_file)
+h5createGroup(hdf5_file, "group")
+
+values_to_be_written <- c(NA, FALSE, TRUE, FALSE, NA)
+h5writeAttribute(
+  values_to_be_written,
+  h5obj = hdf5_file,
+  name = "test",
+  h5loc = "/group"
+)
+
+h5readAttributes(hdf5_file, name = "/group")
+}

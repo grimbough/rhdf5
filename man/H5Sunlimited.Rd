@@ -10,6 +10,10 @@ H5Sunlimited()
 The value for \code{H5S_UNLIMITED} can be provided to the \code{maxdims} argument of \link{H5Screate_simple}
 to indicate that the maximum size of the corresponding dimension is unlimited.
 }
+\examples{
+H5Sunlimited()
+
+}
 \seealso{
 \link{H5Screate_simple}
 }

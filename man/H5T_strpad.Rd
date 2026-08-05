@@ -19,3 +19,10 @@ to use.  Valid options are \code{NULLTERM}, \code{NULLPAD} and \code{SPACEPAD}.}
 \description{
 Retrieve or set the type of padding used by string datatype
 }
+\examples{
+tid <- H5Tcopy("H5T_C_S1")
+H5Tget_strpad(tid)
+H5Tset_strpad(tid, "NULLPAD")
+H5Tget_strpad(tid)
+
+}
