@@ -200,8 +200,10 @@ exportMethods(show)
 import(Rhdf5lib)
 import(methods)
 import(rhdf5filters)
-importFrom(utils,file_test)
-importFrom(utils,head)
-importFrom(utils,packageVersion)
-importFrom(utils,tail)
+importFrom(utils,
+  file_test,
+  head,
+  packageVersion,
+  tail
+)
 useDynLib(rhdf5)
