@@ -126,6 +126,13 @@ H5Tget_strpad <- function(dtype_id) {
 #' 'UTF-8'.
 #'
 #' @name H5T_cset
+#'
+#' @examples
+#' tid <- H5Tcopy("H5T_C_S1")
+#' H5Tget_cset(tid)
+#' H5Tset_cset(tid, "UTF-8")
+#' H5Tget_cset(tid)
+#'
 NULL
 
 #' @rdname H5T_cset
