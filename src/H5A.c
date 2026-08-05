@@ -1,21 +1,22 @@
+#include "H5A.h"
 #include <stdlib.h>
 #include <string.h>
-#include "H5A.h"
 
 /*################################*/
 /* functions */
 /*################################*/
 
-/* hid_t H5Acreate( hid_t loc_id, const char *attr_name, hid_t type_id, hid_t space_id, hid_t acpl_id, hid_t aapl_id ) */
-SEXP _H5Acreate( SEXP _obj_id, SEXP _attr_name, SEXP _type_id, SEXP _space_id ) {
-  
-  hid_t obj_id = STRSXP_2_HID( _obj_id );
-  const char *attr_name = CHAR(STRING_ELT(_attr_name, 0));
-  hid_t type_id = STRSXP_2_HID( _type_id );
-  hid_t space_id = STRSXP_2_HID( _space_id );
+/* hid_t H5Acreate( hid_t loc_id, const char *attr_name, hid_t type_id, hid_t
+ * space_id, hid_t acpl_id, hid_t aapl_id ) */
+SEXP _H5Acreate(SEXP _obj_id, SEXP _attr_name, SEXP _type_id, SEXP _space_id) {
 
-  hid_t hid = H5Acreate( obj_id, attr_name, type_id, space_id, 
-			 H5P_DEFAULT, H5P_DEFAULT );
+  hid_t obj_id = STRSXP_2_HID(_obj_id);
+  const char *attr_name = CHAR(STRING_ELT(_attr_name, 0));
+  hid_t type_id = STRSXP_2_HID(_type_id);
+  hid_t space_id = STRSXP_2_HID(_space_id);
+
+  hid_t hid =
+      H5Acreate(obj_id, attr_name, type_id, space_id, H5P_DEFAULT, H5P_DEFAULT);
   addHandle(hid);
 
   SEXP Rval = HID_2_STRSXP(hid);
@@ -23,55 +24,60 @@ SEXP _H5Acreate( SEXP _obj_id, SEXP _attr_name, SEXP _type_id, SEXP _space_id ) 
 }
 
 /* hid_t H5Aopen( hid_t obj_id, const char *attr_name, hid_t aapl_id ) */
-SEXP _H5Aopen( SEXP _obj_id, SEXP _attr_name ) {
-  hid_t obj_id = STRSXP_2_HID( _obj_id );
+SEXP _H5Aopen(SEXP _obj_id, SEXP _attr_name) {
+  hid_t obj_id = STRSXP_2_HID(_obj_id);
   const char *attr_name = CHAR(STRING_ELT(_attr_name, 0));
-  hid_t hid = H5Aopen( obj_id, attr_name, H5P_DEFAULT );
-  addHandle( hid );
+  hid_t hid = H5Aopen(obj_id, attr_name, H5P_DEFAULT);
+  addHandle(hid);
 
   SEXP Rval = HID_2_STRSXP(hid);
   return Rval;
 }
 
-/* hid_t H5Aopen_by_name( hid_t loc_id, const char *obj_name, const char *attr_name, hid_t aapl_id, hid_t lapl_id ) */
-SEXP _H5Aopen_by_name( SEXP _obj_id, SEXP _obj_name, SEXP _attr_name ) {
-  hid_t obj_id = STRSXP_2_HID( _obj_id );
+/* hid_t H5Aopen_by_name( hid_t loc_id, const char *obj_name, const char
+ * *attr_name, hid_t aapl_id, hid_t lapl_id ) */
+SEXP _H5Aopen_by_name(SEXP _obj_id, SEXP _obj_name, SEXP _attr_name) {
+  hid_t obj_id = STRSXP_2_HID(_obj_id);
   const char *obj_name = CHAR(STRING_ELT(_obj_name, 0));
   const char *attr_name = CHAR(STRING_ELT(_attr_name, 0));
-  hid_t hid = H5Aopen_by_name( obj_id, obj_name, attr_name, H5P_DEFAULT, H5P_DEFAULT );
-  addHandle( hid );
+  hid_t hid =
+      H5Aopen_by_name(obj_id, obj_name, attr_name, H5P_DEFAULT, H5P_DEFAULT);
+  addHandle(hid);
 
   SEXP Rval = HID_2_STRSXP(hid);
   return Rval;
 }
 
-/* hid_t H5Aopen_by_idx( hid_t loc_id, const char *obj_name, H5_index_t idx_type, H5_iter_order_t order, hsize_t n, hid_t aapl_id, hid_t lapl_id ) */
-SEXP _H5Aopen_by_idx( SEXP _obj_id, SEXP _obj_name, SEXP _idx_type, SEXP _order, SEXP _n ) {
-  hid_t obj_id = STRSXP_2_HID( _obj_id );
+/* hid_t H5Aopen_by_idx( hid_t loc_id, const char *obj_name, H5_index_t
+ * idx_type, H5_iter_order_t order, hsize_t n, hid_t aapl_id, hid_t lapl_id ) */
+SEXP _H5Aopen_by_idx(SEXP _obj_id, SEXP _obj_name, SEXP _idx_type, SEXP _order,
+                     SEXP _n) {
+  hid_t obj_id = STRSXP_2_HID(_obj_id);
   const char *obj_name = CHAR(STRING_ELT(_obj_name, 0));
-  H5_index_t idx_type = (H5_index_t) INTEGER(_idx_type)[0];
-  H5_iter_order_t order = (H5_iter_order_t) INTEGER(_order)[0];
+  H5_index_t idx_type = (H5_index_t)INTEGER(_idx_type)[0];
+  H5_iter_order_t order = (H5_iter_order_t)INTEGER(_order)[0];
   hsize_t n = INTEGER(_n)[0];
-  hid_t hid = H5Aopen_by_idx( obj_id, obj_name, idx_type, order, n, H5P_DEFAULT, H5P_DEFAULT );
-  addHandle( hid );
+  hid_t hid = H5Aopen_by_idx(obj_id, obj_name, idx_type, order, n, H5P_DEFAULT,
+                             H5P_DEFAULT);
+  addHandle(hid);
 
   SEXP Rval = HID_2_STRSXP(hid);
   return Rval;
 }
 
 /* htri_t H5Aexists( hid_t obj_id, const char *attr_name ) */
-SEXP _H5Aexists( SEXP _obj_id, SEXP _attr_name ) {
-  hid_t obj_id = STRSXP_2_HID( _obj_id );
+SEXP _H5Aexists(SEXP _obj_id, SEXP _attr_name) {
+  hid_t obj_id = STRSXP_2_HID(_obj_id);
   const char *attr_name = CHAR(STRING_ELT(_attr_name, 0));
-  htri_t htri = H5Aexists( obj_id, attr_name );
+  htri_t htri = H5Aexists(obj_id, attr_name);
   SEXP Rval = ScalarInteger(htri);
   return Rval;
 }
 
 /* herr_t H5Aclose(hid_t attr_id) */
-SEXP _H5Aclose( SEXP _attr_id ) {
-  hid_t attr_id = STRSXP_2_HID( _attr_id );
-  herr_t herr = H5Aclose( attr_id );
+SEXP _H5Aclose(SEXP _attr_id) {
+  hid_t attr_id = STRSXP_2_HID(_attr_id);
+  herr_t herr = H5Aclose(attr_id);
   if (herr == 0) {
     removeHandle(attr_id);
   }
@@ -80,18 +86,17 @@ SEXP _H5Aclose( SEXP _attr_id ) {
 }
 
 /* herr_t H5Adelete( hid_t loc_id, const char *attr_name ) */
-SEXP _H5Adelete( SEXP _obj_id, SEXP _attr_name ) {
-  hid_t obj_id = STRSXP_2_HID( _obj_id );
+SEXP _H5Adelete(SEXP _obj_id, SEXP _attr_name) {
+  hid_t obj_id = STRSXP_2_HID(_obj_id);
   const char *attr_name = CHAR(STRING_ELT(_attr_name, 0));
-  herr_t herr = H5Adelete( obj_id, attr_name );
+  herr_t herr = H5Adelete(obj_id, attr_name);
   SEXP Rval = ScalarInteger(herr);
   return Rval;
 }
 
+SEXP H5Aread_helper_INTEGER(hid_t attr_id, hsize_t n, SEXP Rdim, SEXP _buf,
+                            hid_t dtype_id, int bit64conversion) {
 
-SEXP H5Aread_helper_INTEGER(hid_t attr_id, hsize_t n, SEXP Rdim, SEXP _buf, hid_t dtype_id,
-                            int bit64conversion) {
-    
   hid_t mem_type_id = -1;
 
   SEXP Rval;
@@ -99,106 +104,107 @@ SEXP H5Aread_helper_INTEGER(hid_t attr_id, hsize_t n, SEXP Rdim, SEXP _buf, hid_
   H5T_sign_t sgn = H5Tget_sign(dtype_id);
   herr_t herr;
   int protected = 0;
-  
-  if((b < 4) || ((b == 4) && (sgn == H5T_SGN_2))) {
-      mem_type_id = H5T_NATIVE_INT;
-    
-      void * buf;
+
+  if ((b < 4) || ((b == 4) && (sgn == H5T_SGN_2))) {
+    mem_type_id = H5T_NATIVE_INT;
+
+    void *buf;
+    if (length(_buf) == 0) {
+      Rval = PROTECT(allocVector(INTSXP, n));
+      protected++;
+      buf = INTEGER(Rval);
+    } else {
+      buf = INTEGER(_buf);
+      Rval = _buf;
+    }
+    herr = H5Aread(attr_id, mem_type_id, buf);
+  } else if (((b == 4) && (sgn == H5T_SGN_NONE)) || (b == 8)) {
+    // unsigned32-bit or 64-bit integer
+    void *intbuf;
+    void *buf;
+
+    if (b == 4) {
+      mem_type_id = H5T_STD_U32LE;
+      intbuf = R_alloc(n, sizeof(unsigned int));
+    } else if ((b == 8) && (sgn == H5T_SGN_NONE)) {
+      mem_type_id = H5T_NATIVE_UINT64;
+      intbuf = R_alloc(n, sizeof(unsigned long long));
+    } else {
+      mem_type_id = H5T_NATIVE_INT64;
+      intbuf = R_alloc(n, sizeof(long long));
+    }
+
+    if (intbuf == 0) {
+      error("Not enough memory to read the attribute.");
+    }
+
+    herr = H5Aread(attr_id, mem_type_id, intbuf);
+    if (herr < 0) {
+      error("Error reading attribute");
+    }
+
+    if (bit64conversion == 0) { // Convert data to R-integer and replace
+                                // overflow values with NA_integer
+
       if (length(_buf) == 0) {
         Rval = PROTECT(allocVector(INTSXP, n));
         protected++;
-        buf = INTEGER(Rval);
+        buf = (int *)INTEGER(Rval);
       } else {
         buf = INTEGER(_buf);
         Rval = _buf;
       }
-      herr = H5Aread(attr_id, mem_type_id, buf );
-  } else if ( ((b == 4) && (sgn == H5T_SGN_NONE)) || (b == 8) ) { 
-      // unsigned32-bit or 64-bit integer
-      void* intbuf;
-      void* buf;
-      
-      if(b == 4) {
-          mem_type_id = H5T_STD_U32LE;
-          intbuf = R_alloc(n, sizeof(unsigned int));
-      } else if((b == 8) && (sgn == H5T_SGN_NONE)) {
-          mem_type_id = H5T_NATIVE_UINT64;
-          intbuf = R_alloc(n, sizeof(unsigned long long));
-      } else {
-          mem_type_id = H5T_NATIVE_INT64;
-          intbuf = R_alloc(n, sizeof(long long));
+      if ((b == 4) && (sgn == H5T_SGN_NONE)) {
+        uint32_to_int32(intbuf, n, buf);
+      } else if (b == 8) {
+        int64_to_int32(intbuf, n, buf, sgn);
       }
-      
-      if (intbuf == 0) {
-          error("Not enough memory to read the attribute.");
-      }
-      
-      herr = H5Aread(attr_id, mem_type_id, intbuf );
-      if(herr< 0) {
-        error("Error reading attribute");
-      }
-      
-      if (bit64conversion == 0) {  // Convert data to R-integer and replace overflow values with NA_integer
+    } else {
 
-          if (length(_buf) == 0) {
-              Rval = PROTECT(allocVector(INTSXP, n));
-              protected++;
-              buf = (int *) INTEGER(Rval);
-          } else {
-              buf = INTEGER(_buf);
-              Rval = _buf;
-          }
-          if ((b == 4) && (sgn == H5T_SGN_NONE)) {
-              uint32_to_int32(intbuf, n, buf);
-          } else if (b == 8) { 
-              int64_to_int32(intbuf, n, buf, sgn);
-          }
+      if (length(_buf) == 0) {
+        Rval = PROTECT(allocVector(REALSXP, n));
+        protected++;
+        buf = (long long *)REAL(Rval);
       } else {
-
-          if (length(_buf) == 0) {
-              Rval = PROTECT(allocVector(REALSXP, n));
-              protected++;
-              buf = (long long *) REAL(Rval);
-          } else {
-              buf = REAL(_buf);
-              Rval = _buf;
-          }
-          if (bit64conversion == 1) {  //convert to double
-              if ((b == 4) && (sgn == H5T_SGN_NONE)) {
-                  uint32_to_double(intbuf, n, buf);
-              } else if (b == 8) {
-                  int64_to_double(intbuf, n, buf, sgn);
-              }
-          } else { // convert to integer64
-              if((b == 4) && (sgn == H5T_SGN_NONE)) {
-                  uint32_to_integer64(intbuf, n, buf);
-              } else if (b == 8) {
-                  int64_to_integer64(intbuf, n, buf, sgn);
-              }
-              SEXP la = PROTECT(mkString("integer64"));
-              setAttrib(Rval, R_ClassSymbol, la);
-              UNPROTECT(1);
-          }
+        buf = REAL(_buf);
+        Rval = _buf;
       }
+      if (bit64conversion == 1) { // convert to double
+        if ((b == 4) && (sgn == H5T_SGN_NONE)) {
+          uint32_to_double(intbuf, n, buf);
+        } else if (b == 8) {
+          int64_to_double(intbuf, n, buf, sgn);
+        }
+      } else { // convert to integer64
+        if ((b == 4) && (sgn == H5T_SGN_NONE)) {
+          uint32_to_integer64(intbuf, n, buf);
+        } else if (b == 8) {
+          int64_to_integer64(intbuf, n, buf, sgn);
+        }
+        SEXP la = PROTECT(mkString("integer64"));
+        setAttrib(Rval, R_ClassSymbol, la);
+        UNPROTECT(1);
+      }
+    }
   } else {
-      error("Unknown integer type\n");
+    error("Unknown integer type\n");
   }
-    
+
   if (length(_buf) == 0) {
     setAttrib(Rval, R_DimSymbol, Rdim);
   }
   UNPROTECT(protected);
-  return(Rval);
+  return (Rval);
 }
 
-
-SEXP H5Aread_helper_FLOAT(hid_t attr_id, hsize_t n, SEXP Rdim, SEXP _buf, hid_t dtype_id) {
+SEXP H5Aread_helper_FLOAT(hid_t attr_id, hsize_t n, SEXP Rdim, SEXP _buf,
+                          hid_t dtype_id) {
   hid_t mem_type_id = -1;
   int protected = 0;
 
   SEXP Rval;
   mem_type_id = H5T_NATIVE_DOUBLE;
-  void * buf;
+  void *buf;
   if (length(_buf) == 0) {
     Rval = PROTECT(allocVector(REALSXP, n));
     protected++;
@@ -207,21 +213,22 @@ SEXP H5Aread_helper_FLOAT(hid_t attr_id, hsize_t n, SEXP Rdim, SEXP _buf, hid_t 
     buf = REAL(_buf);
     Rval = _buf;
   }
-  
-  herr_t herr = H5Aread(attr_id, mem_type_id, buf );
-  if(herr < 0) {
+
+  herr_t herr = H5Aread(attr_id, mem_type_id, buf);
+  if (herr < 0) {
     error("Error reading attribute");
   }
-  
+
   if (length(_buf) == 0) {
     setAttrib(Rval, R_DimSymbol, Rdim);
   }
 
   UNPROTECT(protected);
-  return(Rval);
+  return (Rval);
 }
 
-SEXP H5Aread_helper_STRING(hid_t attr_id, hsize_t n, SEXP Rdim, SEXP _buf, hid_t dtype_id) {
+SEXP H5Aread_helper_STRING(hid_t attr_id, hsize_t n, SEXP Rdim, SEXP _buf,
+                           hid_t dtype_id) {
   hid_t mem_type_id = -1;
 
   SEXP Rval;
@@ -230,56 +237,61 @@ SEXP H5Aread_helper_STRING(hid_t attr_id, hsize_t n, SEXP Rdim, SEXP _buf, hid_t
   Rval = PROTECT(allocVector(STRSXP, n));
   if (H5Tis_variable_str(dtype_id)) {
     char *bufSTR[n];
-    herr_t herr = H5Aread(attr_id, mem_type_id, bufSTR );
-    if(herr < 0) { error("Error reading attribute"); }
-    for (hsize_t i=0; i<n; i++) {
+    herr_t herr = H5Aread(attr_id, mem_type_id, bufSTR);
+    if (herr < 0) {
+      error("Error reading attribute");
+    }
+    for (hsize_t i = 0; i < n; i++) {
       SET_STRING_ELT(Rval, i, mkChar(bufSTR[i]));
       free(bufSTR[i]);
     }
   } else {
     char bufSTR[n][size];
-    
-    herr_t herr = H5Aread(attr_id, mem_type_id, bufSTR );
-    if(herr < 0) { error("Error reading attribute"); }
-    
-    char bufSTR2[n][size+1];
-    for (hsize_t i=0; i<n; i++) {
+
+    herr_t herr = H5Aread(attr_id, mem_type_id, bufSTR);
+    if (herr < 0) {
+      error("Error reading attribute");
+    }
+
+    char bufSTR2[n][size + 1];
+    for (hsize_t i = 0; i < n; i++) {
       memcpy(bufSTR2[i], bufSTR[i], size);
       bufSTR2[i][size] = '\0';
     }
 
-    for (hsize_t i=0; i<n; i++) {
+    for (hsize_t i = 0; i < n; i++) {
       SET_STRING_ELT(Rval, i, mkChar(bufSTR2[i]));
     }
   }
   setAttrib(Rval, R_DimSymbol, Rdim);
   UNPROTECT(1);
-  return(Rval);
+  return (Rval);
 }
 
-SEXP H5Aread_helper_REFERENCE(hid_t attr_id, hsize_t n, SEXP Rdim, SEXP _buf, hid_t dtype_id) {
-  
+SEXP H5Aread_helper_REFERENCE(hid_t attr_id, hsize_t n, SEXP Rdim, SEXP _buf,
+                              hid_t dtype_id) {
+
   void *references;
-  SEXP Rrefs, Rtype; 
-  
-  if(H5Tequal(dtype_id, H5T_STD_REF_OBJ)) {
-    Rrefs = PROTECT(allocVector(RAWSXP, sizeof(hobj_ref_t) * n ));
+  SEXP Rrefs, Rtype;
+
+  if (H5Tequal(dtype_id, H5T_STD_REF_OBJ)) {
+    Rrefs = PROTECT(allocVector(RAWSXP, sizeof(hobj_ref_t) * n));
     Rtype = PROTECT(ScalarInteger(H5R_OBJECT));
   } else if (H5Tequal(dtype_id, H5T_STD_REF_DSETREG)) {
-    Rrefs = PROTECT(allocVector(RAWSXP, sizeof(hdset_reg_ref_t) * n ));
+    Rrefs = PROTECT(allocVector(RAWSXP, sizeof(hdset_reg_ref_t) * n));
     Rtype = PROTECT(ScalarInteger(H5R_DATASET_REGION));
   } else {
     error("Unkown reference type");
     return R_NilValue;
   }
-  
+
   references = RAW(Rrefs);
   herr_t err = H5Aread(attr_id, dtype_id, references);
   if (err < 0) {
     error("could not read attribute");
     return R_NilValue;
   }
-  
+
   SEXP Rclass = PROTECT(R_getClassDef("H5Ref"));
   SEXP Rval = PROTECT(R_do_new_object(Rclass));
   SEXP val = PROTECT(mkString("val"));
@@ -290,39 +302,42 @@ SEXP H5Aread_helper_REFERENCE(hid_t attr_id, hsize_t n, SEXP Rdim, SEXP _buf, hi
   return Rval;
 }
 
-SEXP H5Aread_helper_ENUM(hid_t attr_id, hsize_t n, SEXP Rdim, SEXP _buf, hid_t dtype_id) {
-  
-  SEXP Rval = PROTECT(allocVector(STRSXP, (R_xlen_t) n));
-  
+SEXP H5Aread_helper_ENUM(hid_t attr_id, hsize_t n, SEXP Rdim, SEXP _buf,
+                         hid_t dtype_id) {
+
+  SEXP Rval = PROTECT(allocVector(STRSXP, (R_xlen_t)n));
+
   size_t el_size = H5Tget_size(dtype_id);
   // We need a pointer to a single byte data type for pointer arithmetic.
-  unsigned char *buf = (unsigned char *) R_alloc(el_size, n);
+  unsigned char *buf = (unsigned char *)R_alloc(el_size, n);
   H5Aread(attr_id, dtype_id, buf);
 
   size_t max_string_length = 1024;
   char *st = H5allocate_memory(max_string_length, FALSE);
-  for (hsize_t i=0; i < n; i++) {
+  for (hsize_t i = 0; i < n; i++) {
     memset(st, 0, max_string_length);
     H5Tenum_nameof(dtype_id, buf, st, max_string_length);
     SET_STRING_ELT(Rval, i, mkChar(st));
     buf += el_size;
   }
   H5free_memory(st);
-  
+
   UNPROTECT(1);
   return Rval;
 }
 
-SEXP H5Aread_helper(hid_t attr_id, hsize_t n, SEXP Rdim, SEXP _buf, int bit64conversion ) {
-    
-    hid_t dtype_id;
-    dtype_id = H5Aget_type(attr_id);
-    hid_t dtypeclass_id = H5Tget_class(dtype_id);
+SEXP H5Aread_helper(hid_t attr_id, hsize_t n, SEXP Rdim, SEXP _buf,
+                    int bit64conversion) {
+
+  hid_t dtype_id;
+  dtype_id = H5Aget_type(attr_id);
+  hid_t dtypeclass_id = H5Tget_class(dtype_id);
 
   SEXP Rval;
-  switch(dtypeclass_id) {
+  switch (dtypeclass_id) {
   case H5T_INTEGER: {
-    Rval = H5Aread_helper_INTEGER(attr_id, n, Rdim, _buf, dtype_id, bit64conversion);
+    Rval = H5Aread_helper_INTEGER(attr_id, n, Rdim, _buf, dtype_id,
+                                  bit64conversion);
   } break;
   case H5T_FLOAT: {
     Rval = H5Aread_helper_FLOAT(attr_id, n, Rdim, _buf, dtype_id);
@@ -337,9 +352,9 @@ SEXP H5Aread_helper(hid_t attr_id, hsize_t n, SEXP Rdim, SEXP _buf, int bit64con
     Rval = H5Aread_helper_ENUM(attr_id, n, Rdim, _buf, dtype_id);
   } break;
   case H5T_COMPOUND:
- /* { */
- /*    Rval = H5Aread_helper_COMPOUND(attr_id, n, Rdim, _buf, dtype_id); */
- /*  } break; */
+    /* { */
+    /*    Rval = H5Aread_helper_COMPOUND(attr_id, n, Rdim, _buf, dtype_id); */
+    /*  } break; */
   case H5T_TIME:
   case H5T_BITFIELD:
   case H5T_OPAQUE:
@@ -348,20 +363,24 @@ SEXP H5Aread_helper(hid_t attr_id, hsize_t n, SEXP Rdim, SEXP _buf, int bit64con
   default: {
     double na = R_NaReal;
     Rval = PROTECT(allocVector(REALSXP, n));
-    for (hsize_t i=0; i<n; i++) { REAL(Rval)[i] = na; }
+    for (hsize_t i = 0; i < n; i++) {
+      REAL(Rval)[i] = na;
+    }
     setAttrib(Rval, R_DimSymbol, Rdim);
-    warning("Reading attribute data of type '%s' not yet implemented. Values replaced by NA's.", getDatatypeClass(dtype_id));
+    warning("Reading attribute data of type '%s' not yet implemented. Values "
+            "replaced by NA's.",
+            getDatatypeClass(dtype_id));
     UNPROTECT(1);
   } break;
   }
 
-  return(Rval);
+  return (Rval);
 }
 
 /* herr_t H5Aread(hid_t attr_id, hid_t mem_type_id, void *buf ) */
-SEXP _H5Aread( SEXP _attr_id, SEXP _buf, SEXP _bit64conversion ) {
-  
-  hsize_t *size, *maxsize, *dims;  
+SEXP _H5Aread(SEXP _attr_id, SEXP _buf, SEXP _bit64conversion) {
+
+  hsize_t *size, *maxsize, *dims;
   hsize_t n = 1;
   SEXP Rdim;
   int bit64conversion = INTEGER(_bit64conversion)[0];
@@ -370,32 +389,32 @@ SEXP _H5Aread( SEXP _attr_id, SEXP _buf, SEXP _bit64conversion ) {
   /***********************************************************************/
   /* attr_id                                                          */
   /***********************************************************************/
-  hid_t attr_id = STRSXP_2_HID( _attr_id );
-  
+  hid_t attr_id = STRSXP_2_HID(_attr_id);
+
   /***********************************************************************/
   /* file_space_id and get dimensionality of output file_space and buf   */
   /***********************************************************************/
-  hid_t file_space_id = H5Aget_space( attr_id );
-  int rank = H5Sget_simple_extent_ndims( file_space_id );
-  if(rank < 0) {
+  hid_t file_space_id = H5Aget_space(attr_id);
+  int rank = H5Sget_simple_extent_ndims(file_space_id);
+  if (rank < 0) {
     error("Error determining the attribute dimensions\n");
-  } else if(rank > 0) {
-    size    = (hsize_t *) R_alloc(rank, sizeof(hsize_t));
-    maxsize = (hsize_t *) R_alloc(rank, sizeof(hsize_t));
-    dims    = (hsize_t *) R_alloc(rank, sizeof(hsize_t));
+  } else if (rank > 0) {
+    size = (hsize_t *)R_alloc(rank, sizeof(hsize_t));
+    maxsize = (hsize_t *)R_alloc(rank, sizeof(hsize_t));
+    dims = (hsize_t *)R_alloc(rank, sizeof(hsize_t));
     H5Sget_simple_extent_dims(file_space_id, size, maxsize);
-    
+
     for (int i = 0; i < rank; i++) {
       n = n * size[i];
-      dims[i] = size[rank-i-1];
+      dims[i] = size[rank - i - 1];
     }
-    
+
     Rdim = PROTECT(allocVector(INTSXP, rank));
     protected++;
     for (int i = 0; i < rank; i++) {
       INTEGER(Rdim)[i] = dims[i];
     }
-    
+
   } else {
     Rdim = NULL_USER_OBJECT;
   }
@@ -413,93 +432,94 @@ SEXP _H5Aread( SEXP _attr_id, SEXP _buf, SEXP _bit64conversion ) {
 }
 
 /* herr_t H5Awrite(hid_t attr_id, hid_t mem_type_id, const void *buf ) */
-SEXP _H5Awrite( SEXP _attr_id, SEXP _buf) {
-    hid_t attr_id = STRSXP_2_HID( _attr_id );
-    hid_t mem_type_id = -1;
-    
-    const void * buf;
-    static const char* H5Ref[] = {"H5Ref", ""};
-    int values[3] = {1, 0, NA_LOGICAL};
-    
-    switch(TYPEOF(_buf)) {
-    case INTSXP :
-        mem_type_id = H5T_NATIVE_INT;
-        buf = INTEGER(_buf);
-        break;
-    case REALSXP :
-        mem_type_id = H5T_NATIVE_DOUBLE;
-        buf = REAL(_buf);
-        break;
-    case STRSXP :
-        mem_type_id = H5Aget_type(attr_id);
-        buf = read_string_datatype(mem_type_id, _buf);
-        break;
-    case LGLSXP :
-        // create memory enum type
-        mem_type_id = H5Tenum_create(H5T_NATIVE_INT32);
-        H5Tenum_insert(mem_type_id, "TRUE",  &values[0]);
-        H5Tenum_insert(mem_type_id, "FALSE", &values[1]);
-        
-        hid_t attr_type_id = H5Aget_type(attr_id);
-        int n = H5Tget_nmembers(attr_type_id);
-        // only do this if we have 3 values in the datatype: TRUE, FALSE & NA
-        if(n == 3) {
-          H5Tenum_insert(mem_type_id, "NA", &values[2]);
-        }
-        buf = LOGICAL(_buf);
-        break;
-    case S4SXP : 
-        if(R_check_class_etc(_buf, H5Ref) >= 0) {
-          SEXP typeSlot = PROTECT(mkString("type"));
-          if(INTEGER(R_do_slot(_buf, typeSlot))[0] == H5R_OBJECT) {
-            mem_type_id = H5T_STD_REF_OBJ;
-          } else if (INTEGER(R_do_slot(_buf, typeSlot))[0] == H5R_DATASET_REGION) {
-            mem_type_id = H5T_STD_REF_DSETREG;
-          } else {
-            mem_type_id = -1;
-            Rf_error("Error writing references");
-          }
-          UNPROTECT(1);
-        }
-        SEXP valSlot = PROTECT(mkString("val"));
-        buf = RAW(R_do_slot(_buf, valSlot));
-        UNPROTECT(1);
-        break;
-    default :
-        mem_type_id = -1;
-        error("Writing of this type of attribute data not supported.");
-        SEXP Rval = R_NilValue;
-        return Rval;
-    }
+SEXP _H5Awrite(SEXP _attr_id, SEXP _buf) {
+  hid_t attr_id = STRSXP_2_HID(_attr_id);
+  hid_t mem_type_id = -1;
 
-    herr_t herr = H5Awrite(attr_id, mem_type_id, buf );
-    if(herr < 0) { error("Error writing attribute"); }
-    return ScalarInteger(herr);
+  const void *buf;
+  static const char *H5Ref[] = {"H5Ref", ""};
+  int values[3] = {1, 0, NA_LOGICAL};
+
+  switch (TYPEOF(_buf)) {
+  case INTSXP:
+    mem_type_id = H5T_NATIVE_INT;
+    buf = INTEGER(_buf);
+    break;
+  case REALSXP:
+    mem_type_id = H5T_NATIVE_DOUBLE;
+    buf = REAL(_buf);
+    break;
+  case STRSXP:
+    mem_type_id = H5Aget_type(attr_id);
+    buf = read_string_datatype(mem_type_id, _buf);
+    break;
+  case LGLSXP:
+    // create memory enum type
+    mem_type_id = H5Tenum_create(H5T_NATIVE_INT32);
+    H5Tenum_insert(mem_type_id, "TRUE", &values[0]);
+    H5Tenum_insert(mem_type_id, "FALSE", &values[1]);
+
+    hid_t attr_type_id = H5Aget_type(attr_id);
+    int n = H5Tget_nmembers(attr_type_id);
+    // only do this if we have 3 values in the datatype: TRUE, FALSE & NA
+    if (n == 3) {
+      H5Tenum_insert(mem_type_id, "NA", &values[2]);
+    }
+    buf = LOGICAL(_buf);
+    break;
+  case S4SXP:
+    if (R_check_class_etc(_buf, H5Ref) >= 0) {
+      SEXP typeSlot = PROTECT(mkString("type"));
+      if (INTEGER(R_do_slot(_buf, typeSlot))[0] == H5R_OBJECT) {
+        mem_type_id = H5T_STD_REF_OBJ;
+      } else if (INTEGER(R_do_slot(_buf, typeSlot))[0] == H5R_DATASET_REGION) {
+        mem_type_id = H5T_STD_REF_DSETREG;
+      } else {
+        mem_type_id = -1;
+        Rf_error("Error writing references");
+      }
+      UNPROTECT(1);
+    }
+    SEXP valSlot = PROTECT(mkString("val"));
+    buf = RAW(R_do_slot(_buf, valSlot));
+    UNPROTECT(1);
+    break;
+  default:
+    mem_type_id = -1;
+    error("Writing of this type of attribute data not supported.");
+    SEXP Rval = R_NilValue;
+    return Rval;
+  }
+
+  herr_t herr = H5Awrite(attr_id, mem_type_id, buf);
+  if (herr < 0) {
+    error("Error writing attribute");
+  }
+  return ScalarInteger(herr);
 }
 
 /* ssize_t H5Aget_name(hid_t attr_id, size_t buf_size, char *buf ) */
-SEXP _H5Aget_name(SEXP _attr_id ) {
-  hid_t attr_id = STRSXP_2_HID( _attr_id );
-  ssize_t s = H5Aget_name(attr_id, 0, NULL );
-  char buf[s+1];
-  H5Aget_name(attr_id, s+1, buf );
+SEXP _H5Aget_name(SEXP _attr_id) {
+  hid_t attr_id = STRSXP_2_HID(_attr_id);
+  ssize_t s = H5Aget_name(attr_id, 0, NULL);
+  char buf[s + 1];
+  H5Aget_name(attr_id, s + 1, buf);
   return mkString(buf);
 }
 
 /* hid_t H5Aget_space(hid_t attr_id) */
-SEXP _H5Aget_space(SEXP _attr_id ) {
-  hid_t attr_id = STRSXP_2_HID( _attr_id );
-  hid_t sid = H5Aget_space( attr_id );
+SEXP _H5Aget_space(SEXP _attr_id) {
+  hid_t attr_id = STRSXP_2_HID(_attr_id);
+  hid_t sid = H5Aget_space(attr_id);
   addHandle(sid);
   SEXP Rval = HID_2_STRSXP(sid);
   return Rval;
 }
 
 /* hid_t H5Aget_type(hid_t attr_id) */
-SEXP _H5Aget_type( SEXP _attr_id ) {
-  hid_t attr_id = STRSXP_2_HID( _attr_id );
-  hid_t hid = H5Aget_type( attr_id );
+SEXP _H5Aget_type(SEXP _attr_id) {
+  hid_t attr_id = STRSXP_2_HID(_attr_id);
+  hid_t hid = H5Aget_type(attr_id);
   SEXP Rval = HID_2_STRSXP(hid);
   return Rval;
 }
-

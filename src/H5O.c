@@ -1,28 +1,30 @@
 #include "H5O.h"
 
-herr_t opAcount( hid_t g_id, const char *name, const H5A_info_t *info, void *op_data) {
+herr_t opAcount(hid_t g_id, const char *name, const H5A_info_t *info,
+                void *op_data) {
   int *n = op_data;
   (*n)++;
   herr_t herr = 0;
-  return(herr);
+  return (herr);
 }
 
-hsize_t H5Oget_num_attrs ( hid_t obj_id ) {
-  hsize_t n=0;
-  hsize_t idx=0;
-  herr_t herr = H5Aiterate( obj_id, H5_INDEX_CRT_ORDER, H5_ITER_NATIVE, &idx, &opAcount, &n);
-  if(herr < 0) {
+hsize_t H5Oget_num_attrs(hid_t obj_id) {
+  hsize_t n = 0;
+  hsize_t idx = 0;
+  herr_t herr = H5Aiterate(obj_id, H5_INDEX_CRT_ORDER, H5_ITER_NATIVE, &idx,
+                           &opAcount, &n);
+  if (herr < 0) {
     error("Unable to determine the number of attributes\n");
   }
-  return(n);
+  return (n);
 }
 
-SEXP _H5Oget_num_attrs ( SEXP _obj_id ) {
-  //hid_t obj_id = INTEGER(_obj_id)[0];
-  hid_t obj_id = STRSXP_2_HID( _obj_id );
-  hsize_t n = H5Oget_num_attrs ( obj_id );
+SEXP _H5Oget_num_attrs(SEXP _obj_id) {
+  // hid_t obj_id = INTEGER(_obj_id)[0];
+  hid_t obj_id = STRSXP_2_HID(_obj_id);
+  hsize_t n = H5Oget_num_attrs(obj_id);
   SEXP Rval = ScalarInteger(n);
-  return(Rval);
+  return (Rval);
 }
 
 /*
@@ -53,19 +55,19 @@ SEXP H5O_info_t2SEXP (H5O_info_t *object_info) {
 }
 */
 
-SEXP _H5Oopen( SEXP _loc_id, SEXP _name) {
-  hid_t loc_id = STRSXP_2_HID( _loc_id );
+SEXP _H5Oopen(SEXP _loc_id, SEXP _name) {
+  hid_t loc_id = STRSXP_2_HID(_loc_id);
   const char *name = CHAR(STRING_ELT(_name, 0));
-  hid_t hid = H5Oopen( loc_id, name, H5P_DEFAULT );
+  hid_t hid = H5Oopen(loc_id, name, H5P_DEFAULT);
   addHandle(hid);
 
   SEXP Rval = HID_2_STRSXP(hid);
   return Rval;
 }
 
-SEXP _H5Oclose( SEXP _object_id ) {
-  hid_t object_id = STRSXP_2_HID( _object_id );
-  herr_t herr = H5Oclose( object_id );
+SEXP _H5Oclose(SEXP _object_id) {
+  hid_t object_id = STRSXP_2_HID(_object_id);
+  herr_t herr = H5Oclose(object_id);
   if (herr == 0) {
     removeHandle(object_id);
   }
@@ -73,32 +75,36 @@ SEXP _H5Oclose( SEXP _object_id ) {
   return ScalarInteger(herr);
 }
 
-SEXP _H5Olink( SEXP _object_id, SEXP _new_loc_id, SEXP _new_link_name, SEXP _lcpl_id, SEXP _lapl_id) {
-  hid_t object_id = STRSXP_2_HID( _object_id );
-  hid_t new_loc_id = STRSXP_2_HID( _new_loc_id );
+SEXP _H5Olink(SEXP _object_id, SEXP _new_loc_id, SEXP _new_link_name,
+              SEXP _lcpl_id, SEXP _lapl_id) {
+  hid_t object_id = STRSXP_2_HID(_object_id);
+  hid_t new_loc_id = STRSXP_2_HID(_new_loc_id);
   const char *new_link_name = CHAR(STRING_ELT(_new_link_name, 0));
-  hid_t lcpl_id = STRSXP_2_HID( _lcpl_id );
-  hid_t lapl_id = STRSXP_2_HID( _lapl_id );
-  
-  herr_t herr = H5Olink(object_id, new_loc_id, new_link_name, lcpl_id, lapl_id );
-  
+  hid_t lcpl_id = STRSXP_2_HID(_lcpl_id);
+  hid_t lapl_id = STRSXP_2_HID(_lapl_id);
+
+  herr_t herr = H5Olink(object_id, new_loc_id, new_link_name, lcpl_id, lapl_id);
+
   return ScalarInteger(herr);
 }
 
-/* herr_t H5Ocopy	(hid_t src_loc_id, const char *src_name, hid_t dst_loc_id, const char *dst_name, hid_t ocpypl_id, hid_t lcpl_id) */
-SEXP _H5Ocopy( SEXP _src_loc_id, SEXP _src_name, SEXP _dest_loc_id, SEXP _dest_name, SEXP _ocpypl_id, SEXP _lcpl_id ) {
-  
-  hid_t src_loc_id = STRSXP_2_HID( _src_loc_id );
+/* herr_t H5Ocopy	(hid_t src_loc_id, const char *src_name, hid_t
+ * dst_loc_id, const char *dst_name, hid_t ocpypl_id, hid_t lcpl_id) */
+SEXP _H5Ocopy(SEXP _src_loc_id, SEXP _src_name, SEXP _dest_loc_id,
+              SEXP _dest_name, SEXP _ocpypl_id, SEXP _lcpl_id) {
+
+  hid_t src_loc_id = STRSXP_2_HID(_src_loc_id);
   const char *src_name = CHAR(STRING_ELT(_src_name, 0));
-  
-  hid_t dest_loc_id = STRSXP_2_HID( _dest_loc_id );
+
+  hid_t dest_loc_id = STRSXP_2_HID(_dest_loc_id);
   const char *dest_name = CHAR(STRING_ELT(_dest_name, 0));
-  
-  hid_t ocpypl_id = STRSXP_2_HID( _ocpypl_id );
-  hid_t lcpl_id = STRSXP_2_HID( _lcpl_id );
-  
-  herr_t herr = H5Ocopy(src_loc_id, src_name, dest_loc_id, dest_name, ocpypl_id, lcpl_id);
-  
+
+  hid_t ocpypl_id = STRSXP_2_HID(_ocpypl_id);
+  hid_t lcpl_id = STRSXP_2_HID(_lcpl_id);
+
+  herr_t herr =
+      H5Ocopy(src_loc_id, src_name, dest_loc_id, dest_name, ocpypl_id, lcpl_id);
+
   return ScalarInteger(herr);
 }
 
@@ -118,29 +124,35 @@ SEXP _H5Oget_info( SEXP _object_id ) {
 }
 */
 
-SEXP _H5Oget_info( SEXP _object_id ) {
-  
-  hid_t object_id = STRSXP_2_HID( _object_id );
+SEXP _H5Oget_info(SEXP _object_id) {
+
+  hid_t object_id = STRSXP_2_HID(_object_id);
   H5O_info2_t info;
   SEXP Rval, class, tz_attr;
-  
-  herr_t herr = H5Oget_info3( object_id, &info, H5O_INFO_ALL );
-  if(herr < 0) {
+
+  herr_t herr = H5Oget_info3(object_id, &info, H5O_INFO_ALL);
+  if (herr < 0) {
     error("Unable to obtain object info\n");
   }
 
   // create names for our list that will be returned
-  const char *names[] = {"file_num", "type", "reference_count", 
-                         "access_time", "modification_time", "change_time",
-                         "birth_time", "num_attrs", ""};
+  const char *names[] = {"file_num",
+                         "type",
+                         "reference_count",
+                         "access_time",
+                         "modification_time",
+                         "change_time",
+                         "birth_time",
+                         "num_attrs",
+                         ""};
   Rval = PROTECT(Rf_mkNamed(VECSXP, names));
-  
+
   // timestamps
   SEXP atime = PROTECT(Rf_ScalarReal(info.atime));
   SEXP mtime = PROTECT(Rf_ScalarReal(info.mtime));
   SEXP ctime = PROTECT(Rf_ScalarReal(info.ctime));
   SEXP btime = PROTECT(Rf_ScalarReal(info.btime));
-  
+
   // add POSIXct class
   class = PROTECT(allocVector(STRSXP, 2));
   SET_STRING_ELT(class, 0, mkChar("POSIXct"));
@@ -149,49 +161,48 @@ SEXP _H5Oget_info( SEXP _object_id ) {
   classgets(mtime, class);
   classgets(ctime, class);
   classgets(btime, class);
-  
+
   // set timezone
   tz_attr = PROTECT(Rf_ScalarString(mkChar("UTC")));
   setAttrib(atime, install("tzone"), tz_attr);
   setAttrib(mtime, install("tzone"), tz_attr);
   setAttrib(ctime, install("tzone"), tz_attr);
   setAttrib(btime, install("tzone"), tz_attr);
-  
-  //object type
+
+  // object type
   SEXP obj_type;
-  switch(info.type) {
-  case H5O_TYPE_GROUP :
+  switch (info.type) {
+  case H5O_TYPE_GROUP:
     obj_type = PROTECT(mkString("GROUP"));
     break;
-  case H5O_TYPE_DATASET :
+  case H5O_TYPE_DATASET:
     obj_type = PROTECT(mkString("DATASET"));
     break;
-  case H5O_TYPE_NAMED_DATATYPE :
+  case H5O_TYPE_NAMED_DATATYPE:
     obj_type = PROTECT(mkString("NAMED_DATATYPE"));
     break;
-  default :
+  default:
     obj_type = PROTECT(mkString("UNKNOWN TYPE"));
     break;
   }
-  
-  // add elements to the list
-  SET_VECTOR_ELT(Rval, 0, Rf_ScalarInteger(info.fileno)); 
-  SET_VECTOR_ELT(Rval, 1, obj_type); 
-  SET_VECTOR_ELT(Rval, 2, Rf_ScalarInteger(info.rc)); 
-  SET_VECTOR_ELT(Rval, 3, atime); 
-  SET_VECTOR_ELT(Rval, 4, mtime); 
-  SET_VECTOR_ELT(Rval, 5, ctime); 
-  SET_VECTOR_ELT(Rval, 6, btime); 
-  SET_VECTOR_ELT(Rval, 7, Rf_ScalarInteger(info.num_attrs)); 
 
-  
+  // add elements to the list
+  SET_VECTOR_ELT(Rval, 0, Rf_ScalarInteger(info.fileno));
+  SET_VECTOR_ELT(Rval, 1, obj_type);
+  SET_VECTOR_ELT(Rval, 2, Rf_ScalarInteger(info.rc));
+  SET_VECTOR_ELT(Rval, 3, atime);
+  SET_VECTOR_ELT(Rval, 4, mtime);
+  SET_VECTOR_ELT(Rval, 5, ctime);
+  SET_VECTOR_ELT(Rval, 6, btime);
+  SET_VECTOR_ELT(Rval, 7, Rf_ScalarInteger(info.num_attrs));
+
   UNPROTECT(8);
 
   return Rval;
 }
-  
 
-/* herr_t H5Oget_info_by_name( hid_t loc_id, const char *object_name, H5O_info_t *object_info, hid_t lapl_id ) */
+/* herr_t H5Oget_info_by_name( hid_t loc_id, const char *object_name, H5O_info_t
+ * *object_info, hid_t lapl_id ) */
 /*
 SEXP _H5Oget_info_by_name( SEXP _loc_id, SEXP _object_name ) {
   //  hid_t loc_id = INTEGER(_loc_id)[0];
@@ -206,18 +217,15 @@ SEXP _H5Oget_info_by_name( SEXP _loc_id, SEXP _object_name ) {
     printf("name = %s\n", object_name);
     //    oid = H5Oopen(loc_id, name=object_name);
     //if (oid >= 0) {
-      
+
     //  H5Oclose(oid);
     //} else {
     //  printf("Cannot open object.");
    // }
-    
-    herr_t herr = H5Oget_info_by_name( loc_id, object_name, &object_info, H5P_DEFAULT);
-    printf("herr=%d\n",herr);
-    H5Fclose(loc_id);
-    printf("name = %s\n", object_name);
-  } else {
-    printf("file id not valid.\n");
+
+    herr_t herr = H5Oget_info_by_name( loc_id, object_name, &object_info,
+H5P_DEFAULT); printf("herr=%d\n",herr); H5Fclose(loc_id); printf("name = %s\n",
+object_name); } else { printf("file id not valid.\n");
     //    Rval = R_NilValue;
   }
   SEXP Rval;

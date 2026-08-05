@@ -1,31 +1,30 @@
 #include "H5I.h"
 
 // H5I_type_t H5Iget_type( hid_t obj_id )
-SEXP _H5Iis_valid( SEXP _obj_id ) {
-  hid_t obj_id = STRSXP_2_HID( _obj_id );
+SEXP _H5Iis_valid(SEXP _obj_id) {
+  hid_t obj_id = STRSXP_2_HID(_obj_id);
   int v = H5Iis_valid(obj_id);
   SEXP Rval = ScalarLogical(v);
-  return(Rval);
+  return (Rval);
 }
 
 // H5I_type_t H5Iget_type( hid_t obj_id )
-SEXP _H5Iget_type( SEXP _obj_id ) {
-  hid_t obj_id = STRSXP_2_HID( _obj_id );
+SEXP _H5Iget_type(SEXP _obj_id) {
+  hid_t obj_id = STRSXP_2_HID(_obj_id);
   H5I_type_t t = H5Iget_type(obj_id);
   SEXP Rval = ScalarInteger(t);
-  return(Rval);
+  return (Rval);
 }
 
 /* ssize_t H5Iget_name( hid_t obj_id, char *name, size_t size ) */
-SEXP _H5Iget_name( SEXP _obj_id ) {
-  hid_t obj_id = STRSXP_2_HID( _obj_id );
-  ssize_t st = H5Iget_name( obj_id, NULL, 0 );
-  
-  char *name = R_alloc(st+1, sizeof(char));
-  
-  H5Iget_name( obj_id, name, st+1 );
+SEXP _H5Iget_name(SEXP _obj_id) {
+  hid_t obj_id = STRSXP_2_HID(_obj_id);
+  ssize_t st = H5Iget_name(obj_id, NULL, 0);
+
+  char *name = R_alloc(st + 1, sizeof(char));
+
+  H5Iget_name(obj_id, name, st + 1);
   SEXP Rval;
   Rval = mkString(name);
-  return(Rval);
+  return (Rval);
 }
-

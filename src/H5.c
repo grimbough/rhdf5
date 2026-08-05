@@ -23,18 +23,19 @@ SEXP _H5garbage_collect(void) {
   return Rval;
 }
 
-/* herr_t H5get_libversion( unsigned *majnum, unsigned *minnum, unsigned *relnum ) */
+/* herr_t H5get_libversion(unsigned *majnum, unsigned *minnum, unsigned *relnum)
+ */
 SEXP _H5get_libversion(void) {
   unsigned majnum;
   unsigned minnum;
   unsigned relnum;
-  herr_t herr = H5get_libversion( &majnum, &minnum, &relnum );
+  herr_t herr = H5get_libversion(&majnum, &minnum, &relnum);
 
   if (herr < 0) {
     error("Failed reading HDF5 library version.");
     return ScalarInteger(herr);
   }
-  
+
   const char *nms[] = {"majnum", "minnum", "relnum", ""};
   SEXP Rval = PROTECT(Rf_mkNamed(INTSXP, nms));
   INTEGER(Rval)[0] = majnum;
@@ -45,4 +46,3 @@ SEXP _H5get_libversion(void) {
 
   return Rval;
 }
-
