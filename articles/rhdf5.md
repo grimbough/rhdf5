@@ -7,11 +7,12 @@ The package is an R interface for HDF5. On the one hand it implements
 interface. On the other hand it provides high level convenience
 functions on **R** level to make a usage of HDF5 files more easy.
 
-\#Installation of the HDF5 package To install the
-*[rhdf5](https://bioconductor.org/packages/3.23/rhdf5)* package, you
-need a current version (\>3.5.0) of **R** (www.r-project.org). After
-installing **R** you can run the following commands from the **R**
-command shell to install
+## Installation of the HDF5 package
+
+To install the *[rhdf5](https://bioconductor.org/packages/3.23/rhdf5)*
+package, you need a current version (\>= 4.0.0) of **R**
+(www.r-project.org). After installing **R** you can run the following
+commands from the **R** command shell to install
 *[rhdf5](https://bioconductor.org/packages/3.23/rhdf5)*.
 
 ``` r
@@ -65,10 +66,13 @@ attr(B, "scale") <- "liter"
 h5write(B, "myhdf5file.h5", "foo/B")
 C <- matrix(
   paste(LETTERS[1:10], LETTERS[11:20], collapse = ""),
-  nrow = 2, ncol = 5
+  nrow = 2,
+  ncol = 5
 )
 h5write(C, "myhdf5file.h5", "foo/foobaa/C")
-df <- data.frame(1L:5L, seq(0, 1, length.out = 5),
+df <- data.frame(
+  1L:5L,
+  seq(0, 1, length.out = 5),
   c("ab", "cde", "fghi", "a", "s"),
   stringsAsFactors = FALSE
 )
@@ -258,6 +262,8 @@ or close all open HDF5 handles in the environment by
 h5closeAll()
 ```
 
+### Writing and reading with subsetting, chunking and compression
+
 The *[rhdf5](https://bioconductor.org/packages/3.23/rhdf5)* package
 provides two ways of subsetting. One can specify the submatrix with the
 **R**-style index lists or with the HDF5 style hyperslabs. Note, that
@@ -267,6 +273,8 @@ hyperslabbing, the dataset with full dimensions has to be created in the
 HDF5 file. This can be achieved by writing once an array with full
 dimensions as in Section or by creating a dataset. Afterwards the
 dataset can be written sequentially.
+
+#### Influence of chunk size and compression level
 
 The chosen chunk size and compression level have a strong impact on the
 reading and writing time as well as on the resulting file size. In an
@@ -291,12 +299,19 @@ and
 
 ``` r
 
-h5createDataset("myhdf5file.h5", "foo/S", c(5, 8),
-  storage.mode = "integer", chunk = c(5, 1), level = 7
+h5createDataset(
+  "myhdf5file.h5",
+  "foo/S",
+  c(5, 8),
+  storage.mode = "integer",
+  chunk = c(5, 1),
+  level = 7
 )
-h5write(matrix(1:5, nrow = 5, ncol = 1),
+h5write(
+  matrix(1:5, nrow = 5, ncol = 1),
   file = "myhdf5file.h5",
-  name = "foo/S", index = list(NULL, 1)
+  name = "foo/S",
+  index = list(NULL, 1)
 )
 h5read("myhdf5file.h5", "foo/S")
 ```
@@ -310,10 +325,7 @@ h5read("myhdf5file.h5", "foo/S")
 
 ``` r
 
-h5write(6:10,
-  file = "myhdf5file.h5",
-  name = "foo/S", index = list(1, 2:6)
-)
+h5write(6:10, file = "myhdf5file.h5", name = "foo/S", index = list(1, 2:6))
 h5read("myhdf5file.h5", "foo/S")
 ```
 
@@ -326,9 +338,11 @@ h5read("myhdf5file.h5", "foo/S")
 
 ``` r
 
-h5write(matrix(11:40, nrow = 5, ncol = 6),
+h5write(
+  matrix(11:40, nrow = 5, ncol = 6),
   file = "myhdf5file.h5",
-  name = "foo/S", index = list(1:5, 3:8)
+  name = "foo/S",
+  index = list(1:5, 3:8)
 )
 h5read("myhdf5file.h5", "foo/S")
 ```
@@ -342,9 +356,11 @@ h5read("myhdf5file.h5", "foo/S")
 
 ``` r
 
-h5write(matrix(141:144, nrow = 2, ncol = 2),
+h5write(
+  matrix(141:144, nrow = 2, ncol = 2),
   file = "myhdf5file.h5",
-  name = "foo/S", index = list(3:4, 1:2)
+  name = "foo/S",
+  index = list(3:4, 1:2)
 )
 h5read("myhdf5file.h5", "foo/S")
 ```
@@ -358,9 +374,11 @@ h5read("myhdf5file.h5", "foo/S")
 
 ``` r
 
-h5write(matrix(151:154, nrow = 2, ncol = 2),
+h5write(
+  matrix(151:154, nrow = 2, ncol = 2),
   file = "myhdf5file.h5",
-  name = "foo/S", index = list(2:3, c(3, 6))
+  name = "foo/S",
+  index = list(2:3, c(3, 6))
 )
 h5read("myhdf5file.h5", "foo/S")
 ```
@@ -405,12 +423,18 @@ the argument `index` is specified.
 
 ``` r
 
-h5createDataset("myhdf5file.h5", "foo/H", c(5, 8),
+h5createDataset(
+  "myhdf5file.h5",
+  "foo/H",
+  c(5, 8),
   storage.mode = "integer",
-  chunk = c(5, 1), level = 7
+  chunk = c(5, 1),
+  level = 7
 )
-h5write(matrix(1:5, nrow = 5, ncol = 1),
-  file = "myhdf5file.h5", name = "foo/H",
+h5write(
+  matrix(1:5, nrow = 5, ncol = 1),
+  file = "myhdf5file.h5",
+  name = "foo/H",
   start = c(1, 1)
 )
 h5read("myhdf5file.h5", "foo/H")
@@ -425,9 +449,12 @@ h5read("myhdf5file.h5", "foo/H")
 
 ``` r
 
-h5write(6:10,
-  file = "myhdf5file.h5", name = "foo/H",
-  start = c(1, 2), count = c(1, 5)
+h5write(
+  6:10,
+  file = "myhdf5file.h5",
+  name = "foo/H",
+  start = c(1, 2),
+  count = c(1, 5)
 )
 h5read("myhdf5file.h5", "foo/H")
 ```
@@ -441,8 +468,10 @@ h5read("myhdf5file.h5", "foo/H")
 
 ``` r
 
-h5write(matrix(11:40, nrow = 5, ncol = 6),
-  file = "myhdf5file.h5", name = "foo/H",
+h5write(
+  matrix(11:40, nrow = 5, ncol = 6),
+  file = "myhdf5file.h5",
+  name = "foo/H",
   start = c(1, 3)
 )
 h5read("myhdf5file.h5", "foo/H")
@@ -457,8 +486,10 @@ h5read("myhdf5file.h5", "foo/H")
 
 ``` r
 
-h5write(matrix(141:144, nrow = 2, ncol = 2),
-  file = "myhdf5file.h5", name = "foo/H",
+h5write(
+  matrix(141:144, nrow = 2, ncol = 2),
+  file = "myhdf5file.h5",
+  name = "foo/H",
   start = c(3, 1)
 )
 h5read("myhdf5file.h5", "foo/H")
@@ -473,9 +504,12 @@ h5read("myhdf5file.h5", "foo/H")
 
 ``` r
 
-h5write(matrix(151:154, nrow = 2, ncol = 2),
-  file = "myhdf5file.h5", name = "foo/H",
-  start = c(2, 3), stride = c(1, 3)
+h5write(
+  matrix(151:154, nrow = 2, ncol = 2),
+  file = "myhdf5file.h5",
+  name = "foo/H",
+  start = c(2, 3),
+  stride = c(1, 3)
 )
 h5read("myhdf5file.h5", "foo/H")
 ```
@@ -489,9 +523,7 @@ h5read("myhdf5file.h5", "foo/H")
 
 ``` r
 
-h5read("myhdf5file.h5", "foo/H",
-  start = c(2, 2), count = c(2, 2)
-)
+h5read("myhdf5file.h5", "foo/H", start = c(2, 2), count = c(2, 2))
 ```
 
     ##      [,1] [,2]
@@ -500,8 +532,12 @@ h5read("myhdf5file.h5", "foo/H",
 
 ``` r
 
-h5read("myhdf5file.h5", "foo/H",
-  start = c(2, 2), stride = c(1, 2), count = c(2, 2)
+h5read(
+  "myhdf5file.h5",
+  "foo/H",
+  start = c(2, 2),
+  stride = c(1, 2),
+  count = c(2, 2)
 )
 ```
 
@@ -511,8 +547,13 @@ h5read("myhdf5file.h5", "foo/H",
 
 ``` r
 
-h5read("myhdf5file.h5", "foo/H",
-  start = c(2, 1), stride = c(1, 3), count = c(2, 2), block = c(1, 2)
+h5read(
+  "myhdf5file.h5",
+  "foo/H",
+  start = c(2, 1),
+  stride = c(1, 3),
+  count = c(2, 2),
+  block = c(1, 2)
 )
 ```
 
@@ -774,7 +815,12 @@ As an example, we create an HDF5 file that contains 64-bit integers.
 x <- h5createFile("newfile3.h5")
 
 D <- array(1L:30L, dim = c(3, 5, 2))
-d <- h5createDataset(file = "newfile3.h5", dataset = "D64", dims = c(3, 5, 2), H5type = "H5T_NATIVE_INT64")
+d <- h5createDataset(
+  file = "newfile3.h5",
+  dataset = "D64",
+  dims = c(3, 5, 2),
+  H5type = "H5T_NATIVE_INT64"
+)
 h5write(D, file = "newfile3.h5", name = "D64")
 ```
 
