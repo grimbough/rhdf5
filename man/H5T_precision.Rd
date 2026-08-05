@@ -27,3 +27,9 @@ successful and will stop with an error if the operation fails.
 \description{
 Retrieve or set the precision of an HDF5 datatype
 }
+\examples{
+tid <- H5Tcopy("H5T_NATIVE_INT")
+H5Tget_precision(tid)
+H5Tset_precision(tid, 16L)
+H5Tget_precision(tid)
+}
