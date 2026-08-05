@@ -30,12 +30,14 @@ if (file.exists("newfile3.h5")) {
 ```
 
 # Introduction
+
 The package is an R interface for HDF5. On the one hand it implements
 **R** interfaces to many of the low level functions from the C
 interface. On the other hand it provides high level convenience
 functions on **R** level to make a usage of HDF5 files more easy.
 
-#Installation of the HDF5 package
+# Installation of the HDF5 package
+
 To install the `r BiocStyle::Biocpkg("rhdf5")` package, you need a current version
 (>3.5.0) of **R** (www.r-project.org). After installing **R** you can
 run the following commands from the **R** command shell to install `r BiocStyle::Biocpkg("rhdf5")`.
@@ -156,7 +158,8 @@ or close all open HDF5 handles in the environment by
 h5closeAll()
 ```
 
-\subsection{Writing and reading with subsetting, chunking and compression}
+## Writing and reading with subsetting, chunking and compression
+
 The `r BiocStyle::Biocpkg("rhdf5")` package provides two ways of subsetting. One can
 specify the submatrix with the **R**-style index lists or with the HDF5
 style hyperslabs. Note, that the two next examples below show two
@@ -167,8 +170,9 @@ achieved by writing once an array with full dimensions as in Section
 \ref{sec_writeMatrix} or by creating a dataset. Afterwards the dataset
 can be written sequentially.
 
-\paragraph{Influence of chunk size and compression level} The chosen
-chunk size and compression level have a strong impact on the reading
+### Influence of chunk size and compression level
+
+The chosen chunk size and compression level have a strong impact on the reading
 and writing time as well as on the resulting file size. In an example
 an integer vector of size 10e7 is written to an HDF5 file. The file is
 written in subvectors of size 10'000. The definition of the chunk size
