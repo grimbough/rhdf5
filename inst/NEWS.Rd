@@ -33,6 +33,9 @@
       when the \code{drop} argument in \code{H5Dread()} is set to \code{TRUE}.
       \item \code{native = TRUE} now works correctly on large arrays with more
       than 2^31-1 elements.
+      \item BLOSC and LZF compression no longer fail when applied to variable
+      length types. Thanks to Luke Zappia for the report and reproducible
+      example.
     }
   }
 
@@ -45,7 +48,12 @@
   \subsection{Internal changes}{
     \itemize{
       \item Compiler warnings and C linting issues have been resolved.
-      \item C code formatting has been standardized with clang-format
+      \item C code formatting has been standardized with clang-format.
+      \item The output buffer size is no longer guessed for BLOSC and LZF
+      compression. This was virtually not used in rhdf5filters already and led
+      to unnecessary complexity in both packages. This was also the source of
+      the bug related to compression of variable length types whose fix is 
+      documented above.
     }
   }
 }
