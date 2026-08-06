@@ -3,6 +3,7 @@ library(rhdf5)
 h5File <- withr::local_tempfile(pattern = "ex_save", fileext = ".h5")
 vec <- as.integer(rexp(2000, rate = 1.5))
 
+
 ############################################################
 context("Writing Using External Filters")
 ############################################################
@@ -87,5 +88,67 @@ test_that("LZF filter works when reading", {
 })
 
 H5Fclose(fid)
+
+vlen <- c("this", "is", "a", "variable", "length", "string", "vector", "!!!!!")
+
+test_that("BLOSC works with variable length types", {
+  # https://github.com/Huber-group-EMBL/rhdf5/issues/168#issuecomment-5168440454
+  skip_if_not_installed("rhdf5filters")
+  h5f <- H5Fcreate(tempfile())
+  expect_silent(
+    h5createDataset(
+      h5f,
+      dataset = "blosc_vlen",
+      dims = length(vlen),
+      storage.mode = "character",
+      filter = "BLOSC_ZLIB"
+    )
+  )
+  expect_silent(
+    h5write(
+      vlen,
+      h5f,
+      "blosc_vlen"
+    )
+  )
+  expect_silent(
+    vlen_read <- h5read(
+      h5f,
+      "blosc_vlen"
+    )
+  )
+  expect_equal(vlen, vlen_read, check.attributes = FALSE)
+  H5Fclose(h5f)
+})
+
+test_that("LZF works with variable length types", {
+  # https://github.com/Huber-group-EMBL/rhdf5/issues/168
+  skip_if_not_installed("rhdf5filters")
+  h5f <- H5Fcreate(tempfile())
+  expect_silent(
+    h5createDataset(
+      h5f,
+      dataset = "lzf_vlen",
+      dims = length(vlen),
+      storage.mode = "character",
+      filter = "LZF"
+    )
+  )
+  expect_silent(
+    h5write(
+      vlen,
+      h5f,
+      "lzf_vlen"
+    )
+  )
+  expect_silent(
+    vlen_read <- h5read(
+      h5f,
+      "lzf_vlen"
+    )
+  )
+  expect_equal(vlen, vlen_read, check.attributes = FALSE)
+  H5Fclose(h5f)
+})
 
 h5closeAll()
