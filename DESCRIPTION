@@ -29,7 +29,7 @@ Depends:
     methods,
     R (>= 4.0.0)
 Imports: 
-    rhdf5filters (>= 1.15.5),
+    rhdf5filters (>= 1.25.4),
     Rhdf5lib (>= 1.33.3)
 Suggests: 
     bench,
