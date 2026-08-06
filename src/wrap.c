@@ -377,9 +377,9 @@ static R_CallMethodDef libraryRCalls[] = {
     {"_H5PLget", (DL_FUNC)&_H5PLget, 1},
     {"_h5getAllChunkInfo", (DL_FUNC)&_h5getAllChunkInfo, 1},
 #ifdef _H5P_filters
-    {"_H5Pset_lzf", (DL_FUNC)&_H5Pset_lzf, 2},
+    {"_H5Pset_lzf", (DL_FUNC)&_H5Pset_lzf, 1},
     {"_H5Pset_bzip2", (DL_FUNC)&_H5Pset_bzip2, 2},
-    {"_H5Pset_blosc", (DL_FUNC)&_H5Pset_blosc, 6},
+    {"_H5Pset_blosc", (DL_FUNC)&_H5Pset_blosc, 5},
 #endif
     {NULL, NULL, 0}};
 
