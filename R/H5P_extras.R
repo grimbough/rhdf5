@@ -61,8 +61,10 @@ H5Pset_blosc <- function(
   ## parameters. This requires calls to HDF5 functions and doesn't play well
   ## with our static linking.  We move this setup code into R code below.
   typesize <- H5Tget_size(h5tid)
-  if (typesize > 255) {
-    typesize <- 1
+  if (is.null(typesize) || typesize > 255) {
+    # NULL happens for variable length types.
+    # See https://github.com/Huber-group-EMBL/rhdf5/issues/168#issuecomment-5168440454
+    typesize <- 1L
   }
   ## END
 
@@ -73,7 +75,7 @@ H5Pset_blosc <- function(
     as.integer(method) - 1L,
     as.integer(level),
     as.integer(as.logical(shuffle)),
-    as.integer(typesize),
+    typesize,
     PACKAGE = "rhdf5"
   )
   invisible(res)
