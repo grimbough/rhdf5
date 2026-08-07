@@ -169,17 +169,11 @@ h5checktypeOrOpenLocS3 <- function(
 }
 
 h5closeitLoc <- function(file) {
-  res <- TRUE
-  if (file$closeit) {
-    if (H5Iis_valid(file$H5Identifier)) {
-      res <- H5Fclose(file$H5Identifier)
-    } else {
-      res <- FALSE
-    }
-  } else {
-    res <- FALSE
+  if (file$closeit && H5Iis_valid(file$H5Identifier)) {
+    res <- H5Fclose(file$H5Identifier)
+    return(invisible(res))
   }
-  invisible(res)
+  invisible(FALSE)
 }
 
 h5checktypeOrOpenObj <- function(
@@ -218,17 +212,11 @@ h5checktypeOrOpenObj <- function(
 }
 
 h5closeitObj <- function(obj) {
-  res <- TRUE
-  if (obj$closeit) {
-    if (H5Iis_valid(obj$H5Identifier)) {
-      res <- H5Oclose(obj$H5Identifier)
-    } else {
-      res <- FALSE
-    }
-  } else {
-    res <- FALSE
+  if (obj$closeit && H5Iis_valid(obj$H5Identifier)) {
+    res <- H5Oclose(obj$H5Identifier)
+    return(invisible(res))
   }
-  invisible(res)
+  invisible(FALSE)
 }
 
 h5checktypeAndPLC <- function(
