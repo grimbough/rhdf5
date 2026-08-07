@@ -73,3 +73,33 @@ test_that("Objects can be copied in a different file", {
   expect_shape(ls_out, nrow = 4L)
   expect_identical(ls_out$name, c("DS1", "foo", "baa", "DS1_nested"))
 })
+
+test_that("`obj_cpy_pl` argument can be passed", {
+  h5File <- withr::local_tempfile(pattern = "H5O_", fileext = ".h5")
+  h5File2 <- withr::local_tempfile(pattern = "H5O_", fileext = ".h5")
+  h5createFile(h5File)
+  h5createFile(h5File2)
+  h5write(1:10, file = h5File, name = "DS1")
+
+  fid1 <- H5Fopen(h5File)
+  fid2 <- H5Fopen(h5File2)
+
+  pid <- H5Pcreate("H5P_OBJECT_COPY")
+
+  expect_no_condition(H5Ocopy(
+    h5loc = fid1,
+    name = "DS1",
+    h5loc_dest = fid2,
+    name_dest = "DS1",
+    obj_cpy_pl = pid
+  ))
+
+  H5Pclose(pid)
+  H5Fclose(fid1)
+  H5Fclose(fid2)
+
+  expect_identical(
+    h5read(h5File, "DS1"),
+    h5read(h5File2, "DS1")
+  )
+})
