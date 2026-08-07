@@ -51,22 +51,20 @@ h5readAttributes <- function(file, name, native = FALSE, ...) {
     num_attrs <- 0
   }
   res <- list()
-  if (num_attrs > 0) {
-    for (i in seq_len(num_attrs)) {
-      A <- H5Aopen_by_idx(loc$H5Identifier, n = i - 1, objname = name)
-      attrname <- H5Aget_name(A)
-      res[[attrname]] <- H5Aread(A, ...)
-      tid <- H5Aget_type(A)
-      ## if we have an enum type where the levels are only TRUE,FALSE,NA
-      ## convert the result to an R logical.  This is consistent with h5py
-      if (H5Tget_class(tid) == "H5T_ENUM") {
-        enumNames <- h5getEnumNames(tid)
-        if (all(enumNames %in% c("TRUE", "FALSE", "NA"))) {
-          res[[attrname]] <- as.logical(res[[attrname]])
-        }
+  for (i in seq_len(num_attrs)) {
+    A <- H5Aopen_by_idx(loc$H5Identifier, n = i - 1, objname = name)
+    attrname <- H5Aget_name(A)
+    res[[attrname]] <- H5Aread(A, ...)
+    tid <- H5Aget_type(A)
+    ## if we have an enum type where the levels are only TRUE,FALSE,NA
+    ## convert the result to an R logical.  This is consistent with h5py
+    if (H5Tget_class(tid) == "H5T_ENUM") {
+      enumNames <- h5getEnumNames(tid)
+      if (all(enumNames %in% c("TRUE", "FALSE", "NA"))) {
+        res[[attrname]] <- as.logical(res[[attrname]])
       }
-      H5Aclose(A)
     }
+    H5Aclose(A)
   }
   res
 }
