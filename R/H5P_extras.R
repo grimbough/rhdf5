@@ -1,3 +1,27 @@
+#' Add the SZIP compression filter to the chunk processing pipeline.
+#'
+#' @param h5plist Object of class [H5IdComponent-class] representing a dataset
+#' creation property list.
+#' @param options_mask,pixels_per_block Integer vectors of length 1, setting parameters
+#' of the SZIP algorithm. See <https://portal.hdfgroup.org/display/HDF5/H5P_SET_SZIP> for more details.
+#'
+#' @references <https://portal.hdfgroup.org/display/HDF5/Szip+Compression+in+HDF+Products>
+#'
+#' @export
+H5Pset_szip <- function(h5plist, options_mask, pixels_per_block) {
+  h5checktypeAndPLC(h5plist, "H5P_DATASET_CREATE")
+  options_mask <- as.integer(options_mask)
+  pixels_per_block <- as.integer(pixels_per_block)
+  res <- .Call(
+    "_H5Pset_szip",
+    h5plist@ID,
+    options_mask,
+    pixels_per_block,
+    PACKAGE = "rhdf5"
+  )
+  invisible(res)
+}
+
 #' Add the BZIP2 filter to the chunk processing pipeline.
 #'
 #' @param h5plist Object of class [H5IdComponent-class] representing a dataset
