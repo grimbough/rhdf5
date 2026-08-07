@@ -7,7 +7,7 @@ jobs:
   s390x:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
 
       - uses: r-hub/actions/ctr-start@main
         with:
@@ -25,7 +25,10 @@ jobs:
         with:
           pak-version: none
           cache-version: s390x-1
-          extra-packages: any::rcmdcheck
+          extra-packages: |
+            any::rcmdcheck
+            Huber-group-EMBL/Rhdf5lib
+            Huber-group-EMBL/rhdf5filters
           needs: check
 
       - uses: r-lib/actions/check-r-package@v2
