@@ -18,4 +18,4 @@ H5Pset_lzf(h5plist, h5tid)
 
 - h5tid:
 
-  HDF5 data type id
+  Deprecated. This argument is not used and will be ignored.

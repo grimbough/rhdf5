@@ -56,7 +56,7 @@ system.time(
 ```
 
     ##    user  system elapsed 
-    ##   0.027   0.005   0.032
+    ##   0.029   0.003   0.032
 
 Next, instead of selecting 10,000 consecutive columns we’ll ask for
 every other column. This should still return the same amount of data and
@@ -75,7 +75,7 @@ system.time(
 ```
 
     ##    user  system elapsed 
-    ##   0.076   0.000   0.076
+    ##   0.072   0.003   0.075
 
 We can see this is marginally slower, because there’s a small overhead
 in selecting this disjoint set of columns, but it’s only marginal and
@@ -107,7 +107,7 @@ system.time(
 ```
 
     ##    user  system elapsed 
-    ##   0.069   0.002   0.072
+    ##   0.067   0.002   0.069
 
 ``` r
 
@@ -161,10 +161,10 @@ system.time(res4 <- vapply(
 ```
 
     ##    user  system elapsed 
-    ##  22.007   0.085  22.097
+    ##  19.648   0.084  19.733
 
 This is clearly a terrible idea, it takes ages! For reference, using the
-`index` argument with this set of columns takes 0.083 seconds. This poor
+`index` argument with this set of columns takes 0.088 seconds. This poor
 performance is driven by two things:
 
 1.  Our dataset was created as a single chunk. This means for each
@@ -212,7 +212,7 @@ system.time(res5 <- vapply(
 ```
 
     ##    user  system elapsed 
-    ##   2.184   0.048   2.232
+    ##   2.500   0.042   2.542
 
 This is still quite slow, and the remaining time is being spent on the
 overheads associated with multiple calls to
@@ -238,7 +238,7 @@ system.time(f2())
 ```
 
     ##    user  system elapsed 
-    ##   0.525   0.014   0.539
+    ##   0.593   0.009   0.603
 
 We can see this has a significant effect, although it’s still an order
 of magnitude slower than when we were dealing with regularly spaced
@@ -304,7 +304,7 @@ requested data.
 
 ## Writing in parallel
 
-Using *[rhdf5](https://bioconductor.org/packages/3.23/rhdf5)* it isn’t
+Using *[rhdf5](https://bioconductor.org/packages/3.24/rhdf5)* it isn’t
 possible to open an HDF5 file and write multiple datasets in parallel.
 However we can try to mimic this behaviour by writing each dataset to
 it’s own HDF5 file in parallel and then using the function
@@ -411,7 +411,7 @@ gather functions together. Like the `simple_writer()` function we
 created earlier, this takes the name of an output file and the list of
 datasets to be written as input. We can also provide a
 `BiocParallelParam` instance from
-*[BiocParallel](https://bioconductor.org/packages/3.23/BiocParallel)* to
+*[BiocParallel](https://bioconductor.org/packages/3.24/BiocParallel)* to
 trial writing the temporary file in parallel. If the `BPPARAM` argument
 isn’t provided then they will be written in serial.
 
@@ -463,21 +463,21 @@ Below we can see some timings comparing calling `simple_writer()` with
     ## # A tibble: 4 × 3
     ##   expression               min median
     ##   <bch:expr>             <dbl>  <dbl>
-    ## 1 simple writer           34.1   34.1
-    ## 2 split/gather - 1 core   34.7   34.7
-    ## 3 split/gather - 2 cores  17.5   17.5
-    ## 4 split/gather - 4 cores  12.7   12.8
+    ## 1 simple writer           31.0   31.0
+    ## 2 split/gather - 1 core   30.6   30.6
+    ## 3 split/gather - 2 cores  15.6   15.8
+    ## 4 split/gather - 4 cores  11.6   11.7
 
 We can see from our benchmark results that there is some performance
 improvement to be achieved by using the parallel approach. Based on the
 median times of out three iterations using two cores sees an speedup of
-1.95 and 2.7 with 4 cores. This isn’t quite linear, presumably because
+1.97 and 2.7 with 4 cores. This isn’t quite linear, presumably because
 there are overheads involved both in using a two-step process and
 initialising the parallel workers, but it is a noticeable improvement.
 
 ## Session info
 
-    ## R version 4.6.1 (2026-06-24)
+    ## R Under development (unstable) (2026-06-21 r90185)
     ## Platform: x86_64-pc-linux-gnu
     ## Running under: Ubuntu 24.04.4 LTS
     ## 
@@ -498,13 +498,13 @@ initialising the parallel workers, but it is a noticeable improvement.
     ## [1] stats     graphics  grDevices utils     datasets  methods   base     
     ## 
     ## other attached packages:
-    ## [1] BiocParallel_1.46.0 ggplot2_4.0.3       dplyr_1.2.1        
-    ## [4] rhdf5_2.57.4        BiocStyle_2.40.0   
+    ## [1] BiocParallel_1.47.0 ggplot2_4.0.3       dplyr_1.2.1        
+    ## [4] rhdf5_2.57.6        BiocStyle_2.41.0   
     ## 
     ## loaded via a namespace (and not attached):
-    ##  [1] gtable_0.3.6        jsonlite_2.0.0      compiler_4.6.1     
-    ##  [4] BiocManager_1.30.27 tidyselect_1.2.1    rhdf5filters_1.24.1
-    ##  [7] parallel_4.6.1      jquerylib_0.1.4     systemfonts_1.3.2  
+    ##  [1] gtable_0.3.6        jsonlite_2.0.0      compiler_4.7.0     
+    ##  [4] BiocManager_1.30.27 tidyselect_1.2.1    rhdf5filters_1.25.4
+    ##  [7] parallel_4.7.0      jquerylib_0.1.4     systemfonts_1.3.2  
     ## [10] scales_1.4.0        textshaping_1.0.5   yaml_2.3.12        
     ## [13] fastmap_1.2.0       R6_2.6.1            labeling_0.4.3     
     ## [16] generics_0.1.4      knitr_1.51          tibble_3.3.1       
@@ -513,11 +513,11 @@ initialising the parallel workers, but it is a noticeable improvement.
     ## [25] utf8_1.2.6          cachem_1.1.0        xfun_0.60          
     ## [28] S7_0.2.2            fs_2.1.0            sass_0.4.10        
     ## [31] otel_0.2.0          cli_3.6.6           withr_3.0.3        
-    ## [34] pkgdown_2.2.1       magrittr_2.0.5      Rhdf5lib_2.0.0     
-    ## [37] digest_0.6.39       grid_4.6.1          lifecycle_1.0.5    
+    ## [34] pkgdown_2.2.1       magrittr_2.0.5      Rhdf5lib_2.1.0     
+    ## [37] digest_0.6.39       grid_4.7.0          lifecycle_1.0.5    
     ## [40] vctrs_0.7.3         bench_1.1.4         evaluate_1.0.5     
     ## [43] glue_1.8.1          farver_2.1.2        codetools_0.2-20   
-    ## [46] ragg_1.5.2          rmarkdown_2.31      tools_4.6.1        
+    ## [46] ragg_1.5.2          rmarkdown_2.31      tools_4.7.0        
     ## [49] pkgconfig_2.0.3     htmltools_0.5.9
 
 [^1]: You’ll probably see a warning here regarding chunking, something
