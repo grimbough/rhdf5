@@ -44,6 +44,7 @@
   \subsection{Other user-facing changes}{
     \itemize{
       \item More exported functions now include examples.
+      \item `H5Ocopy()` no longer errors when passed the `obj_cpy_pl` argument.
     }
   }
 
