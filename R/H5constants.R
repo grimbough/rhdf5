@@ -55,18 +55,6 @@ h5checkConstants <- function(group, constant) {
   res
 }
 
-h5const2Factor <- function(group = "", values) {
-  if (!group %in% names(h5constants)) {
-    stop("unknown 'group' of H5 constants")
-  }
-  Levels <- unique(c(h5constants[[group]], values))
-  f <- factor(values, levels = Levels)
-  m <- match(Levels, h5constants[[group]])
-  Levels[is.finite(m)] <- names(h5constants[[group]])[which(is.finite(m))]
-  levels(f) <- Levels
-  f
-}
-
 h5const2String <- function(group = "", values) {
   if (!group %in% names(h5constants)) {
     stop("unknown 'group' of H5 constants")
