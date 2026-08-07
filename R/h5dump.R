@@ -1,35 +1,33 @@
 h5loadData <- function(h5loc, L, all = FALSE, ..., native) {
   h5checktype(h5loc, "loc")
-  if (length(L) > 0) {
-    for (i in seq_along(L)) {
-      if (is.data.frame(L[[i]])) {
-        if (
-          L[[i]]$ltype %in%
-            h5constants[["H5L_TYPE"]][c("H5L_TYPE_HARD", "H5L_TYPE_EXTERNAL")]
-        ) {
-          if (L[[i]]$otype == h5constants[["H5I_TYPE"]]["H5I_DATASET"]) {
-            L[i] <- list(h5read(
-              h5loc,
-              L[[i]]$name,
-              ...,
-              native = native
-            ))
-          } else {
-            L[i] <- h5lsConvertToDataframe(
-              L[i],
-              all = all
-            )
-          }
+  for (i in seq_along(L)) {
+    if (is.data.frame(L[[i]])) {
+      if (
+        L[[i]]$ltype %in%
+          h5constants[["H5L_TYPE"]][c("H5L_TYPE_HARD", "H5L_TYPE_EXTERNAL")]
+      ) {
+        if (L[[i]]$otype == h5constants[["H5I_TYPE"]]["H5I_DATASET"]) {
+          L[i] <- list(h5read(
+            h5loc,
+            L[[i]]$name,
+            ...,
+            native = native
+          ))
         } else {
-          L[i] <- h5lsConvertToDataframe(L[i], all = all)
+          L[i] <- h5lsConvertToDataframe(
+            L[i],
+            all = all
+          )
         }
       } else {
-        group <- H5Gopen(h5loc, names(L)[i])
-        L[i] <- list(
-          h5loadData(group, L[[i]], all = all, ..., native = native)
-        )
-        H5Gclose(group)
+        L[i] <- h5lsConvertToDataframe(L[i], all = all)
       }
+    } else {
+      group <- H5Gopen(h5loc, names(L)[i])
+      L[i] <- list(
+        h5loadData(group, L[[i]], all = all, ..., native = native)
+      )
+      H5Gclose(group)
     }
   }
   L
