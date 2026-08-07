@@ -30,9 +30,9 @@ jobs:
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          extra-packages:
+          extra-packages: 
             any::rcmdcheck
-            Huber-group-EMBL/Rhdf5lib # for tests before pushing to Bioconductor
+            Huber-group-EMBL/Rhdf5lib
             Huber-group-EMBL/rhdf5filters
           needs: check
 
