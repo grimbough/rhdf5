@@ -242,7 +242,7 @@ h5createGroup <- function(file, group) {
         shuffle = shuffle
       )
     } else if (filter == "LZF") {
-      H5Pset_lzf(dcpl, h5tid = dtype)
+      H5Pset_lzf(dcpl)
     }
   }
 

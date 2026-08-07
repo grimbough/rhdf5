@@ -41,7 +41,7 @@ test_that("LZF filter works for writing", {
   expect_silent(dcpl <- H5Pcreate("H5P_DATASET_CREATE"))
   expect_silent(H5Pset_fill_time(dcpl, "H5D_FILL_TIME_ALLOC"))
   expect_silent(H5Pset_chunk(dcpl, 200))
-  expect_silent(H5Pset_lzf(dcpl, tid))
+  expect_silent(H5Pset_lzf(dcpl))
   expect_silent(did <- H5Dcreate(fid, "lzf", tid, sid, dcpl = dcpl))
   expect_silent(H5Dwrite(buf = vec, h5dataset = did))
   expect_silent(H5Dclose(did))
