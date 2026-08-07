@@ -26,13 +26,14 @@ jobs:
     container:
       image: ghcr.io/r-devel/${{ matrix.distro }}:latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
           extra-packages:
             any::rcmdcheck
             Huber-group-EMBL/Rhdf5lib # for tests before pushing to Bioconductor
+            Huber-group-EMBL/rhdf5filters
           needs: check
 
       - uses: r-lib/actions/check-r-package@v2
