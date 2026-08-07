@@ -24,6 +24,8 @@
       the `bit64conversion` argument in `H5Aread()` and `H5Dread()`.
       \item The `native` argument to `H5Pcreate()` has been removed entirely 
       after being deprecated in version 2.56.0.
+      \item The `h5tid` argument to `H5Pset_lzf()` is now deprecated and will
+      be removed in the next release.
     }
   }
 
