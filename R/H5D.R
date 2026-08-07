@@ -298,16 +298,16 @@ H5Dread <- function(
   drop = FALSE
 ) {
   h5checktype(h5dataset, "dataset")
-  h5checktypeOrNULL(h5spaceFile, "dataspace")
-  h5checktypeOrNULL(h5spaceMem, "dataspace")
   if (is.null(h5spaceMem)) {
     sidMem <- NULL
   } else {
+    h5checktype(h5spaceMem, "dataspace")
     sidMem <- h5spaceMem@ID
   }
   if (is.null(h5spaceFile)) {
     sidFile <- NULL
   } else {
+    h5checktype(h5spaceFile, "dataspace")
     sidFile <- h5spaceFile@ID
   }
   bit64conversion <- match.arg(bit64conversion)
@@ -359,17 +359,17 @@ H5Dwrite <- function(
   h5spaceFile = NULL
 ) {
   h5checktype(h5dataset, "dataset")
-  h5checktypeOrNULL(h5spaceFile, "dataspace")
-  h5checktypeOrNULL(h5spaceMem, "dataspace")
 
   if (is.null(h5spaceMem)) {
     sidMem <- NULL
   } else {
+    h5checktype(h5spaceMem, "dataspace")
     sidMem <- h5spaceMem@ID
   }
   if (is.null(h5spaceFile)) {
     sidFile <- NULL
   } else {
+    h5checktype(h5spaceFile, "dataspace")
     sidFile <- h5spaceFile@ID
   }
   invisible(.Call(
