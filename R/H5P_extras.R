@@ -85,10 +85,16 @@ H5Pset_blosc <- function(
 #'
 #' @param h5plist Object of class [H5IdComponent-class] representing a dataset
 #' creation property list.
-#' @param h5tid HDF5 data type id
+#' @param h5tid Deprecated. This argument is not used and will be ignored.
 #'
 #' @export
 H5Pset_lzf <- function(h5plist, h5tid) {
+  if (!missing(h5tid)) {
+    warning(
+      "`h5tid` argument is deprecated and will be removed in a future version.",
+      call. = FALSE
+    )
+  }
   if (!is.loaded("_H5Pset_lzf", PACKAGE = "rhdf5")) {
     stop(
       "LZF filter not found.\nPlease install rhdf5filters, and then reinstall rhdf5."

@@ -10,7 +10,7 @@ H5Pset_lzf(h5plist, h5tid)
 \item{h5plist}{Object of class \link[=H5IdComponent-class]{H5IdComponent} representing a dataset
 creation property list.}
 
-\item{h5tid}{HDF5 data type id}
+\item{h5tid}{Deprecated. This argument is not used and will be ignored.}
 }
 \description{
 Add the LZF filter to the chunk processing pipeline.
