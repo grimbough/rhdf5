@@ -81,7 +81,6 @@ NULL
 #'
 H5Rcreate <- function(h5loc, name, ref_type = "H5R_OBJECT", h5space = NULL) {
   ref_type <- h5checkConstants("H5R_TYPE", ref_type)
-  h5checktypeOrNULL(h5space, type = "dataspace")
   if (is.null(h5space)) {
     if (h5const2String("H5R_TYPE", ref_type) == "H5R_DATASET_REGION") {
       stop(
@@ -90,6 +89,8 @@ H5Rcreate <- function(h5loc, name, ref_type = "H5R_OBJECT", h5space = NULL) {
     }
     ## we pass a dataspace ID of -1 if this is an object reference
     h5space <- new("H5IdComponent", ID = "-1", native = FALSE)
+  } else {
+    h5checktype(h5space, type = "dataspace")
   }
 
   ptr <- .Call(

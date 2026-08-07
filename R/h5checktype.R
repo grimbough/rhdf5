@@ -54,13 +54,6 @@ h5checktype <- function(
   return(invisible(NULL))
 }
 
-h5checktypeOrNULL <- function(h5id, type, fctname = deparse(match.call()[1])) {
-  if (!is.null(h5id)) {
-    h5checktype(h5id, type, fctname = fctname)
-  }
-  invisible(NULL)
-}
-
 h5FileIsOpen <- function(filename) {
   filename <- normalizePath(filename, mustWork = FALSE)
   L <- h5validObjects()
