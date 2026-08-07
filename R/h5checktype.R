@@ -132,6 +132,9 @@ h5checktypeOrOpenLoc <- function(
   invisible(res)
 }
 
+# WARNING:
+# This is an internal function, but used by the h5mread Bioconductor package.
+# Proceed with caution!
 h5checktypeOrOpenLocS3 <- function(
   file,
   fctname = deparse(match.call()[1]),
