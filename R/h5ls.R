@@ -1,4 +1,4 @@
-h5lsConvertToDataframe <- function(L, all = FALSE, native) {
+h5lsConvertToDataframe <- function(L, all = FALSE) {
   if (is.data.frame(L)) {
     L$ltype <- h5const2String("H5L_TYPE", L$ltype)
     L$otype <- h5const2String("H5I_TYPE", L$otype)
@@ -7,7 +7,7 @@ h5lsConvertToDataframe <- function(L, all = FALSE, native) {
     }
   } else {
     for (i in seq_along(L)) {
-      L[i] <- list(h5lsConvertToDataframe(L[[i]], all = all, native = native))
+      L[i] <- list(h5lsConvertToDataframe(L[[i]], all = all))
     }
   }
   L
@@ -132,5 +132,5 @@ h5ls <- function(
     loc$H5Identifier@native,
     PACKAGE = "rhdf5"
   )
-  h5lsConvertToDataframe(L, all = all, native = loc$H5Identifier@native)
+  h5lsConvertToDataframe(L, all = all)
 }

@@ -17,12 +17,11 @@ h5loadData <- function(h5loc, L, all = FALSE, ..., native) {
           } else {
             L[i] <- h5lsConvertToDataframe(
               L[i],
-              all = all,
-              native = native
+              all = all
             )
           }
         } else {
-          L[i] <- h5lsConvertToDataframe(L[i], all = all, native = native)
+          L[i] <- h5lsConvertToDataframe(L[i], all = all)
         }
       } else {
         group <- H5Gopen(h5loc, names(L)[i])
@@ -159,7 +158,7 @@ h5dump <- function(
   if (load) {
     L <- h5loadData(loc$H5Identifier, L, all = all, ..., native = native)
   } else {
-    L <- h5lsConvertToDataframe(L, all = all, native = native)
+    L <- h5lsConvertToDataframe(L, all = all)
   }
 
   L
