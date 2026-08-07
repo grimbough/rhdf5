@@ -129,7 +129,11 @@ H5Ocopy <- function(
     obj_cpy_pl <- H5Pcreate("H5P_OBJECT_COPY")
     on.exit(H5Pclose(obj_cpy_pl), add = TRUE)
   } else {
-    lapl <- h5checktypeAndPLC(lapl, "H5P_OBJECT_COPY", allowNULL = FALSE)
+    obj_cpy_pl <- h5checktypeAndPLC(
+      obj_cpy_pl,
+      "H5P_OBJECT_COPY",
+      allowNULL = FALSE
+    )
   }
 
   res <- invisible(.Call(
