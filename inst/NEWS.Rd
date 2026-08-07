@@ -56,6 +56,7 @@
       to unnecessary complexity in both packages. This was also the source of
       the bug related to compression of variable length types whose fix is 
       documented above.
+      \item Unused internal functions and arguments have been removed.
     }
   }
 }
