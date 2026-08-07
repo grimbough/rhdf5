@@ -43,14 +43,15 @@ H5loadConstants <- function() {
 h5constants <- list()
 
 h5checkConstants <- function(group, constant) {
-  res <- h5constants[[group]][constant[1]]
-  if (is.null(res)) {
-    stop("unknown 'group' of H5 constants")
-  }
   if (length(constant) > 1) {
     warning(
       "H5 constant identifier has more than one value. Only the first value will be used."
     )
+    constant <- constant[1]
+  }
+  res <- h5constants[[group]][constant]
+  if (is.null(res)) {
+    stop("unknown 'group' of H5 constants")
   }
   res
 }
