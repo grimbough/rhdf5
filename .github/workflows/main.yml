@@ -1,3 +1,5 @@
+name: Test R-universe
+
 on:
   workflow_dispatch:
   push:
@@ -7,50 +9,13 @@ on:
     branches:
       - devel
 
-name: R-CMD-check
-
-env:
-  GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
-  R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
+permissions:
+  contents: read
 
 jobs:
-  R-CMD-check:
-    runs-on: ${{ matrix.config.os }}
-
-    name: ${{ matrix.config.os }} (${{ matrix.config.r-version }})
-
-    strategy:
-      fail-fast: false
-      matrix:
-        config:
-        - { os: windows-latest,   r-version: 'devel',   Ncpus: 4 }
-        - { os: windows-11-arm,   r-version: 'devel',   Ncpus: 4 }
-        - { os: macOS-latest,     r-version: 'devel',   Ncpus: 3 }
-        - { os: macos-15-intel,   r-version: 'devel',   Ncpus: 3 }
-        - { os: ubuntu-latest,    r-version: 'devel',   Ncpus: 4 }
-        - { os: ubuntu-latest,    r-version: 'release', Ncpus: 4 }
-        - { os: ubuntu-24.04-arm, r-version: 'devel',   Ncpus: 4 }
-    steps:
-      - uses: actions/checkout@v6
-      
-      - uses: r-lib/actions/setup-pandoc@v2
-      
-      - uses: r-lib/actions/setup-r@v2
-        with:
-          r-version: ${{ matrix.config.r-version }}
-
-      - name: Install openssl
-        if: runner.os == 'macOS'
-        run: |
-          sudo R -e 'source("https://mac.R-project.org/bin/install.R")' -e 'install.libs("openssl")'
-        
-      - uses: r-lib/actions/setup-r-dependencies@v2
-        with:
-          extra-packages: any::rcmdcheck
-          needs: check
-
-      - uses: r-lib/actions/check-r-package@v2
-        with:
-          upload-snapshots: true
-          build_args: 'c("--no-manual","--compact-vignettes=gs+qpdf")'
-          error-on: '"warning"'
+  build:
+    name: R-universe testing
+    uses: r-universe-org/workflows/.github/workflows/build.yml@v3
+    with:
+      universe: bioc
+      organization: bioconductor
