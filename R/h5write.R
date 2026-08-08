@@ -71,10 +71,7 @@ h5writeDatasetHelper <- function(
       })
     }
   }
-  DimMem <- dim(obj)
-  if (is.null(DimMem)) {
-    DimMem <- length(obj)
-  }
+  DimMem <- dim(obj) %||% length(obj)
   try({
     h5spaceMem <- H5Screate_simple(DimMem)
     on.exit(H5Sclose(h5spaceMem), add = TRUE, after = FALSE)
@@ -415,11 +412,9 @@ h5writeDataset.array <- function(
         encoding <- if (any(Encoding(obj) == "UTF-8")) "UTF-8" else "ASCII"
       }
     }
-    if (is.null(dim(obj))) {
-      dim <- length(obj)
-    } else {
-      dim <- dim(obj)
-      if (h5loc@native) dim <- rev(dim)
+    dim <- dim(obj) %||% length(obj)
+    if (h5loc@native) {
+      dim <- rev(dim)
     }
     h5createDataset(
       h5loc,
