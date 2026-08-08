@@ -41,9 +41,8 @@ H5Dchunk_dims <- function(h5dataset) {
 
   if (H5Pget_layout(pid) != "H5D_CHUNKED") {
     return(NULL)
-  } else {
-    return(rev(H5Pget_chunk(pid)))
   }
+  return(rev(H5Pget_chunk(pid)))
 }
 
 #' @rdname H5D_extras
