@@ -46,9 +46,7 @@ h5save <- function(
   N <- ...length()
 
   # get object names
-  if (is.null(name)) {
-    name <- as.character(substitute(list(...)))[-1L]
-  }
+  name <- name %||% as.character(substitute(list(...)))[-1L]
   if (length(name) != N) {
     stop("length of 'name' argument  must fit the number of objects to save.")
   }

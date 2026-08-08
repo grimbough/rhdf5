@@ -117,10 +117,7 @@ h5writeAttribute.array <- function(
     }
     dims <- NULL
   } else {
-    dims <- dim(attr)
-    if (is.null(dims)) {
-      dims <- length(attr)
-    }
+    dims <- dim(attr) %||% length(attr)
   }
 
   size <- NULL
@@ -158,10 +155,7 @@ h5writeAttribute.array <- function(
   )
   h5attr <- H5Aopen(h5obj, name)
 
-  DimMem <- dim(attr)
-  if (is.null(DimMem)) {
-    DimMem <- length(attr)
-  }
+  DimMem <- dim(attr) %||% length(attr)
   h5spaceMem <- H5Screate_simple(DimMem)
 
   res <- H5Awrite(h5attr, attr)
