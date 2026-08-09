@@ -58,6 +58,7 @@
       the bug related to compression of variable length types whose fix is 
       documented above.
       \item Unused internal functions and arguments have been removed.
+      \item Cyclomatic complexity of some functions has been reduced.
     }
   }
 }
