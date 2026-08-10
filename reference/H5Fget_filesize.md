@@ -18,3 +18,15 @@ H5Fget_filesize(h5file)
   [`H5Fcreate()`](https://huber-group-embl.github.io/rhdf5/reference/H5Fcreate.md)
   or
   [`H5Fopen()`](https://huber-group-embl.github.io/rhdf5/reference/H5Fopen.md).
+
+## Examples
+
+``` r
+h5_file <- withr::local_tempfile(fileext = ".h5")
+H5Fcreate(h5_file)
+
+fid <- H5Fopen(h5_file)
+H5Fget_filesize(fid)
+#> [1] 2048
+H5Fclose(fid)
+```

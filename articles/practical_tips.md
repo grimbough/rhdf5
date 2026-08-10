@@ -56,7 +56,7 @@ system.time(
 ```
 
     ##    user  system elapsed 
-    ##   0.029   0.002   0.031
+    ##   0.029   0.004   0.033
 
 Next, instead of selecting 10,000 consecutive columns we’ll ask for
 every other column. This should still return the same amount of data and
@@ -75,7 +75,7 @@ system.time(
 ```
 
     ##    user  system elapsed 
-    ##   0.073   0.001   0.075
+    ##   0.075   0.001   0.076
 
 We can see this is marginally slower, because there’s a small overhead
 in selecting this disjoint set of columns, but it’s only marginal and
@@ -107,7 +107,7 @@ system.time(
 ```
 
     ##    user  system elapsed 
-    ##   0.067   0.002   0.070
+    ##   0.068   0.003   0.071
 
 ``` r
 
@@ -161,10 +161,10 @@ system.time(res4 <- vapply(
 ```
 
     ##    user  system elapsed 
-    ##  19.571   0.057  19.630
+    ##  21.973   0.083  22.059
 
 This is clearly a terrible idea, it takes ages! For reference, using the
-`index` argument with this set of columns takes 0.087 seconds. This poor
+`index` argument with this set of columns takes 0.084 seconds. This poor
 performance is driven by two things:
 
 1.  Our dataset was created as a single chunk. This means for each
@@ -212,7 +212,7 @@ system.time(res5 <- vapply(
 ```
 
     ##    user  system elapsed 
-    ##   2.451   0.047   2.497
+    ##   2.249   0.034   2.283
 
 This is still quite slow, and the remaining time is being spent on the
 overheads associated with multiple calls to
@@ -238,7 +238,7 @@ system.time(f2())
 ```
 
     ##    user  system elapsed 
-    ##   0.588   0.004   0.593
+    ##   0.542   0.008   0.550
 
 We can see this has a significant effect, although it’s still an order
 of magnitude slower than when we were dealing with regularly spaced
@@ -463,15 +463,15 @@ Below we can see some timings comparing calling `simple_writer()` with
     ## # A tibble: 4 × 3
     ##   expression               min median
     ##   <bch:expr>             <dbl>  <dbl>
-    ## 1 simple writer           30.4   30.5
-    ## 2 split/gather - 1 core   30.6   30.9
-    ## 3 split/gather - 2 cores  16.0   16.1
-    ## 4 split/gather - 4 cores  11.7   11.7
+    ## 1 simple writer           34.0   34.0
+    ## 2 split/gather - 1 core   34.2   34.2
+    ## 3 split/gather - 2 cores  17.4   17.5
+    ## 4 split/gather - 4 cores  12.8   12.9
 
 We can see from our benchmark results that there is some performance
 improvement to be achieved by using the parallel approach. Based on the
 median times of out three iterations using two cores sees an speedup of
-1.89 and 2.6 with 4 cores. This isn’t quite linear, presumably because
+1.95 and 2.6 with 4 cores. This isn’t quite linear, presumably because
 there are overheads involved both in using a two-step process and
 initialising the parallel workers, but it is a noticeable improvement.
 

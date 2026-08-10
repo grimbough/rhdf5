@@ -43,3 +43,13 @@ H5Fcreate(
   orientation. Using `native = TRUE` increases HDF5 file portability
   between programming languages. A file written with `native = TRUE`
   should also be read with `native = TRUE`.
+
+## Examples
+
+``` r
+h5_file <- withr::local_tempfile(fileext = ".h5")
+H5Fcreate(h5_file)
+
+H5Fis_hdf5(h5_file)
+#> [1] TRUE
+```

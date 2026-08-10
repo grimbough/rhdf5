@@ -24,3 +24,13 @@ H5Fis_hdf5(name, showWarnings = TRUE)
 
 Returns `TRUE`, if the file is an HDF5 file, or `FALSE` otherwise. In
 the case the file doesn't exist, `NA` is returned
+
+## Examples
+
+``` r
+h5_file <- withr::local_tempfile(fileext = ".h5")
+H5Fcreate(h5_file)
+
+H5Fis_hdf5(h5_file)
+#> [1] TRUE
+```
