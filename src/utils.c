@@ -114,7 +114,11 @@ void *read_string_datatype(hid_t mem_type_id, SEXP _buf) {
   } else {
     const char **strbuf = (const char **)R_alloc(n, sizeof(char *));
     for (R_xlen_t i = 0; i < n; i++) {
-      strbuf[i] = CHAR(STRING_ELT(_buf, i));
+      if (STRING_ELT(_buf, i) == NA_STRING) {
+        strbuf[i] = NULL;
+      } else {
+        strbuf[i] = CHAR(STRING_ELT(_buf, i));
+      }
     }
     return strbuf;
   }
