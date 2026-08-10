@@ -20,7 +20,9 @@
       }
     }
   } else if (storage.mode(obj) == "character") {
-    ## coerce the string "NA" to NA if required
+    # This is the old way of storing NA values in character datasets (as "NA"
+    # with a special attribute). It is now deprecated and no new datasets
+    # should be written this way. However, we still need to support reading.
     if (H5Aexists(h5dataset, name = "as.na")) {
       obj[obj == "NA"] <- NA_character_
     }
