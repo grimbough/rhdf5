@@ -393,6 +393,14 @@ h5writeDataset.array <- function(
   })
   if (!exists) {
     if (storage.mode(obj) == "character") {
+      if (!variableLengthString && anyNA(obj)) {
+        warning(
+          "Writing NA_character_ in fixed-length string datasets is fragile ",
+          "and deprecated. ",
+          "Use `variableLengthString=TRUE` to write the data as ",
+          "variable-length strings instead."
+        )
+      }
       if (!variableLengthString && is.null(size)) {
         if (length(obj) > 0) {
           size <- max(nchar(obj, type = "bytes"), na.rm = TRUE)
