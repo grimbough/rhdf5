@@ -1,8 +1,23 @@
 #' Identifies the filters required to read a dataset
 #' If filters aren't available it will try to identify them
 #' and print the names to the user.
+#'
+#' @examples
+#' h5file <- system.file("testfiles", "h5ex_d_blosc.h5", package = "rhdf5")
+#' fid <- H5Fopen(h5file)
+#' gid <- H5Gopen(fid, "/")
+#' did <- H5Dopen(gid, "dset")
+#'
+#' h5checkFilters(did)
+#'
+#' ## tidy up
+#' H5Dclose(did)
+#' H5Gclose(gid)
+#' H5Fclose(fid)
+#'
 #' @keywords internal
 h5checkFilters <- function(h5id) {
+  browser()
   truetype <- H5Iget_type(h5id)
 
   if (truetype == "H5I_DATASET") {

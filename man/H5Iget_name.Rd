@@ -13,3 +13,16 @@ file, group, dataset or attribute.}
 \description{
 Retrieve the name of an object from a given identifier
 }
+\examples{
+h5file <- system.file("testfiles", "h5ex_t_array.h5", package = "rhdf5")
+fid <- H5Fopen(h5file)
+gid <- H5Gopen(fid, "/")
+did <- H5Dopen(gid, "DS1")
+
+H5Iget_name(did)
+
+## tidy up
+H5Gclose(gid)
+H5Fclose(fid)
+
+}
