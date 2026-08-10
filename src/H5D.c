@@ -486,7 +486,11 @@ SEXP H5Dread_helper_STRING(hid_t dataset_id, hid_t file_space_id,
         error("Unable to read dataset");
       }
       for (hsize_t i = 0; i < n; i++) {
-        SET_STRING_ELT(Rval, i, mkChar(bufSTR[i]));
+        if (bufSTR[i] == NULL) {
+          SET_STRING_ELT(Rval, i, NA_STRING);
+        } else {
+          SET_STRING_ELT(Rval, i, mkChar(bufSTR[i]));
+        }
       }
       herr = H5Treclaim(mem_type_id, file_space_id, H5P_DEFAULT, bufSTR);
       if (herr < 0) {
