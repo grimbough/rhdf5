@@ -3,10 +3,10 @@
 #' and print the names to the user.
 #'
 #' @examples
-#' h5file <- system.file("testfiles", "h5ex_d_blosc.h5", package = "rhdf5")
+#' h5file <- system.file("testfiles", "h5ex_d_szip.h5", package = "rhdf5")
 #' fid <- H5Fopen(h5file)
 #' gid <- H5Gopen(fid, "/")
-#' did <- H5Dopen(gid, "dset")
+#' did <- H5Dopen(gid, "DS1")
 #'
 #' h5checkFilters(did)
 #'
@@ -17,7 +17,6 @@
 #'
 #' @keywords internal
 h5checkFilters <- function(h5id) {
-  browser()
   truetype <- H5Iget_type(h5id)
 
   if (truetype == "H5I_DATASET") {
