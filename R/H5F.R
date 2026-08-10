@@ -13,6 +13,12 @@
 #' between programming languages. A file written with `native = TRUE`
 #' should also be read with `native = TRUE`.
 #'
+#' @examples
+#' h5_file <- withr::local_tempfile(fileext = ".h5")
+#' H5Fcreate(h5_file)
+#'
+#' H5Fis_hdf5(h5_file)
+#'
 #' @export
 H5Fcreate <- function(
   name,
@@ -119,6 +125,15 @@ H5Fopen <- function(
 #' created via [H5Fcreate()] or [H5Fopen()].
 #'
 #' @export
+#'
+#' @examples
+#' h5_file <- withr::local_tempfile(fileext = ".h5")
+#' H5Fcreate(h5_file)
+#'
+#' fid <- H5Fopen(h5_file)
+#' H5Fget_filesize(fid)
+#' H5Fclose(fid)
+#'
 H5Fclose <- function(h5file) {
   h5checktype(h5file, "file")
   invisible(.Call("_H5Fclose", h5file@ID, PACKAGE = "rhdf5"))
@@ -151,6 +166,12 @@ H5Fflush <- function(h5file, scope = h5default("H5F_SCOPE")) {
 #' @returns Returns `TRUE`, if the file is an HDF5 file, or `FALSE` otherwise.
 #' In the case the file doesn't exist, `NA` is returned
 #'
+#' @examples
+#' h5_file <- withr::local_tempfile(fileext = ".h5")
+#' H5Fcreate(h5_file)
+#'
+#' H5Fis_hdf5(h5_file)
+#'
 #' @export
 H5Fis_hdf5 <- function(name, showWarnings = TRUE) {
   if (length(name) != 1 || !is.character(name)) {
@@ -173,6 +194,14 @@ H5Fis_hdf5 <- function(name, showWarnings = TRUE) {
 #'
 #' @param h5file [H5IdComponent-class] representing an HDF5 file ID.  Typically
 #' created via [H5Fcreate()] or [H5Fopen()].
+#'
+#' @examples
+#' h5_file <- withr::local_tempfile(fileext = ".h5")
+#' H5Fcreate(h5_file)
+#'
+#' fid <- H5Fopen(h5_file)
+#' H5Fget_filesize(fid)
+#' H5Fclose(fid)
 #'
 #' @export
 H5Fget_filesize <- function(h5file) {

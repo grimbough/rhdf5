@@ -13,3 +13,12 @@ created via \code{\link[=H5Fcreate]{H5Fcreate()}} or \code{\link[=H5Fopen]{H5Fop
 \description{
 Close access to an HDF5 file
 }
+\examples{
+h5_file <- withr::local_tempfile(fileext = ".h5")
+H5Fcreate(h5_file)
+
+fid <- H5Fopen(h5_file)
+H5Fget_filesize(fid)
+H5Fclose(fid)
+
+}
