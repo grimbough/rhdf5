@@ -8,7 +8,7 @@
 #' gid <- H5Gopen(fid, "/")
 #' did <- H5Dopen(gid, "DS1")
 #'
-#' h5checkFilters(did)
+#' .h5checkFilters(did)
 #'
 #' ## tidy up
 #' H5Dclose(did)
@@ -17,7 +17,7 @@
 #'
 #' @keywords internal
 #' @noRd
-h5checkFilters <- function(h5id) {
+.h5checkFilters <- function(h5id) {
   truetype <- H5Iget_type(h5id)
 
   if (truetype == "H5I_DATASET") {
