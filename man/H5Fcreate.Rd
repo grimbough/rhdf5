@@ -32,3 +32,10 @@ should also be read with \code{native = TRUE}.}
 \description{
 Create an HDF5 file
 }
+\examples{
+h5_file <- withr::local_tempfile(fileext = ".h5")
+H5Fcreate(h5_file)
+
+H5Fis_hdf5(h5_file)
+
+}

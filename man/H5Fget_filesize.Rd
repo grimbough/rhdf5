@@ -14,3 +14,12 @@ created via \code{\link[=H5Fcreate]{H5Fcreate()}} or \code{\link[=H5Fopen]{H5Fop
 \code{H5Fget_filesize()} returns the size in bytes of the HDF5 file specified by
 \code{h5file}.
 }
+\examples{
+h5_file <- withr::local_tempfile(fileext = ".h5")
+H5Fcreate(h5_file)
+
+fid <- H5Fopen(h5_file)
+H5Fget_filesize(fid)
+H5Fclose(fid)
+
+}

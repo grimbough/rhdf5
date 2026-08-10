@@ -20,3 +20,10 @@ In the case the file doesn't exist, \code{NA} is returned
 \description{
 \code{H5Fis_hdf5()} determines whether a file is in the HDF5 format.
 }
+\examples{
+h5_file <- withr::local_tempfile(fileext = ".h5")
+H5Fcreate(h5_file)
+
+H5Fis_hdf5(h5_file)
+
+}
