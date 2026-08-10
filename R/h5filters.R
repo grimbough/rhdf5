@@ -16,6 +16,7 @@
 #' H5Fclose(fid)
 #'
 #' @keywords internal
+#' @noRd
 h5checkFilters <- function(h5id) {
   truetype <- H5Iget_type(h5id)
 
