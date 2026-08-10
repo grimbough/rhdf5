@@ -4,11 +4,11 @@ test_that("Tests for filters work", {
   dcpl <- H5Pcreate(type = "H5P_DATASET_CREATE")
 
   ## default DCPL has no filters set
-  expect_true(nzchar(h5checkFilters(dcpl)) == 0L)
+  expect_false(nzchar(.h5checkFilters(dcpl)))
 
   ## deflate fitlers should always be available
   H5Pset_deflate(dcpl, level = 6)
-  expect_true(nzchar(h5checkFilters(dcpl)) == 0L)
+  expect_false(nzchar(.h5checkFilters(dcpl)))
 
   H5Pclose(dcpl)
 })
@@ -25,7 +25,7 @@ test_that("Missing filters are identified", {
   )
 
   expect_match(
-    h5checkFilters(dcpl),
+    .h5checkFilters(dcpl),
     "Missing filters: foo_filter",
     fixed = TRUE
   )
