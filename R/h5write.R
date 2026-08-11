@@ -396,7 +396,9 @@ h5writeDataset.array <- function(
       if (!variableLengthString && anyNA(obj)) {
         warning(
           "Writing NA_character_ in fixed-length string datasets is fragile ",
-          "and deprecated. ",
+          "and deprecated.\n",
+          "In particular, it will write NA_character_ as the string 'NA' in ",
+          "the HDF5 file.\n",
           "Use `variableLengthString=TRUE` to write the data as ",
           "variable-length strings instead."
         )
@@ -447,16 +449,6 @@ h5writeDataset.array <- function(
     count = count
   )
   h5writeAttribute(1L, h5dataset, name = "rhdf5-NA.OK")
-
-  if (storage.mode(obj) == "character" && anyNA(obj)) {
-    h5writeAttribute(1L, h5dataset, name = "as.na")
-    if (any(obj == "NA", na.rm = TRUE)) {
-      warning(
-        "Both NA_character_ and the string 'NA' detected.\n",
-        "These will all be coerced to NA_character_ when read using h5read()"
-      )
-    }
-  }
 
   invisible(NULL)
 }
