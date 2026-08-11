@@ -272,3 +272,44 @@ test_that("Overwriting a subset", {
   expect_is(mat <- h5read(h5File, name = "matrix"), "matrix")
   expect_all_true(mat[, 2] == 0)
 })
+
+test_that("Writing a VLen string dataset with NA_character_ values", {
+  fid <- H5Fcreate(name = h5File)
+  expect_warning(
+    h5writeDataset(
+      obj = c(NA_character_, "NA", "", LETTERS),
+      h5loc = fid,
+      name = "vlen_string",
+      variableLengthString = TRUE,
+      # size should be ignored.
+      # See https://github.com/Huber-group-EMBL/rhdf5/issues/143.
+      size = 10
+    ),
+    "Argument `size` is ignored when `variableLengthString=TRUE`"
+  )
+  H5Fclose(fid)
+  fid <- H5Fopen(h5File)
+  did <- H5Dopen(fid, "vlen_string")
+  type <- H5Dget_type(did)
+  expect_true(H5Tis_variable_str(type))
+  H5Dclose(did)
+  H5Fclose(fid)
+
+  expect_type(vlen_string <- h5read(h5File, name = "vlen_string"), "character")
+  expect_identical(sum(is.na(vlen_string)), 1L)
+})
+
+test_that("Writing NA_character_ as fixed-length string is deprecated", {
+  fid <- H5Fcreate(name = h5File)
+  expect_warning(
+    h5writeDataset(
+      obj = c(NA_character_, "NA", "", LETTERS),
+      h5loc = fid,
+      name = "fixed_string",
+      variableLengthString = FALSE,
+      size = 10
+    ),
+    "Writing NA_character_ in fixed-length string datasets is fragile and deprecated"
+  )
+  H5Fclose(fid)
+})
