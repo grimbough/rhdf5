@@ -46,7 +46,7 @@ h5writeAttribute <- function(
   name,
   h5loc,
   encoding = NULL,
-  variableLengthString = FALSE,
+  variableLengthString = TRUE,
   asScalar = FALSE,
   checkForNA = TRUE
 ) {
@@ -98,7 +98,7 @@ h5writeAttribute.array <- function(
   name,
   h5loc,
   encoding = NULL,
-  variableLengthString = FALSE,
+  variableLengthString = TRUE,
   asScalar = FALSE,
   checkForNA = TRUE
 ) {

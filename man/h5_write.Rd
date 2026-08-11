@@ -43,7 +43,7 @@ h5writeDataset(obj, h5loc, name, ...)
   block = NULL,
   count = NULL,
   size = NULL,
-  variableLengthString = FALSE,
+  variableLengthString = TRUE,
   encoding = NULL,
   level = 6,
   ...
@@ -120,10 +120,10 @@ index is not NULL.}
 
 \item{size}{The length of the fixed-width string data type, when \code{obj} is a
 character vector. If \code{NULL}, this is set to the length of the largest
-string.}
+string. Ignored when \code{variableLengthString=TRUE}.}
 
 \item{variableLengthString}{Whether character vectors should be written as
-variable-length strings into the attributes. If \code{TRUE}, \code{size} is ignored.}
+variable-length strings. If \code{TRUE} (the default), \code{size} is ignored.}
 
 \item{encoding}{The encoding of the string data type.  Valid options are
 "ASCII" or "UTF-8".}

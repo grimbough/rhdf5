@@ -12,7 +12,7 @@ h5writeAttribute(
   name,
   h5loc,
   encoding = NULL,
-  variableLengthString = FALSE,
+  variableLengthString = TRUE,
   asScalar = FALSE,
   checkForNA = TRUE
 )
@@ -23,7 +23,7 @@ h5writeAttribute(
   name,
   h5loc,
   encoding = NULL,
-  variableLengthString = FALSE,
+  variableLengthString = TRUE,
   asScalar = FALSE,
   checkForNA = TRUE
 )

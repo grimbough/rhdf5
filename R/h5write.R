@@ -162,9 +162,9 @@ h5writeDatasetHelper <- function(
 #'   reading is required, `DataFrameAsCompound=FALSE` is recommended.
 #' @param size The length of the fixed-width string data type, when `obj` is a
 #'   character vector. If `NULL`, this is set to the length of the largest
-#'   string.
+#'   string. Ignored when `variableLengthString=TRUE`.
 #' @param variableLengthString Whether character vectors should be written as
-#'   variable-length strings into the attributes. If `TRUE`, `size` is ignored.
+#'   variable-length strings. If `TRUE` (the default), `size` is ignored.
 #' @param encoding The encoding of the string data type.  Valid options are
 #'   "ASCII" or "UTF-8".
 #' @param createnewfile If `TRUE`, a new file will be created if necessary.
@@ -382,7 +382,7 @@ h5writeDataset.array <- function(
   block = NULL,
   count = NULL,
   size = NULL,
-  variableLengthString = FALSE,
+  variableLengthString = TRUE,
   encoding = NULL,
   level = 6,
   ...
