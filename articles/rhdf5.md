@@ -747,7 +747,7 @@ h5ls("myhdf5file.h5", recursive = 2)
 file.size("myhdf5file.h5")
 ```
 
-    ## [1] 26165
+    ## [1] 32299
 
 We then use
 [`h5delete()`](https://huber-group-embl.github.io/rhdf5/reference/h5_delete.md)
@@ -790,7 +790,7 @@ h5ls("myhdf5file.h5", recursive = 2)
 file.size("myhdf5file.h5")
 ```
 
-    ## [1] 26105
+    ## [1] 32239
 
 *N.B.
 [`h5delete()`](https://huber-group-embl.github.io/rhdf5/reference/h5_delete.md)
@@ -1072,7 +1072,7 @@ sessionInfo()
     ## [1] stats     graphics  grDevices utils     datasets  methods   base     
     ## 
     ## other attached packages:
-    ## [1] rhdf5_2.57.9     BiocStyle_2.41.0
+    ## [1] rhdf5_2.57.10    BiocStyle_2.41.0
     ## 
     ## loaded via a namespace (and not attached):
     ##  [1] cli_3.6.6           knitr_1.51          rlang_1.3.0        

@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">rhdf5</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.57.9</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.57.10</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -663,7 +663,7 @@ file in bytes.</p>
 <span><span class="co">## 7  /foo foobaa   H5I_GROUP</span></span></code></pre>
 <div class="sourceCode" id="cb72"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/file.info.html" class="external-link">file.size</a></span><span class="op">(</span><span class="st">"myhdf5file.h5"</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## [1] 26165</span></span></code></pre>
+<pre><code><span><span class="co">## [1] 32299</span></span></code></pre>
 <p>We then use <code><a href="../reference/h5_delete.html">h5delete()</a></code> to remove the <strong>df</strong>
 dataset by providing the file name and the name of the dataset, e.g.</p>
 <div class="sourceCode" id="cb74"><pre class="downlit sourceCode r">
@@ -690,7 +690,7 @@ decreased.</p>
 <span><span class="co">## 0     /  baa H5I_GROUP</span></span></code></pre>
 <div class="sourceCode" id="cb78"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/file.info.html" class="external-link">file.size</a></span><span class="op">(</span><span class="st">"myhdf5file.h5"</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## [1] 26105</span></span></code></pre>
+<pre><code><span><span class="co">## [1] 32239</span></span></code></pre>
 <p><em>N.B. <code><a href="../reference/h5_delete.html">h5delete()</a></code> does not explicitly traverse the
 tree to remove child nodes. It only removes the named entry, and HDF5
 will then remove child nodes if they are now orphaned. Hence it won’t
@@ -919,7 +919,7 @@ functions to close datasets, dataspaces, groups, and files.</p>
 <span><span class="co">## [1] stats     graphics  grDevices utils     datasets  methods   base     </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## other attached packages:</span></span>
-<span><span class="co">## [1] rhdf5_2.57.9     BiocStyle_2.41.0</span></span>
+<span><span class="co">## [1] rhdf5_2.57.10    BiocStyle_2.41.0</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## loaded via a namespace (and not attached):</span></span>
 <span><span class="co">##  [1] cli_3.6.6           knitr_1.51          rlang_1.3.0        </span></span>

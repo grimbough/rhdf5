@@ -9,7 +9,7 @@ full arrays/vectors or subarrays (hyperslabs) within an existing dataset."><meta
 
     <a class="navbar-brand me-2" href="../index.html">rhdf5</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.57.9</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.57.10</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -83,7 +83,7 @@ full arrays/vectors or subarrays (hyperslabs) within an existing dataset.</p>
 <span>  block <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  count <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  size <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  variableLengthString <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  variableLengthString <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  encoding <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  level <span class="op">=</span> <span class="fl">6</span>,</span>
 <span>  <span class="va">...</span></span>
@@ -197,12 +197,12 @@ index is not NULL.</p></dd>
 <dt id="arg-size">size<a class="anchor" aria-label="anchor" href="#arg-size"></a></dt>
 <dd><p>The length of the fixed-width string data type, when <code>obj</code> is a
 character vector. If <code>NULL</code>, this is set to the length of the largest
-string.</p></dd>
+string. Ignored when <code>variableLengthString=TRUE</code>.</p></dd>
 
 
 <dt id="arg-variablelengthstring">variableLengthString<a class="anchor" aria-label="anchor" href="#arg-variablelengthstring"></a></dt>
 <dd><p>Whether character vectors should be written as
-variable-length strings into the attributes. If <code>TRUE</code>, <code>size</code> is ignored.</p></dd>
+variable-length strings. If <code>TRUE</code> (the default), <code>size</code> is ignored.</p></dd>
 
 
 <dt id="arg-encoding">encoding<a class="anchor" aria-label="anchor" href="#arg-encoding"></a></dt>

@@ -44,7 +44,7 @@ h5writeDataset(
   block = NULL,
   count = NULL,
   size = NULL,
-  variableLengthString = FALSE,
+  variableLengthString = TRUE,
   encoding = NULL,
   level = 6,
   ...
@@ -168,12 +168,12 @@ h5writeDataset(
 
   The length of the fixed-width string data type, when `obj` is a
   character vector. If `NULL`, this is set to the length of the largest
-  string.
+  string. Ignored when `variableLengthString=TRUE`.
 
 - variableLengthString:
 
-  Whether character vectors should be written as variable-length strings
-  into the attributes. If `TRUE`, `size` is ignored.
+  Whether character vectors should be written as variable-length
+  strings. If `TRUE` (the default), `size` is ignored.
 
 - encoding:
 
