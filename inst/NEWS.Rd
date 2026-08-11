@@ -13,6 +13,9 @@
       \code{addr} (file byte offsets), and \code{size} (compressed chunk 
       sizes). Requires chunked storage; contiguous datasets raise an error
       Thanks to PR #217 from Michael Sumner (https://github.com/mdsumner).
+      \item Variable length string datasets now support writing and reading
+      \code{NA_character_} values. These values will be read as the empty
+      string \code{""} in Python.
     }
   }
 
@@ -26,6 +29,12 @@
       after being deprecated in version 2.56.0.
       \item The `h5tid` argument to `H5Pset_lzf()` is now deprecated and will
       be removed in the next release.
+      \item Writing `NA_character_` values to fixed-length string datasets is
+      now deprecated and will be removed in a future release.
+      \item Variable length strings is now the default behavior for 
+      `h5write()`, `h5writeDataset()` and `h5writeAttribute()`. This makes them
+      consistent with the behaviour of `h5create()`, `h5createDataset()` and 
+      `h5createAttribute()`.
     }
   }
 
@@ -38,6 +47,9 @@
       \item BLOSC and LZF compression no longer fail when applied to variable
       length types. Thanks to Luke Zappia for the report and reproducible
       example.
+      \item \code{h5write(variableLengthString = TRUE)} now properly ignores
+      the \code{size} argument, as already documented, instead of incorrectly
+      writing a fixed-length string dataset.
     }
   }
 
