@@ -202,15 +202,17 @@ h5File <- withr::local_tempfile(pattern = "ex_read", fileext = ".h5")
 
 h5createFile(h5File)
 
-test_that("NA characters are supported", {
+test_that("NA_character_ are supported and don't collide with the string 'NA'", {
   expect_silent(h5write(c(NA_character_, LETTERS), h5File, "NA_char"))
-  expect_true(anyNA(h5read(h5File, name = "NA_char")))
+  expect_identical(sum(is.na(h5read(h5File, name = "NA_char"))), 1L)
 
-  expect_warning(
-    h5write(c(NA_character_, LETTERS, "NA"), h5File, "NA_char_2"),
-    "Both NA_character_ and the string 'NA' detected",
-    fixed = TRUE
-  )
+  expect_silent(h5write(
+    c(NA_character_, LETTERS, "", "NA"),
+    h5File,
+    "NA_char_2"
+  ))
+  expect_identical(sum(is.na(h5read(h5File, name = "NA_char_2"))), 1L)
+  expect_identical(h5read(h5File, name = "NA_char_2")[29], "NA")
 })
 
 test_that("No warnings are generated for integers containing NA written from R", {
