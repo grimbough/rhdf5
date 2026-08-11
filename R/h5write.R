@@ -403,6 +403,12 @@ h5writeDataset.array <- function(
           "variable-length strings instead."
         )
       }
+      if (variableLengthString && !is.null(size)) {
+        warning(
+          "Argument `size` is ignored when `variableLengthString=TRUE`."
+        )
+        size <- NULL
+      }
       if (!variableLengthString && is.null(size)) {
         if (length(obj) > 0) {
           size <- max(nchar(obj, type = "bytes"), na.rm = TRUE)
