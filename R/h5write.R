@@ -445,6 +445,16 @@ h5writeDataset.array <- function(
     h5dataset <- H5Dopen(h5loc, name)
     on.exit(H5Dclose(h5dataset))
   } else {
+    if (
+      !missing(size) ||
+        !missing(variableLengthString) ||
+        !missing(encoding) ||
+        !missing(level)
+    ) {
+      warning(
+        "Dataset already exists. Arguments `size`, `variableLengthString`, `encoding`, and `level` are ignored."
+      )
+    }
     h5dataset <- H5Dopen(h5loc, name)
     on.exit(H5Dclose(h5dataset))
     type <- H5Dget_type(h5dataset)
