@@ -391,7 +391,30 @@ h5writeDataset.array <- function(
   exists <- try({
     H5Lexists(h5loc, name)
   })
-  if (!exists) {
+  if (exists) {
+    if (
+      !missing(size) ||
+        !missing(variableLengthString) ||
+        !missing(encoding) ||
+        !missing(level)
+    ) {
+      warning(
+        "Dataset already exists. Arguments `size`, `variableLengthString`, `encoding`, and `level` are ignored."
+      )
+    }
+    h5dataset <- H5Dopen(h5loc, name)
+    on.exit(H5Dclose(h5dataset))
+    type <- H5Dget_type(h5dataset)
+    is_vlen <- H5Tis_variable_str(type)
+    if (!is_vlen && anyNA(obj)) {
+      warning(
+        "Writing NA_character_ in fixed-length string datasets is fragile ",
+        "and deprecated.\n",
+        "In particular, it will write NA_character_ as the string 'NA' in ",
+        "the HDF5 file.\n"
+      )
+    }
+  } else {
     if (storage.mode(obj) == "character") {
       if (!variableLengthString && anyNA(obj)) {
         warning(
@@ -444,30 +467,8 @@ h5writeDataset.array <- function(
     )
     h5dataset <- H5Dopen(h5loc, name)
     on.exit(H5Dclose(h5dataset))
-  } else {
-    if (
-      !missing(size) ||
-        !missing(variableLengthString) ||
-        !missing(encoding) ||
-        !missing(level)
-    ) {
-      warning(
-        "Dataset already exists. Arguments `size`, `variableLengthString`, `encoding`, and `level` are ignored."
-      )
-    }
-    h5dataset <- H5Dopen(h5loc, name)
-    on.exit(H5Dclose(h5dataset))
-    type <- H5Dget_type(h5dataset)
-    is_vlen <- H5Tis_variable_str(type)
-    if (!is_vlen && anyNA(obj)) {
-      warning(
-        "Writing NA_character_ in fixed-length string datasets is fragile ",
-        "and deprecated.\n",
-        "In particular, it will write NA_character_ as the string 'NA' in ",
-        "the HDF5 file.\n"
-      )
-    }
   }
+
   h5writeDatasetHelper(
     obj = obj,
     h5dataset = h5dataset,
