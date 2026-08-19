@@ -57,6 +57,9 @@
     \itemize{
       \item More exported functions now include examples.
       \item `H5Ocopy()` no longer errors when passed the `obj_cpy_pl` argument.
+      \item \code{h5write()} and \code{h5writeDataset()} will now warn about
+      ignored arguments when the dataset was already existing, instead of
+      silently ignoring them.
     }
   }
 
