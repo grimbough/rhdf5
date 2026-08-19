@@ -312,4 +312,23 @@ test_that("Writing NA_character_ as fixed-length string is deprecated", {
     "Writing NA_character_ in fixed-length string datasets is fragile and deprecated"
   )
   H5Fclose(fid)
+
+  # Works also if the dataset is created with h5createDataset() first
+  fid <- H5Fcreate(name = h5File)
+  h5createDataset(
+    file = fid,
+    dataset = "fixed_string2",
+    dims = 29,
+    storage.mode = "character",
+    size = 10
+  )
+  expect_warning(
+    h5writeDataset(
+      obj = c(NA_character_, "NA", "", LETTERS),
+      h5loc = fid,
+      name = "fixed_string2"
+    ),
+    "Writing NA_character_ in fixed-length string datasets is fragile and deprecated"
+  )
+  H5Fclose(fid)
 })
