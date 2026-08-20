@@ -13,7 +13,8 @@
 
 - **Daniel van Twisk**. Contributor.
 
-- **Hugo Gruson**. Maintainer. [](https://orcid.org/0000-0002-4094-1476)
+- **Hugo Gruson**. Author, maintainer.
+  [](https://orcid.org/0000-0002-4094-1476)
 
 - **German Network for Bioinformatics Infrastructure - de.NBI**. Funder.
   [![ROR](https://raw.githubusercontent.com/ror-community/ror-logos/main/ror-icon-rgb.svg)](https://ror.org/01vmpm840)
@@ -23,12 +24,13 @@
 Source:
 [`DESCRIPTION`](https://github.com/Huber-group-EMBL/rhdf5/blob/devel/DESCRIPTION)
 
-Fischer B, Smith M, Pau G (2026). *rhdf5: R Interface to HDF5*. R
-package version 2.57.11, <https://huber-group-embl.github.io/rhdf5/>.
+Fischer B, Smith M, Pau G, Gruson H (2026). *rhdf5: R Interface to
+HDF5*. R package version 2.57.11,
+<https://huber-group-embl.github.io/rhdf5/>.
 
     @Manual{,
       title = {rhdf5: R Interface to HDF5},
-      author = {Bernd Fischer and Mike Smith and Gregoire Pau},
+      author = {Bernd Fischer and Mike Smith and Gregoire Pau and Hugo Gruson},
       year = {2026},
       note = {R package version 2.57.11},
       url = {https://huber-group-embl.github.io/rhdf5/},
