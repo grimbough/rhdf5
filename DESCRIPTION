@@ -9,7 +9,7 @@ Authors@R: c(
     person("Gregoire", "Pau", role = "aut"),
     person("Martin", "Morgan", role = "ctb"),
     person("Daniel", "van Twisk", role = "ctb"),
-    person("Hugo", "Gruson", , "hugo.gruson@embl.de", role = "cre",
+    person("Hugo", "Gruson", , "hugo.gruson@embl.de", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-4094-1476")),
     person("German Network for Bioinformatics Infrastructure - de.NBI", role = "fnd",
            comment = c(ROR = "01vmpm840"))
