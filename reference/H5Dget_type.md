@@ -24,7 +24,7 @@ fid <- H5Fopen(f)
 did <- H5Dopen(fid, "DS1")
 type <- H5Dget_type(did)
 type
-#> [1] "216172782113783914"
+#> [1] "216172782113783916"
 H5Dclose(did)
 H5Fclose(fid)
 ```
