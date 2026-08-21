@@ -73,16 +73,13 @@ h5readDataset <- function(
         !is.null(block)
       ))
     ) {
-      size <- 0
-      try({
-        size <- H5Sselect_hyperslab(
-          h5spaceFile,
-          start = start,
-          stride = stride,
-          count = count,
-          block = block
-        )
-      })
+      size <- H5Sselect_hyperslab(
+        h5spaceFile,
+        start = start,
+        stride = stride,
+        count = count,
+        block = block
+      )
       h5spaceMem <- H5Screate_simple(size, native = h5dataset@native)
       on.exit(H5Sclose(h5spaceMem), add = TRUE)
     }
