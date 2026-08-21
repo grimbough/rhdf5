@@ -411,7 +411,8 @@ h5writeDataset.array <- function(
         "Writing NA_character_ in fixed-length string datasets is fragile ",
         "and deprecated.\n",
         "In particular, it will write NA_character_ as the string 'NA' in ",
-        "the HDF5 file.\n"
+        "the HDF5 file.\n",
+        "Use variable-length strings instead."
       )
     }
   } else {
