@@ -405,8 +405,8 @@ h5writeDataset.array <- function(
     h5dataset <- H5Dopen(h5loc, name)
     on.exit(H5Dclose(h5dataset))
     type <- H5Dget_type(h5dataset)
-    is_vlen <- H5Tis_variable_str(type)
-    if (!is_vlen && anyNA(obj)) {
+    variableLengthString <- H5Tis_variable_str(type)
+    if (!variableLengthString && anyNA(obj)) {
       warning(
         "Writing NA_character_ in fixed-length string datasets is fragile ",
         "and deprecated.\n",
@@ -479,6 +479,11 @@ h5writeDataset.array <- function(
     count = count
   )
   h5writeAttribute(1L, h5dataset, name = "rhdf5-NA.OK")
+
+  if (!variableLengthString && anyNA(obj)) {
+    # THIS WILL BE REMOVED IN THE NEXT RELEASE!
+    h5writeAttribute(1L, h5dataset, name = "as.na")
+  }
 
   invisible(NULL)
 }
