@@ -16,6 +16,7 @@ SEXP _H5Tcopy(SEXP _dtype_id) {
 
   hid_t dtype_id = STRSXP_2_HID(_dtype_id);
   hid_t tid = H5Tcopy(dtype_id);
+  addHandle(tid);
 
   SEXP Rval = HID_2_STRSXP(tid);
   return Rval;
@@ -251,5 +252,20 @@ SEXP _H5Tget_class(SEXP _dtype_id) {
   } break;
   }
 
+  return Rval;
+}
+
+/* herr_t H5Tclose( hid_t dtype_id ) */
+SEXP _H5Tclose( SEXP _dtype_id ) {
+  hid_t dtype_id = STRSXP_2_HID( _dtype_id );
+  herr_t herr = H5Tclose( dtype_id );
+  if (herr == 0) {
+    removeHandle(dtype_id);
+  }
+  
+  SEXP Rval;
+  PROTECT(Rval = allocVector(INTSXP, 1));
+  INTEGER(Rval)[0] = herr;
+  UNPROTECT(1);
   return Rval;
 }

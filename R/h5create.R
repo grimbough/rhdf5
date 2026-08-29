@@ -509,6 +509,10 @@ h5createDataset <- function(
     size,
     encoding = encoding
   )
+  if (storage.mode[1] %in% c("character", "complex")) {
+    # opened in .setDataType
+    on.exit(H5Tclose(tid), add = TRUE)
+  }
 
   dcpl <- .createDCPL(
     chunk,
@@ -636,6 +640,7 @@ h5createAttribute <- function(
       integer = h5constants$H5T["H5T_STD_I32LE"],
       character = {
         tid <- H5Tcopy("H5T_C_S1")
+        on.exit(H5Tclose(tid), add = TRUE)
         H5Tset_cset(
           tid,
           cset = encoding
@@ -650,6 +655,7 @@ h5createAttribute <- function(
       },
       logical = {
         tid <- H5Tenum_create(dtype_id = "H5T_NATIVE_UCHAR")
+        on.exit(H5Tclose(tid), add = TRUE)
         H5Tenum_insert(tid, name = "TRUE", value = 1L)
         H5Tenum_insert(tid, name = "FALSE", value = 0L)
         H5Tenum_insert(tid, name = "NA", value = 255L)
