@@ -7,10 +7,8 @@ h5writeDatasetHelper <- function(
   block = NULL,
   count = NULL
 ) {
-  try({
-    h5spaceFile <- H5Dget_space(h5dataset)
-    on.exit(H5Sclose(h5spaceFile))
-  })
+  h5spaceFile <- H5Dget_space(h5dataset)
+  on.exit(H5Sclose(h5spaceFile))
 
   if (!is.null(index)) {
     s <- H5Sget_simple_extent_dims(h5spaceFile)$size
@@ -26,9 +24,7 @@ h5writeDatasetHelper <- function(
         index[[i]] <- eval(index[[i]])
       }
     }
-    try({
-      H5Sselect_index(h5spaceFile, index)
-    })
+    H5Sselect_index(h5spaceFile, index)
     if (length(index) > 1) {
       ## indexing an array
       d <- lengths(index)
@@ -60,30 +56,24 @@ h5writeDatasetHelper <- function(
           count <- dim(obj)
         }
       }
-      try({
-        H5Sselect_hyperslab(
-          h5spaceFile,
-          start = start,
-          stride = stride,
-          count = count,
-          block = block
-        )
-      })
+      H5Sselect_hyperslab(
+        h5spaceFile,
+        start = start,
+        stride = stride,
+        count = count,
+        block = block
+      )
     }
   }
   DimMem <- dim(obj) %||% length(obj)
-  try({
-    h5spaceMem <- H5Screate_simple(DimMem)
-    on.exit(H5Sclose(h5spaceMem), add = TRUE, after = FALSE)
-  })
-  try({
-    H5Dwrite(
-      h5dataset,
-      obj,
-      h5spaceMem = h5spaceMem,
-      h5spaceFile = h5spaceFile
-    )
-  })
+  h5spaceMem <- H5Screate_simple(DimMem)
+  on.exit(H5Sclose(h5spaceMem), add = TRUE, after = FALSE)
+  H5Dwrite(
+    h5dataset,
+    obj,
+    h5spaceMem = h5spaceMem,
+    h5spaceFile = h5spaceFile
+  )
 
   invisible(NULL)
 }
@@ -319,9 +309,7 @@ h5writeDataset.data.frame <- function(
 #' @export
 h5writeDataset.list <- function(obj, h5loc, name, level = 6, ...) {
   chkDots(...)
-  exists <- try({
-    H5Lexists(h5loc, name)
-  })
+  exists <- H5Lexists(h5loc, name)
   if (exists) {
     message(
       "Existing object within HDF5 file cannot be overwritten with a list object. First delete the group or dataset from the HDF5 file."
@@ -388,9 +376,7 @@ h5writeDataset.array <- function(
   ...
 ) {
   chkDots(...)
-  exists <- try({
-    H5Lexists(h5loc, name)
-  })
+  exists <- H5Lexists(h5loc, name)
   if (exists) {
     if (
       !missing(size) ||
