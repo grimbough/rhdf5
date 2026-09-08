@@ -332,3 +332,35 @@ test_that("Writing NA_character_ as fixed-length string is deprecated", {
   )
   H5Fclose(fid)
 })
+
+test_that("No NA_character_ warning for non-character datasets", {
+  fid <- H5Fcreate(name = h5File)
+
+  # dataset created beforehand
+  h5createDataset(
+    file = fid,
+    dataset = "numeric_na",
+    dims = 3,
+    storage.mode = "double"
+  )
+  expect_no_warning(
+    h5writeDataset(obj = c(1, NA, 3), h5loc = fid, name = "numeric_na")
+  )
+  h5createDataset(
+    file = fid,
+    dataset = "integer_na",
+    dims = 3,
+    storage.mode = "integer"
+  )
+  expect_no_warning(
+    h5writeDataset(obj = c(1L, NA, 3L), h5loc = fid, name = "integer_na")
+  )
+
+  # dataset created on the fly
+  expect_no_warning(
+    h5writeDataset(obj = c(1, NaN, 3), h5loc = fid, name = "numeric_nan")
+  )
+  H5Fclose(fid)
+
+  expect_true(is.na(h5read(h5File, "numeric_na")[2]))
+})
