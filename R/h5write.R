@@ -406,7 +406,9 @@ h5writeDataset.array <- function(
     on.exit(H5Dclose(h5dataset))
     type <- H5Dget_type(h5dataset)
     variableLengthString <- H5Tis_variable_str(type)
-    if (!variableLengthString && anyNA(obj)) {
+    if (
+      storage.mode(obj) == "character" && !variableLengthString && anyNA(obj)
+    ) {
       warning(
         "Writing NA_character_ in fixed-length string datasets is fragile ",
         "and deprecated.\n",
